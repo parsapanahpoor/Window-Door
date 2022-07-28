@@ -359,39 +359,6 @@ namespace Window.Application.Services.Services
 
             var segments = _context.Segments.Where(p=> !p.IsDelete).AsQueryable();
 
-            switch (product.SellerType)
-            {
-                case Domain.Enums.SellerType.SellerType.Aluminium:
-                    segments = segments.Where(p => p.Aluminum);
-                    break;
-
-                case Domain.Enums.SellerType.SellerType.UPC:
-                    segments = segments.Where(p => p.UPVC);
-                    break;
-            }
-
-            switch (product.ProductKind)
-            {
-                case Domain.Enums.Types.ProductKind.Window:
-                    segments = segments.Where(p => p.Window);
-                    break;
-
-                case Domain.Enums.Types.ProductKind.Door:
-                    segments = segments.Where(p => p.Door);
-                    break;
-            }
-
-            switch (product.ProductType)
-            {
-                case Domain.Enums.Types.ProductType.Lolaie:
-                    segments = segments.Where(p => p.Lolaie);
-                    break;
-
-                case Domain.Enums.Types.ProductType.Keshoie:
-                    segments = segments.Where(p => p.Keshoie);
-                    break;
-            }
-
             #endregion
 
             #region Fill View Model
@@ -402,6 +369,23 @@ namespace Window.Application.Services.Services
                 Segments = segments.Select(p => new SegmentPRicingEntityViewModel() { 
                 Segment = p,
                 }).ToList()
+            };
+
+            #endregion
+
+            return model;
+        }
+
+        public async Task<GlassPricingViewModel?> FillGlassPricingEntityViewModel()
+        {
+            #region Fill View Model
+
+            GlassPricingViewModel model = new GlassPricingViewModel()
+            {
+                Glass = await _context.Glasses.Where(p=> !p.IsDelete).Select(p=> new GlassPricingEntityViewModel()
+                {
+                    Glass = p
+                }).ToListAsync()
             };
 
             #endregion
@@ -467,6 +451,57 @@ namespace Window.Application.Services.Services
             return true;
         }
 
+        public async Task<bool> AddPricingForGlass(ulong GlassId, int Price, ulong userId)
+        {
+            #region Get Segment
+
+            var glass = await _context.Glasses.FirstOrDefaultAsync(p => p.Id == GlassId && !p.IsDelete);
+            if (glass == null) return false;
+
+            #endregion
+
+            #region Is Exist Any Same Glass Price
+
+            var samePrice = await _context.GlassPricings.AnyAsync(p => p.GlassId == GlassId && !p.IsDelete);
+
+            #endregion
+
+            //Update Pricing
+            if (samePrice == true)
+            {
+                var lastSegmentPricing = await _context.GlassPricings.FirstOrDefaultAsync(p => p.GlassId == GlassId && !p.IsDelete);
+
+                lastSegmentPricing.Price = Price;
+
+                _context.GlassPricings.Update(lastSegmentPricing);
+                await _context.SaveChangesAsync();
+            }
+
+            //Add New Pricing
+            if (samePrice == false)
+            {
+                #region Fill Entity
+
+                GlassPricing model = new GlassPricing()
+                {
+                    GlassId = GlassId,
+                    Price = Price
+                };
+
+                #endregion
+
+                #region Add Glass Price
+
+                await _context.GlassPricings.AddAsync(model);
+                await _context.SaveChangesAsync();
+
+                #endregion
+            }
+
+            return true;
+        }
+
+
         public async Task<List<SegmentPricing>?> FillSegmentPricing(ulong productId , ulong userId)
         {
             #region Get Product 
@@ -477,6 +512,11 @@ namespace Window.Application.Services.Services
             #endregion
 
             return await _context.SegmentPricings.Where(p => !p.IsDelete && p.ProductId == productId).ToListAsync();
+        }
+
+        public async Task<List<GlassPricing>?> FillGlassPricing(ulong userId)
+        {
+            return await _context.GlassPricings.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
         }
 
         #endregion

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Common;
+using Window.Domain.Entities.Product;
 
 namespace Window.Domain.Entities.Glass
 {
@@ -16,6 +17,12 @@ namespace Window.Domain.Entities.Glass
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200)]
         public string GlassName { get; set; }
+
+        #endregion
+
+        #region relation 
+
+        public ICollection<GlassPricing> GlassPricings { get; set; }
 
         #endregion
     }

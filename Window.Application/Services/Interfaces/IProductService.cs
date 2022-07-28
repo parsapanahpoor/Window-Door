@@ -48,6 +48,12 @@ namespace Window.Application.Services.Interfaces
 
         Task<List<SegmentPricing>?> FillSegmentPricing(ulong productId, ulong userId);
 
+        Task<GlassPricingViewModel?> FillGlassPricingEntityViewModel();
+
+        Task<List<GlassPricing>?> FillGlassPricing(ulong userId);
+
+        Task<bool> AddPricingForGlass(ulong GlassId, int Price, ulong userId);
+
         #endregion
     }
 }

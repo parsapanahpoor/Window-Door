@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Contact;
 using Window.Domain.Entities.Market;
+using Window.Domain.Entities.Product;
 
 namespace Window.Domain.Entities.Account
 {
@@ -72,6 +73,8 @@ namespace Window.Domain.Entities.Account
         public ICollection<MarketChargeInfo> MarketChargeInfos { get; set; }
 
         public ICollection<Product.Product> Product { get; set; }
+
+        public ICollection<GlassPricing> GlassPricings { get; set; }
 
         #endregion
     }

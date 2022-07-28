@@ -132,5 +132,47 @@ namespace Window.Web.Areas.Seller.Controllers
         }
 
         #endregion
+
+        #region Create Glass Pricing  
+
+        [HttpGet]
+        public async Task<IActionResult> CreateGlassPricing()
+        {
+            #region Fill View Model
+
+            var model = await _productService.FillGlassPricingEntityViewModel();
+            if (model == null) return NotFound();
+
+            #endregion
+
+            #region Glass Pricing
+
+            ViewBag.GlassPricing = await _productService.FillGlassPricing(User.GetUserId());
+
+            #endregion
+
+            return View(model);
+        }
+
+        [HttpPost , ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateGlassPricing(ulong GlassId , int Price)
+        {
+            #region Add Pricing
+
+            var res = await _productService.AddPricingForGlass(GlassId, Price, User.GetUserId());
+
+            if (res)
+            {
+                TempData[SuccessMessage] = "عملیات با موفقیت انجام شده است .";
+                return View();
+            }
+
+            #endregion
+
+            TempData[ErrorMessage] = "عملیات با شکست روبرو شده است .";
+            return View();
+        }
+
+        #endregion
     }
 }

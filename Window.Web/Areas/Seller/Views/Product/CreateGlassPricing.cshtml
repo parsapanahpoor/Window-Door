@@ -1,0 +1,81 @@
+﻿@using Window.Domain.ViewModels.Common
+@using Window.Application.StaticTools
+@model Window.Domain.ViewModels.Seller.Pricing.GlassPricingViewModel
+@using Window.Domain.Enums.SellerType
+
+
+@{
+    ViewData["Title"] = "قیمت گذاری شیشه";
+
+    var glassPricing = ViewBag.GlassPricing as List<Window.Domain.Entities.Product.GlassPricing>;
+}
+
+@section Scripts
+{
+<partial name="_JqueryValidation" />
+}
+
+@section breadcrumb {
+
+<li>
+    <a href="javascript:void(0)"> @ViewData["Title"] </a>
+</li>
+}
+
+
+<div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-green">
+                <span class="widget-caption"> @ViewData["Title"] </span>
+            </div>
+            <div class="widget-body">
+                <div>
+                    <div class="row">
+
+                        @if (Model.Glass != null && Model.Glass.Any())
+                        {
+                            @foreach (var item in Model.Glass)
+                            {
+                                <form method="post" asp-action="CreateGlassPricing" asp-controller="Product" asp-area="Seller" enctype="multipart/form-data">
+                                    <input type="hidden" name="GlassId" value="@item.Glass.Id" />
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <label>@item.Glass.GlassName</label>
+                                        <div class="input-group">
+                                            @if (glassPricing != null && glassPricing.Any())
+                                            {
+                                                @if (glassPricing.Any(p => p.GlassId == item.Glass.Id))
+                                                {
+                                                    <input type="number" class="form-control" value="@glassPricing.Where(p=> p.GlassId == item.Glass.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="0">
+                                                }
+                                                   else
+                                            {
+                                                <input type="number" class="form-control" name="Price" min="0">
+                                            }
+                                            }
+                                            else
+                                            {
+                                                <input type="number" class="form-control" name="Price" min="0">
+                                            }
+                                            <span class="input-group-btn">
+                                                <span class="btn palegreen-azure btn-file" style="padding:0px 0px 0px 0px;">
+                                                    <button type="submit" class="btn btn-labeled btn-palegreen" style="margin-top:0px; padding-right:15px;">
+                                                        ثبت
+                                                    </button>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
+                            }
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

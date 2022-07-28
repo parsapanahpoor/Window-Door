@@ -118,6 +118,8 @@ namespace Window.Data.Context
 
         public DbSet<SegmentPricing> SegmentPricings { get; set; }
 
+        public DbSet<GlassPricing> GlassPricings { get; set; }
+
         #endregion
 
         #endregion
