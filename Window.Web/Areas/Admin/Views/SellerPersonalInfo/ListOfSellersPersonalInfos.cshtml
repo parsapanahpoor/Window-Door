@@ -1,0 +1,194 @@
+﻿@using Window.Domain.ViewModels.Admin.PersonalInfo
+@using Window.Application.Convertors
+@using Window.Application.Extensions
+@model ListOfSellersInfoViewModel
+@{
+    ViewData["Title"] = "لیست اطلاعات فروشنده ";
+}
+@section Scripts
+{
+<partial name="_AdminSweetAlertLocalizer" />
+}
+
+@section breadcrumb
+{
+
+<li class="active">@ViewData["Title"]</li>
+}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-lg-3 col-sm-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-green">
+                    <span class="widget-caption"> لیست اطلاعات شخصی  </span>
+                </div>
+                <div class="widget-body">
+                    <div>
+                        <form asp-action="ListOfSellersPersonalInfos" asp-controller="SellerPersonalInfo" asp-area="Admin" id="filter-search" method="get">
+                            <input type="hidden" asp-for="Page" />
+
+                            <div class="form-group">
+                                <label asp-for="Username"> نام کاربری </label>
+                                <input type="text" class="form-control" asp-for="Username">
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Email"> ایمیل  </label>
+                                <input type="text" class="form-control" asp-for="Email">
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Mobile"> موبایل </label>
+                                <input type="text" class="form-control" asp-for="Mobile">
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="MarketPersonalsInfoState"> وضعیت </label>
+                                <select asp-for="MarketPersonalsInfoState" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Entities.Market.MarketPersonalsInfoState))"></select>
+                            </div>
+
+                            <hr />
+
+                            <div class="row">
+                                <div class="col-md-12 flex-style">
+                                    <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
+                                        <i class="btn-label glyphicon glyphicon-filter"></i>فیلتر
+                                    </button>
+
+                                    @if (Context.Request.QueryString.HasValue)
+                                    {
+                                        <a asp-action="ListOfSellersPersonalInfos" asp-controller="SellerPersonalInfo" asp-area="Admin" class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                            <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9 col-sm-12">
+            <div class="well with-header with-footer table-responsive">
+                <div class="header bordered-azure">
+                    <div class="flex-style">
+                        <span>لیست اطلاعات </span>
+                        <span>@Model.GetShownEntitiesPagesTitle()</span>
+                    </div>
+                </div>
+
+                @if (Model.Entities != null && Model.Entities.Any())
+                {
+                    <table class="table table-hover table-bordered tc vm">
+                        <thead class="tc vm">
+                            <tr class="tc vm">
+                                <th class="tc vm">
+                                    عکس پروفایل
+                                </th>
+                                <th class="tc vm">
+                                    نام شرکت
+                                </th>
+                                <th class="tc vm">
+                                    اطلاعات شخصی
+                                </th>
+                                <th class="tc vm">
+                                    وضعیت
+                                </th>
+                                <th class="tc vm">
+                                    امکانات
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="tc vm">
+                            @foreach (var seller in Model.Entities)
+                            {
+                                <tr class="tc vm">
+                                    <td class="vm">
+                                        <div class="flex-style-center">
+                                            <img src="@seller.User.GetUserAvatar()" class="avatar-style" />
+                                            <div class="mr-10px">
+                                                <span> @seller.User.Username </span>
+                                                <hr class="margin-7" />
+                                                <span>تاریخ ثبت نام  : @seller.User.CreateDate.ToShamsi()</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                      <td class="tc vm">
+                                            <p> @seller.Market.MarketName</p>
+                                    </td>
+                                    <td class="tc vm">
+                                        <p>
+                                            @Localizer["Email"] :
+                                            @if (seller.User.Email == null)
+                                            {
+                                                <span class="mr-8px label label-orange">وارد نشده  </span>
+                                            }
+                                            else
+                                            {
+                                                @seller.User.Email
+                                            }
+                                        </p>
+                                        @if (!string.IsNullOrEmpty(seller.User.Mobile))
+                                        {
+                                            <hr class="margin-7" />
+                                            <p>موبایل : @seller.User.Mobile</p>
+                                        }
+                                    </td>
+                                    <td class="tc vm">
+                                        <p class="flex-style-center">
+                                            @if (seller.Market.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller)
+                                            {
+                                                <span class="mr-8px label label-orange">تکمیل نشده </span>
+                                            }
+                                            @if (seller.Market.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.WaitingForConfirmPersonalInformations)
+                                            {
+                                                <span class="mr-8px label label-orange">درانتظار برسی </span>
+                                            }
+                                            @if (seller.Market.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.WaitingForPyedFromSeller)
+                                            {
+                                                <span class="mr-8px label label-orange">در انتظار پرداخت  </span>
+                                            }
+                                             @if (seller.Market.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.AcceptedPersonalInformation)
+                                            {
+                                                <span class="mr-8px label label-info"> اطلاعات تایید شده   </span>
+                                            }  
+                                            @if (seller.Market.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.ActiveMarketAccount)
+                                            {
+                                                <span class="mr-8px label label-success">تایید شده   </span>
+                                            }
+                                              @if (seller.Market.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.DisAcctiveMarketAccount)
+                                            {
+                                                <span class="mr-8px label label-success">غیر فعال   </span>
+                                            }
+                                               @if (seller.Market.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.Rejected)
+                                            {
+                                                <span class="mr-8px label label-success">رد شده </span>
+                                            }
+
+                                        </p>
+                                    </td>
+                                    <td class="tc vm">
+                                        <a asp-action="SellerPersonalInfoDetail" asp-controller="SellerPersonalInfo" asp-area="Admin" asp-route-id="@seller.Market.Id" class="btn btn-azure btn-circle btn-xs"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="footer tc margin-top-5">
+
+                        <partial name="_AdminPaging" model="@Model.GetCurrentPaging()" />
+
+                    </div>
+                }
+                else
+                {
+                    <partial name="_AdminNotFoundPartial" />
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,221 @@
+﻿.btn-sky {
+    width: 100%;
+}
+
+.btn-labeled {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.tc {
+    text-align: center;
+}
+
+.selectStateInFilterUsersListInAdmin {
+    padding: 1vw
+}
+
+.radioButtonInFilterInAdmin {
+    display: block;
+}
+
+.submitFilterInAdmin {
+    padding: 1vw
+}
+
+    .submitFilterInAdmin button {
+        width: 100%;
+        display: block
+    }
+
+.custom-file-input {
+    display: none !important
+}
+
+.showLocationsListInAddUserPage select {
+    width: 100%
+}
+
+.showLocationsInAddUserSection {
+    margin-bottom: 5vh;
+    padding: 0
+}
+
+.chooseUserAvatarInEditUserInAdmin {
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+}
+
+.pagingInInIndex {
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+}
+
+.ck-content {
+    height: 30vh
+}
+
+.address-field {
+    resize: vertical;
+}
+
+.panelBody {
+    padding: 5px 15px 0 15px !important
+}
+
+.address-field {
+    resize: vertical;
+}
+
+.bordered-0 {
+    border: none !important;
+}
+
+.d-none {
+    display: none !important;
+}
+
+.d-inline-block {
+    display: inline-block !important;
+}
+
+.c-pointer {
+    cursor: pointer !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.subPermissionSectionHr {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important
+}
+
+.tableShowListInAdmin th, tbody td {
+    text-align: center;
+}
+
+.tableShowListInAdmin .permission {
+    text-align: start !important
+}
+
+.avatarPreview {
+    width: 100%
+}
+
+.addUserAddressTextarea {
+    resize: none
+}
+
+.addExchangeRatioBtn button {
+    margin-top: 0
+}
+
+.exchangeCurrencyPageTitles label {
+    font-weight: bold
+}
+
+.exchangeCurrencyPageCurrencyName label {
+    margin-top: 5px
+}
+
+.exchangeRatioPageWidgetBody {
+    padding: 4vh !important
+}
+
+.exchangeCurrencyPageTitles label {
+    width: 20%
+}
+
+.exchangeCurrencyPageCurrencyName label {
+    width: 20%
+}
+
+.exchangeCurrencyPageCurrencyName .ratioInput {
+    display: inline-block
+}
+
+.addExchangeRatioBtn {
+    display: inline-block;
+    width: 30%;
+    margin: 0 30px;
+}
+
+    .addExchangeRatioBtn button {
+        width: 50%;
+        display: inline-block;
+    }
+
+@media screen and (max-width: 970px) {
+    .addExchangeRatioBtn {
+        width: 20%;
+    }
+
+        .addExchangeRatioBtn button {
+            width: 100%;
+        }
+}
+@media screen and (max-width: 625px) {
+    .exchangeCurrencyPageTitles label {
+        width: 20%;
+        font-size: .9em;
+    }
+    .ratioInput {
+        width: 15%
+    }
+}
+    @media screen and (max-width: 540px) {
+        .addExchangeRatioBtn {
+            width: 25%;
+        }
+
+        .addExchangeRatioBtn button {
+            width: 100%;
+        }
+    }
+
+    @media screen and (max-width: 450px) {
+        .addExchangeRatioBtn {
+            width: 25%;
+        }
+
+        .exchangeRatioPageWidgetBody {
+            padding: 1vh!important
+        }
+    }
+}
+
+.ta-unresizable {
+    resize: none !important;
+}
+.isNotificationForSingileUserSection {
+    height: 20vh;
+}
+.isNotificationForSingileUser {
+    padding-top: 5vh
+}
+.isNotificationForSingileUser input {
+    opacity: 1;
+    display: initial;
+    position: initial;
+    width: 1.3em;
+}
+.isNotificationForSingileUser label {
+    margin-top: -7px
+}
+.findUserSection {
+    display: none
+}
+.userNameInAddNotificationPage {
+    padding: 0 3vw
+}
+.filterButtoonInShowUsersListPartial {
+    padding-top: 15px
+}
+
+.padding-10 {
+    padding: 10px !important;
+}

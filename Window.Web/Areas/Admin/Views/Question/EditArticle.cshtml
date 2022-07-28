@@ -1,0 +1,99 @@
+﻿@using Window.Domain.ViewModels.Common
+@using Window.Application.StaticTools
+@model Window.Domain.ViewModels.Admin.QuestionAnswer.EditQuestionAnswerAdminSideViewModel
+@using Window.Application.Extensions
+@{
+    ViewData["Title"] = "ویرایش ";
+
+}
+
+@section Scripts
+{
+<partial name="_JqueryValidation" />
+<script src="/admin/js/admin-custom.js"></script>
+<script src="/admin/js/EditArticle.js"></script>
+}
+
+@section breadcrumb {
+
+<li>
+    <a href="javascript:void(0)"> @ViewData["Title"] </a>
+</li>
+}
+
+<form method="post" asp-action="EditArticle" asp-controller="Question" asp-area="Admin" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <div class="row">
+        <div class="col-lg-9 col-sm-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-yellow">
+                    <span class="widget-caption"> @ViewData["Title"] </span>
+                </div>
+                <div class="widget-body">
+                    <div>
+
+                        <div class="row">
+
+                            <div class="form-group col-md-12 col-sm-12">
+                                <label asp-for="Question"></label>
+                                <input type="text" class="form-control" asp-for="Question">
+                                <span class="text-danger" asp-validation-for="Question"></span>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="form-group col-md-12">
+                                <label asp-for="Answer"></label>
+                                <textarea class="form-control" ckeditor="1" asp-for="Answer"></textarea>
+                                <span class="text-danger" asp-validation-for="Answer"></span>
+
+                            </div>
+
+                        </div>
+
+                        <hr class="margin-bottom-10 margin-top-10" />
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled btn-warning">
+                                    <i class="btn-label glyphicon glyphicon-ok"></i>ویرایش
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-sm-12">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-yellow">
+                            <span class="widget-caption"> وضعیت </span>
+                        </div>
+                        <div class="widget-body">
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" asp-for="IsActive">
+                                                <span class="text"> فعال </span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>

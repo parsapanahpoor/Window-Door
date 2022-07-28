@@ -1,0 +1,56 @@
+﻿@using Window.Domain.ViewModels.Common
+@using Window.Application.StaticTools
+@model Window.Domain.Entities.Glass.Glass
+@using Window.Domain.Enums.SellerType
+
+
+@{
+    ViewData["Title"] = "افزودن شیشه ی جدید";
+}
+
+@section Scripts
+{
+<partial name="_JqueryValidation" />
+}
+
+@section breadcrumb {
+
+<li>
+    <a href="javascript:void(0)"> @ViewData["Title"] </a>
+</li>
+}
+
+<form method="post" asp-action="CreateGlass" asp-controller="Segment" asp-area="Admin" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-green">
+                    <span class="widget-caption"> @ViewData["Title"] </span>
+                </div>
+                <div class="widget-body">
+                    <div>
+
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12">
+                                <label asp-for="GlassName"></label>
+                                <input type="text" class="form-control" asp-for="GlassName">
+                                <span class="text-danger" asp-validation-for="GlassName"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled btn-palegreen">
+                                    <i class="btn-label glyphicon glyphicon-ok"></i>ثبت
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>

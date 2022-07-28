@@ -1,0 +1,128 @@
+﻿@using Window.Domain.ViewModels.Common
+@using Window.Application.StaticTools
+@model Window.Domain.Entities.Brand.MainBrand
+@using Window.Domain.Enums.SellerType
+
+
+@{
+    ViewData["Title"] = "افزودن برند جدید";
+}
+
+@section Scripts
+{
+<partial name="_JqueryValidation" />
+<script src="/admin/js/admin-custom.js"></script>
+<script src="/admin/js/CreateArticle.js"></script>
+<script src="/common/custom/custom.js"></script>
+}
+
+@section breadcrumb {
+
+<li>
+    <a href="javascript:void(0)"> @ViewData["Title"] </a>
+</li>
+}
+
+<form method="post" asp-action="CreateMainBrand" asp-controller="Brand" asp-area="Admin" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-lg-9 col-sm-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-green">
+                    <span class="widget-caption"> @ViewData["Title"] </span>
+                </div>
+                <div class="widget-body">
+                    <div>
+
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12">
+                                <label asp-for="BrandName"></label>
+                                <input type="text" class="form-control" asp-for="BrandName">
+                                <span class="text-danger" asp-validation-for="BrandName"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled btn-palegreen">
+                                    <i class="btn-label glyphicon glyphicon-ok"></i>ثبت
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-3 col-sm-12">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-green">
+                            <span class="widget-caption"> تصویر برند   </span>
+                        </div>
+                        <div class="widget-body">
+                            <div class="row">
+
+                                <input type="file" class="display-none" name="brandLogo" id="ArticleImage" ImageInput="1" accept=".jpg,.jpeg,.png" />
+
+                                <div class="col-md-12">
+                                    <label for="ArticleImage" class="file-input-style">
+                                        <i class="glyphicon glyphicon-upload"></i>
+                                        <span class="mr-8px">لطفا  تصویر برند را انتخاب کنید .</span>
+                                    </label>
+                                </div>
+
+                                <div class="col-md-12 tc mt-10px">
+                                    <img src="@Window.Application.StticTools.FilePaths.DefaultSellerInfoImage" class="Article-Priew" ImageFile="1" />
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                   <div class="col-lg-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-yellow">
+                            <span class="widget-caption"> وضعیت </span>
+                        </div>
+                        <div class="widget-body">
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" asp-for="Alominum">
+                                                <span class="text"> آلومینیوم </span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                 <div class="col-md-12">
+
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" asp-for="UPVC">
+                                                <span class="text"> UPVC </span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>

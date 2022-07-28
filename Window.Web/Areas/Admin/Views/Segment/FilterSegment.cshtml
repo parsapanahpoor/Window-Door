@@ -1,0 +1,123 @@
+﻿@using Window.Application.Extensions
+@using Window.Application.Convertors
+@model Window.Domain.ViewModels.Admin.Segment.FilterSegmentViewModel
+@using Window.Domain.ViewModels.Admin.QuestionAnswer
+
+@{
+    ViewData["Title"] = "لیست قطعه ها ";
+}
+
+@section Styles
+{
+
+}
+
+@section Scripts
+{
+<partial name="_AdminSweetAlertLocalizer" />
+}
+
+@section breadcrumb {
+<li>
+    <a href="javascript:void(0)"> @ViewData["Title"] </a>
+</li>
+}
+
+<div class="row">
+    <div class="col-lg-3 col-sm-12">
+        <a class="btn btn-sky w-100 margin-bottom-10" asp-action="CreateSegment" asp-controller="Segment" asp-area="Admin">افزودن قطعه  </a>
+
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-green">
+                <span class="widget-caption"> فیلتر   </span>
+            </div>
+            <div class="widget-body">
+                <div>
+                    <form asp-action="FilterSegment" asp-controller="Segment" asp-area="Admin" id="filter-search" method="get">
+
+                        <input type="hidden" asp-for="Page" />
+
+
+                        <div class="form-group">
+                            <label asp-for="SegmentName"> نام قطعه </label>
+                            <input asp-for="SegmentName" class="form-control">
+                        </div>
+
+                        <hr />
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
+                                    <i class="btn-label glyphicon glyphicon-filter"></i>اعمال فیلتر
+                                </button>
+
+                                @if (Context.Request.QueryString.HasValue)
+                                {
+                                    <a asp-action="FilterSegment" asp-controller="Segment" asp-area="Admin" class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                        <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
+                                    </a>
+                                }
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-sm-12">
+        <div class="well with-header with-footer table-responsive">
+            <div class="header bordered-azure">
+                <div class="flex-style">
+                    <span>لیست </span>
+                    <span>@Model.GetShownEntitiesPagesTitle()</span>
+                </div>
+            </div>
+
+            @if (Model.Entities != null && Model.Entities.Any())
+            {
+                <table class="table table-hover table-bordered tc vm">
+                    <thead class="tc vm">
+                        <tr class="tc vm">
+                            <th class="tc vm">
+                                عنوان 
+                            </th>
+                            <th class="tc vm">
+                                امکانات
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="tc vm">
+                        @foreach (var Segment in Model.Entities)
+                        {
+                            <tr class="tc vm" remove-ajax-item="@Segment.Id">
+                                <td class="tc vm">
+                                    <p class="flex-style-center">
+                                        @Segment.SegmentName
+                                    </p>
+                                </td>
+
+                                <td class="tc vm">
+                                    <a asp-action="EditSegment" asp-area="Admin" asp-controller="Segment" asp-route-segmentId="@Segment.Id" class="btn btn-warning btn-circle btn-xs"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <button onclick="DeleteAjax(@Segment.Id, '@Url.Action("DeleteSegment", "Segment", new { area = "Admin", Id = Segment.Id })')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="footer tc">
+                    <partial name="_AdminPaging" model="@Model.GetCurrentPaging()" />
+
+                </div>
+            }
+            else
+            {
+                <partial name="_AdminNotFoundPartial" />
+            }
+        </div>
+    </div>
+</div>
+

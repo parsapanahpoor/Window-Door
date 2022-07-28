@@ -1,0 +1,42 @@
+﻿@inject IHtmlLocalizer<SharedLocalizer> SharedHtmlLocalizer
+
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function AddCurrenciesRatio(sourceCurrencyId, targetCurrencyId, i) {
+
+        var ratio = $(`#ratioInput_${i}`).val();
+        $.ajax({
+            url: "/add-currencies-exchange-ratio",
+            type: "get",
+            data: {
+                SourceCurrencyId: sourceCurrencyId,
+                TargetCurrencyId: targetCurrencyId,
+                Ratio: ratio
+            },
+            beforeSend: function() {
+            },
+            success: function(response) {
+                if (response.status === "Success") {
+                    Swal.fire({
+                        title: '@SharedHtmlLocalizer["Success"]',
+                        text:  '@SharedHtmlLocalizer["Ratio Submitted Successfully"]' ,
+                        icon: "success",
+                        confirmButtonText: '@SharedHtmlLocalizer["confirm"]'
+                    });
+
+                } else {
+                    Swal.fire({
+                        title: "@SharedHtmlLocalizer["Error"]",
+                        text: '@SharedHtmlLocalizer["There is a problem. please try again"]',
+                        icon: "error",
+                        confirmButtonText: '@SharedHtmlLocalizer["confirm"]'
+                    });
+                }
+            },
+            error: function() {
+            }
+        });
+    }
+</script>

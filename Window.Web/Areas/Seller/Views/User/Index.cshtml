@@ -1,0 +1,150 @@
+﻿@using Window.Domain.Entities.Account
+@using Window.Domain.ViewModels.User
+@using Window.Application.Convertors
+@using Window.Application.Extensions
+@model FilterUserViewModel
+@{
+    ViewData["Title"] = "مدیریت کارمندان";
+}
+@section Scripts
+{
+}
+
+@section breadcrumb
+{
+
+<li class="active">@ViewData["Title"]</li>
+}
+
+<div class="container-fluid">
+    <div class="row">
+
+
+    <div class="col-12 col-xl-3 col-lg-3">
+        <a class="btn btn-sky w-100 margin-bottom-10" asp-action="AddNewUser" asp-controller="User" asp-area="Seller">افرودن کارمند جدید </a>
+
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-green">
+                <span class="widget-caption"> فیلتر  </span>
+            </div>
+            <div class="widget-body">
+                <div class="row">
+                    <div class="basic-form">
+                        <form asp-area="Seller" asp-controller="User" asp-action="Index" method="get" id="filter-search">
+                            <input type="hidden" asp-for="Page"/>
+
+                            <div class="form-row">
+
+                                <div class="form-group col-md-12">
+                                    <label>ایمیل</label>
+                                    <input type="text" asp-for="Email" class="form-control" placeholder="ایمیل">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>موبایل</label>
+                                    <input type="text" asp-for="Mobile" class="form-control" placeholder="موبایل">
+                                </div>
+                            </div>
+
+                            <hr/>
+                      
+                            <hr/>
+
+                              <div class="selectStateInFilterUsersListInAdmin">
+                                <div class="form-group">
+                                <label asp-for="OrderType">مرتب سازی بر اساس تاریخ </label>
+                                <select asp-for="OrderType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(FilterUserViewModel.FilterUserOrderType))"></select>
+                            </div>
+                            </div>
+
+                            <hr/>
+
+                            <div class="submitFilterInAdmin">
+                                <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
+                                    <i class="btn-label glyphicon glyphicon-filter"></i>فیلتر
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+        <div class="col-xs-12 col-md-12 col-lg-9">
+            <div class="well with-header with-footer table-responsive">
+                <div class="header bordered-azure">
+                    <div class="flex-style">
+                        <span>مدیریت کارمندان </span>
+                        <span>@Model.GetShownEntitiesPagesTitle()</span>
+                    </div>
+                </div>
+               
+                        @if (Model != null)
+                        {
+                            <table class="table table-hover table-bordered tc tableShowListInAdmin">
+                         
+                                <thead class="tc">
+                                    <tr class="tc">
+                                        <th>
+                                            نام کاربری
+                                        </th>
+                                        <th>
+                                            ایمیل 
+                                        </th>
+                                        <th>
+                                            موبایل
+                                        </th>
+                                   
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Entities)
+                                    {
+
+
+                                        <tr id="profile_@item.Id" remove-ajax-item="@item.Id">
+                                            <td>
+                                                @item.Username
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Email))
+                                                {
+                                                    @item.Email
+                                                }
+                                                else
+                                                {
+                                                    <span>وارد نشده</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Mobile))
+                                                {
+                                                    @item.Mobile
+                                                }
+                                                else
+                                                {
+                                                    <span>وارد نشده </span>
+
+                                                }
+                                            </td>
+                                        
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+
+                            <partial name="_SellerPaging" model="@Model.GetCurrentPaging()" />
+                        }
+                        else
+                        {
+                            <partial name="_SellerNotFoundPartial" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+ 

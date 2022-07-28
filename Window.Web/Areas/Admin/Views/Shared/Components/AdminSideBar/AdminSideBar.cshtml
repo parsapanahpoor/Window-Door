@@ -1,0 +1,206 @@
+﻿
+<div class="page-sidebar" id="sidebar">
+    <div class="sidebar-header-wrapper">
+        <input type="text" class="searchinput" />
+        <i class="searchicon fa fa-search"></i>
+    </div>
+
+    <ul class="nav sidebar-menu">
+
+        <li>
+            <a asp-action="Index" asp-area="Admin" asp-controller="Home">
+                <i class="menu-icon glyphicon glyphicon-home"></i>
+                <span class="menu-text"> @SharedLocalizer["Dashboard"]  </span>
+            </a>
+        </li>
+
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-users"></i>
+                <span class="menu-text"> @SharedLocalizer["Manage Users"] </span>
+
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-controller="User" asp-action="Index">
+                        <span class="menu-text">@SharedLocalizer["Users List"]</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a asp-action="AddNewUser" asp-controller="User">
+                        <span class="menu-text">@SharedLocalizer["Add new User"]</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-users"></i>
+                <span class="menu-text"> مدیریت اطلاعات فروشندگان </span>
+
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-controller="SellerPersonalInfo" asp-action="ListOfSellersPersonalInfos">
+                        <span class="menu-text">لیست اطلاعات فروشندگان</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon glyphicon glyphicon-book"></i>
+                <span class="menu-text"> مدیریت بلاگ ها  </span>
+
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-controller="Article" asp-action="Index" asp-area="Admin">
+                        <span class="menu-text">لیست بلاگ ها</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon glyphicon glyphicon-book"></i>
+                <span class="menu-text"> مدیریت سوال و جواب ها  </span>
+
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-controller="Question" asp-action="Index" asp-area="Admin">
+                        <span class="menu-text">لیست سوال و جواب ها</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+              <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon glyphicon glyphicon-tag"></i>
+                <span class="menu-text"> مدیریت قطعه ها </span>
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-action="FilterSegment" asp-controller="Segment" asp-area="Admin">
+                        <span class="menu-text"> لیست قطعه ها </span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="CreateSegment" asp-controller="Segment" asp-area="Admin">
+                        <span class="menu-text"> ایجاد قطعه </span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+                 <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon glyphicon glyphicon-tag"></i>
+                <span class="menu-text"> مدیریت شیشه ها </span>
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-action="FilterGlasses" asp-controller="Segment" asp-area="Admin">
+                        <span class="menu-text"> لیست شیشه ها </span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="CreateGlass" asp-controller="Segment" asp-area="Admin">
+                        <span class="menu-text"> ایجاد شیشه </span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon glyphicon glyphicon-th"></i>
+                <span class="menu-text"> مدیریت برندهای اصلی </span>
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-action="FilterMainBrand" asp-controller="Brand" asp-area="Admin">
+                        <span class="menu-text"> لیست برندهای اصلی </span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="CreateMainBrand" asp-controller="Brand" asp-area="Admin">
+                        <span class="menu-text"> ایجاد برند اصلی جدید </span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon glyphicon glyphicon-map-marker"></i>
+                <span class="menu-text"> مدیریت مکان ها </span>
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-action="FilterState" asp-controller="State" asp-area="Admin">
+                        <span class="menu-text"> لیست مکان ها </span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="CreateState" asp-controller="State" asp-area="Admin">
+                        <span class="menu-text"> ایجاد مکان جدید </span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a asp-controller="Wallet" asp-action="Index">
+                <i class="menu-icon glyphicon glyphicon-usd"></i>
+                <span class="menu-text"> @SharedLocalizer["Wallet list"]  </span>
+            </a>
+        </li>
+
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-ticket"></i>
+                <span class="menu-text"> @SharedLocalizer["Manage Tickets"] </span>
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-action="FilterTickets" asp-controller="Ticket" asp-area="Admin">
+                        <span class="menu-text"> @SharedLocalizer["List Of Tickets"] </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a asp-action="CreateTicket" asp-controller="Ticket" asp-area="Admin">
+                        <span class="menu-text"> @SharedLocalizer["Create New Ticket"]</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
+    </ul>
+</div>

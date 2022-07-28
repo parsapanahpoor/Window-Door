@@ -1,0 +1,79 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Window.Application.StticTools
+{
+    public static class FilePaths
+    {
+
+        #region Site
+
+        public static string SiteFarsiName = "DoctorFAM";
+        public static string SiteAddress = "https://localhost:7286";
+
+        public static readonly string SiteLogo = "/content/images/site/logo/main/";
+        public static readonly string SiteLogoServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/site/logo/main/");
+
+        public static readonly string DefaultSiteLogo = "/content/images/site/logo/default/logo.png";
+        public static readonly string SiteLogoThumb = "/content/images/site/logo/thumb/";
+        public static readonly string SiteLogoThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/site/logo/thumb/");
+
+        public static readonly string EmailBanner = "/content/images/site/emailBanner/main/";
+        public static readonly string EmailBannerServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/site/emailBanner/main/");
+
+        public static readonly string EmailBannerThumb = "/content/images/site/emailBanner/thumb/";
+        public static readonly string EmailBannerThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/site/emailBanner/thumb/");
+
+        #endregion
+
+        #region UserAvatar
+
+        public static readonly string UserAvatarPath = "/content/images/user/main/";
+        public static readonly string UserAvatarPathServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/user/main/");
+
+        public static readonly string UserAvatarPathThumb = "/content/images/user/thumb/";
+        public static readonly string UserAvatarPathThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/user/thumb/");
+
+        public static readonly string DefaultUserAvatar = "/content/images/user/DefaultAvatar.png";
+
+        #endregion
+
+        #region Seller
+
+        public static readonly string DefaultSellerInfoImage = "/content/images/SellerInfo/ImageNotFound.png";
+        public static string SellerInfoOriginimage = "/content/images/SellerInfo/main/";
+        public static readonly string SellerInfoPathServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/SellerInfo/main/");
+        public static readonly string SellerInfoPathThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/SellerInfo/thumb/");
+
+        public static string SellerInfoPath = "/content/images/SellerInfo/main/";
+        public static string SellerInfoThumbimage = "/content/images/SellerInfo/thumb/";
+
+        #endregion
+
+        #region Article
+
+        public static readonly string DefaultArticleImage = "/content/images/Article/default.jpg";
+        public static string ArticleOriginimage = "/content/images/Article/origin/";
+        public static string ArticleThumbimage = "/content/images/Article/thumb/";
+        public static string DefaultArticleThumbimage = "/content/images/Article/thumb/default.jpg";
+        public static readonly string ArticleImageOriginPathServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/Article/origin/");
+        public static readonly string ArticleImageThumbPathServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/Article/thumb/");
+
+        #endregion
+
+        #region Brand
+
+        public static readonly string DefaultBrandImage = "/content/images/Brand/default.jpg";
+        public static string BrandOriginimage = "/content/images/Brand/origin/";
+        public static string BrandThumbimage = "/content/images/Brand/thumb/";
+        public static string DefaultBrandThumbimage = "/content/images/Brand/thumb/default.jpg";
+        public static readonly string BrandImageOriginPathServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/Brand/origin/");
+        public static readonly string BrandImageThumbPathServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/Brand/thumb/");
+
+        #endregion
+
+    }
+}

@@ -1,0 +1,97 @@
+﻿@using Window.Application.StticTools
+@using Window.Web.Culture
+@model Window.Domain.ViewModels.User.Account.EditProfileViewModel
+@{
+    ViewData["Title"] = Localizer["Edit Profile"];
+
+    var isRtl = ApplicationCultures.GetCurrentCulture().IsRtl;
+}
+
+@section breadcrumb
+{
+<li>
+    <a asp-controller="Account" asp-action="EditProfile">@Localizer["User Panel"]</a>
+</li>
+<li>
+    <a asp-action="EditProfile">@Localizer["Edit Profile Information"]</a>
+</li>
+}
+
+<form method="post" asp-antiforgery="true" enctype="multipart/form-data">
+        <div class="col-lg-9 col-sm-12">
+            
+            @if (ViewData.ModelState.ErrorCount > 0)
+            {
+                <div asp-validation-summary="All" class="alert alert-danger"></div>
+            }
+
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-blue">
+                    <span class="widget-caption"> @ViewData["Title"] </span>
+                </div>
+                <div class="widget-body">
+                    <div>
+                        <div class="card">
+                            <div class="card-body">
+
+                                <div class="form-group col-xs-6">
+                                    <label asp-for="Username"></label>
+                                    <input asp-for="Username" class="form-control"/>
+                                    <span asp-validation-for="Username" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-xs-6">
+                                    <label asp-for="Mobile"></label>
+                                    <input asp-for="Mobile" class="form-control @(isRtl ? "text-right" : "")" dir="ltr"/>
+                                    <span asp-validation-for="Mobile" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled btn-blue">
+                                    <i class="btn-label glyphicon glyphicon-ok"></i>@Localizer["Edit"]
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-sm-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-blue">
+                    <span class="widget-caption"> @ViewData["Title"] </span>
+                </div>
+                <div class="widget-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label asp-for="Avatar" class="file-input-style  c-pointer" id="select-avatar-button">
+                                <i class="glyphicon glyphicon-upload"></i>
+                                <span class="mr-8px">@Localizer["Please select an image"]</span>
+                            </label>
+                        </div>
+                        <div class="col-md-12 tc text-center">
+                            <img class="img-responsive d-inline-block" id="user-avatar-preview" src="@(string.IsNullOrEmpty(Model.AvatarName) ? FilePaths.DefaultUserAvatar : FilePaths.UserAvatarPath + Model.AvatarName)"/>
+                            <input asp-for="Avatar" accept="image/png,image/jpg,image/jpeg" class="d-none"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    @* </div> *@
+</form>
+
+
+@section Scripts
+{
+    
+    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_SweetAlertLocalizer"/>
+    <script src="/UserPanel/Account/EditProfile.js"></script>
+}

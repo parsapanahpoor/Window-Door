@@ -1,0 +1,13 @@
+﻿@inject IHtmlLocalizer<SharedLocalizer> SharedHtmlLocalizer
+<script>
+     function CopyToClipboardByElementId(elementId) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        var el = $("#" + elementId);
+        $temp.val($(el).text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+        ShowMessage('@SharedHtmlLocalizer["Success"]', '@SharedHtmlLocalizer["Succes Message"]');
+    }
+</script>
+

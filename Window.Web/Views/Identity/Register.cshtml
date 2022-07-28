@@ -1,0 +1,67 @@
+﻿@using Window.Web.Culture
+@model Window.Domain.ViewModels.User.Authentication.RegisterUserViewModel
+@{
+    ViewData["Title"] = Localizer["Register"].Value;
+    Layout = "Identity/_IdentityLayout";
+    var culture = ApplicationCultures.GetCurrentCulture();
+    var isRtl = culture.IsRtl;
+}
+
+<div class="register-container animated fadeInDown">
+    <form method="post" dir="@(isRtl ? "rtl" : "ltr")" asp-antiforgery="true">
+        <div class="registerbox bg-white">
+            <div class="registerbox-title">@Localizer["Register"]</div>
+            
+            @if (ViewData.ModelState.ErrorCount > 0)
+            {
+                <div asp-validation-summary="All" class="alert alert-danger margin-left-20 margin-right-20 margin-top-10"></div>
+            }
+
+            <div class="registerbox-caption @(isRtl ? "text-right" : "")">@Localizer["Please fill in your information"]</div>
+
+            <div class="registerbox-textbox col-6">
+                <label asp-for="Username"></label>
+                <input asp-for="Username" class="form-control"/>
+                <span asp-validation-for="Username" class="text-danger small"></span>
+            </div>
+
+            <div class="registerbox-textbox">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control"/>
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+            
+            <div class="registerbox-textbox">
+                <label asp-for="Mobile"></label>
+                <input asp-for="Mobile" class="form-control" placeholder="@Localizer["Example 09**********"]"/>
+                <span asp-validation-for="Mobile" class="text-danger small"></span>
+            </div>
+
+            <div class="registerbox-textbox">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+            
+            <div class="registerbox-textbox">
+                <label asp-for="RePassword"></label>
+                <input asp-for="RePassword" class="form-control"/>
+                <span asp-validation-for="RePassword" class="text-danger small"></span>
+            </div>
+            
+            <div class="registerbox-textbox">
+                <a asp-action="Login">@Localizer["Already have account? login"]</a>
+            </div>
+
+            <div class="registerbox-submit mt-3" dir="@(isRtl ? "ltr" : "rtl")">
+                <input type="submit" class="btn btn-primary" value="@Localizer["Register"]">
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+    <script src="/Identity/Register.js"></script>
+}

@@ -1,0 +1,82 @@
+﻿@using Window.Domain.ViewModels.Common
+@using Window.Application.StaticTools
+@model Window.Domain.ViewModels.Seller.Pricing.SegmentPricingViewModel
+@using Window.Domain.Enums.SellerType
+
+
+@{
+    ViewData["Title"] = "قیمت گذاری قطعه";
+
+    var segmentPricing = ViewBag.SegmentPRicing as List<Window.Domain.Entities.Product.SegmentPricing>;
+}
+
+@section Scripts
+{
+<partial name="_JqueryValidation" />
+}
+
+@section breadcrumb {
+
+<li>
+    <a href="javascript:void(0)"> @ViewData["Title"] </a>
+</li>
+}
+
+
+<div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-green">
+                <span class="widget-caption"> @ViewData["Title"] </span>
+            </div>
+            <div class="widget-body">
+                <div>
+                    <div class="row">
+
+                        @if (Model.Segments != null && Model.Segments.Any())
+                        {
+                            @foreach (var item in Model.Segments)
+                            {
+                                <form method="post" asp-action="AddSegmentPricing" asp-controller="Product" asp-area="Seller" enctype="multipart/form-data">
+                                    <input type="hidden" asp-for="ProductId" />
+                                    <input type="hidden" name="SegmentId" value="@item.Segment.Id" />
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <label>@item.Segment.SegmentName</label>
+                                        <div class="input-group">
+                                            @if (segmentPricing != null && segmentPricing.Any())
+                                            {
+                                                @if (segmentPricing.Any(p => p.SegmentId == item.Segment.Id))
+                                                {
+                                                    <input type="number" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="0">
+                                                }
+                                                   else
+                                            {
+                                                <input type="number" class="form-control" name="Price" min="0">
+                                            }
+                                            }
+                                            else
+                                            {
+                                                <input type="number" class="form-control" name="Price" min="0">
+                                            }
+                                            <span class="input-group-btn">
+                                                <span class="btn palegreen-azure btn-file" style="padding:0px 0px 0px 0px;">
+                                                    <button type="submit" class="btn btn-labeled btn-palegreen" style="margin-top:0px; padding-right:15px;">
+                                                        ثبت
+                                                    </button>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
+                            }
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

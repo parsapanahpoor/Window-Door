@@ -1,0 +1,120 @@
+﻿@using Window.Application.Extensions
+@using Window.Application.Convertors
+@model Window.Domain.ViewModels.User.FilterUserViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedLocalizer> SharedHtmlLocalizer
+
+<div id="SearchUserModalBox">
+    <div class="row">
+        <form asp-action="SearchUserModal" asp-controller="Home" asp-area="Admin" asp-route-baseName="@(ViewBag.BaseName)" id="@(ViewBag.BaseName)-Form"
+              data-ajax="true" data-method="post" data-ajax-begin="open_waiting('#SearchUserModalBox')" data-ajax-success="close_wating('#SearchUserModalBox')"
+              data-ajax-mode="replace" data-ajax-update="#SearchUserModalBox">
+
+            <input type="hidden" asp-for="Page" id="PartialPageId"/>
+
+            <div class="form-group col-md-3 col-xs-12">
+                <label asp-for="Username"> @Localizer["Name"] </label>
+                <input type="text" class="form-control" asp-for="Username">
+            </div>
+
+            <div class="form-group col-md-3 col-xs-12">
+                <label asp-for="Email"> @Localizer["Email"] </label>
+                <input type="text" class="form-control" asp-for="Email">
+            </div>
+
+            <div class="form-group col-md-3 col-xs-12">
+                <label asp-for="Mobile"> @Localizer["Mobile"] </label>
+                <input type="text" class="form-control" asp-for="Mobile">
+            </div>
+
+            <div class="form-group col-md-3 col-xs-12 filterButtoonInShowUsersListPartial">
+                <button type="submit" class="btn btn-labeled w-100 btn-palegreen mt-24 ">
+                    <i class="btn-label glyphicon glyphicon-filter"></i>@Localizer["Filter"]
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <hr style="margin-top: 5px; margin-bottom: 20px" />
+
+    <div class="row">
+        <div class="col-lg-12 table-responsive">
+
+            @if (Model.Entities != null && Model.Entities.Any())
+            {
+                <table class="table table-hover table-bordered tc vm">
+                    <thead class="tc vm">
+                        <tr class="tc vm">
+                            <th class="tc vm">
+                                @Localizer["User Avatar"]
+                            </th>
+                            <th class="tc vm">
+                                @Localizer["User Informations"]
+                            </th>
+                            <th class="tc vm">
+                                @Localizer["Options"]
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="tc vm">
+                        @foreach (var user in Model.Entities)
+                        {
+                            <tr class="tc vm">
+                                <td class="vm">
+                                    <div class="flex-style-center">
+                                        <img src="@user.GetUserAvatar()" class="avatar-style" />
+                                        <div class="mr-10px">
+                                            <span> @user.Username </span>
+                                            <hr class="margin-7" />
+                                            <span>@Localizer["Register Date"] : @user.CreateDate)</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="tc vm">
+                                    <p>@Localizer["Email"] : @user.Email</p>
+                                    @if (!string.IsNullOrEmpty(user.Mobile))
+                                    {
+                                        <hr class="margin-7" />
+                                        <p>@Localizer["Mobile"] : @user.Mobile</p>
+                                    }
+                                </td>
+                                <td class="tc vm">
+                                    <a onclick="SelectUser('@user.Id', '@user.Username', '@ViewBag.BaseName')" class="btn btn-success btn-circle btn-xs"><i class="glyphicon glyphicon-ok"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="tc">
+                    <ul class="pagination mt-5px">
+                        @if (Model.StartPage < Model.Page)
+                        {
+                            <li><a class="cursor-pointer" onclick="FillPartialPageId(@(Model.Page - 1), '@(ViewBag.BaseName)')">«</a></li>
+                        }
+                        @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+                        {
+                            if (Model.Page == i)
+                            {
+                                <li class="active"><a class="cursor-pointer">@i</a></li>
+                            }
+                            else
+                            {
+                                <li><a class="cursor-pointer" onclick="FillPartialPageId(@i, '@(ViewBag.BaseName)')">@i</a></li>
+                            }
+                        }
+                        @if (Model.EndPage > Model.Page)
+                        {
+                            <li><a class="cursor-pointer" onclick="FillPartialPageId(@(Model.Page + 1), '@(ViewBag.BaseName)')">»</a></li>
+                        }
+                    </ul>
+                </div>
+            }
+            else
+            {
+                <partial name="_AdminNotFoundPartial" />
+            }
+
+        </div>
+    </div>
+</div>

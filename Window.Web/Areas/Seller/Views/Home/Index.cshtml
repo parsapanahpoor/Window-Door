@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewData["Title"] = Localizer["Index"];
+}
+
+@section breadcrumb
+{
+    
+}
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_SweetAlertLocalizer"/>
+}
+
+@await Component.InvokeAsync("SellersInfos")
+

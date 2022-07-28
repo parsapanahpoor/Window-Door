@@ -1,0 +1,97 @@
+﻿@model Window.Domain.ViewModels.Seller.PersonalInfo.MarketChargeInfoViewModel
+@using Window.Domain.Enums
+@using Window.Application.StaticTools
+@using Window.Domain.ViewModels.Common
+
+@{
+    ViewData["Title"] = " نمایش اطلاعات شارژ حساب";
+}
+
+@section Scripts
+{
+<partial name="_JqueryValidation" />
+}
+
+@section Breadcrumb
+{
+<li>
+    <a href="javascript:void(0)"> @ViewData["Title"] </a>
+</li>
+}
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <div class="well bordered-left bordered-themeprimary">
+                    <p> <strong> در این بخش شما می توانید اطلاعات مربوط به شارژ حساب کاربری خود را مشاهده کنید .</strong> </p>
+
+                    @if (Model.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller)
+                    {
+                        <p> کاربر عزیز اطلاعات کاربری شما وارد نشده است . لطفا قبل از شارژ حساب خود ابتدا اطلاعات خود را وارد نمایید  </p>
+                    }
+                    @if (Model.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller)
+                    {
+                        <p>کاربر عزیز اطلاعات کاربری شما در دست یرسی از طریق پشتیبان می باشد لطفا ال اعلام نتیحه ی برسی شکیبا باشید .  </p>
+                    }
+                    @if (Model.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.Rejected)
+                    {
+                        <p>کاربر عزیز صحت اطلاعات ارسالی شما از سمت پشتیبانی تایید نشده است. لطفا قبل از شارژ حساب اطلاعات خود را تکمیل کنید.  </p>
+                    }
+
+                    @if (Model.DaysOfCharge != null && Model.DaysOfCharge.HasValue)
+                    {
+                        <p>  کاربر عزیز  @Model.DaysOfCharge روز از شارژ حساب کاربری شما باقی مانده است </p>
+                    }
+                    else
+                    {
+                        <p> کاربر عزیز حساب کاربری شما شارژ نشده است و اطلاعات فروشگاه شما در سایت به نمایش در نمیاید .  </p>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+
+             <div class="col-lg-12 col-sm-12">
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <div class="widget">
+                            
+                            <div class="widget-body">
+                                <div class="row">
+
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <label asp-for="MarketName">نام فروشگاه</label>
+                                        <div class="form-control" asp-for="MarketName">@Model.MarketName</div>
+                                    </div>
+
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <label asp-for="MarketName">مبلغ قابل پرداخت</label>
+                                        <div class="form-control" asp-for="MarketName"> ریال @Model.ChargePrice</div>
+                                    </div>
+
+                                    <div class="col-md-12 flex-style">
+                                        <a asp-action="BankPay" asp-area="Seller" asp-controller="SellerPersonalInfo" class="btn btn-labeled btn-palegreen">
+                                            <i class="btn-label glyphicon glyphicon-ok"></i>پرداخت 
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+

@@ -1,0 +1,140 @@
+﻿@using Window.Domain.Enums
+@using Window.Application.StaticTools
+@using Window.Domain.ViewModels.Common
+@model Window.Domain.ViewModels.Seller.PersonalInfo.AddSellerLinksViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedLocalizer> SharedHtmlLocalizer
+
+@{
+    ViewData["Title"] = "افزودن لینک  های ارتباطی ";
+
+    var links = ViewBag.SellerLinks as List<Window.Domain.ViewModels.Seller.PersonalInfo.AddSellerLinksViewModel>;
+
+}
+
+@section Scripts
+{
+<partial name="_JqueryValidation" />
+}
+
+@section Breadcrumb
+{
+<li>
+    <a asp-action="Index" asp-controller="Home" asp-area="Seller"> داشبورد </a>
+</li>
+<li>
+    <a href="javascript:void(0)"> @ViewData["Title"] </a>
+</li>
+}
+
+<form method="post" asp-action="AddSellerPersonalLinks" asp-controller="SellerPersonalInfo" asp-area="Seller" enctype="multipart/form-data">
+
+    <div class="row">
+
+        <div class="col-lg-6 col-sm-12">
+
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="row">
+
+                        <div class="col-lg-12">
+                            <div class="widget">
+                                <div class="widget-header bordered-bottom bordered-green">
+                                    <span class="widget-caption"> لینک ارتباطی  </span>
+                                </div>
+                                <div class="widget-body">
+                                    <div class="row">
+
+                                        <div class="form-group col-md-12 col-sm-12">
+                                            <label asp-for="LinkTitle"></label>
+                                            <input type="text" class="form-control" asp-for="LinkTitle">
+                                            <span class="text-danger" asp-validation-for="LinkTitle"></span>
+                                        </div>
+
+                                        <div class="form-group col-md-12 col-sm-12">
+                                            <label asp-for="LinkValue"></label>
+                                            <input type="text" class="form-control" asp-for="LinkValue">
+                                            <span class="text-danger" asp-validation-for="LinkValue"></span>
+                                        </div>
+
+                                        <hr class="margin-bottom-10 margin-top-10" />
+
+                                        <div class="col-md-12 flex-style">
+
+                                            <button type="submit" class="btn btn-labeled btn-palegreen">
+                                                <i class="btn-label glyphicon glyphicon-ok"></i>ثبت لینک
+                                            </button>
+
+
+                                            <a asp-action="AddSellerWorkSampleTitle" asp-area="Seller" asp-controller="SellerPersonalInfo" class="btn btn-labeled btn-warning">
+                                                <i class="btn-label glyphicon glyphicon-ok"></i>رفتن به مرحله ی بعدی
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-sm-12">
+            <div class="row">
+
+                <div class="col-lg-12 col-sm-12">
+                    <div class="well with-header with-footer table-responsive">
+                        <div class="header bordered-azure">
+                            <div class="flex-style">
+                                <span> لیست لینک های ارتباطی  </span>
+                            </div>
+                        </div>
+
+                        @if (links != null && links.Any())
+                        {
+                            <table class="table table-hover table-bordered tc vm ">
+                                <thead class="tc vm">
+                                    <tr class="tc vm">
+                                        <th class="tc vm">
+                                            عنوان لینک
+                                        </th>
+                                        <th class="tc vm">
+                                            آدرس لینک
+                                        </th>
+                                        <th class="tc vm">
+                                            امکانات
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tc vm">
+                                    @foreach (var link in links)
+                                    {
+                                        <tr class="tc vm" id="profile_@link.Id" remove-ajax-item="@link.Id">
+                                            <td class="vm">
+                                                <p>@link.LinkTitle</p>
+                                            </td>
+                                            <td id="CommentDetail" class="tc vm">
+                                                <p>@link.LinkValue</p>
+                                            </td>
+
+                                            <td class="tc vm">
+                                                <button onclick="DeleteAjax(@link.Id, '@Url.Action("DeleteSellersLinks", "SellerPersonalInfo", new {area = "Seller", id = link.Id})')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <partial name="_SellerNotFoundPartial" />
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+</form>

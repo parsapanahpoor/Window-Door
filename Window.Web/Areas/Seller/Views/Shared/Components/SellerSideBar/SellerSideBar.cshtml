@@ -1,0 +1,274 @@
+﻿<!-- Page Sidebar -->
+<div class="page-sidebar" id="sidebar">
+    <!-- Page Sidebar Header-->
+    <div class="sidebar-header-wrapper">
+        <input type="text" class="searchinput" />
+        <i class="searchicon fa fa-search"></i>
+        <div class="searchhelper">به جستجوی صفحات، گزارشات، پیام ها و ایمیل خود بپردازید</div>
+    </div>
+
+    <ul class="nav sidebar-menu">
+
+        <li>
+            <a asp-area="Seller" asp-controller="Home" asp-action="Index">
+                <i class="menu-icon glyphicon glyphicon-home"></i>
+                <span class="menu-text"> @Localizer["Dashboard"] </span>
+            </a>
+        </li>
+
+        @if (ViewBag.DoctorInfoState == "ActiveSellerAccount")
+        {
+
+
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon fa fa-user"></i>
+                    <span class="menu-text"> @Localizer["Profile"] </span>
+
+                    <i class="menu-expand"></i>
+                </a>
+
+                <ul class="submenu">
+                    <li>
+                        <a asp-area="Seller" asp-controller="Account" asp-action="EditProfile">
+                            <span class="menu-text">@Localizer["Edit Profile"]</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-area="Seller" asp-controller="Account" asp-action="ChangePassword">
+                            <span class="menu-text">@Localizer["Change Password"]</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon fa fa-ticket"></i>
+                    <span class="menu-text"> @Localizer["Manage Tickets"]</span>
+
+                    <i class="menu-expand"></i>
+                </a>
+
+                <ul class="submenu">
+                    <li>
+                        <a asp-area="Seller" asp-controller="Ticket" asp-action="FilterTickets">
+                            <span class="menu-text">@Localizer["List Of Tickets"]</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-area="Seller" asp-controller="Ticket" asp-action="CreateTicket">
+                            <span class="menu-text">@Localizer["Create Ticket"]</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon fa fa-inbox"></i>
+                    <span class="menu-text"> مدیریت قیمت گذاری</span>
+
+                    <i class="menu-expand"></i>
+                </a>
+
+                <ul class="submenu">
+                    <li>
+                        <a asp-area="Seller" asp-controller="Product" asp-action="FilterProducts">
+                            <span class="menu-text">لیست محصولات</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-area="Seller" asp-controller="Product" asp-action="CreateProduct">
+                            <span class="menu-text">افزودن محصول</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon fa fa-ticket"></i>
+                    <span class="menu-text"> @Localizer["Manage Tickets"]</span>
+
+                    <i class="menu-expand"></i>
+                </a>
+
+                <ul class="submenu">
+                    <li>
+                        <a asp-area="Seller" asp-controller="Ticket" asp-action="FilterTickets">
+                            <span class="menu-text">@Localizer["List Of Tickets"]</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-area="Seller" asp-controller="Ticket" asp-action="CreateTicket">
+                            <span class="menu-text">@Localizer["Create Ticket"]</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            @if (ViewBag.SellerMastert == true)
+            {
+                <li>
+                    <a href="#" class="menu-dropdown">
+                        <i class="menu-icon fa fa-users"></i>
+                        <span class="menu-text"> مدیریت کارمندان </span>
+
+                        <i class="menu-expand"></i>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a asp-area="Seller" asp-controller="User" asp-action="Index">
+                                <span class="menu-text">لیست کارمندان</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a asp-area="Seller" asp-action="AddNewUser" asp-controller="User">
+                                <span class="menu-text">افزودن کارمند جدید </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#" class="menu-dropdown">
+                        <i class="menu-icon fa fa-user"></i>
+                        <span class="menu-text"> اطلاعات فروشگاه </span>
+
+                        <i class="menu-expand"></i>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a asp-area="Seller" asp-controller="SellerPersonalInfo" asp-action="PageOfManageSellerInformation">
+                                <span class="menu-text">مدیریت اطلاعات فروشگاه </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            }
+        }
+
+        else
+        {
+
+
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon fa fa-user"></i>
+                    <span class="menu-text"> @Localizer["Profile"] </span>
+
+                    <i class="menu-expand"></i>
+                </a>
+
+                <ul class="submenu">
+                    <li>
+                        <a asp-area="Seller" asp-controller="Account" asp-action="EditProfile">
+                            <span class="menu-text">@Localizer["Edit Profile"]</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-area="Seller" asp-controller="Account" asp-action="ChangePassword">
+                            <span class="menu-text">@Localizer["Change Password"]</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon fa fa-inbox"></i>
+                    <span class="menu-text"> مدیریت محصولات</span>
+
+                    <i class="menu-expand"></i>
+                </a>
+
+                <ul class="submenu">
+                    <li>
+                        <a asp-area="Seller" asp-controller="Product" asp-action="FilterProducts">
+                            <span class="menu-text">لیست محصولات</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-area="Seller" asp-controller="Product" asp-action="CreateProduct">
+                            <span class="menu-text">افزودن محصول</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon fa fa-ticket"></i>
+                    <span class="menu-text"> @Localizer["Manage Tickets"]</span>
+
+                    <i class="menu-expand"></i>
+                </a>
+
+                <ul class="submenu">
+                    <li>
+                        <a asp-area="Seller" asp-controller="Ticket" asp-action="FilterTickets">
+                            <span class="menu-text">@Localizer["List Of Tickets"]</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-area="Seller" asp-controller="Ticket" asp-action="CreateTicket">
+                            <span class="menu-text">@Localizer["Create Ticket"]</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            @if (ViewBag.SellerMastert == true)
+            {
+                <li>
+                    <a href="#" class="menu-dropdown">
+                        <i class="menu-icon fa fa-users"></i>
+                        <span class="menu-text"> مدیریت کارمندان </span>
+
+                        <i class="menu-expand"></i>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a asp-area="Seller" asp-controller="User" asp-action="Index">
+                                <span class="menu-text">لیست کارمندان</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a asp-area="Seller" asp-action="AddNewUser" asp-controller="User">
+                                <span class="menu-text">افزودن کارمند جدید </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#" class="menu-dropdown">
+                        <i class="menu-icon fa fa-user"></i>
+                        <span class="menu-text"> اطلاعات فروشگاه </span>
+
+                        <i class="menu-expand"></i>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a asp-area="Seller" asp-controller="SellerPersonalInfo" asp-action="PageOfManageSellerInformation">
+                                <span class="menu-text">مدیریت اطلاعات فروشگاه </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            }
+
+        }
+
+    </ul>
+</div>

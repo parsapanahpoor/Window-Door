@@ -1,0 +1,100 @@
+﻿@using Window.Application.StticTools
+@model Window.Domain.ViewModels.AddUserViewModel
+
+@{
+    ViewData["Title"] = "افزودن کاربر جدید ";
+}
+
+@section breadcrumb
+{
+    <li class="active">
+        <a asp-area="Seller" asp-controller="User" asp-action="Index"> مدیریت کاربران / </a>
+        <a href="javascript:void(0)" >@ViewData["Title"]</a>
+    </li>
+}
+
+@section Scripts
+{
+<partial name="_JqueryValidation" />
+}
+
+<form asp-action="AddNewUser" enctype="multipart/form-data" method="post">
+
+    <div class="col-lg-9 col-sm-9 col-xs-12">
+        <div id="settings" class="tab-pane  active">
+            <div class="widget-header bordered-bottom bordered-sky">
+                <span class="widget-caption"> افزودن کاربر جدید </span>
+            </div>
+            <div class="widget-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="Username">نام کاربری </label>
+                            <input asp-for="Username" class="form-control" placeholder="نام کاربری " />
+
+                            <span class="text-danger" asp-validation-for="Username"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="Email">ایمیل </label>
+                            <input type="email" asp-for="Email" class="form-control" placeholder="ایمیل" />
+
+                            <span class="text-danger" asp-validation-for="Email"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="Email">موبایل</label>
+
+                            <input asp-for="Mobile" class="form-control" placeholder="موبایل" />
+                            <span class="text-danger" asp-validation-for="Mobile"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="Password">کلمه ی عبور</label>
+                            <input asp-for="Password" class="form-control" placeholder="کلمه ی عبور" />
+
+                            <span class="text-danger" asp-validation-for="Password"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div>
+                    <button type="submit" class="btn btn-labeled btn-palegreen">
+                        <i class="btn-label glyphicon glyphicon-ok"></i>ثبت
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-sm-3 col-xs-12">
+
+        <div class="widget-header bordered-bottom bordered-sky">
+
+            <span class="widget-caption">  آواتار</span>
+
+        </div>
+        <div class="widget-body">
+
+            <div class=" d-flex justify-content-center mb-3 ">
+                <img class="avatarPreview" src="/admin/img/avatars/avatar.png" id="avatarPreview" imagefile="user-avatar" alt="Avatar" />
+
+            </div>
+            <div class="input-group mb-3 chooseUserAvatarInEditUserInAdmin ">
+
+                <input type="file" asp-for="Avatar" imageinput="user-avatar" onchange="loadAvatar(event)" class="custom-file-input" id="NewAvatar">
+                <label class="btn btn-labeled btn-blue" for="NewAvatar">
+                    <i class="btn-label glyphicon glyphicon-ok"></i>انتخاب
+                </label>
+
+            </div>
+        </div>
+    </div>
+
+</form>
+

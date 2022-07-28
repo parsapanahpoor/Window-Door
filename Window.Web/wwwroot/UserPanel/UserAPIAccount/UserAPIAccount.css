@@ -1,0 +1,13 @@
+﻿#myLink {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#ReGenerate {
+    margin-top: 23px;
+}
+
+#icon {
+    margin-top:23px;
+}

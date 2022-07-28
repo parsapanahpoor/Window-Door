@@ -1,0 +1,63 @@
+﻿@using Window.Web.Culture
+@model Window.Domain.ViewModels.User.Authentication.LoginUserViewModel
+@{
+    ViewData["Title"] = Localizer["Login"];
+    Layout = "Identity/_IdentityLayout";
+    var culture = ApplicationCultures.GetCurrentCulture();
+    var isRtl = culture.IsRtl;
+}
+
+<div class="login-container animated fadeInDown">
+    <form method="post" dir="@(isRtl ? "rtl" : "ltr")" asp-antiforgery="true">
+        <div class="loginbox bg-white">
+            <div class="loginbox-title">@Localizer["Login"]</div>
+            
+            @if (ViewData.ModelState.ErrorCount > 0)
+            {
+                <div asp-validation-summary="All" class="alert alert-danger margin-left-20 margin-right-20 margin-top-10"></div>
+            }
+
+            <div class="loginbox-textbox">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control"/>
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+            
+            <div class="loginbox-textbox">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+            
+            <div class="loginbox-textbox no-padding-bottom">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="RememberMe" class="colored-primary" >
+                        <span class="text darkgray"> @Localizer["Remember Me"] </span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="loginbox-textbox">
+                <a asp-action="ForgotPassword">@Localizer["Forgot Password?"]</a>
+            </div>
+            
+            <div class="loginbox-textbox">
+                <a asp-action="Register">@Localizer["Don\'t have account ? Create a new"]</a>
+            </div>
+
+            <div class="loginbox-submit mt-3" dir="@(isRtl ? "ltr" : "rtl")">
+                <input type="submit" class="btn btn-primary" value="@Localizer["Login"]">
+            </div>
+
+        </div>
+    </form>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_SweetAlertLocalizer"/>
+}
+
+

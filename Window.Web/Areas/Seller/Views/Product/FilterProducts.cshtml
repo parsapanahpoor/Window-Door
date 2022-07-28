@@ -1,0 +1,136 @@
+﻿@using Window.Application.Extensions
+@using Window.Application.Convertors
+@model Window.Domain.ViewModels.Seller.Product.FilterProductSellerSideViewModel
+
+@{
+    ViewData["Title"] = "لیست محصولات ";
+}
+
+@section Styles
+{
+
+}
+
+@section Scripts
+{
+}
+
+@section breadcrumb {
+<li>
+    <a href="javascript:void(0)"> @ViewData["Title"] </a>
+</li>
+}
+
+<div class="row">
+
+    <div class="col-lg-12 col-sm-12">
+        <a class="btn btn-sky w-100 margin-bottom-10" asp-action="CreateProduct" asp-controller="Product" asp-area="Seller">ایجاد محصول جدید </a>
+
+        <div class="well with-header with-footer table-responsive">
+            <div class="header bordered-azure">
+                <div class="flex-style">
+                    <span>لیست محصولات </span>
+                    <span>@Model.GetShownEntitiesPagesTitle()</span>
+                </div>
+            </div>
+
+            @if (Model.Entities != null && Model.Entities.Any())
+            {
+                <table class="table table-hover table-bordered tc vm">
+                    <thead class="tc vm">
+                        <tr class="tc vm">
+                            <th class="tc vm">
+                                لوگوی برند
+                            </th>
+                            <th class="tc vm">
+                                نام برند
+                            </th>
+                            <th class="tc vm">
+                                نوع محصول
+                            </th>
+                            <th class="tc vm">
+                                جنس محصول
+                            </th>
+                            <th class="tc vm">
+                                حالت محصول
+                            </th>
+                            <th class="tc vm">
+                                امکانات
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="tc vm">
+                        @foreach (var product in Model.Entities)
+                        {
+                            <tr class="tc vm" remove-ajax-item="@product.Id">
+
+                                <td class="tc vm">
+                                    @if (!string.IsNullOrEmpty(product.MainBrand.BrandLogo))
+                                    {
+                                        <img src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@product.MainBrand.BrandLogo" class="avatar-style" style="border-radius:50px;" />
+                                    }
+                                    else
+                                    {
+                                        <img src="@Window.Application.StticTools.FilePaths.DefaultSellerInfoImage" class="avatar-style" style="border-radius:50px;" />
+                                    }
+                                </td>
+
+                                <td class="tc vm">
+                                    <p> @product.MainBrand.BrandName </p>
+                                </td>
+
+                                <td class="tc vm">
+                                    @if (product.ProductKind == Window.Domain.Enums.Types.ProductKind.Door)
+                                    {
+                                        <span class="label label-primary">در</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-primary">پنجره</span>
+                                    }
+                                </td>
+
+                                <td class="tc vm">
+                                    @if (product.SellerType == Window.Domain.Enums.SellerType.SellerType.Aluminium)
+                                    {
+                                        <span class="label label-primary">آلومینیوم</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-primary">UPVC</span>
+                                    }
+                                </td>
+
+                                <td class="tc vm">
+                                    @if (product.ProductType == Window.Domain.Enums.Types.ProductType.Keshoie)
+                                    {
+                                        <span class="label label-primary">کشویی</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-primary">لولایی</span>
+                                    }
+                                </td>
+
+                                <td class="tc vm">
+                                    <a asp-action="SegmentPricing" asp-area="Seller" asp-controller="Product" asp-route-productId="@product.Id" class="btn btn-warning btn-circle btn-xs"><i class="glyphicon glyphicon-pencil"></i></a>
+                                  @*    <button onclick="DeleteAjax(@Article.Id, '@Url.Action("DeleteArticle", "Article", new { area = "Admin", Id = Article.Id })')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="footer tc">
+                    <partial name="_SellerPaging" model="@Model.GetCurrentPaging()" />
+
+                </div>
+            }
+            else
+            {
+                <partial name="_SellerNotFoundPartial" />
+            }
+        </div>
+    </div>
+</div>
+
