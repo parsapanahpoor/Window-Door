@@ -535,7 +535,7 @@ namespace Window.Application.Services.Services
                 .Include(p => p.MainBrand)
                 .Include(p=> p.User)
                 .ThenInclude(p=> p.SellersPersonalInfos)
-                .Where(p => p.MainBrand.Id == filter.MainBrandId && !p.IsDelete)
+                .Where(p => !p.IsDelete)
                 .Select(p=> new InquiryViewModel()
                 {
                     User = p.User,
@@ -558,6 +558,11 @@ namespace Window.Application.Services.Services
             if (filter.CityId != null && filter.CityId != 0)
             {
                 product = product.Where(p => p.User.SellersPersonalInfos.CityId == filter.CityId);
+            }
+
+            if (filter.MainBrandId != null && filter.MainBrandId != 0)
+            {
+                product = product.Where(p => p.MainBrand.Id == filter.MainBrandId);
             }
 
             if (filter.SellerType != null)

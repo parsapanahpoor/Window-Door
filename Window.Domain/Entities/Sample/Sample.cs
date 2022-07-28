@@ -5,14 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Common;
-using Window.Domain.Entities.Product;
-using Window.Domain.Entities.Sample;
-using Window.Domain.Enums.SellerType;
-using Window.Domain.Enums.Types;
 
-namespace Window.Domain.Entities.Segment
+namespace Window.Domain.Entities.Sample
 {
-    public class Segment : BaseEntity
+    public class Sample : BaseEntity
     {
         #region properties
 
@@ -28,22 +24,21 @@ namespace Window.Domain.Entities.Segment
 
         public bool Window { get; set; }
 
-        [Display(Name = "نام قطعه")]
+        [Display(Name = "نام نمونه")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200)]
         public string SegmentName { get; set; }
+
+        [Display(Name = "لوگوی نمونه")]
+        [MaxLength(200)]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        public string Image { get; set; }
 
         #endregion
 
         #region relations
 
-        public List<Product.ProductMainBrandPrice> ProductMainBrandPrice { get; set; }
-
-        public List<ProductYaraghBrandPrice> ProductYaraghBrandPrice { get; set; }
-
-        public List<SegmentPricing> SegmentPricings { get; set; }
-
-        public List<SampleSelectedSegment>  SampleSelectedSegments { get; set; }
+        public List<SampleSelectedSegment> SampleSelectedSegments { get; set; }
 
         #endregion
     }

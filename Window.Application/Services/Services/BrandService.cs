@@ -12,6 +12,7 @@ using Window.Application.StticTools;
 using Window.Data.Context;
 using Window.Domain.Entities.Brand;
 using Window.Domain.ViewModels.Admin.Brand;
+using Window.Domain.ViewModels.Common;
 
 namespace Window.Application.Services.Services
 {
@@ -238,6 +239,20 @@ namespace Window.Application.Services.Services
             return true;
         }
 
+
+        #endregion
+
+        #region Site Side
+
+        public async Task<List<SelectListViewModel>> GetAllBrands()
+        {
+            return await _context.MainBrands.Where(s => !s.IsDelete)
+                .Select(s => new SelectListViewModel
+                {
+                    Id = s.Id,
+                    Title = s.BrandName
+                }).ToListAsync();
+        }
 
         #endregion
     }

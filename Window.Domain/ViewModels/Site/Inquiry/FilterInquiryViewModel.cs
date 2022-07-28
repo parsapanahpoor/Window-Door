@@ -16,15 +16,12 @@ namespace Window.Domain.ViewModels.Site.Inquiry
         #region properties
 
         [Display(Name = "کشور")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public ulong? CountryId { get; set; }
 
         [Display(Name = "استان")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public ulong? StateId { get; set; }
 
         [Display(Name = "شهر")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public ulong? CityId { get; set; }
 
         public ProductType? ProductType { get; set; }

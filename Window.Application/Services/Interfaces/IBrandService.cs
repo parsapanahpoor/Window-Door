@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Brand;
 using Window.Domain.ViewModels.Admin.Brand;
+using Window.Domain.ViewModels.Common;
 
 namespace Window.Application.Services.Interfaces
 {
@@ -30,5 +31,7 @@ namespace Window.Application.Services.Interfaces
         Task<bool> UpdateYaraghBrand(YaraghBrand mainBrand, IFormFile? brandLogo);
 
         Task<bool> DeleteYaraghBrand(ulong brandId);
+
+        Task<List<SelectListViewModel>> GetAllBrands();
     }
 }

@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Window.Application.Services.Implementation;
 using Window.Application.Services.Interfaces;
+using Window.Domain.ViewModels.Site.Inquiry;
 using Window.Web.Models;
 
 namespace Window.Web.Controllers
@@ -15,19 +17,48 @@ namespace Window.Web.Controllers
 
         private readonly IProductService _productService;
 
-        public HomeController(ILogger<HomeController> logger , IProductService prodcutService)
+        private readonly IStateService _stateService;
+
+        private readonly IBrandService _brandService;
+
+        public HomeController(ILogger<HomeController> logger, IProductService prodcutService, IStateService stateService, IBrandService brandService)
         {
             _logger = logger;
             _productService = prodcutService;
+            _stateService = stateService;
+            _brandService = brandService;
         }
 
         #endregion
 
         #region Index 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(FilterInquiryViewModel filter)
         {
-            return View();
+            #region Location ViewBags 
+
+            ViewData["Countries"] = await _stateService.GetAllCountries();
+
+            if (filter.CountryId != null)
+            {
+                ViewData["States"] = await _stateService.GetStateChildren(filter.CountryId.Value);
+                if (filter.StateId != null)
+                {
+                    ViewData["Cities"] = await _stateService.GetStateChildren(filter.StateId.Value);
+                }
+            }
+
+            #endregion
+
+            #region Brand ViewBag
+
+            ViewBag.Brand = await _brandService.GetAllBrands();
+
+            #endregion
+
+            var model = await _productService.FilterInquiryViewModel(filter);
+
+            return View(model);
         }
 
         #endregion
