@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 using Window.Application.Services.Interfaces;
 using Window.Data.Context;
 using Window.Domain.Entities.Brand;
+using Window.Domain.Entities.Common;
 using Window.Domain.Entities.Product;
 using Window.Domain.ViewModels.Article;
 using Window.Domain.ViewModels.Common;
 using Window.Domain.ViewModels.Seller.Pricing;
 using Window.Domain.ViewModels.Seller.Product;
+using Window.Domain.ViewModels.Site.Inquiry;
 
 namespace Window.Application.Services.Services
 {
@@ -163,7 +165,7 @@ namespace Window.Application.Services.Services
 
             #endregion
 
-            return _context.Segments.Where(p => !p.IsDelete )
+            return _context.Segments.Where(p => !p.IsDelete)
                             .Select(p => new SelectListItem
                             {
                                 Value = p.Id.ToString(),
@@ -292,7 +294,7 @@ namespace Window.Application.Services.Services
         {
             var query = _context.Products
                 .Include(p => p.User)
-                .Include(p=> p.MainBrand)
+                .Include(p => p.MainBrand)
                 .Where(a => !a.IsDelete)
                 .OrderByDescending(s => s.CreateDate)
                 .AsQueryable();
@@ -346,7 +348,7 @@ namespace Window.Application.Services.Services
             return true;
         }
 
-        public async Task<SegmentPricingViewModel?> FillSegmentPricingViewModel(ulong productId , ulong userId)
+        public async Task<SegmentPricingViewModel?> FillSegmentPricingViewModel(ulong productId, ulong userId)
         {
             #region Get Product 
 
@@ -357,7 +359,7 @@ namespace Window.Application.Services.Services
 
             #region Get Segments
 
-            var segments = _context.Segments.Where(p=> !p.IsDelete).AsQueryable();
+            var segments = _context.Segments.Where(p => !p.IsDelete).AsQueryable();
 
             #endregion
 
@@ -366,8 +368,9 @@ namespace Window.Application.Services.Services
             SegmentPricingViewModel model = new SegmentPricingViewModel()
             {
                 ProductId = productId,
-                Segments = segments.Select(p => new SegmentPRicingEntityViewModel() { 
-                Segment = p,
+                Segments = segments.Select(p => new SegmentPRicingEntityViewModel()
+                {
+                    Segment = p,
                 }).ToList()
             };
 
@@ -382,7 +385,7 @@ namespace Window.Application.Services.Services
 
             GlassPricingViewModel model = new GlassPricingViewModel()
             {
-                Glass = await _context.Glasses.Where(p=> !p.IsDelete).Select(p=> new GlassPricingEntityViewModel()
+                Glass = await _context.Glasses.Where(p => !p.IsDelete).Select(p => new GlassPricingEntityViewModel()
                 {
                     Glass = p
                 }).ToListAsync()
@@ -393,7 +396,7 @@ namespace Window.Application.Services.Services
             return model;
         }
 
-        public async Task<bool> AddPricingForSegment(ulong ProductId, ulong SegmentId, int Price , ulong userId)
+        public async Task<bool> AddPricingForSegment(ulong ProductId, ulong SegmentId, int Price, ulong userId)
         {
             #region Get Product 
 
@@ -405,7 +408,7 @@ namespace Window.Application.Services.Services
             #region Get Segment
 
             var segment = await _context.Segments.FirstOrDefaultAsync(p => p.Id == SegmentId && !p.IsDelete);
-            if(segment == null) return false;
+            if (segment == null) return false;
 
             #endregion
 
@@ -485,7 +488,8 @@ namespace Window.Application.Services.Services
                 GlassPricing model = new GlassPricing()
                 {
                     GlassId = GlassId,
-                    Price = Price
+                    Price = Price,
+                    UserId = userId
                 };
 
                 #endregion
@@ -502,7 +506,7 @@ namespace Window.Application.Services.Services
         }
 
 
-        public async Task<List<SegmentPricing>?> FillSegmentPricing(ulong productId , ulong userId)
+        public async Task<List<SegmentPricing>?> FillSegmentPricing(ulong productId, ulong userId)
         {
             #region Get Product 
 
@@ -517,6 +521,63 @@ namespace Window.Application.Services.Services
         public async Task<List<GlassPricing>?> FillGlassPricing(ulong userId)
         {
             return await _context.GlassPricings.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
+        }
+
+        #endregion
+
+        #region Site Side
+
+        public async Task<FilterInquiryViewModel> FilterInquiryViewModel(FilterInquiryViewModel filter)
+        {
+            List<InquiryViewModel> model = new List<InquiryViewModel>();
+
+            var product = _context.Products
+                .Include(p => p.MainBrand)
+                .Include(p=> p.User)
+                .ThenInclude(p=> p.SellersPersonalInfos)
+                .Where(p => p.MainBrand.Id == filter.MainBrandId && !p.IsDelete)
+                .Select(p=> new InquiryViewModel()
+                {
+                    User = p.User,
+                    MainBrand = p.MainBrand, 
+                })
+                .AsQueryable();
+
+            #region Filter
+
+            if (filter.CountryId != null && filter.CountryId != 0)
+            {
+                product = product.Where(p => p.User.SellersPersonalInfos.CountryId == filter.CountryId);
+            }
+
+            if (filter.StateId != null && filter.StateId != 0)
+            {
+                product = product.Where(p => p.User.SellersPersonalInfos.StateId == filter.StateId);
+            }
+
+            if (filter.CityId != null && filter.CityId != 0)
+            {
+                product = product.Where(p => p.User.SellersPersonalInfos.CityId == filter.CityId);
+            }
+
+            if (filter.SellerType != null)
+            {
+                if (filter.SellerType == Domain.Enums.SellerType.SellerType.UPC)
+                {
+                    product = product.Where(p => p.User.SellersPersonalInfos.SellerType == Domain.Enums.SellerType.SellerType.UPC);
+                }
+                if (filter.SellerType == Domain.Enums.SellerType.SellerType.Aluminium)
+                {
+                    product = product.Where(p => p.User.SellersPersonalInfos.SellerType == Domain.Enums.SellerType.SellerType.Aluminium);
+                }
+            }
+
+            #endregion
+
+            await filter.Paging(product);
+
+            return filter;
+
         }
 
         #endregion

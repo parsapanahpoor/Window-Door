@@ -60,7 +60,7 @@ namespace Window.Domain.Entities.Account
 
         public List<Wallet.Wallet> Wallets { get; set; }
 
-        public List<MarketPersonalInfo> SellersPersonalInfos { get; set; }
+        public MarketPersonalInfo SellersPersonalInfos { get; set; }
 
         public List<MarketWorkSamle> SellerWorkSamles { get; set; }
 

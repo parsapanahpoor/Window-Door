@@ -157,6 +157,19 @@ namespace Window.Web.Areas.Seller.Controllers
         [HttpPost , ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateGlassPricing(ulong GlassId , int Price)
         {
+            #region Fill View Model
+
+            var model = await _productService.FillGlassPricingEntityViewModel();
+            if (model == null) return NotFound();
+
+            #endregion
+
+            #region Glass Pricing
+
+            ViewBag.GlassPricing = await _productService.FillGlassPricing(User.GetUserId());
+
+            #endregion
+
             #region Add Pricing
 
             var res = await _productService.AddPricingForGlass(GlassId, Price, User.GetUserId());
@@ -164,13 +177,13 @@ namespace Window.Web.Areas.Seller.Controllers
             if (res)
             {
                 TempData[SuccessMessage] = "عملیات با موفقیت انجام شده است .";
-                return View();
+                return RedirectToAction(nameof(CreateGlassPricing));
             }
 
             #endregion
 
             TempData[ErrorMessage] = "عملیات با شکست روبرو شده است .";
-            return View();
+            return RedirectToAction(nameof(CreateGlassPricing));
         }
 
         #endregion

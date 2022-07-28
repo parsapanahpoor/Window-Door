@@ -9,6 +9,7 @@ using Window.Domain.Entities.Product;
 using Window.Domain.ViewModels.Common;
 using Window.Domain.ViewModels.Seller.Pricing;
 using Window.Domain.ViewModels.Seller.Product;
+using Window.Domain.ViewModels.Site.Inquiry;
 
 namespace Window.Application.Services.Interfaces
 {
@@ -53,6 +54,12 @@ namespace Window.Application.Services.Interfaces
         Task<List<GlassPricing>?> FillGlassPricing(ulong userId);
 
         Task<bool> AddPricingForGlass(ulong GlassId, int Price, ulong userId);
+
+        #endregion
+
+        #region Site Side
+
+        Task<FilterInquiryViewModel> FilterInquiryViewModel(FilterInquiryViewModel filter);
 
         #endregion
     }
