@@ -62,8 +62,20 @@ builder.Services.AddMvc();
 
 #endregion
 
-builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
+
+#region Session
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+#endregion
 
 #region Add DBContext
 

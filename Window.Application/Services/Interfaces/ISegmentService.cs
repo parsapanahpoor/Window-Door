@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Window.Domain.Entities.Glass;
 using Window.Domain.Entities.Segment;
 using Window.Domain.ViewModels.Admin.Segment;
+using Window.Domain.ViewModels.Common;
 
 namespace Window.Application.Services.Interfaces
 {
@@ -32,6 +33,8 @@ namespace Window.Application.Services.Interfaces
         Task<bool> UpdateGlass(Glass glass);
 
         Task<bool> DeleteGlass(ulong glassId);
+
+        Task<List<SelectListViewModel>> GetAllSegments();
 
         #endregion
     }

@@ -9,6 +9,7 @@ using Window.Data.Context;
 using Window.Domain.Entities.Glass;
 using Window.Domain.Entities.Segment;
 using Window.Domain.ViewModels.Admin.Segment;
+using Window.Domain.ViewModels.Common;
 
 namespace Window.Application.Services.Services
 {
@@ -26,6 +27,16 @@ namespace Window.Application.Services.Services
         #endregion
 
         #region Admin Side 
+
+        public async Task<List<SelectListViewModel>> GetAllSegments()
+        {
+            return await _context.Segments.Where(s => !s.IsDelete)
+                .Select(s => new SelectListViewModel
+                {
+                    Id = s.Id,
+                    Title = s.SegmentName
+                }).ToListAsync();
+        }
 
         public async Task<FilterGlassesViewModel> FilterGlasseViewModel(FilterGlassesViewModel filter)
         {

@@ -88,6 +88,27 @@
             </ul>
         </li>
 
+            <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon glyphicon glyphicon-tag"></i>
+                <span class="menu-text"> مدیریت نمونه ها </span>
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-action="FilterSample" asp-controller="Sample" asp-area="Admin">
+                        <span class="menu-text"> لیست نمونه ها </span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="CreateSample" asp-controller="Sample" asp-area="Admin">
+                        <span class="menu-text"> ایجاد نمونه </span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
               <li>
             <a href="#" class="menu-dropdown">
                 <i class="menu-icon glyphicon glyphicon-tag"></i>
@@ -133,19 +154,19 @@
         <li>
             <a href="#" class="menu-dropdown">
                 <i class="menu-icon glyphicon glyphicon-th"></i>
-                <span class="menu-text"> مدیریت برندهای اصلی </span>
+                <span class="menu-text"> مدیریت برندهای  </span>
                 <i class="menu-expand"></i>
             </a>
 
             <ul class="submenu">
                 <li>
                     <a asp-action="FilterMainBrand" asp-controller="Brand" asp-area="Admin">
-                        <span class="menu-text"> لیست برندهای اصلی </span>
+                        <span class="menu-text"> لیست برندهای  </span>
                     </a>
                 </li>
                 <li>
                     <a asp-action="CreateMainBrand" asp-controller="Brand" asp-area="Admin">
-                        <span class="menu-text"> ایجاد برند اصلی جدید </span>
+                        <span class="menu-text"> یجاد برند جدید </span>
                     </a>
                 </li>
             </ul>

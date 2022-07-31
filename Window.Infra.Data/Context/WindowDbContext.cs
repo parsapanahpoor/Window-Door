@@ -9,6 +9,7 @@ using Window.Domain.Entities.Location;
 using Window.Domain.Entities.Market;
 using Window.Domain.Entities.Product;
 using Window.Domain.Entities.QuestionAnswer;
+using Window.Domain.Entities.Sample;
 using Window.Domain.Entities.Segment;
 using Window.Domain.Entities.Wallet;
 
@@ -119,6 +120,14 @@ namespace Window.Data.Context
         public DbSet<SegmentPricing> SegmentPricings { get; set; }
 
         public DbSet<GlassPricing> GlassPricings { get; set; }
+
+        #endregion
+
+        #region Sample
+
+        public DbSet<Sample> Samples { get; set; }
+
+        public DbSet<SampleSelectedSegment> SampleSelectedSegments { get; set; }
 
         #endregion
 

@@ -75,5 +75,16 @@ namespace Window.Application.StticTools
 
         #endregion
 
+        #region Sample
+
+        public static readonly string DefaultSampleImage = "/content/images/Sample/default.jpg";
+        public static string SampleOriginimage = "/content/images/Sample/origin/";
+        public static string SampleThumbimage = "/content/images/Sample/thumb/";
+        public static string DefaultSampleThumbimage = "/content/images/Sample/thumb/default.jpg";
+        public static readonly string SampleImageOriginPathServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/Sample/origin/");
+        public static readonly string SampleImageThumbPathServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/Sample/thumb/");
+
+        #endregion
+
     }
 }

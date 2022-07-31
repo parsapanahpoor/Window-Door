@@ -38,7 +38,7 @@ namespace Window.Domain.Entities.Sample
 
         #region relations
 
-        public List<SampleSelectedSegment> SampleSelectedSegments { get; set; }
+        public ICollection<SampleSelectedSegment> SampleSelectedSegment { get; set; }
 
         #endregion
     }

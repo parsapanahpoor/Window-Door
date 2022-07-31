@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Brand;
 using Window.Domain.Entities.Product;
+using Window.Domain.Entities.Sample;
 using Window.Domain.ViewModels.Common;
 using Window.Domain.ViewModels.Seller.Pricing;
 using Window.Domain.ViewModels.Seller.Product;
@@ -60,6 +62,14 @@ namespace Window.Application.Services.Interfaces
         #region Site Side
 
         Task<FilterInquiryViewModel> FilterInquiryViewModel(FilterInquiryViewModel filter);
+
+        Task<List<InquiryViewModel>?> ListOfInquiry(List<SampleSizeViewModel> sampleSize, SellersFieldFitreViewModel sellerInfo);
+
+        Task<List<Sample?>> GetSamplesById(List<ulong?> samplesId);
+
+        Task<int?> InitializeSamplesPrice(List<Sample?> samples, User user, int height, int width);
+
+        Task<int?> InitialTotalSamplePrice(ulong sampleId, int height, int width, ulong userId);
 
         #endregion
     }

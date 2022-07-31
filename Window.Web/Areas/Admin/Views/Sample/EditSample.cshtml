@@ -1,0 +1,229 @@
+﻿@using Window.Application.StticTools
+@using Window.Domain.Enums
+@using Window.Application.StaticTools
+@using Window.Domain.ViewModels.Common
+@model Window.Domain.Entities.Sample.Sample
+
+@{
+    ViewData["Title"] = "ویرایش نمونه";
+
+    var segment = ViewData["Segments"] != null ? ViewData["Segments"] as List<SelectListViewModel> : null;
+    var segmentsId = ViewBag.SelectedSegments != null ? ViewBag.SelectedSegments as List<ulong> : null;
+}
+
+@section Scripts
+{
+<partial name="_JqueryValidation" />
+}
+
+@section breadcrumb {
+
+<li>
+    <a href="javascript:void(0)"> @ViewData["Title"] </a>
+</li>
+}
+
+<form method="post" asp-action="EditSample" asp-controller="Sample" asp-area="Admin" enctype="multipart/form-data">
+
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="Image" type="hidden" />
+
+    <div class="row">
+        <div class="col-lg-3 col-sm-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-blue">
+                    <span class="widget-caption"> @ViewData["Title"] </span>
+                </div>
+                <div class="widget-body" style="height: 312px !important;">
+                    <div>
+
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12">
+                                <label asp-for="SegmentName"></label>
+                                <input type="text" class="form-control" asp-for="SegmentName">
+                                <span class="text-danger" asp-validation-for="SegmentName"></span>
+                            </div>
+
+
+                        </div>
+
+                        <hr class="margin-bottom-10 margin-top-10" />
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled btn-info">
+                                    <i class="btn-label glyphicon glyphicon-ok"></i>ویرایش
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-sm-12" style="height: 346px !important;">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-blue">
+                    <span class="widget-caption"> @ViewData["Title"] </span>
+                </div>
+                <div class="widget-body">
+                    <div>
+
+                        <div class="row">
+
+                            <div class="form-group col-md-12 col-sm-12">
+                                <label>انتخاب نمونه</label>
+                                <select class="form-control" name="segmentsId" multiple="multiple" style="height: 250px;">
+                                    <option value=""> لطفا قطعه را انتخاب کنید </option>
+                                    @if (segment != null && segment.Any())
+                                    {
+                                        foreach (var seg in segment)
+                                        {
+                                            if (segmentsId != null && segmentsId.Any())
+                                            {
+                                                if (segmentsId.Contains(seg.Id))
+                                                {
+                                                    <option value="@seg.Id" selected="selected"> @seg.Title </option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@seg.Id"> @seg.Title </option>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-sm-12">
+
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-blue">
+                    <span class="widget-caption"> تصویر نمونه   </span>
+                </div>
+                <div class="widget-body">
+                    <div class="row">
+
+                        <input type="file" class="display-none" name="ArticleImage" id="ArticleImage" ImageInput="1" accept=".jpg,.jpeg,.png" />
+
+                        <div class="col-md-12">
+                            <label for="ArticleImage" class="file-input-style">
+                                <i class="glyphicon glyphicon-upload"></i>
+                                <span class="mr-8px">لطفا  تصویر نمونه را انتخاب کنید .</span>
+                            </label>
+                        </div>
+
+                        <div class="col-md-12 tc mt-10px">
+                            <img src="@(string.IsNullOrEmpty(Model.Image) ? FilePaths.DefaultSampleImage : FilePaths.SampleOriginimage + Model.Image)" class="Article-Priew" ImageFile="1" />
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-sm-12" style="height: 346px !important;">
+
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-blue">
+                    <span class="widget-caption"> وضعیت </span>
+                </div>
+                <div class="widget-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" asp-for="Aluminum">
+                                        <span class="text"> آلومینیوم </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" asp-for="UPVC">
+                                        <span class="text"> UPVC </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" asp-for="Keshoie">
+                                        <span class="text"> کشویی </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" asp-for="Lolaie">
+                                        <span class="text"> لولایی </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" asp-for="Window">
+                                        <span class="text"> پنجره </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" asp-for="Door">
+                                        <span class="text"> درب </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</form>

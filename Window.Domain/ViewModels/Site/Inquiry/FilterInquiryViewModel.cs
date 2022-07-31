@@ -11,7 +11,7 @@ using Window.Domain.ViewModels.Common;
 
 namespace Window.Domain.ViewModels.Site.Inquiry
 {
-    public class FilterInquiryViewModel : BasePaging<InquiryViewModel>
+    public class FilterInquiryViewModel
     {
         #region properties
 

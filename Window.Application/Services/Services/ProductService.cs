@@ -7,9 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Window.Application.Services.Interfaces;
 using Window.Data.Context;
+using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Brand;
 using Window.Domain.Entities.Common;
 using Window.Domain.Entities.Product;
+using Window.Domain.Entities.Sample;
 using Window.Domain.ViewModels.Article;
 using Window.Domain.ViewModels.Common;
 using Window.Domain.ViewModels.Seller.Pricing;
@@ -527,62 +529,164 @@ namespace Window.Application.Services.Services
 
         #region Site Side
 
-        public async Task<FilterInquiryViewModel> FilterInquiryViewModel(FilterInquiryViewModel filter)
+        public async Task<List<Sample?>> GetSamplesById(List<ulong?> samplesId)
         {
-            List<InquiryViewModel> model = new List<InquiryViewModel>();
+            List<Sample> sampleList = new List<Sample>();
 
-            var product = _context.Products
-                .Include(p => p.MainBrand)
-                .Include(p=> p.User)
-                .ThenInclude(p=> p.SellersPersonalInfos)
-                .Where(p => !p.IsDelete)
-                .Select(p=> new InquiryViewModel()
+            if (samplesId != null && samplesId.Any())
+            {
+                foreach (var item in samplesId)
                 {
-                    User = p.User,
-                    MainBrand = p.MainBrand, 
-                })
-                .AsQueryable();
-
-            #region Filter
-
-            if (filter.CountryId != null && filter.CountryId != 0)
-            {
-                product = product.Where(p => p.User.SellersPersonalInfos.CountryId == filter.CountryId);
-            }
-
-            if (filter.StateId != null && filter.StateId != 0)
-            {
-                product = product.Where(p => p.User.SellersPersonalInfos.StateId == filter.StateId);
-            }
-
-            if (filter.CityId != null && filter.CityId != 0)
-            {
-                product = product.Where(p => p.User.SellersPersonalInfos.CityId == filter.CityId);
-            }
-
-            if (filter.MainBrandId != null && filter.MainBrandId != 0)
-            {
-                product = product.Where(p => p.MainBrand.Id == filter.MainBrandId);
-            }
-
-            if (filter.SellerType != null)
-            {
-                if (filter.SellerType == Domain.Enums.SellerType.SellerType.UPC)
-                {
-                    product = product.Where(p => p.User.SellersPersonalInfos.SellerType == Domain.Enums.SellerType.SellerType.UPC);
+                    var sample = await _context.Samples.Include(p => p.SampleSelectedSegment).FirstOrDefaultAsync(p => !p.IsDelete && p.Id == item);
+                    sampleList.Add(sample);
                 }
-                if (filter.SellerType == Domain.Enums.SellerType.SellerType.Aluminium)
+            }
+
+            return sampleList;
+        }
+
+        public async Task<int?> InitializeSamplesPrice(List<Sample?> samples, User user, int height, int width)
+        {
+            var model = 0;
+
+            var samplesize = 2 * (height + width);
+
+            #region Get User Segments Price 
+
+            var segments = await _context.SegmentPricings.Include(p => p.Product).Where(p => !p.IsDelete && p.Product.UserId == user.Id).ToListAsync();
+            if (segments == null) return null;
+
+            #endregion
+
+            #region pricing 
+
+            if (samples == null)
+            {
+                return null;
+            }
+            else
+            {
+                foreach (var item in samples)
                 {
-                    product = product.Where(p => p.User.SellersPersonalInfos.SellerType == Domain.Enums.SellerType.SellerType.Aluminium);
+                    var sampleSegments = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == item.Id).Select(p => p.Segment).ToListAsync();
+
+                    foreach (var seg in segments)
+                    {
+                        if (sampleSegments.Any(p => p.Id == seg.Segment.Id))
+                        {
+                            model = model + (seg.Price * samplesize);
+                        }
+                    }
+                }
+            }
+
+            return model;
+
+            #endregion
+        }
+
+        public async Task<int?> InitialTotalSamplePrice(ulong sampleId, int height, int width, ulong userId)
+        {
+            #region return Model 
+
+            var totalPrice = 0;
+
+            #endregion
+
+            #region Get User Segments Price 
+
+            var userSegments = await _context.SegmentPricings.Include(p => p.Product).Where(p => !p.IsDelete && p.Product.UserId == userId).ToListAsync();
+            if (userSegments == null) return null;
+
+            #endregion
+
+            #region pricing & Get Sample
+
+            var sample = await _context.Samples.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == sampleId);
+            if (sample == null) return null;
+
+            //Get Sample Segments
+            var sampleSegments = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
+
+            foreach (var seg in userSegments)
+            {
+                if (sampleSegments.Any(p => p.Id == seg.Segment.Id))
+                {
+                    totalPrice = totalPrice + (seg.Price * (2*(width + height)));
                 }
             }
 
             #endregion
 
-            await filter.Paging(product);
+            return totalPrice;
+        }
+
+        public async Task<FilterInquiryViewModel> FilterInquiryViewModel(FilterInquiryViewModel filter)
+        {
+            #region Get Product
+
+            var product = _context.Products
+                .Include(p => p.MainBrand)
+                .Include(p => p.User)
+                .ThenInclude(p => p.SellersPersonalInfos)
+                .Where(p => !p.IsDelete)
+                .Select(p => new InquiryViewModel()
+                {
+                    User = p.User,
+                    MainBrand = p.MainBrand,
+                })
+                .ToListAsync();
+
+            #endregion
 
             return filter;
+        }
 
+        public async Task<List<InquiryViewModel>?> ListOfInquiry(List<SampleSizeViewModel> sampleSize, SellersFieldFitreViewModel sellerInfo)
+        {
+            #region Initial Model 
+
+            List<InquiryViewModel> model = new List<InquiryViewModel>();
+
+            #endregion
+
+            #region Get Brand 
+
+            var brand = await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == sellerInfo.BrandId);
+            if (brand == null) return null;
+
+            #endregion
+
+            #region Get Sellers
+
+            var sellers = await _context.MarketPersonalInfo.Include(p => p.User)
+                                    .Where(p => !p.IsDelete && p.CityId == sellerInfo.CityId && p.CountryId == sellerInfo.CountryId
+                                    && p.StateId == sellerInfo.StateId && p.SellerType == sellerInfo.SellerType)
+                                    .Select(p => p.User).ToListAsync();
+
+            #endregion
+
+            #region Get Samples 
+
+            foreach (var seller in sellers)
+            {
+                InquiryViewModel model2 = new InquiryViewModel();
+
+                model2.User = seller;
+                model2.MainBrand = brand;
+                model2.Price = 0;
+
+                foreach (var sample in sampleSize)
+                {
+                    model2.Price = model2.Price + await InitialTotalSamplePrice(sample.SampleId , sample.Width , sample.Height , seller.Id);
+                }
+
+                model.Add(model2);
+            }
+
+            #endregion
+
+            return model;
         }
 
         #endregion

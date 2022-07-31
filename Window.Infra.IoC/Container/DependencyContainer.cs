@@ -36,6 +36,7 @@ namespace Window.IOC.Container
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<ISegmentService, SegmentService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ISampleService, SampleService>();
 
             #endregion
         }

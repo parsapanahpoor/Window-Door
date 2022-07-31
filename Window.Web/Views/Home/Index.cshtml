@@ -13,6 +13,10 @@
     var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
 
     var brand = ViewBag.Brand != null ? ViewBag.Brand as List<SelectListViewModel> : null;
+
+    var Sample = ViewBag.Sample != null ? ViewBag.Sample as List<Window.Domain.Entities.Sample.Sample> : null;
+
+    Window.Domain.ViewModels.Site.Inquiry.SampleSizeViewModel sampleSize = new Window.Domain.ViewModels.Site.Inquiry.SampleSizeViewModel();
 }
 
 @section Styles
@@ -25,11 +29,19 @@
 
 <script>
 
+      $("#ProductKind").change(function () {
+          $('form#filter-search').submit();
+      });
+
+        $("#ProductType").change(function () {
+          $('form#filter-search').submit();
+      });
+
         $("#CountryId").change(function () {
         if ($("#CountryId :selected").val() !== '') {
             $('#CityId option:not(:first)').remove();
             $('#StateId option:not(:first)').remove();
-            $.get("/Admin/Home/LoadCities", { stateId: $("#CountryId :selected").val() }).then(res => {
+            $.get("/Home/LoadCities", { stateId: $("#CountryId :selected").val() }).then(res => {
                 if (res.data !== null) {
                     $.each(res.data, function () {
                         $("#StateId").append(
@@ -48,7 +60,7 @@
     $("#StateId").change(function () {
         if ($("#StateId :selected").val() !== '') {
             $('#CityId option:not(:first)').remove();
-            $.get("/Admin/Home/LoadCities", { stateId: $("#StateId :selected").val() }).then(res => {
+            $.get("/Home/LoadCities", { stateId: $("#StateId :selected").val() }).then(res => {
                 if (res.data !== null) {
                     $.each(res.data, function () {
                         $("#CityId").append(
@@ -77,8 +89,6 @@
             <div class="widget-body">
                 <div>
                     <form asp-action="Index" asp-controller="Home" asp-area="" id="filter-search" method="get">
-
-                        <input type="hidden" asp-for="Page" />
 
                         <div class="form-group">
                             <label asp-for="CountryId"></label>
@@ -146,12 +156,11 @@
                         <div class="form-group">
                             <label asp-for="MainBrandId">برند</label>
                             <select asp-for="MainBrandId" class="form-control">
-                                <option value=""> لطفا یک برند را انتخاب کنید </option>
                                 @if (brand != null && brand.Any())
                                 {
                                     foreach (var brands in brand)
                                     {
-                                            <option value="@brands.Id"> @brands.Title </option>
+                                        <option value="@brands.Id"> @brands.Title </option>
                                     }
                                 }
                             </select>
@@ -160,23 +169,46 @@
                         <div class="form-group">
                             <label asp-for="SellerType"> وضعیت </label>
                             <select asp-for="SellerType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.SellerType.SellerType))">
-                                                                <option value=""> لطفا وضعیت را انتخاب کنید </option>
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="ProductKind"> وضعیت </label>
                             <select asp-for="ProductKind" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.Types.ProductKind))">
-                                                                                                <option value=""> لطفا وضعیت را انتخاب کنید </option>
+                                <option value=""> لطفا وضعیت را انتخاب کنید </option>
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="ProductType"> وضعیت </label>
                             <select asp-for="ProductType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.Types.ProductType))">
-                                                                                                <option value=""> لطفا وضعیت را انتخاب کنید </option>
+                                <option value=""> لطفا وضعیت را انتخاب کنید </option>
                             </select>
                         </div>
+
+                        @*    <div class="form-group">
+                            <label asp-for="SamplesId">نمونه</label>
+                            <select class="form-control" asp-for="SamplesId">
+                            <option value=""> لطفا نمونه را انتخاب کنید </option>
+                            @if (Sample != null && Sample.Any())
+                            {
+                            foreach (var samp in Sample)
+                            {
+                            if (Model != null && Model.SamplesId != null && Model.SamplesId.Any())
+                            {
+                            if (Model.SamplesId.Contains(samp.Id))
+                            {
+                            <option value="@samp.Id" selected="selected"> @samp.Title </option>
+                            }
+                            }
+                            else
+                            {
+                            <option value="@samp.Id"> @samp.Title </option>
+                            }
+                            }
+                            }
+                            </select>
+                            </div>*@
 
                         <hr />
 
@@ -192,6 +224,10 @@
                                         <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
                                     </a>
                                 }
+
+                                  <a asp-action="Inquiry" asp-controller="Home" asp-area="" class="btn btn-labeled w-100 btn-blue">
+                                    <i class="btn-label glyphicon glyphicon-filter"></i>استعلام گیری 
+                                </a>
                             </div>
                         </div>
 
@@ -206,60 +242,64 @@
             <div class="header bordered-azure">
                 <div class="flex-style">
                     <span>لیست </span>
-                    <span>@Model.GetShownEntitiesPagesTitle()</span>
                 </div>
             </div>
 
-            @if (Model.Entities != null && Model.Entities.Any())
+            @if (Sample != null && Sample.Any())
             {
                 <table class="table table-hover table-bordered tc vm">
                     <thead class="tc vm">
                         <tr class="tc vm">
                             <th class="tc vm">
-                                نام فروشنده
+                                نام نمونه
                             </th>
                             <th class="tc vm">
-                                برند
+                                لوگوی نمونه
                             </th>
                             <th class="tc vm">
-                                قیمت
+                                عرض
                             </th>
                             <th class="tc vm">
-                                امتیاز
+                                ارتفاع
                             </th>
                             <th class="tc vm">
-                                امکانات
+                                ثبت
                             </th>
                         </tr>
                     </thead>
                     <tbody class="tc vm">
-                        @foreach (var product in Model.Entities)
+                        @foreach (var product in Sample)
                         {
+                            <form asp-action="GetSampleSize" asp-controller="Home" asp-area="" id="" method="get">
+                                <input type="hidden" value="@product.Id" name="SampleId" />
+
                             <tr class="tc vm" remove-ajax-item="">
-                                <td class="tc vm" style="max-width: 200px">
-                                    @product.User.Username
-                                </td>
+
                                 <td class="vm">
                                     <div class="flex-style-center">
-                                        <img src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@product.MainBrand.BrandLogo" class="avatar-style" style="border-radius:50px;" />
+                                        <img src="@Window.Application.StticTools.FilePaths.SampleThumbimage/@product.Image" class="avatar-style" style="border-radius:50px;" />
                                     </div>
                                 </td>
                                 <td class="tc vm" style="max-width: 200px">
-                                    @product.User.Username
+                                        @product.SegmentName
                                 </td>
                                 <td class="tc vm">
+                                    <input type="text" name="Width" />
                                 </td>
                                 <td class="tc vm">
+                                    <input type="text" name="Height" />
+                                </td>
+                                <td class="tc vm">
+                                    <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
+                                        ثبت
+                                    </button>
                                 </td>
                             </tr>
+
+                            </form>
                         }
                     </tbody>
                 </table>
-
-                <div class="footer tc">
-                    <partial name="_Paging" model="@Model.GetCurrentPaging()" />
-
-                </div>
             }
             else
             {

@@ -43,7 +43,7 @@ namespace Window.Domain.Entities.Segment
 
         public List<SegmentPricing> SegmentPricings { get; set; }
 
-        public List<SampleSelectedSegment>  SampleSelectedSegments { get; set; }
+        public ICollection<SampleSelectedSegment> SampleSelectedSegment { get; set; }
 
         #endregion
     }

@@ -11,9 +11,9 @@ namespace Window.Domain.Entities.Sample
     {
         #region properties
 
-        public Segment.Segment SegmentId { get; set; }
+        public ulong SegmentId { get; set; }
 
-        public Sample SampleId { get; set; }
+        public ulong SampleId { get; set; }
 
         #endregion
 
