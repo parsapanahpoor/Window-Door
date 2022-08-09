@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Globalization;
 using System.Text.Encodings.Web;
+using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using Window.Data.Context;
 using Window.Domain.SharedResource;

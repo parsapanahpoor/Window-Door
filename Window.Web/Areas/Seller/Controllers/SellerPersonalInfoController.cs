@@ -64,6 +64,13 @@ namespace Window.Web.Areas.Seller.Controllers
 
         public async Task<IActionResult> PageOfManageSellerInformation()
         {
+            #region Check User Charge
+
+            var res = await _sellerService.CheckUserCharge(User.GetUserId());
+            if (res == false) return NotFound();
+
+            #endregion
+
             var model = await _sellerService.FillInformationOfSellerStateViewModel(User.GetUserId());
             return View(model) ;
         }
@@ -445,6 +452,13 @@ namespace Window.Web.Areas.Seller.Controllers
 
         public async Task<IActionResult> MarketChargeInformation()
         {
+            #region Check User Charge
+
+            var res = await _sellerService.CheckUserCharge(User.GetUserId());
+            if (res == false) return NotFound();
+
+            #endregion
+
             return View(await _sellerService.FillMarketChargeInfoViewModel(User.GetUserId()));
         }
 
@@ -465,6 +479,12 @@ namespace Window.Web.Areas.Seller.Controllers
 
             #endregion
 
+            #region Get Market 
+
+            var market = await _sellerService.GetMarketByUserId(User.GetUserId());
+
+            #endregion
+
             #region Tarif 
 
             var tariff = await _sellerService.GetMarketAccountChargeTariff(User.GetUserId());
@@ -473,12 +493,19 @@ namespace Window.Web.Areas.Seller.Controllers
                 TempData[ErrorMessage] = "کاربر عزیز امکان پرداخت وجه برای شما وجود ندارد لطفا با پشتیبانی تماس بگیرید.";
                 return RedirectToAction(nameof(MarketChargeInformation));
             }
+            if (tariff == 0)
+            {
+                //Charge User Wallet
+                await _sellerService.ChargeUserWallet(User.GetUserId(), tariff.Value);
 
-            #endregion
+                //Pay Account Charge Tariff
+                await _sellerService.PayAccountChargeTariff(User.GetUserId(), tariff.Value);
 
-            #region Get Market 
+                //Update Market State 
+                var result = await _sellerService.ChargeAccount(market.Id, User.GetUserId());
 
-            var market = await _sellerService.GetMarketByUserId(User.GetUserId());
+                return RedirectToAction("Index" , "Home" , new { area = "Seller" });
+            }
 
             #endregion
 

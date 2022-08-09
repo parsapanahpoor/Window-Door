@@ -49,7 +49,7 @@ namespace Window.Web.Controllers
 
             if (result == RegisterUserResponse.Success)
             {
-                TempData["success"] = _localizer["You Are Registered Successfully, Please Check Your Inbox And Activate Your Account"].Value;
+                TempData["success"] = _localizer["ثبت نام شما باموفقیت انجام شده است ."].Value;
                 return RedirectToAction("Login");
             }
 

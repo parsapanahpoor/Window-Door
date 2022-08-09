@@ -16,14 +16,12 @@
             </a>
         </li>
 
-        @if (ViewBag.DoctorInfoState == "ActiveSellerAccount")
+        @if (ViewBag.SellersInfosState == "ActiveSellerAccount")
         {
-
-
             <li>
                 <a href="#" class="menu-dropdown">
                     <i class="menu-icon fa fa-user"></i>
-                    <span class="menu-text"> @Localizer["Profile"] </span>
+                    <span class="menu-text"> @Localizer["اطلاعات کاربری"] </span>
 
                     <i class="menu-expand"></i>
                 </a>
@@ -31,22 +29,44 @@
                 <ul class="submenu">
                     <li>
                         <a asp-area="Seller" asp-controller="Account" asp-action="EditProfile">
-                            <span class="menu-text">@Localizer["Edit Profile"]</span>
+                            <span class="menu-text">@Localizer["ویرایش اطلاعات کاربری"]</span>
                         </a>
                     </li>
 
                     <li>
                         <a asp-area="Seller" asp-controller="Account" asp-action="ChangePassword">
-                            <span class="menu-text">@Localizer["Change Password"]</span>
+                            <span class="menu-text">@Localizer["تغییر کلمه ی عبور"]</span>
                         </a>
                     </li>
                 </ul>
             </li>
 
+              <li>
+                    <a href="#" class="menu-dropdown">
+                        <i class="menu-icon fa fa-inbox"></i>
+                        <span class="menu-text"> مدیریت قیمت گذاری</span>
+
+                        <i class="menu-expand"></i>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a asp-area="Seller" asp-controller="Product" asp-action="FilterProducts">
+                                <span class="menu-text">لیست محصولات</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-area="Seller" asp-controller="Product" asp-action="CreateProduct">
+                                <span class="menu-text">افزودن محصول</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
             <li>
                 <a href="#" class="menu-dropdown">
                     <i class="menu-icon fa fa-ticket"></i>
-                    <span class="menu-text"> @Localizer["Manage Tickets"]</span>
+                    <span class="menu-text"> @Localizer["مدیریت تیکت ها"]</span>
 
                     <i class="menu-expand"></i>
                 </a>
@@ -54,56 +74,12 @@
                 <ul class="submenu">
                     <li>
                         <a asp-area="Seller" asp-controller="Ticket" asp-action="FilterTickets">
-                            <span class="menu-text">@Localizer["List Of Tickets"]</span>
+                            <span class="menu-text">@Localizer["لیست تیکت ها "]</span>
                         </a>
                     </li>
                     <li>
                         <a asp-area="Seller" asp-controller="Ticket" asp-action="CreateTicket">
-                            <span class="menu-text">@Localizer["Create Ticket"]</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="#" class="menu-dropdown">
-                    <i class="menu-icon fa fa-inbox"></i>
-                    <span class="menu-text"> مدیریت قیمت گذاری</span>
-
-                    <i class="menu-expand"></i>
-                </a>
-
-                <ul class="submenu">
-                    <li>
-                        <a asp-area="Seller" asp-controller="Product" asp-action="FilterProducts">
-                            <span class="menu-text">لیست محصولات</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-area="Seller" asp-controller="Product" asp-action="CreateProduct">
-                            <span class="menu-text">افزودن محصول</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="#" class="menu-dropdown">
-                    <i class="menu-icon fa fa-ticket"></i>
-                    <span class="menu-text"> @Localizer["Manage Tickets"]</span>
-
-                    <i class="menu-expand"></i>
-                </a>
-
-                <ul class="submenu">
-                    <li>
-                        <a asp-area="Seller" asp-controller="Ticket" asp-action="FilterTickets">
-                            <span class="menu-text">@Localizer["List Of Tickets"]</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-area="Seller" asp-controller="Ticket" asp-action="CreateTicket">
-                            <span class="menu-text">@Localizer["Create Ticket"]</span>
+                            <span class="menu-text">@Localizer["ایجاد تیکت"]</span>
                         </a>
                     </li>
                 </ul>
@@ -155,12 +131,10 @@
 
         else
         {
-
-
-            <li>
+              <li>
                 <a href="#" class="menu-dropdown">
                     <i class="menu-icon fa fa-user"></i>
-                    <span class="menu-text"> @Localizer["Profile"] </span>
+                    <span class="menu-text"> @Localizer["اطلاعات کاربری"] </span>
 
                     <i class="menu-expand"></i>
                 </a>
@@ -168,41 +142,13 @@
                 <ul class="submenu">
                     <li>
                         <a asp-area="Seller" asp-controller="Account" asp-action="EditProfile">
-                            <span class="menu-text">@Localizer["Edit Profile"]</span>
+                            <span class="menu-text">@Localizer["ویرایش اطلاعات کاربری"]</span>
                         </a>
                     </li>
 
                     <li>
                         <a asp-area="Seller" asp-controller="Account" asp-action="ChangePassword">
-                            <span class="menu-text">@Localizer["Change Password"]</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            
-            <li>
-                <a href="#" class="menu-dropdown">
-                    <i class="menu-icon fa fa-inbox"></i>
-                    <span class="menu-text"> مدیریت قیمت گذاری</span>
-
-                    <i class="menu-expand"></i>
-                </a>
-
-                <ul class="submenu">
-                    <li>
-                        <a asp-area="Seller" asp-controller="Product" asp-action="FilterProducts">
-                            <span class="menu-text">لیست قیمت گذاری</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-area="Seller" asp-controller="Product" asp-action="CreateProduct">
-                            <span class="menu-text">افزودن قیمت گذاری</span>
-                        </a>
-                    </li>
-                      <li>
-                        <a asp-area="Seller" asp-controller="Product" asp-action="CreateGlassPricing">
-                            <span class="menu-text"> قیمت گذاری شیشه  </span>
+                            <span class="menu-text">@Localizer["تغییر کلمه ی عبور"]</span>
                         </a>
                     </li>
                 </ul>
@@ -211,7 +157,7 @@
             <li>
                 <a href="#" class="menu-dropdown">
                     <i class="menu-icon fa fa-ticket"></i>
-                    <span class="menu-text"> @Localizer["Manage Tickets"]</span>
+                    <span class="menu-text"> @Localizer["مدیریت تیکت ها"]</span>
 
                     <i class="menu-expand"></i>
                 </a>
@@ -219,12 +165,12 @@
                 <ul class="submenu">
                     <li>
                         <a asp-area="Seller" asp-controller="Ticket" asp-action="FilterTickets">
-                            <span class="menu-text">@Localizer["List Of Tickets"]</span>
+                            <span class="menu-text">@Localizer["لیست تیکت ها "]</span>
                         </a>
                     </li>
                     <li>
                         <a asp-area="Seller" asp-controller="Ticket" asp-action="CreateTicket">
-                            <span class="menu-text">@Localizer["Create Ticket"]</span>
+                            <span class="menu-text">@Localizer["ایجاد تیکت"]</span>
                         </a>
                     </li>
                 </ul>
@@ -272,7 +218,6 @@
                     </ul>
                 </li>
             }
-
         }
 
     </ul>

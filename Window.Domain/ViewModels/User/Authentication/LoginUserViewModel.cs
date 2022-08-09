@@ -7,12 +7,12 @@ public class LoginUserViewModel
 {
     #region Properties
 
-    [Required(ErrorMessage = "Please Enter {0}")]
+    [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
     [EmailAddress(ErrorMessage = "Please Enter Valid Email Address")]
     [DisplayName("Email")]
     public string Email { get; set; }
 
-    [Required(ErrorMessage = "Please Enter {0}")]
+    [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
     [DataType(DataType.Password)]
     [DisplayName("Password")]
     public string Password { get; set; }

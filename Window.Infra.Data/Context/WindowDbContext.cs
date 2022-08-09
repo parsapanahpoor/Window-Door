@@ -179,7 +179,7 @@ namespace Window.Data.Context
 
             #endregion
 
-            #region Product Type Category
+            #region Product Type Category Seed Date 
 
             modelBuilder.Entity<ProductTypeCategory>().HasData(new ProductTypeCategory
             {
@@ -224,6 +224,472 @@ namespace Window.Data.Context
                 ProductType = Domain.Enums.Types.ProductType.Lolaie,
                 CreateDate = DateTime.Now,
                 IsDelete = false
+            });
+
+            #endregion
+
+            #region Segments Seed Data 
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 1,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "فریم",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 2,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "زهوار دوجداره",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 3,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "لنگه",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 4,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "یراق ملغی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 5,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "یراق تک حالته",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 6,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "لنگه ی بازشوی پنجره",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 7,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "مولیون لولایی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 8,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "گالوانیزه ی فریم",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 10,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "گالوانیزه ی لنگه",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 11,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "گالوانیزه ی مولیون",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 12,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "لنگه ی درب",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 13,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "گالوانیزه ی دربی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 14,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "یراق درب سویئچی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 15,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "یراق درب سرویسی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 16,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "گالوانیزه ی لولایی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 17,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "پنل",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 18,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "گالوانیزه ی مولیون لولایی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 19,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "لنگه ی کشویی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 20,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "گالوانیزه ی لنگه ی کشویی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 21,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "نوار مویی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 22,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "کاور لنگه ی کشویی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 23,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "مولوین کشویی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 24,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "گالوانیزه ی مولوین کشویی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 25,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "کاور مولوین کشویی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 26,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "کاور بارانگیر",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 27,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "ریل کشویی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 28,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "یراق کشویی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 29,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "ریل کشویی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 30,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "لاستیک فشاری",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 31,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "اینترلاک",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 32,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "فریم لولایی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 33,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "وادار لولایی",
+            });
+
+            modelBuilder.Entity<Segment>().HasData(new Segment
+            {
+                Id = 34,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                Aluminum = true,
+                Door = true,
+                Keshoie = true,
+                Lolaie = true,
+                UPVC = true,
+                Window = true,
+                SegmentName = "قفل چهارلنگه",
             });
 
             #endregion

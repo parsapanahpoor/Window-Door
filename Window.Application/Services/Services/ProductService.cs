@@ -226,6 +226,13 @@ namespace Window.Application.Services.Services
 
             #endregion
 
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return 0;
+
+            #endregion
+
             #region Get seller informations 
 
             var sellerInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
@@ -252,7 +259,7 @@ namespace Window.Application.Services.Services
 
             Product product = new Product()
             {
-                UserId = userId,
+                UserId = market.UserId,
                 CityId = sellerInfo.CityId.Value,
                 StateId = sellerInfo.StateId.Value,
                 CountryId = sellerInfo.CountryId.Value,
@@ -301,11 +308,18 @@ namespace Window.Application.Services.Services
                 .OrderByDescending(s => s.CreateDate)
                 .AsQueryable();
 
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p=> !p.IsDelete && p.UserId == filter.UserId).Select(p=> p.Market).FirstOrDefaultAsync();
+            if (market == null) return null;
+
+            #endregion
+
             #region Filter By Properties
 
-            if (filter.UserId != null && filter.UserId != 0)
+            if (market.UserId != null && market.UserId != 0)
             {
-                query = query.Where(p => p.UserId == filter.UserId);
+                query = query.Where(p => p.UserId == market.UserId);
             }
 
             #endregion
@@ -318,16 +332,23 @@ namespace Window.Application.Services.Services
 
         public async Task<bool> GetSellerTypeForValidAddProduct(ulong userId)
         {
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return false;
+
+            #endregion
+
             #region Get seller informations 
 
-            var sellerInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
+            var sellerInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == market.UserId);
             if (sellerInfo == null) return false;
 
             #endregion
 
             #region Get User Product Count 
 
-            var count = await _context.Products.CountAsync(p => !p.IsDelete && p.UserId == userId);
+            var count = await _context.Products.CountAsync(p => !p.IsDelete && p.UserId == market.UserId);
 
             #endregion
 
@@ -352,9 +373,16 @@ namespace Window.Application.Services.Services
 
         public async Task<SegmentPricingViewModel?> FillSegmentPricingViewModel(ulong productId, ulong userId)
         {
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return null;
+
+            #endregion
+
             #region Get Product 
 
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId && p.UserId == userId && !p.IsDelete);
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId && p.UserId == market.UserId && !p.IsDelete);
             if (product == null) return null;
 
             #endregion
@@ -400,9 +428,16 @@ namespace Window.Application.Services.Services
 
         public async Task<bool> AddPricingForSegment(ulong ProductId, ulong SegmentId, int Price, ulong userId)
         {
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return false;
+
+            #endregion
+
             #region Get Product 
 
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == ProductId && p.UserId == userId && !p.IsDelete);
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == ProductId && p.UserId == market.UserId && !p.IsDelete);
             if (product == null) return false;
 
             #endregion
@@ -458,6 +493,13 @@ namespace Window.Application.Services.Services
 
         public async Task<bool> AddPricingForGlass(ulong GlassId, int Price, ulong userId)
         {
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return false;
+
+            #endregion
+
             #region Get Segment
 
             var glass = await _context.Glasses.FirstOrDefaultAsync(p => p.Id == GlassId && !p.IsDelete);
@@ -491,7 +533,7 @@ namespace Window.Application.Services.Services
                 {
                     GlassId = GlassId,
                     Price = Price,
-                    UserId = userId
+                    UserId = market.UserId
                 };
 
                 #endregion
@@ -510,9 +552,16 @@ namespace Window.Application.Services.Services
 
         public async Task<List<SegmentPricing>?> FillSegmentPricing(ulong productId, ulong userId)
         {
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return null;
+
+            #endregion
+
             #region Get Product 
 
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId && p.UserId == userId && !p.IsDelete);
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId && p.UserId == market.UserId && !p.IsDelete);
             if (product == null) return null;
 
             #endregion
@@ -522,7 +571,14 @@ namespace Window.Application.Services.Services
 
         public async Task<List<GlassPricing>?> FillGlassPricing(ulong userId)
         {
-            return await _context.GlassPricings.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return null;
+
+            #endregion
+
+            return await _context.GlassPricings.Where(p => !p.IsDelete && p.UserId == market.UserId).ToListAsync();
         }
 
         #endregion

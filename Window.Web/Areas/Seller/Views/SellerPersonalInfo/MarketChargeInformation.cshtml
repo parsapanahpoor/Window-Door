@@ -30,10 +30,12 @@
                     {
                         <p> کاربر عزیز اطلاعات کاربری شما وارد نشده است . لطفا قبل از شارژ حساب خود ابتدا اطلاعات خود را وارد نمایید  </p>
                     }
+
                     @if (Model.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller)
                     {
                         <p>کاربر عزیز اطلاعات کاربری شما در دست یرسی از طریق پشتیبان می باشد لطفا ال اعلام نتیحه ی برسی شکیبا باشید .  </p>
                     }
+
                     @if (Model.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.Rejected)
                     {
                         <p>کاربر عزیز صحت اطلاعات ارسالی شما از سمت پشتیبانی تایید نشده است. لطفا قبل از شارژ حساب اطلاعات خود را تکمیل کنید.  </p>
@@ -43,6 +45,7 @@
                     {
                         <p>  کاربر عزیز  @Model.DaysOfCharge روز از شارژ حساب کاربری شما باقی مانده است </p>
                     }
+
                     else
                     {
                         <p> کاربر عزیز حساب کاربری شما شارژ نشده است و اطلاعات فروشگاه شما در سایت به نمایش در نمیاید .  </p>

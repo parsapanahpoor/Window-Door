@@ -255,26 +255,33 @@ namespace Window.Application.Services.Services
 
         public async Task<string> GetSellersInfosState(ulong userId)
         {
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return null;
+
+            #endregion
+
             //If Seller Registers Now
-            if (!await _context.Market.AnyAsync(p => !p.IsDelete && p.UserId == userId)) return "NewUser";
+            if (!await _context.Market.AnyAsync(p => !p.IsDelete && p.UserId == market.UserId)) return "NewUser";
 
             //If Seller State Is WatingForConfirm Informations
-            if (await _context.Market.AnyAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.WaitingForConfirmPersonalInformations)) return "WatingForConfirmInformations";
+            if (await _context.Market.AnyAsync(p => p.UserId == market.UserId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.WaitingForConfirmPersonalInformations)) return "WatingForConfirmInformations";
 
             //If Seller State Is Waiting For Payed Money From Seller
-            if (await _context.Market.AnyAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.WaitingForPyedFromSeller)) return "WaitingForPyedFromSeller";
+            if (await _context.Market.AnyAsync(p => p.UserId == market.UserId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.WaitingForPyedFromSeller)) return "WaitingForPyedFromSeller";
 
             //If Seller State Is Accepted And Active
-            if (await _context.Market.AnyAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.ActiveMarketAccount)) return "ActiveSellerAccount";
+            if (await _context.Market.AnyAsync(p => p.UserId == market.UserId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.ActiveMarketAccount)) return "ActiveSellerAccount";
 
             //If Seller Informations State Is Accepted 
-            if (await _context.Market.AnyAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.AcceptedPersonalInformation)) return "AcceptedPersonalInformation";
+            if (await _context.Market.AnyAsync(p => p.UserId == market.UserId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.AcceptedPersonalInformation)) return "AcceptedPersonalInformation";
 
             //If Seller Informations State Is DisActived 
-            if (await _context.Market.AnyAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.Rejected)) return "Rejected";
+            if (await _context.Market.AnyAsync(p => p.UserId == market.UserId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.Rejected)) return "Rejected";
 
             //If Seller State Is DisActived
-            if (await _context.Market.AnyAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.DisAcctiveMarketAccount)) return "DisAcctiveSellerAccount";
+            if (await _context.Market.AnyAsync(p => p.UserId == market.UserId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.DisAcctiveMarketAccount)) return "DisAcctiveSellerAccount";
 
             return "NewUser";
         }
@@ -624,7 +631,7 @@ namespace Window.Application.Services.Services
             var user = await _context.Users.FirstOrDefaultAsync(p => p.Id == userId && !p.IsDelete);
             if (user == null) return null;
 
-            var sellerPersonalInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState != MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller);
+            var sellerPersonalInfo = await _context.MarketPersonalInfo.Include(p=> p.Market).FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState != MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller);
             if (sellerPersonalInfo == null) return null;
 
             var sellerLinks = await _context.MarketLinks.Where(p => p.UserId == userId && !p.IsDelete).ToListAsync();
@@ -648,7 +655,7 @@ namespace Window.Application.Services.Services
                 Resume = sellerPersonalInfo.Resume,
                 WorkAddress = sellerPersonalInfo.WorkAddress,
                 RejectedNote = sellerPersonalInfo.RejectDescription,
-                MarketPersonalsInfoState = sellerPersonalInfo.MarketPersonalsInfoState,
+                MarketPersonalsInfoState = sellerPersonalInfo.Market.MarketPersonalsInfoState,
                 SellerType = sellerPersonalInfo.SellerType,
                 CountryId = sellerPersonalInfo.CountryId.Value,
                 StateId = sellerPersonalInfo.StateId.Value,
@@ -818,6 +825,46 @@ namespace Window.Application.Services.Services
             return UpdateSellerPersonalInfoResul.Success;
         }
 
+        public async Task<bool> CheckUserCharge(ulong UserId)
+        {
+            #region Get Market By User Id 
+
+            var market = await _context.MarketUser.Include(p=> p.Market).Where(p => !p.IsDelete && p.UserId == UserId).Select(p=> p.Market).FirstOrDefaultAsync();
+            if (market == null) return false;
+
+            #endregion
+
+            #region Check User Charge 
+
+            if (market.MarketPersonalsInfoState == MarketPersonalsInfoState.ActiveMarketAccount)
+            {
+                var marketChargeInfo = await _context.MarketChargeInfo.FirstOrDefaultAsync(p => !p.IsDelete && p.CurrentAccountCharge && p.MarketId == market.Id);
+                if (marketChargeInfo.EndDate < DateTime.Now)
+                {
+                    #region Update Market Charge Info
+
+                    marketChargeInfo.CurrentAccountCharge = false;
+
+                    _context.MarketChargeInfo.Update(marketChargeInfo);
+                    await _context.SaveChangesAsync();
+
+                    #endregion
+
+                    #region Update Market Info 
+
+                    market.MarketPersonalsInfoState = MarketPersonalsInfoState.DisAcctiveMarketAccount;
+
+                    _context.Market.Update(market);
+                    await _context.SaveChangesAsync();
+
+                    #endregion
+                }
+            }
+
+            #endregion
+
+            return true;
+        }
 
         #endregion
 

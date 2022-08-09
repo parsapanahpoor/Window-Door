@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Window.Application.Services.Interfaces;
+using Window.Application.Extensions;
 
 namespace Window.Web.Areas.Seller.Controllers
 {
@@ -19,11 +20,14 @@ namespace Window.Web.Areas.Seller.Controllers
 
         private readonly IProductService _productService;
 
-        public HomeController(IConfiguration configuration, IUserService userService , IProductService productService)
+        private ISellerService _sellerService;
+
+        public HomeController(IConfiguration configuration, IUserService userService, IProductService productService, ISellerService sellerService)
         {
             _configuration = configuration;
             _userService = userService;
             _productService = productService;
+            _sellerService = sellerService;
         }
 
         #endregion
@@ -32,6 +36,13 @@ namespace Window.Web.Areas.Seller.Controllers
 
         public async Task<IActionResult> Index()
         {
+            #region Check User Charge
+
+            var res = await _sellerService.CheckUserCharge(User.GetUserId());
+            if (res == false) return NotFound();
+
+            #endregion
+
             return View();
         }
 

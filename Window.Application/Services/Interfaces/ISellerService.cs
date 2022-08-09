@@ -68,7 +68,7 @@ namespace Window.Application.Services.Interfaces
 
         Task<ListOfSellersInfoViewModel> FilterPersonalInfo(ListOfSellersInfoViewModel filter);
 
-
+        Task<bool> CheckUserCharge(ulong UserId);
 
         #endregion
 

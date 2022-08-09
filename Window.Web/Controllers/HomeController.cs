@@ -11,6 +11,7 @@ using Window.Web.Models;
 using System.Text.Json;
 using Window.Application.Extensions;
 using Window.Domain.Enums.SellerType;
+using System.Text.Json.Serialization;
 
 namespace Window.Web.Controllers
 {
@@ -184,8 +185,14 @@ namespace Window.Web.Controllers
 
         #region Inquiry
 
-        public async Task<IActionResult> Inquiry()
+        public async Task<IActionResult> Inquiry(ulong? MainBrandId , SellerType? SellerType, int pageId = 1)
         {
+            #region Brand ViewBag
+
+            ViewBag.Brand = await _brandService.GetAllBrands();
+
+            #endregion
+
             #region Seler Filter
 
             SellersFieldFitreViewModel sellerFilter = new SellersFieldFitreViewModel();
@@ -203,6 +210,16 @@ namespace Window.Web.Controllers
 
                 if (list.UserId == User.GetUserId())
                 {
+                    if (MainBrandId.HasValue)
+                    {
+                        list.BrandId = MainBrandId.Value;
+                    }
+
+                    if (SellerType != null)
+                    {
+                        list.SellerType = SellerType;
+                    }
+
                     sellerFilter = list;
                 }
             }
@@ -259,7 +276,29 @@ namespace Window.Web.Controllers
 
             #endregion
 
-            return View();
+            ViewBag.pageId = pageId;
+
+            #region Paginaition
+
+            int take = 20;
+
+            int skip = (pageId - 1) * take;
+
+            int pageCount = (model.Count() / take);
+
+            if ((pageCount % 2) == 0 || (pageCount % 2) != 0)
+            {
+                pageCount += 1;
+            }
+
+            var query = model.Skip(skip).Take(take).ToList();
+
+            var viewModel = Tuple.Create(query, pageCount);
+
+            #endregion
+
+            TempData[SuccessMessage] = "استعلام گیری با موفقیت انجام شده است .";
+            return View(viewModel);
         }
 
         #endregion

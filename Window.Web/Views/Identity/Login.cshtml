@@ -1,16 +1,16 @@
 ﻿@using Window.Web.Culture
 @model Window.Domain.ViewModels.User.Authentication.LoginUserViewModel
 @{
-    ViewData["Title"] = Localizer["Login"];
+    ViewData["Title"] = "ورود";
     Layout = "Identity/_IdentityLayout";
     var culture = ApplicationCultures.GetCurrentCulture();
     var isRtl = culture.IsRtl;
 }
 
 <div class="login-container animated fadeInDown">
-    <form method="post" dir="@(isRtl ? "rtl" : "ltr")" asp-antiforgery="true">
+    <form method="post" dir=""ltr" asp-antiforgery="true">
         <div class="loginbox bg-white">
-            <div class="loginbox-title">@Localizer["Login"]</div>
+            <div class="loginbox-title">ورود</div>
             
             @if (ViewData.ModelState.ErrorCount > 0)
             {
@@ -18,13 +18,13 @@
             }
 
             <div class="loginbox-textbox">
-                <label asp-for="Email"></label>
+                <label asp-for="Email">ایمیل</label>
                 <input asp-for="Email" class="form-control"/>
                 <span asp-validation-for="Email" class="text-danger small"></span>
             </div>
             
             <div class="loginbox-textbox">
-                <label asp-for="Password"></label>
+                <label asp-for="Password">کلمه ی عبور</label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger small"></span>
             </div>
@@ -33,21 +33,21 @@
                 <div class="checkbox">
                     <label>
                         <input asp-for="RememberMe" class="colored-primary" >
-                        <span class="text darkgray"> @Localizer["Remember Me"] </span>
+                        <span class="text darkgray"> @Localizer["مرا به خاطر بسپار"] </span>
                     </label>
                 </div>
             </div>
             
             <div class="loginbox-textbox">
-                <a asp-action="ForgotPassword">@Localizer["Forgot Password?"]</a>
+                <a asp-action="ForgotPassword">@Localizer["فراموشی روز عبور "]</a>
             </div>
             
             <div class="loginbox-textbox">
-                <a asp-action="Register">@Localizer["Don\'t have account ? Create a new"]</a>
+                <a asp-action="Register">@Localizer["ثبت نام "]</a>
             </div>
 
-            <div class="loginbox-submit mt-3" dir="@(isRtl ? "ltr" : "rtl")">
-                <input type="submit" class="btn btn-primary" value="@Localizer["Login"]">
+            <div class="loginbox-submit mt-3" dir="rtl">
+                <input type="submit" class="btn btn-primary" value="@Localizer["ورود"]">
             </div>
 
         </div>

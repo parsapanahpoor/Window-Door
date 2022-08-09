@@ -14,6 +14,14 @@
 
         @if (User.Identity.IsAuthenticated)
         {
+             <li>
+                <a  asp-area="Seller" asp-controller="Home" asp-action="Index">
+                    <i class="menu-icon glyphicon glyphicon-home"></i>
+                    <span class="menu-text">پنل فروشگاه  </span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+
             <li>
                 <a  asp-area="" asp-controller="Market" asp-action="AddMarket">
                     <i class="menu-icon glyphicon glyphicon-home"></i>
