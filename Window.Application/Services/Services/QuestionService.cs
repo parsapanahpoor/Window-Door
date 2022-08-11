@@ -37,6 +37,11 @@ namespace Window.Application.Services.Services
 
         #region Mian Methods
 
+        public async Task<List<QuestionAnswer>?> GetListOfQuestions()
+        {
+            return await _context.QuestionAnswers.Where(p => !p.IsDelete && p.IsActive).ToListAsync();
+        }
+
         public async Task<bool> IsExistAnyQuestionService()
         {
             return await _context.QuestionAnswers.AnyAsync(p => !p.IsDelete);

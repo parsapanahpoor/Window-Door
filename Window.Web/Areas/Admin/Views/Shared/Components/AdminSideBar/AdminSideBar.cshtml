@@ -10,14 +10,14 @@
         <li>
             <a asp-action="Index" asp-area="Admin" asp-controller="Home">
                 <i class="menu-icon glyphicon glyphicon-home"></i>
-                <span class="menu-text"> @SharedLocalizer["Dashboard"]  </span>
+                <span class="menu-text"> @SharedLocalizer["داشبورد"]  </span>
             </a>
         </li>
 
         <li>
             <a href="#" class="menu-dropdown">
                 <i class="menu-icon fa fa-users"></i>
-                <span class="menu-text"> @SharedLocalizer["Manage Users"] </span>
+                <span class="menu-text"> @SharedLocalizer["مدیریت کاربران"] </span>
 
                 <i class="menu-expand"></i>
             </a>
@@ -25,13 +25,13 @@
             <ul class="submenu">
                 <li>
                     <a asp-controller="User" asp-action="Index">
-                        <span class="menu-text">@SharedLocalizer["Users List"]</span>
+                        <span class="menu-text">@SharedLocalizer["لیست کاربران"]</span>
                     </a>
                 </li>
 
                 <li>
                     <a asp-action="AddNewUser" asp-controller="User">
-                        <span class="menu-text">@SharedLocalizer["Add new User"]</span>
+                        <span class="menu-text">@SharedLocalizer["افزودن کاربر جدید"]</span>
                     </a>
                 </li>
             </ul>
@@ -196,27 +196,27 @@
         <li>
             <a asp-controller="Wallet" asp-action="Index">
                 <i class="menu-icon glyphicon glyphicon-usd"></i>
-                <span class="menu-text"> @SharedLocalizer["Wallet list"]  </span>
+                <span class="menu-text"> @SharedLocalizer["لیست تراکنش ها"]  </span>
             </a>
         </li>
 
         <li>
             <a href="#" class="menu-dropdown">
                 <i class="menu-icon fa fa-ticket"></i>
-                <span class="menu-text"> @SharedLocalizer["Manage Tickets"] </span>
+                <span class="menu-text"> @SharedLocalizer["مدیریت تیکت ها"] </span>
                 <i class="menu-expand"></i>
             </a>
 
             <ul class="submenu">
                 <li>
                     <a asp-action="FilterTickets" asp-controller="Ticket" asp-area="Admin">
-                        <span class="menu-text"> @SharedLocalizer["List Of Tickets"] </span>
+                        <span class="menu-text"> @SharedLocalizer["لیست تیکت ها"] </span>
                     </a>
                 </li>
 
                 <li>
                     <a asp-action="CreateTicket" asp-controller="Ticket" asp-area="Admin">
-                        <span class="menu-text"> @SharedLocalizer["Create New Ticket"]</span>
+                        <span class="menu-text"> @SharedLocalizer["افزودن تیکت"]</span>
                     </a>
                 </li>
 

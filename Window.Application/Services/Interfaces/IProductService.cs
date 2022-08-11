@@ -69,7 +69,7 @@ namespace Window.Application.Services.Interfaces
 
         Task<int?> InitializeSamplesPrice(List<Sample?> samples, User user, int height, int width);
 
-        Task<int?> InitialTotalSamplePrice(ulong sampleId, int height, int width, ulong userId);
+        Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, ulong userId);
 
         #endregion
     }

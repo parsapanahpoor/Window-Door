@@ -12,6 +12,8 @@ namespace Window.Application.Services.Interfaces
     {
         #region Mian Methods
 
+        Task<List<QuestionAnswer>?> GetListOfQuestions();
+
         Task<bool> IsExistAnyQuestionService();
 
         Task SaveChangesAsync();

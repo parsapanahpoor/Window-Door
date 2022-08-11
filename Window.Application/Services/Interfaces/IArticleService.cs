@@ -24,6 +24,7 @@ namespace Window.Application.Services.Interfaces
         Task<EditArticleAdminSideViewModel> FillEditArticleAdminSideViewModel(Article article);
         Task<EditArticleFromAdminPanelResponse> EditArticleFromAdminPanel(EditArticleAdminSideViewModel model, IFormFile ArticleImage);
         Task<bool> DeleteArticleFromAdminPanel(ulong ArticleId);
+        Task<List<Article>?> GetListOfArticles();
 
         #endregion
 

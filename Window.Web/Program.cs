@@ -165,6 +165,17 @@ builder.Services.Configure<RequestLocalizationOptions>(
 
 #endregion
 
+#region API Configuration
+
+builder.Services.AddEndpointsApiExplorer();
+
+JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+{
+    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+};
+
+#endregion
+
 #endregion
 
 #region MiddleWares

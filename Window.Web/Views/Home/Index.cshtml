@@ -250,11 +250,14 @@
                 <table class="table table-hover table-bordered tc vm">
                     <thead class="tc vm">
                         <tr class="tc vm">
-                            <th class="tc vm">
-                                نام نمونه
+                             <th class="tc vm">
+                                #
                             </th>
                             <th class="tc vm">
                                 لوگوی نمونه
+                            </th>
+                            <th class="tc vm">
+                                نام نمونه
                             </th>
                             <th class="tc vm">
                                 عرض
@@ -274,7 +277,9 @@
                                 <input type="hidden" value="@product.Id" name="SampleId" />
 
                             <tr class="tc vm" remove-ajax-item="">
-
+                                <td class="vm">
+                                    @product.Id
+                                </td>
                                 <td class="vm">
                                     <div class="flex-style-center">
                                         <img src="@Window.Application.StticTools.FilePaths.SampleThumbimage/@product.Image" class="avatar-style" style="border-radius:50px;" />

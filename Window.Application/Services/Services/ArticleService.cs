@@ -35,6 +35,11 @@ namespace Window.Application.Services.Services
 
         #region Mian Methods
 
+        public async Task<List<Article>?> GetListOfArticles()
+        {
+            return await _context.Articles.Where(p=> !p.IsDelete && p.IsActive).ToListAsync();
+        }
+
         public async Task<bool> IsExistAnyArticle()
         {
             return await _context.Articles.AnyAsync(p => !p.IsDelete);
