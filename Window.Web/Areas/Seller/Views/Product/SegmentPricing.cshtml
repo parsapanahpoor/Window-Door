@@ -5,7 +5,7 @@
 
 
 @{
-    ViewData["Title"] = "قیمت گذاری قطعه";
+    ViewData["Title"] = $"قیمت گذاری قطعه برای برند {Model.ProductName}";
 
     var segmentPricing = ViewBag.SegmentPRicing as List<Window.Domain.Entities.Product.SegmentPricing>;
 }
@@ -27,7 +27,7 @@
     <div class="col-lg-12 col-sm-12">
         <div class="widget">
             <div class="widget-header bordered-bottom bordered-green">
-                <span class="widget-caption"> @ViewData["Title"] </span>
+                <h3 class="widget-caption"> @ViewData["Title"] </h3>
             </div>
             <div class="widget-body">
                 <div>
@@ -40,7 +40,7 @@
                                 <form method="post" asp-action="AddSegmentPricing" asp-controller="Product" asp-area="Seller" enctype="multipart/form-data">
                                     <input type="hidden" asp-for="ProductId" />
                                     <input type="hidden" name="SegmentId" value="@item.Segment.Id" />
-                                    <div class="form-group col-md-12 col-sm-12">
+                                    <div class="form-group col-md-4 col-sm-12">
                                         <label>@item.Segment.SegmentName</label>
                                         <div class="input-group">
                                             @if (segmentPricing != null && segmentPricing.Any())

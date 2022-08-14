@@ -382,7 +382,7 @@ namespace Window.Application.Services.Services
 
             #region Get Product 
 
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId && p.UserId == market.UserId && !p.IsDelete);
+            var product = await _context.Products.Include(p=> p.MainBrand).FirstOrDefaultAsync(p => p.Id == productId && p.UserId == market.UserId && !p.IsDelete);
             if (product == null) return null;
 
             #endregion
@@ -398,6 +398,7 @@ namespace Window.Application.Services.Services
             SegmentPricingViewModel model = new SegmentPricingViewModel()
             {
                 ProductId = productId,
+                ProductName = product.MainBrand.BrandName,
                 Segments = segments.Select(p => new SegmentPRicingEntityViewModel()
                 {
                     Segment = p,

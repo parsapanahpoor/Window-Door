@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Window.Application.Services.Interfaces;
 using Window.Web.HttpServices;
@@ -22,7 +23,8 @@ namespace Window.Web.Controllers
 
         #region Get List Of Questions 
 
-        [HttpPost("get-QA")]
+        [HttpGet("get-QA")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetQA(string? pageId)
         {
             var model = await _questionService.GetListOfQuestions();
@@ -57,7 +59,7 @@ namespace Window.Web.Controllers
 
             #endregion
 
-            return ApiResult.SetResponse(ApiResultEnum.Success, null, model);
+            return Ok(model);
 
         }
 

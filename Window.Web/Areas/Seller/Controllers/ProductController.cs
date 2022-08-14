@@ -39,7 +39,8 @@ namespace Window.Web.Areas.Seller.Controllers
 
             if (!await _productService.GetSellerTypeForValidAddProduct(User.GetUserId()))
             {
-                return NotFound();
+                TempData[ErrorMessage] = "کاربر عزیز شما حد مجاز برای درج محصول را تکمبل کرده اید . ";
+                return RedirectToAction(nameof(FilterProducts));
             }
 
             #endregion

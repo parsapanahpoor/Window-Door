@@ -1,10 +1,12 @@
 ﻿using CRM.Domain.DTOs.StructuredApiDtos.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Window.Application.Extensions;
 using Window.Application.Interfaces;
 using Window.Application.Services.Interfaces;
 using Window.Domain.ViewModels.Article;
+using Window.Web.HttpManager;
 using Window.Web.HttpServices;
 
 namespace Window.Web.Controllers
@@ -28,43 +30,31 @@ namespace Window.Web.Controllers
 
         #region Get List Of Articles
 
-        [HttpPost("get-articles")]
-        public async Task<IActionResult> GetArticles(string? pageId)
+        [HttpGet("get-articles")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetArticles()
         {
             var model = await _articleService.GetListOfArticles();
 
-            #region Get Page Id
+            return JsonResponseStatus.Success(model);
+        }
 
-            int PageId = 1;
+        [HttpGet("get-articles1")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetArticles1()
+        {
+            var model = await _articleService.GetListOfArticles();
 
-            if (pageId != null)
-            {
-                PageId = Int32.Parse(pageId);
-            }
+            return new ObjectResult(model);
+        }
 
-            #endregion
+        [HttpGet("get-articles2")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetArticles2()
+        {
+            var model = await _articleService.GetListOfArticles();
 
-            #region Paginaition
-
-            int take = 20;
-
-            int skip = (PageId - 1) * take;
-
-            int pageCount = (model.Count() / take);
-
-            if ((pageCount % 2) == 0 || (pageCount % 2) != 0)
-            {
-                pageCount += 1;
-            }
-
-            var query = model.Skip(skip).Take(take).ToList();
-
-            var viewModel = Tuple.Create(query, pageCount);
-
-            #endregion
-
-            return ApiResult.SetResponse(ApiResultEnum.Success, null , model);
-            
+            return Ok(model);
         }
 
         #endregion

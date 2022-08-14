@@ -13,6 +13,8 @@ namespace Window.Domain.ViewModels.Seller.Pricing
     {
         #region properties
 
+        public string  ProductName { get; set; }
+
         public ulong ProductId { get; set; }
 
         public List<SegmentPRicingEntityViewModel> Segments { get; set; }

@@ -176,6 +176,24 @@ JsonConvert.DefaultSettings = () => new JsonSerializerSettings
 
 #endregion
 
+#region cors
+
+builder.Services.AddCors(
+    options =>
+    {
+        options.AddPolicy(
+            "ApiCORS",
+            builder => builder
+                .AllowAnyOrigin()
+                .SetIsOriginAllowed(domains => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetPreflightMaxAge(TimeSpan.FromSeconds(43200))
+        );
+    });
+
+#endregion
+
 #endregion
 
 #region MiddleWares
@@ -223,6 +241,8 @@ app.UseRequestLocalization(options);
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCors("ApiCORS");
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
