@@ -32,6 +32,9 @@ namespace Window.Application.Services.Interfaces
 
         #region Site Side
 
+        //Get Samples For Show In Inquiry Page (Or API)
+        Task<List<Sample>?> GetListOfSamplesForShowInAPI(string userMacAddress);
+
         Task<List<Sample>?> GetAllSample();
 
         Task<List<Sample>?> GetAllDoorAndWindowSample(ProductKind sellerType);

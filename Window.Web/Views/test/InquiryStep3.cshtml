@@ -1,0 +1,91 @@
+﻿@model List<Window.Domain.Entities.Sample.Sample>
+
+@{
+    ViewData["Title"] = "استعلام گیری";
+}
+
+<div class="row">
+
+    <div class="col-lg-12 col-sm-12">
+        <div class="well with-header with-footer table-responsive">
+            <div class="header bordered-azure">
+                <div class="flex-style">
+                    <span>لیست </span>
+                </div>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <table class="table table-hover table-bordered tc vm">
+                    <thead class="tc vm">
+                        <tr class="tc vm">
+                            <th class="tc vm">
+                                #
+                            </th>
+                            <th class="tc vm">
+                                لوگوی نمونه
+                            </th>
+                            <th class="tc vm">
+                                نام نمونه
+                            </th>
+                            <th class="tc vm">
+                                عرض
+                            </th>
+                            <th class="tc vm">
+                                ارتفاع
+                            </th>
+                            <th class="tc vm">
+                                ثبت
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="tc vm">
+                        @foreach (var product in Model)
+                        {
+                            <form asp-action="InquiryStep3" asp-controller="test" asp-area="" id="" method="post">
+                                <input type="hidden" value="@product.Id" name="SampleId" />
+                                <input type="hidden" value="@ViewBag.UserMacAddress" name="userMacAddress" />
+
+                            <tr class="tc vm" remove-ajax-item="">
+                                <td class="vm">
+                                        @product.Id
+                                </td>
+                                <td class="vm">
+                                    <div class="flex-style-center">
+                                        <img src="@Window.Application.StticTools.FilePaths.SampleThumbimage/@product.Image" class="avatar-style" style="border-radius:50px;" />
+                                    </div>
+                                </td>
+                                <td class="tc vm" style="max-width: 200px">
+                                        @product.SegmentName
+                                </td>
+                                <td class="tc vm">
+                                    <input type="text" name="Width" />
+                                </td>
+                                <td class="tc vm">
+                                    <input type="text" name="Height" />
+                                </td>
+                                <td class="tc vm">
+                                    <button type="submit" class="btn btn-labeled btn-palegreen">
+                                        ثبت
+                                    </button>
+                                </td>
+                            </tr>
+
+                            </form>
+                        }
+                    </tbody>
+
+                </table>
+
+                <a asp-action="InquiryStep4" asp-route-userMacAddress="@ViewBag.UserMacAddress" asp-controller="test" asp-area="" class="btn btn-labeled w-100 btn-blue" style="margin-top: 30px;margin-bottom: -20px;">
+                    <i class="btn-label glyphicon glyphicon-filter"></i>استعلام گیری
+                </a>
+            }
+            else
+            {
+                <partial name="_NotFoundPartial" />
+            }
+        </div>
+    </div>
+</div>
+

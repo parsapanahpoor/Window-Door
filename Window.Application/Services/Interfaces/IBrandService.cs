@@ -12,6 +12,12 @@ namespace Window.Application.Services.Interfaces
 {
     public interface IBrandService
     {
+        //Get Brand By Name
+        Task<MainBrand> GetMainBrandByBrandName(string name);
+
+        //Get List Of Main Brands Of API
+        Task<List<MainBrand>> GetListOfMainBrand();
+
         Task<FilterMainBrandViewModel> FilterMainBrandViewModel(FilterMainBrandViewModel filter);
 
         Task<bool> CreateMainBrand(MainBrand brand, IFormFile? brandLogo);

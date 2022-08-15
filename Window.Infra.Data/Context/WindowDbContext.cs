@@ -5,6 +5,7 @@ using Window.Domain.Entities.Article;
 using Window.Domain.Entities.Brand;
 using Window.Domain.Entities.Contact;
 using Window.Domain.Entities.Glass;
+using Window.Domain.Entities.Inquiry;
 using Window.Domain.Entities.Location;
 using Window.Domain.Entities.Market;
 using Window.Domain.Entities.Product;
@@ -128,6 +129,14 @@ namespace Window.Data.Context
         public DbSet<Sample> Samples { get; set; }
 
         public DbSet<SampleSelectedSegment> SampleSelectedSegments { get; set; }
+
+        #endregion
+
+        #region Inquiry
+
+        public DbSet<LogInquiryForUser> LogInquiryForUsers { get; set; }
+
+        public DbSet<LogInquiryForUserDetail> logInquiryForUserDetails { get; set; }
 
         #endregion
 

@@ -9,6 +9,7 @@ using Window.Domain.ViewModels.Admin.State;
 using Window.Domain.ViewModels.Common;
 using Microsoft.EntityFrameworkCore;
 using Window.Data.Context;
+using Window.Domain.ViewModels.Site.API;
 
 namespace Window.Application.Services.Implementation
 {
@@ -24,6 +25,37 @@ namespace Window.Application.Services.Implementation
         }
 
         #endregion
+
+        //Get Location By Unique Name
+        public async Task<State> GetLocationByUniqueName(string uniqueName)
+        {
+            return await _context.States.FirstOrDefaultAsync(p => !p.IsDelete && p.UniqueName == uniqueName);
+        }
+
+        //Get List Of States 
+        public async Task<List<State>> GetListOfState()
+        {
+            return await _context.States.Where(p => !p.IsDelete && p.ParentId == 1).ToListAsync();
+        }
+
+        //Get List Of City By City Name
+        public async Task<List<StateAPIViewModel>> GetListOfCityByCityName(string cityName)
+        {
+            //Get Parent By Id 
+            var state = await _context.States.FirstOrDefaultAsync(p => !p.IsDelete && p.UniqueName == cityName);
+            if (state == null) return null;
+
+            //Get City By State Id
+            var model = await _context.States.Where(p => !p.IsDelete && p.ParentId == state.Id)
+                .Select(p => new StateAPIViewModel()
+                {
+                    CityName = p.UniqueName
+                }).ToListAsync();
+
+            if (model == null) return null;
+
+            return model;
+        }
 
         public Task<State> GetStateById(ulong stateId)
         {

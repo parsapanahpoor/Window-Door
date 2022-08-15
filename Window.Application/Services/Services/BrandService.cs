@@ -13,6 +13,7 @@ using Window.Data.Context;
 using Window.Domain.Entities.Brand;
 using Window.Domain.ViewModels.Admin.Brand;
 using Window.Domain.ViewModels.Common;
+using Window.Domain.ViewModels.Site.API;
 
 namespace Window.Application.Services.Services
 {
@@ -244,6 +245,12 @@ namespace Window.Application.Services.Services
 
         #region Site Side
 
+        //Get Brand By Name
+        public async Task<MainBrand> GetMainBrandByBrandName(string name)
+        {
+            return await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.BrandName == name);
+        }
+
         public async Task<List<SelectListViewModel>> GetAllBrands()
         {
             return await _context.MainBrands.Where(s => !s.IsDelete)
@@ -252,6 +259,12 @@ namespace Window.Application.Services.Services
                     Id = s.Id,
                     Title = s.BrandName
                 }).ToListAsync();
+        }
+
+        //Get List Of Main Brands Of API
+        public async Task<List<MainBrand>> GetListOfMainBrand()
+        {
+            return await _context.MainBrands.Where(p=> !p.IsDelete).ToListAsync();
         }
 
         #endregion

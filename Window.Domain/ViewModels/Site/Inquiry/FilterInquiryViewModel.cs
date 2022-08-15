@@ -32,6 +32,8 @@ namespace Window.Domain.ViewModels.Site.Inquiry
 
         public ulong? MainBrandId { get; set; }
 
+        public string? UserMacAddress { get; set; }
+
         #endregion
     }
 }

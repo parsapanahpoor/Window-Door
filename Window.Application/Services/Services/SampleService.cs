@@ -236,6 +236,55 @@ namespace Window.Application.Services.Services
 
         #region Site Side 
 
+        //Get Samples For Show In Inquiry Page (Or API)
+        public async Task<List<Sample>?> GetListOfSamplesForShowInAPI(string userMacAddress)
+        {
+            #region Get User Log 
+
+            var log = await _context.LogInquiryForUsers.FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
+            if (log == null) return null;
+
+            #endregion
+
+            #region Get Samples
+
+            var samples =  _context.Samples.Where(p => !p.IsDelete).AsQueryable();
+
+            if (log.ProductKind == ProductKind.Door)
+            {
+                samples =  samples.Where(s => !s.IsDelete && s.Door);
+            }
+
+            if (log.ProductKind == ProductKind.Window)
+            {
+                samples = samples.Where(s => !s.IsDelete && s.Window);
+            }
+
+            if (log.ProductType == ProductType.Keshoie)
+            {
+                samples = samples.Where(s => !s.IsDelete && s.Keshoie);
+            }
+
+            if (log.ProductType == ProductType.Lolaie)
+            {
+                samples = samples.Where(s => !s.IsDelete && s.Lolaie);
+            }
+
+            if (log.SellerType == SellerType.Aluminium)
+            {
+                samples = samples.Where(s => !s.IsDelete && s.Aluminum);
+            }
+
+            if (log.SellerType == SellerType.UPC)
+            {
+                samples = samples.Where(s => !s.IsDelete && s.UPVC);
+            }
+
+            #endregion
+
+            return await samples.ToListAsync();
+        }
+
         public async Task<List<Sample>?> GetAllSample()
         {
             return await _context.Samples.Where(s => !s.IsDelete).ToListAsync();

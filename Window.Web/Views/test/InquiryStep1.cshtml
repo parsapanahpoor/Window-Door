@@ -1,0 +1,193 @@
+﻿@using Window.Application.Extensions
+@using Window.Application.Convertors
+@model Window.Domain.ViewModels.Site.Inquiry.FilterInquiryViewModel
+@using Window.Domain.ViewModels.Admin.QuestionAnswer
+@using Window.Domain.Enums
+@using Window.Application.StaticTools
+@using Window.Domain.ViewModels.Common
+
+@{
+    ViewData["Title"] = "استعلام گیری";
+    var countries = ViewData["Countries"] != null ? ViewData["Countries"] as List<SelectListViewModel> : null;
+    var states = ViewData["States"] != null ? ViewData["States"] as List<SelectListViewModel> : null;
+    var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
+
+    var brand = ViewBag.Brand != null ? ViewBag.Brand as List<SelectListViewModel> : null;
+}
+
+@section Styles
+{
+
+}
+
+@section Scripts
+{
+
+<script>
+        $("#CountryId").change(function () {
+        if ($("#CountryId :selected").val() !== '') {
+            $('#CityId option:not(:first)').remove();
+            $('#StateId option:not(:first)').remove();
+            $.get("/Home/LoadCities", { stateId: $("#CountryId :selected").val() }).then(res => {
+                if (res.data !== null) {
+                    $.each(res.data, function () {
+                        $("#StateId").append(
+                            '<option value=' + this.id + '>' + this.title + '</option>'
+                        );
+                    });
+                    $("#StateId").removeAttr("disabled");
+                }
+            });
+        } else {
+            $('#StateId option:not(:first)').remove();
+            $('#CityId option:not(:first)').remove();
+        }
+    });
+
+    $("#StateId").change(function () {
+        if ($("#StateId :selected").val() !== '') {
+            $('#CityId option:not(:first)').remove();
+            $.get("/Home/LoadCities", { stateId: $("#StateId :selected").val() }).then(res => {
+                if (res.data !== null) {
+                    $.each(res.data, function () {
+                        $("#CityId").append(
+                            '<option value=' + this.id + '>' + this.title + '</option>'
+                        );
+                    });
+                                        $("#CityId").removeAttr("disabled");
+                }
+            });
+        } else {
+            $('#CityId option:not(:first)').remove();
+        }
+    });
+
+</script>
+
+}
+
+
+<div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-green">
+                <span class="widget-caption"> فیلتر استعلام گیری  </span>
+            </div>
+            <div class="widget-body">
+                <div>
+                    <form asp-action="InquiryStep2" asp-controller="test" asp-area="" id="filter-search" method="get">
+                        <input name="UserMacAddress" type="hidden" value="@ViewBag.UserId" />
+
+                        <div class="form-group">
+                            <label asp-for="CountryId"></label>
+                            <select class="form-control" asp-for="CountryId">
+                                <option value=""> لطفا یک کشور را انتخاب کنید </option>
+                                @if (countries != null && countries.Any())
+                                {
+                                    foreach (var country in countries)
+                                    {
+                                        if (Model != null && Model.CountryId == country.Id)
+                                        {
+                                            <option value="@country.Id" selected="selected"> @country.Title </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@country.Id"> @country.Title </option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="StateId"></label>
+                            <select class="form-control" asp-for="StateId">
+                                <option value=""> لطفا یک استان را انتخاب کنید </option>
+                                @if (states != null && states.Any())
+                                {
+                                    foreach (var state in states)
+                                    {
+                                        if (Model != null && Model.StateId == state.Id)
+                                        {
+                                            <option value="@state.Id" selected="selected"> @state.Title </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@state.Id"> @state.Title </option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="CityId"></label>
+                            <select asp-for="CityId" class="form-control">
+                                <option value=""> لطفا یک شهر را انتخاب کنید </option>
+                                @if (cities != null && cities.Any())
+                                {
+                                    foreach (var city in cities)
+                                    {
+                                        if (Model != null && Model.CityId == city.Id)
+                                        {
+                                            <option value="@city.Id" selected="selected"> @city.Title </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@city.Id"> @city.Title </option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="MainBrandId">برند</label>
+                            <select asp-for="MainBrandId" class="form-control">
+                                @if (brand != null && brand.Any())
+                                {
+                                    foreach (var brands in brand)
+                                    {
+                                        <option value="@brands.Id"> @brands.Title </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="SellerType"> وضعیت </label>
+                            <select asp-for="SellerType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.SellerType.SellerType))">
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="ProductKind"> وضعیت </label>
+                            <select asp-for="ProductKind" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.Types.ProductKind))">
+                                <option value=""> لطفا وضعیت را انتخاب کنید </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="ProductType"> وضعیت </label>
+                            <select asp-for="ProductType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.Types.ProductType))">
+                                <option value=""> لطفا وضعیت را انتخاب کنید </option>
+                            </select>
+                        </div>
+
+                        <hr />
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
+                                    <i class="btn-label glyphicon glyphicon-filter"></i>ثبت
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

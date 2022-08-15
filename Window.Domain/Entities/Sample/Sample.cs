@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Common;
+using Window.Domain.Entities.Inquiry;
 
 namespace Window.Domain.Entities.Sample
 {
@@ -39,6 +40,8 @@ namespace Window.Domain.Entities.Sample
         #region relations
 
         public ICollection<SampleSelectedSegment> SampleSelectedSegment { get; set; }
+
+        public ICollection<LogInquiryForUserDetail> logInquiryForUserDetails { get; set; }
 
         #endregion
     }
