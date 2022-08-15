@@ -1981,8 +1981,6 @@ namespace Window.Application.Services.Services
                 .Where(p => !p.IsDelete)
                 .Select(p => new InquiryViewModel()
                 {
-                    User = p.User,
-                    MainBrand = p.MainBrand,
                 })
                 .ToListAsync();
 
@@ -2021,8 +2019,10 @@ namespace Window.Application.Services.Services
             {
                 InquiryViewModel model2 = new InquiryViewModel();
 
-                model2.User = seller;
-                model2.MainBrand = brand;
+                model2.UserName = seller.Username;
+                model2.UserAvatar = seller.Avatar;
+                model2.BrandName = brand.BrandName;
+                model2.BrandImage = brand.BrandLogo;
                 model2.Price = 0;
 
                 foreach (var sample in sampleSize)

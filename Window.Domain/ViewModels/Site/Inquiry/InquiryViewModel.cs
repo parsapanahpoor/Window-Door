@@ -9,9 +9,13 @@ namespace Window.Domain.ViewModels.Site.Inquiry
 {
     public class InquiryViewModel
     {
-        public Domain.Entities.Account.User User { get; set; }
+        public string UserAvatar { get; set; }
 
-        public MainBrand MainBrand { get; set; }
+        public string UserName { get; set; }
+
+        public string BrandImage { get; set; }
+
+        public string BrandName { get; set; }
 
         public int? Price { get; set; }
 

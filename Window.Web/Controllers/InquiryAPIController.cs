@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Enums.SellerType;
 using Window.Domain.Enums.Types;

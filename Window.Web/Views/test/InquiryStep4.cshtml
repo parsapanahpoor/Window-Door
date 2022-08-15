@@ -80,14 +80,14 @@
 
                                     <td class="vm">
                                         <div class="flex-style-center">
-                                            <img src="@product.User.GetUserAvatar()" class="avatar-style" style="border-radius:50px;" />
+                                            <img src="/content/images/user/main/@product.UserAvatar" class="avatar-style" style="border-radius:50px;" />
                                         </div>
                                     </td>
                                     <td class="tc vm" style="max-width: 200px">
-                                        @product.User.Username
+                                        @product.UserName
                                     </td>
                                     <td class="tc vm">
-                                        <img src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@product.MainBrand.BrandLogo" class="avatar-style" style="border-radius:50px;" />
+                                        <img src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@product.BrandImage" class="avatar-style" style="border-radius:50px;" />
                                     </td>
                                     @if (product.Price.HasValue)
                                     {
