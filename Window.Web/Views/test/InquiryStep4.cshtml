@@ -13,39 +13,80 @@
 }
 
 @section Styles
-{
+    {
 }
 
-@section Scripts
-{
-<script>
+    @section Scripts
+    {
+    <script>
 
-       $("#MainBrandId").change(function () {
-        $("#pageid").val(1);
-        $("#formFilter").submit();
-      });
+        $("#MainBrandId").change(function () {
+            $("#pageid").val(1);
+            $("#formFilter").submit();
+        });
 
-    function changePage(pageid) {
-        $("#pageid").val(pageid);
-        $("#formFilter").submit();
-    }
+        function changePage(pageid) {
+            $("#pageid").val(pageid);
+            $("#formFilter").submit();
+        }
 
-</script>
+    </script>
 }
 
-<form asp-action="InquiryStep4" asp-controller="test" asp-area="" id="formFilter" method="get">
-    <input type="hidden" id="pageid" name="pageId" value="@ViewBag.pageId.ToString()" />
-    <input type="hidden" name="userMacAddress" value="@ViewBag.userMacAddress" />
+    <form asp-action="InquiryStep4" asp-controller="test" asp-area="" id="formFilter" method="get">
+        <input type="hidden" id="pageid" name="pageId" value="@ViewBag.pageId.ToString()" />
+        <input type="hidden" name="userMacAddress" value="@ViewBag.userMacAddress" />
 
-    <div class="row">
- 
-        <div class="col-lg-12 col-sm-12">
-            <div class="well with-header with-footer table-responsive">
-                <div class="header bordered-azure">
-                    <div class="flex-style">
-                        <span>لیست </span>
+        <div class="row">
+
+            <div class="col-lg-3 col-sm-12">
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-green">
+                        <span class="widget-caption"> فیلتر استعلام گیری  </span>
+                    </div>
+                    <div class="widget-body">
+                        <div>
+
+                            <div class="form-group">
+                                <label>برند</label>
+                                <select name="brandTitle" id="MainBrandId" class="form-control">
+                                    <option>لطفا یکی از برند هارا انتخاب کنید </option>
+                                @if (brand != null && brand.Any())
+                                {
+                                    foreach (var brands in brand)
+                                    {
+                                        <option value="@brands.Title"> @brands.Title </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <hr />
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <a asp-action="Inquiry" asp-controller="Home" asp-area="" class="btn btn-labeled w-100 btn-blue">
+                                    <i class="btn-label glyphicon glyphicon-filter"></i>استعلام گیری
+                                </a>
+                                    <a asp-action="InquiryStep1" asp-controller="test" asp-area="" class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                        <i class="btn-label glyphicon glyphicon-remove"></i>حذف استعلام
+                                    </a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+            </div>
+        </div>
+
+
+            <div class="col-lg-9 col-sm-12">
+                <div class="well with-header with-footer table-responsive">
+                    <div class="header bordered-azure">
+                        <div class="flex-style">
+                            <span>لیست </span>
+                        </div>
+                    </div>
 
 
                 @if (Model.Item1 != null && Model.Item1.Any())
@@ -104,9 +145,9 @@
                                     <td class="tc vm">
                                     </td>
                                     <td class="tc vm">
-                                        <button type="submit" class="btn btn-labeled btn-btn-blue">
-                                            نمایش اطلاعات
-                                        </button>
+                                        <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="test" class="btn btn-primary">
+                                            نمایش اطلاعات فروشنده 
+                                        </a>
                                     </td>
                                 </tr>
 
@@ -137,10 +178,6 @@
                 {
                     <partial name="_NotFoundPartial" />
                 }
-
-                      <a asp-action="InquiryStep1" asp-controller="test" asp-area="" class="btn btn-labeled w-100 btn-darkorange mr-10px" style="margin-top: 30px;margin-bottom: -20px;">
-                        <i class="btn-label glyphicon glyphicon-remove"></i>حذف استعلام
-                    </a>
 
             </div>
         </div>

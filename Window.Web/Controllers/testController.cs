@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
+using Window.Application.Services.Services;
 using Window.Domain.Enums.SellerType;
 using Window.Domain.Enums.Types;
 using Window.Domain.ViewModels.Site.Inquiry;
@@ -23,13 +24,17 @@ namespace Window.Web.Controllers
 
         private readonly IInquiryService _inquiryService;
 
-        public testController( IProductService prodcutService, IStateService stateService, IBrandService brandService, ISampleService sampleService, IInquiryService inquiryService)
+        private readonly ISellerService _sellerService;
+
+        public testController(IProductService prodcutService, IStateService stateService, IBrandService brandService
+            , ISampleService sampleService, IInquiryService inquiryService, ISellerService sellerService)
         {
             _productService = prodcutService;
             _stateService = stateService;
             _brandService = brandService;
             _sampleService = sampleService;
             _inquiryService = inquiryService;
+            _sellerService = sellerService;
         }
 
         #endregion
@@ -68,7 +73,7 @@ namespace Window.Web.Controllers
 
         #region Test For Step 2
 
-        public async Task<IActionResult> InquiryStep2(ulong CountryId , ulong StateId , ulong CityId , ProductType? ProductType , ProductKind? ProductKind , SellerType? SellerType , ulong? MainBrandId , string UserMacAddress)
+        public async Task<IActionResult> InquiryStep2(ulong CountryId, ulong StateId, ulong CityId, ProductType? ProductType, ProductKind? ProductKind, SellerType? SellerType, ulong? MainBrandId, string UserMacAddress)
         {
             #region Model State Valdiation
 
@@ -101,7 +106,7 @@ namespace Window.Web.Controllers
 
             #endregion
 
-            return RedirectToAction(nameof(InquiryStep3) , new { userMacAddress = UserMacAddress });
+            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = UserMacAddress });
         }
 
         #endregion
@@ -114,7 +119,11 @@ namespace Window.Web.Controllers
             #region Get Samples For Show In Page Model
 
             var samples = await _sampleService.GetListOfSamplesForShowInAPI(userMacAddress);
-            if (samples == null) return NotFound();
+            if (samples == null || !samples.Any())
+            {
+                TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
+                return NotFound();
+            } 
 
             #endregion
 
@@ -129,14 +138,22 @@ namespace Window.Web.Controllers
             #region Get Samples For Show In Page Model
 
             var samples = await _sampleService.GetListOfSamplesForShowInAPI(userMacAddress);
-            if (samples == null) return NotFound();
+            if (samples == null || !samples.Any())
+            {
+                TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
+                return NotFound();
+            }
 
             #endregion
 
             #region Check Is Exist Sample 
 
             var sample = await _sampleService.GetSampleBySampleId(sampleId);
-            if (sample == null) return NotFound();
+            if (samples == null || !samples.Any())
+            {
+                TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
+                return NotFound();
+            }
 
             #endregion
 
@@ -156,7 +173,7 @@ namespace Window.Web.Controllers
 
         #region Inquiry Step 4 (proccess inquiry)
 
-        public async Task<IActionResult> InquiryStep4(string userMacAddress , ulong? MainBrandId, int pageId = 1 )
+        public async Task<IActionResult> InquiryStep4(string userMacAddress , string? brandTitle, int pageId = 1 )
         {
             #region Brand ViewBag
 
@@ -164,13 +181,23 @@ namespace Window.Web.Controllers
 
             #endregion
 
+            #region Update Inqury By Brand 
+
+            if (!string.IsNullOrEmpty(brandTitle))
+            {
+                var res = await _inquiryService.UpdateUserInquryInLastStep(userMacAddress , brandTitle);
+                if (!res) return NotFound();
+            }
+
+            #endregion
+
             #region Fill Model
 
             var model = await _inquiryService.ListOfInquiry(userMacAddress);
-            if (model == null)
+            if (model == null || !model.Any())
             {
-                TempData[ErrorMessage] = "عملیات با شکست مواجه شده است .";
-                return RedirectToAction(nameof(Index));
+                TempData[ErrorMessage] = "نتیجه ای برای استعلام شما یافت نشده است .";
+                return RedirectToAction("Index" , "Home");
             }
 
             #endregion
@@ -200,6 +227,45 @@ namespace Window.Web.Controllers
 
             TempData[SuccessMessage] = "استعلام گیری با موفقیت انجام شده است .";
             return View(viewModel);
+        }
+
+        #endregion
+
+        #region Show Seller Persoanl Inormation 
+
+        public async Task<IActionResult> ShowSellerPersoanlInfo(ulong userId)
+        {
+            #region Fill Model 
+
+            var model = await _sellerService.FillListOfPersonalInfoViewModel(userId);
+
+            if (model == null) return NotFound();
+
+            ViewData["Countries"] = await _stateService.GetAllCountries();
+            ViewData["States"] = await _stateService.GetStateChildren(model.CountryId);
+            ViewData["Cities"] = await _stateService.GetStateChildren(model.StateId);
+
+            #endregion
+
+            #region Update Seller Activation Tariff
+
+            await _sellerService.UpdateSellerActivationTariff(userId);
+
+            #endregion
+
+            return View(model);
+        }
+
+        #endregion
+
+        #region Last Inquiry Base On User Log 
+
+        public async Task<IActionResult> LastUserInquryBaseOnUserLog()
+        {
+            //Get User ID 
+            var userId = User.GetUserId();
+
+            return RedirectToAction(nameof(InquiryStep4) , new { userMacAddress = userId});            
         }
 
         #endregion

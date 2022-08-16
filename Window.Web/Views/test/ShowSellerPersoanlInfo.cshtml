@@ -1,0 +1,304 @@
+﻿@using Window.Application.StticTools
+@using Window.Domain.Enums
+@using Window.Application.StaticTools
+@using Window.Domain.ViewModels.Common
+@model Window.Domain.ViewModels.Seller.PersonalInfo.ListOfPersonalInfoViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedLocalizer> SharedHtmlLocalizer
+
+@{
+    ViewData["Title"] = "لیست اطلاعات فروشنده ";
+    var countries = ViewData["Countries"] != null ? ViewData["Countries"] as List<SelectListViewModel> : null;
+    var states = ViewData["States"] != null ? ViewData["States"] as List<SelectListViewModel> : null;
+    var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
+}
+
+@section Scripts
+{
+<script src="/lib/Custom/SellerPersonalInfo.js"></script>
+<partial name="_JqueryValidation" />
+}
+
+
+<div class="col-lg-12 col-sm-12">
+
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <div class="row">
+
+
+                    <div class="col-lg-12">
+                        <div class="widget">
+                            <div class="widget-header bordered-bottom bordered-green">
+                                <span class="widget-caption"> اطلاعات شخصی  </span>
+                            </div>
+                            <div class="widget-body">
+                                <div class="row">
+
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label asp-for="NationalCode"></label>
+                                        <input type="text" class="form-control" asp-for="NationalCode">
+                                        <span class="text-danger" asp-validation-for="NationalCode"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <label asp-for="SellerType">نوع فروشنده</label>
+                                        <select asp-for="SellerType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.SellerType.SellerType))"></select>
+                                        <span class="text-danger" asp-validation-for="SellerType"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <label asp-for="CompanyName"></label>
+                                        <input type="text" class="form-control" asp-for="CompanyName">
+                                        <span class="text-danger" asp-validation-for="CompanyName"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <label asp-for="PeriodTimesOfWork"></label>
+                                        <input type="text" class="form-control" asp-for="PeriodTimesOfWork">
+                                        <span class="text-danger" asp-validation-for="PeriodTimesOfWork"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label asp-for="CountryId"></label>
+                                        <select class="form-control" asp-for="CountryId">
+                                            @if (countries != null && countries.Any())
+                                            {
+                                                foreach (var country in countries)
+                                                {
+                                                    if (Model != null && Model.CountryId == country.Id)
+                                                    {
+                                                        <option value="@country.Id" selected="selected"> @country.Title </option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                        <span class="text-danger" asp-validation-for="CountryId"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label asp-for="StateId"></label>
+                                        <select class="form-control" asp-for="StateId">
+                                            @if (states != null && states.Any())
+                                            {
+                                                foreach (var state in states)
+                                                {
+                                                    if (Model != null && Model.StateId == state.Id)
+                                                    {
+                                                        <option value="@state.Id" selected="selected"> @state.Title </option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                        <span class="text-danger" asp-validation-for="StateId"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label asp-for="CityId"></label>
+                                        <select asp-for="CityId" class="form-control">
+                                            @if (cities != null && cities.Any())
+                                            {
+                                                foreach (var city in cities)
+                                                {
+                                                    if (Model != null && Model.CityId == city.Id)
+                                                    {
+                                                        <option value="@city.Id" selected="selected"> @city.Title </option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                        <span class="text-danger" asp-validation-for="CityId"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <label asp-for="Resume"></label>
+                                        <textarea type="text" rows="7" class="form-control" asp-for="Resume"></textarea>
+                                        <span class="text-danger" asp-validation-for="Resume"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <label asp-for="WorkAddress"></label>
+                                        <textarea type="text" rows="7" class="form-control" asp-for="WorkAddress"></textarea>
+                                        <span class="text-danger" asp-validation-for="WorkAddress"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-12 col-sm-12">
+
+                                        <div class="col-lg-4 col-sm-12">
+                                            <div class="widget">
+                                                <div class="widget-header bordered-bottom bordered-green">
+                                                    <span class="widget-caption"> عکس کارت ملی</span>
+                                                </div>
+                                                <div class="widget-body">
+                                                    <div class="row">
+                                                        <input type="file" class="display-none " asp-for="ImageOfNationalCode" ImageInput="2" id="UserAvatar2" accept=".jpg,.jpeg,.png" />
+
+                                                        <div class="col-md-12">
+                                                            <label for="UserAvatar2" class="file-input-style">
+                                                                <i class="glyphicon glyphicon-upload"></i>
+                                                                <span class="mr-8px"> لطفا عکس کارت ملی را بارگذاری کنید .</span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="col-md-12 tc mt-10px">
+                                                            <img src="@(string.IsNullOrEmpty(Model.PhotoOfNationalCode) ? FilePaths.DefaultUserAvatar : FilePaths.SellerInfoPath + Model.PhotoOfNationalCode)" class="image-style" ImageFile="2" />
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-sm-12">
+                                            <div class="widget">
+                                                <div class="widget-header bordered-bottom bordered-green">
+                                                    <span class="widget-caption"> عکس جواز کسب</span>
+                                                </div>
+                                                <div class="widget-body">
+                                                    <div class="row">
+                                                        <input type="file" class="display-none " asp-for="ImageOfBusinessLicense" id="UserAvatar1" ImageInput="1" accept=".jpg,.jpeg,.png" />
+
+                                                        <div class="col-md-12">
+                                                            <label for="UserAvatar1" class="file-input-style">
+                                                                <i class="glyphicon glyphicon-upload"></i>
+                                                                <span class="mr-8px"> لطفا عکس جواز کسب را بارگذاری کنید .</span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="col-md-12 tc mt-10px">
+                                                            <img src="@(string.IsNullOrEmpty(Model.PhotoOfBusinessLicense) ? FilePaths.DefaultUserAvatar : FilePaths.SellerInfoPath + Model.PhotoOfBusinessLicense)" class="image-style" ImageFile="1" />
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-sm-12">
+                                            <div class="widget">
+                                                <div class="widget-header bordered-bottom bordered-green">
+                                                    <span class="widget-caption"> لوگوی شرکت</span>
+                                                </div>
+                                                <div class="widget-body">
+                                                    <div class="row">
+                                                        <input type="file" class="display-none " asp-for="ImageCompanyLogo" id="UserAvatar3" ImageInput="3" accept=".jpg,.jpeg,.png" />
+
+                                                        <div class="col-md-12">
+                                                            <label for="UserAvatar3" class="file-input-style">
+                                                                <i class="glyphicon glyphicon-upload"></i>
+                                                                <span class="mr-8px"> لطفا لوگوی شرکت را بارگذاری کنید .</span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="col-md-12 tc mt-10px">
+                                                            <img src="@(string.IsNullOrEmpty(Model.CompanyLogo) ? FilePaths.DefaultUserAvatar : FilePaths.SellerInfoPath + Model.CompanyLogo)" class="image-style" ImageFile="3" />
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+
+               <div class="col-lg-12 col-sm-12">
+                    <div class="well with-header with-footer table-responsive" style="padding-bottom: 30px;">
+                        <div class="header bordered-azure">
+                            <div class="flex-style">
+                                <span> لیست نمونه کار  </span>
+                            </div>
+                        </div>
+
+                        @if (Model.MarketWorkSamples != null && Model.MarketWorkSamples.Any())
+                        {
+                            <table class="table table-hover table-bordered tc vm ">
+                                <thead class="tc vm">
+                                    <tr class="tc vm">
+                                        <th class="tc vm">
+                                            تصویر نمونه کار
+                                        </th>
+                                        <th class="tc vm">
+                                            عنوان نمونه کار
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tc vm">
+                                    @foreach (var link in Model.MarketWorkSamples)
+                                    {
+                                        <tr class="tc vm" id="profile_@link.Id" remove-ajax-item="@link.Id">
+                                            <td class="vm">
+                                                <img src="/content/images/sellerInfo/thumb/@link.WorkSampleImage" class="avatar-style" />
+                                            </td>
+                                            <td id="CommentDetail" class="tc vm">
+                                                <p>@link.WorkSampleTitle</p>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <partial name="_NotFoundPartial" />
+                        }
+
+
+                    </div>
+                </div>
+
+            <div class="col-lg-12 col-sm-12">
+                <div class="well with-header with-footer table-responsive" style="padding-bottom: 30px;">
+                    <div class="header bordered-azure">
+                        <div class="flex-style">
+                            <span> لیست لینک های ارتباطی  </span>
+                        </div>
+                    </div>
+
+                    @if (Model.MarketLinks != null && Model.MarketLinks.Any())
+                    {
+                        <table class="table table-hover table-bordered tc vm ">
+                            <thead class="tc vm">
+                                <tr class="tc vm">
+                                    <th class="tc vm">
+                                        عنوان لینک
+                                    </th>
+                                    <th class="tc vm">
+                                        آدرس لینک
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="tc vm">
+                                @foreach (var sellerLinks in Model.MarketLinks)
+                                {
+                                    <tr class="tc vm" id="profile_@sellerLinks.Id" remove-ajax-item="@sellerLinks.Id">
+                                        <td class="vm">
+                                            <p>@sellerLinks.LinkTitle</p>
+                                        </td>
+                                        <td id="CommentDetail" class="tc vm">
+                                            <p>@sellerLinks.LinkValue</p>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <partial name="_NotFoundPartial" />
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+

@@ -79,5 +79,12 @@ namespace Window.Application.Services.Interfaces
         Task<bool> ChangeMarketStateFromAdminPanel(ListOfPersonalInfoViewModel model, ulong marketId);
 
         #endregion
+
+        #region Site Side
+
+        //Update Seller Activation Tariff After Seen Seller Profile By User 
+        Task UpdateSellerActivationTariff(ulong userId);
+
+        #endregion
     }
 }

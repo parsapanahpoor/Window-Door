@@ -1027,5 +1027,28 @@ namespace Window.Application.Services.Services
         }
 
         #endregion
+
+        #region Site Side 
+
+        //Update Seller Activation Tariff After Seen Seller Profile By User 
+        public async Task UpdateSellerActivationTariff(ulong userId)
+        {
+            #region Get Market By Seller Id 
+
+            var market = await _context.Market.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
+
+            #endregion
+
+            #region Update Activation Tariff
+
+            market.ActivationTariff = market.ActivationTariff + 10;
+
+            _context.Market.Update(market);
+            await _context.SaveChangesAsync();
+
+            #endregion
+        }
+
+        #endregion
     }
 }

@@ -121,6 +121,35 @@ namespace Window.Application.Services.Services
             return true;
         }
 
+        //Update User Inqury In Last Step For Update Brand 
+        public async Task<bool> UpdateUserInquryInLastStep(string userMacAddress , string brandTitle)
+        {
+            #region Get Brand By Title 
+
+            var brand = await _context.MainBrands.FirstOrDefaultAsync(p=> !p.IsDelete && p.BrandName == brandTitle);
+            if (brand == null) return false;
+
+            #endregion
+
+            #region Get User Inqury
+
+            var userInqury = await _context.LogInquiryForUsers.FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
+            if (userInqury == null) return false;
+
+            userInqury.BrandId = brand.Id;
+
+            #endregion
+
+            #region Update User Inquiry
+
+            _context.LogInquiryForUsers.Update(userInqury);
+            await _context.SaveChangesAsync();
+
+            #endregion
+
+            return true;
+        }
+
         public async Task<int?> InitializeSamplesPrice(List<Sample?> samples, User user, int height, int width)
         {
             var model = 0;
@@ -1533,6 +1562,7 @@ namespace Window.Application.Services.Services
                 model2.UserAvatar = seller.Avatar;
                 model2.BrandName = brand.BrandName;
                 model2.BrandImage = brand.BrandLogo;
+                model2.UserId = seller.Id;
                 model2.Price = 0;
 
                 foreach (var sample in logDetail)

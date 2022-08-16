@@ -13,6 +13,8 @@ namespace Window.Domain.ViewModels.Site.Inquiry
 
         public string UserName { get; set; }
 
+        public ulong UserId { get; set; }
+
         public string BrandImage { get; set; }
 
         public string BrandName { get; set; }
