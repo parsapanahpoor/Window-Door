@@ -173,7 +173,7 @@ namespace Window.Web.Controllers
 
         #region Inquiry Step 4 (proccess inquiry)
 
-        public async Task<IActionResult> InquiryStep4(string userMacAddress , string? brandTitle, int? orderByPrice , int orderByScore, int pageId = 1 )
+        public async Task<IActionResult> InquiryStep4(string userMacAddress , string? brandTitle, int? orderByPrice , int? orderByScore, int pageId = 1 )
         {
             #region Brand ViewBag
 

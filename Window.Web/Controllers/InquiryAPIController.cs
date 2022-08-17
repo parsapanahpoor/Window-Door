@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
+using Window.Application.Services.Services;
 using Window.Domain.Enums.SellerType;
 using Window.Domain.Enums.Types;
 using Window.Domain.ViewModels.Site.Inquiry;
@@ -24,12 +26,15 @@ namespace Window.Web.Controllers
 
         private readonly ISampleService _sampleService;
 
-        public InquiryAPIController(IStateService stateService, IBrandService brandService, IInquiryService inquiryService, ISampleService sampleService)
+        private readonly ISellerService _sellerService;
+
+        public InquiryAPIController(IStateService stateService, IBrandService brandService, IInquiryService inquiryService, ISampleService sampleService, ISellerService sellerService)
         {
             _stateService = stateService;
             _brandService = brandService;
             _inquiryService = inquiryService;
             _sampleService = sampleService;
+            _sellerService = sellerService;
         }
 
         #endregion
@@ -178,16 +183,52 @@ namespace Window.Web.Controllers
 
         #region Inquiry API Step 4
 
-        [HttpGet("get-step4/{userMacAddress}/{pageId}")]
+        [HttpGet("get-step4/{userMacAddress}/{brandTitle?}/{orderByPrice?}/{orderByScore?}/{pageId}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Step4(string userMacAddress , int pageId = 1)
+        public async Task<IActionResult> Step4(string userMacAddress, string? brandTitle, int? orderByPrice, int? orderByScore, int pageId = 1)
         {
+            #region Update Inqury By Brand 
+
+            if (!string.IsNullOrEmpty(brandTitle))
+            {
+                var res = await _inquiryService.UpdateUserInquryInLastStep(userMacAddress, brandTitle);
+                if (!res) return NotFound();
+            }
+
+            #endregion
+
             #region Fill Model
 
             var model = await _inquiryService.ListOfInquiry(userMacAddress);
             if (model == null)
             {
                 JsonResponseStatus.Error();
+            }
+
+            #endregion
+
+            #region Oredr By Price Value
+
+            if (orderByPrice == 1)
+            {
+                model = model.OrderByDescending(p => p.Price).ToList();
+            }
+            else if (orderByPrice == 2)
+            {
+                model = model.OrderBy(p => p.Price).ToList();
+            }
+
+            #endregion
+
+            #region Order By Score
+
+            if (orderByScore == 1)
+            {
+                model = model.OrderByDescending(p => p.Score).ToList();
+            }
+            else if (orderByScore == 2)
+            {
+                model = model.OrderBy(p => p.Score).ToList();
             }
 
             #endregion
@@ -212,6 +253,64 @@ namespace Window.Web.Controllers
             #endregion
 
             return JsonResponseStatus.Success(model);
+        }
+
+        #endregion
+
+        #region Show Seller Personal Information
+
+        [HttpGet("get-Seller-Info/{userId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ShowSellerPersoanlInfo(int userId)
+        {
+            #region Fill Model 
+
+            var model = await _sellerService.FillListOfPersonalInfoViewModel(Convert.ToUInt64(userId));
+            if (model == null)
+            {
+                JsonResponseStatus.Error();
+            }
+
+            #endregion
+
+            #region Update Seller Activation Tariff
+
+            await _sellerService.UpdateSellerActivationTariff(Convert.ToUInt64(userId));
+
+            #endregion
+
+            return JsonResponseStatus.Success(model);
+        }
+
+        #endregion
+
+        #region Get Last User Last Inquiry
+
+        [HttpGet("add-seller-score/{score}/{sellerId}/{macAddress}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddScoreToSeller(int score, int sellerId , string macAddress)
+        {
+            #region Check Is User Was Scored To Seller
+
+            if (await _inquiryService.checkIsUserScoredToSeller(macAddress, Convert.ToUInt64(sellerId)))
+            {
+                JsonResponseStatus.Error();
+            }
+
+            #endregion
+
+            #region Add Score For Seller
+
+            if (score > 5 || score < 0)
+            {
+                JsonResponseStatus.Error();
+            }
+
+            var res = await _inquiryService.AddScoreForSeller(score, Convert.ToUInt64(sellerId), macAddress);
+
+            #endregion
+
+            return JsonResponseStatus.Success();
         }
 
         #endregion
