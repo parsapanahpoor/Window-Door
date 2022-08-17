@@ -173,7 +173,7 @@ namespace Window.Web.Controllers
 
         #region Inquiry Step 4 (proccess inquiry)
 
-        public async Task<IActionResult> InquiryStep4(string userMacAddress , string? brandTitle, int pageId = 1 )
+        public async Task<IActionResult> InquiryStep4(string userMacAddress , string? brandTitle, int? orderByPrice , int orderByScore, int pageId = 1 )
         {
             #region Brand ViewBag
 
@@ -203,8 +203,34 @@ namespace Window.Web.Controllers
             #endregion
 
             ViewBag.pageId = pageId;
-
             ViewBag.userMacAddress = userMacAddress;
+            ViewBag.OredrByPrice = orderByPrice;
+
+            #region Oredr By Price Value
+
+            if (orderByPrice == 1)
+            {
+                model = model.OrderByDescending(p => p.Price).ToList();
+            }
+            else if(orderByPrice == 2)
+            {
+                model = model.OrderBy(p => p.Price).ToList();
+            }
+
+            #endregion
+
+            #region Order By Score
+
+            if (orderByScore == 1)
+            {
+                model = model.OrderByDescending(p => p.Score).ToList();
+            }
+            else if (orderByScore == 2)
+            {
+                model = model.OrderBy(p => p.Score).ToList();
+            }
+
+            #endregion
 
             #region Paginaition
 
@@ -266,6 +292,62 @@ namespace Window.Web.Controllers
             var userId = User.GetUserId();
 
             return RedirectToAction(nameof(InquiryStep4) , new { userMacAddress = userId});            
+        }
+
+        #endregion
+
+        #region Add Score For Seller
+
+        [HttpGet]
+        public async Task<IActionResult> AddScoreToSeller(ulong sellerId)
+        {
+            #region Check Is User Was Scored To Seller
+
+            if (await _inquiryService.checkIsUserScoredToSeller(User.GetUserId().ToString() , sellerId))
+            {
+                TempData[ErrorMessage] = "شما درگذشته امتیاز خود را برای این فروشنده ثبت کرده اید.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            #endregion
+
+            ViewBag.sellerId = sellerId;
+
+            return View();
+        }
+
+        [HttpPost , ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddScoreToSeller(int score, ulong sellerId)
+        {
+            #region Check Is User Was Scored To Seller
+
+            if (await _inquiryService.checkIsUserScoredToSeller(User.GetUserId().ToString(), sellerId))
+            {
+                TempData[ErrorMessage] = "شما درگذشته امتیاز خود را برای این فروشنده ثبت کرده اید.";
+                return RedirectToAction("LastUserInquryBaseOnUserLog", "test");
+            }
+
+            #endregion
+
+            #region Add Score For Seller
+
+            if (score > 5 || score < 0)
+            {
+                TempData[ErrorMessage] = "امتیاز وارد شده صحیح نمی باشد";
+                return RedirectToAction("Index", "Home");
+            }
+
+            var res = await _inquiryService.AddScoreForSeller(score , sellerId , User.GetUserId().ToString());
+
+            if (res)
+            {
+                TempData[SuccessMessage] = "امتیاز شما برای فروشنده باموفقیت انجام شده است";
+                return RedirectToAction("Index" , "Home");
+            }
+
+            #endregion
+
+            return View();
         }
 
         #endregion

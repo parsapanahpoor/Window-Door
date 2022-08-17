@@ -28,6 +28,15 @@ namespace Window.Application.Services.Interfaces
         //Update User Inqury In Last Step For Update Brand 
         Task<bool> UpdateUserInquryInLastStep(string userMacAddress, string brandTitle);
 
+        //Calculate Seller Score 
+        Task<int> CalculateSellerScore(ulong userId);
+
+        //Check Is User Scored To Seller 
+        Task<bool> checkIsUserScoredToSeller(string macAddress, ulong sellerId);
+
+        //Add Score For Seller
+        Task<bool> AddScoreForSeller(int score, ulong sellerId, string userMacAddress);
+
         #endregion
     }
 }

@@ -50,7 +50,7 @@
                             <div class="form-group">
                                 <label>برند</label>
                                 <select name="brandTitle" id="MainBrandId" class="form-control">
-                                    <option>لطفا یکی از برند هارا انتخاب کنید </option>
+                                    <option value="">لطفا یکی از برند هارا انتخاب کنید </option>
                                 @if (brand != null && brand.Any())
                                 {
                                     foreach (var brands in brand)
@@ -61,16 +61,32 @@
                             </select>
                         </div>
 
-                        <hr />
+                            <div class="form-group">
+                                <label>مرتب سازی بر اساس مبلغ</label>
+                                <select name="orderByPrice" class="form-control">
+                                    <option value="2"> صعودی </option>
+                                    <option value="1"> نزولی </option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>مرتب سازی بر اساس امتیاز</label>
+                                <select name="orderByScore" class="form-control">
+                                    <option value="2"> صعودی </option>
+                                    <option value="1"> نزولی </option>
+                                </select>
+                            </div>
+
+                            <hr />
 
                         <div class="row">
                             <div class="col-md-12 flex-style">
-                                <a asp-action="Inquiry" asp-controller="Home" asp-area="" class="btn btn-labeled w-100 btn-blue">
+                                <button type="submit" class="btn btn-labeled w-100 btn-blue">
                                     <i class="btn-label glyphicon glyphicon-filter"></i>استعلام گیری
+                                </button>
+                                <a asp-action="InquiryStep1" asp-controller="test" asp-area="" class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                    <i class="btn-label glyphicon glyphicon-remove"></i>حذف استعلام
                                 </a>
-                                    <a asp-action="InquiryStep1" asp-controller="test" asp-area="" class="btn btn-labeled w-100 btn-darkorange mr-10px">
-                                        <i class="btn-label glyphicon glyphicon-remove"></i>حذف استعلام
-                                    </a>
                             </div>
                         </div>
 
@@ -80,13 +96,13 @@
         </div>
 
 
-            <div class="col-lg-9 col-sm-12">
-                <div class="well with-header with-footer table-responsive">
-                    <div class="header bordered-azure">
-                        <div class="flex-style">
-                            <span>لیست </span>
-                        </div>
+        <div class="col-lg-9 col-sm-12">
+            <div class="well with-header with-footer table-responsive">
+                <div class="header bordered-azure">
+                    <div class="flex-style">
+                        <span>لیست </span>
                     </div>
+                </div>
 
 
                 @if (Model.Item1 != null && Model.Item1.Any())
@@ -143,10 +159,63 @@
                                         </td>
                                     }
                                     <td class="tc vm">
+                                        <p> @product.Score/5 </p>
+                                        @if (@product.Score == 0)
+                                        {
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                        }
+                                        @if (@product.Score == 1)
+                                        {
+                                            <span class=" 	glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                        }
+                                        @if (@product.Score == 2)
+                                        {
+                                            <span class=" 	glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                        }
+                                        @if (@product.Score == 3)
+                                        {
+                                            <span class=" 	glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                        }
+                                        @if (@product.Score == 4)
+                                        {
+                                            <span class=" 	glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                        }
+                                        @if (@product.Score == 5)
+                                        {
+                                            <span class=" 	glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                        }
                                     </td>
                                     <td class="tc vm">
                                         <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="test" class="btn btn-primary">
-                                            نمایش اطلاعات فروشنده 
+                                            نمایش اطلاعات فروشنده
+                                        </a>
+
+                                        <a asp-action="AddScoreToSeller" asp-route-sellerId="@product.UserId" asp-area="" asp-controller="test" class="btn btn-warning">
+                                            امتیاز دهی
                                         </a>
                                     </td>
                                 </tr>
@@ -155,12 +224,12 @@
                         </tbody>
                     </table>
 
+
                     @if (Model.Item2 > 1)
                     {
                         int pageCount = ViewBag.pageId;
                         int next = pageCount + 1;
                         int last = pageCount - 1;
-
 
                         <div class="footer tc">
                             <ul class="pagination mt-5px pagingInInIndex">

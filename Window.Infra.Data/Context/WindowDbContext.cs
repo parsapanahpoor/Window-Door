@@ -8,6 +8,7 @@ using Window.Domain.Entities.Glass;
 using Window.Domain.Entities.Inquiry;
 using Window.Domain.Entities.Location;
 using Window.Domain.Entities.Market;
+using Window.Domain.Entities.MarketInfo;
 using Window.Domain.Entities.Product;
 using Window.Domain.Entities.QuestionAnswer;
 using Window.Domain.Entities.Sample;
@@ -57,6 +58,8 @@ namespace Window.Data.Context
         public DbSet<MarketWorkSamle> MarketWorkSamle { get; set; }
 
         public DbSet<MarketPersonalInfo> MarketPersonalInfo { get; set; }
+
+        public DbSet<ScoreForMarket> ScoreForMarkets { get; set; }
 
         #endregion
 

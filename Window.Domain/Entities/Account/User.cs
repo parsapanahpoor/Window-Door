@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Window.Domain.Entities.Contact;
 using Window.Domain.Entities.Market;
 using Window.Domain.Entities.Product;
+using Window.Domain.Entities.MarketInfo;
 
 namespace Window.Domain.Entities.Account
 {
@@ -75,6 +76,8 @@ namespace Window.Domain.Entities.Account
         public ICollection<Product.Product> Product { get; set; }
 
         public ICollection<GlassPricing> GlassPricings { get; set; }
+
+        public ICollection<ScoreForMarket> Score { get; set; }
 
         #endregion
     }

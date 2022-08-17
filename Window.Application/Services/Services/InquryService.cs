@@ -8,6 +8,7 @@ using Window.Application.Services.Interfaces;
 using Window.Data.Context;
 using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Inquiry;
+using Window.Domain.Entities.MarketInfo;
 using Window.Domain.Entities.Sample;
 using Window.Domain.ViewModels.Site.Inquiry;
 
@@ -79,7 +80,7 @@ namespace Window.Application.Services.Services
                 _context.LogInquiryForUsers.Update(inquiry);
                 await _context.SaveChangesAsync();
 
-                var logInquiryUserDetail = await _context.logInquiryForUserDetails.Where(p=> !p.IsDelete && p.LogInquiryForUserId == inquiry.Id)
+                var logInquiryUserDetail = await _context.logInquiryForUserDetails.Where(p => !p.IsDelete && p.LogInquiryForUserId == inquiry.Id)
                                                     .ToListAsync();
                 if (logInquiryUserDetail != null)
                 {
@@ -92,11 +93,11 @@ namespace Window.Application.Services.Services
         }
 
         //Log Inquiry For User In Step 2
-        public async Task<bool> LogInquiryForUserPart2(ulong sampleId , int width , int height , string userMacAddress)
+        public async Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height, string userMacAddress)
         {
             #region Get User Log By User Mac Address
 
-            var userLog = await _context.LogInquiryForUsers.FirstOrDefaultAsync(p=> !p.IsDelete && p.UserMAcAddress == userMacAddress);
+            var userLog = await _context.LogInquiryForUsers.FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
             if (userLog == null) return false;
 
             #endregion
@@ -122,11 +123,11 @@ namespace Window.Application.Services.Services
         }
 
         //Update User Inqury In Last Step For Update Brand 
-        public async Task<bool> UpdateUserInquryInLastStep(string userMacAddress , string brandTitle)
+        public async Task<bool> UpdateUserInquryInLastStep(string userMacAddress, string brandTitle)
         {
             #region Get Brand By Title 
 
-            var brand = await _context.MainBrands.FirstOrDefaultAsync(p=> !p.IsDelete && p.BrandName == brandTitle);
+            var brand = await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.BrandName == brandTitle);
             if (brand == null) return false;
 
             #endregion
@@ -1518,6 +1519,26 @@ namespace Window.Application.Services.Services
             return totalPrice;
         }
 
+        //Calculate Seller Score 
+        public async Task<int> CalculateSellerScore(ulong userId)
+        {
+            #region MyRegion
+
+            var sellerScores = await _context.ScoreForMarkets.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
+
+            #endregion
+
+            //If Score Dosent Exist Yet
+            if (sellerScores == null || !sellerScores.Any())
+            {
+                return 0;
+            }
+
+            var score = sellerScores.Sum(p => p.Score) / sellerScores.Count();
+
+            return score;
+        }
+
         public async Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress)
         {
             #region Get User log 
@@ -1564,6 +1585,7 @@ namespace Window.Application.Services.Services
                 model2.BrandImage = brand.BrandLogo;
                 model2.UserId = seller.Id;
                 model2.Price = 0;
+                model2.Score = await CalculateSellerScore(seller.Id);
 
                 foreach (var sample in logDetail)
                 {
@@ -1576,6 +1598,39 @@ namespace Window.Application.Services.Services
             #endregion
 
             return model;
+        }
+
+        //Check Is User Scored To Seller 
+        public async Task<bool> checkIsUserScoredToSeller(string macAddress, ulong sellerId)
+        {
+            #region MyRegion
+
+            var scored = await _context.ScoreForMarkets.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == sellerId);
+            if (scored == null) return false;
+
+            #endregion
+
+            return true;
+        }
+
+        //Add Score For Seller
+        public async Task<bool> AddScoreForSeller(int score, ulong sellerId, string userMacAddress)
+        {
+            #region Add Method
+
+            ScoreForMarket model = new ScoreForMarket()
+            {
+                UserId = sellerId,
+                Score = score,
+                macAddress = userMacAddress
+            };
+
+            await _context.ScoreForMarkets.AddAsync(model);
+            await _context.SaveChangesAsync();
+
+            #endregion
+
+            return true;
         }
 
         #endregion

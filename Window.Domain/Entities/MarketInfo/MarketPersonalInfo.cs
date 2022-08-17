@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Common;
 using Window.Domain.Entities.Location;
+using Window.Domain.Entities.MarketInfo;
 using Window.Domain.Enums.SellerType;
 
 namespace Window.Domain.Entities.Market

@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "امتیاز دهی ";
+}
+
+@section Styles
+    {
+}
+
+    @section Scripts
+    {
+
+}
+
+    <form asp-action="AddScoreToSeller" asp-controller="test" asp-area="" id="formFilter" method="post">
+        <input name="sellerId" value="@ViewBag.sellerId" type="hidden" />
+
+        <div class="row">
+
+            <div class="col-lg-12 col-sm-12">
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-green">
+                        <span class="widget-caption"> افزودن امتیاز  </span>
+                    </div>
+                    <div class="widget-body">
+                        <div>
+
+                            <div class="form-group">
+                                <label>امتیاز دهی</label>
+                                <input name="score" type="number" min="0" max="5" class="form-control">
+                            </div>
+
+                            <hr />
+
+                            <div class="row">
+                                <div class="col-md-12 flex-style">
+                                    <button type="submit" class="btn btn-labeled w-100 btn-blue">
+                                        <i class="btn-label glyphicon glyphicon-filter"></i>استعلام گیری
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
