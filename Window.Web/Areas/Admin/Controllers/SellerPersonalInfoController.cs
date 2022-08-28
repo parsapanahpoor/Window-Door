@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Window.Application.Security;
 using Window.Application.Services.Interfaces;
 using Window.Domain.ViewModels.Admin.PersonalInfo;
 using Window.Domain.ViewModels.Seller.PersonalInfo;
 
 namespace Window.Web.Areas.Admin.Controllers
 {
+    [PermissionChecker("ManageSellersInfo")]
     public class SellerPersonalInfoController : AdminBaseController
     {
         #region Ctor

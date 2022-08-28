@@ -10,6 +10,7 @@ using Window.Domain.ViewModels.Admin.QuestionAnswer;
 
 namespace Window.Web.Areas.Admin.Controllers
 {
+    [PermissionChecker("ManageQuestionsAndAnswers")]
     public class QuestionController : AdminBaseController
     {
         #region Constructor

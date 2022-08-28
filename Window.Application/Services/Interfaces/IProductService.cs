@@ -61,6 +61,9 @@ namespace Window.Application.Services.Interfaces
 
         #region Site Side
 
+        //Get All Glasses
+        Task<List<SelectListViewModel>> GetAllGlasses();
+
         Task<FilterInquiryViewModel> FilterInquiryViewModel(FilterInquiryViewModel filter);
 
         Task<List<InquiryViewModel>?> ListOfInquiry(List<SampleSizeViewModel> sampleSize, SellersFieldFitreViewModel sellerInfo);

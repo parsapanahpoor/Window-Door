@@ -17,6 +17,8 @@ using Window.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Window.Domain.ViewModels.Common;
 using Window.Domain.Entities.Market;
+using Window.Application.Services.Interfaces;
+using Window.Application.Services.Implementation;
 
 namespace Window.Application.Services
 {
@@ -28,18 +30,43 @@ namespace Window.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IWalletService _walletService;
         private readonly WindowDbContext _context;
+        private readonly IViewRenderService _viewRenderService;
+        private IEmailSender _emailSender;
 
-        public UserService(IConfiguration configuration, IUserRepository userRepository, IWalletService walletService, WindowDbContext context)
+        public UserService(IConfiguration configuration, IUserRepository userRepository, IWalletService walletService, WindowDbContext context, IEmailSender emailSender , IViewRenderService viewRenderService)
         {
             _configuration = configuration;
             _userRepository = userRepository;
             _walletService = walletService;
             _context = context;
+            _emailSender = emailSender;
+            _viewRenderService = viewRenderService;
         }
 
         #endregion
 
         #region Authentication
+
+        public async Task<bool> ResetPassword(ResetPasswordViewModel resetPassword)
+        {
+            // get user by activation code
+            var user = await GetUserByEmailActivationCode(resetPassword.EmailActivationCode);
+
+            // check user exists
+            if (user == null) return false;
+
+            // hash password
+            var password = PasswordHelper.EncodePasswordMd5(resetPassword.NewPassword.SanitizeText());
+
+            // update user
+            user.Password = password;
+            user.EmailActivationCode = CodeGenerator.GenerateUniqCode();
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
 
         public async Task<List<SelectListViewModel>> GetSelectRolesList()
         {
@@ -52,7 +79,6 @@ namespace Window.Application.Services
 
         public async Task<RegisterUserResponse> RegisterUserAsync(RegisterUserViewModel model)
         {
-
             if (await _userRepository.IsEmailExist(model.Email.Trim().ToLower()))
             {
                 return RegisterUserResponse.EmailExist;
@@ -69,6 +95,7 @@ namespace Window.Application.Services
                 Username = model.Username,
                 Email = model.Email.Trim().ToLower(),
                 Password = PasswordHelper.EncodePasswordMd5(model.Password),
+                EmailActivationCode = CodeGenerator.GenerateUniqCode(),
                 CreateDate = DateTime.Now,
                 IsAdmin = false,
             };
@@ -76,6 +103,26 @@ namespace Window.Application.Services
             await _userRepository.CreateUser(user);
 
             return RegisterUserResponse.Success;
+        }
+
+        public async Task<ResetPasswordViewModel> GetResetPasswordViewModel(string emailActivationCode)
+        {
+            // get user by activation code
+            var user = await GetUserByEmailActivationCode(emailActivationCode.SanitizeText());
+
+            // check user exists
+            if (user == null) return null;
+
+            return new ResetPasswordViewModel()
+            {
+                EmailActivationCode = user.EmailActivationCode
+            };
+        }
+
+        public async Task<User?> GetUserByEmailActivationCode(string emailActivationCode)
+        {
+            return await _context.Users.FirstOrDefaultAsync(s =>
+                s.EmailActivationCode == emailActivationCode.SanitizeText());
         }
 
         public async Task<LoginUserResponse> LoginUserAsync(LoginUserViewModel model)
@@ -102,6 +149,35 @@ namespace Window.Application.Services
         #endregion
 
         #region User
+
+        public async Task<bool> ForgotPasswordUser(ForgotPasswordViewModel forgotPassword)
+        {
+            // get user by email
+            var user = await GetUserByEmail(forgotPassword.Email.SanitizeText());
+
+            // check user exists
+            if (user == null) return false;
+
+            #region Send Email
+
+            var emailViewModel = new EmailViewModel
+            {
+                EmailActivationCode = user.EmailActivationCode,
+                ButtonName = "فعالسازی حساب کاربری",
+                FullName = user.Username,
+                Description = $"{user.Username} عزیز لطفا جهت بازیابی کلمه عبور روی لینک زیر کلیک کنید .",
+                ButtonLink = $"{FilePaths.SiteAddress}/ResetPassword/{user.EmailActivationCode}",
+                EmailBanner = string.Empty,
+            };
+
+            string body = _viewRenderService.RenderToStringAsync("_Email", emailViewModel);
+
+            await _emailSender.SendEmail(forgotPassword.Email.SanitizeText(), "بازیابی کلمه عبور", body);
+
+            #endregion
+
+            return true;
+        }
 
         public Task<EditProfileViewModel?> GetUserProfileForEditAsync(ulong userId)
         {

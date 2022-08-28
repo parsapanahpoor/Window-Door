@@ -3,9 +3,11 @@ using Window.Domain.ViewModels.Admin.Wallet;
 using Window.Web.HttpManager;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Window.Application.Security;
 
 namespace Window.Web.Areas.Admin.Controllers
 {
+    [PermissionChecker("ListOfTransactions")]
     public class WalletController : AdminBaseController
     {
         #region Ctor

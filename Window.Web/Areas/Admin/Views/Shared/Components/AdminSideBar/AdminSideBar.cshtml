@@ -14,6 +14,28 @@
             </a>
         </li>
 
+
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-user-secret"></i>
+                <span class="menu-text"> مدیریت نقش ها</span>
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-action="FilterRoles" asp-controller="Access" asp-area="Admin">
+                        <span class="menu-text"> لیست نقش ها </span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="CreateRole" asp-controller="Access" asp-area="Admin">
+                        <span class="menu-text"> ایجاد نقش جدید </span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
         <li>
             <a href="#" class="menu-dropdown">
                 <i class="menu-icon fa fa-users"></i>
@@ -56,6 +78,23 @@
 
         <li>
             <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-users"></i>
+                <span class="menu-text"> مدیریت استعلامات </span>
+
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-controller="LogForVisitSellerProfile" asp-action="FilterLogForVisitSellerProfile">
+                        <span class="menu-text">لیست بازدید فروشندگان</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" class="menu-dropdown">
                 <i class="menu-icon glyphicon glyphicon-book"></i>
                 <span class="menu-text"> مدیریت بلاگ ها  </span>
 
@@ -88,7 +127,7 @@
             </ul>
         </li>
 
-            <li>
+        <li>
             <a href="#" class="menu-dropdown">
                 <i class="menu-icon glyphicon glyphicon-tag"></i>
                 <span class="menu-text"> مدیریت نمونه ها </span>
@@ -109,7 +148,7 @@
             </ul>
         </li>
 
-              <li>
+        <li>
             <a href="#" class="menu-dropdown">
                 <i class="menu-icon glyphicon glyphicon-tag"></i>
                 <span class="menu-text"> مدیریت قطعه ها </span>
@@ -130,7 +169,7 @@
             </ul>
         </li>
 
-                 <li>
+        <li>
             <a href="#" class="menu-dropdown">
                 <i class="menu-icon glyphicon glyphicon-tag"></i>
                 <span class="menu-text"> مدیریت شیشه ها </span>
@@ -197,6 +236,8 @@
             <a asp-controller="Wallet" asp-action="Index">
                 <i class="menu-icon glyphicon glyphicon-usd"></i>
                 <span class="menu-text"> @SharedLocalizer["لیست تراکنش ها"]  </span>
+
+                <i class="menu-expand"></i>
             </a>
         </li>
 
@@ -221,6 +262,15 @@
                 </li>
 
             </ul>
+        </li>
+
+        <li>
+            <a asp-controller="SiteSetting" asp-action="AddOrEditSiteSetting">
+                <i class="menu-icon glyphicon glyphicon-wrench"></i>
+                <span class="menu-text"> تنظیمات سایت  </span>
+
+                <i class="menu-expand"></i>
+            </a>
         </li>
 
     </ul>

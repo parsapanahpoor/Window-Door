@@ -9,12 +9,17 @@ using Window.Application.Extensions;
 using Window.Application.Generators;
 using Window.Application.Interfaces;
 using Window.Application.Security;
+using Window.Application.Services.Implementation;
 using Window.Application.Services.Interfaces;
+using Window.Application.StaticTools;
 using Window.Application.StticTools;
 using Window.Data.Context;
+using Window.Domain.Entities.Account;
+using Window.Domain.Entities.Log;
 using Window.Domain.Entities.Market;
 using Window.Domain.Entities.Wallet;
 using Window.Domain.Interfaces;
+using Window.Domain.ViewModels.Admin.Log;
 using Window.Domain.ViewModels.Admin.PersonalInfo;
 using Window.Domain.ViewModels.Seller.PersonalInfo;
 
@@ -30,11 +35,14 @@ namespace Window.Application.Services.Services
 
         private readonly IWalletRepository _walletRepository;
 
-        public SellerService(WindowDbContext context , IUserService userService , IWalletRepository walletRepository)
+        private readonly ISMSService _smsService;
+
+        public SellerService(WindowDbContext context , IUserService userService , IWalletRepository walletRepository , ISMSService smsService)
         {
             _context = context;
             _userService = userService;
             _walletRepository = walletRepository;
+            _smsService = smsService;
         }
 
         #endregion
@@ -624,6 +632,59 @@ namespace Window.Application.Services.Services
             return true;
         }
 
+        public async Task<bool> SendSMSForSellerForSeenProfile(ulong userId)
+        {
+            #region Validation User
+
+            var user = await _context.Users.FirstOrDefaultAsync(p => p.Id == userId && !p.IsDelete);
+            if (user == null) return false;
+
+            var sellerPersonalInfo = await _context.MarketPersonalInfo.Include(p => p.Market).FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState != MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller);
+            if (sellerPersonalInfo == null) return false;
+
+            var sellerLinks = await _context.MarketLinks.Where(p => p.UserId == userId && !p.IsDelete).ToListAsync();
+            if (sellerLinks == null) return false;
+
+            var sellerWorkSamples = await _context.MarketWorkSamle.Where(p => p.UserId == userId && !p.IsDelete).ToListAsync();
+            if (sellerWorkSamples == null) return false;
+
+            #endregion
+
+            #region Get Allet Text Message
+
+            var text = await _context.SiteSettings.FirstOrDefaultAsync();
+            if (text != null)
+            {
+                var message = text.AlertForSellerForSeenProfile;
+                await _smsService.SendSimpleSMS(user.Mobile, message);
+            }
+
+            #endregion
+
+            return true;
+        }
+
+        public async Task LogForSellerVisitProfile(ulong userId)
+        {
+            #region Fill Model
+
+            LogForVisitSellerProfile model = new LogForVisitSellerProfile()
+            {
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                UserId = userId
+            };
+
+            #endregion
+
+            #region Add Method
+
+            await _context.LogForVisitSellerProfiles.AddAsync(model);
+            await _context.SaveChangesAsync();
+
+            #endregion
+        }
+
         public async Task<ListOfPersonalInfoViewModel> FillListOfPersonalInfoViewModel(ulong userId)
         {
             #region Validation User
@@ -660,6 +721,7 @@ namespace Window.Application.Services.Services
                 CountryId = sellerPersonalInfo.CountryId.Value,
                 StateId = sellerPersonalInfo.StateId.Value,
                 CityId = sellerPersonalInfo.CityId.Value,
+                ActivationTariff = await _context.Market.Where(p=> !p.IsDelete && p.UserId == userId).Select(p=> p.ActivationTariff).FirstOrDefaultAsync(),
             };
 
             model.MarketWorkSamples = await _context.MarketWorkSamle.Where(p => !p.IsDelete && p.UserId == userId)
@@ -897,6 +959,7 @@ namespace Window.Application.Services.Services
             if (market == null) return false;
 
             market.MarketPersonalsInfoState = model.MarketPersonalsInfoState;
+            market.ActivationTariff = model.ActivationTariff;
 
             _context.Market.Update(market);
             await _context.SaveChangesAsync();
@@ -976,6 +1039,36 @@ namespace Window.Application.Services.Services
             if ((!string.IsNullOrEmpty(filter.Mobile)))
             {
                 query = query.Where(u => u.User.Mobile.Contains(filter.Mobile));
+            }
+            if ((!string.IsNullOrEmpty(filter.Username)))
+            {
+                query = query.Where(u => u.User.Username.Contains(filter.Username));
+            }
+
+            #endregion
+
+            #region paging
+
+            await filter.Paging(query);
+
+            #endregion
+
+            return filter;
+        }
+
+        public async Task<FilterLogVisitSellerProfileViewModel> FilterLogVisitSellerProfile(FilterLogVisitSellerProfileViewModel filter)
+        {
+            var query = _context.LogForVisitSellerProfiles
+           .Include(u => u.User)
+           .Where(p => !p.IsDelete)
+           .OrderByDescending(p => p.CreateDate)
+           .AsQueryable();
+
+            #region filter
+
+            if ((!string.IsNullOrEmpty(filter.SellerMobile)))
+            {
+                query = query.Where(u => u.User.Mobile.Contains(filter.SellerMobile));
             }
             if ((!string.IsNullOrEmpty(filter.Username)))
             {

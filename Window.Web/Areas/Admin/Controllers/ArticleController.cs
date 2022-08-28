@@ -9,6 +9,7 @@ using Window.Application.Interfaces;
 
 namespace Window.Web.Areas.Admin.Controllers
 {
+    [PermissionChecker("ManageArticles")]
     public class ArticleController : AdminBaseController
     {
         #region Constructor

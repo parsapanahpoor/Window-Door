@@ -11,12 +11,16 @@ using Microsoft.AspNetCore.Http;
 using Window.Domain.ViewModels.User.Authentication;
 using Window.Domain.ViewModels.User.Account;
 using Window.Domain.ViewModels.Common;
+using Window.Application.Generators;
+using Window.Application.Security;
 
 namespace Window.Application.Interfaces
 {
     public interface IUserService
     {
         #region Authentication
+
+        Task<bool> ResetPassword(ResetPasswordViewModel resetPassword);
 
         Task<RegisterUserResponse> RegisterUserAsync(RegisterUserViewModel model);
 
@@ -27,6 +31,12 @@ namespace Window.Application.Interfaces
         #endregion
 
         #region user account
+
+        Task<User?> GetUserByEmailActivationCode(string emailActivationCode);
+
+        Task<ResetPasswordViewModel> GetResetPasswordViewModel(string emailActivationCode);
+
+        Task<bool> ForgotPasswordUser(ForgotPasswordViewModel forgotPassword);
 
         Task<EditProfileViewModel?> GetUserProfileForEditAsync(ulong userId);
 

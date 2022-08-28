@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Market;
+using Window.Domain.ViewModels.Admin.Log;
 using Window.Domain.ViewModels.Admin.PersonalInfo;
 using Window.Domain.ViewModels.Seller.PersonalInfo;
 
@@ -82,8 +83,14 @@ namespace Window.Application.Services.Interfaces
 
         #region Site Side
 
+        Task<FilterLogVisitSellerProfileViewModel> FilterLogVisitSellerProfile(FilterLogVisitSellerProfileViewModel filter);
+
         //Update Seller Activation Tariff After Seen Seller Profile By User 
         Task UpdateSellerActivationTariff(ulong userId);
+
+        Task LogForSellerVisitProfile(ulong userId);
+
+        Task<bool> SendSMSForSellerForSeenProfile(ulong userId);
 
         #endregion
     }

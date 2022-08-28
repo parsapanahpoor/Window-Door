@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Window.Application.Convertors;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
 using Window.Application.Services.Services;
@@ -271,11 +272,27 @@ namespace Window.Web.Controllers
                 JsonResponseStatus.Error();
             }
 
+            #region Send SMS
+
+            //var res = await _sellerService.SendSMSForSellerForSeenProfile(Convert.ToUInt64(userId));
+            //if (res == false)
+            //{
+            //    JsonResponseStatus.Error();
+            //}
+
+            #endregion
+
             #endregion
 
             #region Update Seller Activation Tariff
 
             await _sellerService.UpdateSellerActivationTariff(Convert.ToUInt64(userId));
+
+            #endregion
+
+            #region Log For Visit Seller Profile
+
+            await _sellerService.LogForSellerVisitProfile(Convert.ToUInt64(userId));
 
             #endregion
 
@@ -311,6 +328,17 @@ namespace Window.Web.Controllers
             #endregion
 
             return JsonResponseStatus.Success();
+        }
+
+        #endregion
+
+        #region Today Date Time API
+
+        [HttpGet("get-dateTime-api")]
+        [AllowAnonymous]
+        public async Task<IActionResult> DateTimeNowAPI()
+        {
+            return JsonResponseStatus.Success(DateTime.Now.ToShamsiDate());
         }
 
         #endregion

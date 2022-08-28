@@ -64,6 +64,12 @@ namespace Window.Web.Controllers
 
             #endregion
 
+            #region Glasses ViewBag
+
+            ViewBag.Glasses = await _productService.GetAllGlasses();
+
+            #endregion
+
             ViewBag.UserId = User.GetUserId();
 
             return View();
@@ -73,7 +79,7 @@ namespace Window.Web.Controllers
 
         #region Test For Step 2
 
-        public async Task<IActionResult> InquiryStep2(ulong CountryId, ulong StateId, ulong CityId, ProductType? ProductType, ProductKind? ProductKind, SellerType? SellerType, ulong? MainBrandId, string UserMacAddress)
+        public async Task<IActionResult> InquiryStep2(ulong CountryId, ulong StateId, ulong CityId, ProductType? ProductType, ProductKind? ProductKind, SellerType? SellerType, ulong? MainBrandId, ulong? GlassId, string UserMacAddress)
         {
             #region Model State Valdiation
 
@@ -95,7 +101,8 @@ namespace Window.Web.Controllers
                 ProductKind = ProductKind,
                 MainBrandId = MainBrandId,
                 UserMacAddress = UserMacAddress,
-                SellerType = SellerType
+                SellerType = SellerType,
+                GlassId = GlassId
             };
 
             #endregion
@@ -276,6 +283,23 @@ namespace Window.Web.Controllers
             #region Update Seller Activation Tariff
 
             await _sellerService.UpdateSellerActivationTariff(userId);
+
+            #endregion
+
+            #region Send SMS
+
+            //var res = await _sellerService.SendSMSForSellerForSeenProfile(userId);
+
+            //if (res == false)
+            //{
+            //    return NotFound();
+            //}
+
+            #endregion
+
+            #region Log For Visit Seller Profile
+
+            await _sellerService.LogForSellerVisitProfile(userId);
 
             #endregion
 

@@ -35,6 +35,17 @@ namespace Window.Application.Services.Services
 
         #region Seller Side
 
+        //Get All Glasses
+        public async Task<List<SelectListViewModel>> GetAllGlasses()
+        {
+            return await _context.Glasses.Where(s => !s.IsDelete)
+                .Select(s => new SelectListViewModel
+                {
+                    Id = s.Id,
+                    Title = s.GlassName
+                }).ToListAsync();
+        }
+
         public async Task<bool> AddPriceForSelectedYaraghBrand(AddPriceForSelectedYaraghBrandViewModel model, ulong userId)
         {
             #region Get Product
@@ -90,7 +101,6 @@ namespace Window.Application.Services.Services
 
             return true;
         }
-
 
         public async Task<bool> AddPriceForSelectedMainBrand(AddPriceForSelectedMainBrandViewModel model, ulong userId)
         {

@@ -4,9 +4,11 @@ using Window.Web.HttpManager;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Window.Domain.ViewModels.Admin.Ticket;
+using Window.Application.Security;
 
 namespace Window.Web.Areas.Admin.Controllers
 {
+    [PermissionChecker("ManageTickets")]
     public class TicketController : AdminBaseController
     {
         #region Ctor

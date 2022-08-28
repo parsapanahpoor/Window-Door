@@ -10,11 +10,11 @@ namespace Window.Domain.ViewModels.Access
 {
     public class CreateRoleViewModel
     {
-        [DisplayName("Title")]
+        [DisplayName("عنوان")]
         [Required(ErrorMessage = "Please Enter {0}")]
         public string Title { get; set; }
 
-        [DisplayName("Unique Name")]
+        [DisplayName("نام یکتا")]
         [Required(ErrorMessage = "Please Enter {0}")]
         public string RoleUniqueName { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Window.Application.Security;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Entities.Brand;
 using Window.Domain.ViewModels.Admin.Brand;
@@ -6,6 +7,7 @@ using Window.Web.HttpManager;
 
 namespace Window.Web.Areas.Admin.Controllers
 {
+    [PermissionChecker("ManageBrands")]
     public class BrandController : AdminBaseController
     {
         #region ctor

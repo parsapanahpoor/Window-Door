@@ -9,6 +9,7 @@ using Window.Application.Services.Interfaces;
 
 namespace Window.Web.Areas.Admin.Controllers
 {
+    [PermissionChecker("Dashboard")]
     public class HomeController : AdminBaseController
     {
         #region constructor

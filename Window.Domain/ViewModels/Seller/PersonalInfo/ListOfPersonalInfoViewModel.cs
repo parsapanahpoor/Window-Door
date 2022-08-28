@@ -14,6 +14,10 @@ namespace Window.Domain.ViewModels.Seller.PersonalInfo
     {
         #region properties
 
+        [Display(Name = "مبلغ شارژ ماه بعد کاربر")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        public int ActivationTariff { get; set; }
+
         [Display(Name = "کشور")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public ulong CountryId { get; set; }

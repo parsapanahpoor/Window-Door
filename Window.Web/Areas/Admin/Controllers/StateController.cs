@@ -7,6 +7,7 @@ using Window.Application.Services.Interfaces;
 
 namespace Window.Web.Areas.Admin.Controllers
 {
+    [PermissionChecker("ManageLocations")]
     public class StateController : AdminBaseController
     {
         private readonly IStateService _stateService;

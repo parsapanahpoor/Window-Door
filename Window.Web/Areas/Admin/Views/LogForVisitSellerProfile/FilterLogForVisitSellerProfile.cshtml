@@ -1,0 +1,120 @@
+﻿@using Window.Domain.ViewModels.Admin.Log
+@using Window.Application.Convertors
+@using Window.Application.Extensions
+@model Window.Domain.ViewModels.Admin.Log.FilterLogVisitSellerProfileViewModel
+@{
+    ViewData["Title"] = "لیست استعلام بازدید  ";
+}
+@section Scripts
+    {
+    <partial name="_AdminSweetAlertLocalizer" />
+}
+
+    @section breadcrumb
+    {
+
+    <li class="active">@ViewData["Title"]</li>
+}
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-3 col-sm-12">
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-green">
+                        <span class="widget-caption"> لیست استعلام بازدید  </span>
+                    </div>
+                    <div class="widget-body">
+                        <div>
+                            <form asp-action="FilterLogForVisitSellerProfile" asp-controller="LogForVisitSellerProfile" asp-area="Admin" id="filter-search" method="get">
+                                <input type="hidden" asp-for="Page" />
+
+                                <div class="form-group">
+                                    <label asp-for="Username"> نام کاربری فروشنده </label>
+                                    <input type="text" class="form-control" asp-for="Username">
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="SellerMobile"> موبایل فروشنده </label>
+                                    <input type="text" class="form-control" asp-for="SellerMobile">
+                                </div>
+
+                                <hr />
+
+                                <div class="row">
+                                    <div class="col-md-12 flex-style">
+                                        <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
+                                            <i class="btn-label glyphicon glyphicon-filter"></i>فیلتر
+                                        </button>
+
+                                    @if (Context.Request.QueryString.HasValue)
+                                    {
+                                        <a asp-action="FilterLogForVisitSellerProfile" asp-controller="LogForVisitSellerProfile" asp-area="Admin" class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                            <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9 col-sm-12">
+            <div class="well with-header with-footer table-responsive">
+                <div class="header bordered-azure">
+                    <div class="flex-style">
+                        <span>لیست اطلاعات </span>
+                        <span>@Model.GetShownEntitiesPagesTitle()</span>
+                    </div>
+                </div>
+
+                @if (Model.Entities != null && Model.Entities.Any())
+                {
+                    <table class="table table-hover table-bordered tc vm">
+                        <thead class="tc vm">
+                            <tr class="tc vm">
+                                <th class="tc vm">
+                                    فروشنده
+                                </th>
+                                <th class="tc vm">
+                                    تاریخ بازدید
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="tc vm">
+                            @foreach (var seller in Model.Entities)
+                            {
+                                <tr class="tc vm">
+                                    <td class="vm">
+                                        <div class="flex-style-center">
+                                            <img src="@seller.User.GetUserAvatar()" class="avatar-style" />
+                                            <div class="mr-10px">
+                                                <span> @seller.User.Username </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="tc vm">
+                                        <p> @seller.CreateDate.ToShamsi()</p>
+                                    </td>
+                                   
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="footer tc margin-top-5">
+
+                        <partial name="_AdminPaging" model="@Model.GetCurrentPaging()" />
+
+                    </div>
+                }
+                else
+                {
+                    <partial name="_AdminNotFoundPartial" />
+                }
+            </div>
+        </div>
+    </div>
+</div>

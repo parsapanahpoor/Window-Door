@@ -7,12 +7,14 @@ using Window.Domain.Entities.Contact;
 using Window.Domain.Entities.Glass;
 using Window.Domain.Entities.Inquiry;
 using Window.Domain.Entities.Location;
+using Window.Domain.Entities.Log;
 using Window.Domain.Entities.Market;
 using Window.Domain.Entities.MarketInfo;
 using Window.Domain.Entities.Product;
 using Window.Domain.Entities.QuestionAnswer;
 using Window.Domain.Entities.Sample;
 using Window.Domain.Entities.Segment;
+using Window.Domain.Entities.SiteSetting;
 using Window.Domain.Entities.Wallet;
 
 namespace Window.Data.Context
@@ -132,6 +134,20 @@ namespace Window.Data.Context
         public DbSet<Sample> Samples { get; set; }
 
         public DbSet<SampleSelectedSegment> SampleSelectedSegments { get; set; }
+
+        #endregion
+
+        #region Log 
+
+        public DbSet<LogForVisitSellerProfile> LogForVisitSellerProfiles { get; set; }
+
+        #endregion
+
+        #region Site Setting
+
+        public DbSet<EmailSetting> EmailSettings { get; set; }
+
+        public DbSet<SiteSetting> SiteSettings { get; set; }
 
         #endregion
 
@@ -702,6 +718,27 @@ namespace Window.Data.Context
                 UPVC = true,
                 Window = true,
                 SegmentName = "قفل چهارلنگه",
+            });
+
+            #endregion
+
+            #region Email Setting Seed Data
+
+            var date = new DateTime(2022, 03, 01);
+
+            modelBuilder.Entity<EmailSetting>().HasData(new EmailSetting
+            {
+                Id = 1,
+                Password = "54511441",
+                IsDelete = false,
+                CreateDate = date,
+                IsDefaultEmail = true,
+                DisplayName = "برنامه ی درب و پنجره",
+                From = "parsapanahpoor77@gmail.com",
+                Smtp = "smtp.gmail.com",
+                EnableSsL = true,
+                Port = 587,
+                UserName = "برنامه ی درب و پنجره"
             });
 
             #endregion

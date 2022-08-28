@@ -13,6 +13,7 @@
     var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
 
     var brand = ViewBag.Brand != null ? ViewBag.Brand as List<SelectListViewModel> : null;
+    var glass = ViewBag.Glasses != null ? ViewBag.Glasses as List<SelectListViewModel> : null;
 }
 
 @section Styles
@@ -30,6 +31,9 @@
             $('#StateId option:not(:first)').remove();
             $.get("/Home/LoadCities", { stateId: $("#CountryId :selected").val() }).then(res => {
                 if (res.data !== null) {
+                     $("#StateId").append(
+                            '<option>' + "لطفا یک استان را انتخاب کنید" + '</option>'
+                        );
                     $.each(res.data, function () {
                         $("#StateId").append(
                             '<option value=' + this.id + '>' + this.title + '</option>'
@@ -149,6 +153,19 @@
                                     foreach (var brands in brand)
                                     {
                                         <option value="@brands.Id"> @brands.Title </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="GlassId">شیشه</label>
+                            <select asp-for="GlassId" class="form-control">
+                                @if (glass != null && glass.Any())
+                                {
+                                    foreach (var glasses in glass)
+                                    {
+                                        <option value="@glasses.Id"> @glasses.Title </option>
                                     }
                                 }
                             </select>

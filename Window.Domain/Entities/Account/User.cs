@@ -9,6 +9,7 @@ using Window.Domain.Entities.Contact;
 using Window.Domain.Entities.Market;
 using Window.Domain.Entities.Product;
 using Window.Domain.Entities.MarketInfo;
+using Window.Domain.Entities.Log;
 
 namespace Window.Domain.Entities.Account
 {
@@ -49,6 +50,12 @@ namespace Window.Domain.Entities.Account
 
         [Required]
         public int WalletBalance { get; set; }
+
+        [Display(Name = "کد فعالسازی ایمیل")]
+        [Required(ErrorMessage = "این فیلد الزامی است .")]
+        [MaxLength(100, ErrorMessage = "تعداد کاراکتر های {0} نمیتواند بیشتر از {1} باشد")]
+        public string EmailActivationCode { get; set; }
+
         #endregion
 
         #region Relations
@@ -78,6 +85,8 @@ namespace Window.Domain.Entities.Account
         public ICollection<GlassPricing> GlassPricings { get; set; }
 
         public ICollection<ScoreForMarket> Score { get; set; }
+
+        public ICollection<LogForVisitSellerProfile> LogForVisitSellerProfiles { get; set; }
 
         #endregion
     }

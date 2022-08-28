@@ -12,7 +12,7 @@
         <li>
             <a asp-area="Seller" asp-controller="Home" asp-action="Index">
                 <i class="menu-icon glyphicon glyphicon-home"></i>
-                <span class="menu-text"> @Localizer["Dashboard"] </span>
+                <span class="menu-text"> @Localizer["داشبورد"] </span>
             </a>
         </li>
 
@@ -60,6 +60,11 @@
                                 <span class="menu-text">افزودن محصول</span>
                             </a>
                         </li>
+                    <li>
+                        <a asp-area="Seller" asp-controller="Product" asp-action="CreateGlassPricing">
+                            <span class="menu-text">قیمت گذاری شیشه</span>
+                        </a>
+                    </li>
                     </ul>
                 </li>
 

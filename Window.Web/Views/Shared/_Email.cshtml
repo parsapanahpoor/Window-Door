@@ -1,0 +1,223 @@
+﻿@using Window.Application.StaticTools
+@model Window.Domain.ViewModels.Common.EmailViewModel
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
+    <link rel="preconnect" href="//fdn.fontcdn.ir">
+    <link rel="preconnect" href="//v1.fontapi.ir">
+    <link href="https://v1.fontapi.ir/css/Yekan" rel="stylesheet">
+    <style type="text/css">
+
+        @@import url('https://v1.fontapi.ir/css/Yekan');
+
+        * {
+            font-family: 'Yekan' !important
+        }
+
+        body, html {
+            margin: 0px;
+            padding: 0px;
+            -webkit-font-smoothing: antialiased;
+            text-size-adjust: none;
+            width: 100% !important;
+            font-family: 'Yekan' !important
+        }
+
+        #outlook a {
+            padding: 0px;
+        }
+
+        .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
+            line-height: 100%;
+        }
+
+        .ExternalClass {
+            width: 100%;
+        }
+
+        @@media only screen and (max-width: 480px) {
+            table, table tr td, table td {
+                width: 100% !important;
+            }
+
+            img {
+                width: inherit;
+            }
+
+            .layer_2 {
+                max-width: 100% !important;
+            }
+
+            .edsocialfollowcontainer table {
+                max-width: 25% !important;
+            }
+
+                .edsocialfollowcontainer table td {
+                    padding: 10px !important;
+                }
+
+            .edsocialfollowcontainer table {
+                max-width: 25% !important;
+            }
+
+                .edsocialfollowcontainer table td {
+                    padding: 10px !important;
+                }
+        }
+    </style>
+</head>
+
+<body style="padding: 0px; margin: 0px;">
+    <table style="height: 100%; width: 100%; background-color: #efefef;" align="center">
+        <tbody>
+            <tr>
+                <td valign="top" id="dbody" data-version="2.31"
+                    style="width: 100%; height: 100%; padding-top: 12px; padding-bottom: 12px; background-color: #efefef;">
+                    <table class="layer_1" align="center" border="0" cellpadding="0" cellspacing="0"
+                           style="max-width: 600px; box-sizing: border-box; width: 100%; margin: 0px auto;">
+                        <tbody>
+                            @if (!string.IsNullOrEmpty(Model.EmailBanner))
+                            {
+                                <tr>
+                                    <td class="drow" valign="top" align="center"
+                                        style="background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;">
+                                        <div class="layer_2"
+                                             style="display: inline-block; vertical-align: top; width: 100%; max-width: 600px;">
+                                            <table border="0" cellspacing="0" cellpadding="0" class="edcontent"
+                                                   style="border-collapse: collapse;width:100%">
+                                                <tbody>
+                                                <tr>
+                                                    <td valign="top" class="edimg"
+                                                        style="text-align: center; box-sizing: border-box;">
+                                                        <img src="@Model.EmailBanner"
+                                                             alt="Image" width="100%"
+                                                             style="border-width: 0px; border-style: none; width: 100%;">
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td class="drow" valign="top" align="center"
+                                    style="background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;">
+                                    <div class="layer_2"
+                                         style="display: inline-block; vertical-align: top; width: 100%; max-width: 600px;">
+                                        <table border="0" cellspacing="0" class="edcontent"
+                                               style="border-collapse: collapse;width:100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign="top" class="edtext"
+                                                        style="padding: 20px; text-align: right; color: #5f5f5f; font-size: 16px; font-family: Tahoma, Geneva, sans-serif; word-break: break-word; direction: rtl; box-sizing: border-box;">
+                                                        <p class="text-center" style="text-align: center; margin: 0px; padding: 0px;">
+                                                            @Html.Raw(Model.Description)
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" class="edbutton" style="padding: 20px;">
+                                                        <table cellspacing="0" cellpadding="0" style="text-align: center;margin:0 auto;"
+                                                               align="center">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td align="center"
+                                                                        style="border-radius: 50px; padding: 15px 20px; background: #28a745;">
+                                                                        <a href="@Model.ButtonLink" style="font-size: 20px; cursor: pointer; color: #ffffff; font-weight: bold; font-family: Helvetica, Arial, sans-serif; text-decoration: none; display: inline-block;">
+                                                                            <span style="color: #ffffff;">@Model.ButtonName</span>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="drow" valign="top" align="center"
+                                    style="background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;">
+                                    <div class="layer_2"
+                                         style="display: inline-block; vertical-align: top; width: 100%; max-width: 600px;">
+                                        <table border="0" cellspacing="0" cellpadding="0" class="edcontent"
+                                               style="border-collapse: collapse;width:100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign="top" class="breakline" style="padding:0">
+                                                        <div style="border-style: solid none none; border-width: 1px 0px 0px; margin: 8px 36px; border-top-color: #c5c5c5;">
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="drow" valign="top" align="center"
+                                    style="background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;">
+                                    <div class="layer_2"
+                                         style="display: inline-block; vertical-align: top; width: 100%; max-width: 600px;">
+                                        <table border="0" cellspacing="0" class="edcontent"
+                                               style="border-collapse: collapse;width:100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign="top" class="edsocialfollow" style="padding: 20px;">
+                                                        <table align="center" style="margin:0 auto" class="edsocialfollowcontainer"
+                                                               cellpadding="0" border="0" cellspacing="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                      
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="drow" valign="top" align="center"
+                                    style="background-color: #ffffff; box-sizing: border-box; font-size: 0px; text-align: center;">
+                                    <div class="layer_2"
+                                         style="max-width: 600px; display: inline-block; vertical-align: top; width: 100%;">
+                                        <table class="edcontent" style="border-collapse: collapse;width:100%" border="0"
+                                               cellpadding="0" cellspacing="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="edtext" valign="top"
+                                                        style="padding: 10px; text-align: right; color: #5f5f5f; font-size: 16px; font-family: Tahoma, Geneva, sans-serif; word-break: break-word; direction: rtl; box-sizing: border-box;">
+                                                        <p style="text-align: center">
+                                                            <a style="text-align: center; font-size: 13px; margin: 0px; padding: 0px; color: darkblue; text-decoration: none" > برنامه ی درب و پنجره </a>
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

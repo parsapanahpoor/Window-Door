@@ -38,6 +38,10 @@ namespace Window.IOC.Container
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ISampleService, SampleService>();
             services.AddScoped<IInquiryService, InquryService>();
+            services.AddScoped<IViewRenderService, ViewRenderService>();
+            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<ISMSService, SMSService>();
+            services.AddScoped<ISiteSettingService, SiteSettingService>();
 
             #endregion
         }

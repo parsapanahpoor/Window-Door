@@ -21,7 +21,7 @@ namespace Window.Application.Services.Interfaces
 
         Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress);
 
-        Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, ulong userId);
+        Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, ulong userId , ulong glassId);
 
         Task<int?> InitializeSamplesPrice(List<Sample?> samples, User user, int height, int width);
 

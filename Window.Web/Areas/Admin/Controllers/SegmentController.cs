@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Window.Application.Security;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Entities.Glass;
 using Window.Domain.Entities.Segment;
@@ -7,6 +8,7 @@ using Window.Web.HttpManager;
 
 namespace Window.Web.Areas.Admin.Controllers
 {
+    [PermissionChecker("ManageSegments")]
     public class SegmentController : AdminBaseController
     {
         #region Ctor

@@ -29,6 +29,8 @@ namespace Window.Domain.Entities.Inquiry
 
         public string? UserMAcAddress { get; set; }
 
+        public ulong? GlassId { get; set; }
+
         #endregion
 
         #region relations

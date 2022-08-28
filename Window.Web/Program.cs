@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
+using Window.Application.SiteServices;
 using Window.Data.Context;
 using Window.Domain.SharedResource;
 using Window.IOC.Container;
@@ -237,6 +238,7 @@ app.UseRequestLocalization(options);
 
 #endregion
 
+SiteCurrentContext.Configure(app.Services.GetRequiredService<IHttpContextAccessor>());
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

@@ -34,6 +34,8 @@ namespace Window.Domain.ViewModels.Site.Inquiry
 
         public string? UserMacAddress { get; set; }
 
+        public ulong? GlassId { get; set; }
+
         #endregion
     }
 }

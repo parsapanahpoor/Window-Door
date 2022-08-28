@@ -7,6 +7,8 @@ public class ResetPasswordViewModel
 {
     #region Properties
 
+    public string? EmailActivationCode { get; set; }
+
     [DisplayName("New Password")]
     [Required(ErrorMessage = "Please Enter {0}")]
     [DataType(DataType.Password)]

@@ -53,7 +53,8 @@ namespace Window.Application.Services.Services
                     ProductKind = filter.ProductKind,
                     ProductType = filter.ProductType,
                     SellerType = filter.SellerType,
-                    UserMAcAddress = filter.UserMacAddress
+                    UserMAcAddress = filter.UserMacAddress,
+                    GlassId = filter.GlassId
                 };
 
                 await _context.LogInquiryForUsers.AddAsync(log);
@@ -76,6 +77,7 @@ namespace Window.Application.Services.Services
                 inquiry.ProductType = filter.ProductType;
                 inquiry.SellerType = filter.SellerType;
                 inquiry.UserMAcAddress = filter.UserMacAddress;
+                inquiry.GlassId = filter.GlassId;
 
                 _context.LogInquiryForUsers.Update(inquiry);
                 await _context.SaveChangesAsync();
@@ -191,7 +193,7 @@ namespace Window.Application.Services.Services
             #endregion
         }
 
-        public async Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, ulong userId)
+        public async Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, ulong userId , ulong glassId)
         {
             #region return Model 
 
@@ -203,6 +205,13 @@ namespace Window.Application.Services.Services
 
             var userSegments = await _context.SegmentPricings.Include(p => p.Product).Where(p => !p.IsDelete && p.Product.UserId == userId && p.Product.MainBrandId == brandId).ToListAsync();
             if (userSegments == null) return null;
+
+            #endregion
+
+            #region Get Glasses Pricing
+
+            var glassPricing = await _context.GlassPricings.FirstOrDefaultAsync(p => !p.IsDelete && p.GlassId == glassId && p.UserId == userId);
+            if (glassPricing == null) return null;
 
             #endregion
 
@@ -225,13 +234,19 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
                 {
                     //قیمت زهوار دوجداره
                     totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 2).Price);
+                }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
                 }
             }
 
@@ -247,7 +262,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -267,6 +282,12 @@ namespace Window.Application.Services.Services
                     //یراق ملغی
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 4).Price);
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
@@ -281,7 +302,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -301,6 +322,12 @@ namespace Window.Application.Services.Services
                     //یراق تک حالته
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 5).Price);
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
@@ -315,7 +342,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -347,6 +374,12 @@ namespace Window.Application.Services.Services
                     //یراق تک حالته
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 5).Price);
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
@@ -361,7 +394,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -393,6 +426,12 @@ namespace Window.Application.Services.Services
                     //یراق تک حالته
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 5).Price);
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
@@ -407,7 +446,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -439,11 +478,17 @@ namespace Window.Application.Services.Services
                     //یراق تک حالته
                     totalPrice = totalPrice + (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 5).Price));
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
 
-            #region پنجره لولایی آلومینیومی لولایی  شش لنگه ساده
+            #region پنجره لولایی آلومینیومی لولایی شش لنگه ساده
 
             if (sample.Id == 14)
             {
@@ -453,7 +498,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -485,6 +530,12 @@ namespace Window.Application.Services.Services
                     //یراق تک حالته
                     totalPrice = totalPrice + (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 5).Price));
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
@@ -499,7 +550,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -512,6 +563,12 @@ namespace Window.Application.Services.Services
                 {
                     //قیمت گالوانیزه ی فریم
                     totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 8).Price);
+                }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
                 }
             }
 
@@ -527,7 +584,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -559,6 +616,12 @@ namespace Window.Application.Services.Services
                     //یراق ملغی
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 4).Price);
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
@@ -573,7 +636,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -605,6 +668,12 @@ namespace Window.Application.Services.Services
                     //یراق تک حالته
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 5).Price);
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
@@ -619,7 +688,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -669,6 +738,12 @@ namespace Window.Application.Services.Services
                     //یراق تک حالته
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 5).Price);
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
@@ -683,7 +758,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -733,6 +808,12 @@ namespace Window.Application.Services.Services
                     //یراق تک حالته
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 5).Price);
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
@@ -747,7 +828,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -797,6 +878,12 @@ namespace Window.Application.Services.Services
                     //یراق تک حالته
                     totalPrice = totalPrice + (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 5).Price));
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
@@ -811,7 +898,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -861,11 +948,17 @@ namespace Window.Application.Services.Services
                     //یراق تک حالته
                     totalPrice = totalPrice + (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 5).Price));
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
 
-            #region درب لولایی  درب سوییچی شیشه یکپارچه UPVC 
+            #region درب لولایی درب سوییچی شیشه یکپارچه UPVC 
 
             if (sample.Id == 22)
             {
@@ -875,13 +968,13 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 12) != null)
                 {
                     //لنگه ی درب
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
+                    totalPrice = totalPrice +  (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -907,6 +1000,12 @@ namespace Window.Application.Services.Services
                     //یراق درب سویئچی
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 14).Price);
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
@@ -921,13 +1020,13 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 12) != null)
                 {
                     //لنگه ی درب
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -953,6 +1052,12 @@ namespace Window.Application.Services.Services
                     //یراق درب سرویسی
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 15).Price);
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
@@ -967,13 +1072,13 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 12) != null)
                 {
                     //لنگه ی درب
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -1023,6 +1128,12 @@ namespace Window.Application.Services.Services
                     //یراق درب سویئچی
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 14).Price);
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * (height - 60)));
+                }
             }
 
             #endregion
@@ -1037,13 +1148,13 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 12) != null)
                 {
                     //لنگه ی درب
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -1093,6 +1204,12 @@ namespace Window.Application.Services.Services
                     //یراق درب سرویسی
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 15).Price);
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * (height - 120)));
+                }
             }
 
             #endregion
@@ -1107,7 +1224,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -1143,19 +1260,25 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 12) != null)
                 {
                     //لنگه ی درب
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 13) != null)
                 {
                     //گالوانیزه ی دربی
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 13).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 13).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 15) != null)
                 {
                     //یراق درب سرویسی
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 15).Price);
+                }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
                 }
             }
 
@@ -1171,7 +1294,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -1207,25 +1330,31 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 12) != null)
                 {
                     //لنگه ی درب
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 13) != null)
                 {
                     //گالوانیزه ی دربی
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 13).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 13).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 17) != null)
                 {
                     //پنل
-                    totalPrice = (width * 60) * (userSegments.FirstOrDefault(p => p.SegmentId == 17).Price);
+                    totalPrice = totalPrice + (width * 60) * (userSegments.FirstOrDefault(p => p.SegmentId == 17).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 14) != null)
                 {
                     //یراق درب سویئچی
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 14).Price);
+                }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * (height - 60)));
                 }
             }
 
@@ -1241,7 +1370,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -1322,6 +1451,12 @@ namespace Window.Application.Services.Services
                     totalPrice = totalPrice + (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 28).Price));
                 }
 
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
+
             }
 
             #endregion
@@ -1336,7 +1471,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -1416,6 +1551,12 @@ namespace Window.Application.Services.Services
                     //یراق کشویی
                     totalPrice = totalPrice + (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 28).Price));
                 }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
             }
 
             #endregion
@@ -1430,7 +1571,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
                 {
                     //قیمت فریم
-                    totalPrice = (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -1509,6 +1650,12 @@ namespace Window.Application.Services.Services
                 {
                     //یراق کشویی
                     totalPrice = totalPrice + (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 28).Price));
+                }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
                 }
             }
 
@@ -1589,7 +1736,7 @@ namespace Window.Application.Services.Services
 
                 foreach (var sample in logDetail)
                 {
-                    model2.Price = model2.Price + await InitialTotalSamplePrice(brand.Id, sample.SampleId.Value, sample.Width.Value, sample.Height.Value, seller.Id);
+                    model2.Price = model2.Price + await InitialTotalSamplePrice(brand.Id, sample.SampleId.Value, sample.Width.Value, sample.Height.Value, seller.Id , log.GlassId.Value);
                 }
 
                 model.Add(model2);

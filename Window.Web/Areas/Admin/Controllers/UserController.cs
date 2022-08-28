@@ -9,6 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Window.Web.Areas.Admin.Controllers
 {
+    [PermissionChecker("ManageUsers")]
     public class UserController : AdminBaseController
     {
         #region cunstructor

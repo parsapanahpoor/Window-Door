@@ -5,9 +5,11 @@ using Window.Web.Areas.User.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Window.Web.Areas.Seller.Controllers;
+using Window.Application.Security;
 
 namespace Window.Web.Areas.User.Controllers;
 
+[PermissionChecker("ManageUsers")]
 public class AccountController : SellerBaseController
 {
     #region ctor

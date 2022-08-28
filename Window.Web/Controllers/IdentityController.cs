@@ -134,6 +134,82 @@ namespace Window.Web.Controllers
 
         #endregion
 
+        #region Forgot Password
+
+        [HttpGet("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost("ForgotPassword"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel forgotPassword)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "مقادیر وارد شده معتبر نمی باشد .";
+                return View(forgotPassword);
+            }
+
+            var result = await _userService.ForgotPasswordUser(forgotPassword);
+
+            if (result)
+            {
+                TempData["success"] = $"ایمیل حاوی لینک بازیابی کلمه عبور به {forgotPassword.Email} ارسال شد .";
+                return RedirectToAction("Login", "Identity");
+            }
+
+            TempData["Error"] = "کاربری با مشخصات وارد شده یافت نشد";
+
+            return View(forgotPassword);
+        }
+
+        #endregion
+
+        #region Reset Password
+
+        [HttpGet("ResetPassword/{emailActivationCode}")]
+        public async Task<IActionResult> ResetPassword(string emailActivationCode)
+        {
+            var result = await _userService.GetResetPasswordViewModel(emailActivationCode);
+
+            // check user exists by activation code
+            if (result == null)
+            {
+                TempData["Error"] = "کد فعالسازی شما معتبر نمی باشد لطفا مجدد تلاش کنید .";
+                return RedirectToAction("Login", "Identity");
+            }
+
+            return View(result);
+        }
+
+        [HttpPost("ResetPassword/{emailActivationCode}"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel resetPassword)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "مقادیر وارد شده معتبر نمی باشد .";
+                return View(resetPassword);
+            }
+
+            var result = await _userService.ResetPassword(resetPassword);
+
+            if (!result)
+            {
+                TempData["Error"] = "کد فعالسازی معتبر نمی باشد لطفا مجدد تلاش کنید .";
+            }
+            else
+            {
+                TempData["success"] = "عملیات با موفقیت انجام شد .";
+            }
+
+            return RedirectToAction("Login", "Identity");
+        }
+
+        #endregion
+
         #region Logout
 
         [HttpGet("logout")]
