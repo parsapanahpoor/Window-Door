@@ -73,6 +73,8 @@ namespace Window.Domain.ViewModels.Seller.PersonalInfo
 
         public List<AddSellerWorkSampleViewModel> MarketWorkSamples { get; set; }
 
+        public List<MarketChargeInfo?> MarketChargeInfos { get; set; }
+
         public SellerType SellerType { get; set; }
 
         #endregion

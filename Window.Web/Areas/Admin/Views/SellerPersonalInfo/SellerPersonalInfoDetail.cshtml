@@ -1,4 +1,6 @@
 ﻿@using Window.Application.StticTools
+@using Window.Application.Convertors
+@using Window.Application.Extensions
 @using Window.Domain.Enums
 @using Window.Application.StaticTools
 @using Window.Domain.ViewModels.Common
@@ -8,215 +10,215 @@
 
 @{
     ViewData["Title"] = "لیست اطلاعات شخصی ";
-        var countries = ViewData["Countries"] != null ? ViewData["Countries"] as List<SelectListViewModel> : null;
+    var countries = ViewData["Countries"] != null ? ViewData["Countries"] as List<SelectListViewModel> : null;
     var states = ViewData["States"] != null ? ViewData["States"] as List<SelectListViewModel> : null;
     var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
 }
 
 @section Scripts
-{
-<script src="/lib/Custom/SellerPersonalInfo.js"></script>
-<partial name="_JqueryValidation" />
+    {
+    <script src="/lib/Custom/SellerPersonalInfo.js"></script>
+    <partial name="_JqueryValidation" />
 
-<script>
+    <script>
 
         $("#CountryId").change(function () {
-        if ($("#CountryId :selected").val() !== '') {
-            $('#CityId option:not(:first)').remove();
-            $('#StateId option:not(:first)').remove();
-            $.get("/Admin/Home/LoadCities", { stateId: $("#CountryId :selected").val() }).then(res => {
-                if (res.data !== null) {
-                    $.each(res.data, function () {
-                        $("#StateId").append(
-                            '<option value=' + this.id + '>' + this.title + '</option>'
-                        );
-                    });
-                }
-            });
-        } else {
-            $('#StateId option:not(:first)').remove();
-            $('#CityId option:not(:first)').remove();
-        }
-    });
+            if ($("#CountryId :selected").val() !== '') {
+                $('#CityId option:not(:first)').remove();
+                $('#StateId option:not(:first)').remove();
+                $.get("/Admin/Home/LoadCities", { stateId: $("#CountryId :selected").val() }).then(res => {
+                    if (res.data !== null) {
+                        $.each(res.data, function () {
+                            $("#StateId").append(
+                                '<option value=' + this.id + '>' + this.title + '</option>'
+                            );
+                        });
+                    }
+                });
+            } else {
+                $('#StateId option:not(:first)').remove();
+                $('#CityId option:not(:first)').remove();
+            }
+        });
 
-    $("#StateId").change(function () {
-        if ($("#StateId :selected").val() !== '') {
-            $('#CityId option:not(:first)').remove();
-            $.get("/Admin/Home/LoadCities", { stateId: $("#StateId :selected").val() }).then(res => {
-                if (res.data !== null) {
-                    $.each(res.data, function () {
-                        $("#CityId").append(
-                            '<option value=' + this.id + '>' + this.title + '</option>'
-                        );
-                    });
-                }
-            });
-        } else {
-            $('#CityId option:not(:first)').remove();
-        }
-    });
+        $("#StateId").change(function () {
+            if ($("#StateId :selected").val() !== '') {
+                $('#CityId option:not(:first)').remove();
+                $.get("/Admin/Home/LoadCities", { stateId: $("#StateId :selected").val() }).then(res => {
+                    if (res.data !== null) {
+                        $.each(res.data, function () {
+                            $("#CityId").append(
+                                '<option value=' + this.id + '>' + this.title + '</option>'
+                            );
+                        });
+                    }
+                });
+            } else {
+                $('#CityId option:not(:first)').remove();
+            }
+        });
 
-</script>
+    </script>
 
 }
 
-@section Breadcrumb
-{
-<li>
-    <a asp-action="Index" asp-controller="Home" asp-area="Admin"> داشبورد </a>
-</li>
-<li>
-    <a href="javascript:void(0)"> @ViewData["Title"] </a>
-</li>
+    @section Breadcrumb
+    {
+    <li>
+        <a asp-action="Index" asp-controller="Home" asp-area="Admin"> داشبورد </a>
+    </li>
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
 }
 
 
-<div class="col-lg-12 col-sm-12">
+    <div class="col-lg-12 col-sm-12">
 
-    <div class="row">
-        <div class="col-lg-12 col-sm-12">
-            <div class="row">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <div class="row">
 
-                <form method="post" asp-action="SellerPersonalInfoDetail" asp-controller="SellerPersonalInfo" asp-area="Admin" enctype="multipart/form-data">
+                    <form method="post" asp-action="SellerPersonalInfoDetail" asp-controller="SellerPersonalInfo" asp-area="Admin" enctype="multipart/form-data">
 
-                    <input type="hidden" asp-for="PhotoOfBusinessLicense" />
-                    <input type="hidden" asp-for="PhotoOfNationalCode" />
-                    <input type="hidden" asp-for="CompanyLogo" />
-                    <input type="hidden" name="marketId" value="@ViewBag.marketId" />
+                        <input type="hidden" asp-for="PhotoOfBusinessLicense" />
+                        <input type="hidden" asp-for="PhotoOfNationalCode" />
+                        <input type="hidden" asp-for="CompanyLogo" />
+                        <input type="hidden" name="marketId" value="@ViewBag.marketId" />
 
-                      <div class="col-lg-12">
-                    <div class="widget">
-                        <div class="widget-header bordered-bottom bordered-green">
-                            <span class="widget-caption"> تایین وضعیت  </span>
-                        </div>
-                        <div class="widget-body">
-                            <div class="row">
-
-                                <div class="form-group col-md-12 col-sm-12">
-                                    <label asp-for="MarketPersonalsInfoState">وضعیت های فروشنده</label>
-                                    <select asp-for="MarketPersonalsInfoState" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Entities.Market.MarketPersonalsInfoState))"></select>
-                                    <span class="text-danger" asp-validation-for="MarketPersonalsInfoState"></span>
+                        <div class="col-lg-12">
+                            <div class="widget">
+                                <div class="widget-header bordered-bottom bordered-green">
+                                    <span class="widget-caption"> تایین وضعیت  </span>
                                 </div>
+                                <div class="widget-body">
+                                    <div class="row">
 
-                                <div class="form-group col-md-12 col-sm-12">
-                                    <label asp-for="RejectedNote">علت عدم تایید اطلاعات </label>
-                                    <textarea type="text" rows="7" class="form-control" asp-for="RejectedNote" placeholder="دلیل رد کردن اطلاعات را ذکر کنید "></textarea>
-                                    <span class="text-danger" asp-validation-for="RejectedNote"></span>
-                                </div>
+                                        <div class="form-group col-md-12 col-sm-12">
+                                            <label asp-for="MarketPersonalsInfoState">وضعیت های فروشنده</label>
+                                            <select asp-for="MarketPersonalsInfoState" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Entities.Market.MarketPersonalsInfoState))"></select>
+                                            <span class="text-danger" asp-validation-for="MarketPersonalsInfoState"></span>
+                                        </div>
+
+                                        <div class="form-group col-md-12 col-sm-12">
+                                            <label asp-for="RejectedNote">علت عدم تایید اطلاعات </label>
+                                            <textarea type="text" rows="7" class="form-control" asp-for="RejectedNote" placeholder="دلیل رد کردن اطلاعات را ذکر کنید "></textarea>
+                                            <span class="text-danger" asp-validation-for="RejectedNote"></span>
+                                        </div>
 
                                         <div class="form-group col-md-12 col-sm-12">
                                             <label asp-for="ActivationTariff">مبلغ شارژ حساب ماه بعد </label>
-                                            <input type="text" rows="7" class="form-control" asp-for="ActivationTariff" >
+                                            <input type="text" rows="7" class="form-control" asp-for="ActivationTariff">
                                             <span class="text-danger" asp-validation-for="ActivationTariff"></span>
                                         </div>
-                                
-                                    <hr class="margin-bottom-10 margin-top-10" />
 
-                                    <div class="col-md-12 flex-style">
-                                        <button type="submit" class="btn btn-labeled btn-warning">
-                                            <i class="btn-label glyphicon glyphicon-ok"></i>ویرایش
-                                        </button>
+                                        <hr class="margin-bottom-10 margin-top-10" />
+
+                                        <div class="col-md-12 flex-style">
+                                            <button type="submit" class="btn btn-labeled btn-warning">
+                                                <i class="btn-label glyphicon glyphicon-ok"></i>ویرایش
+                                            </button>
+                                        </div>
+
                                     </div>
-
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                </form>
+                    </form>
 
 
-                <div class="col-lg-12">
-                    <div class="widget">
-                        <div class="widget-header bordered-bottom bordered-green">
-                            <span class="widget-caption"> اطلاعات شخصی  </span>
-                        </div>
-                        <div class="widget-body">
-                            <div class="row">
+                    <div class="col-lg-12">
+                        <div class="widget">
+                            <div class="widget-header bordered-bottom bordered-green">
+                                <span class="widget-caption"> اطلاعات شخصی  </span>
+                            </div>
+                            <div class="widget-body">
+                                <div class="row">
 
-                                <div class="form-group col-md-12 col-sm-12">
-                                    <label asp-for="NationalCode"></label>
-                                    <input type="text" class="form-control" asp-for="NationalCode">
-                                    <span class="text-danger" asp-validation-for="NationalCode"></span>
-                                </div>
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <label asp-for="NationalCode"></label>
+                                        <input type="text" class="form-control" asp-for="NationalCode">
+                                        <span class="text-danger" asp-validation-for="NationalCode"></span>
+                                    </div>
 
-                                <div class="form-group col-md-12 col-sm-12">
-                                    <label asp-for="SellerType"></label>
-                                    <select asp-for="SellerType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.SellerType.SellerType))"></select>
-                                    <span class="text-danger" asp-validation-for="SellerType"></span>
-                                </div>
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <label asp-for="SellerType"></label>
+                                        <select asp-for="SellerType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.SellerType.SellerType))"></select>
+                                        <span class="text-danger" asp-validation-for="SellerType"></span>
+                                    </div>
 
-                                <div class="form-group col-md-12 col-sm-12">
-                                    <label asp-for="CompanyName"></label>
-                                    <input type="text" class="form-control" asp-for="CompanyName">
-                                    <span class="text-danger" asp-validation-for="CompanyName"></span>
-                                </div>
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <label asp-for="CompanyName"></label>
+                                        <input type="text" class="form-control" asp-for="CompanyName">
+                                        <span class="text-danger" asp-validation-for="CompanyName"></span>
+                                    </div>
 
-                                        <div class="form-group col-md-12">
+                                    <div class="form-group col-md-12">
                                         <label asp-for="CountryId"></label>
                                         <select class="form-control" asp-for="CountryId">
                                             <option value=""> لطفا یک کشور را انتخاب کنید </option>
-                                            @if (countries != null && countries.Any())
+                                        @if (countries != null && countries.Any())
+                                        {
+                                            foreach (var country in countries)
                                             {
-                                                foreach (var country in countries)
+                                                if (Model != null && Model.CountryId == country.Id)
                                                 {
-                                                    if (Model != null && Model.CountryId == country.Id)
-                                                    {
-                                                        <option value="@country.Id" selected="selected"> @country.Title </option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@country.Id"> @country.Title </option>
-                                                    }
+                                                    <option value="@country.Id" selected="selected"> @country.Title </option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@country.Id"> @country.Title </option>
                                                 }
                                             }
-                                        </select>
-                                        <span class="text-danger" asp-validation-for="CountryId"></span>
-                                    </div>
+                                        }
+                                    </select>
+                                    <span class="text-danger" asp-validation-for="CountryId"></span>
+                                </div>
 
-                                    <div class="form-group col-md-12">
-                                        <label asp-for="StateId"></label>
-                                        <select class="form-control" asp-for="StateId">
-                                            <option value=""> لطفا یک استان را انتخاب کنید </option>
-                                            @if (states != null && states.Any())
+                                <div class="form-group col-md-12">
+                                    <label asp-for="StateId"></label>
+                                    <select class="form-control" asp-for="StateId">
+                                        <option value=""> لطفا یک استان را انتخاب کنید </option>
+                                        @if (states != null && states.Any())
+                                        {
+                                            foreach (var state in states)
                                             {
-                                                foreach (var state in states)
+                                                if (Model != null && Model.StateId == state.Id)
                                                 {
-                                                    if (Model != null && Model.StateId == state.Id)
-                                                    {
-                                                        <option value="@state.Id" selected="selected"> @state.Title </option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@state.Id"> @state.Title </option>
-                                                    }
+                                                    <option value="@state.Id" selected="selected"> @state.Title </option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@state.Id"> @state.Title </option>
                                                 }
                                             }
-                                        </select>
-                                        <span class="text-danger" asp-validation-for="StateId"></span>
-                                    </div>
+                                        }
+                                    </select>
+                                    <span class="text-danger" asp-validation-for="StateId"></span>
+                                </div>
 
-                                    <div class="form-group col-md-12">
-                                        <label asp-for="CityId"></label>
-                                        <select asp-for="CityId" class="form-control">
-                                            <option value=""> لطفا یک شهر را انتخاب کنید </option>
-                                            @if (cities != null && cities.Any())
+                                <div class="form-group col-md-12">
+                                    <label asp-for="CityId"></label>
+                                    <select asp-for="CityId" class="form-control">
+                                        <option value=""> لطفا یک شهر را انتخاب کنید </option>
+                                        @if (cities != null && cities.Any())
+                                        {
+                                            foreach (var city in cities)
                                             {
-                                                foreach (var city in cities)
+                                                if (Model != null && Model.CityId == city.Id)
                                                 {
-                                                    if (Model != null && Model.CityId == city.Id)
-                                                    {
-                                                        <option value="@city.Id" selected="selected"> @city.Title </option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@city.Id"> @city.Title </option>
-                                                    }
+                                                    <option value="@city.Id" selected="selected"> @city.Title </option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@city.Id"> @city.Title </option>
                                                 }
                                             }
-                                        </select>
-                                        <span class="text-danger" asp-validation-for="CityId"></span>
-                                    </div>
+                                        }
+                                    </select>
+                                    <span class="text-danger" asp-validation-for="CityId"></span>
+                                </div>
 
                                 <div class="form-group col-md-12 col-sm-12">
                                     <label asp-for="PeriodTimesOfWork"></label>
@@ -408,6 +410,76 @@
                     </div>
 
                 </div>
+
+                <div class="col-lg-12 col-sm-12">
+                    <div class="well with-header with-footer table-responsive" style="padding-bottom: 30px;">
+                        <div class="header bordered-azure">
+                            <div class="flex-style">
+                                <span> لیست اطلاعات پرداختی شارژ حساب کاربر   </span>
+                            </div>
+                        </div>
+
+                        @if (Model.MarketLinks != null && Model.MarketLinks.Any())
+                        {
+                            <table class="table table-hover table-bordered tc vm ">
+                                <thead class="tc vm">
+                                    <tr class="tc vm">
+                                        <th class="tc vm">
+                                            تاریخ شروع حساب
+                                        </th>
+                                        <th class="tc vm">
+                                            تاریخ پایان حساب
+                                        </th>
+                                        <th class="tc vm">
+                                            مبلغ پرداختی
+                                        </th>
+                                        <th class="tc vm">
+                                            تاریخ شارژ
+                                        </th>
+                                        <th class="tc vm">
+                                            حساب فعال
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tc vm">
+                                    @foreach (var charge in Model.MarketChargeInfos)
+                                    {
+                                        <tr class="tc vm" id="profile_@charge.Id" remove-ajax-item="@charge.Id">
+                                            <td class="vm">
+                                                <p>@charge.StartDate.ToShamsi()</p>
+                                            </td>
+                                            <td id="CommentDetail" class="tc vm">
+                                                <p>@charge.EndDate.ToShamsi()</p>
+                                            </td>
+                                            <td id="CommentDetail" class="tc vm">
+                                                <p>@charge.Price.ToString("#,000") ریال</p>
+                                            </td>
+                                            <td id="CommentDetail" class="tc vm">
+                                                <p>@charge.CreateDate.ToShamsi()</p>
+                                            </td>
+                                            <td id="CommentDetail" class="tc vm">
+                                                @if (charge.CurrentAccountCharge)
+                                                {
+                                                    <p>بله </p>
+                                                }
+                                                else
+                                                {
+                                                    <p>خیر</p>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <partial name="_AdminNotFoundPartial" />
+                        }
+                    </div>
+
+                </div>
+
             </div>
         </div>
     </div>

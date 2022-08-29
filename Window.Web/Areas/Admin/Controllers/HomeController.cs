@@ -20,11 +20,14 @@ namespace Window.Web.Areas.Admin.Controllers
 
         private readonly IStateService _stateService;
 
-        public HomeController(IConfiguration configuration, IUserService userService, IStateService stateService)
+        private readonly IAdminDashboardService _adminDashboardService;
+
+        public HomeController(IConfiguration configuration, IUserService userService, IStateService stateService, IAdminDashboardService adminDashboardService)
         {
             _configuration = configuration;
             _userService = userService;
             _stateService = stateService;
+            _adminDashboardService = adminDashboardService;
         }
 
         #endregion
@@ -33,6 +36,23 @@ namespace Window.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
+            //Count Of Active User 
+            ViewBag.CountOfActiveUser = await _adminDashboardService.CountOfActiveUsers();
+
+            //Count Of Active Markets
+            ViewBag.CountOfActiveMarkets = await _adminDashboardService.CountOfActiveMarkets();
+
+            //Count Of Dis Active Markets 
+            ViewBag.DisActiveMarkets = await _adminDashboardService.CountOfDisActiveMarkets();
+
+            //Count Of Today Register Users
+            ViewBag.CountOfTodayRegisterUsers = await _adminDashboardService.CountOFTodayRegisterUsers();
+
+            //Get List Of MArket That DisActive Today 
+            ViewBag.ListOfMArketsThatDisActiveToday = await _adminDashboardService.GetListOfMarketsThatDisActiveToday();
+
+            ViewBag.ListOfMArketsThatDisActiveIn3Day = await _adminDashboardService.GetListOfMarketsThatDisActiveIn3Day();
+
             return View();
         }
 

@@ -13,6 +13,14 @@ namespace Window.Domain.Entities.Sample
     {
         #region properties
 
+        public int MaxHeight { get; set; }
+
+        public int MinHeight { get; set; }
+
+        public int MaxWidth { get; set; }
+
+        public int MinWidth { get; set; }
+
         public bool UPVC { get; set; }
 
         public bool Aluminum { get; set; }

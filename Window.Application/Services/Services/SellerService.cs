@@ -102,24 +102,58 @@ namespace Window.Application.Services.Services
 
             #endregion
 
-            #region Add Record For Charge Information 
+            #region Get User Last Charge 
 
-            MarketChargeInfo charge = new MarketChargeInfo()
-            {
-                CreateDate = DateTime.Now,
-                CurrentAccountCharge = true,
-                EndDate = DateTime.Now.AddDays(30),
-                StartDate = DateTime.Now,
-                IsDelete = false,
-                MarketId = market.Id,
-                Price = market.ActivationTariff,
-                UserId = userId
-            };
-
-            await _context.MarketChargeInfo.AddAsync(charge);
-            await _context.SaveChangesAsync();
+            var lastCharge = await _context.MarketChargeInfo.Where(p => !p.IsDelete && p.MarketId == market.Id)
+                                    .OrderByDescending(p => p.CreateDate).FirstOrDefaultAsync();
 
             #endregion
+
+            //For The First Time 
+            if (lastCharge == null)
+            {
+                #region Add Record For Charge Information 
+
+                MarketChargeInfo charge = new MarketChargeInfo()
+                {
+                    CreateDate = DateTime.Now,
+                    CurrentAccountCharge = true,
+                    EndDate = DateTime.Now.AddDays(30),
+                    StartDate = DateTime.Now,
+                    IsDelete = false,
+                    MarketId = market.Id,
+                    Price = market.ActivationTariff,
+                    UserId = userId
+                };
+
+                await _context.MarketChargeInfo.AddAsync(charge);
+                await _context.SaveChangesAsync();
+
+                #endregion
+            }
+
+            //For The Seconde Time 
+            else
+            {
+                #region Add Record For Charge Information 
+
+                MarketChargeInfo charge = new MarketChargeInfo()
+                {
+                    CreateDate = DateTime.Now,
+                    CurrentAccountCharge = true,
+                    EndDate = lastCharge.EndDate.AddDays(30),
+                    StartDate = lastCharge.EndDate,
+                    IsDelete = false,
+                    MarketId = market.Id,
+                    Price = market.ActivationTariff,
+                    UserId = userId
+                };
+
+                await _context.MarketChargeInfo.AddAsync(charge);
+                await _context.SaveChangesAsync();
+
+                #endregion
+            }
 
             #region Update Market State 
 
@@ -742,6 +776,8 @@ namespace Window.Application.Services.Services
                                            LinkValue = p.LinkValue
                                        }).ToListAsync();
 
+            model.MarketChargeInfos = await _context.MarketChargeInfo.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
+
             #endregion
 
             return model;
@@ -912,14 +948,62 @@ namespace Window.Application.Services.Services
 
                     #endregion
 
-                    #region Update Market Info 
+                    if ( DateTime.Now.Month - marketChargeInfo.EndDate.Month >= 3)
+                    {
+                        //Delete Market Info 
+                        var marketInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => p.MarketId == market.Id);
+                        if (marketInfo != null)
+                        {
+                            marketInfo.IsDelete = true;
+                            _context.MarketPersonalInfo.Update(marketInfo);
+                            await _context.SaveChangesAsync();
+                        }
 
-                    market.MarketPersonalsInfoState = MarketPersonalsInfoState.DisAcctiveMarketAccount;
+                        //Delete Personal Sample
+                        var marketWorkSamples = await _context.MarketWorkSamle.Where(p => !p.IsDelete && p.MarketId == market.Id).ToListAsync();
+                        if (marketWorkSamples != null)
+                        {
+                            foreach (var item in marketWorkSamples)
+                            {
+                                item.IsDelete = true;
+                                _context.MarketWorkSamle.Update(item);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
 
-                    _context.Market.Update(market);
-                    await _context.SaveChangesAsync();
+                        //Delete Links 
+                        var marketLinks = await _context.MarketLinks.Where(p => !p.IsDelete && p.MarketId == market.Id).ToListAsync();
+                        if (marketLinks != null)
+                        {
+                            foreach (var item in marketLinks)
+                            {
+                                item.IsDelete = true;
+                                _context.MarketLinks.Update(item);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
 
-                    #endregion
+                        #region Update Market Info 
+
+                        market.MarketPersonalsInfoState = MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller;
+
+                        _context.Market.Update(market);
+                        await _context.SaveChangesAsync();
+
+                        #endregion
+                    }
+
+                    else
+                    {
+                        #region Update Market Info 
+
+                        market.MarketPersonalsInfoState = MarketPersonalsInfoState.DisAcctiveMarketAccount;
+
+                        _context.Market.Update(market);
+                        await _context.SaveChangesAsync();
+
+                        #endregion
+                    }
                 }
             }
 

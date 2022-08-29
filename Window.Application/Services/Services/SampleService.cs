@@ -57,7 +57,7 @@ namespace Window.Application.Services.Services
                 SampleSelectedSegment segment = new SampleSelectedSegment()
                 {
                     SampleId = sample.Id,
-                    SegmentId = item
+                    SegmentId = item,
                 };
 
                 await _context.SampleSelectedSegments.AddAsync(segment);
@@ -133,6 +133,10 @@ namespace Window.Application.Services.Services
             model.Window = sample.Window;
             model.Keshoie = sample.Keshoie;
             model.Lolaie = sample.Lolaie;
+            model.MaxHeight = sample.MaxHeight;
+            model.MaxWidth = sample.MaxWidth;
+            model.MinWidth = sample.MinWidth;
+            model.MinHeight = sample.MinHeight;
 
             #endregion
 

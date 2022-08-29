@@ -29,13 +29,16 @@ namespace Window.Web.Controllers
 
         private readonly ISellerService _sellerService;
 
-        public InquiryAPIController(IStateService stateService, IBrandService brandService, IInquiryService inquiryService, ISampleService sampleService, ISellerService sellerService)
+        private readonly IProductService _productService;
+
+        public InquiryAPIController(IStateService stateService, IBrandService brandService, IInquiryService inquiryService, ISampleService sampleService, ISellerService sellerService, IProductService productService)
         {
             _stateService = stateService;
             _brandService = brandService;
             _inquiryService = inquiryService;
             _sampleService = sampleService;
             _sellerService = sellerService;
+            _productService = productService;
         }
 
         #endregion
@@ -80,9 +83,9 @@ namespace Window.Web.Controllers
 
         #region Inquiry API Step 1
 
-        [HttpGet("get-step1/{ProductType}/{ProductKind}/{SellerType}/{MainBrand}/{UserMacAddress}/{City}/{State}")]
+        [HttpGet("get-step1/{ProductType}/{ProductKind}/{SellerType}/{MainBrand}/{GlassName}/{UserMacAddress}/{City}/{State}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Step1(ProductType ProductType , ProductKind ProductKind , SellerType SellerType , string MainBrand , string UserMacAddress , string City , string State)
+        public async Task<IActionResult> Step1(ProductType ProductType , ProductKind ProductKind , SellerType SellerType , string MainBrand , string GlassName, string UserMacAddress , string City , string State)
         {
             #region Get Satte and City
 
@@ -98,6 +101,12 @@ namespace Window.Web.Controllers
 
             #endregion
 
+            #region Get Glass By Name
+
+            var glass = await _productService.GetGlassWithName(GlassName);
+
+            #endregion
+
             #region Step 1 Log For User 
 
             FilterInquiryViewModel log = new FilterInquiryViewModel()
@@ -109,7 +118,8 @@ namespace Window.Web.Controllers
                 ProductKind = ProductKind,
                 MainBrandId = barand.Id,
                 UserMacAddress = UserMacAddress,
-                SellerType = SellerType
+                SellerType = SellerType,
+                GlassId = glass.Id
             };
 
             #endregion
@@ -339,6 +349,19 @@ namespace Window.Web.Controllers
         public async Task<IActionResult> DateTimeNowAPI()
         {
             return JsonResponseStatus.Success(DateTime.Now.ToShamsiDate());
+        }
+
+        #endregion
+
+        #region List Of Glasses
+
+        [HttpGet("get-galsses")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetListOfGlasses()
+        {
+            var glasses = await _productService.GetListOfGlasses();
+
+            return JsonResponseStatus.Success(glasses);
         }
 
         #endregion

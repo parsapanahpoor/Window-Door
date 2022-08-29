@@ -162,6 +162,27 @@ namespace Window.Web.Controllers
                 return NotFound();
             }
 
+            if (sample.MaxHeight < height)
+            {
+                TempData[ErrorMessage] = "ارتفاع وارد شده بیشتر از حد مجاز است .";
+                return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
+            }
+            if (sample.MinHeight > height)
+            {
+                TempData[ErrorMessage] = "ارتفاع وارد شده کمتر از حد مجاز است .";
+                return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
+            }
+            if (sample.MaxWidth < width)
+            {
+                TempData[ErrorMessage] = "عرض وارد شده بیشتر از حد مجاز است .";
+                return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
+            }
+            if (sample.MinWidth > width)
+            {
+                TempData[ErrorMessage] = "عرض وارد شده کمتر از حد مجاز است .";
+                return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
+            }
+
             #endregion
 
             #region Add Log For User
@@ -327,11 +348,11 @@ namespace Window.Web.Controllers
         {
             #region Check Is User Was Scored To Seller
 
-            if (await _inquiryService.checkIsUserScoredToSeller(User.GetUserId().ToString() , sellerId))
-            {
-                TempData[ErrorMessage] = "شما درگذشته امتیاز خود را برای این فروشنده ثبت کرده اید.";
-                return RedirectToAction("Index", "Home");
-            }
+            //if (await _inquiryService.checkIsUserScoredToSeller(User.GetUserId().ToString() , sellerId))
+            //{
+            //    TempData[ErrorMessage] = "شما درگذشته امتیاز خود را برای این فروشنده ثبت کرده اید.";
+            //    return RedirectToAction("Index", "Home");
+            //}
 
             #endregion
 
@@ -345,11 +366,11 @@ namespace Window.Web.Controllers
         {
             #region Check Is User Was Scored To Seller
 
-            if (await _inquiryService.checkIsUserScoredToSeller(User.GetUserId().ToString(), sellerId))
-            {
-                TempData[ErrorMessage] = "شما درگذشته امتیاز خود را برای این فروشنده ثبت کرده اید.";
-                return RedirectToAction("LastUserInquryBaseOnUserLog", "test");
-            }
+            //if (await _inquiryService.checkIsUserScoredToSeller(User.GetUserId().ToString(), sellerId))
+            //{
+            //    TempData[ErrorMessage] = "شما درگذشته امتیاز خود را برای این فروشنده ثبت کرده اید.";
+            //    return RedirectToAction("LastUserInquryBaseOnUserLog", "test");
+            //}
 
             #endregion
 

@@ -10,6 +10,7 @@ using Window.Data.Context;
 using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Brand;
 using Window.Domain.Entities.Common;
+using Window.Domain.Entities.Glass;
 using Window.Domain.Entities.Product;
 using Window.Domain.Entities.Sample;
 using Window.Domain.ViewModels.Article;
@@ -34,6 +35,11 @@ namespace Window.Application.Services.Services
         #endregion
 
         #region Seller Side
+
+        public async Task<Glass?> GetGlassWithName(string glassName)
+        {
+            return await _context.Glasses.FirstOrDefaultAsync(p => !p.IsDelete && p.GlassName == glassName); 
+        }
 
         //Get All Glasses
         public async Task<List<SelectListViewModel>> GetAllGlasses()
@@ -590,6 +596,11 @@ namespace Window.Application.Services.Services
             #endregion
 
             return await _context.GlassPricings.Where(p => !p.IsDelete && p.UserId == market.UserId).ToListAsync();
+        }
+
+        public async Task<List<Glass>> GetListOfGlasses()
+        {
+            return await _context.Glasses.Where(p => p.IsDelete).ToListAsync();
         }
 
         #endregion

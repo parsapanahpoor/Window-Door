@@ -42,6 +42,7 @@ namespace Window.IOC.Container
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<ISMSService, SMSService>();
             services.AddScoped<ISiteSettingService, SiteSettingService>();
+            services.AddScoped<IAdminDashboardService, AdminDashboardService>();
 
             #endregion
         }

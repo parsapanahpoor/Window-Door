@@ -1713,9 +1713,9 @@ namespace Window.Application.Services.Services
 
             #region Get Sellers
 
-            var sellers = await _context.MarketPersonalInfo.Include(p => p.User)
+            var sellers = await _context.MarketPersonalInfo.Include(p => p.User).Include(p=> p.Market)
                                     .Where(p => !p.IsDelete && p.CityId == log.CityId && p.CountryId == log.CountryId
-                                    && p.StateId == log.StateId && p.SellerType == log.SellerType)
+                                    && p.StateId == log.StateId && p.SellerType == log.SellerType && p.Market.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.ActiveMarketAccount)
                                     .Select(p => p.User).ToListAsync();
 
             #endregion

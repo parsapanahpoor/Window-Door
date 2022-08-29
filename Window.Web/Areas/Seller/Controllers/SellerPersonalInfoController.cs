@@ -513,7 +513,7 @@ namespace Window.Web.Areas.Seller.Controllers
 
             var payment = new ZarinpalSandbox.Payment(tariff.Value);
 
-            var res = payment.PaymentRequest("پرداخت  ", "https://localhost:7075/ChargeAccount/" + market.Id, "Parsapanahpoor@yahoo.com", "09117878804");
+            var res = payment.PaymentRequest("پرداخت  ", "https://localhost:7075/ChargeAccount/"+market.Id, "Parsapanahpoor@yahoo.com", "09117878804");
 
             if (res.Result.Status == 100)
             {

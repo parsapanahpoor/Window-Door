@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Brand;
+using Window.Domain.Entities.Glass;
 using Window.Domain.Entities.Product;
 using Window.Domain.Entities.Sample;
 using Window.Domain.ViewModels.Common;
@@ -18,6 +19,10 @@ namespace Window.Application.Services.Interfaces
     public interface IProductService
     {
         #region Seller Side
+
+        Task<Glass?> GetGlassWithName(string glassName);
+
+        Task<List<Glass>> GetListOfGlasses();
 
         Task<List<SelectListViewModel>> GetProductTypeCategories(ulong productTypeId);
 

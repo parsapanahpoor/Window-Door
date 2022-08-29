@@ -1,68 +1,209 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = @SharedHtmlLocalizer["Home"];
 }
 
+@{
+    var disActiveToday = ViewBag.ListOfMArketsThatDisActiveToday as List<Window.Domain.Entities.Market.MarketChargeInfo>;
+    var disActiveIn3DAy = ViewBag.ListOfMArketsThatDisActiveIn3Day as List<Window.Domain.Entities.Market.MarketChargeInfo>;
+}
+
 @section breadcrumb {
-<li class="active">@SharedHtmlLocalizer["Home"]</li>
+    <li class="active">@SharedHtmlLocalizer["Home"]</li>
 }
 
-@section Styles
-{
-<style>
+    @section Styles
+    {
+    <style>
 
-    .databox-bottom {
-        height: 100% !important;
-    }
+        .databox-bottom {
+            height: 100% !important;
+        }
 
-    .databox.databox-vertical.databox-lg {
-        height: 100%;
-        width: 100%;
-    }
+        .databox.databox-vertical.databox-lg {
+            height: 100%;
+            width: 100%;
+        }
 
-    .databox.databox-vertical.databox-halved .databox-top {
-        height: 60px;
-    }
+        .databox.databox-vertical.databox-halved .databox-top {
+            height: 60px;
+        }
 
-    .databox-icon {
-        margin-top: 10px !important;
-    }
+        .databox-icon {
+            margin-top: 10px !important;
+        }
 
-    .dropdown-menu {
-        left: 0;
-        right: auto;
-    }
+        .dropdown-menu {
+            left: 0;
+            right: auto;
+        }
 
-    #ShowUserCommentInAdminPanelMinus {
-        margin-left: 20px;
-    }
+        #ShowUserCommentInAdminPanelMinus {
+            margin-left: 20px;
+        }
 
-    #ShowUserCommentInAdminPanel {
-        margin-left: 5px;
-    }
+        #ShowUserCommentInAdminPanel {
+            margin-left: 5px;
+        }
 
-    #CommentDetail {
-        max-width: 200px;
-    }
+        #CommentDetail {
+            max-width: 200px;
+        }
 
-    .section-style > header h2 {
-        padding: 0 22px 0 135px;
-    }
+        .section-style > header h2 {
+            padding: 0 22px 0 135px;
+        }
 
-</style>
+    </style>
 }
 
-@section Scripts
-{
+    @section Scripts
+    {
 
 }
 
-<div class="page-body">
 
     <div class="row">
 
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="databox bg-white radius-bordered">
+                <div class="bg-success databox-right">
+                </div>
+                <div class="databox-left">
+                    <span class="databox-number sucees">@((ViewBag.CountOfActiveUser != null) ? ViewBag.CountOfActiveUser : 0)</span>
+                <div class="databox-text darkgray">تعداد کاربر فعال</div>
 
+            </div>
+        </div>
+    </div>
 
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="databox bg-white radius-bordered">
+            <div class="bg-primary databox-right">
+            </div>
+            <div class="databox-left">
+                <span class="databox-number primary">@((ViewBag.CountOfActiveMarkets != null) ? ViewBag.CountOfActiveMarkets : 0)</span>
+                <div class="databox-text darkgray">تعداد فروشگاه های فعال</div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="databox bg-white radius-bordered">
+            <div class="bg-danger databox-right">
+            </div>
+            <div class="databox-left">
+                <span class="databox-number danger">@((ViewBag.DisActiveMarkets != null) ? ViewBag.DisActiveMarkets : 0)</span>
+                <div class="databox-text darkgray">تعداد فروشگاه های منقضی شده شارژ حساب</div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="databox bg-white radius-bordered">
+            <div class="bg-warning databox-right">
+            </div>
+            <div class="databox-left">
+                <span class="databox-number warning">@((ViewBag.CountOfTodayRegisterUsers != null) ? ViewBag.CountOfTodayRegisterUsers : 0)</span>
+                <div class="databox-text darkgray">تعداد کاربران ثبت نام امروز</div>
+            </div>
+        </div>
     </div>
 
 </div>
+
+<div class="col-lg-6">
+    <div class="widget">
+        <div class="widget-header bordered-bottom bordered-info">
+            <i class="widget-icon fa fa-tags info"></i>
+            <span class="widget-caption info">لیست فروشندگانی که حسابشان امروز منقضی می شود </span>
+        </div><!--Widget Header-->
+        <div class="widget-body  no-padding" style="height: 400px !important;overflow-y: scroll;">
+            <div class="tickets-container">
+                <ul class="tickets-list">
+                    @if (disActiveToday != null && disActiveToday.Any())
+                    {
+                        @foreach (var date in disActiveToday)
+                        {
+                            <li class="ticket-item">
+                                <div class="row">
+                                    <div class="ticket-user col-lg-3 col-sm-12">
+                                        <span class="user-name">@date.MArket.User.Username</span>
+                                    </div>
+                                    <div class="ticket-time  col-lg-2 col-sm-6 col-xs-12">
+                                        <div class="divider hidden-md hidden-sm hidden-xs"></div>
+                                        <span class="time"> @date.MArket.MarketName</span>
+                                    </div>
+                                    <div class="ticket-time  col-lg-4 col-sm-6 col-xs-12">
+                                        <div class="divider hidden-md hidden-sm hidden-xs"></div>
+                                        <span class="time">@date.EndDate</span>
+                                    </div>
+                                    <a asp-action="ReservationDetail" asp-controller="Reservation" asp-area="UserPanel" asp-route-ReservationId="@date.Id">
+                                        <div class="ticket-state bg-green">
+                                            <i class="fa fa-info"></i>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <partial name="_AdminNotFoundPartial" />
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="col-lg-6">
+    <div class="widget">
+        <div class="widget-header bordered-bottom bordered-info">
+            <i class="widget-icon fa fa-tags info"></i>
+            <span class="widget-caption info">لیست فروشندگانی که از منقضی شدن حسابشان تا 3 روز گذشته است </span>
+        </div><!--Widget Header-->
+        <div class="widget-body  no-padding" style="height: 400px !important;overflow-y: scroll;">
+            <div class="tickets-container">
+                <ul class="tickets-list">
+                    @if (disActiveIn3DAy != null && disActiveIn3DAy.Any())
+                    {
+                        @foreach (var date in disActiveIn3DAy)
+                        {
+                            <li class="ticket-item">
+                                <div class="row">
+                                    <div class="ticket-user col-lg-3 col-sm-12">
+                                        <span class="user-name">@date.MArket.User.Username</span>
+                                    </div>
+                                    <div class="ticket-time  col-lg-2 col-sm-6 col-xs-12">
+                                        <div class="divider hidden-md hidden-sm hidden-xs"></div>
+                                        <span class="time"> @date.MArket.MarketName</span>
+                                    </div>
+                                    <div class="ticket-time  col-lg-4 col-sm-6 col-xs-12">
+                                        <div class="divider hidden-md hidden-sm hidden-xs"></div>
+                                        <span class="time">@date.EndDate</span>
+                                    </div>
+                                    <a asp-action="ReservationDetail" asp-controller="Reservation" asp-area="UserPanel" asp-route-ReservationId="@date.Id">
+                                        <div class="ticket-state bg-green">
+                                            <i class="fa fa-info"></i>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <partial name="_AdminNotFoundPartial" />
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+

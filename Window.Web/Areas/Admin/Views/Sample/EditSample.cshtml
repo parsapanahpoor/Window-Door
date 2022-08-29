@@ -34,17 +34,35 @@
                 <div class="widget-header bordered-bottom bordered-blue">
                     <span class="widget-caption"> @ViewData["Title"] </span>
                 </div>
-                <div class="widget-body" style="height: 312px !important;">
+                <div class="widget-body">
                     <div>
 
                         <div class="row">
-                            <div class="form-group col-md-12 col-sm-12">
-                                <label asp-for="SegmentName"></label>
-                                <input type="text" class="form-control" asp-for="SegmentName">
-                                <span class="text-danger" asp-validation-for="SegmentName"></span>
-                            </div>
-
-
+                                <div class="form-group col-md-12 col-sm-12">
+                                    <label asp-for="SegmentName"></label>
+                                    <input type="text" class="form-control" asp-for="SegmentName">
+                                    <span class="text-danger" asp-validation-for="SegmentName"></span>
+                                </div>
+                                <div class="form-group col-md-12 col-sm-12">
+                                    <label asp-for="MaxHeight">حداکثر ارتفاع</label>
+                                    <input type="text" class="form-control" asp-for="MaxHeight">
+                                    <span class="text-danger" asp-validation-for="MaxHeight"></span>
+                                </div>
+                                <div class="form-group col-md-12 col-sm-12">
+                                    <label asp-for="MinHeight">حداقل ارتفاع</label>
+                                    <input type="text" class="form-control" asp-for="MinHeight">
+                                    <span class="text-danger" asp-validation-for="MinHeight"></span>
+                                </div>
+                                <div class="form-group col-md-12 col-sm-12">
+                                    <label asp-for="MaxWidth">حداکثر عرض</label>
+                                    <input type="text" class="form-control" asp-for="MaxWidth">
+                                    <span class="text-danger" asp-validation-for="MaxWidth"></span>
+                                </div>
+                                <div class="form-group col-md-12 col-sm-12">
+                                    <label asp-for="MinWidth">حداقل عرض</label>
+                                    <input type="text" class="form-control" asp-for="MinWidth">
+                                    <span class="text-danger" asp-validation-for="MinWidth"></span>
+                                </div>
                         </div>
 
                         <hr class="margin-bottom-10 margin-top-10" />
