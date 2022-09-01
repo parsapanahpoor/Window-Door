@@ -17,11 +17,11 @@ namespace Window.Application.Services.Interfaces
         Task LogInquiryForUserPart1(FilterInquiryViewModel filter);
 
         //Log Inquiry For User In Step 2
-        Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height, string userMacAddress);
+        Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height, int? KatibeSize, string userMacAddress);
 
         Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress);
 
-        Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, ulong userId , ulong glassId);
+        Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, int? katibeSize, ulong userId , ulong glassId);
 
         Task<int?> InitializeSamplesPrice(List<Sample?> samples, User user, int height, int width);
 
@@ -36,6 +36,12 @@ namespace Window.Application.Services.Interfaces
 
         //Add Score For Seller
         Task<bool> AddScoreForSeller(int score, ulong sellerId, string userMacAddress);
+
+        //Get Count Of Inquiry In Cities
+        Task<int> GetCountOfInquiryInCities(string cityName);
+
+        //Get Count Of Inquiry In State 
+        Task<int> CountOfInquiryInState(string stateName);
 
         #endregion
     }

@@ -6,6 +6,7 @@ using Window.Application.Convertors;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
 using Window.Application.Services.Services;
+using Window.Domain.Entities.Glass;
 using Window.Domain.Enums.SellerType;
 using Window.Domain.Enums.Types;
 using Window.Domain.ViewModels.Site.Inquiry;
@@ -162,9 +163,9 @@ namespace Window.Web.Controllers
 
         #region Inquiry API Step 3
 
-        [HttpGet("get-step3/{sampleId}/{width}/{height}/{userMacAddress}")]
+        [HttpGet("get-step3/{sampleId}/{width}/{height}/{KatibeSize}/{userMacAddress}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Step3(ulong sampleId, int width, int height, string userMacAddress)
+        public async Task<IActionResult> Step3(ulong sampleId, int width, int height , int? KatibeSize , string userMacAddress)
         {
             #region Get Samples For Show In Page Model
 
@@ -200,7 +201,7 @@ namespace Window.Web.Controllers
 
             #region Add Log For User
 
-            var res = await _inquiryService.LogInquiryForUserPart2(sampleId, width, height, userMacAddress);
+            var res = await _inquiryService.LogInquiryForUserPart2(sampleId, width, height , KatibeSize, userMacAddress);
             if (!res) return NotFound();
 
             #endregion
@@ -262,24 +263,24 @@ namespace Window.Web.Controllers
 
             #endregion
 
-            #region Paginaition
+            //#region Paginaition
 
-            int take = 20;
+            //int take = 20;
 
-            int skip = (pageId - 1) * take;
+            //int skip = (pageId - 1) * take;
 
-            int pageCount = (model.Count() / take);
+            //int pageCount = (model.Count() / take);
 
-            if ((pageCount % 2) == 0 || (pageCount % 2) != 0)
-            {
-                pageCount += 1;
-            }
+            //if ((pageCount % 2) == 0 || (pageCount % 2) != 0)
+            //{
+            //    pageCount += 1;
+            //}
 
-            var query = model.Skip(skip).Take(take).ToList();
+            ////var query = model.Skip(skip).Take(take).ToList();
 
-            var viewModel = Tuple.Create(query, pageCount);
+            //var viewModel = Tuple.Create(query, pageCount);
 
-            #endregion
+            //#endregion
 
             return JsonResponseStatus.Success(model);
         }
@@ -292,9 +293,21 @@ namespace Window.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ShowSellerPersoanlInfo(int userId)
         {
+            #region Update Seller Activation Tariff
+
+            await _sellerService.UpdateSellerActivationTariff(Convert.ToUInt64(userId) , false , true);
+
+            #endregion
+
+            #region Log For Visit Seller Profile
+
+            await _sellerService.LogForSellerVisitProfile(Convert.ToUInt64(userId));
+
+            #endregion
+
             #region Fill Model 
 
-            var model = await _sellerService.FillListOfPersonalInfoViewModel(Convert.ToUInt64(userId));
+            var model = await _sellerService.FillListOfPersonalInfoForInquiryViewModel(Convert.ToUInt64(userId));
             if (model == null)
             {
                 JsonResponseStatus.Error();
@@ -309,18 +322,6 @@ namespace Window.Web.Controllers
             //}
 
             #endregion
-
-            #endregion
-
-            #region Update Seller Activation Tariff
-
-            await _sellerService.UpdateSellerActivationTariff(Convert.ToUInt64(userId));
-
-            #endregion
-
-            #region Log For Visit Seller Profile
-
-            await _sellerService.LogForSellerVisitProfile(Convert.ToUInt64(userId));
 
             #endregion
 
@@ -380,6 +381,40 @@ namespace Window.Web.Controllers
             var glasses = await _productService.GetListOfGlasses();
 
             return JsonResponseStatus.Success(glasses);
+        }
+
+        #endregion
+
+        #region Count Of Inquiry In Cities
+
+        [HttpGet("get-countOfInquiryInCities/{cityName}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CountOfInquiryInCities(string? cityName)
+        {
+            #region Get Model 
+
+            var model = await _inquiryService.GetCountOfInquiryInCities(cityName);
+
+            #endregion
+
+            return JsonResponseStatus.Success(model);
+        }
+
+        #endregion 
+        
+        #region Count Of Inquiry In Cities
+
+        [HttpGet("get-countOfInquiryInState/{stateName}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CountOfInquiryInState(string stateName)
+        {
+            #region Get Model 
+
+            var model = await _inquiryService.CountOfInquiryInState(stateName);
+
+            #endregion
+
+            return JsonResponseStatus.Success(model);
         }
 
         #endregion

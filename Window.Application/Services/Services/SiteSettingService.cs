@@ -59,6 +59,8 @@ namespace Window.Application.Services.Services
             if (site != null)
             {
                 site.AlertForSellerForSeenProfile = siteSetting.AlertForSellerForSeenProfile;
+                site.ChargeTariffAboutSellerDetail = siteSetting.ChargeTariffAboutSellerDetail;
+                site.ChargeTariffAboutListOfInquiry = siteSetting.ChargeTariffAboutListOfInquiry;
 
                 _context.SiteSettings.Update(site);
                 await _context.SaveChangesAsync();

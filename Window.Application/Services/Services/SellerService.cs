@@ -22,6 +22,7 @@ using Window.Domain.Interfaces;
 using Window.Domain.ViewModels.Admin.Log;
 using Window.Domain.ViewModels.Admin.PersonalInfo;
 using Window.Domain.ViewModels.Seller.PersonalInfo;
+using Window.Domain.ViewModels.Site.Inquiry;
 
 namespace Window.Application.Services.Services
 {
@@ -783,6 +784,61 @@ namespace Window.Application.Services.Services
             return model;
         }
 
+        public async Task<ListOfPersonalInfoForInquiryViewModel> FillListOfPersonalInfoForInquiryViewModel(ulong userId)
+        {
+            #region Validation User
+
+            var user = await _context.Users.FirstOrDefaultAsync(p => p.Id == userId && !p.IsDelete);
+            if (user == null) return null;
+
+            var sellerPersonalInfo = await _context.MarketPersonalInfo.Include(p => p.Market).FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState != MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller);
+            if (sellerPersonalInfo == null) return null;
+
+            var sellerLinks = await _context.MarketLinks.Where(p => p.UserId == userId && !p.IsDelete).ToListAsync();
+            if (sellerLinks == null) return null;
+
+            var sellerWorkSamples = await _context.MarketWorkSamle.Where(p => p.UserId == userId && !p.IsDelete).ToListAsync();
+            if (sellerWorkSamples == null) return null;
+
+            #endregion
+
+            #region Fill View Model 
+
+            ListOfPersonalInfoForInquiryViewModel model = new ListOfPersonalInfoForInquiryViewModel
+            {
+                CompanyLogo = sellerPersonalInfo.CompanyLogo,
+                CompanyName = sellerPersonalInfo.CompanyName,
+                PeriodTimesOfWork = sellerPersonalInfo.PeriodTimesOfWork,
+                PhotoOfBusinessLicense = sellerPersonalInfo.PhotoOfBusinessLicense,
+                PhotoOfNationalCode = sellerPersonalInfo.PhotoOfNationalCode,
+                Resume = sellerPersonalInfo.Resume,
+                WorkAddress = sellerPersonalInfo.WorkAddress,
+            };
+
+            model.MarketWorkSamples = await _context.MarketWorkSamle.Where(p => !p.IsDelete && p.UserId == userId)
+                                        .Select(p => new AddSellerWorkSampleViewModel
+                                        {
+                                            UserId = userId,
+                                            Id = p.Id,
+                                            WorkSampleImage = p.WorkSampleImage,
+                                            WorkSampleTitle = p.WorkSampleTitle
+                                        }).ToListAsync();
+
+            model.MarketLinks = await _context.MarketLinks.Where(p => !p.IsDelete && p.UserId == userId)
+                                       .Select(p => new AddSellerLinksViewModel
+                                       {
+                                           UserId = userId,
+                                           Id = p.Id,
+                                           LinkTitle = p.LinkTitle,
+                                           LinkValue = p.LinkValue
+                                       }).ToListAsync();
+
+            #endregion
+
+            return model;
+        }
+
+
         public async Task<bool> AddSellerWorkSampleInModal(AddSellerWorkSampleViewModel workSample)
         {
             #region Data Validations 
@@ -1208,8 +1264,10 @@ namespace Window.Application.Services.Services
         #region Site Side 
 
         //Update Seller Activation Tariff After Seen Seller Profile By User 
-        public async Task UpdateSellerActivationTariff(ulong userId)
+        public async Task UpdateSellerActivationTariff(ulong userId , bool listOfInquiry , bool sellerDetail)
         {
+            var tariffValue = 0;
+
             #region Get Market By Seller Id 
 
             var market = await _context.Market.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
@@ -1218,7 +1276,25 @@ namespace Window.Application.Services.Services
 
             #region Update Activation Tariff
 
-            market.ActivationTariff = market.ActivationTariff + 10;
+            if (listOfInquiry == true)
+            {
+                var listOfInquiryTariff = await _context.SiteSettings.FirstOrDefaultAsync(p => !p.IsDelete);
+                if (listOfInquiryTariff != null)
+                {
+                    tariffValue = listOfInquiryTariff.ChargeTariffAboutListOfInquiry;
+                }
+            }
+
+            if (sellerDetail == true)
+            {
+                var sellerDetailTariff = await _context.SiteSettings.FirstOrDefaultAsync(p => !p.IsDelete);
+                if (sellerDetailTariff != null)
+                {
+                    tariffValue = sellerDetailTariff.ChargeTariffAboutSellerDetail;
+                }
+            }
+
+            market.ActivationTariff = market.ActivationTariff + tariffValue;
 
             _context.Market.Update(market);
             await _context.SaveChangesAsync();

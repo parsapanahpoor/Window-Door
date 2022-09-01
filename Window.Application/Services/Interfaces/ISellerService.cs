@@ -8,6 +8,7 @@ using Window.Domain.Entities.Market;
 using Window.Domain.ViewModels.Admin.Log;
 using Window.Domain.ViewModels.Admin.PersonalInfo;
 using Window.Domain.ViewModels.Seller.PersonalInfo;
+using Window.Domain.ViewModels.Site.Inquiry;
 
 namespace Window.Application.Services.Interfaces
 {
@@ -69,6 +70,8 @@ namespace Window.Application.Services.Interfaces
 
         Task<ListOfSellersInfoViewModel> FilterPersonalInfo(ListOfSellersInfoViewModel filter);
 
+        Task<ListOfPersonalInfoForInquiryViewModel> FillListOfPersonalInfoForInquiryViewModel(ulong userId);
+
         Task<bool> CheckUserCharge(ulong UserId);
 
         #endregion
@@ -86,7 +89,7 @@ namespace Window.Application.Services.Interfaces
         Task<FilterLogVisitSellerProfileViewModel> FilterLogVisitSellerProfile(FilterLogVisitSellerProfileViewModel filter);
 
         //Update Seller Activation Tariff After Seen Seller Profile By User 
-        Task UpdateSellerActivationTariff(ulong userId);
+        Task UpdateSellerActivationTariff(ulong userId, bool listOfInquiry, bool sellerDetail);
 
         Task LogForSellerVisitProfile(ulong userId);
 

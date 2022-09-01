@@ -13,6 +13,10 @@ namespace Window.Domain.Entities.SiteSetting
 
         public string AlertForSellerForSeenProfile { get; set; }
 
+        public int ChargeTariffAboutListOfInquiry { get; set; }
+
+        public int ChargeTariffAboutSellerDetail { get; set; }
+
         #endregion
     }
 }

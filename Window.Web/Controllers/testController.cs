@@ -140,7 +140,7 @@ namespace Window.Web.Controllers
         }
 
         [HttpPost , ValidateAntiForgeryToken]
-        public async Task<IActionResult> InquiryStep3(ulong sampleId , int width , int height , string userMacAddress)
+        public async Task<IActionResult> InquiryStep3(ulong sampleId , int width , int height , int? katibeSize , string userMacAddress)
         {
             #region Get Samples For Show In Page Model
 
@@ -187,7 +187,7 @@ namespace Window.Web.Controllers
 
             #region Add Log For User
 
-            var res = await _inquiryService.LogInquiryForUserPart2(sampleId , width , height , userMacAddress);
+            var res = await _inquiryService.LogInquiryForUserPart2(sampleId , width , height , katibeSize, userMacAddress);
             if (!res) return NotFound();
 
             #endregion
@@ -303,7 +303,7 @@ namespace Window.Web.Controllers
 
             #region Update Seller Activation Tariff
 
-            await _sellerService.UpdateSellerActivationTariff(userId);
+            await _sellerService.UpdateSellerActivationTariff(userId , false , true);
 
             #endregion
 

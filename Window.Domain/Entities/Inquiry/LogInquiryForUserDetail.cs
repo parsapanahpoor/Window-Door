@@ -20,6 +20,8 @@ namespace Window.Domain.Entities.Inquiry
 
         public int? Height { get; set; }
 
+        public int? KatibeSize { get; set; }
+
         #endregion
 
         #region relations 
