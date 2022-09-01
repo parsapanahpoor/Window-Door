@@ -53,6 +53,8 @@ namespace Window.Web.Areas.Admin.Controllers
 
             ViewBag.ListOfMArketsThatDisActiveIn3Day = await _adminDashboardService.GetListOfMarketsThatDisActiveIn3Day();
 
+            ViewBag.ListOfMArketsThatDisActiveIn15Day = await _adminDashboardService.GetListOfMarketsThatDisActiveIn15Day();
+
             return View();
         }
 

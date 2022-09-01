@@ -600,7 +600,7 @@ namespace Window.Application.Services.Services
 
         public async Task<List<Glass>> GetListOfGlasses()
         {
-            return await _context.Glasses.Where(p => p.IsDelete).ToListAsync();
+            return await _context.Glasses.Where(p => !p.IsDelete).ToListAsync();
         }
 
         #endregion

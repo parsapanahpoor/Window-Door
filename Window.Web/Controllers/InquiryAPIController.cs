@@ -178,6 +178,24 @@ namespace Window.Web.Controllers
             var sample = await _sampleService.GetSampleBySampleId(sampleId);
             if (sample == null) return NotFound();
 
+
+            if (sample.MaxHeight < height)
+            {
+                return JsonResponseStatus.Error();
+            }
+            if (sample.MinHeight > height)
+            {
+                return JsonResponseStatus.Error();
+            }
+            if (sample.MaxWidth < width)
+            {
+                return JsonResponseStatus.Error();
+            }
+            if (sample.MinWidth > width)
+            {
+                return JsonResponseStatus.Error();
+            }
+
             #endregion
 
             #region Add Log For User

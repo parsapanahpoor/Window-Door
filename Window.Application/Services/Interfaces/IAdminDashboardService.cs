@@ -20,5 +20,7 @@ namespace Window.Application.Services.Interfaces
         Task<List<MarketChargeInfo>?> GetListOfMarketsThatDisActiveToday();
 
         Task<List<MarketChargeInfo>?> GetListOfMarketsThatDisActiveIn3Day();
+
+        Task<List<MarketChargeInfo>?> GetListOfMarketsThatDisActiveIn15Day();
     }
 }

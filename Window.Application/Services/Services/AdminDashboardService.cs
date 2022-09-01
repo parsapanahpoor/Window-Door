@@ -60,6 +60,13 @@ namespace Window.Application.Services.Services
                                       && (DateTime.Now.DayOfYear - p.EndDate.DayOfYear <= 3) && (DateTime.Now.DayOfYear - p.EndDate.DayOfYear >= 1)).ToListAsync();
         }
 
+        public async Task<List<MarketChargeInfo>?> GetListOfMarketsThatDisActiveIn15Day()
+        {
+            return await _context.MarketChargeInfo.Include(p => p.MArket).ThenInclude(p => p.User)
+                               .Where(p => !p.IsDelete && p.CurrentAccountCharge && p.EndDate.Year == DateTime.Now.Year
+                                      && (DateTime.Now.DayOfYear - p.EndDate.DayOfYear <= 15) && (DateTime.Now.DayOfYear - p.EndDate.DayOfYear >= 4)).ToListAsync();
+        }
+
         #endregion
     }
 }

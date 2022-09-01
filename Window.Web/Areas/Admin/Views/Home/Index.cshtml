@@ -5,6 +5,7 @@
 @{
     var disActiveToday = ViewBag.ListOfMArketsThatDisActiveToday as List<Window.Domain.Entities.Market.MarketChargeInfo>;
     var disActiveIn3DAy = ViewBag.ListOfMArketsThatDisActiveIn3Day as List<Window.Domain.Entities.Market.MarketChargeInfo>;
+    var disActiveIn15DAy = ViewBag.ListOfMArketsThatDisActiveIn15Day as List<Window.Domain.Entities.Market.MarketChargeInfo>;
 }
 
 @section breadcrumb {
@@ -207,3 +208,49 @@
 
 </div>
 
+<div class="col-lg-6">
+    <div class="widget">
+        <div class="widget-header bordered-bottom bordered-info">
+            <i class="widget-icon fa fa-tags info"></i>
+            <span class="widget-caption info">لیست فروشندگانی که از منقضی شدن حسابشان از تا 15 روز به طول می انجامد </span>
+        </div><!--Widget Header-->
+        <div class="widget-body  no-padding" style="height: 400px !important;overflow-y: scroll;">
+            <div class="tickets-container">
+                <ul class="tickets-list">
+                    @if (disActiveIn15DAy != null && disActiveIn15DAy.Any())
+                    {
+                        @foreach (var date in disActiveIn15DAy)
+                        {
+                            <li class="ticket-item">
+                                <div class="row">
+                                    <div class="ticket-user col-lg-3 col-sm-12">
+                                        <span class="user-name">@date.MArket.User.Username</span>
+                                    </div>
+                                    <div class="ticket-time  col-lg-2 col-sm-6 col-xs-12">
+                                        <div class="divider hidden-md hidden-sm hidden-xs"></div>
+                                        <span class="time"> @date.MArket.MarketName</span>
+                                    </div>
+                                    <div class="ticket-time  col-lg-4 col-sm-6 col-xs-12">
+                                        <div class="divider hidden-md hidden-sm hidden-xs"></div>
+                                        <span class="time">@date.EndDate</span>
+                                    </div>
+                                    <a asp-action="ReservationDetail" asp-controller="Reservation" asp-area="UserPanel" asp-route-ReservationId="@date.Id">
+                                        <div class="ticket-state bg-green">
+                                            <i class="fa fa-info"></i>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <partial name="_AdminNotFoundPartial" />
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
