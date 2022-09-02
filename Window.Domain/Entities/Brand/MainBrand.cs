@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Common;
+using Window.Domain.Entities.Log;
 using Window.Domain.Entities.Product;
 using Window.Domain.Enums.SellerType;
 
@@ -33,6 +34,7 @@ namespace Window.Domain.Entities.Brand
 
         public ICollection<ProductMainBrandPrice> ProductMainBrandPrice { get; set; }
         public ICollection<Product.Product> Products { get; set; }
+        public ICollection<LogForBrands> LogForBrands { get; set; }
 
         #endregion
     }

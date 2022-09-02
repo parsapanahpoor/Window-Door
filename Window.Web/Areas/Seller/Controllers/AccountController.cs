@@ -6,10 +6,9 @@ using Microsoft.Extensions.Localization;
 using Window.Web.Areas.Seller.Controllers;
 using Window.Application.Security;
 
-namespace Window.Web.Areas.Admin.Controllers;
+namespace Window.Web.Areas.Seller.Controllers;
 
-[PermissionChecker("ManageUsers")]
-public class AccountController : AdminBaseController
+public class AccountController : SellerBaseController
 {
     #region ctor
 

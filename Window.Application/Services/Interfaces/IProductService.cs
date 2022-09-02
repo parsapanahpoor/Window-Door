@@ -56,7 +56,7 @@ namespace Window.Application.Services.Interfaces
 
         Task<List<SegmentPricing>?> FillSegmentPricing(ulong productId, ulong userId);
 
-        Task<GlassPricingViewModel?> FillGlassPricingEntityViewModel();
+        Task<GlassPricingViewModel?> FillGlassPricingEntityViewModel(ulong userId);
 
         Task<List<GlassPricing>?> FillGlassPricing(ulong userId);
 

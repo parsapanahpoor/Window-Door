@@ -28,9 +28,9 @@ namespace Window.Domain.Entities.Market
 
         public MarketPersonalInfo MarketPersonalInfo { get; set; }
 
-        public MarketLinks MarketLinks { get; set; }
+        public List<MarketLinks> MarketLinks { get; set; }
 
-        public MarketWorkSamle MarketWorkSamle { get; set; }
+        public List<MarketWorkSamle> MarketWorkSamle { get; set; }
 
         public ICollection<MarketUsers> MarketUsers { get; set; }
 

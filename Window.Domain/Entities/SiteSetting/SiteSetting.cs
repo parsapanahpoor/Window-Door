@@ -17,6 +17,12 @@ namespace Window.Domain.Entities.SiteSetting
 
         public int ChargeTariffAboutSellerDetail { get; set; }
 
+        public string SMSForDisActiveFromToday { get; set; }
+
+        public string SMSForDisActiveFrom3Day { get; set; }
+
+        public string SMSForDisActiveFrom15Day { get; set; }
+
         #endregion
     }
 }

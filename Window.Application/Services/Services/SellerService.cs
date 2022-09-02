@@ -699,6 +699,47 @@ namespace Window.Application.Services.Services
             return true;
         }
 
+        public async Task<bool> SendSMSForDisActiveUsers(ulong marketId , bool threetoday, bool day, bool fifteenday)
+        {
+            #region Validation Market
+
+            var market = await _context.Market.Include(p=> p.User).FirstOrDefaultAsync(p=> !p.IsDelete && p.Id == marketId);
+            if (market == null) return false;
+
+            #endregion
+
+            #region Get Allet Text Message
+
+            var text = await _context.SiteSettings.FirstOrDefaultAsync();
+            if (text != null)
+            {
+
+                if (threetoday == true)
+                {
+                    var message = text.SMSForDisActiveFrom3Day;
+                    await _smsService.SendSimpleSMS(market.User.Mobile, message);
+                }
+
+                if (day == true)
+                {
+                    var message = text.SMSForDisActiveFromToday;
+                    await _smsService.SendSimpleSMS(market.User.Mobile, message);
+                }
+
+                if (fifteenday == true)
+                {
+                    var message = text.SMSForDisActiveFrom15Day;
+                    await _smsService.SendSimpleSMS(market.User.Mobile, message);
+                }
+
+            }
+
+            #endregion
+
+            return true;
+        }
+
+
         public async Task LogForSellerVisitProfile(ulong userId)
         {
             #region Fill Model

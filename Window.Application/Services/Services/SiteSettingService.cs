@@ -61,6 +61,9 @@ namespace Window.Application.Services.Services
                 site.AlertForSellerForSeenProfile = siteSetting.AlertForSellerForSeenProfile;
                 site.ChargeTariffAboutSellerDetail = siteSetting.ChargeTariffAboutSellerDetail;
                 site.ChargeTariffAboutListOfInquiry = siteSetting.ChargeTariffAboutListOfInquiry;
+                site.SMSForDisActiveFromToday = siteSetting.SMSForDisActiveFromToday;
+                site.SMSForDisActiveFrom3Day = siteSetting.SMSForDisActiveFrom3Day;
+                site.SMSForDisActiveFrom15Day = siteSetting.SMSForDisActiveFrom15Day;
 
                 _context.SiteSettings.Update(site);
                 await _context.SaveChangesAsync();

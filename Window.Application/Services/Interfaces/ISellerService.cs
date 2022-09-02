@@ -82,6 +82,8 @@ namespace Window.Application.Services.Interfaces
 
         Task<bool> ChangeMarketStateFromAdminPanel(ListOfPersonalInfoViewModel model, ulong marketId);
 
+        Task<bool> SendSMSForDisActiveUsers(ulong marketId, bool threetoday, bool day, bool fifteenday);
+
         #endregion
 
         #region Site Side

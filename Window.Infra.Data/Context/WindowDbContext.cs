@@ -141,6 +141,8 @@ namespace Window.Data.Context
 
         public DbSet<LogForVisitSellerProfile> LogForVisitSellerProfiles { get; set; }
 
+        public DbSet<LogForBrands> LogForBrands { get; set; }
+
         #endregion
 
         #region Site Setting

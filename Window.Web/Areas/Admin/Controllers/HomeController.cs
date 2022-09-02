@@ -1,11 +1,9 @@
-﻿using Window.Application.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
+using Window.Application.Interfaces;
 using Window.Application.Security;
+using Window.Application.Services.Interfaces;
 using Window.Domain.ViewModels.User;
 using Window.Web.HttpManager;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc;
-using Window.Application.Services.Interfaces;
 
 namespace Window.Web.Areas.Admin.Controllers
 {
@@ -20,14 +18,17 @@ namespace Window.Web.Areas.Admin.Controllers
 
         private readonly IStateService _stateService;
 
+        private readonly ISellerService _sellerService;
+
         private readonly IAdminDashboardService _adminDashboardService;
 
-        public HomeController(IConfiguration configuration, IUserService userService, IStateService stateService, IAdminDashboardService adminDashboardService)
+        public HomeController(IConfiguration configuration, IUserService userService, IStateService stateService, IAdminDashboardService adminDashboardService , ISellerService sellerService)
         {
             _configuration = configuration;
             _userService = userService;
             _stateService = stateService;
             _adminDashboardService = adminDashboardService;
+            _sellerService = sellerService;
         }
 
         #endregion
@@ -82,6 +83,23 @@ namespace Window.Web.Areas.Admin.Controllers
             var result = await _stateService.GetStateChildren(stateId);
 
             return JsonResponseStatus.Success(result);
+        }
+
+        #endregion
+
+        #region Send SMS For DisActiveUsers
+
+        public async Task<IActionResult> SendSMSForDisActiveUsers(ulong marketId , bool threetoday , bool day , bool fifteenday)
+        {
+            var res = await _sellerService.SendSMSForDisActiveUsers(marketId , threetoday , day , fifteenday);
+
+            if (res)
+            {
+                TempData["success"] = "عملیات باموفقیت انجام شده است";
+                return RedirectToAction("Index" , "Home" , new { area = "Admin"});
+            }
+
+            return NotFound();
         }
 
         #endregion

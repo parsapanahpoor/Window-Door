@@ -148,6 +148,7 @@
                         <div class="form-group">
                             <label asp-for="MainBrandId">برند</label>
                             <select asp-for="MainBrandId" class="form-control">
+                                <option value="@null">لطفا یک برند را انتخاب کنید</option>
                                 @if (brand != null && brand.Any())
                                 {
                                     foreach (var brands in brand)

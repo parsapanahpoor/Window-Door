@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Window.Data.Context;
 
@@ -11,9 +12,10 @@ using Window.Data.Context;
 namespace Window.Infra.Data.Migrations
 {
     [DbContext(typeof(WindowDbContext))]
-    partial class WindowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220901093300_Update-SiteSetting2")]
+    partial class UpdateSiteSetting2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +54,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 1m,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(7999),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2339),
                             IsDelete = false,
                             RoleUniqueName = "Admin",
                             Title = "Admin"
@@ -60,7 +62,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 2m,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8024),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2367),
                             IsDelete = false,
                             RoleUniqueName = "Support",
                             Title = "Support"
@@ -68,7 +70,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 3m,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8036),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2378),
                             IsDelete = false,
                             RoleUniqueName = "Seller",
                             Title = "Seller"
@@ -76,7 +78,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 4m,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8047),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2388),
                             IsDelete = false,
                             RoleUniqueName = "SellerMaster",
                             Title = "SellerMaster"
@@ -528,30 +530,6 @@ namespace Window.Infra.Data.Migrations
                     b.ToTable("States");
                 });
 
-            modelBuilder.Entity("Window.Domain.Entities.Log.LogForBrands", b =>
-                {
-                    b.Property<decimal>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(20,0)");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("MainBrandId")
-                        .HasColumnType("decimal(20,0)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MainBrandId");
-
-                    b.ToTable("LogForBrands");
-                });
-
             modelBuilder.Entity("Window.Domain.Entities.Log.LogForVisitSellerProfile", b =>
                 {
                     b.Property<decimal>("Id")
@@ -687,7 +665,8 @@ namespace Window.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MarketId");
+                    b.HasIndex("MarketId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -844,7 +823,8 @@ namespace Window.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MarketId");
+                    b.HasIndex("MarketId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -1033,7 +1013,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 1m,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8064),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2405),
                             IsDelete = false,
                             Name = "کشویی",
                             ProductType = 0
@@ -1041,7 +1021,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 2m,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8078),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2418),
                             IsDelete = false,
                             Name = "کتیبه",
                             ProductType = 0
@@ -1049,7 +1029,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 3m,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8089),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2429),
                             IsDelete = false,
                             Name = "کتیبه",
                             ProductType = 1
@@ -1057,7 +1037,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 4m,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8100),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2439),
                             IsDelete = false,
                             Name = "درب",
                             ProductType = 1
@@ -1065,7 +1045,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 5m,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8110),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2450),
                             IsDelete = false,
                             Name = "لولایی",
                             ProductType = 1
@@ -1305,7 +1285,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 1m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8127),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2486),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1318,7 +1298,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 2m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8142),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2519),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1331,7 +1311,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 3m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8152),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2530),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1344,7 +1324,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 4m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8163),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2539),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1357,7 +1337,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 5m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8173),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2549),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1370,7 +1350,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 6m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8185),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2559),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1383,7 +1363,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 7m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8195),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2569),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1396,7 +1376,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 8m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8206),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2579),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1409,7 +1389,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 10m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8216),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2588),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1422,7 +1402,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 11m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8229),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2599),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1435,7 +1415,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 12m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8239),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2608),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1448,7 +1428,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 13m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8250),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2618),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1461,7 +1441,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 14m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8260),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2627),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1474,7 +1454,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 15m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8270),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2637),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1487,7 +1467,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 16m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8286),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2647),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1500,7 +1480,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 17m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8298),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2656),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1513,7 +1493,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 18m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8308),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2665),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1526,7 +1506,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 19m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8320),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2676),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1539,7 +1519,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 20m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8330),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2685),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1552,7 +1532,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 21m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8341),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2695),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1565,7 +1545,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 22m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8351),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2704),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1578,7 +1558,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 23m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8362),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2714),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1591,7 +1571,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 24m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8372),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2723),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1604,7 +1584,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 25m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8383),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2733),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1617,7 +1597,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 26m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8394),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2742),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1630,7 +1610,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 27m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8404),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2751),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1643,7 +1623,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 28m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8415),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2760),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1656,7 +1636,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 29m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8427),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2776),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1669,7 +1649,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 30m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8438),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2786),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1682,7 +1662,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 31m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8448),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2795),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1695,7 +1675,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 32m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8459),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2804),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1708,7 +1688,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 33m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8470),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2814),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -1721,7 +1701,7 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 34m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 3, 4, 13, 28, 974, DateTimeKind.Local).AddTicks(8480),
+                            CreateDate = new DateTime(2022, 9, 1, 14, 2, 59, 816, DateTimeKind.Local).AddTicks(2823),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
@@ -2022,17 +2002,6 @@ namespace Window.Infra.Data.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("Window.Domain.Entities.Log.LogForBrands", b =>
-                {
-                    b.HasOne("Window.Domain.Entities.Brand.MainBrand", "MainBrand")
-                        .WithMany("LogForBrands")
-                        .HasForeignKey("MainBrandId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("MainBrand");
-                });
-
             modelBuilder.Entity("Window.Domain.Entities.Log.LogForVisitSellerProfile", b =>
                 {
                     b.HasOne("Window.Domain.Entities.Account.User", "User")
@@ -2081,8 +2050,8 @@ namespace Window.Infra.Data.Migrations
             modelBuilder.Entity("Window.Domain.Entities.Market.MarketLinks", b =>
                 {
                     b.HasOne("Window.Domain.Entities.Market.Market", "Market")
-                        .WithMany("MarketLinks")
-                        .HasForeignKey("MarketId")
+                        .WithOne("MarketLinks")
+                        .HasForeignKey("Window.Domain.Entities.Market.MarketLinks", "MarketId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -2164,8 +2133,8 @@ namespace Window.Infra.Data.Migrations
             modelBuilder.Entity("Window.Domain.Entities.Market.MarketWorkSamle", b =>
                 {
                     b.HasOne("Window.Domain.Entities.Market.Market", "Market")
-                        .WithMany("MarketWorkSamle")
-                        .HasForeignKey("MarketId")
+                        .WithOne("MarketWorkSamle")
+                        .HasForeignKey("Window.Domain.Entities.Market.MarketWorkSamle", "MarketId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -2393,8 +2362,6 @@ namespace Window.Infra.Data.Migrations
 
             modelBuilder.Entity("Window.Domain.Entities.Brand.MainBrand", b =>
                 {
-                    b.Navigation("LogForBrands");
-
                     b.Navigation("ProductMainBrandPrice");
 
                     b.Navigation("Products");
@@ -2435,14 +2402,16 @@ namespace Window.Infra.Data.Migrations
                 {
                     b.Navigation("MarketChargeInfos");
 
-                    b.Navigation("MarketLinks");
+                    b.Navigation("MarketLinks")
+                        .IsRequired();
 
                     b.Navigation("MarketPersonalInfo")
                         .IsRequired();
 
                     b.Navigation("MarketUsers");
 
-                    b.Navigation("MarketWorkSamle");
+                    b.Navigation("MarketWorkSamle")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Window.Domain.Entities.Product.Product", b =>

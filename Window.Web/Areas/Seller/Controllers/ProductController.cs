@@ -141,7 +141,7 @@ namespace Window.Web.Areas.Seller.Controllers
         {
             #region Fill View Model
 
-            var model = await _productService.FillGlassPricingEntityViewModel();
+            var model = await _productService.FillGlassPricingEntityViewModel(User.GetUserId());
             if (model == null) return NotFound();
 
             #endregion
@@ -160,7 +160,7 @@ namespace Window.Web.Areas.Seller.Controllers
         {
             #region Fill View Model
 
-            var model = await _productService.FillGlassPricingEntityViewModel();
+            var model = await _productService.FillGlassPricingEntityViewModel(User.GetUserId());
             if (model == null) return NotFound();
 
             #endregion

@@ -1,13 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Window.Application.Services.Interfaces;
 using Window.Data.Context;
 using Window.Domain.Entities.Account;
+using Window.Domain.Entities.Brand;
 using Window.Domain.Entities.Inquiry;
+using Window.Domain.Entities.Log;
 using Window.Domain.Entities.MarketInfo;
 using Window.Domain.Entities.Sample;
 using Window.Domain.ViewModels.Site.Inquiry;
@@ -22,7 +25,7 @@ namespace Window.Application.Services.Services
 
         private readonly ISellerService _sellerService;
 
-        public InquryService(WindowDbContext context , ISellerService sellerService)
+        public InquryService(WindowDbContext context, ISellerService sellerService)
         {
             _context = context;
             _sellerService = sellerService;
@@ -98,7 +101,7 @@ namespace Window.Application.Services.Services
         }
 
         //Log Inquiry For User In Step 2
-        public async Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height , int? KatibeSize, string userMacAddress)
+        public async Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height, int? KatibeSize, string userMacAddress)
         {
             #region Get User Log By User Mac Address
 
@@ -197,7 +200,7 @@ namespace Window.Application.Services.Services
             #endregion
         }
 
-        public async Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width , int? katibeSize, ulong userId , ulong glassId)
+        public async Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, int? katibeSize, ulong userId, ulong glassId)
         {
             #region return Model 
 
@@ -208,7 +211,7 @@ namespace Window.Application.Services.Services
             #region Get User Segments Price 
 
             var userSegments = await _context.SegmentPricings.Include(p => p.Product).Where(p => !p.IsDelete && p.Product.UserId == userId && p.Product.MainBrandId == brandId).ToListAsync();
-            if (userSegments == null) return null;
+            if (userSegments == null || !userSegments.Any()) return null;
 
             #endregion
 
@@ -978,7 +981,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 12) != null)
                 {
                     //لنگه ی درب
-                    totalPrice = totalPrice +  (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -1704,7 +1707,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 31) != null)
                 {
                     // اینترلاک
-                    totalPrice = totalPrice + ((2 * (height - katibeSize.Value))) * ( (userSegments.FirstOrDefault(p => p.SegmentId == 31).Price));
+                    totalPrice = totalPrice + ((2 * (height - katibeSize.Value))) * ((userSegments.FirstOrDefault(p => p.SegmentId == 31).Price));
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 27) != null)
@@ -1716,7 +1719,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 32) != null)
                 {
                     // فریم لولایی
-                    totalPrice = totalPrice + (2 * (katibeSize.Value + width)) *  (userSegments.FirstOrDefault(p => p.SegmentId == 32).Price);
+                    totalPrice = totalPrice + (2 * (katibeSize.Value + width)) * (userSegments.FirstOrDefault(p => p.SegmentId == 32).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -1736,10 +1739,219 @@ namespace Window.Application.Services.Services
                     //قیمت شیشه
                     totalPrice = totalPrice + (glassPricing.Price * (width * height));
                 }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 28) != null)
+                {
+                    //قیمت یراق کشویی
+                    totalPrice = totalPrice + ((userSegments.FirstOrDefault(p => p.SegmentId == 30)).Price);
+                }
             }
 
             #endregion
 
+            #region  قیمت گذاری پنجره ھای کشویی کتیبھ دار آلومینیومی سه لنگه       
+
+            if (sample.Id == 32)
+            {
+                if (katibeSize == null)
+                {
+                    return null;
+                }
+
+                //Get Sample Segments
+                var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
+                {
+                    //قیمت فریم
+                    totalPrice = totalPrice + (2 * (width + (height - katibeSize.Value))) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 19) != null)
+                {
+                    // لنگه کشویی
+                    totalPrice = totalPrice + ((2 * width) + (6 * (height - katibeSize.Value))) * (userSegments.FirstOrDefault(p => p.SegmentId == 19).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 30) != null)
+                {
+                    // لاستیک فشاري
+                    totalPrice = totalPrice + ((2 * width) + (6 * (height - katibeSize.Value))) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 30).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 21) != null)
+                {
+                    // نوار مویی
+                    totalPrice = totalPrice + ((2 * width) + (6 * (height - katibeSize.Value))) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 21).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 31) != null)
+                {
+                    // اینترلاک
+                    totalPrice = totalPrice + ((4 * (height - katibeSize.Value))) * ((userSegments.FirstOrDefault(p => p.SegmentId == 31).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 27) != null)
+                {
+                    // ریل کشویی
+                    totalPrice = totalPrice + (width) * ((userSegments.FirstOrDefault(p => p.SegmentId == 27).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 32) != null)
+                {
+                    // فریم لولایی
+                    totalPrice = totalPrice + (2 * (katibeSize.Value + width)) * (userSegments.FirstOrDefault(p => p.SegmentId == 32).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
+                {
+                    // قیمت زهوار دوجدار
+                    totalPrice = totalPrice + (2 * (katibeSize.Value + width)) * (userSegments.FirstOrDefault(p => p.SegmentId == 2).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 30) != null)
+                {
+                    // لاستیک فشاري
+                    totalPrice = totalPrice + (2 * (katibeSize.Value + width)) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 30)).Price);
+                }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 28) != null)
+                {
+                    //قیمت یراق کشویی
+                    totalPrice = totalPrice + (2 * ((userSegments.FirstOrDefault(p => p.SegmentId == 30)).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 33) != null)
+                {
+                    //قیمت وادار لولایی
+                    totalPrice = totalPrice + (katibeSize.Value * ((userSegments.FirstOrDefault(p => p.SegmentId == 33)).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
+                {
+                    //قیمت زهوار دوجداره
+                    totalPrice = totalPrice + (katibeSize.Value * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 2)).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 30) != null)
+                {
+                    // لاستیک فشاري
+                    totalPrice = totalPrice + (katibeSize.Value * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 30)).Price));
+                }
+            }
+
+            #endregion
+
+            #region  قیمت گذاری پنجره ھای کشویی کتیبھ دار آلومینیومی چهار لنگه       
+
+            if (sample.Id == 33)
+            {
+                if (katibeSize == null)
+                {
+                    return null;
+                }
+
+                //Get Sample Segments
+                var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
+                {
+                    //قیمت فریم
+                    totalPrice = totalPrice + (2 * (width + (height - katibeSize.Value))) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 19) != null)
+                {
+                    // لنگه کشویی
+                    totalPrice = totalPrice + ((2 * width) + (8 * (height))) * (userSegments.FirstOrDefault(p => p.SegmentId == 19).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 30) != null)
+                {
+                    // لاستیک فشاري
+                    totalPrice = totalPrice + ((2 * width) + (8 * (height))) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 30).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 21) != null)
+                {
+                    // نوار مویی
+                    totalPrice = totalPrice + ((2 * width) + (8 * (height))) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 21).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 31) != null)
+                {
+                    // اینترلاک
+                    totalPrice = totalPrice + ((4 * (height - katibeSize.Value))) * ((userSegments.FirstOrDefault(p => p.SegmentId == 31).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 27) != null)
+                {
+                    // ریل کشویی
+                    totalPrice = totalPrice + (width) * ((userSegments.FirstOrDefault(p => p.SegmentId == 27).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 32) != null)
+                {
+                    // فریم لولایی
+                    totalPrice = totalPrice + (2 * (katibeSize.Value + width)) * (userSegments.FirstOrDefault(p => p.SegmentId == 32).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
+                {
+                    // قیمت زهوار دوجدار
+                    totalPrice = totalPrice + (2 * (katibeSize.Value + width)) * (userSegments.FirstOrDefault(p => p.SegmentId == 2).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 30) != null)
+                {
+                    // لاستیک فشاري
+                    totalPrice = totalPrice + (2 * (katibeSize.Value + width)) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 30)).Price);
+                }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 28) != null)
+                {
+                    //قیمت یراق کشویی
+                    totalPrice = totalPrice + (2 * ((userSegments.FirstOrDefault(p => p.SegmentId == 30)).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 33) != null)
+                {
+                    //قیمت وادار لولایی
+                    totalPrice = totalPrice + (katibeSize.Value * ((userSegments.FirstOrDefault(p => p.SegmentId == 33)).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
+                {
+                    //قیمت زهوار دوجداره
+                    totalPrice = totalPrice + (katibeSize.Value * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 2)).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 30) != null)
+                {
+                    // لاستیک فشاري
+                    totalPrice = totalPrice + (katibeSize.Value * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 30)).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
+                {
+                    // قفل چهارگانه
+                    totalPrice = totalPrice + ((height - katibeSize.Value) * (userSegments.FirstOrDefault(p => p.SegmentId == 30)).Price);
+                }
+            }
+
+            #endregion
 
             #endregion
 
@@ -1784,19 +1996,59 @@ namespace Window.Application.Services.Services
 
             #endregion
 
-            #region Get Brand 
+            #region List Of Brand 
 
-            var brand = await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == log.BrandId);
-            if (brand == null) return null;
+            List<MainBrand> brands = new List<MainBrand>();
+
+            #endregion
+
+            #region Get Brands
+
+            if (log.BrandId.HasValue)
+            {
+                var brand = await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == log.BrandId);
+                if (brand == null) return null;
+
+                brands.Add(brand);
+            }
+
+            if (log.BrandId == null)
+            {
+                var getBrands = await _context.MainBrands.Where(p => !p.IsDelete).ToListAsync();
+
+                brands.AddRange(getBrands);
+            }
 
             #endregion
 
             #region Get Sellers
 
-            var sellers = await _context.MarketPersonalInfo.Include(p => p.User).Include(p=> p.Market)
+            var sellers = await _context.MarketPersonalInfo.Include(p => p.User).Include(p => p.Market)
                                     .Where(p => !p.IsDelete && p.CityId == log.CityId && p.CountryId == log.CountryId
                                     && p.StateId == log.StateId && p.SellerType == log.SellerType && p.Market.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.ActiveMarketAccount)
                                     .Select(p => p.User).ToListAsync();
+
+            #endregion
+
+            #region Log For Brands
+
+            foreach (var brand in brands)
+            {
+                InquiryViewModel model2 = new InquiryViewModel();
+
+                #region Add Log For Brands
+
+                LogForBrands logForBrands = new LogForBrands()
+                {
+                    MainBrandId = brand.Id
+                };
+
+
+                await _context.LogForBrands.AddAsync(logForBrands);
+                await _context.SaveChangesAsync();
+
+                #endregion
+            }
 
             #endregion
 
@@ -1804,24 +2056,32 @@ namespace Window.Application.Services.Services
 
             foreach (var seller in sellers)
             {
-                InquiryViewModel model2 = new InquiryViewModel();
+                await _sellerService.UpdateSellerActivationTariff(seller.Id, true, false);
 
-                model2.UserName = seller.Username;
-                model2.UserAvatar = seller.Avatar;
-                model2.BrandName = brand.BrandName;
-                model2.BrandImage = brand.BrandLogo;
-                model2.UserId = seller.Id;
-                model2.Price = 0;
-                model2.Score = await CalculateSellerScore(seller.Id);
-
-                await _sellerService.UpdateSellerActivationTariff(seller.Id , true , false);
-
-                foreach (var sample in logDetail)
+                foreach (var brand in brands)
                 {
-                    model2.Price = model2.Price + await InitialTotalSamplePrice(brand.Id, sample.SampleId.Value, sample.Width.Value, sample.Height.Value , sample.KatibeSize, seller.Id , log.GlassId.Value);
-                }
+                    InquiryViewModel model2 = new InquiryViewModel();
 
-                model.Add(model2);
+                    model2.BrandName = brand.BrandName;
+                    model2.BrandImage = brand.BrandLogo;
+
+                    model2.UserName = seller.Username;
+                    model2.UserAvatar = seller.Avatar;
+                    model2.UserId = seller.Id;
+                    model2.Price = 0;
+                    model2.Score = await CalculateSellerScore(seller.Id);
+
+
+                    foreach (var sample in logDetail)
+                    {
+                        model2.Price = model2.Price + await InitialTotalSamplePrice(brand.Id, sample.SampleId.Value, sample.Width.Value, sample.Height.Value, sample.KatibeSize, seller.Id, log.GlassId.Value);
+
+                        if (model2.Price.HasValue && model2.Price.Value != 0)
+                        {
+                            model.Add(model2);
+                        }
+                    }
+                }
             }
 
             #endregion
@@ -1869,7 +2129,7 @@ namespace Window.Application.Services.Services
             var city = await _context.States.FirstOrDefaultAsync(p => !p.IsDelete && p.UniqueName == cityName);
             if (city == null) return 0;
 
-            var model = await _context.LogInquiryForUsers.Where(p=> !p.IsDelete && p.CityId == city.Id).ToListAsync();
+            var model = await _context.LogInquiryForUsers.Where(p => !p.IsDelete && p.CityId == city.Id).ToListAsync();
 
             return model.Count();
         }
@@ -1881,7 +2141,7 @@ namespace Window.Application.Services.Services
             var state = await _context.States.FirstOrDefaultAsync(p => !p.IsDelete && p.UniqueName == stateName);
             if (state == null) return 0;
 
-            var model = await _context.LogInquiryForUsers.Where(p=> !p.IsDelete && p.StateId == state.Id).ToListAsync();
+            var model = await _context.LogInquiryForUsers.Where(p => !p.IsDelete && p.StateId == state.Id).ToListAsync();
 
             return model.Count();
         }

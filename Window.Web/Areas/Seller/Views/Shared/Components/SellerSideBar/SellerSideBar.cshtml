@@ -41,7 +41,33 @@
                 </ul>
             </li>
 
-              <li>
+       
+
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon fa fa-ticket"></i>
+                    <span class="menu-text"> @Localizer["مدیریت تیکت ها"]</span>
+
+                    <i class="menu-expand"></i>
+                </a>
+
+                <ul class="submenu">
+                    <li>
+                        <a asp-area="Seller" asp-controller="Ticket" asp-action="FilterTickets">
+                            <span class="menu-text">@Localizer["لیست تیکت ها "]</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-area="Seller" asp-controller="Ticket" asp-action="CreateTicket">
+                            <span class="menu-text">@Localizer["ایجاد تیکت"]</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            @if (ViewBag.SellerMastert == true)
+            {
+                       <li>
                     <a href="#" class="menu-dropdown">
                         <i class="menu-icon fa fa-inbox"></i>
                         <span class="menu-text"> مدیریت قیمت گذاری</span>
@@ -68,30 +94,6 @@
                     </ul>
                 </li>
 
-            <li>
-                <a href="#" class="menu-dropdown">
-                    <i class="menu-icon fa fa-ticket"></i>
-                    <span class="menu-text"> @Localizer["مدیریت تیکت ها"]</span>
-
-                    <i class="menu-expand"></i>
-                </a>
-
-                <ul class="submenu">
-                    <li>
-                        <a asp-area="Seller" asp-controller="Ticket" asp-action="FilterTickets">
-                            <span class="menu-text">@Localizer["لیست تیکت ها "]</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-area="Seller" asp-controller="Ticket" asp-action="CreateTicket">
-                            <span class="menu-text">@Localizer["ایجاد تیکت"]</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            @if (ViewBag.SellerMastert == true)
-            {
                 <li>
                     <a href="#" class="menu-dropdown">
                         <i class="menu-icon fa fa-users"></i>

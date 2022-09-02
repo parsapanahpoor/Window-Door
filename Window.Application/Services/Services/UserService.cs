@@ -262,6 +262,7 @@ namespace Window.Application.Services
                 CreateDate = DateAndTime.Now,
                 Email = user.Email.SanitizeText(),
                 Mobile = user.Mobile.SanitizeText(),
+                EmailActivationCode = CodeGenerator.GenerateUniqCode(),
                 Password = PasswordHelper.EncodePasswordMd5(user.Password).SanitizeText(),
                 IsAdmin = false,
             };
