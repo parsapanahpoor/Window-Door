@@ -57,6 +57,15 @@ namespace Window.Web.Controllers
             return Ok(model);
         }
 
+        [HttpGet("get-articlesDetail/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetArticles2(ulong id)
+        {
+            var model = await _articleService.GetArticleByIdWhitoutAuthorAsync(id);
+
+            return Ok(model);
+        }
+
         #endregion
     }
 }

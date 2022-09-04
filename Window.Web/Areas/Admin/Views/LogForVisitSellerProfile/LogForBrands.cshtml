@@ -1,0 +1,137 @@
+﻿@using Window.Application.Extensions
+@using Window.Application.Convertors
+@model Window.Domain.ViewModels.Admin.Log.LogForBrandsViewModel
+@using Window.Domain.ViewModels.Admin.QuestionAnswer
+
+@{
+    ViewData["Title"] = "لیست لاگ های برند  ";
+}
+
+@section Styles
+    {
+
+}
+
+    @section Scripts
+    {
+    <partial name="_AdminSweetAlertLocalizer" />
+}
+
+    @section breadcrumb {
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
+}
+
+    <div class="row">
+        <div class="col-lg-3 col-sm-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-green">
+                    <span class="widget-caption"> فیلتر   </span>
+                </div>
+                <div class="widget-body">
+                    <div>
+                        <form asp-action="LogForBrands" asp-controller="LogForVisitSellerProfile" asp-area="Admin" id="filter-search" method="get">
+
+                            <input type="hidden" asp-for="Page" />
+
+
+                            <div class="form-group">
+                                <label asp-for="BrandName"> نام برند </label>
+                                <input asp-for="BrandName" class="form-control">
+                            </div>
+
+                            <hr />
+
+                            <div class="row">
+                                <div class="col-md-12 flex-style">
+                                    <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
+                                        <i class="btn-label glyphicon glyphicon-filter"></i>اعمال فیلتر
+                                    </button>
+
+                                @if (Context.Request.QueryString.HasValue)
+                                {
+                                    <a asp-action="LogForBrands" asp-controller="LogForVisitSellerProfile" asp-area="Admin" class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                        <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
+                                    </a>
+                                }
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-sm-12">
+        <div class="well with-header with-footer table-responsive">
+            <div class="header bordered-azure">
+                <div class="flex-style">
+                    <span>لیست </span>
+                    <span>@Model.GetShownEntitiesPagesTitle()</span>
+                </div>
+            </div>
+
+            @if (Model.Entities != null && Model.Entities.Any())
+            {
+                <table class="table table-hover table-bordered tc vm">
+                    <thead class="tc vm">
+                        <tr class="tc vm">
+                            <th class="tc vm">
+                                لوگوی برند
+                            </th>
+                            <th class="tc vm">
+                                عنوان برند
+                            </th>
+                            <th class="tc vm">
+                                تاریخ بازدید
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="tc vm">
+                        @foreach (var brand in Model.Entities)
+                        {
+                            <tr class="tc vm" remove-ajax-item="@brand.Id">
+                                <td class="vm">
+                                    <div class="flex-style-center">
+                                        @if (!string.IsNullOrEmpty(brand.MainBrand.BrandLogo))
+                                        {
+                                            <img src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@brand.MainBrand.BrandLogo" class="avatar-style" />
+                                        }
+                                        else
+                                        {
+                                            <img src="@Window.Application.StticTools.FilePaths.DefaultSellerInfoImage" class="avatar-style" />
+                                        }
+                                    </div>
+                                </td>
+
+                                <td class="tc vm">
+                                    <p class="flex-style-center">
+                                        @brand.MainBrand.BrandName
+                                    </p>
+                                </td>
+
+                                <td class="tc vm">
+                                    <p class="flex-style-center">
+                                        @brand.CreateDate.ToShamsi()
+                                    </p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="footer tc">
+                    <partial name="_AdminPaging" model="@Model.GetCurrentPaging()" />
+
+                </div>
+            }
+            else
+            {
+                <partial name="_AdminNotFoundPartial" />
+            }
+        </div>
+    </div>
+</div>
+

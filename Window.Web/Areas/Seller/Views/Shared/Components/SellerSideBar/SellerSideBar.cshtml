@@ -41,7 +41,7 @@
                 </ul>
             </li>
 
-       
+
 
             <li>
                 <a href="#" class="menu-dropdown">
@@ -67,7 +67,24 @@
 
             @if (ViewBag.SellerMastert == true)
             {
-                       <li>
+                <li>
+                    <a href="#" class="menu-dropdown">
+                        <i class="menu-icon fa fa-user"></i>
+                        <span class="menu-text"> استعلامات من  </span>
+
+                        <i class="menu-expand"></i>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a asp-area="Seller" asp-controller="Home" asp-action="FilterLogForVisitSellerProfile">
+                                <span class="menu-text">لیست بازدید شما </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
                     <a href="#" class="menu-dropdown">
                         <i class="menu-icon fa fa-inbox"></i>
                         <span class="menu-text"> مدیریت قیمت گذاری</span>
@@ -86,11 +103,11 @@
                                 <span class="menu-text">افزودن محصول</span>
                             </a>
                         </li>
-                    <li>
-                        <a asp-area="Seller" asp-controller="Product" asp-action="CreateGlassPricing">
-                            <span class="menu-text">قیمت گذاری شیشه</span>
-                        </a>
-                    </li>
+                        <li>
+                            <a asp-area="Seller" asp-controller="Product" asp-action="CreateGlassPricing">
+                                <span class="menu-text">قیمت گذاری شیشه</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
@@ -138,7 +155,7 @@
 
         else
         {
-              <li>
+            <li>
                 <a href="#" class="menu-dropdown">
                     <i class="menu-icon fa fa-user"></i>
                     <span class="menu-text"> @Localizer["اطلاعات کاربری"] </span>

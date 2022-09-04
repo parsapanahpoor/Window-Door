@@ -25,5 +25,14 @@ namespace Window.Web.Areas.Admin.Controllers
         }
 
         #endregion
+
+        #region Log For Brands 
+
+        public async Task<IActionResult> LogForBrands(LogForBrandsViewModel filter)
+        {
+            return View(await _sellerService.FilterLogForBrands(filter));
+        }
+
+        #endregion
     }
 }

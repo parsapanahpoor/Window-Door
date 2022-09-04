@@ -64,6 +64,13 @@ namespace Window.Application.Services.Services
             return article;
         }
 
+        public async Task<Article> GetArticleByIdWhitoutAuthorAsync(ulong ArticleId)
+        {
+            var article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == ArticleId && !a.IsDelete);
+               
+            return article;
+        }
+
         #endregion
 
         #region Admin Side

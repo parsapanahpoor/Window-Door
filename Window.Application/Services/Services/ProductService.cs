@@ -254,6 +254,8 @@ namespace Window.Application.Services.Services
             var sellerInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
             if (sellerInfo == null) return 0;
 
+            if (sellerInfo.SellerType == Domain.Enums.SellerType.SellerType.Aluminium && model.SellerType == Domain.Enums.SellerType.SellerType.UPC) return 0;
+
             #endregion
 
             #region Check User Activity 

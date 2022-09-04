@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,6 +88,14 @@ namespace Window.Application.Services.Interfaces
         #endregion
 
         #region Site Side
+
+        Task<int> CountOfTodayUserInInquiry(ulong userId);
+
+        Task<int> CountOfMonthUserInInquiry(ulong userId);
+
+        Task<int> CountOfYearUserInInquiry(ulong userId);
+
+        Task<LogForBrandsViewModel> FilterLogForBrands(LogForBrandsViewModel filter);
 
         Task<FilterLogVisitSellerProfileViewModel> FilterLogVisitSellerProfile(FilterLogVisitSellerProfileViewModel filter);
 

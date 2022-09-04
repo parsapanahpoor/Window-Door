@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Window.Application.Services.Interfaces;
+using Window.Application.Services.Services;
 using Window.Web.HttpServices;
 
 namespace Window.Web.Controllers
@@ -64,6 +65,15 @@ namespace Window.Web.Controllers
         }
 
         #endregion
+
+        [HttpGet("get-qaDetail/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetQADetail(ulong id)
+        {
+            var model = await _questionService.GetQuestionByIdAsync(id);
+
+            return Ok(model);
+        }
 
     }
 }

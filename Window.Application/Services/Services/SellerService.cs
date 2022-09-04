@@ -50,6 +50,54 @@ namespace Window.Application.Services.Services
 
         #region Seller Panel
 
+        public async Task<int> CountOfTodayUserInInquiry(ulong userId)
+        {
+            #region Get Market By User Id 
+
+            var marketPersons = await _context.MarketUser.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
+            if (marketPersons == null) return 0;
+
+            var market = await _context.Market.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == marketPersons.MarketId);
+            if (market == null) return 0;
+
+            #endregion
+
+            return await _context.LogForVisitSellerProfiles.Where(p => !p.IsDelete && p.UserId == market.UserId
+                            && p.CreateDate.Year == DateTime.Now.Year && p.CreateDate.DayOfYear == DateTime.Now.DayOfYear).CountAsync();
+        }
+
+        public async Task<int> CountOfMonthUserInInquiry(ulong userId)
+        {
+            #region Get Market By User Id 
+
+            var marketPersons = await _context.MarketUser.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
+            if (marketPersons == null) return 0;
+
+            var market = await _context.Market.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == marketPersons.MarketId);
+            if (market == null) return 0;
+
+            #endregion
+
+            return await _context.LogForVisitSellerProfiles.Where(p => !p.IsDelete && p.UserId == market.UserId
+                                     && p.CreateDate.Year == DateTime.Now.Year && p.CreateDate.Month == DateTime.Now.Month).CountAsync();
+        }
+
+        public async Task<int> CountOfYearUserInInquiry(ulong userId)
+        {
+            #region Get Market By User Id 
+
+            var marketPersons = await _context.MarketUser.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
+            if (marketPersons == null) return 0;
+
+            var market = await _context.Market.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == marketPersons.MarketId);
+            if (market == null) return 0;
+
+            #endregion
+
+            return await _context.LogForVisitSellerProfiles.Where(p => !p.IsDelete && p.UserId == market.UserId
+                                     && p.CreateDate.Year == DateTime.Now.Year ).CountAsync();
+        }
+
         public async Task<bool> PayAccountChargeTariff(ulong userId, int price)
         {
             if (!await _context.Users.AnyAsync(p => !p.IsDelete && p.Id == userId))
@@ -1237,6 +1285,33 @@ namespace Window.Application.Services.Services
             return filter;
         }
 
+        public async Task<LogForBrandsViewModel> FilterLogForBrands(LogForBrandsViewModel filter)
+        {
+            var query = _context.LogForBrands
+           .Include(u => u.MainBrand)
+           .Where(p => !p.IsDelete)
+           .OrderByDescending(p => p.CreateDate)
+           .AsQueryable();
+
+            #region filter
+
+            if ((!string.IsNullOrEmpty(filter.BrandName)))
+            {
+                query = query.Where(u => u.MainBrand.BrandName.Contains(filter.BrandName));
+            }
+
+            #endregion
+
+            #region paging
+
+            await filter.Paging(query);
+
+            #endregion
+
+            return filter;
+        }
+
+
         public async Task<FilterLogVisitSellerProfileViewModel> FilterLogVisitSellerProfile(FilterLogVisitSellerProfileViewModel filter)
         {
             var query = _context.LogForVisitSellerProfiles
@@ -1254,6 +1329,18 @@ namespace Window.Application.Services.Services
             if ((!string.IsNullOrEmpty(filter.Username)))
             {
                 query = query.Where(u => u.User.Username.Contains(filter.Username));
+            }
+            if (filter.SellerId.HasValue)
+            {
+                #region Get Market By User Id 
+
+                var marketPersons = await _context.MarketUser.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == filter.SellerId);
+
+                var market = await _context.Market.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == marketPersons.MarketId);
+
+                #endregion
+
+                query = query.Where(u => u.User.Id == market.UserId);
             }
 
             #endregion

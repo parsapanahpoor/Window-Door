@@ -56,7 +56,7 @@ namespace Window.Web.Areas.Seller.Controllers
             if (!ModelState.IsValid)
             {
                 TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد .";
-                return View(model);
+                return RedirectToAction("Index" , "Home" , new { area = "Seller"});
             }
 
             #endregion
@@ -68,7 +68,7 @@ namespace Window.Web.Areas.Seller.Controllers
             if (productId == null || productId == 0)
             {
                 TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد .";
-                return View(model);
+                return RedirectToAction("Index", "Home", new { area = "Seller" });
             }
             else
             {

@@ -14,5 +14,45 @@
     <partial name="_SweetAlertLocalizer"/>
 }
 
-@await Component.InvokeAsync("SellersInfos")
 
+    <div class="row">
+
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="databox bg-white radius-bordered">
+                <div class="bg-success databox-right">
+                </div>
+                <div class="databox-left">
+                    <span class="databox-number sucees">@((ViewBag.CountOfTodayUserInInquiry != null) ? ViewBag.CountOfTodayUserInInquiry : 0)</span>
+                <div class="databox-text darkgray">تعداد بازدید از حساب شما درامروز</div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="databox bg-white radius-bordered">
+            <div class="bg-primary databox-right">
+            </div>
+            <div class="databox-left">
+                <span class="databox-number primary">@((ViewBag.CountOfMonthUserInInquiry != null) ? ViewBag.CountOfMonthUserInInquiry : 0)</span>
+                <div class="databox-text darkgray">تعداد بازدید از حساب شما دراین ماه</div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="databox bg-white radius-bordered">
+            <div class="bg-danger databox-right">
+            </div>
+            <div class="databox-left">
+                <span class="databox-number danger">@((ViewBag.CountOfYearUserInInquiry != null) ? ViewBag.CountOfYearUserInInquiry : 0)</span>
+                <div class="databox-text darkgray">تعداد بازدید از حساب شما دراین سال</div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@await Component.InvokeAsync("SellersInfos")
