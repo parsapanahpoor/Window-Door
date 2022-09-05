@@ -132,21 +132,28 @@ namespace Window.Application.Services.Services
         }
 
         //Update User Inqury In Last Step For Update Brand 
-        public async Task<bool> UpdateUserInquryInLastStep(string userMacAddress, string brandTitle)
+        public async Task<bool> UpdateUserInquryInLastStep(string userMacAddress, string? brandTitle)
         {
-            #region Get Brand By Title 
-
-            var brand = await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.BrandName == brandTitle);
-            if (brand == null) return false;
-
-            #endregion
-
             #region Get User Inqury
 
             var userInqury = await _context.LogInquiryForUsers.FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
             if (userInqury == null) return false;
 
-            userInqury.BrandId = brand.Id;
+            if (brandTitle == "All")
+            {
+                userInqury.BrandId = null;
+            }
+            else
+            {
+                #region Get Brand By Title 
+
+                var brand = await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.BrandName == brandTitle);
+                if (brand == null) return false;
+
+                #endregion
+
+                userInqury.BrandId = brand.Id;
+            }
 
             #endregion
 
@@ -2025,7 +2032,7 @@ namespace Window.Application.Services.Services
 
             var sellers = await _context.MarketPersonalInfo.Include(p => p.User).Include(p => p.Market)
                                     .Where(p => !p.IsDelete && p.CityId == log.CityId && p.CountryId == log.CountryId
-                                    && p.StateId == log.StateId && p.SellerType == log.SellerType && p.Market.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.ActiveMarketAccount)
+                                    && p.StateId == log.StateId && p.Market.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.ActiveMarketAccount)
                                     .Select(p => p.User).ToListAsync();
 
             #endregion
@@ -2075,11 +2082,11 @@ namespace Window.Application.Services.Services
                     foreach (var sample in logDetail)
                     {
                         model2.Price = model2.Price + await InitialTotalSamplePrice(brand.Id, sample.SampleId.Value, sample.Width.Value, sample.Height.Value, sample.KatibeSize, seller.Id, log.GlassId.Value);
+                    }
 
-                        if (model2.Price.HasValue && model2.Price.Value != 0)
-                        {
-                            model.Add(model2);
-                        }
+                    if (model2.Price.HasValue && model2.Price.Value != 0)
+                    {
+                        model.Add(model2);
                     }
                 }
             }

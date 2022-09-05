@@ -26,7 +26,7 @@ namespace Window.Application.Services.Interfaces
         Task<int?> InitializeSamplesPrice(List<Sample?> samples, User user, int height, int width);
 
         //Update User Inqury In Last Step For Update Brand 
-        Task<bool> UpdateUserInquryInLastStep(string userMacAddress, string brandTitle);
+        Task<bool> UpdateUserInquryInLastStep(string userMacAddress, string? brandTitle);
 
         //Calculate Seller Score 
         Task<int> CalculateSellerScore(ulong userId);

@@ -262,7 +262,7 @@ namespace Window.Web.Controllers
 
             #region Paginaition
 
-            int take = 20;
+            int take = 50;
 
             int skip = (pageId - 1) * take;
 

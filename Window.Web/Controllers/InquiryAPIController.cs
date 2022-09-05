@@ -182,19 +182,19 @@ namespace Window.Web.Controllers
 
             if (sample.MaxHeight < height)
             {
-                return JsonResponseStatus.Error();
+                return JsonResponseStatus.Error("ارتفاع وارد شده بیشتر از حد مجاز است.");
             }
             if (sample.MinHeight > height)
             {
-                return JsonResponseStatus.Error();
+                return JsonResponseStatus.Error("ارتفاع وارد شده کمتر از حد مجاز است.");
             }
             if (sample.MaxWidth < width)
             {
-                return JsonResponseStatus.Error();
+                return JsonResponseStatus.Error("عرض وارد شده بیشتر از حد مجاز است.");
             }
             if (sample.MinWidth > width)
             {
-                return JsonResponseStatus.Error();
+                return JsonResponseStatus.Error("عرض وارد شده کمتر از حد مجاز است.");
             }
 
             #endregion
