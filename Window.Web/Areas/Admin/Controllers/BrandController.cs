@@ -83,8 +83,6 @@ namespace Window.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> EditMainBrand(MainBrand brand, IFormFile? brandLogo)
         {
-           
-
             #region Update Method 
 
             var res = await _brandService.UpdateMainBrand(brand, brandLogo);

@@ -33,6 +33,8 @@ namespace Window.Domain.Entities.Segment
         [MaxLength(200)]
         public string SegmentName { get; set; }
 
+        public int Priority { get; set; } = 0;
+
         #endregion
 
         #region relations

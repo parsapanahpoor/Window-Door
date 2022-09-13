@@ -115,8 +115,6 @@ namespace Window.Web.Controllers
                 CountryId = 1,
                 StateId = state.Id,
                 CityId = city.Id,
-                ProductType = ProductType,
-                ProductKind = ProductKind,
                 MainBrandId = barand.Id,
                 UserMacAddress = UserMacAddress,
                 SellerType = SellerType,
@@ -165,7 +163,7 @@ namespace Window.Web.Controllers
 
         [HttpGet("get-step3/{sampleId}/{width}/{height}/{KatibeSize}/{userMacAddress}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Step3(ulong sampleId, int width, int height , int? KatibeSize , string userMacAddress)
+        public async Task<IActionResult> Step3(ulong sampleId, int width, int height , int SampleCount, int? KatibeSize , string userMacAddress)
         {
             #region Get Samples For Show In Page Model
 
@@ -201,7 +199,7 @@ namespace Window.Web.Controllers
 
             #region Add Log For User
 
-            var res = await _inquiryService.LogInquiryForUserPart2(sampleId, width, height , KatibeSize, userMacAddress);
+            var res = await _inquiryService.LogInquiryForUserPart2(sampleId, width, height , KatibeSize, userMacAddress , SampleCount);
             if (!res) return NotFound();
 
             #endregion

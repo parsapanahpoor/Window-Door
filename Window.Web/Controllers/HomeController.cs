@@ -42,7 +42,7 @@ namespace Window.Web.Controllers
 
         #region Index 
 
-        public async Task<IActionResult> Index(FilterInquiryViewModel filter , bool redirect = false)
+        public async Task<IActionResult> Index(FilterInquiryViewModel filter, bool redirect = false)
         {
             #region Location ViewBags 
 
@@ -61,25 +61,7 @@ namespace Window.Web.Controllers
 
             #region Sample View Bag
 
-            if (filter.ProductKind == null && filter.ProductKind == null)
-            {
-                ViewData["Sample"] = await _sampleService.GetAllSample();
-            }
-
-            if (filter.ProductKind.HasValue && filter.ProductType.HasValue)
-            {
-                ViewData["Sample"] = await _sampleService.GetAllSampleUsingProductTypeAndProductKind(filter.ProductKind.Value, filter.ProductType.Value);
-            }
-
-            if (filter.ProductKind != null && !filter.ProductType.HasValue)
-            {
-                ViewData["Sample"] = await _sampleService.GetAllDoorAndWindowSample(filter.ProductKind.Value);
-            }
-
-            if (filter.ProductType != null && !filter.ProductKind.HasValue)
-            {
-                ViewData["Sample"] = await _sampleService.GetAlllolaieKeshoieSample(filter.ProductType.Value);
-            }
+            ViewData["Sample"] = await _sampleService.GetAllSample();
 
             #endregion
 
@@ -156,7 +138,7 @@ namespace Window.Web.Controllers
                 #endregion
 
                 TempData[SuccessMessage] = "افزودن محصول با موفقیت انجام شده است ";
-                return RedirectToAction(nameof(Index) , new { redirect  = true});
+                return RedirectToAction(nameof(Index), new { redirect = true });
             }
             else
             {
@@ -185,7 +167,7 @@ namespace Window.Web.Controllers
 
         #region Inquiry
 
-        public async Task<IActionResult> Inquiry(ulong? MainBrandId , SellerType? SellerType, int pageId = 1)
+        public async Task<IActionResult> Inquiry(ulong? MainBrandId, SellerType? SellerType, int pageId = 1)
         {
             #region Brand ViewBag
 

@@ -24,10 +24,6 @@ namespace Window.Domain.ViewModels.Site.Inquiry
         [Display(Name = "شهر")]
         public ulong? CityId { get; set; }
 
-        public ProductType? ProductType { get; set; }
-
-        public ProductKind? ProductKind { get; set; }
-
         public SellerType? SellerType { get; set; }
 
         public ulong? MainBrandId { get; set; }

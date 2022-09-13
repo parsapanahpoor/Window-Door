@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Account;
+using Window.Domain.Entities.Inquiry;
 using Window.Domain.Entities.Sample;
 using Window.Domain.ViewModels.Site.Inquiry;
 
@@ -17,11 +18,11 @@ namespace Window.Application.Services.Interfaces
         Task LogInquiryForUserPart1(FilterInquiryViewModel filter);
 
         //Log Inquiry For User In Step 2
-        Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height, int? KatibeSize, string userMacAddress);
+        Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height, int? KatibeSize, string userMacAddress, int productCount);
 
         Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress);
 
-        Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, int? katibeSize, ulong userId , ulong glassId);
+        Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, int productCount , int? katibeSize, ulong userId , ulong glassId);
 
         Task<int?> InitializeSamplesPrice(List<Sample?> samples, User user, int height, int width);
 
@@ -42,6 +43,15 @@ namespace Window.Application.Services.Interfaces
 
         //Get Count Of Inquiry In State 
         Task<int> CountOfInquiryInState(string stateName);
+
+        //Get User Lastest Inquiry 
+        Task<List<LogInquiryForUserDetail>?> GetUserLastestInquiryDetailForChange(string macAddress);
+
+        //Delete User Lastest Inquiry Detail 
+        Task<bool> DeleteUserLastestInquiryDetail(ulong inquiryDetailId, string macAddress);
+
+        //Update User Inquiry Detail
+        Task<bool> UpdateUserInquiryItrm(ulong inquiryDetailId , ulong sampleId, int width, int height, int? katibe, string macAddress);
 
         #endregion
     }

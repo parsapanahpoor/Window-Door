@@ -22,7 +22,6 @@ namespace Window.Domain.Entities.Product
 
         #region relations
 
-        public ICollection<Product> Products { get; set; }
 
         #endregion
     }

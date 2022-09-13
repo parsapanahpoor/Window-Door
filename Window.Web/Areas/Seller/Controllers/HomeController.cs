@@ -98,7 +98,7 @@ namespace Window.Web.Areas.Seller.Controllers
 
         public async Task<IActionResult> LoadBrands(ulong sellerTypeId)
         {
-            var result = await _productService.LoadBrands(sellerTypeId);
+            var result = await _productService.LoadBrands();
 
             return JsonResponseStatus.Success(result);
         }

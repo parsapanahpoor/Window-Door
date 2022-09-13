@@ -91,6 +91,7 @@ namespace CRM.Data.Repository
         {
             var query = _context.Users
                 .Include(u => u.UserRoles)
+                .OrderByDescending(p=> p.CreateDate)
                 .AsQueryable();
 
             #region order

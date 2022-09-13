@@ -35,11 +35,17 @@
                     <div>
 
                         <div class="row">
-                            <div class="form-group col-md-12 col-sm-12">
+                            <div class="form-group col-md-6 col-sm-12">
                                 <label asp-for="SegmentName"></label>
                                 <input type="text" class="form-control" asp-for="SegmentName">
                                 <span class="text-danger" asp-validation-for="SegmentName"></span>
                             </div>
+
+                                <div class="form-group col-md-6 col-sm-12">
+                                    <label asp-for="Priority">اولویت نمایش</label>
+                                    <input type="number" min="1" class="form-control" asp-for="Priority">
+                                    <span class="text-danger" asp-validation-for="Priority"></span>
+                                </div>
 
                         </div>
 

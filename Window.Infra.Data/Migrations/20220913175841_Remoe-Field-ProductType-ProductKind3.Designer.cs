@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Window.Data.Context;
 
@@ -11,9 +12,10 @@ using Window.Data.Context;
 namespace Window.Infra.Data.Migrations
 {
     [DbContext(typeof(WindowDbContext))]
-    partial class WindowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220913175841_Remoe-Field-ProductType-ProductKind3")]
+    partial class RemoeFieldProductTypeProductKind3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +54,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 1m,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(882),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(5984),
                             IsDelete = false,
                             RoleUniqueName = "Admin",
                             Title = "Admin"
@@ -60,7 +62,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 2m,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(913),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6033),
                             IsDelete = false,
                             RoleUniqueName = "Support",
                             Title = "Support"
@@ -68,7 +70,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 3m,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(927),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6057),
                             IsDelete = false,
                             RoleUniqueName = "Seller",
                             Title = "Seller"
@@ -76,7 +78,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 4m,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(938),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6080),
                             IsDelete = false,
                             RoleUniqueName = "SellerMaster",
                             Title = "SellerMaster"
@@ -273,9 +275,6 @@ namespace Window.Infra.Data.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
                     b.Property<bool>("UPVC")
                         .HasColumnType("bit");
 
@@ -439,6 +438,12 @@ namespace Window.Infra.Data.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("ProductKind")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductType")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SellerType")
                         .HasColumnType("int");
 
@@ -460,9 +465,6 @@ namespace Window.Infra.Data.Migrations
                         .HasColumnType("decimal(20,0)");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"), 1L, 1);
-
-                    b.Property<int>("CountOfSample")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -1022,7 +1024,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 1m,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(963),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6115),
                             IsDelete = false,
                             Name = "کشویی",
                             ProductType = 0
@@ -1030,7 +1032,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 2m,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(979),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6144),
                             IsDelete = false,
                             Name = "کتیبه",
                             ProductType = 0
@@ -1038,7 +1040,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 3m,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(990),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6166),
                             IsDelete = false,
                             Name = "کتیبه",
                             ProductType = 1
@@ -1046,7 +1048,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 4m,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1002),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6188),
                             IsDelete = false,
                             Name = "درب",
                             ProductType = 1
@@ -1054,7 +1056,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 5m,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1014),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6208),
                             IsDelete = false,
                             Name = "لولایی",
                             ProductType = 1
@@ -1203,9 +1205,6 @@ namespace Window.Infra.Data.Migrations
                     b.Property<int>("MinWidth")
                         .HasColumnType("int");
 
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
                     b.Property<string>("SegmentName")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -1277,9 +1276,6 @@ namespace Window.Infra.Data.Migrations
                     b.Property<bool>("Lolaie")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
                     b.Property<string>("SegmentName")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -1300,12 +1296,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 1m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1040),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6242),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "فریم",
                             UPVC = true,
                             Window = true
@@ -1314,12 +1309,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 2m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1054),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6272),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "زهوار دوجداره",
                             UPVC = true,
                             Window = true
@@ -1328,12 +1322,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 3m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1067),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6295),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "لنگه",
                             UPVC = true,
                             Window = true
@@ -1342,12 +1335,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 4m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1079),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6317),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "یراق ملغی",
                             UPVC = true,
                             Window = true
@@ -1356,12 +1348,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 5m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1091),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6337),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "یراق تک حالته",
                             UPVC = true,
                             Window = true
@@ -1370,12 +1361,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 6m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1104),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6376),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "لنگه ی بازشوی پنجره",
                             UPVC = true,
                             Window = true
@@ -1384,12 +1374,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 7m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1117),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6397),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "مولیون لولایی",
                             UPVC = true,
                             Window = true
@@ -1398,12 +1387,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 8m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1128),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6418),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "گالوانیزه ی فریم",
                             UPVC = true,
                             Window = true
@@ -1412,12 +1400,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 10m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1140),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6439),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "گالوانیزه ی لنگه",
                             UPVC = true,
                             Window = true
@@ -1426,12 +1413,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 11m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1207),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6464),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "گالوانیزه ی مولیون",
                             UPVC = true,
                             Window = true
@@ -1440,12 +1426,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 12m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1220),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6484),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "لنگه ی درب",
                             UPVC = true,
                             Window = true
@@ -1454,12 +1439,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 13m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1233),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6507),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "گالوانیزه ی دربی",
                             UPVC = true,
                             Window = true
@@ -1468,12 +1452,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 14m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1245),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6528),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "یراق درب سویئچی",
                             UPVC = true,
                             Window = true
@@ -1482,12 +1465,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 15m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1257),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6550),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "یراق درب سرویسی",
                             UPVC = true,
                             Window = true
@@ -1496,12 +1478,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 16m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1269),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6571),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "گالوانیزه ی لولایی",
                             UPVC = true,
                             Window = true
@@ -1510,12 +1491,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 17m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1280),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6593),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "پنل",
                             UPVC = true,
                             Window = true
@@ -1524,12 +1504,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 18m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1292),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6622),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "گالوانیزه ی مولیون لولایی",
                             UPVC = true,
                             Window = true
@@ -1538,12 +1517,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 19m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1306),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6648),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "لنگه ی کشویی",
                             UPVC = true,
                             Window = true
@@ -1552,12 +1530,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 20m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1319),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6670),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "گالوانیزه ی لنگه ی کشویی",
                             UPVC = true,
                             Window = true
@@ -1566,12 +1543,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 21m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1331),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6692),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "نوار مویی",
                             UPVC = true,
                             Window = true
@@ -1580,12 +1556,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 22m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1343),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6712),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "کاور لنگه ی کشویی",
                             UPVC = true,
                             Window = true
@@ -1594,12 +1569,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 23m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1354),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6733),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "مولوین کشویی",
                             UPVC = true,
                             Window = true
@@ -1608,12 +1582,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 24m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1366),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6754),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "گالوانیزه ی مولوین کشویی",
                             UPVC = true,
                             Window = true
@@ -1622,12 +1595,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 25m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1378),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6775),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "کاور مولوین کشویی",
                             UPVC = true,
                             Window = true
@@ -1636,12 +1608,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 26m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1389),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6796),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "کاور بارانگیر",
                             UPVC = true,
                             Window = true
@@ -1650,12 +1621,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 27m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1401),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6817),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "ریل کشویی",
                             UPVC = true,
                             Window = true
@@ -1664,12 +1634,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 28m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1412),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6839),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "یراق کشویی",
                             UPVC = true,
                             Window = true
@@ -1678,12 +1647,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 29m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1424),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6860),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "ریل کشویی",
                             UPVC = true,
                             Window = true
@@ -1692,12 +1660,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 30m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1435),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6881),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "لاستیک فشاری",
                             UPVC = true,
                             Window = true
@@ -1706,12 +1673,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 31m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1447),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6903),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "اینترلاک",
                             UPVC = true,
                             Window = true
@@ -1720,12 +1686,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 32m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1459),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6925),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "فریم لولایی",
                             UPVC = true,
                             Window = true
@@ -1734,12 +1699,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 33m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1470),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6947),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "وادار لولایی",
                             UPVC = true,
                             Window = true
@@ -1748,12 +1712,11 @@ namespace Window.Infra.Data.Migrations
                         {
                             Id = 34m,
                             Aluminum = true,
-                            CreateDate = new DateTime(2022, 9, 13, 23, 41, 30, 762, DateTimeKind.Local).AddTicks(1483),
+                            CreateDate = new DateTime(2022, 9, 13, 22, 28, 41, 21, DateTimeKind.Local).AddTicks(6969),
                             Door = true,
                             IsDelete = false,
                             Keshoie = true,
                             Lolaie = true,
-                            Priority = 0,
                             SegmentName = "قفل چهارلنگه",
                             UPVC = true,
                             Window = true

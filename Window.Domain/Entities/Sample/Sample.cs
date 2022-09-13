@@ -43,6 +43,8 @@ namespace Window.Domain.Entities.Sample
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Image { get; set; }
 
+        public int Priority { get; set; } = 0;
+
         #endregion
 
         #region relations

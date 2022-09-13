@@ -9,6 +9,7 @@ using Window.Domain.Entities.Brand;
 using Window.Domain.Entities.Glass;
 using Window.Domain.Entities.Product;
 using Window.Domain.Entities.Sample;
+using Window.Domain.Enums.SellerType;
 using Window.Domain.ViewModels.Common;
 using Window.Domain.ViewModels.Seller.Pricing;
 using Window.Domain.ViewModels.Seller.Product;
@@ -19,6 +20,9 @@ namespace Window.Application.Services.Interfaces
     public interface IProductService
     {
         #region Seller Side
+
+        //Step 2
+        Task<bool> GetSellerTypeForValidAddProductStep2(ulong userId, SellerType sellerType);
 
         Task<Glass?> GetGlassWithName(string glassName);
 
@@ -46,7 +50,7 @@ namespace Window.Application.Services.Interfaces
 
         Task<FilterProductSellerSideViewModel> FilterProductSellerSideViewModel(FilterProductSellerSideViewModel filter);
 
-        Task<List<SelectListViewModel>> LoadBrands(ulong sellerTypeId);
+        Task<List<SelectListViewModel>> LoadBrands();
 
         Task<bool> GetSellerTypeForValidAddProduct(ulong userId);
 
@@ -61,6 +65,9 @@ namespace Window.Application.Services.Interfaces
         Task<List<GlassPricing>?> FillGlassPricing(ulong userId);
 
         Task<bool> AddPricingForGlass(ulong GlassId, int Price, ulong userId);
+
+        //Delete Product 
+        Task<bool> DeleteProductById(ulong productId, ulong sellerId);
 
         #endregion
 

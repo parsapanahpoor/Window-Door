@@ -25,12 +25,6 @@ namespace Window.Domain.Entities.Product
 
         public SellerType SellerType { get; set; }
 
-        public ProductType ProductType{ get; set; }
-
-        public ProductKind ProductKind { get; set; }
-
-        public ulong ProductTypeCategoryId  { get; set; }
-
         public ulong MainBrandId { get; set; }
 
         #endregion
@@ -40,8 +34,6 @@ namespace Window.Domain.Entities.Product
         public MainBrand MainBrand { get; set; }
 
         public User User { get; set; }
-
-        public ProductTypeCategory ProductTypeCategory { get; set; }
 
         public ICollection<ProductMainBrandPrice> ProductMainBrandPrice { get; set; }
 

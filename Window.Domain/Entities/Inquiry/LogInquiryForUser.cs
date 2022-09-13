@@ -23,10 +23,6 @@ namespace Window.Domain.Entities.Inquiry
 
         public SellerType? SellerType { get; set; }
 
-        public ProductKind? ProductKind { get; set; }
-
-        public ProductType? ProductType { get; set; }
-
         public string? UserMAcAddress { get; set; }
 
         public ulong? GlassId { get; set; }

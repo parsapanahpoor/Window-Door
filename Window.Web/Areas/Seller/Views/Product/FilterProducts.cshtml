@@ -7,32 +7,32 @@
 }
 
 @section Styles
-{
+    {
 
 }
 
-@section Scripts
-{
+    @section Scripts
+    {
 }
 
-@section breadcrumb {
-<li>
-    <a href="javascript:void(0)"> @ViewData["Title"] </a>
-</li>
+    @section breadcrumb {
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
 }
 
-<div class="row">
+    <div class="row">
 
-    <div class="col-lg-12 col-sm-12">
-        <a class="btn btn-sky w-100 margin-bottom-10" asp-action="CreateProduct" asp-controller="Product" asp-area="Seller">ایجاد محصول جدید </a>
+        <div class="col-lg-12 col-sm-12">
+            <a class="btn btn-sky w-100 margin-bottom-10" asp-action="CreateProduct" asp-controller="Product" asp-area="Seller">ایجاد محصول جدید </a>
 
-        <div class="well with-header with-footer table-responsive">
-            <div class="header bordered-azure">
-                <div class="flex-style">
-                    <span>لیست محصولات </span>
-                    <span>@Model.GetShownEntitiesPagesTitle()</span>
+            <div class="well with-header with-footer table-responsive">
+                <div class="header bordered-azure">
+                    <div class="flex-style">
+                        <span>لیست محصولات </span>
+                        <span>@Model.GetShownEntitiesPagesTitle()</span>
+                    </div>
                 </div>
-            </div>
 
             @if (Model.Entities != null && Model.Entities.Any())
             {
@@ -46,13 +46,7 @@
                                 نام برند
                             </th>
                             <th class="tc vm">
-                                نوع محصول
-                            </th>
-                            <th class="tc vm">
                                 جنس محصول
-                            </th>
-                            <th class="tc vm">
-                                حالت محصول
                             </th>
                             <th class="tc vm">
                                 امکانات
@@ -67,7 +61,7 @@
                                 <td class="tc vm">
                                     @if (!string.IsNullOrEmpty(product.MainBrand.BrandLogo))
                                     {
-                                        <img src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@product.MainBrand.BrandLogo" class="avatar-style" style="border-radius:50px;" />
+                                        <img src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@product.MainBrand.BrandLogo" class="avatar-style" style="width: 130px;height: 80px;" />
                                     }
                                     else
                                     {
@@ -77,17 +71,6 @@
 
                                 <td class="tc vm">
                                     <p> @product.MainBrand.BrandName </p>
-                                </td>
-
-                                <td class="tc vm">
-                                    @if (product.ProductKind == Window.Domain.Enums.Types.ProductKind.Door)
-                                    {
-                                        <span class="label label-primary">در</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="label label-primary">پنجره</span>
-                                    }
                                 </td>
 
                                 <td class="tc vm">
@@ -102,19 +85,8 @@
                                 </td>
 
                                 <td class="tc vm">
-                                    @if (product.ProductType == Window.Domain.Enums.Types.ProductType.Keshoie)
-                                    {
-                                        <span class="label label-primary">کشویی</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="label label-primary">لولایی</span>
-                                    }
-                                </td>
-
-                                <td class="tc vm">
                                     <a asp-action="SegmentPricing" asp-area="Seller" asp-controller="Product" asp-route-productId="@product.Id" class="btn btn-warning btn-circle btn-xs"><i class="glyphicon glyphicon-pencil"></i></a>
-                                  @*    <button onclick="DeleteAjax(@Article.Id, '@Url.Action("DeleteArticle", "Article", new { area = "Admin", Id = Article.Id })')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                    <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteProduct", "Product", new { area = "Seller", Id = product.Id })')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
                                 </td>
                             </tr>
                         }

@@ -56,8 +56,6 @@ namespace Window.Application.Services.Services
                     BrandId = filter.MainBrandId,
                     CreateDate = DateTime.Now,
                     IsDelete = false,
-                    ProductKind = filter.ProductKind,
-                    ProductType = filter.ProductType,
                     SellerType = filter.SellerType,
                     UserMAcAddress = filter.UserMacAddress,
                     GlassId = filter.GlassId
@@ -79,8 +77,6 @@ namespace Window.Application.Services.Services
                 inquiry.BrandId = filter.MainBrandId;
                 inquiry.CreateDate = DateTime.Now;
                 inquiry.IsDelete = false;
-                inquiry.ProductKind = filter.ProductKind;
-                inquiry.ProductType = filter.ProductType;
                 inquiry.SellerType = filter.SellerType;
                 inquiry.UserMAcAddress = filter.UserMacAddress;
                 inquiry.GlassId = filter.GlassId;
@@ -101,7 +97,7 @@ namespace Window.Application.Services.Services
         }
 
         //Log Inquiry For User In Step 2
-        public async Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height, int? KatibeSize, string userMacAddress)
+        public async Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height, int? KatibeSize, string userMacAddress , int productCount)
         {
             #region Get User Log By User Mac Address
 
@@ -121,12 +117,39 @@ namespace Window.Application.Services.Services
                 SampleId = sampleId,
                 Width = width,
                 KatibeSize = KatibeSize,
+                CountOfSample = productCount
             };
 
             await _context.logInquiryForUserDetails.AddAsync(logDetail);
             await _context.SaveChangesAsync();
 
             #endregion
+
+            return true;
+        }
+
+        //Update User Inquiry Item 
+        public async Task<bool> UpdateUserInquiryItrm(ulong inquiryDetailId , ulong sampleId , int width , int height , int? katibe , string macAddress)
+        {
+            #region Get User Inquiry Item 
+
+            var userInquiry = await _context.logInquiryForUserDetails.Include(p => p.LogInquiryForUser)
+                                    .FirstOrDefaultAsync(p => p.Id == inquiryDetailId && !p.IsDelete && p.SampleId == sampleId && p.LogInquiryForUser.UserMAcAddress == macAddress);
+
+            #endregion
+
+            if (userInquiry == null) return false;
+
+            #region Update Iqnuiry Item
+
+            userInquiry.Width = width;
+            userInquiry.Height = height;
+            userInquiry.KatibeSize = katibe;
+
+            #endregion
+
+            _context.logInquiryForUserDetails.Update(userInquiry);
+            await _context.SaveChangesAsync();
 
             return true;
         }
@@ -207,7 +230,7 @@ namespace Window.Application.Services.Services
             #endregion
         }
 
-        public async Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, int? katibeSize, ulong userId, ulong glassId)
+        public async Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width , int productCount , int? katibeSize, ulong userId, ulong glassId)
         {
             #region return Model 
 
@@ -2081,7 +2104,7 @@ namespace Window.Application.Services.Services
 
                     foreach (var sample in logDetail)
                     {
-                        model2.Price = model2.Price + await InitialTotalSamplePrice(brand.Id, sample.SampleId.Value, sample.Width.Value, sample.Height.Value, sample.KatibeSize, seller.Id, log.GlassId.Value);
+                        model2.Price = model2.Price + await InitialTotalSamplePrice(brand.Id, sample.SampleId.Value, sample.Width.Value, sample.CountOfSample ,  sample.Height.Value, sample.KatibeSize, seller.Id, log.GlassId.Value);
                     }
 
                     if (model2.Price.HasValue && model2.Price.Value != 0)
@@ -2151,6 +2174,45 @@ namespace Window.Application.Services.Services
             var model = await _context.LogInquiryForUsers.Where(p => !p.IsDelete && p.StateId == state.Id).ToListAsync();
 
             return model.Count();
+        }
+
+        //Get User Lastest Inquiry 
+        public async Task<List<LogInquiryForUserDetail>?> GetUserLastestInquiryDetailForChange(string macAddress)
+        {
+            #region Get User Lastest Inquiry Detail 
+
+            var log = await _context.logInquiryForUserDetails.Include(p => p.Sample).Include(p => p.LogInquiryForUser)
+                                                            .Where(p => !p.IsDelete &&
+                                                                    p.LogInquiryForUser.UserMAcAddress == macAddress).ToListAsync();
+            #endregion
+
+            return log;
+        }
+
+        //Delete User Lastest Inquiry Detail 
+        public async Task<bool> DeleteUserLastestInquiryDetail(ulong inquiryDetailId , string macAddress)
+        {
+            #region Get User Lastest Inquiry Detail 
+
+            var lastestUserInquiryDetail = await _context.logInquiryForUserDetails.Include(p => p.LogInquiryForUser)
+                                                    .FirstOrDefaultAsync(p => !p.IsDelete && p.LogInquiryForUser.UserMAcAddress == macAddress
+                                                                            && p.Id == inquiryDetailId);
+
+            if (lastestUserInquiryDetail == null)
+            {
+                return false;
+            }
+
+            #endregion
+
+            #region Remove User Inquiry Detail
+
+            _context.logInquiryForUserDetails.Remove(lastestUserInquiryDetail);
+            await _context.SaveChangesAsync();
+
+            #endregion
+
+            return true;
         }
 
         #endregion

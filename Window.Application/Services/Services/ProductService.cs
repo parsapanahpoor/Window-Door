@@ -13,6 +13,7 @@ using Window.Domain.Entities.Common;
 using Window.Domain.Entities.Glass;
 using Window.Domain.Entities.Product;
 using Window.Domain.Entities.Sample;
+using Window.Domain.Enums.SellerType;
 using Window.Domain.ViewModels.Article;
 using Window.Domain.ViewModels.Common;
 using Window.Domain.ViewModels.Seller.Pricing;
@@ -212,20 +213,9 @@ namespace Window.Application.Services.Services
                                 }).ToListAsync();
         }
 
-        public async Task<List<SelectListViewModel>> LoadBrands(ulong sellerTypeId)
+        public async Task<List<SelectListViewModel>> LoadBrands()
         {
-            if (sellerTypeId == 0)
-            {
-                return await _context.MainBrands.Where(p => !p.IsDelete && p.UPVC)
-                                 .Select(p => new SelectListViewModel
-                                 {
-                                     Id = p.Id,
-                                     Title = p.BrandName
-                                 }).ToListAsync();
-
-            }
-
-            return await _context.MainBrands.Where(p => !p.IsDelete && p.Alominum)
+            return await _context.MainBrands.Where(p => !p.IsDelete)
                                 .Select(p => new SelectListViewModel
                                 {
                                     Id = p.Id,
@@ -283,10 +273,7 @@ namespace Window.Application.Services.Services
                 CountryId = sellerInfo.CountryId.Value,
                 CreateDate = DateTime.Now,
                 IsDelete = false,
-                ProductKind = model.ProductKind,
-                ProductType = model.ProductType,
                 SellerType = model.SellerType,
-                ProductTypeCategoryId = model.ProductTypeCategory,
                 MainBrandId = model.BrandId
             };
 
@@ -380,7 +367,7 @@ namespace Window.Application.Services.Services
 
             if (sellerInfo.SellerType == Domain.Enums.SellerType.SellerType.UPC)
             {
-                if (count >= 3)
+                if (count >= 5)
                 {
                     return false;
                 }
@@ -388,6 +375,65 @@ namespace Window.Application.Services.Services
 
             return true;
         }
+
+        //Step 2
+        public async Task<bool> GetSellerTypeForValidAddProductStep2(ulong userId , SellerType sellerType)
+        {
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return false;
+
+            #endregion
+
+            #region Get seller informations 
+
+            var sellerInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == market.UserId);
+            if (sellerInfo == null) return false;
+
+            #endregion
+
+            #region Get User Product Count 
+
+            var count = await _context.Products.CountAsync(p => !p.IsDelete && p.UserId == market.UserId);
+
+            #endregion
+
+            if (sellerInfo.SellerType == Domain.Enums.SellerType.SellerType.Aluminium)
+            {
+                if (count >= 2)
+                {
+                    return false;
+                }
+            }
+
+            if (sellerInfo.SellerType == Domain.Enums.SellerType.SellerType.UPC)
+            {
+                if (count >= 5)
+                {
+                    return false;
+                }
+
+                if (sellerType == SellerType.UPC)
+                {
+                    if (await _context.Products.CountAsync(p => !p.IsDelete && p.UserId == market.UserId && p.SellerType == SellerType.UPC) >= 3)
+                    {
+                        return false;
+                    }
+                }
+
+                if (sellerType == SellerType.Aluminium)
+                {
+                    if (await _context.Products.CountAsync(p => !p.IsDelete && p.UserId == market.UserId && p.SellerType == SellerType.Aluminium) >= 2)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
 
         public async Task<SegmentPricingViewModel?> FillSegmentPricingViewModel(ulong productId, ulong userId)
         {
@@ -548,7 +594,7 @@ namespace Window.Application.Services.Services
             //Update Pricing
             if (samePrice == true)
             {
-                var lastSegmentPricing = await _context.GlassPricings.FirstOrDefaultAsync(p => p.GlassId == GlassId && !p.IsDelete);
+                var lastSegmentPricing = await _context.GlassPricings.FirstOrDefaultAsync(p => p.GlassId == GlassId && p.UserId == market.UserId && !p.IsDelete);
 
                 lastSegmentPricing.Price = Price;
 
@@ -619,6 +665,40 @@ namespace Window.Application.Services.Services
         public async Task<List<Glass>> GetListOfGlasses()
         {
             return await _context.Glasses.Where(p => !p.IsDelete).ToListAsync();
+        }
+
+        //Delete Product 
+        public async Task<bool> DeleteProductById(ulong productId , ulong sellerId)
+        {
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Include(p=> p.Market)
+                            .Where(p => !p.IsDelete && p.UserId == sellerId)
+                                    .Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return false;
+
+            #endregion
+
+            #region Get Sample 
+
+            var product = await _context.Products.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == market.UserId && p.Id == productId);
+            if (product == null)
+            {
+                return false;
+            }
+
+            #endregion
+
+            #region Delete Product 
+
+            product.IsDelete = true;
+
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+
+            #endregion
+
+            return true;
         }
 
         #endregion

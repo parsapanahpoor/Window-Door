@@ -30,7 +30,7 @@ namespace Window.Application.Services.Services
 
         public async Task<List<SelectListViewModel>> GetAllSegments()
         {
-            return await _context.Segments.Where(s => !s.IsDelete)
+            return await _context.Segments.Where(s => !s.IsDelete).OrderBy(p=> p.Priority)
                 .Select(s => new SelectListViewModel
                 {
                     Id = s.Id,
@@ -64,7 +64,7 @@ namespace Window.Application.Services.Services
         {
             var query = _context.Segments
                 .Where(a => !a.IsDelete)
-                .OrderByDescending(s => s.CreateDate)
+                .OrderBy(s => s.Priority)
                 .AsQueryable();
 
             #region Filter By Properties
@@ -134,6 +134,7 @@ namespace Window.Application.Services.Services
             lastSegment.Door = segment.Door;
             lastSegment.UPVC = segment.UPVC;
             lastSegment.Aluminum = segment.Aluminum;
+            lastSegment.Priority = segment.Priority;
 
             #endregion
 

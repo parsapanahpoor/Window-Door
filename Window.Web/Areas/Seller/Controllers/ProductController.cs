@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
+using Window.Domain.Enums.SellerType;
 using Window.Domain.ViewModels.Seller.Pricing;
 using Window.Domain.ViewModels.Seller.Product;
+using Window.Web.HttpManager;
 
 namespace Window.Web.Areas.Seller.Controllers
 {
@@ -45,6 +47,8 @@ namespace Window.Web.Areas.Seller.Controllers
 
             #endregion
 
+            ViewBag.Brands = await _productService.LoadBrands();
+
             return View();
         }
 
@@ -57,6 +61,16 @@ namespace Window.Web.Areas.Seller.Controllers
             {
                 TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد .";
                 return RedirectToAction("Index" , "Home" , new { area = "Seller"});
+            }
+
+            #endregion
+
+            #region Validation For Add New Product
+
+            if (!await _productService.GetSellerTypeForValidAddProductStep2(User.GetUserId() , model.SellerType))
+            {
+                TempData[ErrorMessage] = "کاربر عزیز شما حد مجاز برای درج محصول را تکمبل کرده اید . ";
+                return RedirectToAction(nameof(FilterProducts));
             }
 
             #endregion
@@ -78,16 +92,9 @@ namespace Window.Web.Areas.Seller.Controllers
 
             #endregion
 
+            ViewBag.Brands = await _productService.LoadBrands();
+
             return View(model);
-        }
-
-        #endregion
-
-        #region Delete Product 
-
-        public async Task<IActionResult> DeleteProduct(ulong id)
-        {
-            return View();
         }
 
         #endregion
@@ -185,6 +192,22 @@ namespace Window.Web.Areas.Seller.Controllers
 
             TempData[ErrorMessage] = "عملیات با شکست روبرو شده است .";
             return RedirectToAction(nameof(CreateGlassPricing));
+        }
+
+        #endregion
+
+        #region Delete Product 
+
+        public async Task<IActionResult> DeleteProduct(ulong Id)
+        {
+            var res = await _productService.DeleteProductById(Id , User.GetUserId());
+
+            if (res)
+            {
+                return JsonResponseStatus.Success();
+            }
+
+            return JsonResponseStatus.Error();
         }
 
         #endregion

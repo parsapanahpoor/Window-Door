@@ -36,7 +36,7 @@ namespace Window.Application.Services.Services
         {
             var query = _context.MainBrands
                 .Where(a => !a.IsDelete)
-                .OrderByDescending(s => s.CreateDate)
+                .OrderBy(s => s.Priority)
                 .AsQueryable();
 
             #region Filter By Properties
@@ -147,6 +147,7 @@ namespace Window.Application.Services.Services
             brand.BrandName = mainBrand.BrandName;
             brand.UPVC = mainBrand.UPVC;
             brand.Alominum = mainBrand.Alominum;
+            brand.Priority = mainBrand.Priority;
 
             if (brandLogo != null && brandLogo.IsImage())
             {

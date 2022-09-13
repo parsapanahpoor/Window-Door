@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
 using Window.Application.Services.Services;
+using Window.Domain.Entities.Sample;
 using Window.Domain.Enums.SellerType;
 using Window.Domain.Enums.Types;
 using Window.Domain.ViewModels.Site.Inquiry;
@@ -97,8 +98,6 @@ namespace Window.Web.Controllers
                 CountryId = CountryId,
                 StateId = StateId,
                 CityId = CityId,
-                ProductType = ProductType,
-                ProductKind = ProductKind,
                 MainBrandId = MainBrandId,
                 UserMacAddress = UserMacAddress,
                 SellerType = SellerType,
@@ -130,7 +129,7 @@ namespace Window.Web.Controllers
             {
                 TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
                 return NotFound();
-            } 
+            }
 
             #endregion
 
@@ -139,8 +138,8 @@ namespace Window.Web.Controllers
             return View(samples);
         }
 
-        [HttpPost , ValidateAntiForgeryToken]
-        public async Task<IActionResult> InquiryStep3(ulong sampleId , int width , int height , int? katibeSize , string userMacAddress)
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> InquiryStep3(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string userMacAddress)
         {
             #region Get Samples For Show In Page Model
 
@@ -187,7 +186,7 @@ namespace Window.Web.Controllers
 
             #region Add Log For User
 
-            var res = await _inquiryService.LogInquiryForUserPart2(sampleId , width , height , katibeSize, userMacAddress);
+            var res = await _inquiryService.LogInquiryForUserPart2(sampleId, width, height, katibeSize, userMacAddress ,SampleCount);
             if (!res) return NotFound();
 
             #endregion
@@ -201,7 +200,7 @@ namespace Window.Web.Controllers
 
         #region Inquiry Step 4 (proccess inquiry)
 
-        public async Task<IActionResult> InquiryStep4(string userMacAddress , string? brandTitle, int? orderByPrice , int? orderByScore, int pageId = 1 )
+        public async Task<IActionResult> InquiryStep4(string userMacAddress, string? brandTitle, int? orderByPrice, int? orderByScore, int pageId = 1)
         {
             #region Brand ViewBag
 
@@ -213,7 +212,7 @@ namespace Window.Web.Controllers
 
             if (!string.IsNullOrEmpty(brandTitle))
             {
-                var res = await _inquiryService.UpdateUserInquryInLastStep(userMacAddress , brandTitle);
+                var res = await _inquiryService.UpdateUserInquryInLastStep(userMacAddress, brandTitle);
                 if (!res) return NotFound();
             }
 
@@ -225,7 +224,7 @@ namespace Window.Web.Controllers
             if (model == null || !model.Any())
             {
                 TempData[ErrorMessage] = "نتیجه ای برای استعلام شما یافت نشده است .";
-                return RedirectToAction("Index" , "Home");
+                return RedirectToAction("Index", "Home");
             }
 
             #endregion
@@ -240,7 +239,7 @@ namespace Window.Web.Controllers
             {
                 model = model.OrderByDescending(p => p.Price).ToList();
             }
-            else if(orderByPrice == 2)
+            else if (orderByPrice == 2)
             {
                 model = model.OrderBy(p => p.Price).ToList();
             }
@@ -303,7 +302,7 @@ namespace Window.Web.Controllers
 
             #region Update Seller Activation Tariff
 
-            await _sellerService.UpdateSellerActivationTariff(userId , false , true);
+            await _sellerService.UpdateSellerActivationTariff(userId, false, true);
 
             #endregion
 
@@ -336,7 +335,7 @@ namespace Window.Web.Controllers
             //Get User ID 
             var userId = User.GetUserId();
 
-            return RedirectToAction(nameof(InquiryStep4) , new { userMacAddress = userId});            
+            return RedirectToAction(nameof(InquiryStep4), new { userMacAddress = userId });
         }
 
         #endregion
@@ -361,7 +360,7 @@ namespace Window.Web.Controllers
             return View();
         }
 
-        [HttpPost , ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> AddScoreToSeller(int score, ulong sellerId)
         {
             #region Check Is User Was Scored To Seller
@@ -382,17 +381,127 @@ namespace Window.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var res = await _inquiryService.AddScoreForSeller(score , sellerId , User.GetUserId().ToString());
+            var res = await _inquiryService.AddScoreForSeller(score, sellerId, User.GetUserId().ToString());
 
             if (res)
             {
                 TempData[SuccessMessage] = "امتیاز شما برای فروشنده باموفقیت انجام شده است";
-                return RedirectToAction("Index" , "Home");
+                return RedirectToAction("Index", "Home");
             }
 
             #endregion
 
             return View();
+        }
+
+        #endregion
+
+        #region Delete User Lastest Inquiry Detail
+
+        public async Task<IActionResult> DeleteUserLasteInquiryDetail(ulong Id)
+        {
+            #region Remove Method
+
+            var res = await _inquiryService.DeleteUserLastestInquiryDetail(Id, User.GetUserId().ToString());
+            if (res == false)
+            {
+                TempData[ErrorMessage] = "نتیجه ای برای استعلام شما یافت نشده است .";
+                return RedirectToAction("Index", "Home");
+            }
+
+            #endregion
+
+            return RedirectToAction(nameof(GetUserLastestInquiry) , new { userMacAddress = User.GetUserId().ToString() });
+        }
+
+        #endregion
+
+        #region Get Lastest User Iquiry 
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserLastestInquiry(string userMacAddress)
+        {
+            #region Get List Of Lastest Inquiry
+
+            var res = await _inquiryService.GetUserLastestInquiryDetailForChange(User.GetUserId().ToString());
+            if (res == null)
+            {
+                TempData[ErrorMessage] = "نتیجه ای برای استعلام شما یافت نشده است .";
+                return RedirectToAction("Index", "Home");
+            }
+
+            #endregion
+
+            ViewBag.UserMacAddress = User.GetUserId().ToString();
+
+            return View(res);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> GetUserLastestInquiry(ulong inquiryDetailId, ulong sampleId, int width, int height, int? katibeSize, string userMacAddress)
+        {
+            #region Get Samples For Show In Page Model
+
+            var samples = await _sampleService.GetListOfSamplesForShowInAPI(userMacAddress);
+            if (samples == null || !samples.Any())
+            {
+                TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
+                return NotFound();
+            }
+
+            #endregion
+
+            #region Check Is Exist Sample 
+
+            var sample = await _sampleService.GetSampleBySampleId(sampleId);
+            if (samples == null || !samples.Any())
+            {
+                TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
+                return NotFound();
+            }
+            if (sample == null)
+            {
+                TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
+                return NotFound();
+            }
+
+            if (sample.MaxHeight < height)
+            {
+                TempData[ErrorMessage] = "ارتفاع وارد شده بیشتر از حد مجاز است .";
+                return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
+            }
+            if (sample.MinHeight > height)
+            {
+                TempData[ErrorMessage] = "ارتفاع وارد شده کمتر از حد مجاز است .";
+                return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
+            }
+            if (sample.MaxWidth < width)
+            {
+                TempData[ErrorMessage] = "عرض وارد شده بیشتر از حد مجاز است .";
+                return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
+            }
+            if (sample.MinWidth > width)
+            {
+                TempData[ErrorMessage] = "عرض وارد شده کمتر از حد مجاز است .";
+                return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
+            }
+
+            #endregion
+
+            #region Add Log For User
+
+            var res = await _inquiryService.UpdateUserInquiryItrm(inquiryDetailId , sampleId, width, height, katibeSize, userMacAddress);
+            if (!res)
+            {
+                TempData[ErrorMessage] = "نتیجه ای برای استعلام شما یافت نشده است .";
+                return RedirectToAction("Index", "Home");
+            }
+
+            #endregion
+
+            ViewBag.UserMacAddress = User.GetUserId().ToString();
+
+            return RedirectToAction(nameof(GetUserLastestInquiry));
         }
 
         #endregion

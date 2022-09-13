@@ -22,6 +22,8 @@ namespace Window.Domain.Entities.Inquiry
 
         public int? KatibeSize { get; set; }
 
+        public int CountOfSample { get; set; } = 1;
+
         #endregion
 
         #region relations 

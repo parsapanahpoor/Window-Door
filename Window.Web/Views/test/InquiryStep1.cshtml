@@ -78,11 +78,11 @@
                 <span class="widget-caption"> فیلتر استعلام گیری  </span>
             </div>
             <div class="widget-body">
-                <div>
+                <div class="row">
                     <form asp-action="InquiryStep2" asp-controller="test" asp-area="" id="filter-search" method="get">
                         <input name="UserMacAddress" type="hidden" value="@ViewBag.UserId" />
 
-                        <div class="form-group">
+                        <div class="form-group col-md-4">
                             <label asp-for="CountryId"></label>
                             <select class="form-control" asp-for="CountryId">
                                 <option value=""> لطفا یک کشور را انتخاب کنید </option>
@@ -103,7 +103,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group col-md-4">
                             <label asp-for="StateId"></label>
                             <select class="form-control" asp-for="StateId">
                                 <option value=""> لطفا یک استان را انتخاب کنید </option>
@@ -124,7 +124,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group col-md-4">
                             <label asp-for="CityId"></label>
                             <select asp-for="CityId" class="form-control">
                                 <option value=""> لطفا یک شهر را انتخاب کنید </option>
@@ -145,10 +145,16 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group col-md-4">
+                            <label asp-for="SellerType"> وضعیت </label>
+                            <select asp-for="SellerType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.SellerType.SellerType))">
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4">
                             <label asp-for="MainBrandId">برند</label>
                             <select asp-for="MainBrandId" class="form-control">
-                                <option value="@null">لطفا یک برند را انتخاب کنید</option>
+                                <option value="@null">همه</option>
                                 @if (brand != null && brand.Any())
                                 {
                                     foreach (var brands in brand)
@@ -159,7 +165,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group col-md-4">
                             <label asp-for="GlassId">شیشه</label>
                             <select asp-for="GlassId" class="form-control">
                                 @if (glass != null && glass.Any())
@@ -172,35 +178,13 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label asp-for="SellerType"> وضعیت </label>
-                            <select asp-for="SellerType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.SellerType.SellerType))">
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="ProductKind"> وضعیت </label>
-                            <select asp-for="ProductKind" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.Types.ProductKind))">
-                                <option value=""> لطفا وضعیت را انتخاب کنید </option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="ProductType"> وضعیت </label>
-                            <select asp-for="ProductType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.Types.ProductType))">
-                                <option value=""> لطفا وضعیت را انتخاب کنید </option>
-                            </select>
-                        </div>
-
                         <hr />
 
-                        <div class="row">
-                            <div class="col-md-12 flex-style">
+                        <div class="form-group col-md-12">
                                 <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
                                     <i class="btn-label glyphicon glyphicon-filter"></i>ثبت
                                 </button>
                             </div>
-                        </div>
 
                     </form>
                 </div>

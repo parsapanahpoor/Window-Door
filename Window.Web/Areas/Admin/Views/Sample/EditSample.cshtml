@@ -63,6 +63,11 @@
                                     <input type="text" class="form-control" asp-for="MinWidth">
                                     <span class="text-danger" asp-validation-for="MinWidth"></span>
                                 </div>
+                                <div class="form-group col-md-12 col-sm-12">
+                                    <label asp-for="Priority">اولویت نمایش</label>
+                                    <input type="number" min="1" class="form-control" asp-for="Priority">
+                                    <span class="text-danger" asp-validation-for="Priority"></span>
+                                </div>
                         </div>
 
                         <hr class="margin-bottom-10 margin-top-10" />

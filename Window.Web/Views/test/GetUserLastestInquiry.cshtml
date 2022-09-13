@@ -1,4 +1,4 @@
-﻿@model List<Window.Domain.Entities.Sample.Sample>
+﻿@model List<Window.Domain.Entities.Inquiry.LogInquiryForUserDetail>
 
 @{
     ViewData["Title"] = "استعلام گیری";
@@ -10,7 +10,7 @@
         <div class="well with-header with-footer table-responsive">
             <div class="header bordered-azure">
                 <div class="flex-style">
-                    <span>لیست نمونه ها </span>
+                    <span>لیست </span>
                 </div>
             </div>
 
@@ -29,19 +29,10 @@
                                 نام نمونه
                             </th>
                             <th class="tc vm">
-                                عرض (cm)
+                                عرض
                             </th>
                             <th class="tc vm">
-                                ارتفاع (cm)
-                            </th>
-                            <th class="tc vm">
-                                تعداد
-                            </th>
-                            <th class="tc vm">
-                                محدوده ی ارتفاع (cm)
-                            </th>
-                            <th class="tc vm">
-                                محدوده ی عرض (cm)
+                                ارتفاع
                             </th>
                             <th class="tc vm">
                                 ثبت
@@ -51,41 +42,31 @@
                     <tbody class="tc vm">
                         @foreach (var product in Model)
                         {
-                            <form asp-action="InquiryStep3" asp-controller="test" asp-area="" id="" method="post">
-                                <input type="hidden" value="@product.Id" name="SampleId" />
+                            <form asp-action="GetUserLastestInquiry" asp-controller="test" asp-area="" id="" method="post">
+                                <input type="hidden" value="@product.SampleId" name="SampleId" />
+                                <input type="hidden" value="@product.Id" name="inquiryDetailId" />
                                 <input type="hidden" value="@ViewBag.UserMacAddress" name="userMacAddress" />
 
                             <tr class="tc vm" remove-ajax-item="">
                                 <td class="vm">
-                                        @product.Id
+                                    <a asp-action="DeleteUserLasteInquiryDetail" asp-area="" asp-controller="test" asp-route-Id="@product.Id" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></a>
                                 </td>
                                 <td class="vm">
                                     <div class="flex-style-center">
-                                        <a target="_blank" href="@Window.Application.StticTools.FilePaths.SampleThumbimage/@product.Image">
-                                            <img src="@Window.Application.StticTools.FilePaths.SampleThumbimage/@product.Image" class="avatar-style" style="height:70px;width:120px;" />
-                                        </a>
+                                        <img src="@Window.Application.StticTools.FilePaths.SampleThumbimage/@product.Sample.Image" class="avatar-style" style="border-radius:50px;" />
                                     </div>
                                 </td>
                                 <td class="tc vm" style="max-width: 200px">
-                                        @product.SegmentName
+                                        @product.Sample.SegmentName
                                 </td>
                                 <td class="tc vm">
-                                    <input type="number" min="0" step="10" name="Width" />
+                                    <input type="text"  name="Width" value="@product.Width"/>
                                 </td>
                                 <td class="tc vm">
-                                    <input type="number" min="0" step="10" name="Height" />
+                                    <input type="text" name="Height" value="@product.Height" />
                                 </td>
                                 <td class="tc vm">
-                                    <input type="number" min="1" name="SampleCount" />
-                                </td>
-                                <td class="tc vm">
-                                    <p> @product.MaxHeight تا @product.MinHeight </p>
-                                </td>
-                                <td class="tc vm">
-                                    <p> @product.MaxWidth تا @product.MinWidth </p>
-                                </td>
-                                <td class="tc vm">
-                                    <button type="submit" class="btn  btn-palegreen">
+                                    <button type="submit" class="btn btn-labeled btn-palegreen">
                                         ثبت
                                     </button>
                                 </td>

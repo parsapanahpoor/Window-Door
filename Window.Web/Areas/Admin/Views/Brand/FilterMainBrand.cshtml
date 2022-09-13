@@ -116,7 +116,6 @@
 
                                 <td class="tc vm">
                                     <a asp-action="EditMainBrand" asp-area="Admin" asp-controller="Brand" asp-route-brandId="@brand.Id" class="btn btn-warning btn-circle btn-xs"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <button onclick="DeleteAjax(@brand.Id, '@Url.Action("DeleteArticle", "Brand", new { area = "Admin", Id = brand.Id })')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
                                 </td>
 
                             </tr>

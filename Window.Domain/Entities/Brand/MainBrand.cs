@@ -28,6 +28,8 @@ namespace Window.Domain.Entities.Brand
         [MaxLength(200)]
         public string? BrandLogo { get; set; }
 
+        public int Priority { get; set; } = 0;
+
         #endregion
 
         #region relations

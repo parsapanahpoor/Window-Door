@@ -12,13 +12,7 @@ namespace Window.Domain.ViewModels.Seller.Product
     {
         #region properties
 
-        public ProductType ProductType { get; set; }
-
-        public ProductKind ProductKind { get; set; }
-
         public SellerType SellerType { get; set; }
-
-        public ulong ProductTypeCategory { get; set; }
 
         public ulong BrandId { get; set; }
 

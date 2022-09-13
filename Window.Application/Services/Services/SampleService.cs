@@ -73,7 +73,7 @@ namespace Window.Application.Services.Services
         {
             var query = _context.Samples
                 .Where(a => !a.IsDelete)
-                .OrderByDescending(s => s.CreateDate)
+                .OrderBy(s => s.Priority)
                 .AsQueryable();
 
             #region Filter By Properties
@@ -137,6 +137,7 @@ namespace Window.Application.Services.Services
             model.MaxWidth = sample.MaxWidth;
             model.MinWidth = sample.MinWidth;
             model.MinHeight = sample.MinHeight;
+            model.Priority = sample.Priority;
 
             #endregion
 
@@ -253,26 +254,6 @@ namespace Window.Application.Services.Services
             #region Get Samples
 
             var samples =  _context.Samples.Where(p => !p.IsDelete).AsQueryable();
-
-            if (log.ProductKind == ProductKind.Door)
-            {
-                samples =  samples.Where(s => !s.IsDelete && s.Door);
-            }
-
-            if (log.ProductKind == ProductKind.Window)
-            {
-                samples = samples.Where(s => !s.IsDelete && s.Window);
-            }
-
-            if (log.ProductType == ProductType.Keshoie)
-            {
-                samples = samples.Where(s => !s.IsDelete && s.Keshoie);
-            }
-
-            if (log.ProductType == ProductType.Lolaie)
-            {
-                samples = samples.Where(s => !s.IsDelete && s.Lolaie);
-            }
 
             if (log.SellerType == SellerType.Aluminium)
             {
