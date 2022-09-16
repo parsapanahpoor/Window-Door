@@ -73,7 +73,7 @@ namespace Window.Application.Services.Services
         {
             var query = _context.Samples
                 .Where(a => !a.IsDelete)
-                .OrderBy(s => s.Priority)
+                .OrderByDescending(s => s.Priority)
                 .AsQueryable();
 
             #region Filter By Properties
