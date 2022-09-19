@@ -11,27 +11,27 @@
 }
 
 @section Scripts
-{
-<partial name="_JqueryValidation" />
+    {
+    <partial name="_JqueryValidation" />
 }
 
-@section breadcrumb {
+    @section breadcrumb {
 
-<li>
-    <a href="javascript:void(0)"> @ViewData["Title"] </a>
-</li>
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
 }
 
 
-<div class="row">
-    <div class="col-lg-12 col-sm-12">
-        <div class="widget">
-            <div class="widget-header bordered-bottom bordered-green">
-                <h3 class="widget-caption"> @ViewData["Title"] </h3>
-            </div>
-            <div class="widget-body">
-                <div>
-                    <div class="row">
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-green">
+                    <h3 class="widget-caption"> @ViewData["Title"] </h3>
+                </div>
+                <div class="widget-body">
+                    <div>
+                        <div class="row">
 
                         @if (Model.Segments != null && Model.Segments.Any())
                         {
@@ -41,22 +41,22 @@
                                     <input type="hidden" asp-for="ProductId" />
                                     <input type="hidden" name="SegmentId" value="@item.Segment.Id" />
                                     <div class="form-group col-md-4 col-sm-12">
-                                        <label>@item.Segment.SegmentName</label>
+                                        <label>@item.Segment.SegmentName (ریال)</label>
                                         <div class="input-group">
                                             @if (segmentPricing != null && segmentPricing.Any())
                                             {
                                                 @if (segmentPricing.Any(p => p.SegmentId == item.Segment.Id))
                                                 {
-                                                    <input type="number" step="10000" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="0">
+                                                    <input type="number" step="100" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="0">
                                                 }
-                                                   else
-                                            {
-                                                <input type="number" step="10000" class="form-control" name="Price" min="0">
-                                            }
+                                                else
+                                                {
+                                                    <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                }
                                             }
                                             else
                                             {
-                                                <input type="number" step="10000" class="form-control" name="Price" min="0">
+                                                <input type="number" step="100" class="form-control" name="Price" min="0">
                                             }
                                             <span class="input-group-btn">
                                                 <span class="btn palegreen-azure btn-file" style="padding:0px 0px 0px 0px;">

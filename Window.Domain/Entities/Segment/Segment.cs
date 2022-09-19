@@ -20,13 +20,7 @@ namespace Window.Domain.Entities.Segment
 
         public bool Aluminum { get; set; }
 
-        public bool Keshoie { get; set; }
-
-        public bool Lolaie { get; set; }
-
-        public bool Door { get; set; }
-
-        public bool Window { get; set; }
+        public bool Yaragh { get; set; }
 
         [Display(Name = "نام قطعه")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]

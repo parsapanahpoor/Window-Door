@@ -527,7 +527,7 @@ namespace Window.Application.Services.Services
 
             #region پنجره لولایی آلومینیومی لولایی شش لنگه 
 
-            if (sample.Id == 14)
+            if (sample.Id == 37)
             {
                 //Get Sample Segments
                 var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
@@ -553,13 +553,13 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 55) != null)
                 {
                     //مولیون لولایی آلومینیومی
-                    totalPrice = totalPrice + (5 * ((height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 55).Price));
+                    totalPrice = totalPrice + (6 * ((height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 55).Price));
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 47) != null)
                 {
                     //قیمت زهوار دوجداره آلومینیومی
-                    totalPrice = totalPrice + (5 * ((height)) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 47).Price)));
+                    totalPrice = totalPrice + (6 * ((height)) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 47).Price)));
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 40) != null)
@@ -813,13 +813,13 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 32) != null)
                 {
                     //لنگه ی لنگه لولایی upvc
-                    totalPrice = totalPrice + (((width) / 3) + (2 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 32).Price);
+                    totalPrice = totalPrice + (((2* width) / 3) + (2 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 32).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 19) != null)
                 {
                     //گالوانیزه لنگه لولایی upvc
-                    totalPrice = totalPrice + (((width) / 3) + (2 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 19).Price);
+                    totalPrice = totalPrice + (((2 * width) / 3) + (2 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 19).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 33) != null)
@@ -883,13 +883,13 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 32) != null)
                 {
                     //لنگه لولایی upvc
-                    totalPrice = totalPrice + ((width / 2) + (4 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 32).Price);
+                    totalPrice = totalPrice + ((width) + (4 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 32).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 19) != null)
                 {
                     //گالوانیزه لنگه لولایی upvc
-                    totalPrice = totalPrice + ((width / 2) + (4 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 19).Price);
+                    totalPrice = totalPrice + ((width) + (4 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 19).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 33) != null)
@@ -953,13 +953,13 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 32) != null)
                 {
                     //لنگه لولایی upvc
-                    totalPrice = totalPrice + ((width / 3) + (4 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 32).Price);
+                    totalPrice = totalPrice + (( 2 * width / 3) + (4 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 32).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 19) != null)
                 {
                     //گالوانیزه لنگه لولایی upvc
-                    totalPrice = totalPrice + ((width / 3) + (4 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 19).Price);
+                    totalPrice = totalPrice + ((2 * width / 3) + (4 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 19).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 33) != null)
@@ -2110,7 +2110,7 @@ namespace Window.Application.Services.Services
 
                     foreach (var sample in logDetail)
                     {
-                        model2.Price = model2.Price + await InitialTotalSamplePrice(brand.Id, sample.SampleId.Value, sample.Width.Value, sample.CountOfSample ,  sample.Height.Value, sample.KatibeSize, seller.Id, log.GlassId.Value);
+                        model2.Price = model2.Price + await InitialTotalSamplePrice(brand.Id, sample.SampleId.Value ,  sample.Height.Value, sample.Width.Value,sample.CountOfSample ,  sample.KatibeSize, seller.Id, log.GlassId.Value);
                     }
 
                     if (model2.Price.HasValue && model2.Price.Value != 0)

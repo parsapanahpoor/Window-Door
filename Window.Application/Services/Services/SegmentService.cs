@@ -128,11 +128,8 @@ namespace Window.Application.Services.Services
             #region Update Models 
 
             lastSegment.SegmentName = segment.SegmentName;
-            lastSegment.Keshoie = segment.Keshoie;
-            lastSegment.Lolaie = segment.Lolaie;
-            lastSegment.Window = segment.Window;
-            lastSegment.Door = segment.Door;
             lastSegment.UPVC = segment.UPVC;
+            lastSegment.Yaragh = segment.Yaragh;
             lastSegment.Aluminum = segment.Aluminum;
             lastSegment.Priority = segment.Priority;
 
