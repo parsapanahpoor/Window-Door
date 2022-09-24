@@ -37,9 +37,60 @@ namespace Window.Application.Services.Services
 
         #region Seller Side
 
+        //Get List OF Brnads
+        public async Task<List<MainBrand>> GetListOfBrands()
+        {
+            return await _context.MainBrands.Where(p => !p.IsDelete).ToListAsync();
+        }
+
+        //Load Brands For Create Product From Seller Side 
+        public async Task<List<SelectListViewModel>>? LoadBrandsForCreateProductFromSellerSide(ulong userId)
+        {
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return null;
+
+            #endregion
+
+            #region Get seller informations 
+
+            var sellerInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == market.UserId);
+            if (sellerInfo == null) return null;
+
+            #endregion
+
+            if (sellerInfo.SellerType == Domain.Enums.SellerType.SellerType.Aluminium)
+            {
+                return await _context.MainBrands.Where(p => !p.IsDelete && p.Alominum)
+                              .Select(p => new SelectListViewModel
+                              {
+                                  Id = p.Id,
+                                  Title = p.BrandName
+                              }).ToListAsync();
+            }
+
+            if (sellerInfo.SellerType == Domain.Enums.SellerType.SellerType.UPC)
+            {
+                return await _context.MainBrands.Where(p => !p.IsDelete && p.UPVC)
+                            .Select(p => new SelectListViewModel
+                            {
+                                Id = p.Id,
+                                Title = p.BrandName
+                            }).ToListAsync();
+            }
+
+            return await _context.MainBrands.Where(p => !p.IsDelete)
+                                .Select(p => new SelectListViewModel
+                                {
+                                    Id = p.Id,
+                                    Title = p.BrandName
+                                }).ToListAsync();
+        }
+
         public async Task<Glass?> GetGlassWithName(string glassName)
         {
-            return await _context.Glasses.FirstOrDefaultAsync(p => !p.IsDelete && p.GlassName == glassName); 
+            return await _context.Glasses.FirstOrDefaultAsync(p => !p.IsDelete && p.GlassName == glassName);
         }
 
         //Get All Glasses
@@ -244,8 +295,6 @@ namespace Window.Application.Services.Services
             var sellerInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
             if (sellerInfo == null) return 0;
 
-            if (sellerInfo.SellerType == Domain.Enums.SellerType.SellerType.Aluminium && model.SellerType == Domain.Enums.SellerType.SellerType.UPC) return 0;
-
             #endregion
 
             #region Check User Activity 
@@ -273,9 +322,23 @@ namespace Window.Application.Services.Services
                 CountryId = sellerInfo.CountryId.Value,
                 CreateDate = DateTime.Now,
                 IsDelete = false,
-                SellerType = model.SellerType,
                 MainBrandId = model.BrandId
             };
+
+            if (brand.UPVC && brand.Alominum)
+            {
+                product.SellerType = SellerType.UPVCAlminium;
+            }
+
+            if (brand.UPVC && !brand.Alominum)
+            {
+                product.SellerType = SellerType.UPC;
+            }
+
+            if (brand.Alominum && !brand.UPVC)
+            {
+                product.SellerType = SellerType.Aluminium;
+            }
 
             #endregion
 
@@ -377,7 +440,7 @@ namespace Window.Application.Services.Services
         }
 
         //Step 2
-        public async Task<bool> GetSellerTypeForValidAddProductStep2(ulong userId , SellerType sellerType)
+        public async Task<bool> GetSellerTypeForValidAddProductStep2(ulong userId, ulong brandId)
         {
             #region Get Market By Id 
 
@@ -399,6 +462,13 @@ namespace Window.Application.Services.Services
 
             #endregion
 
+            #region Get Brand By Id
+
+            var barnd = await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == brandId);
+            if (barnd == null) return false;
+
+            #endregion
+
             if (sellerInfo.SellerType == Domain.Enums.SellerType.SellerType.Aluminium)
             {
                 if (count >= 2)
@@ -409,26 +479,35 @@ namespace Window.Application.Services.Services
 
             if (sellerInfo.SellerType == Domain.Enums.SellerType.SellerType.UPC)
             {
+                if (count >= 3)
+                {
+                    return false;
+                }
+            }
+
+            if (sellerInfo.SellerType == Domain.Enums.SellerType.SellerType.UPVCAlminium)
+            {
                 if (count >= 5)
                 {
                     return false;
                 }
 
-                if (sellerType == SellerType.UPC)
+                if (barnd.UPVC && !barnd.Alominum)
                 {
-                    if (await _context.Products.CountAsync(p => !p.IsDelete && p.UserId == market.UserId && p.SellerType == SellerType.UPC) >= 3)
+                    if (await _context.Products.Include(p => p.MainBrand).CountAsync(p => !p.IsDelete && p.UserId == market.UserId && p.MainBrand.UPVC && !p.MainBrand.Alominum) >= 3)
                     {
                         return false;
                     }
                 }
 
-                if (sellerType == SellerType.Aluminium)
+                if (!barnd.UPVC && barnd.Alominum)
                 {
-                    if (await _context.Products.CountAsync(p => !p.IsDelete && p.UserId == market.UserId && p.SellerType == SellerType.Aluminium) >= 2)
+                    if (await _context.Products.Include(p => p.MainBrand).CountAsync(p => !p.IsDelete && p.UserId == market.UserId && p.MainBrand.Alominum && !p.MainBrand.UPVC) >= 2)
                     {
                         return false;
                     }
                 }
+              
             }
 
             return true;
@@ -446,32 +525,97 @@ namespace Window.Application.Services.Services
 
             #region Get Product 
 
-            var product = await _context.Products.Include(p=> p.MainBrand).FirstOrDefaultAsync(p => p.Id == productId && p.UserId == market.UserId && !p.IsDelete);
+            var product = await _context.Products.Include(p => p.MainBrand).FirstOrDefaultAsync(p => p.Id == productId && p.UserId == market.UserId && !p.IsDelete);
             if (product == null) return null;
 
             #endregion
 
-            #region Get Segments
+            #region Get Brand By Id 
 
-            var segments = _context.Segments.Where(p => !p.IsDelete).AsQueryable();
+            var brand = await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == product.MainBrandId);
+            if (brand == null) return null;
 
             #endregion
 
-            #region Fill View Model
-
-            SegmentPricingViewModel model = new SegmentPricingViewModel()
+            if (brand.UPVC && brand.Alominum)
             {
-                ProductId = productId,
-                ProductName = product.MainBrand.BrandName,
-                Segments = segments.Select(p => new SegmentPRicingEntityViewModel()
+                #region Get Segments
+
+                var segments = _context.Segments.Where(p => !p.IsDelete).ToList();
+
+                #endregion
+
+                #region Fill View Model
+
+                SegmentPricingViewModel model = new SegmentPricingViewModel()
                 {
-                    Segment = p,
-                }).ToList()
-            };
+                    ProductId = productId,
+                    ProductName = product.MainBrand.BrandName,
+                    Segments = segments.Select(p => new SegmentPRicingEntityViewModel()
+                    {
+                        Segment = p,
+                    }).ToList()
+                };
 
-            #endregion
+                #endregion
 
-            return model;
+                return model;
+            }
+
+
+            if (brand.Alominum)
+            {
+                #region Get Segments
+
+                var segments = _context.Segments.Where(p => !p.IsDelete && p.Aluminum).ToList();
+
+
+                #endregion
+
+                #region Fill View Model
+
+                SegmentPricingViewModel model = new SegmentPricingViewModel()
+                {
+                    ProductId = productId,
+                    ProductName = product.MainBrand.BrandName,
+                    Segments = segments.Select(p => new SegmentPRicingEntityViewModel()
+                    {
+                        Segment = p,
+                    }).ToList()
+                };
+
+                #endregion
+
+                return model;
+
+            }
+
+            if (brand.UPVC)
+            {
+                #region Get Segments
+
+                var segments = _context.Segments.Where(p => !p.IsDelete && p.UPVC).ToList();
+
+                #endregion
+
+                #region Fill View Model
+
+                SegmentPricingViewModel model = new SegmentPricingViewModel()
+                {
+                    ProductId = productId,
+                    ProductName = product.MainBrand.BrandName,
+                    Segments = segments.Select(p => new SegmentPRicingEntityViewModel()
+                    {
+                        Segment = p,
+                    }).ToList()
+                };
+
+                #endregion
+
+                return model;
+            }
+
+            return null;
         }
 
         public async Task<GlassPricingViewModel?> FillGlassPricingEntityViewModel(ulong userId)
@@ -668,11 +812,11 @@ namespace Window.Application.Services.Services
         }
 
         //Delete Product 
-        public async Task<bool> DeleteProductById(ulong productId , ulong sellerId)
+        public async Task<bool> DeleteProductById(ulong productId, ulong sellerId)
         {
             #region Get Market By Id 
 
-            var market = await _context.MarketUser.Include(p=> p.Market)
+            var market = await _context.MarketUser.Include(p => p.Market)
                             .Where(p => !p.IsDelete && p.UserId == sellerId)
                                     .Select(p => p.Market).FirstOrDefaultAsync();
             if (market == null) return false;
@@ -897,7 +1041,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 6) != null)
                 {
                     //لنگه ی بازشوی پنجره
-                    totalPrice = totalPrice + (width + ( 2 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 6).Price);
+                    totalPrice = totalPrice + (width + (2 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 6).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 7) != null)
@@ -943,7 +1087,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 6) != null)
                 {
                     //لنگه ی بازشوی پنجره
-                    totalPrice = totalPrice + (((2 * width) / 3)+ (2 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 6).Price);
+                    totalPrice = totalPrice + (((2 * width) / 3) + (2 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 6).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 7) != null)
@@ -1830,8 +1974,8 @@ namespace Window.Application.Services.Services
                 {
                     //لنگه ی کشویی
                     totalPrice = totalPrice + (width + (2 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 19).Price);
-                } 
-                
+                }
+
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 20) != null)
                 {
                     //گالوانیزه ی لنگه ی کشویی
@@ -1861,7 +2005,7 @@ namespace Window.Application.Services.Services
                     //گالوانیزه ی مولوین کشویی
                     totalPrice = totalPrice + (height) * (userSegments.FirstOrDefault(p => p.SegmentId == 24).Price);
                 }
-                
+
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 25) != null)
                 {
                     //کاور مولوین کشویی
@@ -1972,7 +2116,7 @@ namespace Window.Application.Services.Services
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 26) != null)
                 {
                     //کاور بارانگیر
-                    totalPrice = totalPrice + ((2 * width)/3) * (userSegments.FirstOrDefault(p => p.SegmentId == 26).Price);
+                    totalPrice = totalPrice + ((2 * width) / 3) * (userSegments.FirstOrDefault(p => p.SegmentId == 26).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 27) != null)

@@ -9,9 +9,11 @@ namespace Window.Domain.Enums.SellerType
 {
     public enum SellerType
     {
-        [Display(Name = "UPC")]
+        [Display(Name = "UPVC")]
         UPC,
-        [Display(Name = " آلمینیوم" )]
-        Aluminium
+        [Display(Name = " آلمینیوم")]
+        Aluminium,
+        [Display(Name = " UPVC و آلمینیوم")]
+        UPVCAlminium
     }
 }

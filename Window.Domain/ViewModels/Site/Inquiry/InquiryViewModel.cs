@@ -19,7 +19,7 @@ namespace Window.Domain.ViewModels.Site.Inquiry
 
         public string BrandName { get; set; }
 
-        public int? Price { get; set; }
+        public double? Price { get; set; }
 
         public int? Score { get; set; }
     }

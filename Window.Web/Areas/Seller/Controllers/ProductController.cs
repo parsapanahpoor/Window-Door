@@ -37,17 +37,7 @@ namespace Window.Web.Areas.Seller.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateProduct()
         {
-            #region Validation For Add New Product
-
-            if (!await _productService.GetSellerTypeForValidAddProduct(User.GetUserId()))
-            {
-                TempData[ErrorMessage] = "کاربر عزیز شما حد مجاز برای درج محصول را تکمبل کرده اید . ";
-                return RedirectToAction(nameof(FilterProducts));
-            }
-
-            #endregion
-
-            ViewBag.Brands = await _productService.LoadBrands();
+            ViewBag.Brands = await _productService.LoadBrandsForCreateProductFromSellerSide(User.GetUserId());
 
             return View();
         }
@@ -67,7 +57,7 @@ namespace Window.Web.Areas.Seller.Controllers
 
             #region Validation For Add New Product
 
-            if (!await _productService.GetSellerTypeForValidAddProductStep2(User.GetUserId() , model.SellerType))
+            if (!await _productService.GetSellerTypeForValidAddProductStep2(User.GetUserId() , model.BrandId))
             {
                 TempData[ErrorMessage] = "کاربر عزیز شما حد مجاز برای درج محصول را تکمبل کرده اید . ";
                 return RedirectToAction(nameof(FilterProducts));
@@ -92,7 +82,7 @@ namespace Window.Web.Areas.Seller.Controllers
 
             #endregion
 
-            ViewBag.Brands = await _productService.LoadBrands();
+            ViewBag.Brands = await _productService.LoadBrandsForCreateProductFromSellerSide(User.GetUserId());
 
             return View(model);
         }

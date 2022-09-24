@@ -21,8 +21,14 @@ namespace Window.Application.Services.Interfaces
     {
         #region Seller Side
 
+        //Get List OF Brnads
+        Task<List<MainBrand>> GetListOfBrands();
+
+        //Load Brands For Create Product From Seller Side 
+        Task<List<SelectListViewModel>>? LoadBrandsForCreateProductFromSellerSide(ulong userId);
+
         //Step 2
-        Task<bool> GetSellerTypeForValidAddProductStep2(ulong userId, SellerType sellerType);
+        Task<bool> GetSellerTypeForValidAddProductStep2(ulong userId , ulong brandId);
 
         Task<Glass?> GetGlassWithName(string glassName);
 

@@ -12,8 +12,6 @@ namespace Window.Domain.ViewModels.Seller.Product
     {
         #region properties
 
-        public SellerType SellerType { get; set; }
-
         public ulong BrandId { get; set; }
 
         #endregion

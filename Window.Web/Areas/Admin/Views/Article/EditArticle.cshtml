@@ -44,7 +44,9 @@
                                 <label asp-for="AuthorId">نویسنده ی مقاله </label>
                                 <input type="hidden" asp-for="AuthorId" id="Owner-Input" >
                                 <input type="text" class="form-control" asp-for="AuthorName" id="Owner-Display" readonly="readonly" />
-                                <span onclick="ShowSearchUserModal('Owner')" class="search-btn"><i class="glyphicon glyphicon-search"></i></span>
+                                    <span onclick="ShowSearchUserModal('Owner')" class="search-btn" style="color: #2ad32a;top: -25px;right: 10px !important;">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                    </span>
                                 <span class="text-danger" asp-validation-for="AuthorId"></span>
 
                             </div>

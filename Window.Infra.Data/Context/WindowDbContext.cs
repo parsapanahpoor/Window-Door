@@ -4,6 +4,7 @@ using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Article;
 using Window.Domain.Entities.Brand;
 using Window.Domain.Entities.Contact;
+using Window.Domain.Entities.Counseling;
 using Window.Domain.Entities.Glass;
 using Window.Domain.Entities.Inquiry;
 using Window.Domain.Entities.Location;
@@ -15,6 +16,7 @@ using Window.Domain.Entities.QuestionAnswer;
 using Window.Domain.Entities.Sample;
 using Window.Domain.Entities.Segment;
 using Window.Domain.Entities.SiteSetting;
+using Window.Domain.Entities.TechnicalIssues;
 using Window.Domain.Entities.Wallet;
 
 namespace Window.Data.Context
@@ -28,6 +30,18 @@ namespace Window.Data.Context
         #endregion
 
         #region db sets
+
+        #region Technical Issues
+
+        public DbSet<TechnicalIssues> TechnicalIssues { get; set; }
+
+        #endregion
+
+        #region Counseling
+
+        public DbSet<Counseling> Counselings { get; set; }
+
+        #endregion
 
         #region Account 
 

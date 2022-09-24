@@ -230,11 +230,18 @@ namespace Window.Application.Services.Services
             #endregion
         }
 
-        public async Task<int?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width , int productCount , int? katibeSize, ulong userId, ulong glassId)
+        public async Task<double?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int incomeheight, int incomewidth , int productCount , int? katibeSize, ulong userId, ulong glassId)
         {
+            #region Proccess Height And Width
+
+            double height = (double)incomeheight / (double)100;
+            double width = (double)incomewidth / (double)100;
+
+            #endregion
+
             #region return Model 
 
-            var totalPrice = 0;
+            double totalPrice = 0;
 
             #endregion
 
@@ -997,45 +1004,45 @@ namespace Window.Application.Services.Services
 
             #region درب لولایی درب سوییچی شیشه یکپارچه UPVC 
 
-            if (sample.Id == 22)
+            if (sample.Id == 20)
             {
                 //Get Sample Segments
                 var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
                 {
                     //قیمت فریم
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 34).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 12) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 31) != null)
                 {
                     //لنگه ی درب
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 31).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 30) != null)
                 {
                     //قیمت زهوار دوجداره
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 2).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 30).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 8) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 21) != null)
                 {
                     //گالوانیزه ی فریم
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 8).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 21).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 13) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 18) != null)
                 {
                     //گالوانیزه ی دربی
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 13).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 18).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 14) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 11) != null)
                 {
                     //یراق درب سویئچی
-                    totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 14).Price);
+                    totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 11).Price);
                 }
 
                 if (glassPricing != null)
@@ -1047,47 +1054,47 @@ namespace Window.Application.Services.Services
 
             #endregion
 
-            #region  درب لولایی درب سوییچی شیشه یکپارچه UPVC  
+            #region  درب لولایی درب سرویسی شیشه یکپارچه UPVC  
 
-            if (sample.Id == 23)
+            if (sample.Id == 19)
             {
                 //Get Sample Segments
                 var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
                 {
                     //قیمت فریم
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 34).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 12) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 31) != null)
                 {
                     //لنگه ی درب
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 31).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 30) != null)
                 {
                     //قیمت زهوار دوجداره
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 2).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 30).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 8) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 21) != null)
                 {
                     //گالوانیزه ی فریم
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 8).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 21).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 13) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 18) != null)
                 {
                     //گالوانیزه ی دربی
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 13).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 18).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 15) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 10) != null)
                 {
                     //یراق درب سرویسی
-                    totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 15).Price);
+                    totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 10).Price);
                 }
 
                 if (glassPricing != null)
@@ -1101,75 +1108,75 @@ namespace Window.Application.Services.Services
 
             #region  درب لولایی  بالکنی سوویچی UPVC
 
-            if (sample.Id == 24)
+            if (sample.Id == 18)
             {
                 //Get Sample Segments
                 var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
                 {
                     //قیمت فریم
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 34).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 12) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 31) != null)
                 {
                     //لنگه ی درب
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 31).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 30) != null)
                 {
                     //قیمت زهوار دوجداره
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 2).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 30).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 8) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 21) != null)
                 {
                     //گالوانیزه ی فریم
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 8).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 21).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 13) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 18) != null)
                 {
                     //گالوانیزه ی دربی
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 13).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 18).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 7) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 33) != null)
                 {
                     //مولیون لولایی
-                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 7).Price);
+                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 33).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 16) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 20) != null)
                 {
                     //گالوانیزه ی لولایی
-                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 16).Price);
+                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 20).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 30) != null)
                 {
                     //زهوار دوجداره
-                    totalPrice = totalPrice + (width) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 2).Price));
+                    totalPrice = totalPrice + (width) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 30).Price));
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 17) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 22) != null)
                 {
                     //پنل
-                    totalPrice = totalPrice + (width * 60) * (userSegments.FirstOrDefault(p => p.SegmentId == 17).Price);
+                    totalPrice = totalPrice + (width * (double)(60 / 100)) * (userSegments.FirstOrDefault(p => p.SegmentId == 22).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 14) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 11) != null)
                 {
                     //یراق درب سویئچی
-                    totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 14).Price);
+                    totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 11).Price);
                 }
 
                 if (glassPricing != null)
                 {
                     //قیمت شیشه
-                    totalPrice = totalPrice + (glassPricing.Price * (width * (height - 60)));
+                    totalPrice = totalPrice + (glassPricing.Price * (width * (height - (double)(60 / 100))));
                 }
             }
 
@@ -1177,66 +1184,66 @@ namespace Window.Application.Services.Services
 
             #region   درب لولایی درب سرویسی UPVC 
 
-            if (sample.Id == 25)
+            if (sample.Id == 17)
             {
                 //Get Sample Segments
                 var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
                 {
                     //قیمت فریم
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 34).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 12) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 31) != null)
                 {
                     //لنگه ی درب
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 12).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 31).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 30) != null)
                 {
                     //قیمت زهوار دوجداره
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 2).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 30).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 8) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 21) != null)
                 {
                     //گالوانیزه ی فریم
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 8).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 21).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 13) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 18) != null)
                 {
                     //گالوانیزه ی دربی
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 13).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 18).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 7) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 33) != null)
                 {
                     //مولیون لولایی
-                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 7).Price);
+                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 33).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 16) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 20) != null)
                 {
                     //گالوانیزه ی لولایی
-                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 16).Price);
+                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 20).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 30) != null)
                 {
                     //زهوار دوجداره
-                    totalPrice = totalPrice + (width) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 2).Price));
+                    totalPrice = totalPrice + (width) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 30).Price));
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 17) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 22) != null)
                 {
                     //پنل
-                    totalPrice = totalPrice + (width * 120) * (userSegments.FirstOrDefault(p => p.SegmentId == 17).Price);
+                    totalPrice = totalPrice + (width * (double)(120 / 100)) * (userSegments.FirstOrDefault(p => p.SegmentId == 22).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 15) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 10) != null)
                 {
                     //یراق درب سرویسی
                     totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 15).Price);
@@ -1245,7 +1252,7 @@ namespace Window.Application.Services.Services
                 if (glassPricing != null)
                 {
                     //قیمت شیشه
-                    totalPrice = totalPrice + (glassPricing.Price * (width * (height - 120)));
+                    totalPrice = totalPrice + (glassPricing.Price * (width * (height - (double)(120 / 100))));
                 }
             }
 
@@ -1253,39 +1260,39 @@ namespace Window.Application.Services.Services
 
             #region درب لولایی درب بالکنی دوتکه شیشه یکپارچه سوویچیUPVC  
 
-            if (sample.Id == 26)
+            if (sample.Id == 16)
             {
                 //Get Sample Segments
                 var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 1) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
                 {
                     //قیمت فریم
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 1).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 34).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 30) != null)
                 {
                     //قیمت زهوار دوجداره
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 2).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 30).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 8) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 21) != null)
                 {
                     //گالوانیزه ی فریم
-                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 8).Price);
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 21).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 7) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 33) != null)
                 {
                     //مولیون لولایی
-                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 7).Price);
+                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 33).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 18) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 20) != null)
                 {
                     //گالوانیزه ی مولیون لولایی
-                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 18).Price);
+                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 20).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 2) != null)
@@ -1399,7 +1406,7 @@ namespace Window.Application.Services.Services
 
             #region پنجره ی کشویی دولنگه UPVC    
 
-            if (sample.Id == 28)
+            if (sample.Id == 55)
             {
                 //Get Sample Segments
                 var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
@@ -1500,7 +1507,7 @@ namespace Window.Application.Services.Services
 
             #region  پنجره ی کشویی سه لنگه UPVC     
 
-            if (sample.Id == 29)
+            if (sample.Id == 54)
             {
                 //Get Sample Segments
                 var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
@@ -1600,7 +1607,7 @@ namespace Window.Application.Services.Services
 
             #region  پنجره ی کشویی چهار لنگه UPVC      
 
-            if (sample.Id == 30)
+            if (sample.Id == 53)
             {
                 //Get Sample Segments
                 var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
@@ -1700,7 +1707,7 @@ namespace Window.Application.Services.Services
 
             #region  قیمت گذاری پنجره ھای کشویی کتیبھ دار آلومینیومی دولنگه       
 
-            if (sample.Id == 31)
+            if (sample.Id == 52)
             {
                 if (katibeSize == null)
                 {
@@ -1781,7 +1788,7 @@ namespace Window.Application.Services.Services
 
             #region  قیمت گذاری پنجره ھای کشویی کتیبھ دار آلومینیومی سه لنگه       
 
-            if (sample.Id == 32)
+            if (sample.Id == 51)
             {
                 if (katibeSize == null)
                 {
@@ -1880,7 +1887,7 @@ namespace Window.Application.Services.Services
 
             #region  قیمت گذاری پنجره ھای کشویی کتیبھ دار آلومینیومی چهار لنگه       
 
-            if (sample.Id == 33)
+            if (sample.Id == 50)
             {
                 if (katibeSize == null)
                 {

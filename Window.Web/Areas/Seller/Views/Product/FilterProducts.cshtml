@@ -78,9 +78,13 @@
                                     {
                                         <span class="label label-primary">آلومینیوم</span>
                                     }
-                                    else
+                                    @if (product.SellerType == Window.Domain.Enums.SellerType.SellerType.UPC)
                                     {
                                         <span class="label label-primary">UPVC</span>
+                                    }
+                                    @if (product.SellerType == Window.Domain.Enums.SellerType.SellerType.UPVCAlminium)
+                                    {
+                                        <span class="label label-primary">آلمینیوم و UPVC</span>
                                     }
                                 </td>
 

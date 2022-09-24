@@ -21,27 +21,64 @@
         <a href="javascript:void(0)"> @ViewData["Title"] </a>
     </li>
 }
+    <div class="profile-container">
+
+        <div class="profile-body">
+            <div class="col-lg-12">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs tabs-flat  nav-justified" id="myTab11">
+
+                    @if (Model.Segments.Where(p => p.Segment.Yaragh) != null && Model.Segments.Any(p => p.Segment.Yaragh))
+                    {
+                        <li class="tab-palegreen">
+                            <a data-toggle="tab" id="contacttab" href="#contacts" aria-expanded="false">
+                                قطعات یراق
+                            </a>
+                        </li>
+                    }
 
 
-    <div class="row">
-        <div class="col-lg-12 col-sm-12">
-            <div class="widget">
-                <div class="widget-header bordered-bottom bordered-green">
-                    <h3 class="widget-caption"> @ViewData["Title"] </h3>
-                </div>
-                <div class="widget-body">
-                    <div>
+                    @if (Model.Segments.Where(p => p.Segment.Aluminum) != null && Model.Segments.Any(p => p.Segment.Aluminum))
+                    {
+                        @if (Model.Segments.Where(p => p.Segment.UPVC) != null && Model.Segments.Any(p => p.Segment.UPVC))
+                        {
+                            <li class="tab-red">
+                                <a data-toggle="tab" href="#timeline" aria-expanded="false">
+                                    قطعات آلمینیوم
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="tab-red active">
+                                <a data-toggle="tab" href="#timeline" aria-expanded="false">
+                                    قطعات آلمینیوم
+                                </a>
+                            </li>
+                        }
+                    }
+
+                    @if (Model.Segments.Where(p => p.Segment.UPVC) != null && Model.Segments.Any(p => p.Segment.UPVC))
+                    {
+                        <li class="tab-yellow active">
+                            <a data-toggle="tab" href="#settings" aria-expanded="true">
+                                قطعات UPVC
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+                <div class="tab-content tabs-flat" style="margin-top:0px !important">
+                    <div id="contacts" class="tab-pane">
                         <div class="row">
 
-                        @if (Model.Segments != null && Model.Segments.Any())
-                        {
-                            @foreach (var item in Model.Segments)
+                            @foreach (var item in Model.Segments.Where(p => p.Segment.Yaragh))
                             {
                                 <form method="post" asp-action="AddSegmentPricing" asp-controller="Product" asp-area="Seller" enctype="multipart/form-data">
                                     <input type="hidden" asp-for="ProductId" />
                                     <input type="hidden" name="SegmentId" value="@item.Segment.Id" />
                                     <div class="form-group col-md-4 col-sm-12">
-                                        <label>@item.Segment.SegmentName (ریال)</label>
+                                        <label>@item.Segment.SegmentName (برحسب ریال و متر)</label>
                                         <div class="input-group">
                                             @if (segmentPricing != null && segmentPricing.Any())
                                             {
@@ -69,14 +106,157 @@
                                     </div>
                                 </form>
                             }
-                        }
+
+                        </div>
+
 
                     </div>
 
+                    @if (Model.Segments.Where(p => p.Segment.Aluminum) != null && Model.Segments.Any(p => p.Segment.Aluminum))
+                    {
+                        @if (Model.Segments.Where(p => p.Segment.UPVC) != null && Model.Segments.Any(p => p.Segment.UPVC))
+                        {
+                            <div id="timeline" class="tab-pane">
+
+                                <div class="row">
+
+                                    @foreach (var item in Model.Segments.Where(p => p.Segment.Aluminum))
+                                    {
+                                        <form method="post" asp-action="AddSegmentPricing" asp-controller="Product" asp-area="Seller" enctype="multipart/form-data">
+                                            <input type="hidden" asp-for="ProductId" />
+                                            <input type="hidden" name="SegmentId" value="@item.Segment.Id" />
+                                            <div class="form-group col-md-4 col-sm-12">
+                                                <label>@item.Segment.SegmentName (برحسب ریال و متر)</label>
+                                                <div class="input-group">
+                                                    @if (segmentPricing != null && segmentPricing.Any())
+                                                    {
+                                                        @if (segmentPricing.Any(p => p.SegmentId == item.Segment.Id))
+                                                        {
+                                                            <input type="number" step="100" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="0">
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                    }
+                                                    <span class="input-group-btn">
+                                                        <span class="btn palegreen-azure btn-file" style="padding:0px 0px 0px 0px;">
+                                                            <button type="submit" class="btn btn-labeled btn-palegreen" style="margin-top:0px; padding-right:15px;">
+                                                                ثبت
+                                                            </button>
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    }
+
+                                </div>
+
+
+                            </div>
+
+                        }
+                        else
+                        {
+                            <div id="timeline" class="tab-pane active">
+
+                                <div class="row">
+
+                                    @foreach (var item in Model.Segments.Where(p => p.Segment.Aluminum))
+                                    {
+                                        <form method="post" asp-action="AddSegmentPricing" asp-controller="Product" asp-area="Seller" enctype="multipart/form-data">
+                                            <input type="hidden" asp-for="ProductId" />
+                                            <input type="hidden" name="SegmentId" value="@item.Segment.Id" />
+                                            <div class="form-group col-md-4 col-sm-12">
+                                                <label>@item.Segment.SegmentName (برحسب ریال و متر)</label>
+                                                <div class="input-group">
+                                                    @if (segmentPricing != null && segmentPricing.Any())
+                                                    {
+                                                        @if (segmentPricing.Any(p => p.SegmentId == item.Segment.Id))
+                                                        {
+                                                            <input type="number" step="100" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="0">
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                    }
+                                                    <span class="input-group-btn">
+                                                        <span class="btn palegreen-azure btn-file" style="padding:0px 0px 0px 0px;">
+                                                            <button type="submit" class="btn btn-labeled btn-palegreen" style="margin-top:0px; padding-right:15px;">
+                                                                ثبت
+                                                            </button>
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    }
+
+                                </div>
+
+
+                            </div>
+                        }
+                    }
+
+                    @if (Model.Segments.Where(p => p.Segment.UPVC) != null && Model.Segments.Any(p => p.Segment.UPVC))
+                    {
+                        <div id="settings" class="tab-pane active">
+
+                            <div class="row">
+
+                                @foreach (var item in Model.Segments.Where(p => p.Segment.UPVC))
+                                {
+                                    <form method="post" asp-action="AddSegmentPricing" asp-controller="Product" asp-area="Seller" enctype="multipart/form-data">
+                                        <input type="hidden" asp-for="ProductId" />
+                                        <input type="hidden" name="SegmentId" value="@item.Segment.Id" />
+                                        <div class="form-group col-md-4 col-sm-12">
+                                            <label>@item.Segment.SegmentName (برحسب ریال و متر)</label>
+                                            <div class="input-group">
+                                                @if (segmentPricing != null && segmentPricing.Any())
+                                                {
+                                                    @if (segmentPricing.Any(p => p.SegmentId == item.Segment.Id))
+                                                    {
+                                                        <input type="number" step="100" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="0">
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                }
+                                                <span class="input-group-btn">
+                                                    <span class="btn palegreen-azure btn-file" style="padding:0px 0px 0px 0px;">
+                                                        <button type="submit" class="btn btn-labeled btn-palegreen" style="margin-top:0px; padding-right:15px;">
+                                                            ثبت
+                                                        </button>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                }
+
+                            </div>
+
+
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
-
 </div>
-

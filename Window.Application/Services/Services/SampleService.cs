@@ -265,6 +265,11 @@ namespace Window.Application.Services.Services
                 samples = samples.Where(s => !s.IsDelete && s.UPVC);
             }
 
+            if (log.SellerType == SellerType.UPVCAlminium)
+            {
+                samples = samples.Where(s => !s.IsDelete);
+            }
+
             #endregion
 
             return await samples.ToListAsync();
