@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -52,6 +53,16 @@ namespace Window.Application.Services.Interfaces
 
         //Update User Inquiry Detail
         Task<bool> UpdateUserInquiryItrm(ulong inquiryDetailId , ulong sampleId, int width, int height, int? katibe, string macAddress);
+
+        #endregion
+
+        #region Admin Side 
+
+        Task<int?> CountOfTodayInquiry();
+
+        Task<int?> CountOfMonthInquiry();
+
+        Task<int?> CountOfYearInquiry();
 
         #endregion
     }

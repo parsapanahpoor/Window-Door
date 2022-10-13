@@ -22,13 +22,16 @@ namespace Window.Web.Areas.Admin.Controllers
 
         private readonly IAdminDashboardService _adminDashboardService;
 
-        public HomeController(IConfiguration configuration, IUserService userService, IStateService stateService, IAdminDashboardService adminDashboardService , ISellerService sellerService)
+        private readonly IInquiryService _inquiryService;
+
+        public HomeController(IConfiguration configuration, IUserService userService, IStateService stateService, IAdminDashboardService adminDashboardService , ISellerService sellerService, IInquiryService inquiryService)
         {
             _configuration = configuration;
             _userService = userService;
             _stateService = stateService;
             _adminDashboardService = adminDashboardService;
             _sellerService = sellerService;
+            _inquiryService = inquiryService;
         }
 
         #endregion

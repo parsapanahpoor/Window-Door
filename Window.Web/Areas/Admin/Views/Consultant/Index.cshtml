@@ -1,0 +1,125 @@
+﻿@using Window.Application.Extensions
+@using Window.Application.Convertors
+@model Window.Domain.ViewModels.Admin.Cosultant.FilterConsultantAdminSideViewModel
+@using Window.Domain.ViewModels.Admin.Cosultant
+
+@{
+    ViewData["Title"] = "لیست مشاوره ی رایگان ";
+}
+
+@section Styles
+    {
+
+}
+
+    @section Scripts
+    {
+    <partial name="_AdminSweetAlertLocalizer" />
+}
+
+    @section breadcrumb {
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
+}
+
+    <div class="row">
+        <div class="col-lg-3 col-sm-12">
+            <a class="btn btn-sky w-100 margin-bottom-10" asp-action="CreateConsultant" asp-controller="Consultant" asp-area="Admin">ایجاد  </a>
+
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-green">
+                    <span class="widget-caption"> فیلتر مشاوره ی رایگان  </span>
+                </div>
+                <div class="widget-body">
+                    <div>
+                        <form asp-action="Index" asp-controller="Consultant" asp-area="Admin" id="filter-search" method="get">
+
+                            <input type="hidden" asp-for="Page" />
+
+                            <div class="form-group">
+                                <label asp-for="Title"> عنوان      </label>
+                                <input type="text" class="form-control" asp-for="Title" placeholder="عنوان  را وارد کنید ">
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="FilterConcultantAdminSideOrder"> مرتب سازی براساس تاریخ </label>
+                                <select asp-for="FilterConcultantAdminSideOrder" class="form-control" asp-items="Html.GetEnumSelectList(typeof(FilterConcultantAdminSideOrder))"></select>
+                            </div>
+
+                            <hr />
+
+                            <div class="row">
+                                <div class="col-md-12 flex-style">
+                                    <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
+                                        <i class="btn-label glyphicon glyphicon-filter"></i>اعمال فیلتر
+                                    </button>
+
+                                @if (Context.Request.QueryString.HasValue)
+                                {
+                                    <a asp-action="Index" asp-controller="Consultant" asp-area="Admin" class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                        <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
+                                    </a>
+                                }
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-sm-12">
+        <div class="well with-header with-footer table-responsive">
+            <div class="header bordered-azure">
+                <div class="flex-style">
+                    <span>لیست </span>
+                    <span>@Model.GetShownEntitiesPagesTitle()</span>
+                </div>
+            </div>
+
+            @if (Model.Entities != null && Model.Entities.Any())
+            {
+                <table class="table table-hover table-bordered tc vm">
+                    <thead class="tc vm">
+                        <tr class="tc vm">
+                            <th class="tc vm">
+                                عنوان 
+                            </th>
+
+                            <th class="tc vm">
+                                امکانات
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="tc vm">
+                        @foreach (var Article in Model.Entities)
+                        {
+                            <tr class="tc vm" remove-ajax-item="@Article.Id">
+                                <td class="tc vm" style="max-width: 200px">
+                                    @Article.Title
+                                </td>
+
+                                <td class="tc vm">
+                                    <a asp-action="EditConsultant" asp-area="Admin" asp-controller="Consultant" asp-route-id="@Article.Id" class="btn btn-warning btn-circle btn-xs"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <button onclick="DeleteAjax(@Article.Id, '@Url.Action("DeleteConsultant", "Consultant", new { area = "Admin", id = Article.Id })')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="footer tc">
+                    <partial name="_AdminPaging" model="@Model.GetCurrentPaging()" />
+
+                </div>
+            }
+            else
+            {
+                <partial name="_AdminNotFoundPartial" />
+            }
+        </div>
+    </div>
+</div>
+

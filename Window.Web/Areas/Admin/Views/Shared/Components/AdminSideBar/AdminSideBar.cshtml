@@ -86,6 +86,11 @@
 
             <ul class="submenu">
                 <li>
+                    <a asp-controller="LogForVisitSellerProfile" asp-action="FilterForLogInquiry">
+                        <span class="menu-text">لیست استعلامات گرفته شده</span>
+                    </a>
+                </li>
+                <li>
                     <a asp-controller="LogForVisitSellerProfile" asp-action="FilterLogForVisitSellerProfile">
                         <span class="menu-text">لیست بازدید فروشندگان</span>
                     </a>
@@ -110,6 +115,40 @@
                 <li>
                     <a asp-controller="Article" asp-action="Index" asp-area="Admin">
                         <span class="menu-text">لیست بلاگ ها</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon glyphicon glyphicon-book"></i>
+                <span class="menu-text"> مسائل فنی</span>
+
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-controller="TechnicalIssues" asp-action="Index" asp-area="Admin">
+                        <span class="menu-text">لیست مسائل فنی</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon glyphicon glyphicon-book"></i>
+                <span class="menu-text"> مشاوره ی رایگان</span>
+
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-controller="Consulant" asp-action="Index" asp-area="Admin">
+                        <span class="menu-text">لیست مشاوره  </span>
                     </a>
                 </li>
             </ul>

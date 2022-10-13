@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ using Window.Domain.ViewModels.Admin.Log;
 using Window.Domain.ViewModels.Admin.PersonalInfo;
 using Window.Domain.ViewModels.Seller.PersonalInfo;
 using Window.Domain.ViewModels.Site.Inquiry;
+using Window.Domain.ViewModels.User;
 
 namespace Window.Application.Services.Services
 {
@@ -1222,42 +1224,52 @@ namespace Window.Application.Services.Services
 
             #region Order By State 
 
-            //if (filter.SellersPersonalsInfoState == SellersPersonalsInfoState.WaitingForPyedFromSeller)
-            //{
-            //    query = query.Where(p => p.SellersPersonalsInfoState == SellersPersonalsInfoState.WaitingForPyedFromSeller);
-            //}
+            if (filter.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForPyedFromSeller)
+            {
+                query = query.Where(p => p.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForPyedFromSeller);
+            }
 
-            //if (filter.SellersPersonalsInfoState == SellersPersonalsInfoState.DisAcctiveSellerAccount)
-            //{
-            //    query = query.Where(p => p.SellersPersonalsInfoState == SellersPersonalsInfoState.DisAcctiveSellerAccount);
-            //}
+            if (filter.MarketPersonalsInfoState == MarketPersonalsInfoState.DisAcctiveMarketAccount)
+            {
+                query = query.Where(p => p.MarketPersonalsInfoState == MarketPersonalsInfoState.DisAcctiveMarketAccount);
+            }
 
-            //if (filter.SellersPersonalsInfoState == SellersPersonalsInfoState.WaitingForCompleteInfoFromSeller)
-            //{
-            //    query = query.Where(p => p.SellersPersonalsInfoState == SellersPersonalsInfoState.WaitingForCompleteInfoFromSeller);
-            //}
+            if (filter.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller)
+            {
+                query = query.Where(p => p.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller);
+            }
 
-            //if (filter.SellersPersonalsInfoState == SellersPersonalsInfoState.ActiveSellerAccount)
-            //{
-            //    query = query.Where(p => p.SellersPersonalsInfoState == SellersPersonalsInfoState.ActiveSellerAccount);
-            //}
+            if (filter.MarketPersonalsInfoState == MarketPersonalsInfoState.ActiveMarketAccount)
+            {
+                query = query.Where(p => p.MarketPersonalsInfoState == MarketPersonalsInfoState.ActiveMarketAccount);
+            }
 
-            //if (filter.SellersPersonalsInfoState == SellersPersonalsInfoState.AcceptedPersonalInformation)
-            //{
-            //    query = query.Where(p => p.SellersPersonalsInfoState == SellersPersonalsInfoState.AcceptedPersonalInformation);
-            //}
+            if (filter.MarketPersonalsInfoState == MarketPersonalsInfoState.AcceptedPersonalInformation)
+            {
+                query = query.Where(p => p.MarketPersonalsInfoState == MarketPersonalsInfoState.AcceptedPersonalInformation);
+            }
 
-            //if (filter.SellersPersonalsInfoState == SellersPersonalsInfoState.Rejected)
-            //{
-            //    query = query.Where(p => p.SellersPersonalsInfoState == SellersPersonalsInfoState.Rejected);
-            //}
+            if (filter.MarketPersonalsInfoState == MarketPersonalsInfoState.Rejected)
+            {
+                query = query.Where(p => p.MarketPersonalsInfoState == MarketPersonalsInfoState.Rejected);
+            }
 
-            //if (filter.SellersPersonalsInfoState == SellersPersonalsInfoState.WaitingForConfirmPersonalInformations)
-            //{
-            //    query = query.Where(p => p.SellersPersonalsInfoState == SellersPersonalsInfoState.WaitingForConfirmPersonalInformations);
-            //}
+            if (filter.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForConfirmPersonalInformations)
+            {
+                query = query.Where(p => p.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForConfirmPersonalInformations);
+            }
 
             #endregion
+
+            switch (filter.OrderType)
+            {
+                case FilterUserViewModel.FilterUserOrderType.CreateDate_DES:
+                    query = query.OrderByDescending(u => u.CreateDate);
+                    break;
+                case FilterUserViewModel.FilterUserOrderType.CreateDate_ASC:
+                    query = query.OrderBy(u => u.CreateDate);
+                    break;
+            }
 
             #region filter
 
@@ -1272,6 +1284,43 @@ namespace Window.Application.Services.Services
             if ((!string.IsNullOrEmpty(filter.Username)))
             {
                 query = query.Where(u => u.User.Username.Contains(filter.Username));
+            }
+
+            if (!string.IsNullOrEmpty(filter.FromDate))
+            {
+                var spliteDate = filter.FromDate.Split('/');
+                int year = int.Parse(spliteDate[0]);
+                int month = int.Parse(spliteDate[1]);
+                int day = int.Parse(spliteDate[2]);
+                DateTime fromDate = new DateTime(year, month, day, new PersianCalendar());
+
+                query = query.Where(s => s.CreateDate >= fromDate);
+            }
+
+            if (!string.IsNullOrEmpty(filter.ToDate))
+            {
+                var spliteDate = filter.ToDate.Split('/');
+                int year = int.Parse(spliteDate[0]);
+                int month = int.Parse(spliteDate[1]);
+                int day = int.Parse(spliteDate[2]);
+                DateTime toDate = new DateTime(year, month, day, new PersianCalendar());
+
+                query = query.Where(s => s.CreateDate <= toDate);
+            }
+
+            if (filter.CountryId.HasValue)
+            {
+                query = query.Where(p => p.CountryId == filter.CountryId);
+            }
+
+            if (filter.StateId.HasValue)
+            {
+                query = query.Where(p => p.StateId == filter.StateId);
+            }
+
+            if (filter.CityId.HasValue)
+            {
+                query = query.Where(p => p.CityId == filter.CityId);
             }
 
             #endregion
@@ -1293,11 +1342,58 @@ namespace Window.Application.Services.Services
            .OrderByDescending(p => p.CreateDate)
            .AsQueryable();
 
+            switch (filter.OrderType)
+            {
+                case FilterUserViewModel.FilterUserOrderType.CreateDate_DES:
+                    query = query.OrderByDescending(u => u.CreateDate);
+                    break;
+                case FilterUserViewModel.FilterUserOrderType.CreateDate_ASC:
+                    query = query.OrderBy(u => u.CreateDate);
+                    break;
+            }
+
             #region filter
 
             if ((!string.IsNullOrEmpty(filter.BrandName)))
             {
                 query = query.Where(u => u.MainBrand.BrandName.Contains(filter.BrandName));
+            }
+
+            if (!string.IsNullOrEmpty(filter.FromDate))
+            {
+                var spliteDate = filter.FromDate.Split('/');
+                int year = int.Parse(spliteDate[0]);
+                int month = int.Parse(spliteDate[1]);
+                int day = int.Parse(spliteDate[2]);
+                DateTime fromDate = new DateTime(year, month, day, new PersianCalendar());
+
+                query = query.Where(s => s.CreateDate >= fromDate);
+            }
+
+            if (!string.IsNullOrEmpty(filter.ToDate))
+            {
+                var spliteDate = filter.ToDate.Split('/');
+                int year = int.Parse(spliteDate[0]);
+                int month = int.Parse(spliteDate[1]);
+                int day = int.Parse(spliteDate[2]);
+                DateTime toDate = new DateTime(year, month, day, new PersianCalendar());
+
+                query = query.Where(s => s.CreateDate <= toDate);
+            }
+
+            if (filter.CountryId.HasValue)
+            {
+                query = query.Where(p => p.CountryId == filter.CountryId);
+            }
+
+            if (filter.StateId.HasValue)
+            {
+                query = query.Where(p => p.StateId == filter.StateId);
+            }
+
+            if (filter.CityId.HasValue)
+            {
+                query = query.Where(p => p.CityId == filter.CityId);
             }
 
             #endregion
@@ -1320,6 +1416,16 @@ namespace Window.Application.Services.Services
            .OrderByDescending(p => p.CreateDate)
            .AsQueryable();
 
+            switch (filter.OrderType)
+            {
+                case FilterUserViewModel.FilterUserOrderType.CreateDate_DES:
+                    query = query.OrderByDescending(u => u.CreateDate);
+                    break;
+                case FilterUserViewModel.FilterUserOrderType.CreateDate_ASC:
+                    query = query.OrderBy(u => u.CreateDate);
+                    break;
+            }
+
             #region filter
 
             if ((!string.IsNullOrEmpty(filter.SellerMobile)))
@@ -1341,6 +1447,28 @@ namespace Window.Application.Services.Services
                 #endregion
 
                 query = query.Where(u => u.User.Id == market.UserId);
+            }
+
+            if (!string.IsNullOrEmpty(filter.FromDate))
+            {
+                var spliteDate = filter.FromDate.Split('/');
+                int year = int.Parse(spliteDate[0]);
+                int month = int.Parse(spliteDate[1]);
+                int day = int.Parse(spliteDate[2]);
+                DateTime fromDate = new DateTime(year, month, day, new PersianCalendar());
+
+                query = query.Where(s => s.CreateDate >= fromDate);
+            }
+
+            if (!string.IsNullOrEmpty(filter.ToDate))
+            {
+                var spliteDate = filter.ToDate.Split('/');
+                int year = int.Parse(spliteDate[0]);
+                int month = int.Parse(spliteDate[1]);
+                int day = int.Parse(spliteDate[2]);
+                DateTime toDate = new DateTime(year, month, day, new PersianCalendar());
+
+                query = query.Where(s => s.CreateDate <= toDate);
             }
 
             #endregion
@@ -1385,6 +1513,92 @@ namespace Window.Application.Services.Services
             #endregion
 
             return model;
+        }
+
+        public async Task<FilterLogForInquiryViewModel> FilterLogForInquiryViewModel(FilterLogForInquiryViewModel filter)
+        {
+            var query = _context.LogForInquiry
+           .Include(u => u.State)
+           .Include(p=> p.Country)
+           .Include(p=> p.City)
+           .Where(p => !p.IsDelete)
+           .OrderByDescending(p => p.CreateDate)
+           .AsQueryable();
+
+            switch (filter.OrderType)
+            {
+                case FilterUserViewModel.FilterUserOrderType.CreateDate_DES:
+                    query = query.OrderByDescending(u => u.CreateDate);
+                    break;
+                case FilterUserViewModel.FilterUserOrderType.CreateDate_ASC:
+                    query = query.OrderBy(u => u.CreateDate);
+                    break;
+            }
+
+            #region filter
+
+            if (!string.IsNullOrEmpty(filter.FromDate))
+            {
+                var spliteDate = filter.FromDate.Split('/');
+                int year = int.Parse(spliteDate[0]);
+                int month = int.Parse(spliteDate[1]);
+                int day = int.Parse(spliteDate[2]);
+                DateTime fromDate = new DateTime(year, month, day, new PersianCalendar());
+
+                query = query.Where(s => s.CreateDate >= fromDate);
+            }
+
+            if (!string.IsNullOrEmpty(filter.ToDate))
+            {
+                var spliteDate = filter.ToDate.Split('/');
+                int year = int.Parse(spliteDate[0]);
+                int month = int.Parse(spliteDate[1]);
+                int day = int.Parse(spliteDate[2]);
+                DateTime toDate = new DateTime(year, month, day, new PersianCalendar());
+
+                query = query.Where(s => s.CreateDate <= toDate);
+            }
+
+
+            if (filter.CountryId.HasValue)
+            {
+                query = query.Where(p => p.CountryId == filter.CountryId);
+            }
+
+            if (filter.StateId.HasValue)
+            {
+                query = query.Where(p => p.StateId == filter.StateId);
+            }
+
+            if (filter.CityId.HasValue)
+            {
+                query = query.Where(p => p.CityId == filter.CityId);
+            }
+
+            if (filter.SellerType == Domain.Enums.SellerType.SellerType.Aluminium)
+            {
+                query = query.Where(p => p.SellerType == Domain.Enums.SellerType.SellerType.Aluminium);
+            }
+
+            if (filter.SellerType == Domain.Enums.SellerType.SellerType.UPVCAlminium)
+            {
+                query = query.Where(p => p.SellerType == Domain.Enums.SellerType.SellerType.UPVCAlminium);
+            }
+
+            if (filter.SellerType == Domain.Enums.SellerType.SellerType.UPC)
+            {
+                query = query.Where(p => p.SellerType == Domain.Enums.SellerType.SellerType.UPC);
+            }
+
+            #endregion
+
+            #region paging
+
+            await filter.Paging(query);
+
+            #endregion
+
+            return filter;
         }
 
         #endregion

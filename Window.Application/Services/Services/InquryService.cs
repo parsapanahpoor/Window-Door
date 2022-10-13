@@ -2083,15 +2083,35 @@ namespace Window.Application.Services.Services
 
                 LogForBrands logForBrands = new LogForBrands()
                 {
-                    MainBrandId = brand.Id
+                    MainBrandId = brand.Id,
+                    CountryId = log.CountryId,
+                    CityId = log.CityId,
+                    StateId = log.StateId
                 };
 
-
                 await _context.LogForBrands.AddAsync(logForBrands);
-                await _context.SaveChangesAsync();
 
                 #endregion
             }
+
+            #region Log For Inquiry
+
+            if (log.CountryId.HasValue && log.CityId.HasValue && log.StateId.HasValue && log.SellerType.HasValue)
+            {
+                LogForInquiry logForInquiry = new LogForInquiry()
+                {
+                    CityId = log.CityId.Value,
+                    StateId = log.StateId.Value,
+                    CountryId = log.CountryId.Value,
+                    SellerType = log.SellerType.Value
+                };
+
+                await _context.LogForInquiry.AddAsync(logForInquiry);
+            }
+
+            #endregion
+
+            await _context.SaveChangesAsync();
 
             #endregion
 
@@ -2226,6 +2246,27 @@ namespace Window.Application.Services.Services
             #endregion
 
             return true;
+        }
+
+        #endregion
+
+        #region Admin side
+
+        public async Task<int?> CountOfTodayInquiry()
+        {
+            return await _context.LogForInquiry.Where(p => !p.IsDelete && p.CreateDate.Year == DateTime.Now.Year
+                                                               && p.CreateDate.DayOfYear == DateTime.Now.DayOfYear).CountAsync();
+        }
+
+        public async Task<int?> CountOfMonthInquiry()
+        {
+            return await _context.LogForInquiry.Where(p => !p.IsDelete && p.CreateDate.Year == DateTime.Now.Year
+                                                               && p.CreateDate.Month == DateTime.Now.Month).CountAsync();
+        }
+
+        public async Task<int?> CountOfYearInquiry()
+        {
+            return await _context.LogForInquiry.Where(p => !p.IsDelete && p.CreateDate.Year == DateTime.Now.Year).CountAsync();
         }
 
         #endregion

@@ -86,5 +86,12 @@ namespace Window.Application.StticTools
 
         #endregion
 
+        #region Ticket File
+
+        public static readonly string TicketFilePath = "/content/images/OnlineVisitRequestFile/main/";
+        public static readonly string TicketFilePathServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/OnlineVisitRequestFile/main/");
+
+        #endregion
+
     }
 }

@@ -7,164 +7,191 @@
     ViewData["Title"] = Localizer["Manage Users"];
 }
 @section Scripts
-{
-    <partial name="_AdminSweetAlertLocalizer"/>
+    {
+    <partial name="_AdminSweetAlertLocalizer" />
 }
 
-@section breadcrumb
-{
+    @section breadcrumb
+    {
 
-<li class="active">@ViewData["Title"]</li>
+    <li class="active">@ViewData["Title"]</li>
 }
 
-<div class="container-fluid">
-    <div class="row">
+    <div class="container-fluid">
+        <div class="row">
 
 
-    <div class="col-12 col-xl-3 col-lg-3">
-        <a class="btn btn-sky w-100 margin-bottom-10" asp-action="AddNewUser" asp-controller="User" asp-area="Admin">@Localizer["Add User"]</a>
+            <div class="col-12 col-xl-3 col-lg-3">
+                <a class="btn btn-sky w-100 margin-bottom-10" asp-action="AddNewUser" asp-controller="User" asp-area="Admin">@Localizer["Add User"]</a>
 
-        <div class="widget">
-            <div class="widget-header bordered-bottom bordered-green">
-                <span class="widget-caption"> @Localizer["Filter"]  </span>
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-green">
+                        <span class="widget-caption"> @Localizer["Filter"]  </span>
+                    </div>
+                    <div class="widget-body">
+                        <div class="row">
+                            <div class="basic-form">
+                                <form asp-area="Admin" asp-controller="User" asp-action="Index" method="get" id="filter-search">
+                                    <input type="hidden" asp-for="Page" />
+
+                                    <div class="form-row">
+
+                                        <div class="form-group col-md-12">
+                                            <label>@Localizer["نام کاربری"]</label>
+                                            <input type="text" asp-for="Username" class="form-control" placeholder="@Localizer["نام کاربری"]">
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label>@Localizer["Email"]</label>
+                                            <input type="text" asp-for="Email" class="form-control" placeholder="@Localizer["Email"]">
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <label>@Localizer["Mobile"]</label>
+                                            <input type="text" asp-for="Mobile" class="form-control" placeholder="@Localizer["Mobile"]">
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label asp-for="FromDate"> @Localizer["از تاریخ"] </label>
+                                            <input type="text" class="form-control" AdminDatePicker="1" asp-for="FromDate">
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label asp-for="ToDate"> @Localizer["تا تاریخ "] </label>
+                                            <input type="text" class="form-control" AdminDatePicker="2" asp-for="ToDate">
+                                        </div>
+
+                                    </div>
+
+                                    <hr />
+
+                                    <hr />
+
+                                    <div class="selectStateInFilterUsersListInAdmin">
+                                        <div class="form-group">
+                                            <label asp-for="OrderType">@Localizer["Sort By Date"] </label>
+                                            <select asp-for="OrderType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(FilterUserViewModel.FilterUserOrderType))">
+
+                                                <option>لطفا یک گزینه را انتخاب کنید </option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <hr />
+
+                                    <div class="submitFilterInAdmin">
+                                        <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
+                                            <i class="btn-label glyphicon glyphicon-filter"></i>@Localizer["Filter"]
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
             </div>
-            <div class="widget-body">
-                <div class="row">
-                    <div class="basic-form">
-                        <form asp-area="Admin" asp-controller="User" asp-action="Index" method="get" id="filter-search">
-                            <input type="hidden" asp-for="Page"/>
 
-                            <div class="form-row">
-
-                                <div class="form-group col-md-12">
-                                    <label>@Localizer["Email"]</label>
-                                    <input type="text" asp-for="Email" class="form-control" placeholder="@Localizer["Email"]">
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <label>@Localizer["Mobile"]</label>
-                                    <input type="text" asp-for="Mobile" class="form-control" placeholder="@Localizer["Mobile"]">
-                                </div>
-                            </div>
-
-                            <hr/>
-                      
-                            <hr/>
-
-                              <div class="selectStateInFilterUsersListInAdmin">
-                                <div class="form-group">
-                                <label asp-for="OrderType">@Localizer["Sort By Date"] </label>
-                                <select asp-for="OrderType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(FilterUserViewModel.FilterUserOrderType))"></select>
-                            </div>
-                            </div>
-
-                            <hr/>
-
-                            <div class="submitFilterInAdmin">
-                                <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
-                                    <i class="btn-label glyphicon glyphicon-filter"></i>@Localizer["Filter"]
-                                </button>
-                            </div>
-
-                        </form>
+            <div class="col-xs-12 col-md-12 col-lg-9">
+                <div class="well with-header with-footer table-responsive">
+                    <div class="header bordered-azure">
+                        <div class="flex-style">
+                            <span>@Localizer["Users"] </span>
+                            <span>@Model.GetShownEntitiesPagesTitle()</span>
+                            -
+                            <span>تعداد کل : @Model.AllEntitiesCount</span>
+                        </div>
                     </div>
 
-                </div>
+                @if (Model != null)
+                {
+                    <table class="table table-hover table-bordered tc tableShowListInAdmin">
 
+                        <thead class="tc">
+                            <tr class="tc">
+                                <th>
+                                    @Localizer["Username"]
+                                </th>
+                                <th>
+                                    @Localizer["Email"]
+                                </th>
+                                <th>
+                                    @Localizer["Mobile"]
+                                </th>
+                                <th>
+                                    تاریخ ثبت نام
+                                </th>
+                                <th>
+                                    @Localizer["Manage"]
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Entities)
+                            {
+
+
+                                <tr id="profile_@item.Id" remove-ajax-item="@item.Id">
+                                    <td>
+                                        @item.Username
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.Email))
+                                        {
+                                            @item.Email
+                                        }
+                                        else
+                                        {
+                                            <span>@Localizer["Unregistered"]</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.Mobile))
+                                        {
+                                            @item.Mobile
+                                        }
+                                        else
+                                        {
+                                            <span>@Localizer["Unregistered"]</span>
+
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.CreateDate.ToShamsi()
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex justify-content-center ">
+
+                                            @if (!item.IsDelete)
+                                            {
+                                                <a title="@Localizer["Show Profile"]" asp-controller="User" asp-action="Profile" asp-route-id="@item.Id" class="btn btn-info btn-circle shadow btn-xs sharp mr-1">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                                <a title="@Localizer["Edit user"]" asp-controller="User" asp-action="EditUser" asp-route-id="@item.Id" class="btn btn-warning btn-circle btn-xs">
+                                                    <i class="glyphicon glyphicon-edit"></i>
+                                                </a>
+                                                <button onclick="DeleteAjax(@item.Id, '@Url.Action("RemoveUser", "User", new {area = "Admin", userId = item.Id})')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
+
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+
+                    <partial name="_AdminPaging" model="@Model.GetCurrentPaging()" />
+                }
+                else
+                {
+                    <partial name="_AdminNotFoundPartial" />
+                }
             </div>
         </div>
     </div>
-
-        <div class="col-xs-12 col-md-12 col-lg-9">
-            <div class="well with-header with-footer table-responsive">
-                <div class="header bordered-azure">
-                    <div class="flex-style">
-                        <span>@Localizer["Users"] </span>
-                        <span>@Model.GetShownEntitiesPagesTitle()</span>
-                    </div>
-                </div>
-               
-                        @if (Model != null)
-                        {
-                            <table class="table table-hover table-bordered tc tableShowListInAdmin">
-                         
-                                <thead class="tc">
-                                    <tr class="tc">
-                                        <th>
-                                            @Localizer["Username"]
-                                        </th>
-                                        <th>
-                                            @Localizer["Email"]
-                                        </th>
-                                        <th>
-                                            @Localizer["Mobile"]
-                                        </th>
-                                        <th>
-                                            @Localizer["Manage"]
-                                        </th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.Entities)
-                                    {
-
-
-                                        <tr id="profile_@item.Id" remove-ajax-item="@item.Id">
-                                            <td>
-                                                @item.Username
-                                            </td>
-                                            <td>
-                                                @if (!string.IsNullOrEmpty(item.Email))
-                                                {
-                                                    @item.Email
-                                                }
-                                                else
-                                                {
-                                                    <span>@Localizer["Unregistered"]</span>
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (!string.IsNullOrEmpty(item.Mobile))
-                                                {
-                                                    @item.Mobile
-                                                }
-                                                else
-                                                {
-                                                    <span>@Localizer["Unregistered"]</span>
-
-                                                }
-                                            </td>
- 
-                                            <td>
-                                                <div class="d-flex justify-content-center ">
-
-                                                    @if (!item.IsDelete)
-                                                    {
-                                                        <a title="@Localizer["Show Profile"]" asp-controller="User" asp-action="Profile" asp-route-id="@item.Id" class="btn btn-info btn-circle shadow btn-xs sharp mr-1">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
-                                                        <a title="@Localizer["Edit user"]" asp-controller="User" asp-action="EditUser" asp-route-id="@item.Id" class="btn btn-warning btn-circle btn-xs">
-                                                            <i class="glyphicon glyphicon-edit"></i>
-                                                        </a>
-                                                        <button onclick="DeleteAjax(@item.Id, '@Url.Action("RemoveUser", "User", new {area = "Admin", userId = item.Id})')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
-
-                                                    }
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-
-
-                            <partial name="_AdminPaging" model="@Model.GetCurrentPaging()" />
-                        }
-                        else
-                        {
-                            <partial name="_AdminNotFoundPartial" />
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
- 
+</div>

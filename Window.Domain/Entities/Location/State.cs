@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Common;
+using Window.Domain.Entities.Log;
 using Window.Domain.Entities.Market;
 
 namespace Window.Domain.Entities.Location
@@ -42,6 +43,15 @@ namespace Window.Domain.Entities.Location
 
         [InverseProperty("City")]
         public ICollection<MarketPersonalInfo> UserCities { get; set; }
+
+        [InverseProperty("Country")]
+        public ICollection<LogForInquiry> LogCountries { get; set; }
+
+        [InverseProperty("State")]
+        public ICollection<LogForInquiry> LogStates { get; set; }
+
+        [InverseProperty("City")]
+        public ICollection<LogForInquiry> LogCities { get; set; }
 
         #endregion
     }

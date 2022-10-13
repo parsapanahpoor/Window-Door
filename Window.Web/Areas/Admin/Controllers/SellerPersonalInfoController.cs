@@ -27,6 +27,21 @@ namespace Window.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> ListOfSellersPersonalInfos(ListOfSellersInfoViewModel filter)
         {
+            #region Location ViewBags 
+
+            ViewData["Countries"] = await _stateService.GetAllCountries();
+
+            if (filter.CountryId != null)
+            {
+                ViewData["States"] = await _stateService.GetStateChildren(filter.CountryId.Value);
+                if (filter.StateId != null)
+                {
+                    ViewData["Cities"] = await _stateService.GetStateChildren(filter.StateId.Value);
+                }
+            }
+
+            #endregion
+
             return View(await _sellerService.FilterPersonalInfo(filter));
         }
 

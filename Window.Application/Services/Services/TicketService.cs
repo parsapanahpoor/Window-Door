@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Window.Application.Generators;
+using Window.Application.StticTools;
 
 namespace Window.Application.Services
 {
@@ -59,6 +61,39 @@ namespace Window.Application.Services
                 TicketId = ticket.Id,
                 CreateDate = DateTime.Now,
             };
+
+            #region Add File
+
+            if (answer.MessageFile != null)
+            {
+                if (Path.GetExtension(answer.MessageFile.FileName).ToLower() == ".jpg"
+                        && Path.GetExtension(answer.MessageFile.FileName).ToLower() == ".png"
+                        && Path.GetExtension(answer.MessageFile.FileName).ToLower() == ".jpeg")
+                {
+                    var res = answer.MessageFile.IsImage();
+                    if (!res)
+                    {
+                        return false;
+                    }
+                }
+
+                var imageName = CodeGenerator.GenerateUniqCode() + Path.GetExtension(answer.MessageFile.FileName);
+
+                if (!Directory.Exists(FilePaths.TicketFilePathServer))
+                    Directory.CreateDirectory(FilePaths.TicketFilePathServer);
+
+                string OriginPath = FilePaths.TicketFilePathServer + imageName;
+
+                using (var stream = new FileStream(OriginPath, FileMode.Create))
+                {
+                    if (!Directory.Exists(OriginPath)) answer.MessageFile.CopyTo(stream);
+                }
+
+                message.MessageFile = imageName;
+            }
+
+            #endregion
+
 
             #endregion
 
@@ -142,6 +177,7 @@ namespace Window.Application.Services
                 CreateDate = DateTime.Now
             };
 
+
             #endregion
 
             #region Add Ticket Method
@@ -159,6 +195,38 @@ namespace Window.Application.Services
                 TicketId = ticket.Id,
                 CreateDate = DateTime.Now
             };
+
+            #region Add File
+
+            if (addTicket.MessageFile != null)
+            {
+                if (Path.GetExtension(addTicket.MessageFile.FileName).ToLower() == ".jpg"
+                        && Path.GetExtension(addTicket.MessageFile.FileName).ToLower() == ".png"
+                        && Path.GetExtension(addTicket.MessageFile.FileName).ToLower() == ".jpeg")
+                {
+                    var res = addTicket.MessageFile.IsImage();
+                    if (!res)
+                    {
+                        return false;
+                    }
+                }
+
+                var imageName = CodeGenerator.GenerateUniqCode() + Path.GetExtension(addTicket.MessageFile.FileName);
+
+                if (!Directory.Exists(FilePaths.TicketFilePathServer))
+                    Directory.CreateDirectory(FilePaths.TicketFilePathServer);
+
+                string OriginPath = FilePaths.TicketFilePathServer + imageName;
+
+                using (var stream = new FileStream(OriginPath, FileMode.Create))
+                {
+                    if (!Directory.Exists(OriginPath)) addTicket.MessageFile.CopyTo(stream);
+                }
+
+                message.MessageFile = imageName;
+            }
+
+            #endregion
 
             #endregion
 
@@ -259,6 +327,38 @@ namespace Window.Application.Services
                 TicketId = ticket.Id,
                 CreateDate = DateTime.Now
             };
+
+            #region Add File
+
+            if (create.MessageFile != null)
+            {
+                if (Path.GetExtension(create.MessageFile.FileName).ToLower() == ".jpg"
+                        && Path.GetExtension(create.MessageFile.FileName).ToLower() == ".png"
+                        && Path.GetExtension(create.MessageFile.FileName).ToLower() == ".jpeg")
+                {
+                    var res = create.MessageFile.IsImage();
+                    if (!res)
+                    {
+                        return 0;
+                    }
+                }
+
+                var imageName = CodeGenerator.GenerateUniqCode() + Path.GetExtension(create.MessageFile.FileName);
+
+                if (!Directory.Exists(FilePaths.TicketFilePathServer))
+                    Directory.CreateDirectory(FilePaths.TicketFilePathServer);
+
+                string OriginPath = FilePaths.TicketFilePathServer + imageName;
+
+                using (var stream = new FileStream(OriginPath, FileMode.Create))
+                {
+                    if (!Directory.Exists(OriginPath)) create.MessageFile.CopyTo(stream);
+                }
+
+                message.MessageFile = imageName;
+            }
+
+            #endregion
 
             #endregion
 

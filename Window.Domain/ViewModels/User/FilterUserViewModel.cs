@@ -23,15 +23,20 @@ namespace Window.Domain.ViewModels.User
 
         public bool IsDelete  { get; set; }
 
+        [RegularExpression(@"^\d{4}\/(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])$", ErrorMessage = "The entered date is not valid")]
+        public string? FromDate { get; set; }
+
+        [RegularExpression(@"^\d{4}\/(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])$", ErrorMessage = "The entered date is not valid")]
+        public string? ToDate { get; set; }
         public FilterUserOrderType OrderType { get; set; }
 
         #endregion
         public enum FilterUserOrderType
         {
-            [Display(Name = "Ascending")]
-            CreateDate_ASC,
             [Display(Name = "Descending")]
             CreateDate_DES,
+            [Display(Name = "Ascending")]
+            CreateDate_ASC,
         }
 
     }

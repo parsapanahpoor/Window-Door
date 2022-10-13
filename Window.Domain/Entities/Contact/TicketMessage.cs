@@ -20,6 +20,8 @@ namespace Window.Domain.Entities.Contact
         [Required]
         public string Message { get; set; }
 
+        public string? MessageFile { get; set; }
+
         public bool IsDelete { get; set; }
 
         #endregion

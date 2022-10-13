@@ -52,7 +52,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 1m,
-                            CreateDate = new DateTime(2022, 9, 24, 22, 32, 39, 598, DateTimeKind.Local).AddTicks(5344),
+                            CreateDate = new DateTime(2022, 9, 27, 13, 34, 29, 933, DateTimeKind.Local).AddTicks(9723),
                             IsDelete = false,
                             RoleUniqueName = "Admin",
                             Title = "Admin"
@@ -60,7 +60,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 2m,
-                            CreateDate = new DateTime(2022, 9, 24, 22, 32, 39, 598, DateTimeKind.Local).AddTicks(5373),
+                            CreateDate = new DateTime(2022, 9, 27, 13, 34, 29, 933, DateTimeKind.Local).AddTicks(9781),
                             IsDelete = false,
                             RoleUniqueName = "Support",
                             Title = "Support"
@@ -68,7 +68,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 3m,
-                            CreateDate = new DateTime(2022, 9, 24, 22, 32, 39, 598, DateTimeKind.Local).AddTicks(5385),
+                            CreateDate = new DateTime(2022, 9, 27, 13, 34, 29, 933, DateTimeKind.Local).AddTicks(9814),
                             IsDelete = false,
                             RoleUniqueName = "Seller",
                             Title = "Seller"
@@ -76,7 +76,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 4m,
-                            CreateDate = new DateTime(2022, 9, 24, 22, 32, 39, 598, DateTimeKind.Local).AddTicks(5395),
+                            CreateDate = new DateTime(2022, 9, 27, 13, 34, 29, 933, DateTimeKind.Local).AddTicks(9845),
                             IsDelete = false,
                             RoleUniqueName = "SellerMaster",
                             Title = "SellerMaster"
@@ -374,6 +374,9 @@ namespace Window.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MessageFile")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("SenderId")
                         .HasColumnType("decimal(20,0)");
 
@@ -564,6 +567,12 @@ namespace Window.Infra.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"), 1L, 1);
 
+                    b.Property<decimal?>("CityId")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<decimal?>("CountryId")
+                        .HasColumnType("decimal(20,0)");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -573,11 +582,51 @@ namespace Window.Infra.Data.Migrations
                     b.Property<decimal>("MainBrandId")
                         .HasColumnType("decimal(20,0)");
 
+                    b.Property<decimal?>("StateId")
+                        .HasColumnType("decimal(20,0)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("MainBrandId");
 
                     b.ToTable("LogForBrands");
+                });
+
+            modelBuilder.Entity("Window.Domain.Entities.Log.LogForInquiry", b =>
+                {
+                    b.Property<decimal>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(20,0)");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"), 1L, 1);
+
+                    b.Property<decimal>("CityId")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<decimal>("CountryId")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("SellerType")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("StateId")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("StateId");
+
+                    b.ToTable("LogForInquiry");
                 });
 
             modelBuilder.Entity("Window.Domain.Entities.Log.LogForVisitSellerProfile", b =>
@@ -1050,7 +1099,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 1m,
-                            CreateDate = new DateTime(2022, 9, 24, 22, 32, 39, 598, DateTimeKind.Local).AddTicks(5415),
+                            CreateDate = new DateTime(2022, 9, 27, 13, 34, 29, 933, DateTimeKind.Local).AddTicks(9896),
                             IsDelete = false,
                             Name = "کشویی",
                             ProductType = 0
@@ -1058,7 +1107,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 2m,
-                            CreateDate = new DateTime(2022, 9, 24, 22, 32, 39, 598, DateTimeKind.Local).AddTicks(5427),
+                            CreateDate = new DateTime(2022, 9, 27, 13, 34, 29, 933, DateTimeKind.Local).AddTicks(9936),
                             IsDelete = false,
                             Name = "کتیبه",
                             ProductType = 0
@@ -1066,7 +1115,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 3m,
-                            CreateDate = new DateTime(2022, 9, 24, 22, 32, 39, 598, DateTimeKind.Local).AddTicks(5439),
+                            CreateDate = new DateTime(2022, 9, 27, 13, 34, 29, 933, DateTimeKind.Local).AddTicks(9968),
                             IsDelete = false,
                             Name = "کتیبه",
                             ProductType = 1
@@ -1074,7 +1123,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 4m,
-                            CreateDate = new DateTime(2022, 9, 24, 22, 32, 39, 598, DateTimeKind.Local).AddTicks(5448),
+                            CreateDate = new DateTime(2022, 9, 27, 13, 34, 29, 934, DateTimeKind.Local),
                             IsDelete = false,
                             Name = "درب",
                             ProductType = 1
@@ -1082,7 +1131,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 5m,
-                            CreateDate = new DateTime(2022, 9, 24, 22, 32, 39, 598, DateTimeKind.Local).AddTicks(5458),
+                            CreateDate = new DateTime(2022, 9, 27, 13, 34, 29, 934, DateTimeKind.Local).AddTicks(31),
                             IsDelete = false,
                             Name = "لولایی",
                             ProductType = 1
@@ -1644,6 +1693,33 @@ namespace Window.Infra.Data.Migrations
                     b.Navigation("MainBrand");
                 });
 
+            modelBuilder.Entity("Window.Domain.Entities.Log.LogForInquiry", b =>
+                {
+                    b.HasOne("Window.Domain.Entities.Location.State", "City")
+                        .WithMany("LogCities")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Window.Domain.Entities.Location.State", "Country")
+                        .WithMany("LogCountries")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Window.Domain.Entities.Location.State", "State")
+                        .WithMany("LogStates")
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("State");
+                });
+
             modelBuilder.Entity("Window.Domain.Entities.Log.LogForVisitSellerProfile", b =>
                 {
                     b.HasOne("Window.Domain.Entities.Account.User", "User")
@@ -2026,6 +2102,12 @@ namespace Window.Infra.Data.Migrations
             modelBuilder.Entity("Window.Domain.Entities.Location.State", b =>
                 {
                     b.Navigation("Children");
+
+                    b.Navigation("LogCities");
+
+                    b.Navigation("LogCountries");
+
+                    b.Navigation("LogStates");
 
                     b.Navigation("UserCities");
 

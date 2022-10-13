@@ -2,12 +2,63 @@
 @using Window.Application.Convertors
 @using Window.Application.Extensions
 @model Window.Domain.ViewModels.Admin.Log.FilterLogVisitSellerProfileViewModel
+@using Window.Domain.ViewModels.Common
+@using Window.Domain.Entities.Account
+@using Window.Domain.ViewModels.User
+
 @{
     ViewData["Title"] = "لیست استعلام بازدید  ";
+    var countries = ViewData["Countries"] != null ? ViewData["Countries"] as List<SelectListViewModel> : null;
+    var states = ViewData["States"] != null ? ViewData["States"] as List<SelectListViewModel> : null;
+    var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
 }
 @section Scripts
     {
     <partial name="_AdminSweetAlertLocalizer" />
+    <script>
+        $("#CountryId").change(function () {
+        if ($("#CountryId :selected").val() !== '') {
+            $('#CityId option:not(:first)').remove();
+            $('#StateId option:not(:first)').remove();
+            $.get("/Home/LoadCities", { stateId: $("#CountryId :selected").val() }).then(res => {
+                if (res.data !== null) {
+                     $("#StateId").append(
+                            '<option>' + "لطفا یک استان را انتخاب کنید" + '</option>'
+                        );
+                    $.each(res.data, function () {
+                        $("#StateId").append(
+                            '<option value=' + this.id + '>' + this.title + '</option>'
+                        );
+                    });
+                    $("#StateId").removeAttr("disabled");
+                }
+            });
+        } else {
+            $('#StateId option:not(:first)').remove();
+            $('#CityId option:not(:first)').remove();
+        }
+    });
+
+    $("#StateId").change(function () {
+        if ($("#StateId :selected").val() !== '') {
+            $('#CityId option:not(:first)').remove();
+            $.get("/Home/LoadCities", { stateId: $("#StateId :selected").val() }).then(res => {
+                if (res.data !== null) {
+                    $.each(res.data, function () {
+                        $("#CityId").append(
+                            '<option value=' + this.id + '>' + this.title + '</option>'
+                        );
+                    });
+                                        $("#CityId").removeAttr("disabled");
+                }
+            });
+        } else {
+            $('#CityId option:not(:first)').remove();
+        }
+    });
+
+</script>
+
 }
 
     @section breadcrumb
@@ -29,6 +80,70 @@
                             <form asp-action="FilterLogForVisitSellerProfile" asp-controller="LogForVisitSellerProfile" asp-area="Admin" id="filter-search" method="get">
                                 <input type="hidden" asp-for="Page" />
 
+
+                     @*           <div class="form-group">
+                                    <label asp-for="CountryId"></label>
+                                    <select class="form-control" asp-for="CountryId">
+                                        <option value=""> لطفا یک کشور را انتخاب کنید </option>
+                                    @if (countries != null && countries.Any())
+                                    {
+                                        foreach (var country in countries)
+                                        {
+                                            if (Model != null && Model.CountryId == country.Id)
+                                            {
+                                                <option value="@country.Id" selected="selected"> @country.Title </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@country.Id"> @country.Title </option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="StateId"></label>
+                                <select class="form-control" asp-for="StateId">
+                                    <option value=""> لطفا یک استان را انتخاب کنید </option>
+                                    @if (states != null && states.Any())
+                                    {
+                                        foreach (var state in states)
+                                        {
+                                            if (Model != null && Model.StateId == state.Id)
+                                            {
+                                                <option value="@state.Id" selected="selected"> @state.Title </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@state.Id"> @state.Title </option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="CityId"></label>
+                                <select asp-for="CityId" class="form-control">
+                                    <option value=""> لطفا یک شهر را انتخاب کنید </option>
+                                    @if (cities != null && cities.Any())
+                                    {
+                                        foreach (var city in cities)
+                                        {
+                                            if (Model != null && Model.CityId == city.Id)
+                                            {
+                                                <option value="@city.Id" selected="selected"> @city.Title </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@city.Id"> @city.Title </option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>*@
+
                                 <div class="form-group">
                                     <label asp-for="Username"> نام کاربری فروشنده </label>
                                     <input type="text" class="form-control" asp-for="Username">
@@ -39,7 +154,28 @@
                                     <input type="text" class="form-control" asp-for="SellerMobile">
                                 </div>
 
-                                <hr />
+                                  <div class="form-group col-md-12">
+                                            <label asp-for="FromDate"> @Localizer["از تاریخ"] </label>
+                                            <input type="text" class="form-control" AdminDatePicker="1" asp-for="FromDate">
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label asp-for="ToDate"> @Localizer["تا تاریخ "] </label>
+                                            <input type="text" class="form-control" AdminDatePicker="2" asp-for="ToDate">
+                                        </div>
+
+                                <hr /> 
+
+                                <div class="selectStateInFilterUsersListInAdmin">
+                                        <div class="form-group">
+                                        <label asp-for="OrderType">@Localizer["مرتب سازی براساس"] </label>
+                                            <select asp-for="OrderType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(FilterUserViewModel.FilterUserOrderType))">
+
+                                                <option>لطفا یک گزینه را انتخاب کنید </option>
+
+                                            </select>
+                                        </div>
+                                    </div>
 
                                 <div class="row">
                                     <div class="col-md-12 flex-style">
@@ -67,6 +203,8 @@
                     <div class="flex-style">
                         <span>لیست اطلاعات </span>
                         <span>@Model.GetShownEntitiesPagesTitle()</span>
+                        -
+                        <span>تعداد کل : @Model.AllEntitiesCount</span>
                     </div>
                 </div>
 

@@ -157,6 +157,8 @@ namespace Window.Data.Context
 
         public DbSet<LogForBrands> LogForBrands { get; set; }
 
+        public DbSet<LogForInquiry> LogForInquiry { get; set; }
+
         #endregion
 
         #region Site Setting

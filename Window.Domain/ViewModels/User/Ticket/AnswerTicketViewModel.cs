@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace Window.Domain.ViewModels.User.Ticket
         [Display(Name = "Message")]
         [Required(ErrorMessage = "Please Enter {0}")]
         public string Message { get; set; }
+
+        public IFormFile? MessageFile { get; set; }
     }
 }

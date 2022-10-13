@@ -14,12 +14,12 @@ namespace Window.Domain.Entities.TechnicalIssues
         #region properties
 
 
-        [Display(Name = "عنوان مشاوره")]
+        [Display(Name = "عنوان ")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(400)]
         public string Title { get; set; }
 
-        [Display(Name = "متن مشاوره")]
+        [Display(Name = "متن ")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Description { get; set; }
 

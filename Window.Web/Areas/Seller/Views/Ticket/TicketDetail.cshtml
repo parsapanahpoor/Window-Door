@@ -2,6 +2,7 @@
 @using Window.Application.Convertors
 @using Window.Domain.Enums.Contact
 @using Window.Application.Extensions
+@using Window.Application.StticTools
 @model Window.Domain.ViewModels.User.Ticket.AnswerTicketViewModel
 @inject IViewLocalizer Localizer
 @inject IHtmlLocalizer<SharedLocalizer> SharedHtmlLocalizer
@@ -11,60 +12,67 @@
 }
 
 @{
-     var ticketDetail = ViewData["TicketDetailViewModel"] as UserPanelTicketDetailViewModel;
+    var ticketDetail = ViewData["TicketDetailViewModel"] as UserPanelTicketDetailViewModel;
 }
 
 @section Scripts
-{
-<partial name="_JqueryValidation" />
+    {
+    <partial name="_JqueryValidation" />
 }
 
-@section breadcrumb
-{
-<li>
-    <a asp-action="FilterTickets" asp-controller="Ticket" asp-area="Seller"> @Localizer["List Of Tickets"] </a>
-</li>
-<li>
-    <a href="javascript:void(0)"> @ViewData["Title"] </a>
-</li>
+    @section breadcrumb
+    {
+    <li>
+        <a asp-action="FilterTickets" asp-controller="Ticket" asp-area="Seller"> @Localizer["List Of Tickets"] </a>
+    </li>
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
 }
 
-<div class="row">
+    <div class="row">
 
-    <div class="col-lg-12 col-sm-12">
-        <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <div class="row">
 
-           @if (ticketDetail.TicketStatus == TicketStatus.Answered )
+            @if (ticketDetail.TicketStatus == TicketStatus.Answered)
             {
                 <div class="col-md-12">
                     <div class="widget">
-                    <div class="widget-header">
-                        <span class="widget-caption"> <strong> @Localizer["Send Message"] </strong> </span>
-                    </div>
+                        <div class="widget-header">
+                            <span class="widget-caption"> <strong> @Localizer["Send Message"] </strong> </span>
+                        </div>
 
-                    <div class="widget-body">
-                        <div class="row">
-                            <form asp-action="TicketDetail" asp-controller="Ticket" asp-area="Seller" method="post">
+                        <div class="widget-body">
+                            <div class="row">
+                                <form asp-action="TicketDetail" asp-controller="Ticket" asp-area="Seller" method="post" enctype="multipart/form-data">
 
-                        <input type="hidden" asp-for="TicketId" />
+                                    <input type="hidden" asp-for="TicketId" />
 
-                                <div class="form-group col-md-12">
-                                    <label asp-for="Message"></label>
-                                    <textarea class="form-control" ckeditor="1" asp-for="Message"></textarea>
-                                    <span class="text-danger" asp-validation-for="Message"></span>
-                                </div>
+                                    <div class="form-group col-md-12">
+                                        <label asp-for="Message"></label>
+                                        <textarea class="form-control" ckeditor="1" asp-for="Message"></textarea>
+                                        <span class="text-danger" asp-validation-for="Message"></span>
+                                    </div>
 
-                                <div class="col-md-12 flex-style">
-                                    <button type="submit" class="btn btn-labeled btn-palegreen">
-                                        <i class="btn-label glyphicon glyphicon-ok"></i>@Localizer["Submit"]
-                                    </button>
-                                </div>
+                                    <div class="clearfix"></div>
 
-                            </form>
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <label>فایل  </label>
+                                        <input class="btn btn-blue" asp-for="MessageFile" type="file">
+                                    </div>
+
+                                    <div class="col-md-12 flex-style">
+                                        <button type="submit" class="btn btn-labeled btn-palegreen">
+                                            <i class="btn-label glyphicon glyphicon-ok"></i>@Localizer["Submit"]
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             }
 
             <div class="col-md-12">
@@ -88,6 +96,10 @@
                                                     <div class="flex-style-center">
                                                         <img src="@message.Sender.GetUserAvatar()" class="ticket-img-style" />
                                                         <span class="ml-10px"> <strong> @message.Sender.Username </strong> </span>
+                                                        @if (!string.IsNullOrEmpty(message.MessageFile))
+                                                        {
+                                                            <a class="mr-10px" target="_blank" style="color: gold;cursor:pointer; padding-left: 10px" href="@FilePaths.TicketFilePath/@message.MessageFile"> <i class="glyphicon glyphicon-folder-open"></i> </a>
+                                                        }
                                                     </div>
                                                 </div>
 
@@ -107,7 +119,11 @@
                                                         <span class="mr-10px"> <strong> @message.Sender.Username </strong> </span>
                                                     </div>
                                                     <div class="flex-style-center">
-                                                        <span style="border-left: 1px solid gray; padding-left: 10px"> @message.CreateDate.ToStringShamsiDate() ساعت @message.CreateDate.ToShortTimeString() </span>
+                                                        <span> @message.CreateDate.ToStringShamsiDate() ساعت @message.CreateDate.ToShortTimeString() </span>
+                                                        @if (!string.IsNullOrEmpty(message.MessageFile))
+                                                        {
+                                                            <a class="mr-10px" target="_blank" style="color: gold;cursor:pointer;" href="@FilePaths.TicketFilePath/@message.MessageFile"> <i class="glyphicon glyphicon-folder-open"></i> </a>
+                                                        }
                                                     </div>
                                                 </div>
 

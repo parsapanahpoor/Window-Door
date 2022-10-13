@@ -85,6 +85,8 @@ namespace Window.Application.Services.Interfaces
 
         Task<bool> SendSMSForDisActiveUsers(ulong marketId, bool threetoday, bool day, bool fifteenday);
 
+        Task<FilterLogForInquiryViewModel> FilterLogForInquiryViewModel(FilterLogForInquiryViewModel filter);
+
         #endregion
 
         #region Site Side

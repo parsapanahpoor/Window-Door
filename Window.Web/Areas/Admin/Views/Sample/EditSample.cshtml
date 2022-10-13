@@ -107,16 +107,16 @@
                                             {
                                                 if (segmentsId.Contains(seg.Id))
                                                 {
-                                                    <option value="@seg.Id" selected="selected"> @seg.Title </option>
+                                                    <option value="@seg.Id" selected="selected"> @seg.Id-@seg.Title </option>
                                                 }
                                                 else
                                                 {
-                                                    <option value="@seg.Id"> @seg.Title </option>
+                                                    <option value="@seg.Id"> @seg.Id-@seg.Title </option>
                                                 }
                                             }
                                             else
                                             {
-                                                <option value="@seg.Id"> @seg.Title </option>
+                                                <option value="@seg.Id"> @seg.Id-@seg.Title </option>
                                             }
                                         }
                                     }

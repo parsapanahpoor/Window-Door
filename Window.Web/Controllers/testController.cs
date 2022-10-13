@@ -86,7 +86,8 @@ namespace Window.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return NotFound();
+                TempData[ErrorMessage] = "لطفا اطلاعات را کامل وارد کنید";
+                return RedirectToAction(nameof(InquiryStep1));
             }
 
             #endregion

@@ -12,6 +12,7 @@ using Window.Domain.ViewModels.Common;
 using Window.Domain.ViewModels.User;
 using Window.Domain.ViewModels.User.Account;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace CRM.Data.Repository
 {
@@ -98,11 +99,11 @@ namespace CRM.Data.Repository
 
             switch (filter.OrderType)
             {
-                case FilterUserViewModel.FilterUserOrderType.CreateDate_ASC:
-                    query = query.OrderBy(u => u.CreateDate);
-                    break;
                 case FilterUserViewModel.FilterUserOrderType.CreateDate_DES:
                     query = query.OrderByDescending(u => u.CreateDate);
+                    break;
+                case FilterUserViewModel.FilterUserOrderType.CreateDate_ASC:
+                    query = query.OrderBy(u => u.CreateDate);
                     break;
             }
 
@@ -121,6 +122,28 @@ namespace CRM.Data.Repository
             if ((!string.IsNullOrEmpty(filter.Username)))
             {
                 query = query.Where(u => u.Username.Contains(filter.Username));
+            }
+
+            if (!string.IsNullOrEmpty(filter.FromDate))
+            {
+                var spliteDate = filter.FromDate.Split('/');
+                int year = int.Parse(spliteDate[0]);
+                int month = int.Parse(spliteDate[1]);
+                int day = int.Parse(spliteDate[2]);
+                DateTime fromDate = new DateTime(year, month, day, new PersianCalendar());
+
+                query = query.Where(s => s.CreateDate >= fromDate);
+            }
+
+            if (!string.IsNullOrEmpty(filter.ToDate))
+            {
+                var spliteDate = filter.ToDate.Split('/');
+                int year = int.Parse(spliteDate[0]);
+                int month = int.Parse(spliteDate[1]);
+                int day = int.Parse(spliteDate[2]);
+                DateTime toDate = new DateTime(year, month, day, new PersianCalendar());
+
+                query = query.Where(s => s.CreateDate <= toDate);
             }
 
             #endregion

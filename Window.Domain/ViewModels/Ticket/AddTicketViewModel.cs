@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Window.Domain.ViewModels.Admin.Ticket
 {
@@ -36,6 +37,8 @@ namespace Window.Domain.ViewModels.Admin.Ticket
         [Display(Name = "Message")]
         [Required(ErrorMessage = "Please Enter {0}")]
         public string Message { get; set; }
+
+        public IFormFile? MessageFile { get; set; }
 
         #endregion
     }

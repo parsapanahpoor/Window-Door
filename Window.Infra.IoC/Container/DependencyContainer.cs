@@ -43,6 +43,8 @@ namespace Window.IOC.Container
             services.AddScoped<ISMSService, SMSService>();
             services.AddScoped<ISiteSettingService, SiteSettingService>();
             services.AddScoped<IAdminDashboardService, AdminDashboardService>();
+            services.AddScoped<ITechnicalIssues, TechnicalIssuesService>();
+            services.AddScoped<IConsulantService, ConsultantService>();
 
             #endregion
         }

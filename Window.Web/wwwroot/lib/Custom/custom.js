@@ -1,4 +1,21 @@
-﻿//#region PageId For Pagings
+﻿//#region Document Ready
+
+$(function () {
+    var adminDatePickers = $("[AdminDatePicker]");
+    if (adminDatePickers.length > 0) {
+        $('<link/>',
+            {
+                rel: 'stylesheet',
+                type: 'text/css',
+                href: '/lib/admindatapicker/kamadatepicker.min.css'
+            }).appendTo('head');
+        $.getScript("/lib/admindatapicker/kamadatepicker.min.js", function (script, textStatus, jqXHR) { });
+    }
+});
+
+//#endregion
+
+//#region PageId For Pagings
 
 function FillPageId(id) {
     $("#Page").val(id);
