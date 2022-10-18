@@ -84,9 +84,9 @@ namespace Window.Web.Controllers
 
         #region Inquiry API Step 1
 
-        [HttpGet("get-step1/{ProductType}/{ProductKind}/{SellerType}/{MainBrand}/{GlassName}/{UserMacAddress}/{City}/{State}")]
+        [HttpGet("get-step1/{SellerType}/{MainBrand}/{GlassName}/{UserMacAddress}/{City}/{State}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Step1(ProductType ProductType , ProductKind ProductKind , SellerType SellerType , string MainBrand , string GlassName, string UserMacAddress , string City , string State)
+        public async Task<IActionResult> Step1(SellerType SellerType , string MainBrand , string GlassName, string UserMacAddress , string City , string State)
         {
             #region Get Satte and City
 
