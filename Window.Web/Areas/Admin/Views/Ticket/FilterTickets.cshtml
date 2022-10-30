@@ -73,6 +73,11 @@
                             <select asp-for="AdminTicketFilterOnWorkingStatus" class="form-control" asp-items="Html.GetEnumSelectList(typeof(AdminTicketFilterOnWorkingStatus))"></select>
                         </div>
 
+                            <div class="form-group">
+                                <label asp-for="AdminTicketType"> نوع تیکت </label>
+                                <select asp-for="AdminTicketType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(AdminTicketType))"></select>
+                            </div>
+
                         <hr />
 
                         <div class="row">

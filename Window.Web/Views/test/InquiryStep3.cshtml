@@ -70,10 +70,15 @@
                                         @product.SegmentName
                                 </td>
                                 <td class="tc vm">
-                                    <input type="number" min="0" step="10" name="Width" />
+                                    <input type="number" min="0" step="1" name="Width" />
+                                        @if (product.Id == 16 || product.Id == 15)
+                                        {
+                                        <hr />
+                                        <input type="number" min="0" step="1" name="katibeSize" placeholder="عرض درب a" />
+                                        }
                                 </td>
                                 <td class="tc vm">
-                                    <input type="number" min="0" step="10" name="Height" />
+                                    <input type="number" min="0" step="1" name="Height" />
                                 </td>
                                 <td class="tc vm">
                                     <input type="number" min="1" name="SampleCount" />

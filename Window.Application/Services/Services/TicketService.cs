@@ -308,6 +308,7 @@ namespace Window.Application.Services
                 TicketStatus = TicketStatus.Pending,
                 OwnerId = userId,
                 CreateDate = DateTime.Now,
+                TicketType = create.TicketType,
             };
 
             #endregion
@@ -325,7 +326,8 @@ namespace Window.Application.Services
                 Message = create.Message.SanitizeText(),
                 SenderId = userId,
                 TicketId = ticket.Id,
-                CreateDate = DateTime.Now
+                CreateDate = DateTime.Now,
+                
             };
 
             #region Add File
@@ -436,6 +438,38 @@ namespace Window.Application.Services
                 TicketId = ticket.Id,
                 CreateDate = DateTime.Now
             };
+
+            #endregion
+
+            #region Add File
+
+            if (answer.MessageFile != null)
+            {
+                if (Path.GetExtension(answer.MessageFile.FileName).ToLower() == ".jpg"
+                        && Path.GetExtension(answer.MessageFile.FileName).ToLower() == ".png"
+                        && Path.GetExtension(answer.MessageFile.FileName).ToLower() == ".jpeg")
+                {
+                    var res = answer.MessageFile.IsImage();
+                    if (!res)
+                    {
+                        return false;
+                    }
+                }
+
+                var imageName = CodeGenerator.GenerateUniqCode() + Path.GetExtension(answer.MessageFile.FileName);
+
+                if (!Directory.Exists(FilePaths.TicketFilePathServer))
+                    Directory.CreateDirectory(FilePaths.TicketFilePathServer);
+
+                string OriginPath = FilePaths.TicketFilePathServer + imageName;
+
+                using (var stream = new FileStream(OriginPath, FileMode.Create))
+                {
+                    if (!Directory.Exists(OriginPath)) answer.MessageFile.CopyTo(stream);
+                }
+
+                message.MessageFile = imageName;
+            }
 
             #endregion
 

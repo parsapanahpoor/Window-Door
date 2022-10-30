@@ -74,6 +74,21 @@ namespace Window.Data.Repository
                     break;
             }
 
+            switch (filter.AdminTicketType)
+            {
+                case AdminTicketType.All:
+                    break;
+                case AdminTicketType.MasaEleFani:
+                    query = query.Where(s => s.TicketType == Domain.Enums.Ticket.TicketType.MasaEleFani);
+                    break;
+                case AdminTicketType.MoshavereRaygan:
+                    query = query.Where(s => s.TicketType == Domain.Enums.Ticket.TicketType.MoshavereRaygan);
+                    break;
+                case AdminTicketType.TazminDarKharid:
+                    query = query.Where(s => s.TicketType == Domain.Enums.Ticket.TicketType.TazminDarKharid);
+                    break;
+            }
+
             switch (filter.AdminTicketFilterSeenByAdminStatus)
             {
                 case AdminTicketFilterSeenByAdminStatus.All:

@@ -38,9 +38,9 @@
                     }
 
 
-                    @if (Model.Segments.Where(p => p.Segment.Aluminum) != null && Model.Segments.Any(p => p.Segment.Aluminum))
+                    @if (Model.Segments.Where(p => p.Segment.Aluminum && !p.Segment.Yaragh) != null && Model.Segments.Any(p => p.Segment.Aluminum && !p.Segment.Yaragh))
                     {
-                        @if (Model.Segments.Where(p => p.Segment.UPVC) != null && Model.Segments.Any(p => p.Segment.UPVC))
+                        @if (Model.Segments.Where(p => p.Segment.UPVC && !p.Segment.Yaragh) != null && Model.Segments.Any(p => p.Segment.UPVC && !p.Segment.Yaragh))
                         {
                             <li class="tab-red">
                                 <a data-toggle="tab" href="#timeline" aria-expanded="false">
@@ -58,7 +58,7 @@
                         }
                     }
 
-                    @if (Model.Segments.Where(p => p.Segment.UPVC) != null && Model.Segments.Any(p => p.Segment.UPVC))
+                    @if (Model.Segments.Where(p => p.Segment.UPVC && !p.Segment.Yaragh) != null && Model.Segments.Any(p => p.Segment.UPVC && !p.Segment.Yaragh))
                     {
                         <li class="tab-yellow active">
                             <a data-toggle="tab" href="#settings" aria-expanded="true">
@@ -112,15 +112,15 @@
 
                     </div>
 
-                    @if (Model.Segments.Where(p => p.Segment.Aluminum) != null && Model.Segments.Any(p => p.Segment.Aluminum))
+                    @if (Model.Segments.Where(p => p.Segment.Aluminum && !p.Segment.Yaragh) != null && Model.Segments.Any(p => p.Segment.Aluminum && !p.Segment.Yaragh))
                     {
-                        @if (Model.Segments.Where(p => p.Segment.UPVC) != null && Model.Segments.Any(p => p.Segment.UPVC))
+                        @if (Model.Segments.Where(p => p.Segment.UPVC && !p.Segment.Yaragh) != null && Model.Segments.Any(p => p.Segment.UPVC && !p.Segment.Yaragh))
                         {
                             <div id="timeline" class="tab-pane">
 
                                 <div class="row">
 
-                                    @foreach (var item in Model.Segments.Where(p => p.Segment.Aluminum))
+                                    @foreach (var item in Model.Segments.Where(p => p.Segment.Aluminum && !p.Segment.Yaragh))
                                     {
                                         <form method="post" asp-action="AddSegmentPricing" asp-controller="Product" asp-area="Seller" enctype="multipart/form-data">
                                             <input type="hidden" asp-for="ProductId" />
@@ -167,7 +167,7 @@
 
                                 <div class="row">
 
-                                    @foreach (var item in Model.Segments.Where(p => p.Segment.Aluminum))
+                                    @foreach (var item in Model.Segments.Where(p => p.Segment.Aluminum && !p.Segment.Yaragh))
                                     {
                                         <form method="post" asp-action="AddSegmentPricing" asp-controller="Product" asp-area="Seller" enctype="multipart/form-data">
                                             <input type="hidden" asp-for="ProductId" />
@@ -209,13 +209,13 @@
                         }
                     }
 
-                    @if (Model.Segments.Where(p => p.Segment.UPVC) != null && Model.Segments.Any(p => p.Segment.UPVC))
+                    @if (Model.Segments.Where(p => p.Segment.UPVC && !p.Segment.Yaragh) != null && Model.Segments.Any(p => p.Segment.UPVC && !p.Segment.Yaragh))
                     {
                         <div id="settings" class="tab-pane active">
 
                             <div class="row">
 
-                                @foreach (var item in Model.Segments.Where(p => p.Segment.UPVC))
+                                @foreach (var item in Model.Segments.Where(p => p.Segment.UPVC && !p.Segment.Yaragh))
                                 {
                                     <form method="post" asp-action="AddSegmentPricing" asp-controller="Product" asp-area="Seller" enctype="multipart/form-data">
                                         <input type="hidden" asp-for="ProductId" />

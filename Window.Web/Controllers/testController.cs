@@ -439,7 +439,7 @@ namespace Window.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> GetUserLastestInquiry(ulong inquiryDetailId, ulong sampleId, int width, int height, int? katibeSize, string userMacAddress)
+        public async Task<IActionResult> GetUserLastestInquiry(ulong inquiryDetailId, ulong sampleId, int width, int height, int? katibeSize, string userMacAddress , int? SampleCount)
         {
             #region Get Samples For Show In Page Model
 
@@ -491,7 +491,7 @@ namespace Window.Web.Controllers
 
             #region Add Log For User
 
-            var res = await _inquiryService.UpdateUserInquiryItrm(inquiryDetailId , sampleId, width, height, katibeSize, userMacAddress);
+            var res = await _inquiryService.UpdateUserInquiryItrm(inquiryDetailId , sampleId, width, height, katibeSize, userMacAddress , SampleCount);
             if (!res)
             {
                 TempData[ErrorMessage] = "نتیجه ای برای استعلام شما یافت نشده است .";

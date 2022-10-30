@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Window.Domain.Enums.Ticket;
 
 namespace Window.Domain.ViewModels.Admin.Ticket
 {
@@ -29,6 +30,8 @@ namespace Window.Domain.ViewModels.Admin.Ticket
         public AdminTicketFilterStatus AdminTicketFilterStatus { get; set; }
 
         public AdminTicketFilterOnWorkingStatus AdminTicketFilterOnWorkingStatus { get; set; }
+
+        public AdminTicketType? AdminTicketType { get; set; }
 
         public string? UserEmail { get; set; }
     }
@@ -60,5 +63,17 @@ namespace Window.Domain.ViewModels.Admin.Ticket
         [Display(Name = "All")] All,
         [Display(Name = "On Working")] OnWorking,
         [Display(Name = "NotWorking")] NotWorking
+    }
+
+    public enum AdminTicketType
+    {
+        [Display(Name = "همه")]
+        All,
+        [Display(Name = " مسائل فنی")]
+        MasaEleFani,
+        [Display(Name = " مشاوره ی رایگان")]
+        MoshavereRaygan,
+        [Display(Name = " تضمین در خرید")]
+        TazminDarKharid,
     }
 }

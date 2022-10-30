@@ -272,7 +272,7 @@ namespace Window.Application.Services.Services
 
             #endregion
 
-            return await samples.ToListAsync();
+            return await samples.OrderBy(p=> p.Priority).ToListAsync();
         }
 
         public async Task<List<Sample>?> GetAllSample()

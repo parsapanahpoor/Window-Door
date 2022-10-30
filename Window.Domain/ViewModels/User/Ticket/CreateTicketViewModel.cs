@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Window.Domain.Enums.Ticket;
 
 namespace Window.Domain.ViewModels.User.Ticket
 {
@@ -20,5 +21,7 @@ namespace Window.Domain.ViewModels.User.Ticket
         public string Message { get; set; }
 
         public IFormFile? MessageFile { get; set; }
+
+        public TicketType TicketType { get; set; }
     }
 }

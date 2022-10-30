@@ -23,7 +23,7 @@ namespace Window.Application.Services.Interfaces
 
         Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress);
 
-        Task<double?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, int productCount , int? katibeSize, ulong userId , ulong glassId);
+        Task<double?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, int productCount , int? katibeSizes, ulong userId , ulong glassId);
 
         Task<int?> InitializeSamplesPrice(List<Sample?> samples, User user, int height, int width);
 
@@ -52,7 +52,7 @@ namespace Window.Application.Services.Interfaces
         Task<bool> DeleteUserLastestInquiryDetail(ulong inquiryDetailId, string macAddress);
 
         //Update User Inquiry Detail
-        Task<bool> UpdateUserInquiryItrm(ulong inquiryDetailId , ulong sampleId, int width, int height, int? katibe, string macAddress);
+        Task<bool> UpdateUserInquiryItrm(ulong inquiryDetailId , ulong sampleId, int width, int height, int? katibe, string macAddress, int? SampleCount);
 
         #endregion
 

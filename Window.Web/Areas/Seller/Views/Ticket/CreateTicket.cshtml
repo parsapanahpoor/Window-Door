@@ -38,9 +38,14 @@
                                 <span class="text-danger" asp-validation-for="Title"></span>
                             </div>
 
-                            <div class="clearfix"></div>
+                                <div class="form-group col-md-6 col-sm-12">
+                                    <label >نوع تیکت</label>
+                                    <select asp-for="TicketType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.Ticket.TicketType))"></select>
+                                    <span class="text-danger" asp-validation-for="TicketType"></span>
+                                </div>
 
-                                    <div class="form-group col-md-12 col-sm-12">
+
+                                    <div class="form-group col-md-6 col-sm-12">
                                         <label >فایل  </label>
                                         <input class="btn btn-blue" asp-for="MessageFile" type="file">
                                     </div>

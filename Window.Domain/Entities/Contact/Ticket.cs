@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Common;
 using Window.Domain.Enums.Contact;
+using Window.Domain.Enums.Ticket;
 
 namespace Window.Domain.Entities.Contact
 {
@@ -32,6 +33,8 @@ namespace Window.Domain.Entities.Contact
         public bool OnWorking { get; set; }
 
         public bool IsDelete { get; set; }
+
+        public TicketType? TicketType { get; set; }
 
         #endregion
 

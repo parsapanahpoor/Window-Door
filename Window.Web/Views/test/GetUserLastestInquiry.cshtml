@@ -35,6 +35,15 @@
                                 ارتفاع
                             </th>
                             <th class="tc vm">
+                                تعداد
+                            </th>
+                            <th class="tc vm">
+                                محدوده ی ارتفاع (cm)
+                            </th>
+                            <th class="tc vm">
+                                محدوده ی عرض (cm)
+                            </th>
+                            <th class="tc vm">
                                 ثبت
                             </th>
                         </tr>
@@ -53,7 +62,7 @@
                                 </td>
                                 <td class="vm">
                                     <div class="flex-style-center">
-                                        <img src="@Window.Application.StticTools.FilePaths.SampleThumbimage/@product.Sample.Image" class="avatar-style" style="border-radius:50px;" />
+                                        <img src="@Window.Application.StticTools.FilePaths.SampleThumbimage/@product.Sample.Image" class="avatar-style" style="height:70px;width:120px;" />
                                     </div>
                                 </td>
                                 <td class="tc vm" style="max-width: 200px">
@@ -61,9 +70,23 @@
                                 </td>
                                 <td class="tc vm">
                                     <input type="text"  name="Width" value="@product.Width"/>
+                                        @if (product.Sample.Id == 16 || product.Sample.Id == 15)
+                                        {
+                                        <hr />
+                                        <input type="number" min="0" value="@product.KatibeSize" name="katibeSize" placeholder="عرض درب a" />
+                                        }
                                 </td>
                                 <td class="tc vm">
                                     <input type="text" name="Height" value="@product.Height" />
+                                </td>
+                                <td class="tc vm">
+                                    <input type="number" min="1" name="SampleCount" value="@product.CountOfSample"/>
+                                </td>
+                                <td class="tc vm">
+                                    <p> @product.Sample.MaxHeight تا @product.Sample.MinHeight </p>
+                                </td>
+                                <td class="tc vm">
+                                    <p> @product.Sample.MaxWidth تا @product.Sample.MinWidth </p>
                                 </td>
                                 <td class="tc vm">
                                     <button type="submit" class="btn btn-labeled btn-palegreen">
