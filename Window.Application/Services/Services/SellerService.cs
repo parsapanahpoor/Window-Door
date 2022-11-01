@@ -1412,6 +1412,7 @@ namespace Window.Application.Services.Services
         {
             var query = _context.LogForVisitSellerProfiles
            .Include(u => u.User)
+           .ThenInclude(p=> p.SellersPersonalInfos)
            .Where(p => !p.IsDelete)
            .OrderByDescending(p => p.CreateDate)
            .AsQueryable();
@@ -1432,10 +1433,12 @@ namespace Window.Application.Services.Services
             {
                 query = query.Where(u => u.User.Mobile.Contains(filter.SellerMobile));
             }
+
             if ((!string.IsNullOrEmpty(filter.Username)))
             {
                 query = query.Where(u => u.User.Username.Contains(filter.Username));
             }
+
             if (filter.SellerId.HasValue)
             {
                 #region Get Market By User Id 
@@ -1469,6 +1472,21 @@ namespace Window.Application.Services.Services
                 DateTime toDate = new DateTime(year, month, day, new PersianCalendar());
 
                 query = query.Where(s => s.CreateDate <= toDate);
+            }
+
+            if (filter.CountryId.HasValue)
+            {
+                query = query.Where(p => p.User.SellersPersonalInfos.CountryId == filter.CountryId);
+            }
+
+            if (filter.StateId.HasValue)
+            {
+                query = query.Where(p => p.User.SellersPersonalInfos.StateId == filter.StateId);
+            }
+
+            if (filter.CityId.HasValue)
+            {
+                query = query.Where(p => p.User.SellersPersonalInfos.CityId == filter.CityId);
             }
 
             #endregion

@@ -11,7 +11,9 @@ using Window.Application.Services.Interfaces;
 using Window.Application.StticTools;
 using Window.Data.Context;
 using Window.Domain.Entities.Brand;
+using Window.Domain.Enums.BrandType;
 using Window.Domain.ViewModels.Admin.Brand;
+using Window.Domain.ViewModels.Admin.Ticket;
 using Window.Domain.ViewModels.Common;
 using Window.Domain.ViewModels.Site.API;
 
@@ -40,6 +42,21 @@ namespace Window.Application.Services.Services
                 .AsQueryable();
 
             #region Filter By Properties
+
+            switch (filter.BrandType)
+            {
+                case Domain.Enums.BrandType.BrandType.All:
+                    break;
+                case BrandType.Alminum:
+                    query = query.Where(s => s.Alominum);
+                    break;
+                case BrandType.UPVC:
+                    query = query.Where(s => s.UPVC);
+                    break;
+                case BrandType.Yaragh:
+                    query = query.Where(s => s.Yaragh);
+                    break;
+            }
 
             if (!string.IsNullOrEmpty(filter.BrandName))
             {
@@ -148,6 +165,7 @@ namespace Window.Application.Services.Services
             brand.UPVC = mainBrand.UPVC;
             brand.Alominum = mainBrand.Alominum;
             brand.Priority = mainBrand.Priority;
+            brand.Yaragh = mainBrand.Yaragh;
 
             if (brandLogo != null && brandLogo.IsImage())
             {

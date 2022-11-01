@@ -19,6 +19,8 @@ namespace Window.Domain.Entities.Brand
 
         public bool Alominum { get; set; }
 
+        public bool Yaragh { get; set; }
+
         [Display(Name = "نام برند")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200)]

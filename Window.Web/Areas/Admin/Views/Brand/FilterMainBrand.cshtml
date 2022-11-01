@@ -43,6 +43,11 @@
                             <input asp-for="BrandName" class="form-control">
                         </div>
 
+                            <div class="form-group">
+                                <label > دسته بندی برند  </label>
+                                <select asp-for="BrandType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.BrandType.BrandType))"></select>
+                            </div>
+
                         <hr />
 
                         <div class="row">
