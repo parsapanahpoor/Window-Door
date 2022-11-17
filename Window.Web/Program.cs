@@ -48,6 +48,12 @@ builder.Services.Configure<RequestLocalizationOptions>(
 
 #endregion
 
+#region PWA
+
+builder.Services.AddProgressiveWebApp("/Site/Manifest/manifest.json");
+
+#endregion
+
 #region mvc
 
 builder.Services.AddControllersWithViews()

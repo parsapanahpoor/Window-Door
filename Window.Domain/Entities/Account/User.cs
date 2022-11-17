@@ -86,6 +86,14 @@ namespace Window.Domain.Entities.Account
 
         public ICollection<ScoreForMarket> Score { get; set; }
 
+        public ICollection<SehateEtelaAt> SehateEtelaAt { get; set; }
+
+        public ICollection<PasokhGoie> PasokhGoie { get; set; }
+
+        public ICollection<TaAhodeZamaneTahvil> TaAhodeZamaneTahvil { get; set; }
+
+        public ICollection<KhadamatePasAzForosh> KhadamatePasAzForosh { get; set; }
+
         public ICollection<LogForVisitSellerProfile> LogForVisitSellerProfiles { get; set; }
 
         #endregion

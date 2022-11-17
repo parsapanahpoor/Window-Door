@@ -61,6 +61,7 @@
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.9" />
 		<PackageReference Include="Stimulsoft.Reports.Web.NetCore" Version="2022.1.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+		<PackageReference Include="WebEssentials.AspNetCore.PWA" Version="1.0.65" />
 		<PackageReference Include="WebMarkupMin.AspNetCore6" Version="2.11.0" />
 		<PackageReference Include="ZNetCS.AspNetCore.ResumingFileResults" Version="2.2.0" />
 		<PackageReference Include="ZarinpalSandbox" Version="2.0.4" />

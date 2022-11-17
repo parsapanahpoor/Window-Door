@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Window.Domain.ViewModels.Site.Inquiry.AddScoreToTheSellerViewModel
+@{
     ViewData["Title"] = "امتیاز دهی ";
 }
 
@@ -12,7 +13,7 @@
 }
 
     <form asp-action="AddScoreToSeller" asp-controller="test" asp-area="" id="formFilter" method="post">
-        <input name="sellerId" value="@ViewBag.sellerId" type="hidden" />
+        <input asp-for="SellerId" value="@Model.SellerId" type="hidden" />
 
         <div class="row">
 
@@ -25,8 +26,30 @@
                         <div>
 
                             <div class="form-group">
-                                <label>امتیاز دهی</label>
-                                <input name="score" type="number" min="0" max="5" class="form-control">
+                                <label>کیفیت کار(لطفا از 1تا 5 امتیازی را به این فروشنده اختصاص دهید .)</label>
+                                <input asp-for="KeyfiateKar" type="number" min="0" max="5" class="form-control">
+                            </div>
+
+                            <hr />
+
+                            <div class="form-group">
+                                <label>صحت اطلاعات(لطفا از 1تا 5 امتیازی را به این فروشنده اختصاص دهید .)</label>
+                                <input asp-for="SehateEtelaAt" type="number" min="0" max="5" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>پاسخ گویی(لطفا از 1تا 5 امتیازی را به این فروشنده اختصاص دهید .)</label>
+                                <input asp-for="PasokhGoie" type="number" min="0" max="5" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>خدمات پس از فروش(لطفا از 1تا 5 امتیازی را به این فروشنده اختصاص دهید .)</label>
+                                <input asp-for="KhadamatePasAzForosh" type="number" min="0" max="5" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>تعهد زمان تحویل(لطفا از 1تا 5 امتیازی را به این فروشنده اختصاص دهید .)</label>
+                                <input asp-for="KhadamatePasAzForosh" type="number" min="0" max="5" class="form-control">
                             </div>
 
                             <hr />

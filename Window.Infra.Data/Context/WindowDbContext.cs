@@ -77,6 +77,14 @@ namespace Window.Data.Context
 
         public DbSet<ScoreForMarket> ScoreForMarkets { get; set; }
 
+        public DbSet<SehateEtelaAt> SehateEtelaAt { get; set; }
+
+        public DbSet<PasokhGoie> PasokhGoie { get; set; }
+
+        public DbSet<TaAhodeZamaneTahvil> TaAhodeZamaneTahvil { get; set; }
+
+        public DbSet<KhadamatePasAzForosh> KhadamatePasAzForosh { get; set; }
+
         #endregion
 
         #region Market

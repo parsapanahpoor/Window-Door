@@ -1,6 +1,8 @@
 ﻿@using Window.Application.Extensions
 @using Window.Web.Culture
 @model Window.Domain.Entities.Account.User
+@using Window.Application.Convertors
+@using Window.Application.Extensions
 
 <!-- Loading Container -->
 <div class="loading-container">
@@ -32,6 +34,16 @@
 @*                                <span class="badge">4</span>
 *@                            </a>
                         </li>
+
+                          <li class="marli margin-left-10">
+
+                                <div class="add-to" style="padding-top: 6px;">
+                                    <button class="btn btn-success wave in add-to-btn">دانلود نسخه ی تحت وب</button>
+                                </div>
+
+                        </li>
+
+                        
 
                             <li>
                                 <a class="login-area dropdown-toggle" data-toggle="dropdown">
@@ -78,6 +90,14 @@
                                     </li>
                                 </ul>
                                 <!--/Login Area Dropdown-->
+                            </li>
+
+                            <li class="marli margin-left-10">
+
+                                <a class="btn btn-primary " title="" href="#">
+                                    @DateTime.Now.ToShamsi()
+                                </a>
+
                             </li>
                         }
 

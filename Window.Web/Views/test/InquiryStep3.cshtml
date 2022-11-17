@@ -38,10 +38,10 @@
                                 تعداد
                             </th>
                             <th class="tc vm">
-                                محدوده ی ارتفاع (cm)
+                                محدوده ی عرض (cm)
                             </th>
                             <th class="tc vm">
-                                محدوده ی عرض (cm)
+                                محدوده ی ارتفاع (cm)
                             </th>
                             <th class="tc vm">
                                 ثبت
@@ -71,7 +71,7 @@
                                 </td>
                                 <td class="tc vm">
                                     <input type="number" min="0" step="1" name="Width" />
-                                        @if (product.Id == 16 || product.Id == 15)
+                                        @if (product.Id == 16 || product.Id == 15 || product.Id == 42 || product.Id == 43)
                                         {
                                         <hr />
                                         <input type="number" min="0" step="1" name="katibeSize" placeholder="عرض درب a" />
@@ -84,10 +84,10 @@
                                     <input type="number" min="1" name="SampleCount" />
                                 </td>
                                 <td class="tc vm">
-                                    <p> @product.MaxHeight تا @product.MinHeight </p>
+                                    <p> @product.MaxWidth تا @product.MinWidth </p>
                                 </td>
                                 <td class="tc vm">
-                                    <p> @product.MaxWidth تا @product.MinWidth </p>
+                                    <p> @product.MaxHeight تا @product.MinHeight </p>
                                 </td>
                                 <td class="tc vm">
                                     <button type="submit" class="btn  btn-palegreen">

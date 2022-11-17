@@ -187,7 +187,7 @@ namespace Window.Web.Controllers
 
             #region Add Log For User
 
-            var res = await _inquiryService.LogInquiryForUserPart2(sampleId, width, height, katibeSize, userMacAddress ,SampleCount);
+            var res = await _inquiryService.LogInquiryForUserPart2(sampleId, width, height, katibeSize, userMacAddress, SampleCount);
             if (!res) return NotFound();
 
             #endregion
@@ -358,11 +358,14 @@ namespace Window.Web.Controllers
 
             ViewBag.sellerId = sellerId;
 
-            return View();
+            return View(new AddScoreToTheSellerViewModel()
+            {
+                SellerId = sellerId
+            });
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddScoreToSeller(int score, ulong sellerId)
+        public async Task<IActionResult> AddScoreToSeller(AddScoreToTheSellerViewModel model)
         {
             #region Check Is User Was Scored To Seller
 
@@ -376,13 +379,17 @@ namespace Window.Web.Controllers
 
             #region Add Score For Seller
 
-            if (score > 5 || score < 0)
+            if (model.SehateEtelaAt > 5 || model.SehateEtelaAt < 0
+                || model.PasokhGoie > 5 || model.PasokhGoie < 0
+                || model.TaAhodZamaneTahvil > 5 || model.TaAhodZamaneTahvil < 0
+                || model.KeyfiateKar > 5 || model.KeyfiateKar < 0
+                || model.KhadamatePasAzForosh > 5 || model.KhadamatePasAzForosh < 0)
             {
                 TempData[ErrorMessage] = "امتیاز وارد شده صحیح نمی باشد";
                 return RedirectToAction("Index", "Home");
             }
 
-            var res = await _inquiryService.AddScoreForSeller(score, sellerId, User.GetUserId().ToString());
+            var res = await _inquiryService.AddScoreForSeller(model, User.GetUserId().ToString());
 
             if (res)
             {
@@ -392,7 +399,7 @@ namespace Window.Web.Controllers
 
             #endregion
 
-            return View();
+            return View(model);
         }
 
         #endregion

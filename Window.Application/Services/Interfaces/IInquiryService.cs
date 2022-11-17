@@ -39,6 +39,9 @@ namespace Window.Application.Services.Interfaces
         //Add Score For Seller
         Task<bool> AddScoreForSeller(int score, ulong sellerId, string userMacAddress);
 
+        //Add Score For Seller
+        Task<bool> AddScoreForSeller(AddScoreToTheSellerViewModel model, string userMacAddress);
+
         //Get Count Of Inquiry In Cities
         Task<int> GetCountOfInquiryInCities(string cityName);
 
