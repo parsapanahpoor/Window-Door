@@ -1,0 +1,46 @@
+.fa-ul {
+  padding-left: 0;
+  margin-right: 2.14285714em;
+  margin-left: auto;
+}
+.fa-li {
+  right: -2.14285714em;
+  left: auto;
+}
+.fa-li.fa-lg {
+  right: -1.85714286em;
+  left: auto;
+}
+.fa-pull-left {
+  float: right;
+}
+.fa-pull-right {
+  float: right;
+}
+.fa.fa-pull-left {
+  margin-left: .3em;
+  margin-right: auto;
+}
+.fa.fa-pull-right {
+  margin-right: .3em;
+  margin-left: auto;
+}
+.pull-right {
+  float: left;
+}
+.pull-left {
+  float: right;
+}
+.fa.pull-left {
+  margin-left: .3em;
+  margin-right: auto;
+}
+.fa.pull-right {
+  margin-right: .3em;
+  margin-left: auto;
+}
+.fa-stack-1x,
+.fa-stack-2x {
+  right: 0;
+  left: auto;
+}

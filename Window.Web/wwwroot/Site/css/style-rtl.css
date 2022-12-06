@@ -1,0 +1,88 @@
+@font-face {
+    font-family: 'BHoma';
+    src: url('../fonts/homa.eot');
+    src: url('../fonts/homa.otf') format('opentype');
+url('../fonts/homa.woff') format('woff'),
+url('../fonts/homa.ttf') format('truetype'),
+url('../fonts/homa.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body .carousel, #tiptip_holder, .slick-slider, .owl-carousel .owl-wrapper-outer,
+.mfp-wrap.mfp-gallery.mfp-auto-cursor.mfp-fade.mfp-ready{
+    direction: ltr
+}
+
+li,
+.pagination-next-prev{
+    text-align: right;
+}
+
+body,
+.dir-rtl,
+.compare-list-container,
+.toggle-wrap,
+.mhl.ptl,
+.sl-icons-demo,
+.icons,
+.main-search-box.no-shadow,
+.home-slider-container,
+.listing-content,
+.listing-img-content,
+.testimonial-box,
+.style-1.agency-tabs,
+.sidebar.sticky.right,
+form {
+    direction: rtl;
+}
+
+.top-bar-dropdown.active .options {
+    width: 180px;
+}
+
+select {
+    padding: 9px 18px;
+}
+
+blockquote {
+    border-left: unset;
+    border-right: 5px solid #eeeeee;
+}
+
+
+/*@media (min-width: 1367px) {
+    .container {
+        width: 1090px;
+    }
+}*/
+
+@media (max-width: 426px) {
+    .sort-by-select select {
+        padding: 10px 18px;
+    }
+
+    .daterangepicker {
+        left: auto !important;
+        right: 45px !important;
+    }
+
+    .daterangepicker .drp-calendar.left {
+        padding: 12px !important;
+    }
+
+    .daterangepicker .drp-calendar {
+        max-width: 100% !important;
+    }
+
+    .daterangepicker .calendar-table .next span {
+        transform: rotate(135deg) !important;
+        -webkit-transform: rotate(135deg) !important;
+    }
+
+    .daterangepicker .calendar-table .prev span {
+        transform: rotate(-45deg) !important;
+        -webkit-transform: rotate(-45deg) !important;
+    }
+}
+

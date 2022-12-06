@@ -1,0 +1,330 @@
+/* ------------------------------------------------------------------- */
+/* Main #274abb
+---------------------------------------------------------------------- */
+.csm-trigger,
+.csm-content h4,
+#backtotop a,
+#top-bar {
+    background-color: #274abb
+}
+
+.custom-zoom-in:hover:before,
+.custom-zoom-out:hover:before,
+.infoBox-close:hover {
+    -webkit-text-stroke: 1px #274abb
+}
+
+.list-4 li:before,
+.list-3 li:before,
+.list-2 li:before,
+.list-1 li:before {
+    color: #274abb;
+}
+
+.numbered.color ol > li::before {
+    border: 1px solid #274abb;
+    color: #274abb;
+}
+
+.numbered.color.filled ol > li::before {
+    border: 1px solid #274abb;
+    background-color: #274abb;
+}
+
+.change-photo-btn:hover,
+table.manage-table th,
+mark.color {
+    background-color: #274abb;
+}
+
+.user-menu ul li a:hover,
+.user-menu.active .user-name:after,
+.user-menu:hover .user-name:after,
+.user-menu.active .user-name,
+.user-menu:hover .user-name,
+table.manage-table td.action a:hover,
+table.manage-table .title-container .title h4 a:hover,
+.my-account-nav li a.current,
+.my-account-nav li a:hover,
+#footer .social-icons li a:hover i,
+#navigation.style-1 .current,
+#posts-nav li a:hover,
+#top-bar .social-icons li a:hover i,
+.agent .social-icons li a:hover i,
+.agent-contact-details li a:hover,
+.agent-page .agent-name h4,
+.footer-links li a:hover,
+.header-style-2 .header-widget li i,
+.header-widget .sign-in:hover,
+.home-slider-desc .read-more i,
+.info-box,
+.info-box h4,
+.listing-title h4 a:hover,
+.map-box h4 a:hover,
+.plan-price .value,
+.plan.featured .listing-badges .featured,
+.post-content a.read-more,
+.post-content h3 a:hover,
+.post-meta li a:hover,
+.property-pricing,
+.style-2 .trigger a:hover,
+.style-2 .trigger.active a,
+.style-2 .ui-accordion .ui-accordion-header-active,
+.style-2 .ui-accordion .ui-accordion-header-active:hover,
+.style-2 .ui-accordion .ui-accordion-header:hover,
+.tabs-nav li a:hover,
+.tabs-nav li.active a,
+.testimonial-author h4,
+.widget-button:hover,
+.widget-text h5 a:hover,
+a,
+a.button.border,
+a.button.border.white:hover {
+    color: #274abb
+}
+
+#header-container.top-border {
+    border-top: 4px solid #274abb
+}
+
+#navigation.style-1 .current {
+    background-color: transparent;
+    border: 1px solid #274abb
+}
+
+#navigation.style-1 ul li:hover {
+    background-color: #274abb
+}
+
+#navigation.style-2 {
+    background-color: #274abb
+}
+
+.menu-responsive i {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, .07) 0, transparent);
+    background-color: #274abb
+}
+
+.checkboxes input[type=checkbox]:checked+label:before,
+.range-slider .ui-widget-header,
+.search-type label.active,
+.search-type label:hover {
+    background-color: #274abb
+}
+
+.range-slider .ui-slider .ui-slider-handle {
+    border: 2px solid #274abb
+}
+
+.agent-avatar a:before {
+    background: #274abb;
+    background: linear-gradient(to bottom, transparent 50%, #274abb)
+}
+
+.view-profile-btn {
+    background-color: #274abb
+}
+
+.listing-img-container:after {
+    background: linear-gradient(to bottom, transparent 60%, #274abb)
+}
+
+.listing-badges .featured {
+    background-color: #274abb
+}
+
+.list-layout .listing-img-container:after {
+    background: linear-gradient(to bottom, transparent 55%, #274abb)
+}
+
+#titlebar.property-titlebar span.property-badge,
+.back-to-listings:hover,
+.home-slider-price,
+.img-box:hover:before,
+.layout-switcher a.active,
+.layout-switcher a:hover,
+.listing-hidden-content,
+.office-address h3:after,
+.pagination .current,
+.pagination ul li a.current-page,
+.pagination ul li a:hover,
+.pagination-next-prev ul li a:hover,
+.property-features.checkboxes li:before {
+    background-color: #274abb
+}
+
+.post-img:after,
+.tip {
+    background: #274abb
+}
+
+.property-slider-nav .item.slick-current.slick-active:before {
+    border-color: #274abb
+}
+
+.post-img:after {
+    background: linear-gradient(to bottom, transparent 40%, #274abb)
+}
+
+.comment-by a.reply:hover,
+.post-img:before {
+    background-color: #274abb
+}
+
+.map-box .listing-img-container:after {
+    background: linear-gradient(to bottom, transparent 50%, #274abb)
+}
+
+#geoLocation:hover,
+#mapnav-buttons a:hover,
+#scrollEnabling.enabled,
+#scrollEnabling:hover,
+#streetView:hover,
+.cluster div,
+.custom-zoom-in:hover,
+.custom-zoom-out:hover,
+.infoBox-close:hover,
+.listing-carousel.owl-theme .owl-controls .owl-next:after,
+.listing-carousel.owl-theme .owl-controls .owl-prev:before,
+.listing-carousel.owl-theme.outer .owl-controls .owl-next:hover::after,
+.listing-carousel.owl-theme.outer .owl-controls .owl-prev:hover::before,
+.slick-next:after,
+.slick-prev:after {
+    background-color: #274abb
+}
+
+.cluster div:before {
+    border: 7px solid #274abb;
+    box-shadow: inset 0 0 0 4px #274abb
+}
+
+.mfp-arrow:hover {
+    background: #274abb
+}
+
+.dropzone:hover {
+    border: 2px dashed #274abb
+}
+
+.dropzone:before {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, .95), rgba(255, 255, 255, .9));
+    background-color: #274abb
+}
+
+.chosen-container .chosen-results li.highlighted,
+.chosen-container-multi .chosen-choices li.search-choice,
+.select-options li:hover,
+a.button,
+a.button.border:hover,
+button.button,
+input[type=button],
+input[type=submit] {
+    background-color: #274abb
+}
+
+.dropzone:hover .dz-message,
+.sort-by .chosen-container-single .chosen-default,
+.sort-by .chosen-container-single .chosen-single div b:after {
+    color: #274abb
+}
+
+a.button.border {
+    border: 1px solid #274abb
+}
+
+.plan.featured .plan-price {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, .1) 0, transparent);
+    background-color: #274abb
+}
+
+.fp-accordion .accordion h3.ui-accordion-header-active,
+.trigger.active a,
+.ui-accordion .ui-accordion-header-active,
+.ui-accordion .ui-accordion-header-active:hover {
+    background-color: #274abb;
+    border-color: #274abb
+}
+
+.tabs-nav li a:hover,
+.tabs-nav li.active a {
+    border-color: #274abb
+}
+
+.style-3 .tabs-nav li a:hover,
+.style-3 .tabs-nav li.active a {
+    border-color: #274abb;
+    background-color: #274abb
+}
+
+.style-4 .tabs-nav li.active a,
+.style-5 .tabs-nav li.active a,
+table.basic-table th {
+    background-color: #274abb
+}
+
+.info-box {
+    border-top: 2px solid #274abb;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, .98), rgba(255, 255, 255, .95));
+    background-color: #274abb
+}
+
+.info-box.no-border {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, .96), rgba(255, 255, 255, .93));
+    background-color: #274abb
+}
+
+.icon-box-1 .icon-container {
+    background-color: #274abb
+}
+
+
+.qtyTotal {
+  background-color: #274abb;
+}
+
+.daterangepicker td.available:hover, .daterangepicker th.available:hover {
+  background-color: #274abb;
+}
+
+.daterangepicker td.in-range {
+  background-color: rgba(39, 74, 187,0.07);
+  color: #274abb;
+}
+.daterangepicker td.active, .daterangepicker td.active:hover {
+  background-color: #274abb;
+}
+
+.daterangepicker .drp-buttons button.applyBtn,
+.daterangepicker .drp-buttons button.cancelBtn {
+  background-color: #274abb;
+}
+.daterangepicker .drp-buttons button.applyBtn {
+  background-color: #274abb;
+}
+
+#booking-date-range:hover {
+  color: #274abb;
+}
+
+#booking-date-range span:after {
+    color: #274abb;
+}
+
+.daterangepicker .ranges li.active {
+  background-color: #274abb;
+  color: #fff;
+}
+.panel-dropdown a:after {
+  color: #274abb;
+}
+.time-slot input ~ label:hover {
+  color: #274abb;
+  background-color: rgba(39, 74, 187,0.06);
+}
+
+.time-slot input:checked ~ label {
+  background-color: #274abb;
+}
+.time-slot label:hover span {
+  color: #274abb;
+}
