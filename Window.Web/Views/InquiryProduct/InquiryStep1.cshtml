@@ -1,0 +1,242 @@
+﻿@using Window.Application.Extensions
+@using Window.Application.Convertors
+@model Window.Domain.ViewModels.Site.Inquiry.FilterInquiryViewModel
+@using Window.Domain.ViewModels.Admin.QuestionAnswer
+@using Window.Domain.Enums
+@using Window.Application.StaticTools
+@using Window.Domain.ViewModels.Common
+
+@{
+    ViewData["Title"] = "استعلام گیری";
+    var countries = ViewData["Countries"] != null ? ViewData["Countries"] as List<SelectListViewModel> : null;
+    var states = ViewData["States"] != null ? ViewData["States"] as List<SelectListViewModel> : null;
+    var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
+
+    var brand = ViewBag.Brand != null ? ViewBag.Brand as List<SelectListViewModel> : null;
+    var glass = ViewBag.Glasses != null ? ViewBag.Glasses as List<SelectListViewModel> : null;
+}
+
+@section Styles
+    {
+    <style>
+
+        #CountryId_chosen {
+            display: none;
+        }
+
+        #StateId_chosen {
+            display: none;
+        }
+
+        #CityId_chosen {
+            display: none;
+        }
+
+        #CountryId {
+            display: block !important;
+        }
+
+        #StateId {
+            display: block !important;
+        }
+
+        #CityId {
+            display: block !important;
+        }
+
+    </style>
+}
+
+    @section Scripts
+    {
+
+    <script>
+        $("#CountryId").change(function () {
+            if ($("#CountryId :selected").val() !== '') {
+                $('#CityId option:not(:first)').remove();
+                $('#StateId option:not(:first)').remove();
+                $.get("/Home/LoadCities", { stateId: $("#CountryId :selected").val() }).then(res => {
+                    if (res.data !== null) {
+                        $("#StateId").append(
+                            '<option>' + "لطفا یک استان را انتخاب کنید" + '</option>'
+                        );
+                        $.each(res.data, function () {
+                            $("#StateId").append(
+                                '<option value=' + this.id + '>' + this.title + '</option>'
+                            );
+                        });
+                        $("#StateId").removeAttr("disabled");
+                    }
+                });
+            } else {
+                $('#StateId option:not(:first)').remove();
+                $('#CityId option:not(:first)').remove();
+            }
+        });
+
+        $("#StateId").change(function () {
+            if ($("#StateId :selected").val() !== '') {
+                $('#CityId option:not(:first)').remove();
+                $.get("/Home/LoadCities", { stateId: $("#StateId :selected").val() }).then(res => {
+                    if (res.data !== null) {
+                        $.each(res.data, function () {
+                            $("#CityId").append(
+                                '<option value=' + this.id + '>' + this.title + '</option>'
+                            );
+                        });
+                        $("#CityId").removeAttr("disabled");
+                    }
+                });
+            } else {
+                $('#CityId option:not(:first)').remove();
+            }
+        });
+
+    </script>
+
+}
+
+
+    <div class="parallax" data-background="/Site/images/1.jpg" data-color="#36383e" data-color-opacity="0.5" data-img-width="2500" data-img-height="1600" style="background-image: url(&quot;images/home-parallax-2.jpg&quot;); background-attachment: fixed; background-size: 1600px 1024px; background-position: 50% -215.14px;">
+        <div class="parallax-overlay" style="background-color: rgb(54, 56, 62); opacity: 0.5;"></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <form asp-action="InquiryStep2" asp-controller="InquiryProduct" asp-area="" id="filter-search" method="get">
+                        <input name="UserMacAddress" type="hidden" value="@ViewBag.UserId" />
+
+                        <div class="search-container">
+
+                            <!-- Form -->
+                            <h2>یافتن درب و پنجره </h2>
+
+                            <!-- Row With Forms -->
+                            <div class="row with-forms">
+
+                                <!-- Property Type -->
+                                <div class="col-md-4">
+                                    <select asp-for="CountryId" data-placeholder="کشور" class="chosen-select-no-single" style="display: none;">
+                                        <option value=""> لطفا یک کشور را انتخاب کنید </option>
+                                    @if (countries != null && countries.Any())
+                                    {
+                                        foreach (var country in countries)
+                                        {
+                                            if (Model != null && Model.CountryId == country.Id)
+                                            {
+                                                <option value="@country.Id" selected="selected"> @country.Title </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@country.Id"> @country.Title </option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-md-4">
+                                <select asp-for="StateId" data-placeholder="استان" class="chosen-select-no-single" style="display: none;">
+                                    <option value=""> لطفا یک استان را انتخاب کنید </option>
+                                    @if (states != null && states.Any())
+                                    {
+                                        foreach (var state in states)
+                                        {
+                                            if (Model != null && Model.StateId == state.Id)
+                                            {
+                                                <option value="@state.Id" selected="selected"> @state.Title </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@state.Id"> @state.Title </option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <!-- City -->
+                            <div class="col-md-4">
+                                <select asp-for="CityId" data-placeholder="شهر" class="chosen-select-no-single" style="display: none;">
+                                    <option value=""> لطفا یک شهر را انتخاب کنید </option>
+                                    @if (states != null && states.Any())
+                                    {
+                                        foreach (var state in states)
+                                        {
+                                            if (Model != null && Model.StateId == state.Id)
+                                            {
+                                                <option value="@state.Id" selected="selected"> @state.Title </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@state.Id"> @state.Title </option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                        </div>
+                        <!-- Row With Forms / End -->
+                        <!-- Row With Forms -->
+                        <div class="row with-forms" style="margin-top:15px">
+
+                            <!-- Property Type -->
+                            <div class="col-md-4">
+                                <select asp-for="SellerType" data-placeholder="جنس کالا" class="chosen-select-no-single" style="display: none;">
+                                    <option value="0">UPVC</option>
+                                    <option value="1">آلمینیوم</option>
+                                </select>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-md-4">
+                                <select asp-for="MainBrandId" data-placeholder="برند" class="chosen-select-no-single" style="display: none;">
+                                    <option value="@null">همه</option>
+                                    @if (brand != null && brand.Any())
+                                    {
+                                        foreach (var brands in brand)
+                                        {
+                                            <option value="@brands.Id"> @brands.Title </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-md-4">
+                                <select asp-for="GlassId" data-placeholder="نوع شیشه" class="chosen-select-no-single" style="display: none;">
+                                    @if (glass != null && glass.Any())
+                                    {
+                                        foreach (var glasses in glass)
+                                        {
+                                            <option value="@glasses.Id"> @glasses.Title </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                        </div>
+                        <!-- Row With Forms / End -->
+                        <!-- Row With Forms -->
+                        <div class="row with-forms" style="margin-top:15px">
+
+                            <!-- Main Search Input -->
+                            <div class="col-md-12">
+                                <button class="button" style="margin-right: 0px;"> جست و جو  <i class="fa fa-search"></i></button>
+                            </div>
+
+                        </div>
+                        <!-- Row With Forms / End -->
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>

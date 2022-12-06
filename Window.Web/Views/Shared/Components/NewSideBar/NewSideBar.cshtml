@@ -1,0 +1,293 @@
+﻿@using Window.Application.Extensions
+@using Window.Web.Culture
+@model Window.Domain.Entities.Account.User
+@using Window.Application.Convertors
+@using Window.Application.Extensions
+
+<header id="header-container" class="header-style-2">
+
+    <!-- Header -->
+    <div id="header">
+        <div class="container">
+
+            <!-- Left Side Content -->
+            <div class="left-side">
+
+                <!-- Logo -->
+                <div id="logo" class="margin-top-10">
+                    <a href="index.html"><img src="/Site/images/logo.png" alt=""></a>
+
+                    <!-- Logo for Sticky Header -->
+                    <a href="index.html" class="sticky-logo"><img src="/Site/images/logo2.png" alt=""></a>
+                </div>
+
+                <!-- Mobile Navigation -->
+                <div class="mmenu-trigger">
+                    <button class="hamburger hamburger--collapse" type="button">
+                        <span class="hamburger-box">
+                            <span class="hamburger-inner"></span>
+                        </span>
+                    </button>
+                </div>
+
+            </div>
+            <!-- Left Side Content / End -->
+
+            <!-- Right Side Content / End -->
+            <div class="right-side">
+                <ul class="header-widget">
+                    <li>
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <a asp-area="" asp-controller="Identity" asp-action="Login" class="sign-in"> ورود</a>
+                        }
+                        <a asp-area="" asp-controller="Market" asp-action="AddMarket" class="button border">درخواست ثبت فروشگاه </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Right Side Content / End -->
+
+        </div>
+
+        <!-- Main Navigation -->
+        <nav id="navigation" class="style-2">
+
+            <div class="container">
+
+                <ul id="responsive">
+
+                    <li>
+                        <a class="current" href="#">استعلام گیری</a>
+                        <ul>
+                            <li><a asp-area="" asp-controller="InquiryProduct" asp-action="InquiryStep1">استعلام گیری</a></li>
+                            <li><a asp-area="" asp-controller="InquiryProduct" asp-action="GetUserLastestInquiry">آخرین استعلام شما</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- 						<li class="right-side-menu-item"><a href="login-register.html" class="sign-in"><i class="fa fa-user"></i> Log In / Register</a></li> -->
+                </ul>
+            </div>
+        </nav><nav id="navigation" class="style-2 cloned unsticky">
+            <div class="container">
+                <ul id="responsive">
+                    <a href="index.html" class="sticky-logo"><img src="/Site/images/logo2.png" alt=""></a>
+
+                    <li>
+                        <a class="current" href="#">خانه</a>
+                        <ul>
+                            <li><a href="index.html">خانه 1</a></li>
+                            <li><a href="index-2.html">خانه 2</a></li>
+                            <li><a href="index-3.html">خانه 3</a></li>
+                            <li><a href="index-4.html">خانه 4</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#">آگهی ها</a>
+                        <ul>
+                            <li>
+                                <a href="#">طرح فهرستی</a>
+                                <ul>
+                                    <li><a href="listings-list-with-sidebar.html">با ستون کناری</a></li>
+                                    <li><a href="listings-list-with-map.html">با نقشه</a></li>
+                                    <li><a href="listings-list-full-width.html">تمام عرض</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">طرح گرید</a>
+                                <ul>
+                                    <li>
+                                        <a href="listings-grid-standard-with-sidebar.html">
+                                            استاندارد با ستون
+                                            کناری
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="listings-grid-compact-with-sidebar.html">
+                                            جمع و جور با ستون
+                                            کناری
+                                        </a>
+                                    </li>
+                                    <li><a href="listings-grid-with-map.html">با نقشه</a></li>
+                                    <li><a href="listings-grid-full-width.html">تمام عرض</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">با نقشه</a>
+                                <ul>
+                                    <li><a href="listings-half-map-list.html">فهرستی</a></li>
+                                    <li><a href="listings-half-map-grid-standard.html">گرید استاندارد</a></li>
+                                    <li><a href="listings-half-map-grid-compact.html">گرید جمع و جور</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#">ویژگی ها</a>
+                        <ul>
+                            <li>
+                                <a href="#">توضیحات ملک</a>
+                                <ul>
+                                    <li><a href="single-property-page-1.html">سبک 1</a></li>
+                                    <li><a href="single-property-page-2.html">سبک 2</a></li>
+                                    <li><a href="single-property-page-3.html">سبک 3</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">سبک های جست و جو</a>
+                                <ul>
+                                    <li><a href="index.html">جست و جو در صفحه اصلی 1</a></li>
+                                    <li><a href="index-2.html">جست و جو در صفحه اصلی 2</a></li>
+                                    <li><a href="index-3.html">جست و جو در صفحه اصلی 3</a></li>
+                                    <li><a href="listings-list-full-width.html">سبک پیشرفته</a></li>
+                                    <li>
+                                        <a href="listings-list-with-sidebar.html">جست و جو در ستون کناری</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">حساب کاربری من</a>
+                                <ul>
+                                    <li><a href="my-profile.html">پروفایل من</a></li>
+                                    <li><a href="my-bookmarks.html">آگهی های مورد علاقه</a></li>
+                                    <li><a href="my-properties.html">املاک من</a></li>
+                                    <li><a href="change-password.html">تغییر رمز عبور</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">مشاوران و آژانس ها</a>
+                                <ul>
+                                    <li><a href="agencies-list.html">لیست آژانس ها</a></li>
+                                    <li><a href="agency-page.html">برگه آژانس</a></li>
+                                    <li><a href="agents-list.html">لیست مشاوران</a></li>
+                                    <li><a href="agent-page.html">برگه مشاور</a></li>
+                                </ul>
+                            </li>
+
+                            <li><a href="compare-properties.html">مقایسه ویژگی ها</a></li>
+                            <li><a href="submit-property.html">ثبت ملک</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#">برگه ها</a>
+                        <ul>
+                            <li>
+                                <a href="blog.html">وبلاگ</a>
+                                <ul>
+                                    <li><a href="blog.html">وبلاگ</a></li>
+                                    <li><a href="blog-post.html">نوشته وبلاگ</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="contact.html">تماس</a></li>
+                            <li><a href="elements.html">عناصر</a></li>
+                            <li><a href="pricing-tables.html">جداول قیمت گذاری</a></li>
+                            <li><a href="typography.html">تایپوگرافی</a></li>
+                            <li><a href="icons.html">آیکون ها</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- 						<li class="right-side-menu-item"><a href="login-register.html" class="sign-in"><i class="fa fa-user"></i> Log In / Register</a></li> -->
+                </ul>
+            </div>
+        </nav>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <!-- User Menu -->
+            <div class="container">
+                <div class="row">
+                    <div class="user-menu-container">
+                        <div class="user-menu">
+                            <div class="user-name"><span><img style="width: 80px !important;height: 40px !important;" src="@Model.GetUserAvatar()" alt=""></span>سلام, @User.Identity.Name</div>
+                            <ul>
+                                <li><a asp-area="Seller" asp-controller="Home" asp-action="Index"><i class="sl sl-icon-user"></i> پروفایل من </a></li>
+                                <li><a asp-action="Logout" asp-area="" asp-controller="Identity"><i class="sl sl-icon-power"></i> خروج </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- User Menu / End -->
+        }
+
+        <div class="clearfix"></div>
+        <!-- Main Navigation / End -->
+    </div>
+    <!-- Header / End -->
+
+</header>
+
+<div class="clearfix"></div>
+
+<!-- Compare Properties Widget
+ ================================================== -->
+<div class="compare-slide-menu">
+
+    <div class="csm-trigger"></div>
+
+    <div class="csm-content">
+        <h4>
+            مقایسه کنید
+            <div class="csm-mobile-trigger"></div>
+        </h4>
+
+        <div class="csm-properties">
+
+            <!-- Property -->
+            <div class="listing-item compact">
+                <a href="single-property-page-2.html" class="listing-img-container">
+                    <div class="remove-from-compare"><i class="fa fa-close"></i></div>
+                    <div class="listing-badges">
+                        <span>فروشی</span>
+                    </div>
+                    <div class="listing-img-content">
+                        <span class="listing-compact-title">آپارتمان عقاب طلایی <i>420,000 تومان</i></span>
+                    </div>
+                    <img src="/Site/images/listing-01.jpg" alt="">
+                </a>
+            </div>
+
+            <!-- Property -->
+            <div class="listing-item compact">
+                <a href="single-property-page-2.html" class="listing-img-container">
+                    <div class="remove-from-compare"><i class="fa fa-close"></i></div>
+                    <div class="listing-badges">
+                        <span>فروشی</span>
+                    </div>
+                    <div class="listing-img-content">
+                        <span class="listing-compact-title">آپارتمان ویلایی <i>420,000 تومان</i></span>
+                    </div>
+                    <img src="/Site/images/listing-03.jpg" alt="">
+                </a>
+            </div>
+
+            <!-- Property -->
+            <div class="listing-item compact">
+                <a href="single-property-page-2.html" class="listing-img-container">
+                    <div class="remove-from-compare"><i class="fa fa-close"></i></div>
+                    <div class="listing-badges">
+                        <span>فروشی</span>
+                    </div>
+                    <div class="listing-img-content">
+                        <span class="listing-compact-title">ویلا<i>535,000 تومان</i></span>
+                    </div>
+                    <img src="/Site/images/listing-05.jpg" alt="">
+                </a>
+            </div>
+
+        </div>
+
+        <div class="csm-buttons">
+            <a href="compare-properties.html" class="button">مقایسه</a>
+            <a href="#" class="button reset">انصراف</a>
+        </div>
+    </div>
+
+</div>
+<!-- Compare Properties Widget / End -->
+<!-- Header Container
+================================================== -->
+<div class="clearfix"></div>
+<!-- Header Container / End -->

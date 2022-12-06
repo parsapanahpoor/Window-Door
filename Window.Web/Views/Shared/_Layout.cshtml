@@ -1,69 +1,118 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Window.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Window.Web.styles.css" asp-append-version="true" />
 
-    <link rel="stylesheet" type="text/css" href="/lib/waitme/waitMe.min.css">
-<link href="/lib/notification/notifications.css" rel="stylesheet" />
-<link href="/lib/Custom/custom.css" rel="stylesheet" />
+    <!-- Basic Page Needs
+    ================================================== -->
+    <title>در و پنجره یاب</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- CSS
+    ================================================== -->
+    <partial name="_NewHeaderReferences">
+
+                @await RenderSectionAsync("Styles", false)
 
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Window.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Market" asp-action="AddMarket">درخواست ثبت فروشگاه</a>
-                            </li>
-                        }
-                    </ul>
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        @await Component.InvokeAsync("NewSideBar")
+
+        @RenderBody()
+
+        <!-- Footer
+        ================================================== -->
+        <div id="footer" class="sticky-footer">
+            <!-- Main -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5 col-sm-6">
+                        <img class="footer-logo" src="/Site/images/logo.png" alt="">
+                        <br><br>
+                        <p>
+                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.
+                            چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی
+                            تکنولوژی
+                            مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.
+                        </p>
+                    </div>
+
+                    <div class="col-md-4 col-sm-6 ">
+                        <h4>پیوندهای مفید</h4>
+                        <ul class="footer-links">
+                            <li><a href="#">ورود</a></li>
+                            <li><a href="#">ثبت نام</a></li>
+                            <li><a href="#">حساب کاربری من</a></li>
+                            <li><a href="#">ثبت نام فروشندگان </a></li>
+                            <li><a href="#">تعرفه</a></li>
+                            <li><a href="#">حریم خصوصی</a></li>
+                        </ul>
+
+                        <ul class="footer-links">
+                            <li><a href="#">پرسش های متداول</a></li>
+                            <li><a href="#">وبلاگ</a></li>
+                            <li><a href="#">مشاوران ما</a></li>
+                            <li><a href="#">نحوه ی کار</a></li>
+                            <li><a href="#">تماس</a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="col-md-3  col-sm-12">
+                        <h4>تماس با ما</h4>
+                        <div class="text-widget">
+                            <span>تهران، میدان آزادی</span> <br>
+                            تلفن: <span>0210000 </span><br>
+                            ایمیل:<span> <a href="#">AlirezaKhademi@yahoo.com</a> </span><br>
+                        </div>
+
+                        <ul class="social-icons margin-top-20">
+                            <li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
+                            <li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
+                            <li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
+                            <li><a class="vimeo" href="#"><i class="icon-vimeo"></i></a></li>
+                        </ul>
+
+                    </div>
+
                 </div>
+
+                <!-- Copyright -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="copyrights">کپی رایت 1399 © تمامی حقوق برای Findeo محفوظ است.</div>
+                    </div>
+                </div>
+
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - Window.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+        <!-- Footer / End -->
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+        <!-- Back To Top Button -->
+        <div id="backtotop"><a href="#"></a></div>
 
-    <script src="/lib/waitme/waitMe.min.js"></script>
-    <script src="/lib/notification/notifications.js"></script>
-    <script src="/lib/sweetalert/sweetalert.js"></script>
-    <script src="/lib/Custom/custom.js"></script>
+    </div>
+    <!-- Wrapper / End -->
 
-    <partial name="_Notification">
+    <!-- Scripts
+    ================================================== -->
+    <partial name="_NewFooterReferences" />
+    <partial name="_Notification" />
+    <partial name="_Modals" />
+    <script src="~/lib/signalr/signalr.min.js"></script>
 
-        @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
+
