@@ -33,198 +33,214 @@
     </script>
 }
 
-    <form asp-action="InquiryStep4" asp-controller="test" asp-area="" id="formFilter" method="get">
+    <form asp-action="InquiryStep4" asp-controller="InquiryProduct" asp-area="" method="get">
         <input type="hidden" id="pageid" name="pageId" value="@ViewBag.pageId.ToString()" />
         <input type="hidden" name="userMacAddress" value="@ViewBag.userMacAddress" />
 
-        <div class="row">
+        <div class="parallax titlebar" data-background="/Site/images/3.jpg" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -546.894px;">
+            <div class="parallax-overlay" style="background-color: rgb(51, 51, 51); opacity: 0.7;"></div>
 
-            <div class="col-lg-3 col-sm-12">
-                <div class="widget">
-                    <div class="widget-header bordered-bottom bordered-green">
-                        <span class="widget-caption"> فیلتر استعلام گیری  </span>
-                    </div>
-                    <div class="widget-body">
-                        <div>
+            <div id="titlebar">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
 
-                            <div class="form-group">
-                                <label>برند</label>
-                                <select name="brandTitle" id="MainBrandId" class="form-control">
-                                    <option value="@null">لطفا یکی از برند هارا انتخاب کنید </option>
-                                    <option value="All">همه </option>
-                                @if (brand != null && brand.Any())
-                                {
-                                    foreach (var brands in brand)
-                                    {
-                                        <option value="@brands.Title"> @brands.Title </option>
-                                    }
-                                }
-                            </select>
+                            <h2>نتیجه ی استعلام</h2>
+                            <span>لیست فروشندگان ارائه دهنده ی محصولات درخواستی شما</span>
+
+                            <!-- Breadcrumbs -->
+                            <nav id="breadcrumbs">
+                                <ul>
+                                    @*  <li><a href="#">خانه</a></li>
+                                <li>آگهی ها</li>*@
+                                </ul>
+                            </nav>
+
                         </div>
-
-                            <div class="form-group">
-                                <label>مرتب سازی بر اساس مبلغ</label>
-                                <select name="orderByPrice" class="form-control">
-                                    <option value="2"> صعودی </option>
-                                    <option value="1"> نزولی </option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>مرتب سازی بر اساس امتیاز</label>
-                                <select name="orderByScore" class="form-control">
-                                    <option value="2"> صعودی </option>
-                                    <option value="1"> نزولی </option>
-                                </select>
-                            </div>
-
-                            <hr />
-
-                        <div class="row">
-                            <div class="col-md-12 flex-style">
-                                <button type="submit" class="btn btn-labeled w-100 btn-blue">
-                                    <i class="btn-label glyphicon glyphicon-filter"></i>استعلام گیری
-                                </button>
-                                <a asp-action="InquiryStep1" asp-controller="test" asp-area="" class="btn btn-labeled w-100 btn-darkorange mr-10px">
-                                    <i class="btn-label glyphicon glyphicon-remove"></i>حذف استعلام
-                                </a>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="container">
+            <div class="row sticky-wrapper">
 
-        <div class="col-lg-9 col-sm-12">
-            <div class="well with-header with-footer table-responsive">
-                <div class="header bordered-azure">
-                    <div class="flex-style">
-                        <span>لیست </span>
+                <!-- Sidebar
+                ================================================== -->
+                <div class="col-md-4">
+                    <div class="sidebar sticky right">
+
+                        <!-- Widget -->
+                        <div class="widget margin-bottom-40">
+                            <h3 class="margin-top-0 margin-bottom-35">فیلتر کردن نتیجه</h3>
+
+                            <!-- Row -->
+                            <div class="row with-forms">
+                                <!-- Status -->
+                                <div class="col-md-12">
+                                    <select name="brandTitle" id="MainBrandId" data-placeholder="برند" class="chosen-select-no-single" style="display: block;">
+                                        <option value="@null">لطفا یکی از برند هارا انتخاب کنید </option>
+                                        <option value="All">همه </option>
+                                    @if (brand != null && brand.Any())
+                                    {
+                                        foreach (var brands in brand)
+                                        {
+                                            <option value="@brands.Title"> @brands.Title </option>
+                                        }
+                                    }
+                                </select><div class="chosen-container chosen-container-single chosen-container-single-nosearch" style="display: none;width: 100%;" title=""><a class="chosen-single chosen-default"><span>وضعیت</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off" readonly=""></div><ul class="chosen-results"></ul></div></div>
+                            </div>
+                        </div>
+                        <!-- Row / End -->
+                        <!-- Row -->
+                        <div class="row with-forms">
+                            <!-- Status -->
+                            <div class="col-md-12">
+                                <select name="orderByPrice" data-placeholder="مرتب سازی بر اساس مبلغ" class="chosen-select-no-single" style="display: block;">
+                                    <option value="2"> صعودی </option>
+                                    <option value="1"> نزولی </option>
+                                </select><div class="chosen-container chosen-container-single chosen-container-single-nosearch" style="display: none;width: 100%;" title=""><a class="chosen-single chosen-default"><span>وضعیت</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off" readonly=""></div><ul class="chosen-results"></ul></div></div>
+                            </div>
+                        </div>
+                        <!-- Row / End -->
+                        <!-- Row -->
+                        <div class="row with-forms">
+                            <!-- Status -->
+                            <div class="col-md-12">
+                                <select name="orderByScore" data-placeholder="مرتب سازی بر اساس امتیاز" class="chosen-select-no-single" style="display: block;">
+                                    <option value="2"> صعودی </option>
+                                    <option value="1"> نزولی </option>
+                                </select><div class="chosen-container chosen-container-single chosen-container-single-nosearch" style="display: none;width: 100%;" title=""><a class="chosen-single chosen-default"><span>وضعیت</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off" readonly=""></div><ul class="chosen-results"></ul></div></div>
+                            </div>
+                        </div>
+                        <!-- Row / End -->
+
+                        <button type="submit" class="button fullwidth margin-top-30">استعلام گیری</button>
+
+                        <a style="background-color: #ce0505 !important;" asp-action="InquiryStep1" asp-controller="test" asp-area="" class="button fullwidth margin-top-30">حذف استعلام</a>
+
                     </div>
-                </div>
+                    <!-- Widget / End -->
 
+                </div>
+            </div>
+            <!-- Sidebar / End -->
+
+            <div class="col-md-8">
 
                 @if (Model.Item1 != null && Model.Item1.Any())
                 {
-                    <table class="table table-hover table-bordered tc vm">
-                        <thead class="tc vm">
-                            <tr class="tc vm">
-                                <th class="tc vm">
-                                    تصویر فروشنده
-                                </th>
-                                <th class="tc vm">
-                                    نام فروشنده
-                                </th>
-                                <th class="tc vm">
-                                    لوکوی برند
-                                </th>
-                                <th class="tc vm">
-                                    قیمت (ریال)
-                                </th>
-                                <th class="tc vm">
-                                    امتیاز
-                                </th>
-                                <th class="tc vm">
-                                    اطلاعات
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="tc vm">
-                            @foreach (var product in Model.Item1)
-                            {
-                                <tr class="tc vm" remove-ajax-item="">
+                    <!-- Listings -->
+                    <div class="listings-container grid-layout">
+                        @foreach (var product in Model.Item1)
+                        {
+                            <!-- Listing Item -->
+                            <div class="listing-item">
 
-                                    <td class="vm">
-                                        <div class="flex-style-center">
-                                            <img src="/content/images/user/main/@product.UserAvatar" class="avatar-style" style="border-radius:50px;" />
-                                        </div>
-                                    </td>
-                                    <td class="tc vm" style="max-width: 200px">
-                                        @product.UserName
-                                    </td>
-                                    <td class="tc vm">
-                                        <img src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@product.BrandImage" class="avatar-style" style="border-radius:50px;" />
-                                    </td>
-                                    @if (product.Price.HasValue)
-                                    {
-                                        <td class="tc vm">
-                                            @product.Price.Value.ToString("#,000") ریال
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td class="tc vm">
-                                            <p class="label label-orange">وارد نشده </p>
-                                        </td>
-                                    }
-                                    <td class="tc vm">
-                                        <p> @product.Score/5 </p>
+                                <a href="single-property-page-1.html" class="listing-img-container" style="height: auto;">
+
+                                    <div class="listing-badges">
+                                        <img style="height: 60px; width: 60px; border-radius: 50px; margin-top: 10px; margin-right: 10px;" src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@product.BrandImage" alt="" style="height: 50px; width:50px;">
+                                        <span>@product.BrandName</span>
+
+                                    </div>
+
+                                    <div class="listing-img-content">
+                                        @if (product.Price.HasValue)
+                                        {
+                                            <span class="listing-price">@product.Price.Value.ToString("#,000")  <i>ریال</i></span>
+                                        }
+                                        else
+                                        {
+                                            <span class="listing-price">وارد نشده  </span>
+                                        }
+
                                         @if (@product.Score == 0)
                                         {
-                                            <span class="glyphicon glyphicon-star-empty"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="like-icon "></span>
+                                            <span class="like-icon" style="padding-right: 50px;"></span>
+                                            <span class="like-icon" style="padding-right: 75px;"></span>
+                                            <span class="like-icon" style="padding-right: 100px;"></span>
+                                            <span class="like-icon" style="padding-right: 125px;"></span>
                                         }
                                         @if (@product.Score == 1)
                                         {
-                                            <span class=" 	glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="like-icon liked"></span>
+                                            <span class="like-icon" style="padding-right: 50px;"></span>
+                                            <span class="like-icon" style="padding-right: 75px;"></span>
+                                            <span class="like-icon" style="padding-right: 100px;"></span>
+                                            <span class="like-icon" style="padding-right: 125px;"></span>
                                         }
                                         @if (@product.Score == 2)
                                         {
-                                            <span class=" 	glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="like-icon liked"></span>
+                                            <span class="like-icon liked" style="padding-right: 50px;"></span>
+                                            <span class="like-icon" style="padding-right: 75px;"></span>
+                                            <span class="like-icon" style="padding-right: 100px;"></span>
+                                            <span class="like-icon" style="padding-right: 125px;"></span>
                                         }
                                         @if (@product.Score == 3)
                                         {
-                                            <span class=" 	glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="like-icon liked"></span>
+                                            <span class="like-icon liked" style="padding-right: 50px;"></span>
+                                            <span class="like-icon liked" style="padding-right: 75px;"></span>
+                                            <span class="like-icon" style="padding-right: 100px;"></span>
+                                            <span class="like-icon" style="padding-right: 125px;"></span>
                                         }
                                         @if (@product.Score == 4)
                                         {
-                                            <span class=" 	glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            <span class="like-icon liked"></span>
+                                            <span class="like-icon liked" style="padding-right: 50px;"></span>
+                                            <span class="like-icon liked" style="padding-right: 75px;"></span>
+                                            <span class="like-icon liked" style="padding-right: 100px;"></span>
+                                            <span class="like-icon" style="padding-right: 125px;"></span>
                                         }
                                         @if (@product.Score == 5)
                                         {
-                                            <span class=" 	glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="like-icon liked"></span>
+                                            <span class="like-icon liked" style="padding-right: 50px;"></span>
+                                            <span class="like-icon liked" style="padding-right: 75px;"></span>
+                                            <span class="like-icon liked" style="padding-right: 100px;"></span>
+                                            <span class="like-icon liked" style="padding-right: 125px;"></span>
                                         }
-                                    </td>
-                                    <td class="tc vm">
-                                        <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="test" class="btn btn-primary">
-                                            نمایش اطلاعات فروشنده
-                                        </a>
 
-                                        <a asp-action="AddScoreToSeller" asp-route-sellerId="@product.UserId" asp-area="" asp-controller="test" class="btn btn-warning">
-                                            امتیاز دهی
-                                        </a>
-                                    </td>
-                                </tr>
+                                    </div>
 
-                            }
-                        </tbody>
-                    </table>
+                                    @if (!string.IsNullOrEmpty(product.UserAvatar))
+                                    {
+                                        <img src="/content/images/user/thumb/@product.UserAvatar" alt="" style="height: auto;">
+                                    }
+                                    else
+                                    {
+                                        <img src="/Site/images/listing-01.jpg" alt="" style="height: auto;">
+                                    }
 
+                                </a>
+
+                                <div class="listing-content">
+
+                                    <div class="listing-title">
+                                        <h4>
+                                            @product.UserName
+                                        </h4>
+                                    </div>
+
+                                    <div class="listing-footer">
+                                        <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="test" class="button" style="background-color: #13bbe2;"> نمایش اطلاعات فروشنده </a>
+                                        <a class="button" asp-action="AddScoreToSeller" asp-route-sellerId="@product.UserId" asp-area="" asp-controller="test" style="background-color: #c100d1;">  امتیاز دهی</a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <!-- Listing Item / End -->
+                        }
+                    </div>
+                    <!-- Listings Container / End -->
+
+                    <div class="clearfix"></div>
 
                     @if (Model.Item2 > 1)
                     {
@@ -232,16 +248,18 @@
                         int next = pageCount + 1;
                         int last = pageCount - 1;
 
-                        <div class="footer tc">
-                            <ul class="pagination mt-5px pagingInInIndex">
-
-                                @for (int i = 1; i <= (int)Model.Item2; i++)
-                                {
-                                    <li class="@((ViewBag.pageId == i ?"active":"")) "><a class="cursor-pointer " onclick="changePage(@i)" href="#">@i</a></li>
-                                }
-
-                            </ul>
+                        <!-- Pagination -->
+                        <div class="pagination-container margin-top-20">
+                            <nav class="pagination">
+                                <ul>
+                                    @for (int i = 1; i <= (int)Model.Item2; i++)
+                                    {
+                                        <li><a class="@((ViewBag.pageId == i ?"current-page":"")) " onclick="changePage(@i)" href="#">@i</a></li>
+                                    }
+                                </ul>
+                            </nav>
                         </div>
+                        <!-- Pagination / End -->
                     }
                 }
                 else
@@ -252,5 +270,6 @@
             </div>
         </div>
     </div>
+
 </form>
 

@@ -1,0 +1,52 @@
+﻿@model List<Window.Domain.Entities.Inquiry.LogInquiryForUserDetail>
+@using Window.Domain.ViewModels.Admin
+@using Window.Application.Extensions
+@using Window.Application.Convertors
+@using Window.Domain.ViewModels.Common
+
+<!-- Compare Properties Widget
+ ================================================== -->
+<div class="compare-slide-menu">
+
+    <div class="csm-trigger"></div>
+
+    <div class="csm-content">
+        <h4>
+            انتخاب های قبلی شما
+            <div class="csm-mobile-trigger"></div>
+        </h4>
+
+        <div class="csm-properties">
+
+            @if (Model != null && Model.Any())
+            {
+
+                foreach (var item in Model)
+                {
+                    <!-- Property -->
+                    <div class="listing-item compact">
+                        <a  class="listing-img-container">
+                            <div class="remove-from-compare"><i class="fa fa-close"></i></div>
+                            <div class="listing-badges">
+                                <span>تعداد : @item.CountOfSample</span>
+                            </div>
+                            <div class="listing-img-content">
+                                <span class="listing-compact-title">@item.Sample.SegmentName <i> عرض : @item.Width (cm) - طول : @item.Height (cm)</i></span>
+                            </div>
+                            <img src="@Window.Application.StticTools.FilePaths.SampleThumbimage/@item.Sample.Image" alt="">
+                        </a>
+                    </div>
+
+           
+
+                }
+            }
+        </div>
+        <div class="csm-buttons">
+            <a style="background-color: green;" asp-action="InquiryStep4" asp-route-userMacAddress="@ViewBag.UserMacAddress" asp-controller="InquiryProduct" asp-area="" class="button">استعلام</a>
+            <a class="button reset" asp-action="GetUserLastestInquiry" asp-controller="InquiryProduct" asp-area="">بروز رسانی</a>
+        </div>
+    </div>
+
+</div>
+<!-- Compare Properties Widget / End -->

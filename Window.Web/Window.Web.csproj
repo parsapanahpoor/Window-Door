@@ -80,7 +80,6 @@
 	  <Folder Include="wwwroot\content\images\Sample\thumb\" />
 	  <Folder Include="wwwroot\content\images\sellerInfo\main\" />
 	  <Folder Include="wwwroot\content\images\sellerInfo\thumb\" />
-	  <Folder Include="wwwroot\content\images\user\thumb\" />
 	  <Folder Include="wwwroot\content\images\user\main\" />
 	</ItemGroup>
 	

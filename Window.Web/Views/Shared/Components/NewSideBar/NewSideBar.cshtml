@@ -221,72 +221,12 @@
 
 <div class="clearfix"></div>
 
-<!-- Compare Properties Widget
- ================================================== -->
-<div class="compare-slide-menu">
+@if (User.Identity.IsAuthenticated)
+{
+    @await Component.InvokeAsync("NewChatBar")
+}
 
-    <div class="csm-trigger"></div>
 
-    <div class="csm-content">
-        <h4>
-            مقایسه کنید
-            <div class="csm-mobile-trigger"></div>
-        </h4>
-
-        <div class="csm-properties">
-
-            <!-- Property -->
-            <div class="listing-item compact">
-                <a href="single-property-page-2.html" class="listing-img-container">
-                    <div class="remove-from-compare"><i class="fa fa-close"></i></div>
-                    <div class="listing-badges">
-                        <span>فروشی</span>
-                    </div>
-                    <div class="listing-img-content">
-                        <span class="listing-compact-title">آپارتمان عقاب طلایی <i>420,000 تومان</i></span>
-                    </div>
-                    <img src="/Site/images/listing-01.jpg" alt="">
-                </a>
-            </div>
-
-            <!-- Property -->
-            <div class="listing-item compact">
-                <a href="single-property-page-2.html" class="listing-img-container">
-                    <div class="remove-from-compare"><i class="fa fa-close"></i></div>
-                    <div class="listing-badges">
-                        <span>فروشی</span>
-                    </div>
-                    <div class="listing-img-content">
-                        <span class="listing-compact-title">آپارتمان ویلایی <i>420,000 تومان</i></span>
-                    </div>
-                    <img src="/Site/images/listing-03.jpg" alt="">
-                </a>
-            </div>
-
-            <!-- Property -->
-            <div class="listing-item compact">
-                <a href="single-property-page-2.html" class="listing-img-container">
-                    <div class="remove-from-compare"><i class="fa fa-close"></i></div>
-                    <div class="listing-badges">
-                        <span>فروشی</span>
-                    </div>
-                    <div class="listing-img-content">
-                        <span class="listing-compact-title">ویلا<i>535,000 تومان</i></span>
-                    </div>
-                    <img src="/Site/images/listing-05.jpg" alt="">
-                </a>
-            </div>
-
-        </div>
-
-        <div class="csm-buttons">
-            <a href="compare-properties.html" class="button">مقایسه</a>
-            <a href="#" class="button reset">انصراف</a>
-        </div>
-    </div>
-
-</div>
-<!-- Compare Properties Widget / End -->
 <!-- Header Container
 ================================================== -->
 <div class="clearfix"></div>

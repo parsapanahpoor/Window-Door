@@ -12,6 +12,10 @@
     var brand = ViewBag.Brand != null ? ViewBag.Brand as List<SelectListViewModel> : null;
 }
 
+@{
+    Layout = "_SiteLayout";
+}
+
 @section Styles
     {
 }
@@ -62,23 +66,23 @@
                             </select>
                         </div>
 
-                            <div class="form-group">
-                                <label>مرتب سازی بر اساس مبلغ</label>
-                                <select name="orderByPrice" class="form-control">
-                                    <option value="2"> صعودی </option>
-                                    <option value="1"> نزولی </option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>مرتب سازی بر اساس امتیاز</label>
-                                <select name="orderByScore" class="form-control">
-                                    <option value="2"> صعودی </option>
-                                    <option value="1"> نزولی </option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label>مرتب سازی بر اساس مبلغ</label>
+                            <select name="orderByPrice" class="form-control">
+                                <option value="2"> صعودی </option>
+                                <option value="1"> نزولی </option>
+                            </select>
+                        </div>
 
-                            <hr />
+                        <div class="form-group">
+                            <label>مرتب سازی بر اساس امتیاز</label>
+                            <select name="orderByScore" class="form-control">
+                                <option value="2"> صعودی </option>
+                                <option value="1"> نزولی </option>
+                            </select>
+                        </div>
+
+                        <hr />
 
                         <div class="row">
                             <div class="col-md-12 flex-style">

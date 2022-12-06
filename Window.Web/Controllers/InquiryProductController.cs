@@ -180,6 +180,11 @@ namespace Window.Web.Controllers
                 TempData[ErrorMessage] = "عرض وارد شده کمتر از حد مجاز است .";
                 return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
             }
+            if (SampleCount <= 0)
+            {
+                TempData[ErrorMessage] = "تعداد وارد شده صحیح نمی باشد.";
+                return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
+            }
 
             #endregion
 
