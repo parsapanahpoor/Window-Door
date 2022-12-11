@@ -1,0 +1,150 @@
+.color-scheme-grass {
+
+	color: @colorGrassText;
+	
+	body& {
+		background-color: @colorGrassBgSplash;
+	}
+	
+	hr {
+		border-color: @colorGrassHr;
+	}
+	  
+	.countdown {
+		.time {
+			border-color: @colorGrassCountdownBorder;
+			&:last-child {
+				border-color: @colorGrassCountdownBorder;
+			}
+		}
+		
+		.unit {
+			color: @colorGrassTextSecondary;
+		}
+				
+		&.circled {
+			.time {
+				background-color:  @colorGrassCountdownBg;
+			}
+			
+			&.large {
+				.time {
+					background-color: @colorGrassCountdownBg;
+				}
+			}
+		}
+	}
+	
+	.overlap {
+		background-color: @colorGrassBgContent;
+		
+		.more {
+			color: @colorGrassTextSecondary;
+			.fa {
+				background-color: @colorGrassTextSecondary;
+				color: @colorGrassBgSplash;
+			}
+		}
+	}
+	
+	.contact {
+		.icon {
+			background-color: @colorGrassTextMuted;
+			.fa {
+				color: @colorGrassBgContent;
+			}
+			border-color: @colorGrassTextMuted;
+		}
+	}
+	
+	.social {
+		.social-icon {
+			border-color: @colorGrassTextMuted;
+			color: @colorGrassBgContent;
+			&:link, &:visited {
+				color: @colorGrassTextSecondary;
+			}
+			
+			&:hover, &:active {
+				background-color: @colorGrassLinkHover;
+				color:  @colorGrassBgContent;
+			}
+		}
+	}
+	
+	.notify-by-email {
+		background-color: @colorGrassBgNotify;	
+		form {
+			input {
+				background-color: @colorGrassInputBg;
+			}
+			
+			.fa {
+				color: @colorGrassTextMuted;
+			}
+			
+			button {
+				background-color: @colorGrassButton;
+				color: @colorGrassButtonText;
+				&:hover {
+					background-color: @colorGrassButtonHover;
+				}
+			}
+			
+			.note, .message {
+				color: @colorGrassTextSecondary;
+			}
+	
+			
+			&.success {
+				.fa, input {
+					color: @colorGrassTextSuccess;
+				}
+				.message {
+					color: @colorGrassTextSecondary;
+				}
+			}
+			
+			&.error {
+				input, .fa {
+					color: @colorGrassTextError;
+				}
+				.message {
+					color: @colorGrassTextMuted;
+				}
+			}
+		}
+		
+		h3 {
+			color: @colorGrassTextSecondary;
+			&:before {
+				border-color: transparent transparent transparent @colorGrassTextMuted;
+			}
+	
+			&:after {
+				border-color: transparent transparent transparent @colorGrassBgNotify;
+			}
+		}	
+	}
+	
+	.note {
+		color: @colorGrassTextSecondary;
+	}
+	
+	.footer {
+		color: @colorGrassTextSecondary;
+	}
+	
+	a {
+		&:link { color: @colorGrassLink; }
+		&:visited { color: @colorGrassLinkVisited; }
+		&:hover { color: @colorGrassLinkHover; }
+		&:active { color: @colorGrassLinkHover; }
+	
+	}
+	
+	.lead {
+		color: @colorGrassTextSecondary;
+	}
+
+}

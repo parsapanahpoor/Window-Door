@@ -1,0 +1,144 @@
+.color-scheme-silver {
+
+	color: @colorSilverText;
+	
+	body& {
+		background-color: @colorSilverBgSplash;
+	}
+	
+	hr {
+		border-color: @colorSilverHr;
+	}
+	  
+	.countdown {
+		.time {
+			border-color: @colorSilverCountdownBorder;
+			&:last-child {
+				border-color: @colorSilverCountdownBorder;
+			}
+		}
+		
+		.unit {
+			color: @colorSilverTextSecondary;
+		}
+				
+		&.circled {
+			.time {
+				background-color:  @colorSilverCountdownBg;
+			}
+			
+			&.large {
+				.time {
+					background-color: @colorSilverCountdownBg;
+				}
+			}
+		}
+	}
+	
+	.overlap {
+		background-color: @colorSilverBgContent;
+		
+		.more {
+			color: @colorSilverTextSecondary;
+			.fa {
+				background-color: @colorSilverTextSecondary;
+				color: @colorSilverBgSplash;
+			}
+		}
+	}
+	
+	.contact {
+		.icon {
+			background-color: @colorSilverTextMuted;
+			.fa {
+				color: @colorSilverBgContent;
+			}
+			border-color: @colorSilverTextMuted;
+		}
+	}
+	
+	.social {
+		.social-icon {
+			border-color: @colorSilverTextMuted;
+			color: @colorSilverBgContent;
+			&:link, &:visited {
+				color: @colorSilverTextSecondary;
+			}
+			
+			&:hover, &:active {
+				background-color: @colorSilverLinkHover;
+				color:  @colorSilverBgContent;
+			}
+		}
+	}
+	
+	.notify-by-email {
+		background-color: @colorSilverBgNotify;	
+		form {
+			input {
+				background-color: @colorSilverInputBg;
+			}
+			
+			.fa {
+				color: @colorSilverTextMuted;
+			}
+			
+			button {
+				background-color: @colorSilverButton;
+				color: @colorSilverButtonText;
+				&:hover {
+					background-color: @colorSilverButtonHover;
+				}
+			}
+			
+			.note, .message {
+				color: @colorSilverTextSecondary;
+			}
+	
+			
+			&.success {
+				.fa, input, .message {
+					color: @colorSilverTextSuccess;
+				}
+			}
+			
+			&.error {
+				.fa, input, .message {
+					color: @colorSilverTextError;
+				}
+			}
+		}
+		
+		h3 {
+			color: @colorSilverBgSplash;
+			&:before {
+				border-color: transparent transparent transparent @colorSilverBgContent;
+			}
+	
+			&:after {
+				border-color: transparent transparent transparent @colorSilverBgNotify;
+			}
+		}	
+	}
+	
+	.note {
+		color: @colorSilverTextSecondary;
+	}
+	
+	.footer {
+		color: @colorSilverTextSecondary;
+	}
+	
+	a {
+		&:link { color: @colorSilverLink; }
+		&:visited { color: @colorSilverLinkVisited; }
+		&:hover { color: @colorSilverLinkHover; }
+		&:active { color: @colorSilverLinkHover; }
+	
+	}
+	
+	.lead {
+		color: @colorSilverTextSecondary;
+	}
+}
+

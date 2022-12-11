@@ -1,0 +1,191 @@
+﻿@model List<Window.Domain.Entities.Inquiry.LogInquiryForUserDetail>
+
+@{
+    ViewData["Title"] = "استعلام گیری";
+}
+
+<div class="parallax titlebar" data-background="/Site/images/7.jpg" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -799.306px;">
+    <div class="parallax-overlay" style="background-color: rgb(51, 51, 51); opacity: 0.7;"></div>
+
+    <div id="titlebar">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <h2>محصولات</h2>
+                    <span>لیست آخرین انتخاب های شما </span>
+
+                    <nav id="breadcrumbs">
+                        <ul>
+                            <li>
+                                <a asp-action="InquiryStep4" asp-route-userMacAddress="@ViewBag.UserMacAddress" asp-controller="InquiryProduct" asp-area="" class="button">نمایش نتیجه ی استعلام </a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row sticky-wrapper">
+
+        <div class="col-md-12">
+
+            <!-- Listings -->
+            <div class="listings-container list-layout">
+
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var product in Model)
+                    {
+                        <form asp-action="GetUserLastestInquiry" asp-controller="InquiryProduct" asp-area="" id="" method="post">
+                            <input type="hidden" value="@product.SampleId" name="SampleId" />
+                            <input type="hidden" value="@product.Id" name="inquiryDetailId" />
+                            <input type="hidden" value="@ViewBag.UserMacAddress" name="userMacAddress" />
+
+                            <!-- Listing Item -->
+                            <div class="listing-item">
+
+                                <a target="_blank" href="@Window.Application.StticTools.FilePaths.SampleThumbimage/@product.Sample.Image" class="listing-img-container" style="height: 273px;">
+
+                                    <div class="listing-badges">
+                                        <span>@product.Sample.Id :  کد کالا</span>
+                                    </div>
+
+                                    <div class="listing-img-content">
+                                        <span class="listing-price">@product.Sample.SegmentName </span>
+                                    </div>
+
+                                    <img src="@Window.Application.StticTools.FilePaths.SampleThumbimage/@product.Sample.Image" alt="" style="height: 273px;">
+
+                                </a>
+
+                                <div class="listing-content">
+
+                                    <div class="listing-title">
+                                        <h4><a href="single-property-page-1.html">@product.Sample.SegmentName</a></h4>
+
+                                        <div class="listing-badges">
+                                            <span style="background-color: #c80e0e;"><a asp-action="DeleteUserLasteInquiryDetail" asp-area="" asp-controller="InquiryProduct" asp-route-Id="@product.Id" style="background-color: #c80e0e;">حذف</a></span>
+                                        </div>
+                                    </div>
+
+                                    <ul class="listing-details">
+                                        <li>@product.Sample.MaxHeight : حداکثر ارتفاع </li>
+                                        <li>@product.Sample.MinHeight : حداقل ارتفاع </li>
+                                        <li>@product.Sample.MaxWidth : حداکثر عرض </li>
+                                        <li>@product.Sample.MinWidth : حداقل عرض </li>
+                                    </ul>
+
+                                    <div class="listing-footer">
+                                        <div class="row">
+
+                                            @if (product.Id == 16 || product.Id == 15 || product.Id == 42 || product.Id == 43)
+
+                                            {
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <input name="Height" min="0" step="1" type="text" value="@product.Height" placeholder="ارتفاع را وارد کنید">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <input type="text" min="0" step="1" name="Width" value="@product.Width" placeholder="عرض را وارد کنید">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <input type="text" min="1" name="SampleCount" value="@product.CountOfSample" placeholder="تعداد را وارد کنید">
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+
+                                                    <div class="col-md-3">
+                                                        <input type="text" min="0" step="1" value="@product.KatibeSize" name="katibeSize" placeholder="عرض درب a">
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <button type="submit" class="button">ثیت</button>
+                                                    </div>
+
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                @if (product.Id == 26 || product.Id == 25 || product.Id == 24 || product.Id == 23 || product.Id == 22
+                                               || product.Id == 47 || product.Id == 48 || product.Id == 49 || product.Id == 50 || product.Id == 53
+                                               || product.Id == 52 || product.Id == 51 || product.Id == 44 || product.Id == 45 || product.Id == 46
+                                               || product.Id == 57 || product.Id == 56 || product.Id == 55)
+                                                {
+                                                    <div class="row">
+
+                                                        <div class="col-md-4">
+                                                            <input name="Height" min="0" step="1" type="text" value="@product.Height" placeholder="ارتفاع را وارد کنید">
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <input type="text" min="0" step="1" name="Width" value="@product.Width" placeholder="عرض را وارد کنید">
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <input type="text" min="1" name="SampleCount" value="@product.CountOfSample" placeholder="تعداد را وارد کنید">
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-3">
+                                                            <input type="number" min="0" step="1" value="@product.KatibeSize" name="katibeSize" placeholder="ارتفاع کتیبه " />
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <button type="submit" class="button">ثبت</button>
+                                                        </div>
+
+                                                    </div>
+                                                }
+
+                                                else
+                                                {
+                                                    <div class="col-md-3">
+                                                        <input name="Height" min="0" step="1" type="text" value="@product.Height" placeholder="ارتفاع را وارد کنید">
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <input type="text" min="0" step="1" name="Width"  placeholder="عرض را وارد کنید">
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <input type="text" min="1" name="SampleCount" value="@product.CountOfSample" placeholder="تعداد را وارد کنید">
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <button type="submit" class="button">ثبت</button>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <!-- Listing Item / End -->
+
+                        </form>
+                    }
+                }
+
+            </div>
+            <!-- Listings Container / End -->
+
+        </div>
+
+    </div>
+</div>
+

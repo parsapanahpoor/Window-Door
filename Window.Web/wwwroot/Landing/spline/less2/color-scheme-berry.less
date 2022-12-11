@@ -1,0 +1,144 @@
+.color-scheme-berry {
+
+	color: @colorBerryText;
+	
+	body& {
+		background-color: @colorBerryBgSplash;
+	}
+	
+	hr {
+		border-color: @colorBerryHr;
+	}
+	  
+	.countdown {
+		.time {
+			border-color: @colorBerryCountdownBorder;
+			&:last-child {
+				border-color: @colorBerryCountdownBorder;
+			}
+		}
+		
+		.unit {
+			color: @colorBerryTextSecondary;
+		}
+				
+		&.circled {
+			.time {
+				background-color:  @colorBerryCountdownBg;
+			}
+			
+			&.large {
+				.time {
+					background-color: @colorBerryCountdownBg;
+				}
+			}
+		}
+	}
+	
+	.overlap {
+		background-color: @colorBerryBgContent;
+		
+		.more {
+			color: @colorBerryTextSecondary;
+			.fa {
+				background-color: @colorBerryTextSecondary;
+				color: @colorBerryBgSplash;
+			}
+		}
+	}
+	
+	.contact {
+		.icon {
+			background-color: @colorBerryTextMuted;
+			.fa {
+				color: @colorBerryBgContent;
+			}
+			border-color: @colorBerryTextMuted;
+		}
+	}
+	
+	.social {
+		.social-icon {
+			border-color: @colorBerryTextMuted;
+			color: @colorBerryBgContent;
+			&:link, &:visited {
+				color: @colorBerryTextSecondary;
+			}
+			
+			&:hover, &:active {
+				background-color: @colorBerryLinkHover;
+				color:  @colorBerryBgContent;
+			}
+		}
+	}
+	
+	.notify-by-email {
+		background-color: @colorBerryBgNotify;	
+		form {
+			input {
+				background-color: @colorBerryInputBg;
+			}
+			
+			.fa {
+				color: @colorBerryTextMuted;
+			}
+			
+			button {
+				background-color: @colorBerryButton;
+				color: @colorBerryButtonText;
+				&:hover {
+					background-color: @colorBerryButtonHover;
+				}
+			}
+			
+			.note, .message {
+				color: @colorBerryTextSecondary;
+			}
+	
+			
+			&.success {
+				.fa, input, .message {
+					color: @colorBerryTextSuccess;
+				}
+			}
+			
+			&.error {
+				.fa, input, .message {
+					color: @colorBerryTextError;
+				}
+			}
+		}
+		
+		h3 {
+			color: @colorBerryBgSplash;
+			&:before {
+				border-color: transparent transparent transparent @colorBerryBgContent;
+			}
+	
+			&:after {
+				border-color: transparent transparent transparent @colorBerryBgNotify;
+			}
+		}	
+	}
+	
+	.note {
+		color: @colorBerryTextSecondary;
+	}
+	
+	.footer {
+		color: @colorBerryTextSecondary;
+	}
+	
+	a {
+		&:link { color: @colorBerryLink; }
+		&:visited { color: @colorBerryLinkVisited; }
+		&:hover { color: @colorBerryLinkHover; }
+		&:active { color: @colorBerryLinkHover; }
+	
+	}
+	
+	.lead {
+		color: @colorBerryTextSecondary;
+	}
+}
+

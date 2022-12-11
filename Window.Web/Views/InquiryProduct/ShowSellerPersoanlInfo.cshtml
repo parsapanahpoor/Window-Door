@@ -1,0 +1,172 @@
+﻿@using Window.Application.StticTools
+@using Window.Domain.Enums
+@using Window.Application.StaticTools
+@using Window.Domain.ViewModels.Common
+@model Window.Domain.ViewModels.Seller.PersonalInfo.ListOfPersonalInfoViewModel
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedLocalizer> SharedHtmlLocalizer
+
+@{
+    ViewData["Title"] = "لیست اطلاعات فروشنده ";
+    var countries = ViewData["Countries"] != null ? ViewData["Countries"] as List<SelectListViewModel> : null;
+    var states = ViewData["States"] != null ? ViewData["States"] as List<SelectListViewModel> : null;
+    var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
+}
+
+
+@section Scripts
+    {
+    <script src="/lib/Custom/SellerPersonalInfo.js"></script>
+    <partial name="_JqueryValidation" />
+}
+
+
+    <div id="titlebar" class="property-titlebar margin-bottom-0">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="property-title">
+                        <h2>@Model.CompanyName </h2>
+                        <span>
+                            <a href="#location" class="listing-address">
+                                <i class="fa fa-map-marker"></i>
+                            @if (countries != null && countries.Any())
+                            {
+                                foreach (var country in countries)
+                                {
+                                    if (Model != null && Model.CountryId == country.Id)
+                                    {
+                                        @country.Title
+                                    }
+                                }
+                            },
+                            @if (states != null && states.Any())
+                            {
+                                foreach (var state in states)
+                                {
+                                    if (Model != null && Model.StateId == state.Id)
+                                    {
+                                        @state.Title
+                                    }
+                                }
+                            },
+                            @if (cities != null && cities.Any())
+                            {
+                                foreach (var city in cities)
+                                {
+                                    if (Model != null && Model.CityId == city.Id)
+                                    {
+                                        @city.Title
+                                    }
+                                }
+                            }
+                        </a>
+                    </span>
+                </div>
+
+                <div class="property-pricing">
+                    <div>@Model.PeriodTimesOfWork</div>
+                    <div class="sub-price"> ساعات پاسخ گویی</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row margin-bottom-50">
+        <div class="col-md-12">
+
+            <!-- Slider Thumbs -->
+            <div class="property-slider-nav slick-initialized slick-slider">
+
+                <div class="slick-list draggable">
+
+                    <div class="slick-track" style="opacity: 1; width: 1188px; transform: translate3d(0px, 0px, 0px);">
+
+                        @if (Model.MarketWorkSamples != null && Model.MarketWorkSamples.Any())
+                        {
+                            @foreach (var link in Model.MarketWorkSamples)
+                            {
+                                <div class="item slick-slide slick-active" data-slick-index="0" aria-hidden="false" style="width: 188px;" tabindex="-1">
+                                    <img src="/content/images/sellerInfo/thumb/@link.WorkSampleImage" alt="">
+                                </div>
+                            }
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+
+        <!-- Property Description -->
+        <div class="col-lg-8 col-md-7 sp-content">
+            <div class="property-description">
+
+                <!-- Details -->
+                <h3 class="desc-headline">آدرس محل کار : </h3>
+                <ul class="property-features margin-top-0">
+                    <li>@Model.WorkAddress </li>
+                </ul>
+
+
+                <!-- Features -->
+                <h3 class="desc-headline">رزومه ی کاری</h3>
+                <ul class="property-features checkboxes margin-top-0">
+                    <li>@Model.Resume</li>
+                </ul>
+
+
+            </div>
+        </div>
+
+
+        <div class="col-lg-4 col-md-5 sp-sidebar">
+            <div class="sidebar sticky right">
+
+                <!-- Widget -->
+                <div class="widget">
+
+                    <!-- Agent Widget -->
+                    <div class="agent-widget">
+                        <div class="agent-title">
+                            <div class="agent-details">
+                                <h4><a href="#">لیست لینک های ارتباطی</a></h4>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        @if (Model.MarketLinks != null && Model.MarketLinks.Any())
+                        {
+                            @foreach (var sellerLinks in Model.MarketLinks)
+                            {
+                                <input readonly type="text" placeholder="@sellerLinks.LinkTitle">
+                                <textarea>@sellerLinks.LinkValue</textarea>
+
+                            }
+                        }
+
+                    </div>
+                    <!-- Agent Widget / End -->
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+

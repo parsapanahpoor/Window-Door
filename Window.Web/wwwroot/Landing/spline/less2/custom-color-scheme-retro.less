@@ -1,0 +1,150 @@
+.color-scheme-retro {
+
+	color: @colorText;
+	
+	body& {
+		background-color: #403a45; // @colorBgSplash;
+	}
+	
+	hr {
+		border-color: @colorHr;
+	}
+	
+	.splash {
+		h1 {
+			color: rgba(0,0,0,0.7);
+		}
+	}
+	  
+	.countdown {
+		.time {
+			border-color: @colorCountdownBorder;
+			&:last-child {
+				border-color: @colorCountdownBorder;
+			}
+		}
+		
+		.unit {
+			color: rgba(255,255,255,0.3);
+		}
+				
+		&.circled {
+			.time {
+				background-color:  @colorCountdownBg;
+			}
+			
+			&.large {
+				.time {
+					background-color: @colorCountdownBg;
+				}
+			}
+		}
+	}
+	
+	.overlap {
+		background-color: rgba(54,50,58,0.7);
+		
+		.more {
+			color: rgba(255,255,255,0.3);
+			.fa {
+				background-color: rgba(255,255,255,0.3);
+				color: rgba(0,0,0,0.6);
+			}
+		}
+	}
+	
+	.contact {
+		.icon {
+			background-color: @colorTextMuted;
+			.fa {
+				color: @colorBgContent;
+			}
+			border-color: @colorTextMuted;
+		}
+	}
+	
+	.social {
+		.social-icon {
+			border-color: @colorTextMuted;
+			color: @colorBgContent;
+			&:link, &:visited {
+				color: @colorTextSecondary;
+			}
+			
+			&:hover, &:active {
+				background-color: @colorLinkHover;
+				color:  @colorBgContent;
+			}
+		}
+	}
+	
+	.notify-by-email {
+		background-color: #2b262f;
+		form {
+			input {
+				background-color: @colorInputBg;
+			}
+			
+			.fa {
+				color: @colorTextMuted;
+			}
+			
+			button {
+				background-color: @colorButton;
+				color: @colorButtonText;
+				&:hover {
+					background-color: #5c5564;
+				}
+			}
+			
+			.note, .message {
+				color: @colorTextSecondary;
+			}
+	
+			
+			&.success {
+				.fa, input, .message {
+					color: @colorTextSuccess;
+				}
+			}
+			
+			&.error {
+				.fa, input, .message {
+					color: @colorTextError;
+				}
+			}
+		}
+		
+		h3 {
+			color: @colorTextMuted;
+			&:before {
+				border-color: transparent transparent transparent @colorTextMuted;
+			}
+	
+			&:after {
+				border-color: transparent transparent transparent #2b262f;
+			}
+		}	
+	}
+	
+	.note {
+		color: @colorTextSecondary;
+	}
+	
+	.footer {
+		color: @colorTextSecondary;
+	}
+	
+	a {
+		&:link { color: @colorLink; }
+		&:visited { color: @colorLinkVisited; }
+		&:hover { color: @colorLinkHover; }
+		&:active { color: @colorLinkHover; }
+	
+	}
+	
+	.lead {
+		color: rgba(0,0,0,0.5);
+	}
+}
+

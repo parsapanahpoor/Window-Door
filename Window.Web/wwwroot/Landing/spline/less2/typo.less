@@ -1,0 +1,51 @@
+// Responsive
+
+h1, h2, h3 {
+	font-weight: 100;
+	font-size: 50px;
+	margin: 20px 0px 20px;
+	line-height: 1.4;
+}
+
+h2 {
+	font-size: 30px;
+	&:before {
+		content: ' ';
+		display: block;
+		width: 60px;
+		border-bottom: 5px solid #FFF;
+		position: absolute;
+		margin: -25px 0px 0px 0px;
+	}
+	
+}
+
+h3 {
+	font-size: 25px;
+}
+
+p {
+	margin: 20px 0px;
+}
+
+.lead {
+	font-size: 25px;
+	margin: 0px 0px 0px;
+	color: @colorTextSecondary;
+}
+
+a {
+	&:link { color: @colorLink; }
+	&:visited { color: @colorLinkVisited; }
+	&:hover { color: @colorLinkHover; }
+	&:active { color: @colorLinkHover; }
+
+}
+
+
+hr {
+	border: none;
+	border-top: 1px solid @colorHr;
+}
+
+

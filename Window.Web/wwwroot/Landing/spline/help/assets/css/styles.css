@@ -1,0 +1,78 @@
+html, body {
+	padding: 0px;
+	margin: 0px;
+	background-color: #EBEBEB;
+	font-family: "Open Sans", serif;
+}
+
+.logo {
+	margin: 35px 25px 0px;
+	float: right;
+}
+
+.section {
+	padding: 5px 0px;
+}
+
+h1 {
+	margin-bottom: 20px;
+}
+
+p {
+	margin: 20px 0px;
+}
+
+.credits {
+	margin: 30px 0px 0px;
+}
+
+.navigation {
+	width: 220px;
+	background-color: #454d54;
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	z-index: 2;
+}
+
+.navigation .nav {
+	margin-top: 170px;
+	text-align: right;
+}
+.navigation .nav li {
+}
+
+.navigation .nav li a {
+	padding: 10px 25px;
+}
+.navigation .nav li a:link,
+.navigation .nav li a:visited {
+	text-decoration: none;
+	color: #FFF;
+}
+
+.navigation .nav li a:hover,
+.navigation .nav li a:active {
+	background-color: #282e33;
+	text-decoration: none;
+	color: #FFF;
+}
+
+.navigation .nav li.active a {
+	background-color: #34383c;
+	color: #5f686f;
+}
+
+
+.contents {
+	padding-left: 220px;
+	width: 1000px;
+	background-color: #FFF;
+	min-height: 100%;
+	position: absolute;
+}
+
+.wrap {
+	padding: 30px 50px;
+}

@@ -1,0 +1,183 @@
+@font-face{
+	font-family:dimamostanad;
+	src: url(../fonts/dimamostanad.ttf);
+  }
+  h1,p,div,a{
+	font-family:dimamostanad!important;
+  }
+.grid {
+	margin: 0 auto;
+	list-style: none;
+	text-align: center;
+}
+
+.grid li {
+	display: inline-block;
+	margin: 0;
+	padding: 8px;
+	position: relative;
+}
+
+.grid figure {
+	margin: 0;
+	position: relative;
+}
+
+.grid figure img {
+	width: 100%;
+	max-width: 100%;
+	height: 100%;
+	display: block;
+	position: relative;
+}
+
+.grid figcaption {
+	position: absolute;
+    top: 0;
+    left: 0;
+    padding: 5px 5px;
+    background: #304352;
+    color: #ed4e6e;
+}
+
+.grid figcaption h1 {
+	font-size: 1.2rem;
+    line-height: 2.2rem;
+    margin: 0;
+    padding-bottom: 12px;
+    color: #fff;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.grid figcaption small {
+	font-size: 12px;
+    text-align: center;
+}
+figcaption li{
+
+}
+.grid figcaption a {
+	text-align: center;
+	padding: 5px 10px;
+	border-radius: 2px;
+	display: inline-block;
+	background: #e44c65;
+	color: #fff;
+}
+.grid figcaption a:hover {
+	background: #ccc;
+	color:  #e44c65;
+}
+/* Caption Style 4 */
+.cs-style-4 li {
+	-webkit-perspective: 1700px;
+	-moz-perspective: 1700px;
+	perspective: 1700px;
+	-webkit-perspective-origin: 0 50%;
+	-moz-perspective-origin: 0 50%;
+	perspective-origin: 0 50%;
+	height: 230px;
+	width: 230px;
+}
+
+.cs-style-4 figure {
+	height: 100%;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
+
+.cs-style-4 figure > div {
+	overflow: hidden;
+	height: 100%;
+	border-radius: 20px;
+    border: 5px solid #fff;
+}
+
+.cs-style-4 figure img {
+	-webkit-transition: -webkit-transform 0.4s;
+	-moz-transition: -moz-transform 0.4s;
+	transition: transform 0.4s;
+}
+
+/*.no-touch .cs-style-4 figure:hover img,
+.cs-style-4 figure.cs-hover img {
+	-webkit-transform: translateX(25%);
+	-moz-transform: translateX(25%);
+	-ms-transform: translateX(25%);
+	transform: translateX(25%);
+}*/
+
+.cs-style-4 figcaption {
+	height: 100%;
+	width: 50%;
+	opacity: 0;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	backface-visibility: hidden;
+	-webkit-transform-origin: 0 0;
+	-moz-transform-origin: 0 0;
+	transform-origin: 0 0;
+	-webkit-transform: rotateY(-90deg);
+	-moz-transform: rotateY(-90deg);
+	transform: rotateY(-90deg);
+	-webkit-transition: -webkit-transform 0.4s, opacity 0.1s 0.3s;
+	-moz-transition: -moz-transform 0.4s, opacity 0.1s 0.3s;
+	transition: transform 0.4s, opacity 0.1s 0.3s;
+	border-radius: 20px 0 0 20px;
+}
+
+.no-touch .cs-style-4 figure:hover figcaption,
+.cs-style-4 figure.cs-hover figcaption {
+	opacity: 1;
+	-webkit-transform: rotateY(0deg);
+	-moz-transform: rotateY(0deg);
+	transform: rotateY(0deg);
+	-webkit-transition: -webkit-transform 0.4s, opacity 0.1s;
+	-moz-transition: -moz-transform 0.4s, opacity 0.1s;
+	transition: transform 0.4s, opacity 0.1s;
+}
+
+.cs-style-4 figcaption a {
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+}
+ol.type li a:hover{
+	border: 1px solid #cf5022;
+	background: #ccc;
+	color:  #e44c65;
+}
+/******/
+.over-hidden{
+	overflow: hidden;
+}
+.traz{
+	margin: 0 205px;
+}
+@media (max-width: 980px) {
+	.grid figcaption h1 {
+		font-size: 1rem;
+		line-height: 1.6rem;
+	}
+	.grid figcaption {
+		padding: 22px 18px;
+	}
+}
+
+@media screen and (max-width: 31.5em) {
+	.grid {
+		padding: 0px 10px 10px 10px;
+	}
+	.grid li {
+		width: 100%;
+		/* min-width: 300px; */
+	}
+}
+
+@media (min-width:1036px) and (max-width:1200px) {
+    .traz {
+		transform: translate(-115px, -231px);
+    }
+}​

@@ -1,0 +1,326 @@
+﻿@model Window.Domain.ViewModels.Site.Inquiry.AddScoreToTheSellerViewModel
+@{
+    ViewData["Title"] = "سوالات متداول ";
+}
+
+@section Styles
+    {
+}
+
+    @section Scripts
+    {
+
+}
+
+<div class="parallax titlebar" data-background="/Site/images/listing-05.jpg" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -274.894px;"><div class="parallax-overlay" style="background-color: rgb(51, 51, 51); opacity: 0.7;"></div>
+
+	<div id="titlebar">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+
+						<h2>سوالات متداول</h2>
+					<span>افزایش آگهی شما در دستور کار ما قرار دارد .</span>
+
+					<!-- Breadcrumbs -->
+					<nav id="breadcrumbs">
+						<ul>
+							<li><a href="#">خانه</a></li>
+							<li>آگهی ها</li>
+						</ul>
+					</nav>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	<div class="container">
+
+		<div class="row">
+
+			<div class="col-md-6">
+				<h4 class="headline margin-top-0 margin-bottom-30">دکمه ها</h4>
+				<p class="dir-rtl">
+					<a href="#" class="button">دکمه پر شده</a>
+					<a href="#" class="button medium"><i class="fa fa-folder-open"></i> دکمه پر شده</a>
+					<a href="#" class="button border">دکمه حاشیه دار</a>
+					<a href="#" class="button medium border"><i class="fa fa-folder-open"></i> دکمه حاشیه دار</a>
+				</p>
+			</div>
+
+			<div class="col-md-6">
+				<h4 class="headline margin-top-0 margin-bottom-20">توگل</h4>
+
+				<!-- Toggles Container -->
+				<div class="style-2">
+
+					<!-- Toggle 1 -->
+					<div class="toggle-wrap">
+						<span class="trigger "><a href="#">اولین گزینه<i class="sl sl-icon-plus"></i></a></span>
+						<div class="toggle-container" style="display: none;">
+							<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+						</div>
+					</div>
+
+					<!-- Toggle 2 -->
+					<div class="toggle-wrap">
+						<span class="trigger"><a href="#"> دومین گزینه <i class="sl sl-icon-plus"></i></a></span>
+						<div class="toggle-container" style="display: none;">
+							<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+						</div>
+					</div>
+
+					<!-- Toggle 3 -->
+					<div class="toggle-wrap">
+						<span class="trigger"><a href="#"><i class="sl sl-icon-pin"></i>سومین گزینه با آیکون <i class="sl sl-icon-plus"></i> </a></span>
+						<div class="toggle-container" style="display: none;">
+							<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+						</div>
+					</div>
+
+				</div>
+				<!-- Toggles Container / End -->
+			</div>
+
+
+			<!-- Accordions -->
+			<!-- <div class="col-md-12">
+
+				<h4 class="headline margin-top-0 margin-bottom-20">Accordions</h4>
+				<div class="style-2">
+					<div class="accordion">
+
+						<h3><span class="ui-accordion-header-icon ui-icon ui-accordion-icon"></span><i class="sl sl-icon-plus"></i> First Accordion</h3>
+						<div>
+							<p>Mauris mauris ante, blandit et, ultrices a, susceros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate aliquam egestas litora torquent conubia.</p>
+						</div>
+
+						<h3><span class="ui-accordion-header-icon ui-icon ui-accordion-icon"></span><i class="sl sl-icon-plus"></i> Second Accordion</h3>
+						<div>
+							<p>Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor velit, faucibus interdum tellus libero ac justo. Vivamus non quam. Nullam laoreet, velit ut taciti sociosqu condimentum feugiat.</p>
+						</div>
+
+						<h3><span class="ui-accordion-header-icon ui-icon ui-accordion-icon"></span><i class="sl sl-icon-plus"></i> Third Accordion</h3>
+						<div>
+							<p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper.</p>
+						</div>
+
+					</div>
+				</div>
+			</div> -->
+
+		</div>
+
+
+		<div class="row">
+
+			<div class="col-md-6">
+				<h4 class="headline margin-top-70 margin-bottom-30">تب - استایل 1</h4>
+
+				<div class="style-1">
+
+					<!-- Tabs Navigation -->
+					<ul class="tabs-nav">
+						<li class="active"><a href="#tab1">گزینه اول</a></li>
+						<li><a href="#tab2">گزینه دوم</a></li>
+						<li><a href="#tab3">گزینه سوم</a></li>
+					</ul>
+
+					<!-- Tabs Content -->
+					<div class="tabs-container">
+						<div class="tab-content" id="tab1" style="">
+							لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.
+						</div>
+
+						<div class="tab-content" id="tab2" style="display: none;">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</div>
+
+						<div class="tab-content" id="tab3" style="display: none;">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. </div>
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="col-md-6">
+				<h4 class="headline margin-top-70 margin-bottom-30">تب - استایل 2</h4>
+
+				<div class="style-2">
+					<!-- Tabs Navigation -->
+					<ul class="tabs-nav">
+						<li class="active"><a href="#tab1a"><i class="sl sl-icon-pin"></i> گزینه اول</a></li>
+						<li><a href="#tab2a"><i class="sl sl-icon-badge"></i> گزینه دوم</a></li>
+						<li><a href="#tab3a"><i class="sl sl-icon-bubbles"></i> گزینه سوم</a></li>
+					</ul>
+
+					<!-- Tabs Content -->
+					<div class="tabs-container">
+						<div class="tab-content" id="tab1a" style="">
+							لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.
+						</div>
+
+						<div class="tab-content" id="tab2a" style="display: none;">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</div>
+
+						<div class="tab-content" id="tab3a" style="display: none;">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. </div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+
+		<div class="row">
+
+			<div class="col-md-6">
+
+				<h4 class="headline margin-top-70 margin-bottom-30">جدول</h4>
+				<table class="basic-table">
+
+					<tbody>
+						<tr>
+							<th>ستون 1</th>
+							<th>ستون 2</th>
+						</tr>
+
+						<tr>
+							<td>آیتم</td>
+							<td>توضیحات</td>
+						</tr>
+
+						<tr>
+							<td>آیتم</td>
+							<td>توضیحات</td>
+						</tr>
+
+						<tr>
+							<td>آیتم</td>
+							<td>توضیحات</td>
+						</tr>
+
+						<tr>
+							<td>آیتم</td>
+							<td>توضیحات</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+
+			<div class="col-md-6">
+
+				<h4 class="headline margin-top-70 margin-bottom-30">اطلاعیه ها</h4>
+
+				<div class="notification error closeable">
+					<p><span>خطا!</span> لطفا همه ی زمینه های الزامی را پر کنید.</p>
+					<a class="close"></a>
+				</div>
+
+				<div class="notification success closeable">
+					<p><span>موفقیت آمیز!</span> کار تمام شد، حالا لذت ببرید.</p>
+					<a class="close"></a>
+				</div>
+
+				<div class="notification warning closeable">
+					<p><span>هشدار!</span> این مورد را تغییر بدهید و سپس دوباره امتحان کنید.</p>
+					<a class="close"></a>
+				</div>
+
+				<div class="notification notice closeable">
+					<p><span>اطلاعیه!</span> لطفا اطلاعات زیر را ویرایش کنید.</p>
+					<a class="close"></a>
+				</div>
+			</div>
+
+		</div>
+
+
+		<div class="row">
+
+			<div class="col-md-6">
+				<h4 class="headline margin-top-50 margin-bottom-40">آیکون شبکه های اجتماعی 1</h4>
+
+				<!-- Social Icons / Start -->
+				<ul class="social-icons rounded">
+					<li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
+					<li><a class="dribbble" href="#"><i class="icon-dribbble"></i></a></li>
+					<li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
+					<li><a class="linkedin" href="#"><i class="icon-linkedin"></i></a></li>
+					<li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
+					<li><a class="stumbleupon" href="#"><i class="icon-stumbleupon"></i></a></li>
+					<li><a class="fivehundredpx" href="#"><i class="icon-fivehundredpx"></i></a></li>
+					<li><a class="pinterest" href="#"><i class="icon-pinterest"></i></a></li>
+					<li><a class="forrst" href="#"><i class="icon-forrst"></i></a></li>
+					<li><a class="digg" href="#"><i class="icon-digg"></i></a></li>
+					<li><a class="spotify" href="#"><i class="icon-spotify"></i></a></li>
+					<li><a class="reddit" href="#"><i class="icon-reddit"></i></a></li>
+					<li><a class="delicious" href="#"><i class="icon-delicious"></i></a></li>
+					<li><a class="appstore" href="#"><i class="icon-appstore"></i></a></li>
+					<li><a class="paypal" href="#"><i class="icon-paypal"></i></a></li>
+					<li><a class="blogger" href="#"><i class="icon-blogger"></i></a></li>
+					<li><a class="evernote" href="#"><i class="icon-evernote"></i></a></li>
+					<li><a class="instagram" href="#"><i class="icon-instagram"></i></a></li>
+					<li><a class="flickr" href="#"><i class="icon-flickr"></i></a></li>
+					<li><a class="rss" href="#"><i class="icon-rss"></i></a></li>
+					<li><a class="youtube" href="#"><i class="icon-youtube"></i></a></li>
+					<li><a class="vimeo" href="#"><i class="icon-vimeo"></i></a></li>
+					<li><a class="xing" href="#"><i class="icon-xing"></i></a></li>
+					<li><a class="yahoo" href="#"><i class="icon-yahoo"></i></a></li>
+					<li><a class="amazon" href="#"><i class="icon-amazon"></i></a></li>
+					<li><a class="steam" href="#"><i class="icon-steam"></i></a></li>
+					<li><a class="dropbox" href="#"><i class="icon-dropbox"></i></a></li>
+					<li><a class="github" href="#"><i class="icon-github"></i></a></li>
+					<li><a class="lastfm" href="#"><i class="icon-lastfm"></i></a></li>
+					<li><a class="tumblr" href="#"><i class="icon-tumblr"></i></a></li>
+				</ul>
+				<div class="clearfix"></div>
+				<!-- Social Icons / End -->
+			</div>
+
+
+			<div class="col-md-6">
+
+				<h4 class="headline margin-top-50 margin-bottom-40">آیکون شبکه های اجتماعی 2</h4>
+
+				<!-- Social Icons / Start -->
+				<ul class="social-icons color rounded">
+					<li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
+					<li><a class="dribbble" href="#"><i class="icon-dribbble"></i></a></li>
+					<li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
+					<li><a class="linkedin" href="#"><i class="icon-linkedin"></i></a></li>
+					<li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
+					<li><a class="stumbleupon" href="#"><i class="icon-stumbleupon"></i></a></li>
+					<li><a class="fivehundredpx" href="#"><i class="icon-fivehundredpx"></i></a></li>
+					<li><a class="pinterest" href="#"><i class="icon-pinterest"></i></a></li>
+					<li><a class="forrst" href="#"><i class="icon-forrst"></i></a></li>
+					<li><a class="digg" href="#"><i class="icon-digg"></i></a></li>
+					<li><a class="spotify" href="#"><i class="icon-spotify"></i></a></li>
+					<li><a class="reddit" href="#"><i class="icon-reddit"></i></a></li>
+					<li><a class="delicious" href="#"><i class="icon-delicious"></i></a></li>
+					<li><a class="appstore" href="#"><i class="icon-appstore"></i></a></li>
+					<li><a class="paypal" href="#"><i class="icon-paypal"></i></a></li>
+					<li><a class="blogger" href="#"><i class="icon-blogger"></i></a></li>
+					<li><a class="evernote" href="#"><i class="icon-evernote"></i></a></li>
+					<li><a class="instagram" href="#"><i class="icon-instagram"></i></a></li>
+					<li><a class="flickr" href="#"><i class="icon-flickr"></i></a></li>
+					<li><a class="rss" href="#"><i class="icon-rss"></i></a></li>
+					<li><a class="youtube" href="#"><i class="icon-youtube"></i></a></li>
+					<li><a class="vimeo" href="#"><i class="icon-vimeo"></i></a></li>
+					<li><a class="xing" href="#"><i class="icon-xing"></i></a></li>
+					<li><a class="yahoo" href="#"><i class="icon-yahoo"></i></a></li>
+					<li><a class="amazon" href="#"><i class="icon-amazon"></i></a></li>
+					<li><a class="steam" href="#"><i class="icon-steam"></i></a></li>
+					<li><a class="dropbox" href="#"><i class="icon-dropbox"></i></a></li>
+					<li><a class="github" href="#"><i class="icon-github"></i></a></li>
+					<li><a class="lastfm" href="#"><i class="icon-lastfm"></i></a></li>
+					<li><a class="tumblr" href="#"><i class="icon-tumblr"></i></a></li>
+				</ul>
+				<div class="clearfix"></div>
+				<!-- Social Icons / End -->
+
+			</div>
+
+		</div>
+	</div>
+
+

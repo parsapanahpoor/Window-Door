@@ -1,0 +1,148 @@
+.color-scheme-sky {
+
+	color: @colorSkyText;
+	
+	body& {
+		background-color: @colorSkyBgSplash;
+	}
+	
+	hr {
+		border-color: @colorSkyHr;
+	}
+	
+	.splash {
+		color: #FFF;
+	}
+	  
+	.countdown {
+		.time {
+			border-color: @colorSkyCountdownBorder;
+			&:last-child {
+				border-color: @colorSkyCountdownBorder;
+			}
+		}
+		
+		.unit {
+			color: @colorSkyTextMuted;
+		}
+				
+		&.circled {
+			.time {
+				color: @colorSkyText;
+				background-color: @colorSkyCountdownBg;
+			}
+			
+			&.large {
+				.time {
+					background-color: @colorSkyCountdownBg;
+				}
+			}
+		}
+	}
+	
+	.overlap {
+		background-color: @colorSkyBgContent;
+		
+		.more {
+			color: @colorSkyTextSecondary;
+			.fa {
+				background-color: @colorSkyTextSecondary;
+				color: @colorSkyBgSplash;
+			}
+		}
+	}
+	
+	.contact {
+		.icon {
+			background-color: @colorSkyTextMuted;
+			.fa {
+				color: @colorSkyBgContent;
+			}
+			border-color: @colorSkyTextMuted;
+		}
+	}
+	
+	.social {
+		.social-icon {
+			border-color: @colorSkyTextMuted;
+			color: @colorSkyBgContent;
+			&:link, &:visited {
+				color: @colorSkyTextSecondary;
+			}
+			
+			&:hover, &:active {
+				background-color: @colorSkyLinkHover;
+				color:  @colorSkyBgContent;
+			}
+		}
+	}
+	
+	.notify-by-email {
+		background-color: @colorSkyBgNotify;	
+		form {
+			input {
+				background-color: @colorSkyInputBg;
+			}
+			
+			.fa {
+				color: @colorSkyTextMuted;
+			}
+			
+			button {
+				background-color: @colorSkyButton;
+				color: @colorSkyButtonText;
+				&:hover {
+					background-color: @colorSkyButtonHover;
+				}
+			}
+			
+			.note, .message {
+				color: @colorSkyTextMuted;
+			}
+	
+			
+			&.success {
+				.fa, input, .message {
+					color: @colorSkyTextSuccess;
+				}
+			}
+			
+			&.error {
+				.fa, input, .message {
+					color: @colorSkyTextError;
+				}
+			}
+		}
+		
+		h3 {
+			color: @colorSkyBgSplash;
+			&:before {
+				border-color: transparent transparent transparent @colorSkyBgContent;
+			}
+	
+			&:after {
+				border-color: transparent transparent transparent @colorSkyBgNotify;
+			}
+		}	
+	}
+	
+	.note {
+		color: @colorSkyTextSecondary;
+	}
+	
+	.footer {
+		color: @colorSkyTextSecondary;
+	}
+	
+	a {
+		&:link { color: @colorSkyLink; }
+		&:visited { color: @colorSkyLinkVisited; }
+		&:hover { color: @colorSkyLinkHover; }
+		&:active { color: @colorSkyLinkHover; }
+	}
+	
+	.lead {
+		color: @colorSkyTextSecondary;
+	}
+}
+

@@ -1,0 +1,74 @@
+﻿@model Window.Domain.ViewModels.Site.Inquiry.AddScoreToTheSellerViewModel
+@{
+    ViewData["Title"] = "امتیاز دهی ";
+}
+
+@section Styles
+    {
+}
+
+    @section Scripts
+    {
+
+}
+
+    <div id="titlebar">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <h2>امتیاز دهی</h2>
+
+                    <!-- Breadcrumbs -->
+                    <nav id="breadcrumbs">
+                        <ul>
+                            <li><a href="/">خانه</a></li>
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-4">
+              
+            </div>
+
+            <div class="col-md-8">
+                <div class="row">
+                    <form asp-action="AddScoreToSeller" asp-controller="InquiryProduct" asp-area="" id="formFilter" method="post">
+                        <input asp-for="SellerId" value="@Model.SellerId" type="hidden" />
+
+                        <div class="col-md-8 my-profile">
+
+                            <label>کیفیت کار(لطفا از 1تا 5 امتیازی را به این فروشنده اختصاص دهید .)</label>
+                            <input asp-for="KeyfiateKar" type="number" min="0" max="5">
+
+                            <label>صحت اطلاعات(لطفا از 1تا 5 امتیازی را به این فروشنده اختصاص دهید .)</label>
+                            <input asp-for="SehateEtelaAt" type="number" min="0" max="5" class="form-control">
+
+                            <label>پاسخ گویی(لطفا از 1تا 5 امتیازی را به این فروشنده اختصاص دهید .)</label>
+                            <input asp-for="PasokhGoie" type="number" min="0" max="5" class="form-control">
+
+                            <label>خدمات پس از فروش(لطفا از 1تا 5 امتیازی را به این فروشنده اختصاص دهید .)</label>
+                            <input asp-for="KhadamatePasAzForosh" type="number" min="0" max="5" class="form-control">
+
+                            <label>تعهد زمان تحویل(لطفا از 1تا 5 امتیازی را به این فروشنده اختصاص دهید .)</label>
+                            <input asp-for="KhadamatePasAzForosh" type="number" min="0" max="5" class="form-control">
+
+                            <button type="submit" class="button margin-top-20 margin-bottom-20">ثبت امتیاز</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+

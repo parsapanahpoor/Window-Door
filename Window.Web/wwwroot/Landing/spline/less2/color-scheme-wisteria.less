@@ -1,0 +1,143 @@
+.color-scheme-wisteria {
+
+	color: @colorWisteriaText;
+	
+	body& {
+		background-color: @colorWisteriaBgSplash;
+	}
+	
+	hr {
+		border-color: @colorWisteriaHr;
+	}
+	  
+	.countdown {
+		.time {
+			border-color: @colorWisteriaCountdownBorder;
+			&:last-child {
+				border-color: @colorWisteriaCountdownBorder;
+			}
+		}
+		
+		.unit {
+			color: @colorWisteriaTextSecondary;
+		}
+				
+		&.circled {
+			.time {
+				background-color:  @colorWisteriaCountdownBg;
+			}
+			
+			&.large {
+				.time {
+					background-color: @colorWisteriaCountdownBg;
+				}
+			}
+		}
+	}
+	
+	.overlap {
+		background-color: @colorWisteriaBgContent;
+		
+		.more {
+			color: @colorWisteriaTextSecondary;
+			.fa {
+				background-color: @colorWisteriaTextSecondary;
+				color: @colorWisteriaBgSplash;
+			}
+		}
+	}
+	
+	.contact {
+		.icon {
+			background-color: @colorWisteriaTextMuted;
+			.fa {
+				color: @colorWisteriaBgContent;
+			}
+			border-color: @colorWisteriaTextMuted;
+		}
+	}
+	
+	.social {
+		.social-icon {
+			border-color: @colorWisteriaTextMuted;
+			color: @colorWisteriaBgContent;
+			&:link, &:visited {
+				color: @colorWisteriaTextSecondary;
+			}
+			
+			&:hover, &:active {
+				background-color: @colorWisteriaLinkHover;
+				color:  @colorWisteriaBgContent;
+			}
+		}
+	}
+	
+	.notify-by-email {
+		background-color: @colorWisteriaBgNotify;	
+		form {
+			input {
+				background-color: @colorWisteriaInputBg;
+			}
+			
+			.fa {
+				color: @colorWisteriaTextMuted;
+			}
+			
+			button {
+				background-color: @colorWisteriaButton;
+				color: @colorWisteriaButtonText;
+				&:hover {
+					background-color: @colorWisteriaButtonHover;
+				}
+			}
+			
+			.note, .message {
+				color: @colorWisteriaTextMuted;
+			}
+	
+			
+			&.success {
+				.fa, input, .message {
+					color: @colorWisteriaTextSuccess;
+				}
+			}
+			
+			&.error {
+				.fa, input, .message {
+					color: @colorWisteriaTextError;
+				}
+			}
+		}
+		
+		h3 {
+			color: @colorWisteriaTextSecondary;
+			&:before {
+				border-color: transparent transparent transparent @colorWisteriaTextMuted;
+			}
+	
+			&:after {
+				border-color: transparent transparent transparent @colorWisteriaBgNotify;
+			}
+		}	
+	}
+	
+	.note {
+		color: @colorWisteriaTextSecondary;
+	}
+	
+	.footer {
+		color: @colorWisteriaTextSecondary;
+	}
+	
+	a {
+		&:link { color: @colorWisteriaLink; }
+		&:visited { color: @colorWisteriaLinkVisited; }
+		&:hover { color: @colorWisteriaLinkHover; }
+		&:active { color: @colorWisteriaLinkHover; }
+	}
+	
+	.lead {
+		color: @colorWisteriaTextSecondary;
+	}
+}
+

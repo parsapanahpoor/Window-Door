@@ -117,7 +117,7 @@
 
                         <button type="submit" class="button fullwidth margin-top-30">استعلام گیری</button>
 
-                        <a style="background-color: #ce0505 !important;" asp-action="InquiryStep1" asp-controller="test" asp-area="" class="button fullwidth margin-top-30">حذف استعلام</a>
+                        <a style="background-color: #ce0505 !important;" asp-action="InquiryStep1" asp-controller="InquiryProduct" asp-area="" class="button fullwidth margin-top-30">حذف استعلام</a>
 
                     </div>
                     <!-- Widget / End -->
@@ -226,8 +226,8 @@
                                     </div>
 
                                     <div class="listing-footer">
-                                        <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="test" class="button" style="background-color: #13bbe2;"> نمایش اطلاعات فروشنده </a>
-                                        <a class="button" asp-action="AddScoreToSeller" asp-route-sellerId="@product.UserId" asp-area="" asp-controller="test" style="background-color: #c100d1;">  امتیاز دهی</a>
+                                        <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="button" style="background-color: #13bbe2;"> نمایش اطلاعات فروشنده </a>
+                                        <a class="button" asp-action="AddScoreToSeller" asp-route-sellerId="@product.UserId" asp-area="" asp-controller="InquiryProduct" style="background-color: #c100d1;">  امتیاز دهی</a>
                                     </div>
 
                                 </div>

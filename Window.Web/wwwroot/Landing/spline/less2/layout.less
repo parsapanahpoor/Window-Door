@@ -1,0 +1,476 @@
+body {
+	min-height: 100%;
+	margin: 0px;
+	padding: 0px;
+	font-family: 'Open Sans', 'Helvetia Neue', sans-serif;
+	font-weight: 100;
+	font-size: 15px;
+	line-height: 1.8;
+	color: @colorText;
+	background-color: @colorBgSplash;
+	min-width: 320px;
+}
+
+
+#bg-canvas {
+	margin: 0px; padding: 0px; border: 0px; position: fixed; z-index: 1;
+}
+
+
+/* Splash */
+
+.splash {
+	position: absolute;
+	z-index: 10;
+	width: 100%;
+	height: 100%;
+	min-width: 320px;
+	
+	.centered-unit {
+		position: absolute;
+		top: 50%;
+		margin-top: -220px;
+		width: 100%;
+		text-align: center;
+	}
+}
+
+
+/* Countdown */
+  
+.countdown {
+	margin: 70px auto;
+	text-align: center;
+	z-index: 10;
+	height: 90px;
+	&:after  {
+		content: ' ';
+		display: block;
+		clear: both;
+		width: 100%;
+		height: 0px;
+	}
+	
+	.time {
+		width: 90px;
+		height: 80px;
+		font-size: 30px;
+		line-height: 60px;
+		display: inline-block;
+		border-left: 1px solid @colorCountdownBorder;
+		.value {
+			height: 0px;
+		}
+
+		&:last-child {
+			border-right: 1px solid @colorCountdownBorder;
+		}
+	}
+	
+	.unit {
+		font-size: 8px;
+		text-transform: uppercase;
+		line-height: 10px;
+		color: @colorTextSecondary;
+		position: relative;
+		top: 53px;
+		font-weight: 500;
+	}
+	
+	&.large {
+	
+		@media (max-width: @screenMaxXS) {
+			height: 180px;
+			margin: 20px auto;
+			width: 200px;
+			.time {
+				float: left;
+				width: 98px;
+				&.hours, &.seconds {
+					border-left: 1px solid @colorCountdownBorder;
+					border-right: none;
+				}
+				&.minutes, &.days {
+					border-left: none;
+					border-right: none;
+				}
+				
+				&.minutes, &.seconds {
+					border-top: 1px solid @colorCountdownBorder;
+				}
+			}
+		}
+		
+		@media (min-width: @screenMinS) {
+			text-align: center;
+			z-index: 10;
+			
+			.time {
+				line-height: 100px;
+				font-size: 60px;
+				height: 120px;
+				width: 158px;
+			}
+			
+			.unit {
+				font-size: 10px;
+				top: 85px;
+			}
+		}
+		
+		
+		@media (min-width: @screenMinM) {
+			text-align: center;
+			z-index: 10;
+			
+			.time {
+				line-height: 100px;
+				font-size: 60px;
+				height: 120px;
+				width: 198px;
+			}
+			
+			.unit {
+				font-size: 10px;
+				top: 85px;
+			}
+		}
+
+
+	}
+	
+	&.circled {
+		.time {
+			background-color:  @colorCountdownBg;
+			border-radius: 200px;
+			margin: 3px;
+			height: 90px;
+			line-height: 80px;
+			border: none;
+		}
+		
+		.unit {
+			top: 55px;
+		}
+		
+		@media (max-width: @screenMaxXS) {
+			width: 195px;
+			.time {
+				float: left;
+				width: 90px;
+			}
+		}
+		
+		&.large {
+			
+		
+			@media (min-width: @screenMaxS) {
+				height: 150px;
+				
+				.time {
+					background-color: @colorCountdownBg;
+					border-radius: 200px;
+					font-size: 50px;
+					line-height: 135px;
+					margin: 5px;
+					width: 150px;
+					height: 150px;
+				}
+				
+				.unit {
+					top: 95px;
+				}
+			}
+		}
+	}
+}
+
+
+/* Overlap */
+
+.overlap {
+	position: absolute;
+	min-height: 100%;
+	top: 100%;
+	width: 100%;
+	margin-top: 0px;
+	background-color: @colorBgContent;
+	z-index: 10;
+	padding: 0px 0px 100px;
+	min-width: 320px;
+	
+	.border-box();
+	
+	.more {
+		display: block;
+		height: 20px;
+		padding: 10px 20px 15px;
+		position: absolute;
+		width: 250px;
+		text-align: center;
+		top: -45px;
+		left: 50%;
+		margin-left: -125px;
+		color: @colorTextSecondary;
+		text-decoration: none;
+		border-radius: 10px 10px 0px 0px;
+		text-transform: uppercase;
+		font-size: 11px;
+		font-weight: 500;
+		.fa {
+			padding: 5px;
+			background-color: @colorTextSecondary;
+			color: @colorBgSplash;
+			border-radius: 20px;
+			margin: 0px 10px;
+		}
+	}
+}
+
+/* Contact */
+
+.contact {
+	margin: 20px 0px;
+
+	.icon {
+		float: left;
+		width: 28px;
+		height: 28px;
+		line-height: 28px;
+		background-color: @colorTextMuted;
+		.fa {
+			color: @colorBgContent;
+		}
+		border: 1px solid @colorTextMuted;
+		text-align: center;
+		padding: 0px;
+		border-radius: 40px;
+	}
+
+	.value {
+		display: block;
+		margin: 0px 0px 0px 40px;
+		padding: 0px 0px 0px;
+	}
+
+}
+
+.social {
+	margin: 40px 0px 0px;
+		
+	.social-icon {
+		display: inline-block;
+		padding: 8px;
+		width: 28px;
+		height: 28px;
+		line-height: 28px;
+		text-align: center;
+		border: 1px solid @colorTextMuted;
+		border-radius: 30px;
+		color: @colorBgContent;
+		margin: 0px 10px 0px 0px;
+		
+		&:link, &:visited {
+			color: @colorTextSecondary;
+		}
+		
+		&:hover, &:active {
+			background-color: @colorLinkHover;
+			color:  @colorBgContent;
+			border: none;
+			padding: 9px;
+		}
+	}
+
+}
+
+
+
+.few-words {
+	margin: 80px auto 80px;
+}
+
+.notify-by-email {
+	margin: 0px auto 0px;
+	background-color: @colorBgNotify;	
+	
+	.container {
+		padding: 30px 0px 30px;
+	}
+	
+	form {
+		margin: 10px 0px 0px;
+		.clearfix();
+		
+		input {
+			border: none;
+			padding: 15px 20px;
+			background-color: @colorInputBg;
+			font-size: 20px;
+			font-weight: 100;
+			font-family: 'Open Sans';
+			height: 58px;
+			width: 70%;
+			float: left;
+			margin: 0px 0px 0px 0px;
+			.border-box();
+		}
+		
+		.fa {
+			position: absolute;
+			font-size: 30px;
+			margin: 13px 0px 0px -40px;
+			color: @colorTextMuted;
+		}
+		
+		button {
+			border: none;
+			padding: 15px 25px;
+			background-color: @colorButton;
+			font-size: 20px;
+			font-weight: 100;
+			font-family: 'Open Sans';
+			margin: 0px;
+			height: 58px;
+			color: @colorButtonText;
+			.border-box();
+			margin: 0px 0px 0px 0px;
+			cursor: pointer;
+			&:hover {
+				background-color: @colorButtonHover;
+			}
+		}
+		
+		.note, .message {
+			font-size: @fontSizeSmall;
+			color: @colorTextSecondary;
+			font-weight: 500;
+			margin: 5px 0px 0px;
+			clear: left;
+		}
+
+		
+		&.success {
+			.fa, input, .message {
+				color: @colorTextSuccess;
+			}
+		}
+		
+		&.error {
+			.fa, input, .message {
+				color: @colorTextError;
+			}
+		}
+		
+	}
+	
+	h3 {
+		margin: 20px 0px;
+		position: relative;
+		font-size: 22px;
+		padding: 0px 40px 5px 0px;
+		color: @colorTextMuted;
+		&:before {
+			content: " ";
+			display: block;
+			position: absolute;
+			width: 0px;
+			height: 0px;
+			right: -20px;
+			top: 0px;
+			border-width: 30px 0px 30px 20px;
+			border-style: solid;
+			border-color: transparent transparent transparent @colorTextSecondary;
+		}
+		&:after {
+			content: " ";
+			display: block;
+			position: absolute;
+			width: 0px;
+			height: 0px;
+			right: -19px;
+			top: 0px;
+			border-width: 30px 0px 30px 20px;
+			border-style: solid;
+			border-color: transparent transparent transparent @colorBgNotify;
+		}
+	}
+	
+	@media (max-width: @screenMaxXS) {
+		form {
+			input {
+				border: none;
+				padding: 10px 10px;
+				font-size: 15px;
+				height: 48px;
+				width: 65%;
+				border-radius: 0px;
+			}
+			
+			.fa {
+				position: absolute;
+				font-size: 22px;
+				margin: 13px 0px 0px -30px;
+				color: @colorTextMuted;
+			}
+			
+			button {
+				border: none;
+				padding: 10px 15px;
+				background-color: @colorButton;
+				font-size: 15px;
+				font-weight: 100;
+				font-family: 'Open Sans';
+				margin: 0px;
+				height: 48px;
+				color: @colorButtonText;
+				.border-box();
+				margin: 0px 0px 0px 0px;
+				cursor: pointer;
+				&:hover {
+					background-color: @colorButtonHover;
+				}
+			}
+		}
+	}
+
+}
+
+.note {
+	font-size: @fontSizeSmall;
+	color: @colorTextSecondary;
+	font-weight: 500;
+	margin: 5px 0px 0px;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	color: @colorTextMuted;
+	font-size: @fontSizeSmall;
+	.container {
+		padding: 50px 0px 30px;
+		height: 20px;		
+	}
+}
+
+// Responsive
+
+@media (max-width: @screenMaxM) {
+	.social {
+		margin: 30px 0px;
+	}
+}
+
+@media (max-width: @screenMaxS) {
+	.notify-by-email {
+		h3 {
+			&:after, &:before {
+				display: none;
+			}
+		}
+	}
+}
+
