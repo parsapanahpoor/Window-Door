@@ -106,5 +106,15 @@ namespace Window.Application.Services.Services
         }
 
         #endregion
+
+        #region Site Side 
+
+        //Get List Of Technical Issues
+        public async Task<List<TechnicalIssues>> GetListOfTechnicalIssues()
+        {
+            return await _context.TechnicalIssues.Where(p => !p.IsDelete).ToListAsync();
+        }
+
+        #endregion
     }
 }

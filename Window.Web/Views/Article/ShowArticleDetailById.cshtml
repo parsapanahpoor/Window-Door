@@ -1,0 +1,96 @@
+﻿@model Window.Domain.Entities.Article.Article
+
+@using Window.Application.StticTools
+@using Window.Application.Convertors
+@using Window.Application.Extensions
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+@section Styles
+    {
+}
+
+    @section Scripts
+    {
+}
+
+    <div class="parallax titlebar" data-background="@FilePaths.ArticleThumbimage/@Model.Image" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -274.894px;">
+        <div class="parallax-overlay" style="background-color: rgb(51, 51, 51); opacity: 0.7;"></div>
+
+        <div id="titlebar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <h2>@Model.Title</h2>
+                        <span>@Model.ShortDescription</span>
+
+                        <!-- Breadcrumbs -->
+                        <nav id="breadcrumbs">
+                            <ul>
+                                <li><a href="/">خانه</a></li>
+                            </ul>
+                        </nav>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Blog Posts -->
+        <div class="blog-page">
+            <div class="row">
+
+                <div class="col-md-2"></div>
+
+                <!-- Post Content -->
+                <div class="col-md-8">
+
+
+                    <!-- Blog Post -->
+                    <div class="blog-post single-post">
+
+                        <!-- Img -->
+                        <img class="post-img" src="@FilePaths.ArticleOriginimage/@Model.Image" alt="">
+
+                        <!-- Content -->
+                        <div class="post-content">
+                            <h3>@Model.Title</h3>
+
+                            <ul class="post-meta">
+                                <li>@Model.CreateDate.ToStringShamsiDate()</li>
+                            </ul>
+
+                            <p>
+                                @Model.ShortDescription
+                            </p>
+
+                            <p>
+                            @Html.Raw(Model.Description)
+                                </p>
+
+                        </div>
+                    </div>
+
+
+                    <!-- About Author -->
+                    <div class="about-author">
+                        <img src="@Model.Author.GetUserAvatar()" alt="">
+                        <div class="about-description">
+                            <h4>@Model.Author.Username</h4>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Content / End -->
+
+            </div>
+            <!-- Sidebar / End -->
+
+        </div>
+    </div>

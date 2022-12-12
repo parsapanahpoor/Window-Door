@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using Window.Application.Services.Interfaces;
@@ -107,5 +108,14 @@ namespace Window.Application.Services.Services
 
         #endregion
 
+        #region Site Side 
+
+        //List Of Consoltant For Show Site Side 
+        public async Task<List<Window.Domain.Entities.Counseling.Counseling>> ListOfConsoltantForShowSiteSide()
+        {
+            return await _context.Counselings.Where(p => !p.IsDelete).ToListAsync();
+        }
+
+        #endregion
     }
 }

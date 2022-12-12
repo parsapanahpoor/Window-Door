@@ -15,7 +15,7 @@
 
                 <!-- Logo -->
                 <div id="logo" class="margin-top-10">
-                    <a href="index.html"><img src="/Site/images/logo.png" alt=""></a>
+                    <a href="/"><img src="/Site/images/logo.png" alt=""></a>
                 </div>
 
                 <!-- Mobile Navigation -->
@@ -61,19 +61,53 @@
                         </ul>
                     </li>
 
+                    <li>
+                        <a asp-action="ListOfTechnicalIssuse" asp-area="" asp-controller="TechnicalIssues">تضمین در خرید</a>
+                    </li>
+
+                     <li>
+                        <a asp-action="ListOfConsultant" asp-area="" asp-controller="Consultant">مشاوره ی رایگان</a>
+                    </li>
+
+                    <li>
+                        <a asp-action="ListOfArticles" asp-area="" asp-controller="Article">مسائل فنی درب و پنجره</a>
+                    </li>
+
+                    <li>
+                        <a asp-action="ListOfQuestionAndAnswers" asp-area="" asp-controller="QA">سوالات متداول</a>
+                    </li>
+
                     <!-- 						<li class="right-side-menu-item"><a href="login-register.html" class="sign-in"><i class="fa fa-user"></i> Log In / Register</a></li> -->
                 </ul>
+
             </div>
         </nav><nav id="navigation" class="style-2 cloned unsticky">
             <div class="container">
                 <ul id="responsive">
         
+                    <a href="/" class="sticky-logo" ><img src="/Site/images/logo.png" alt=""></a>
+
                     <li>
                         <a class="current" href="#">استعلام گیری</a>
                         <ul>
                             <li><a asp-area="" asp-controller="InquiryProduct" asp-action="InquiryStep1">استعلام گیری</a></li>
                             <li><a asp-area="" asp-controller="InquiryProduct" asp-action="GetUserLastestInquiry">آخرین استعلام شما</a></li>
                         </ul>
+                    </li>
+                    <li>
+                        <a asp-action="ListOfTechnicalIssuse" asp-area="" asp-controller="TechnicalIssues">تضمین در خرید</a>
+                    </li>
+
+                    <li>
+                        <a asp-action="ListOfConsultant" asp-area="" asp-controller="Consultant">مشاوره ی رایگان</a>
+                    </li>
+
+                    <li>
+                        <a asp-action="ListOfArticles" asp-area="" asp-controller="Article">مسائل فنی درب و پنجره</a>
+                    </li>
+
+                    <li>
+                        <a asp-action="ListOfQuestionAndAnswers" asp-area="" asp-controller="QA">سوالات متداول</a>
                     </li>
                     <!-- 						<li class="right-side-menu-item"><a href="login-register.html" class="sign-in"><i class="fa fa-user"></i> Log In / Register</a></li> -->
                 </ul>

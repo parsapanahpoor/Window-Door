@@ -1,6 +1,6 @@
-﻿@model List<Window.Domain.Entities.QuestionAnswer.QuestionAnswer>
+﻿@model List<Window.Domain.Entities.TechnicalIssues.TechnicalIssues>
 @{
-    ViewData["Title"] = "سوالات متداول ";
+    ViewData["Title"] = "تضمین در خرید ";
 }
 
 @section Styles
@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col-md-12">
 
-                        <h2>سوالات متداول</h2>
+                        <h2>تضمین در خرید</h2>
                         <span>افزایش آگاهی شما در دستور کار ما قرار دارد .</span>
 
                         <!-- Breadcrumbs -->
@@ -41,7 +41,7 @@
 
             <div class="col-md-12">
 
-                <h4 class="headline margin-top-0 margin-bottom-20">سوال  های متدوال</h4>
+                <h4 class="headline margin-top-0 margin-bottom-20">تضمین در خرید</h4>
 
                 <!-- Toggles Container -->
                 <div class="style-2">
@@ -51,9 +51,9 @@
                     foreach (var item in Model)
                     {
                         <div class="toggle-wrap">
-                            <span class="trigger"><a href="#"><i class="sl sl-icon-pin"></i>@item.Question <i class="sl sl-icon-plus"></i> </a></span>
+                            <span class="trigger"><a href="#"><i class="sl sl-icon-pin"></i>@item.Title <i class="sl sl-icon-plus"></i> </a></span>
                             <div class="toggle-container" style="display: none;">
-                                <p>@item.Answer</p>
+                                <p>@item.Description</p>
                             </div>
                         </div>
                     }

@@ -11,9 +11,7 @@ using Window.Web.HttpServices;
 
 namespace Window.Web.Controllers
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class ArticleController : ControllerBase
+    public class ArticleController : SiteBaseController
     {
         #region Constructor
 
@@ -30,40 +28,49 @@ namespace Window.Web.Controllers
 
         #region Get List Of Articles
 
-        [HttpGet("get-articles")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetArticles()
+        public async Task<IActionResult> ListOfArticles(int pageId = 1)
         {
             var model = await _articleService.GetListOfArticles();
+            if (model == null) return NotFound();
 
-            return JsonResponseStatus.Success(model);
+            #region Paginaition
+
+            ViewBag.pageId = pageId;
+
+            int take = 20;
+
+            int skip = (pageId - 1) * take;
+
+            int pageCount = (model.Count() / take);
+
+            if ((pageCount % 2) == 0 || (pageCount % 2) != 0)
+            {
+                pageCount += 1;
+            }
+
+            var query = model.Skip(skip).Take(take).ToList();
+
+            var viewModel = Tuple.Create(query, pageCount);
+
+            #endregion
+
+            return View(viewModel);
         }
 
-        [HttpGet("get-articles1")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetArticles1()
+        #endregion
+
+        #region Show Article Detail 
+
+        public async Task<IActionResult> ShowArticleDetailById(ulong id)
         {
-            var model = await _articleService.GetListOfArticles();
+            #region Get Article By Id
 
-            return new ObjectResult(model);
-        }
+            var model = await _articleService.GetArticleByIdAsync(id);
+            if (model == null) return NotFound();
 
-        [HttpGet("get-articles2")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetArticles2()
-        {
-            var model = await _articleService.GetListOfArticles();
+            #endregion
 
-            return Ok(model);
-        }
-
-        [HttpGet("get-articlesDetail/{id}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetArticles2(ulong id)
-        {
-            var model = await _articleService.GetArticleByIdWhitoutAuthorAsync(id);
-
-            return Ok(model);
+            return View(model);
         }
 
         #endregion

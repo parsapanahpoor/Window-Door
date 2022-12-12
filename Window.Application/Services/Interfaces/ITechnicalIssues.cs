@@ -28,5 +28,12 @@ namespace Window.Application.Services.Interfaces
         Task<bool> DeleteTechnicalIssues(ulong id);
 
         #endregion
+
+        #region Site Side 
+
+        //Get List Of Technical Issues
+        Task<List<TechnicalIssues>> GetListOfTechnicalIssues();
+
+        #endregion
     }
 }

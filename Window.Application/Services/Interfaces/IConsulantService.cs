@@ -28,5 +28,12 @@ namespace Window.Application.Services.Interfaces
         Task<bool> DeleteConsultant(ulong id);
 
         #endregion
+
+        #region Site Side 
+
+        //List Of Consoltant For Show Site Side 
+        Task<List<Window.Domain.Entities.Counseling.Counseling>> ListOfConsoltantForShowSiteSide();
+
+        #endregion
     }
 }
