@@ -201,6 +201,15 @@ builder.Services.AddCors(
 
 #endregion
 
+#region IP Address
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
+    });
+
+#endregion
+
 #endregion
 
 #region MiddleWares
@@ -246,6 +255,7 @@ app.UseRequestLocalization(options);
 
 SiteCurrentContext.Configure(app.Services.GetRequiredService<IHttpContextAccessor>());
 
+app.UseForwardedHeaders();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

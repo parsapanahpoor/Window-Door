@@ -26,10 +26,8 @@ Purchase: https://wrapbootstrap.com/theme/beyondadmin-adminapp-angularjs-mvc-WB0
     <div class="main-container container-fluid">
         <div class="page-container">
             @await Component.InvokeAsync("SideBar")
-            @if (User.Identity.IsAuthenticated)
-            {
+           
                 @await Component.InvokeAsync("ChatBar")
-            }
             <div class="page-content">
                 <div class="page-breadcrumbs">
                     <ul class="breadcrumb">

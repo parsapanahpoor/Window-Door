@@ -44,6 +44,30 @@
             display: block !important;
         }
 
+        #SellerType_chosen {
+            display: none;
+        }
+
+        #MainBrandId_chosen {
+            display: none;
+        }
+
+        #GlassId_chosen {
+            display: none;
+        }
+
+        #SellerType {
+            display: block !important;
+        }
+
+        #MainBrandId {
+            display: block !important;
+        }
+
+        #GlassId {
+            display: block !important;
+        }
+
     </style>
 }
 
@@ -178,14 +202,10 @@
                                 </select>
                             </div>
 
-                        </div>
-                        <!-- Row With Forms / End -->
-                        <!-- Row With Forms -->
-                        <div class="row with-forms" style="margin-top:15px">
 
-                            <!-- Property Type -->
-                            <div class="col-md-4">
-                                <select asp-for="SellerType" data-placeholder="جنس کالا" class="chosen-select-no-single" style="display: none;">
+                                                <!-- Property Type -->
+                                <div class="col-md-4">
+                                       <select asp-for="SellerType" data-placeholder="جنس کالا" class="chosen-select-no-single" style="display: none;">
                                     <option value="0">UPVC</option>
                                     <option value="1">آلمینیوم</option>
                                 </select>
@@ -219,7 +239,7 @@
                             </div>
 
                         </div>
-                        <!-- Row With Forms / End -->
+        
                         <!-- Row With Forms -->
                         <div class="row with-forms" style="margin-top:15px">
 

@@ -12,6 +12,7 @@ using System.Text.Json;
 using Window.Application.Extensions;
 using Window.Domain.Enums.SellerType;
 using System.Text.Json.Serialization;
+using System.Net;
 
 namespace Window.Web.Controllers
 {
@@ -42,72 +43,10 @@ namespace Window.Web.Controllers
 
         #region Index 
 
-        public async Task<IActionResult> Index(FilterInquiryViewModel filter, bool redirect = false)
+        public async Task<IActionResult> Index()
         {
-            #region Location ViewBags 
 
-            ViewData["Countries"] = await _stateService.GetAllCountries();
-
-            if (filter.CountryId != null)
-            {
-                ViewData["States"] = await _stateService.GetStateChildren(filter.CountryId.Value);
-                if (filter.StateId != null)
-                {
-                    ViewData["Cities"] = await _stateService.GetStateChildren(filter.StateId.Value);
-                }
-            }
-
-            #endregion
-
-            #region Sample View Bag
-
-            ViewData["Sample"] = await _sampleService.GetAllSample();
-
-            #endregion
-
-            #region Brand ViewBag
-
-            ViewBag.Brand = await _brandService.GetAllBrands();
-
-            #endregion
-
-            #region Set Session
-
-            if (redirect == false)
-            {
-                if (HttpContext.Session.GetString("SellerFilter") == null)
-                {
-                    SellersFieldFitreViewModel sellerFilter = new SellersFieldFitreViewModel();
-
-                    sellerFilter.CountryId = filter.CountryId;
-                    sellerFilter.StateId = filter.StateId;
-                    sellerFilter.CityId = filter.CityId;
-                    sellerFilter.SellerType = filter.SellerType;
-                    sellerFilter.BrandId = filter.MainBrandId;
-                    sellerFilter.UserId = User.GetUserId();
-
-                    HttpContext.Session.SetString("SellerFilter", JsonSerializer.Serialize(sellerFilter));
-                }
-                else
-                {
-                    var value = HttpContext.Session.GetString("SellerFilter");
-                    var list = JsonSerializer.Deserialize<SellersFieldFitreViewModel>(value);
-
-                    if (list.UserId == User.GetUserId())
-                    {
-                        list.CountryId = filter.CountryId;
-                        list.StateId = filter.StateId;
-                        list.CityId = filter.CityId;
-                        list.SellerType = filter.SellerType;
-                        list.BrandId = filter.MainBrandId;
-                        list.UserId = User.GetUserId();
-                    }
-
-                    HttpContext.Session.SetString("SellerFilter", JsonSerializer.Serialize(list));
-                }
-            }
-
-            #endregion
+        
 
             return View();
         }

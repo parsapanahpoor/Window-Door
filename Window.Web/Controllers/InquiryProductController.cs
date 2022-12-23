@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Enums.SellerType;
@@ -8,21 +9,15 @@ using Window.Domain.ViewModels.Site.Inquiry;
 
 namespace Window.Web.Controllers
 {
-    [Authorize]
     public class InquiryProductController : SiteBaseController
     {
         #region Ctor
 
         private readonly IProductService _productService;
-
         private readonly IStateService _stateService;
-
         private readonly IBrandService _brandService;
-
         private readonly ISampleService _sampleService;
-
         private readonly IInquiryService _inquiryService;
-
         private readonly ISellerService _sellerService;
 
         public InquiryProductController(IProductService prodcutService, IStateService stateService, IBrandService brandService
@@ -34,9 +29,9 @@ namespace Window.Web.Controllers
             _sampleService = sampleService;
             _inquiryService = inquiryService;
             _sellerService = sellerService;
-        }
 
-        #endregion
+            #endregion
+        }
 
         #region Inquiry Step 1
 
@@ -69,7 +64,13 @@ namespace Window.Web.Controllers
 
             #endregion
 
-            ViewBag.UserId = User.GetUserId();
+            #region Get User Ip Address
+
+            string Ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
+
+            #endregion
+
+            ViewBag.UserId = Ip;
 
             return View();
         }
@@ -336,8 +337,14 @@ namespace Window.Web.Controllers
 
         public async Task<IActionResult> LastUserInquryBaseOnUserLog()
         {
+            #region Get User Ip Address
+
+            string Ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
+
+            #endregion
+
             //Get User ID 
-            var userId = User.GetUserId();
+            var userId = Ip;
 
             return RedirectToAction(nameof(InquiryStep4), new { userMacAddress = userId });
         }
@@ -380,6 +387,12 @@ namespace Window.Web.Controllers
 
             #endregion
 
+            #region Get User Ip Address
+
+            string Ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
+
+            #endregion
+
             #region Add Score For Seller
 
             if (model.SehateEtelaAt > 5 || model.SehateEtelaAt < 0
@@ -392,7 +405,7 @@ namespace Window.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var res = await _inquiryService.AddScoreForSeller(model, User.GetUserId().ToString());
+            var res = await _inquiryService.AddScoreForSeller(model, Ip);
 
             if (res)
             {
@@ -411,9 +424,15 @@ namespace Window.Web.Controllers
 
         public async Task<IActionResult> DeleteUserLasteInquiryDetail(ulong Id)
         {
+            #region Get User Ip Address
+
+            string Ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
+
+            #endregion
+
             #region Remove Method
 
-            var res = await _inquiryService.DeleteUserLastestInquiryDetail(Id, User.GetUserId().ToString());
+            var res = await _inquiryService.DeleteUserLastestInquiryDetail(Id, Ip);
             if (res == false)
             {
                 TempData[ErrorMessage] = "نتیجه ای برای استعلام شما یافت نشده است .";
@@ -422,7 +441,7 @@ namespace Window.Web.Controllers
 
             #endregion
 
-            return RedirectToAction(nameof(GetUserLastestInquiry), new { userMacAddress = User.GetUserId().ToString() });
+            return RedirectToAction(nameof(GetUserLastestInquiry), new { userMacAddress = Ip });
         }
 
         #endregion
@@ -432,9 +451,15 @@ namespace Window.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserLastestInquiry(string userMacAddress)
         {
+            #region Get User Ip Address
+
+            string Ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
+
+            #endregion
+
             #region Get List Of Lastest Inquiry
 
-            var res = await _inquiryService.GetUserLastestInquiryDetailForChange(User.GetUserId().ToString());
+            var res = await _inquiryService.GetUserLastestInquiryDetailForChange(Ip);
             if (res == null)
             {
                 TempData[ErrorMessage] = "نتیجه ای برای استعلام شما یافت نشده است .";
@@ -443,7 +468,7 @@ namespace Window.Web.Controllers
 
             #endregion
 
-            ViewBag.UserMacAddress = User.GetUserId().ToString();
+            ViewBag.UserMacAddress = Ip;
 
             return View(res);
         }
@@ -451,6 +476,12 @@ namespace Window.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> GetUserLastestInquiry(ulong inquiryDetailId, ulong sampleId, int width, int height, int? katibeSize, string userMacAddress, int? SampleCount)
         {
+            #region Get User Ip Address
+
+            string Ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
+
+            #endregion
+
             #region Get Samples For Show In Page Model
 
             var samples = await _sampleService.GetListOfSamplesForShowInAPI(userMacAddress);
@@ -515,7 +546,7 @@ namespace Window.Web.Controllers
 
             #endregion
 
-            ViewBag.UserMacAddress = User.GetUserId().ToString();
+            ViewBag.UserMacAddress = Ip;
 
             return RedirectToAction(nameof(GetUserLastestInquiry));
         }

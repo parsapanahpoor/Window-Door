@@ -142,10 +142,9 @@
 
 <div class="clearfix"></div>
 
-@if (User.Identity.IsAuthenticated)
-{
+
     @await Component.InvokeAsync("NewChatBar")
-}
+
 
 
 <!-- Header Container
