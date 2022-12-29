@@ -12,7 +12,7 @@ namespace Window.Application.StticTools
         #region Site
 
         public static string SiteFarsiName = "Windows";
-        public static string SiteAddress = "https://parsapnrshop.ir/";
+        public static string SiteAddress = "https://panjerehyab.ir";
 
         public static readonly string SiteLogo = "/content/images/site/logo/main/";
         public static readonly string SiteLogoServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/site/logo/main/");
