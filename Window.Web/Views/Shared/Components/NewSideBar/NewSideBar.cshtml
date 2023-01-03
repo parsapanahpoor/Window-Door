@@ -37,8 +37,11 @@
                         @if (!User.Identity.IsAuthenticated)
                         {
                             <a asp-area="" asp-controller="Identity" asp-action="Login" class="sign-in"> ورود</a>
+                            <a asp-area="" asp-controller="Identity" asp-action="Register" class="sign-in"> ثبت نام </a>
+                        }else
+                        {
+                        <a asp-area="" asp-controller="Market" asp-action="AddMarket" class="button border">ثبت فروشگاه </a>
                         }
-                        <a asp-area="" asp-controller="Market" asp-action="AddMarket" class="button border">درخواست ثبت فروشگاه </a>
                     </li>
                 </ul>
             </div>

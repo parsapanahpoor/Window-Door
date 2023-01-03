@@ -7,15 +7,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>پنجره یاب |مرجع رسمی قیمت گذاری درب و پنجره</title>
-    <link rel="shortcut icon" href="/Site/Manifest/logo.png" />
     <!-- Modernizr -->
-    <!-- <script src="js/modernizr.js"></script> -->
+    <!-- <script src="/Landing/js/modernizr.js"></script> -->
     <!-- Open Sans from Google Webfonts -->
     <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'> -->
-    @*Manifest*@
-    <link rel="manifest" href="~/Site/Manifest/manifest.json">
-
     <!-- Main styles file -->
+    <link rel="shortcut icon" href="/admin/img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="/Landing/css/bootstrap.min.css">
     <link rel="stylesheet" href="/Landing/css/styles.css" />
     <link rel="stylesheet" href="/Landing/css/component.css" />
@@ -23,6 +20,13 @@
     <link rel="stylesheet" href="/Landing/css/font-awesome.min.css" />
     <!-- #94151D,#EF394E -->
     <style>
+        @@media(min-width:1000px) {
+            .cs-style-4 li {
+                height: inherit;
+                width: 230px;
+            }
+        }
+
         @@media(max-width:400px) {
             h1 {
                 margin-top: -40px;
@@ -31,7 +35,7 @@
 
         @@media(max-width:500px) {
             h1 {
-                margin-top: 76px;
+                margin-top: 20px;
             }
         }
 
@@ -63,7 +67,7 @@
             }
 
             .res_h1 {
-                display: none;
+                font-size: 16px;
             }
 
             .cs-style-4 figcaption a {
@@ -75,6 +79,10 @@
             .grid figcaption a {
                 padding: 5px 5.3px !important;
                 border-radius: 2px !important;
+            }
+
+            footer {
+                right: 0%;
             }
         }
 
@@ -119,51 +127,59 @@
         <div class="centered-unit">
             <div class="container">
                 <!-- Main header -->
-                <h1>پنجره یاب</h1>
+                <h1 class="title_header">پنجره یاب</h1>
                 <!-- Sub header -->
-                <p class="lead">مرجع قیمت گذاری درب و پنجره</p>
+                <p class="lead"> مرجع قیمت گذاری درب و پنجره در ایران</p>
                 <div class="row row-respansiv over-hidden">
                     <ul class="grid cs-style-4">
                         <li class="col-md-3 col-sm-6 col-500 col-520">
-
                             <figure>
                                 <div>
                                     <a asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct">
                                         <img src="/Landing/images/1.jpg" alt="image 1">
                                     </a>
                                 </div>
+                                <!--<figcaption>
+                                  <h1>استعلام رایگان</h1>
+                                  <small>توی چند ثانیه هر درب و پنجره ای بخای استعلام میگیری</small>
+                                  <a href="#">کلیک کن</a>
+                                </figcaption>-->
+                                <a asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct"> <h4 class="res_h1">استعلام رایگان</h4>  </a>
+
+                            </figure>
                         </li>
 
                         <li class="col-md-3 col-sm-6 col-501 col-521">
                             <figure>
                                 <div>
                                     <a asp-action="ListOfTechnicalIssuse" asp-area="" asp-controller="TechnicalIssues">
-                                                                            <img src="/Landing/images/2.jpg" alt="image 2">
+                                        <img src="/Landing/images/2.jpg" alt="image 2">
                                     </a>
                                 </div>
-                                <!--<figcaption>
+                                <!-- <figcaption>
                                   <h1 class="res_h1">تضمین در خرید</h1>
                                   <small class="res_small">انتخاب کن، تضمین با ما</small>
                                   <a href="#">کلیک کن</a>
-                                </figcaption>-->
+                                </figcaption> -->
                             </figure>
+                            <a asp-action="ListOfTechnicalIssuse" asp-area="" asp-controller="TechnicalIssues"> <h4 class="res_h1">تضمین در خرید</h4></a>
                         </li>
 
                         <li class="col-md-3 col-sm-6 col-501 col-521">
+
                             <figure>
                                 <div>
                                     <a asp-action="ListOfConsultant" asp-area="" asp-controller="Consultant">
-
                                         <img src="/Landing/images/3.jpg" alt="image 3">
-
                                     </a>
-                                    </div>
+                                </div>
                                 <!--<figcaption>
-                                  <h1 class="res_h1">مشاور رایگان</h1>
-                                  <small class="res_small">پشتیبان های ما توی انتخاب درست بهت کمک میکنند</small>
-                                  <a href="#">کلیک کن</a>
-                                </figcaption>-->
+                                   <h1 class="res_h1">مشاور رایگان</h1>
+                                   <small class="res_small">پشتیبان های ما توی انتخاب درست بهت کمک میکنند</small>
+                                   <a href="#">کلیک کن</a>
+                                 </figcaption>-->
                             </figure>
+                            <a asp-action="ListOfConsultant" asp-area="" asp-controller="Consultant"><h4 class="res_h1">مشاوره رایگان</h4></a>
                         </li>
 
                         <li class="col-md-3 col-sm-6 col-501 col-521">
@@ -172,13 +188,14 @@
                                     <a asp-action="ListOfArticles" asp-area="" asp-controller="Article">
                                         <img src="/Landing/images/4.jpg" alt="image 3">
                                     </a>
-                                    </div>
+                                </div>
                                 <!--<figcaption>
                                   <h1 class="res_h1">مسائل درب و پنجره</h1>
                                   <small class="res_small">مقالات ما بهت توی انتخاب کمک میکنند</small>
                                   <a href="#">کلیک کن</a>
                                 </figcaption>-->
                             </figure>
+                            <a asp-action="ListOfArticles" asp-area="" asp-controller="Article"><h4 class="res_h1">مسائل درب و پنجره</h4></a>
                         </li>
                     </ul>
                 </div>
@@ -187,54 +204,58 @@
                         <li class="col-md-4 col-sm-6 col-501 col-521">
                             <figure>
                                 <div>
-
                                     <a asp-action="ListOfQuestionAndAnswers" asp-area="" asp-controller="QA">
-                                       <img src="/Landing/images/5.jpg" alt="image 1"></a> </div>
+                                        <img src="/Landing/images/5.jpg" alt="image 1">
+                                    </a>
+                                </div>
                                 <!--<figcaption>
                                   <h1 class="res_h1">سوالات متداول</h1>
                                   <small class="res_small">به سوالات ذهنی ات پاسخ دادیم</small>
                                   <a href="#">کلیک کن</a>
                                 </figcaption>-->
                             </figure>
+                            <a asp-action="ListOfQuestionAndAnswers" asp-area="" asp-controller="QA"><h4 class="res_h1">سوالات متداول</h4></a>
                         </li>
 
                         <li class="col-md-4 col-sm-6 col-501 col-521">
                             <figure>
                                 <div><img src="/Landing/images/6.jpg" alt="image 2"></div>
-                                <!--<figcaption>
+                                <!-- <figcaption>
                                   <h1 class="res_h1">باشگاه مشتریان</h1>
                                   <small class="res_small">بهت میگیم کی بهمون ملحق بشی:)</small>
                                   <a href="#">به زودی</a>
-                                </figcaption>-->
+                                </figcaption> -->
                             </figure>
+                            <h4 class="res_h1">باشگاه مشتریان</h4>
                         </li>
 
                         <li class="col-md-4 col-sm-6 col-501 col-521">
                             <figure>
                                 <div><img src="/Landing/images/7.jpg" alt="image 3"></div>
-                                <!--<figcaption>
+                                <!-- <figcaption>
                                   <h1 class="res_h1">فروشگاه</h1>
                                   <small class="res_small">هر درب و پنجره ای که بخای برات میاریم</small>
                                   <a href="#">به زودی</a>
-                                </figcaption>-->
+                                </figcaption> -->
                             </figure>
+                            <h4 class="res_h1">فروشگاه</h4>
                         </li>
                     </ul>
                 </div>
             </div>
+            <footer class="footer"><a href="https://www.fara-zaman.ir" class="footer-link" target="_blank">طراحی و توسعه توسط شرکت برنامه نویسی فـــرا زَمـــان</a></footer>
         </div>
+
     </div>
 
-    @*PWA Downloader Confige*@
-    <script src="~/Site/js/PWADownloader.js"></script>
 
     <!-- JavaScripts -->
     <script src="/Landing/js/jquery.js"></script>
-    <!-- <script src="js/countdown.js"></script> -->
+    <!-- <script src="/Landing/js/countdown.js"></script> -->
     <script src="/Landing/js/bezierCanvas.js"></script>
     <script src="/Landing/js/notifyMe.js"></script>
     <script src="/Landing/js/modernizr.custom.js"></script>
-    <!-- <script src="js/toucheffects.js"></script> -->
+    <!-- <script src="/Landing/js/toucheffects.js"></script> -->
     <script type="text/javascript">
         $().ready(function () {
 

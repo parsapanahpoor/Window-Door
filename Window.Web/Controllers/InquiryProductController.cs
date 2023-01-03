@@ -30,8 +30,10 @@ namespace Window.Web.Controllers
             _inquiryService = inquiryService;
             _sellerService = sellerService;
 
-            #endregion
+
         }
+
+        #endregion
 
         #region Inquiry Step 1
 
@@ -39,15 +41,11 @@ namespace Window.Web.Controllers
         {
             #region Location ViewBags 
 
-            ViewData["Countries"] = await _stateService.GetAllCountries();
+            ViewData["States"] = await _stateService.GetStateChildren(1);
 
-            if (filter.CountryId != null)
+            if (filter.StateId != null)
             {
-                ViewData["States"] = await _stateService.GetStateChildren(filter.CountryId.Value);
-                if (filter.StateId != null)
-                {
-                    ViewData["Cities"] = await _stateService.GetStateChildren(filter.StateId.Value);
-                }
+                ViewData["Cities"] = await _stateService.GetStateChildren(filter.StateId.Value);
             }
 
             #endregion
@@ -79,7 +77,7 @@ namespace Window.Web.Controllers
 
         #region Test For Step 2
 
-        public async Task<IActionResult> InquiryStep2(ulong CountryId, ulong StateId, ulong CityId, ProductType? ProductType, ProductKind? ProductKind, SellerType? SellerType, ulong? MainBrandId, ulong? GlassId, string UserMacAddress)
+        public async Task<IActionResult> InquiryStep2(ulong StateId, ulong CityId, ProductType? ProductType, ProductKind? ProductKind, SellerType? SellerType, ulong? MainBrandId, ulong? GlassId, string UserMacAddress)
         {
             #region Model State Valdiation
 
@@ -95,7 +93,7 @@ namespace Window.Web.Controllers
 
             FilterInquiryViewModel log = new FilterInquiryViewModel()
             {
-                CountryId = CountryId,
+                CountryId = 1,
                 StateId = StateId,
                 CityId = CityId,
                 MainBrandId = MainBrandId,
@@ -198,6 +196,8 @@ namespace Window.Web.Controllers
 
             ViewBag.UserMacAddress = userMacAddress;
 
+            TempData[SuccessMessage] = "محصول مورد نظر به سبد شما اضافه شده است.";
+            TempData[InfoMessage] = "شما میتوانید مجدد اندازه ی جدیدی را وارد کنید.";
             return View(samples);
         }
 

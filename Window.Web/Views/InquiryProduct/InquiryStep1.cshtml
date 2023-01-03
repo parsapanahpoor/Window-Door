@@ -20,20 +20,12 @@
     {
     <style>
 
-        #CountryId_chosen {
-            display: none;
-        }
-
         #StateId_chosen {
             display: none;
         }
 
         #CityId_chosen {
             display: none;
-        }
-
-        #CountryId {
-            display: block !important;
         }
 
         #StateId {
@@ -75,28 +67,6 @@
     {
 
     <script>
-        $("#CountryId").change(function () {
-            if ($("#CountryId :selected").val() !== '') {
-                $('#CityId option:not(:first)').remove();
-                $('#StateId option:not(:first)').remove();
-                $.get("/Home/LoadCities", { stateId: $("#CountryId :selected").val() }).then(res => {
-                    if (res.data !== null) {
-                        $("#StateId").append(
-                            '<option>' + "لطفا یک استان را انتخاب کنید" + '</option>'
-                        );
-                        $.each(res.data, function () {
-                            $("#StateId").append(
-                                '<option value=' + this.id + '>' + this.title + '</option>'
-                            );
-                        });
-                        $("#StateId").removeAttr("disabled");
-                    }
-                });
-            } else {
-                $('#StateId option:not(:first)').remove();
-                $('#CityId option:not(:first)').remove();
-            }
-        });
 
         $("#StateId").change(function () {
             if ($("#StateId :selected").val() !== '') {
@@ -139,27 +109,6 @@
                             <!-- Row With Forms -->
                             <div class="row with-forms">
 
-                                <!-- Property Type -->
-                                <div class="col-md-4">
-                                    <select asp-for="CountryId" data-placeholder="کشور" class="chosen-select-no-single" style="display: none;">
-                                        <option value=""> لطفا یک کشور را انتخاب کنید </option>
-                                    @if (countries != null && countries.Any())
-                                    {
-                                        foreach (var country in countries)
-                                        {
-                                            if (Model != null && Model.CountryId == country.Id)
-                                            {
-                                                <option value="@country.Id" selected="selected"> @country.Title </option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@country.Id"> @country.Title </option>
-                                            }
-                                        }
-                                    }
-                                </select>
-                            </div>
-
                             <!-- Status -->
                             <div class="col-md-4">
                                 <select asp-for="StateId" data-placeholder="استان" class="chosen-select-no-single" style="display: none;">
@@ -185,9 +134,9 @@
                             <div class="col-md-4">
                                 <select asp-for="CityId" data-placeholder="شهر" class="chosen-select-no-single" style="display: none;">
                                     <option value=""> لطفا یک شهر را انتخاب کنید </option>
-                                    @if (states != null && states.Any())
+                                    @if (cities != null && cities.Any())
                                     {
-                                        foreach (var state in states)
+                                        foreach (var state in cities)
                                         {
                                             if (Model != null && Model.StateId == state.Id)
                                             {

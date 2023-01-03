@@ -54,10 +54,6 @@
                                         <span>@product.Id :  کد کالا</span>
                                     </div>
 
-                                    <div class="listing-img-content">
-                                        <span class="listing-price">@product.SegmentName </span>
-                                    </div>
-
                                     <img src="@Window.Application.StticTools.FilePaths.SampleThumbimage/@product.Image" alt="" style="height: 273px;">
 
                                 </a>
@@ -86,23 +82,28 @@
 
                                             {
                                                 <div class="row">
-                                                    <div class="col-md-4">
-                                                        <input name="Height" min="0" step="1" type="text" placeholder="ارتفاع را وارد کنید">
-                                                    </div>
 
                                                     <div class="col-md-4">
                                                         <input type="text" min="0" step="1" name="Width" placeholder="عرض را وارد کنید">
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <input type="text" min="1" name="SampleCount" placeholder="تعداد را وارد کنید">
+                                                        <input name="Height" min="0" step="1" type="text" placeholder="ارتفاع را وارد کنید">
+                                                    </div>
+
+                                                    <div class="col-md-4">
+
+                                                        <input type="text" min="0" step="1" name="katibeSize" placeholder="عرض درب a">
+
                                                     </div>
                                                 </div>
 
                                                 <div class="row">
 
                                                     <div class="col-md-3">
-                                                        <input type="text" min="0" step="1" name="katibeSize" placeholder="عرض درب a">
+
+                                                        <input type="text" min="1" name="SampleCount" placeholder="تعداد را وارد کنید">
+
                                                     </div>
 
                                                     <div class="col-md-3">
@@ -119,17 +120,18 @@
                                                || product.Id == 57 || product.Id == 56 || product.Id == 55)
                                                 {
                                                     <div class="row">
+                                                        <div class="col-md-4">
+                                                            <input type="text" min="0" step="1" name="Width" placeholder="عرض را وارد کنید">
+                                                        </div>
 
                                                         <div class="col-md-4">
                                                             <input name="Height" min="0" step="1" type="text" placeholder="ارتفاع را وارد کنید">
                                                         </div>
 
                                                         <div class="col-md-4">
-                                                            <input type="text" min="0" step="1" name="Width" placeholder="عرض را وارد کنید">
-                                                        </div>
 
-                                                        <div class="col-md-4">
-                                                            <input type="text" min="1" name="SampleCount" placeholder="تعداد را وارد کنید">
+                                                            <input type="number" min="0" step="1" name="katibeSize" placeholder="ارتفاع کتیبه " />
+
                                                         </div>
 
                                                     </div>
@@ -137,7 +139,8 @@
                                                     <div class="row">
 
                                                         <div class="col-md-3">
-                                                            <input type="number" min="0" step="1" name="katibeSize" placeholder="ارتفاع کتیبه " />
+                                                            <input type="text" min="1" name="SampleCount" placeholder="تعداد را وارد کنید">
+
                                                         </div>
 
                                                         <div class="col-md-3">
@@ -148,13 +151,13 @@
                                                 }
 
                                                 else
-                                                {
+                                                {  
                                                     <div class="col-md-3">
-                                                        <input name="Height" min="0" step="1" type="text" placeholder="ارتفاع را وارد کنید">
+                                                        <input type="text" min="0" step="1" name="Width" placeholder="عرض را وارد کنید">
                                                     </div>
 
                                                     <div class="col-md-3">
-                                                        <input type="text" min="0" step="1" name="Width" placeholder="عرض را وارد کنید">
+                                                        <input name="Height" min="0" step="1" type="text" placeholder="ارتفاع را وارد کنید">
                                                     </div>
 
                                                     <div class="col-md-3">
