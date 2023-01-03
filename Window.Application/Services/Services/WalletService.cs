@@ -22,6 +22,70 @@ public class WalletService : IWalletService
 
     #region Wallet
 
+    //Update Wallet And Calculate User Balance After Banking Payment
+    public async Task UpdateWalletAndCalculateUserBalanceAfterBankingPayment(Wallet wallet)
+    {
+        #region Update Wallet Fields
+
+        wallet.IsFinally = true;
+
+        #endregion
+
+        #region Update Wallet 
+
+        await _walletRepository.UpdateWalletWithCalculateBalance(wallet);
+
+        #endregion
+    }
+
+    //Find Wallet Transaction For Redirect To The Bank Portal 
+    public async Task<Wallet?> FindWalletTransactionForRedirectToTheBankPortal(ulong userId, GatewayType gateway, string authority, int amount)
+    {
+        return await _walletRepository.FindWalletTransactionForRedirectToTheBankPortal(userId, gateway, authority, amount);
+    }
+
+    //Create New Wallet Transaction For Redirext To The Bank Portal
+    public async Task CreateNewWalletTransactionForRedirextToTheBankPortal(ulong userId, int price, GatewayType gateway, string authority, string description, ulong? requestId)
+    {
+        #region Fill Wallet 
+
+        var wallet = new Wallet
+        {
+            UserId = userId,
+            TransactionType = TransactionType.Deposit,
+            GatewayType = gateway,
+            PaymentType = PaymentType.ChargeWallet,
+            Price = price,
+            Description = description,
+            IsFinally = false,
+        };
+
+        #endregion
+
+        #region Add Wallet Method 
+
+        await _userRepository.CreateWalletWithoutCalculate(wallet);
+
+        #endregion
+
+        #region Fill Wallet Data 
+
+        var walletData = new WalletData
+        {
+            GatewayType = gateway,
+            TrackingCode = authority,
+            WalletId = wallet.Id
+        };
+
+        #endregion
+
+        #region Add Wallet Data Method
+
+        await _walletRepository.CreateWalletData(walletData);
+
+        #endregion
+    }
+
     public Task<FilterWalletViewModel> FilterWalletsAsync(FilterWalletViewModel filter)
     {
         return _walletRepository.FilterWalletsAsync(filter);

@@ -31,6 +31,13 @@ namespace CRM.Data.Repository
 
         #region user
 
+        //Create Wallet Without Calculate
+        public async Task CreateWalletWithoutCalculate(Wallet wallet)
+        {
+            await _context.Wallets.AddAsync(wallet);
+            await _context.SaveChangesAsync();
+        }
+
         public Task<EditProfileViewModel?> GetUserProfileForEditAsync(ulong userId)
         {
             return Task.FromResult(_context.Users

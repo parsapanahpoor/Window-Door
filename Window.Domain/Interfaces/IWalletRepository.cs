@@ -7,6 +7,15 @@ public interface IWalletRepository
 {
     #region Wallet
 
+    //Update Wallet With Calculate Balance
+    Task UpdateWalletWithCalculateBalance(Wallet wallet);
+
+    //Find Wallet Transaction For Redirect To The Bank Portal 
+    Task<Wallet?> FindWalletTransactionForRedirectToTheBankPortal(ulong userId, GatewayType gateway, string authority, int amount);
+
+    //Create Wallet Data
+    Task CreateWalletData(WalletData walletData);
+
     Task<FilterWalletViewModel> FilterWalletsAsync(FilterWalletViewModel filter);
 
     Task<Wallet?> GetWalletByWalletIdAsync(ulong walletId);

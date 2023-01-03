@@ -7,6 +7,15 @@ public interface IWalletService
 {
     #region Wallet
 
+    //Update Wallet And Calculate User Balance After Banking Payment
+    Task UpdateWalletAndCalculateUserBalanceAfterBankingPayment(Wallet wallet);
+
+    //Find Wallet Transaction For Redirect To The Bank Portal 
+    Task<Wallet?> FindWalletTransactionForRedirectToTheBankPortal(ulong userId, GatewayType gateway, string authority, int amount);
+
+    //Create New Wallet Transaction For Redirext To The Bank Portal
+    Task CreateNewWalletTransactionForRedirextToTheBankPortal(ulong userId, int price, GatewayType gateway, string authority, string description, ulong? requestId);
+
     Task<FilterWalletViewModel> FilterWalletsAsync(FilterWalletViewModel filter);
 
     Task<int?> GetSumUserWalletAsync(ulong userId);

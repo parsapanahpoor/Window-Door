@@ -15,6 +15,9 @@ namespace Window.Domain.Interfaces
     {
         #region user
 
+        //Create Wallet Without Calculate
+        Task CreateWalletWithoutCalculate(Wallet wallet);
+
         Task<EditProfileViewModel?> GetUserProfileForEditAsync(ulong userId);
 
         Task<bool> IsUserActive(string email);

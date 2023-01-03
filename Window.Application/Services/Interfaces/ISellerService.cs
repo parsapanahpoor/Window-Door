@@ -17,6 +17,8 @@ namespace Window.Application.Services.Interfaces
     {
         #region Seller Panel
 
+        Task<bool> PayHomeVisitTariff(ulong userId, int price);
+
         Task<bool> PayAccountChargeTariff(ulong userId, int price);
 
         Task<bool> ChargeUserWallet(ulong userId, int price);

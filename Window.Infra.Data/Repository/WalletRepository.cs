@@ -22,6 +22,29 @@ public class WalletRepository : IWalletRepository
 
     #region Wallet
 
+    //Update Wallet With Calculate Balance
+    public async Task UpdateWalletWithCalculateBalance(Wallet wallet)
+    {
+        _context.Wallets.Update(wallet);
+        await SaveChangesAsync();
+
+        //CalCulate User Wallet Balance
+        var walletBalance = await GetUserWalletBalance(wallet.UserId);
+    }
+
+    //Find Wallet Transaction For Redirect To The Bank Portal 
+    public async Task<Wallet?> FindWalletTransactionForRedirectToTheBankPortal(ulong userId, GatewayType gateway, string authority, int amount)
+    {
+        return await _context.Wallets.Include(p => p.WalletData).FirstOrDefaultAsync(p => !p.IsDelete && !p.IsFinally && p.UserId == userId && p.GatewayType == gateway && p.WalletData.TrackingCode == authority && p.Price == amount);
+    }
+
+    //Create Wallet Data
+    public async Task CreateWalletData(WalletData walletData)
+    {
+        await _context.WalletData.AddAsync(walletData);
+        await SaveChangesAsync();
+    }
+
     public async Task<FilterWalletViewModel> FilterWalletsAsync(FilterWalletViewModel filter)
     {
         var query = _context.Wallets

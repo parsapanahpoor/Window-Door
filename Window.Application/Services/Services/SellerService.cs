@@ -40,7 +40,7 @@ namespace Window.Application.Services.Services
 
         private readonly ISMSService _smsService;
 
-        public SellerService(WindowDbContext context , IUserService userService , IWalletRepository walletRepository , ISMSService smsService)
+        public SellerService(WindowDbContext context, IUserService userService, IWalletRepository walletRepository, ISMSService smsService)
         {
             _context = context;
             _userService = userService;
@@ -97,7 +97,7 @@ namespace Window.Application.Services.Services
             #endregion
 
             return await _context.LogForVisitSellerProfiles.Where(p => !p.IsDelete && p.UserId == market.UserId
-                                     && p.CreateDate.Year == DateTime.Now.Year ).CountAsync();
+                                     && p.CreateDate.Year == DateTime.Now.Year).CountAsync();
         }
 
         public async Task<bool> PayAccountChargeTariff(ulong userId, int price)
@@ -124,7 +124,7 @@ namespace Window.Application.Services.Services
 
         public async Task<bool> ChargeUserWallet(ulong userId, int price)
         {
-            if (!await _context.Users.AnyAsync(p=> !p.IsDelete && p.Id == userId))
+            if (!await _context.Users.AnyAsync(p => !p.IsDelete && p.Id == userId))
             {
                 return false;
             }
@@ -144,7 +144,24 @@ namespace Window.Application.Services.Services
             return true;
         }
 
-        public async Task<bool> ChargeAccount(ulong marketId , ulong userId)
+        public async Task<bool> PayHomeVisitTariff(ulong userId, int price)
+        {
+            var wallet = new Wallet
+            {
+                UserId = userId,
+                TransactionType = TransactionType.Withdraw,
+                GatewayType = GatewayType.Zarinpal,
+                PaymentType = PaymentType.Buy,
+                Price = price,
+                Description = "پرداخت مبلغ ",
+                IsFinally = true,
+            };
+
+            await _walletRepository.CreateWalletAsync(wallet);
+            return true;
+        }
+
+        public async Task<bool> ChargeAccount(ulong marketId, ulong userId)
         {
             #region Get MArket 
 
@@ -284,7 +301,7 @@ namespace Window.Application.Services.Services
         {
             #region Get Market
 
-            var marketUser = await  _context.MarketUser.Include(p => p.Market).FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
+            var marketUser = await _context.MarketUser.Include(p => p.Market).FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
             if (marketUser == null) return null;
 
             var market = await GetMarketByMarketId(marketUser.MarketId);
@@ -308,7 +325,14 @@ namespace Window.Application.Services.Services
 
             if (charge != null)
             {
-                model.DaysOfCharge = charge.EndDate.DayOfYear - charge.StartDate.DayOfYear;
+                if (DateTime.Now.DayOfYear >= charge.EndDate.DayOfYear)
+                {
+                    model.DaysOfCharge = charge.EndDate.DayOfYear + (365 - DateTime.Now.DayOfYear);
+                }
+                else
+                {
+                    model.DaysOfCharge = charge.EndDate.DayOfYear - DateTime.Now.DayOfYear;
+                }
             }
 
             #endregion
@@ -335,7 +359,7 @@ namespace Window.Application.Services.Services
                     model.RejectNote = rejectNote.RejectDescription;
                 }
             }
-            
+
             model.MarketPersonalsInfoState = market.MarketPersonalsInfoState;
 
             return model;
@@ -403,7 +427,7 @@ namespace Window.Application.Services.Services
                 return AddSellerPersonalInfoResul.Faild;
             }
 
-            if (await _context.MarketPersonalInfo.AnyAsync(p=> p.UserId == userId && !p.IsDelete))
+            if (await _context.MarketPersonalInfo.AnyAsync(p => p.UserId == userId && !p.IsDelete))
             {
                 return AddSellerPersonalInfoResul.Faild;
             }
@@ -680,7 +704,7 @@ namespace Window.Application.Services.Services
             var pesonalInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState != MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller);
             if (pesonalInfo == null) return false;
 
-            var sellerLinks = await _context.MarketLinks.FirstOrDefaultAsync(p =>p.UserId == userId && !p.IsDelete);
+            var sellerLinks = await _context.MarketLinks.FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete);
             if (sellerLinks == null) return false;
 
             var sellerWorkSample = await _context.MarketWorkSamle.FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete);
@@ -691,7 +715,7 @@ namespace Window.Application.Services.Services
 
         public async Task<bool> IsUserJustFillUserPersonalInfo(ulong userId)
         {
-            var pesonalInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p =>p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller);
+            var pesonalInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller);
             if (pesonalInfo == null) return false;
 
             var sellerLinks = await _context.MarketLinks.FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete);
@@ -705,13 +729,13 @@ namespace Window.Application.Services.Services
 
         public async Task<bool> IsUserJustFillUserPersonalLinks(ulong userId)
         {
-            var pesonalInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p =>  p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller); ;
+            var pesonalInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller); ;
             if (pesonalInfo == null) return false;
 
-            var sellerLinks = await _context.MarketLinks.FirstOrDefaultAsync(p =>  p.UserId == userId && !p.IsDelete);
+            var sellerLinks = await _context.MarketLinks.FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete);
             if (sellerLinks == null) return false;
 
-            var sellerWorkSample = await _context.MarketWorkSamle.FirstOrDefaultAsync(p =>  p.UserId == userId && !p.IsDelete);
+            var sellerWorkSample = await _context.MarketWorkSamle.FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete);
             if (sellerWorkSample != null) return false;
 
             return true;
@@ -749,11 +773,11 @@ namespace Window.Application.Services.Services
             return true;
         }
 
-        public async Task<bool> SendSMSForDisActiveUsers(ulong marketId , bool threetoday, bool day, bool fifteenday)
+        public async Task<bool> SendSMSForDisActiveUsers(ulong marketId, bool threetoday, bool day, bool fifteenday)
         {
             #region Validation Market
 
-            var market = await _context.Market.Include(p=> p.User).FirstOrDefaultAsync(p=> !p.IsDelete && p.Id == marketId);
+            var market = await _context.Market.Include(p => p.User).FirstOrDefaultAsync(p => !p.IsDelete && p.Id == marketId);
             if (market == null) return false;
 
             #endregion
@@ -818,7 +842,7 @@ namespace Window.Application.Services.Services
             var user = await _context.Users.FirstOrDefaultAsync(p => p.Id == userId && !p.IsDelete);
             if (user == null) return null;
 
-            var sellerPersonalInfo = await _context.MarketPersonalInfo.Include(p=> p.Market).FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState != MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller);
+            var sellerPersonalInfo = await _context.MarketPersonalInfo.Include(p => p.Market).FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState != MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller);
             if (sellerPersonalInfo == null) return null;
 
             var sellerLinks = await _context.MarketLinks.Where(p => p.UserId == userId && !p.IsDelete).ToListAsync();
@@ -847,7 +871,7 @@ namespace Window.Application.Services.Services
                 CountryId = sellerPersonalInfo.CountryId.Value,
                 StateId = sellerPersonalInfo.StateId.Value,
                 CityId = sellerPersonalInfo.CityId.Value,
-                ActivationTariff = await _context.Market.Where(p=> !p.IsDelete && p.UserId == userId).Select(p=> p.ActivationTariff).FirstOrDefaultAsync(),
+                ActivationTariff = await _context.Market.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.ActivationTariff).FirstOrDefaultAsync(),
             };
 
             model.MarketWorkSamples = await _context.MarketWorkSamle.Where(p => !p.IsDelete && p.UserId == userId)
@@ -1074,7 +1098,7 @@ namespace Window.Application.Services.Services
         {
             #region Get Market By User Id 
 
-            var market = await _context.MarketUser.Include(p=> p.Market).Where(p => !p.IsDelete && p.UserId == UserId).Select(p=> p.Market).FirstOrDefaultAsync();
+            var market = await _context.MarketUser.Include(p => p.Market).Where(p => !p.IsDelete && p.UserId == UserId).Select(p => p.Market).FirstOrDefaultAsync();
             if (market == null) return false;
 
             #endregion
@@ -1095,7 +1119,7 @@ namespace Window.Application.Services.Services
 
                     #endregion
 
-                    if ( DateTime.Now.Month - marketChargeInfo.EndDate.Month >= 3)
+                    if (DateTime.Now.Month - marketChargeInfo.EndDate.Month >= 3)
                     {
                         //Delete Market Info 
                         var marketInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => p.MarketId == market.Id);
@@ -1217,9 +1241,9 @@ namespace Window.Application.Services.Services
         {
             var query = _context.MarketPersonalInfo
                 .Include(u => u.User)
-                .Include(p=>p.Market)
-                .Where(p=>!p.IsDelete)
-                .OrderByDescending(p=>p.CreateDate)
+                .Include(p => p.Market)
+                .Where(p => !p.IsDelete)
+                .OrderByDescending(p => p.CreateDate)
                 .AsQueryable();
 
             #region Order By State 
@@ -1412,7 +1436,7 @@ namespace Window.Application.Services.Services
         {
             var query = _context.LogForVisitSellerProfiles
            .Include(u => u.User)
-           .ThenInclude(p=> p.SellersPersonalInfos)
+           .ThenInclude(p => p.SellersPersonalInfos)
            .Where(p => !p.IsDelete)
            .OrderByDescending(p => p.CreateDate)
            .AsQueryable();
@@ -1523,7 +1547,7 @@ namespace Window.Application.Services.Services
                 RejectedNote = personalInfo.RejectDescription,
                 Resume = personalInfo.Resume,
                 MarketLinks = await _context.MarketLinks.Where(p => p.UserId == personalInfo.UserId && !p.IsDelete).ToListAsync(),
-                MarketWorkSamples = await _context.MarketWorkSamle.Where(p=> p.UserId == personalInfo.UserId && !p.IsDelete).ToListAsync(),
+                MarketWorkSamples = await _context.MarketWorkSamle.Where(p => p.UserId == personalInfo.UserId && !p.IsDelete).ToListAsync(),
                 MarketPersonalsInfoState = personalInfo.MarketPersonalsInfoState,
                 WorkAddress = personalInfo.WorkAddress
             };
@@ -1537,8 +1561,8 @@ namespace Window.Application.Services.Services
         {
             var query = _context.LogForInquiry
            .Include(u => u.State)
-           .Include(p=> p.Country)
-           .Include(p=> p.City)
+           .Include(p => p.Country)
+           .Include(p => p.City)
            .Where(p => !p.IsDelete)
            .OrderByDescending(p => p.CreateDate)
            .AsQueryable();
@@ -1624,7 +1648,7 @@ namespace Window.Application.Services.Services
         #region Site Side 
 
         //Update Seller Activation Tariff After Seen Seller Profile By User 
-        public async Task UpdateSellerActivationTariff(ulong userId , bool listOfInquiry , bool sellerDetail)
+        public async Task UpdateSellerActivationTariff(ulong userId, bool listOfInquiry, bool sellerDetail)
         {
             var tariffValue = 0;
 

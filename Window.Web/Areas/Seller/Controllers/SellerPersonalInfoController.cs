@@ -1,8 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AngleSharp.Io;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Text;
+using Window.Application.Convertors;
 using Window.Application.Extensions;
 using Window.Application.Generators;
+using Window.Application.Interfaces;
 using Window.Application.Services.Interfaces;
 using Window.Application.StticTools;
+using Window.Domain.DTOs.ZarinPal;
+using Window.Domain.Entities.Wallet;
+using Window.Domain.Interfaces;
 using Window.Domain.ViewModels.Seller.PersonalInfo;
 using Window.Web.HttpManager;
 
@@ -16,10 +25,13 @@ namespace Window.Web.Areas.Seller.Controllers
 
         private readonly IStateService _stateService;
 
-        public SellerPersonalInfoController(ISellerService sellerService , IStateService stateService)
+        private readonly IWalletService _walletService;
+
+        public SellerPersonalInfoController(ISellerService sellerService , IStateService stateService , IWalletService walletService)
         {
             _sellerService = sellerService;
             _stateService = stateService;
+            _walletService = walletService;
         }
 
         #endregion
@@ -482,6 +494,7 @@ namespace Window.Web.Areas.Seller.Controllers
             #region Get Market 
 
             var market = await _sellerService.GetMarketByUserId(User.GetUserId());
+            if(market == null) return NotFound();
 
             #endregion
 
@@ -511,18 +524,16 @@ namespace Window.Web.Areas.Seller.Controllers
 
             #region Online Payment
 
-            var payment = new ZarinpalSandbox.Payment(tariff.Value);
-
-            var res = payment.PaymentRequest("پرداخت  ", "https://localhost:7075/ChargeAccount/"+market.Id, "Parsapanahpoor@yahoo.com", "09117878804");
-
-            if (res.Result.Status == 100)
+            return RedirectToAction("PaymentMethod", "Payment", new
             {
-                return Redirect("https://sandbox.zarinpal.com/pg/StartPay/" + res.Result.Authority);
-            }
+                area = "",
+                gatewayType = GatewayType.Zarinpal,
+                amount = tariff.Value,
+                description = "شارژ حساب کاربری ",
+                returURL = $"{FilePaths.SiteAddress}/ChargeAccount/" + market.Id,
+            });
 
             #endregion
-
-            return View();
         }
 
         #endregion
@@ -535,15 +546,12 @@ namespace Window.Web.Areas.Seller.Controllers
             #region Get Market 
 
             var market = await _sellerService.GetMarketByMarketId(id);
+            if (market == null) return NotFound();
 
             #endregion
 
-            if (HttpContext.Request.Query["Status"] != "" &&
-                HttpContext.Request.Query["Status"].ToString().ToLower() == "ok"
-                && HttpContext.Request.Query["Authority"] != "")
+            try
             {
-                string authority = HttpContext.Request.Query["Authority"];
-
                 #region Check User Account Charge Status
 
                 if (await _sellerService.HasMarketStateForPayAccountCharge(User.GetUserId()) == false)
@@ -553,6 +561,15 @@ namespace Window.Web.Areas.Seller.Controllers
                 }
 
                 #endregion
+
+                #region Fill Parametrs
+
+                VerifyParameters parameters = new VerifyParameters();
+
+                if (HttpContext.Request.Query["Authority"] != "")
+                {
+                    parameters.authority = HttpContext.Request.Query["Authority"];
+                }
 
                 #region Tarif 
 
@@ -565,29 +582,70 @@ namespace Window.Web.Areas.Seller.Controllers
 
                 #endregion
 
-                var payment = new ZarinpalSandbox.Payment(tariff.Value);
-                var res = payment.Verification(authority).Result;
+                parameters.amount = tariff.ToString();
+                parameters.merchant_id = FilePaths.merchant;
 
-                if (res.Status == 100)
+                #endregion
+
+                using (HttpClient client = new HttpClient())
                 {
-                    ViewBag.code = res.RefId;
-                    ViewBag.IsSuccess = true;
+                    #region Verify Payment
 
-                    //Charge User Wallet
-                    await _sellerService.ChargeUserWallet(User.GetUserId(), tariff.Value);
+                    var json = JsonConvert.SerializeObject(parameters);
 
-                    //Pay Account Charge Tariff
-                    await _sellerService.PayAccountChargeTariff(User.GetUserId(), tariff.Value);
+                    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    //Update Market State 
-                    var result = await _sellerService.ChargeAccount(id , User.GetUserId());
+                    HttpResponseMessage response = await client.PostAsync(URLs.verifyUrl, content);
 
-                    return View();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    JObject jodata = JObject.Parse(responseBody);
+
+                    string data = jodata["data"].ToString();
+
+                    JObject jo = JObject.Parse(responseBody);
+
+                    string errors = jo["errors"].ToString();
+
+                    #endregion
+
+                    if (data != "[]")
+                    {
+                        //Authority Code
+                        string refid = jodata["data"]["ref_id"].ToString();
+
+                        //Get Wallet Transaction For Validation 
+                        var wallet = await _walletService.FindWalletTransactionForRedirectToTheBankPortal(User.GetUserId(), GatewayType.Zarinpal, parameters.authority, tariff.Value);
+
+                        if (wallet != null)
+                        {
+                            //Update Market State 
+                            var result = await _sellerService.ChargeAccount(id, User.GetUserId());
+
+                            await _walletService.UpdateWalletAndCalculateUserBalanceAfterBankingPayment(wallet);
+
+                            //Pay Tariff
+                            await _sellerService.PayHomeVisitTariff(User.GetUserId(), tariff.Value);
+
+                            return RedirectToAction("PaymentResult", "Payment", new { IsSuccess = true, refId = refid });
+                        }
+                    }
+                    else if (errors != "[]")
+                    {
+                        string errorscode = jo["errors"]["code"].ToString();
+
+                        return BadRequest($"error code {errorscode}");
+
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
 
+                throw ex;
             }
 
-            return View();
+            return NotFound();
         }
 
         #endregion
