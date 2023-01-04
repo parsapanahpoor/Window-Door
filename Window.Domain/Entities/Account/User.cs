@@ -56,6 +56,8 @@ namespace Window.Domain.Entities.Account
         [MaxLength(100, ErrorMessage = "تعداد کاراکتر های {0} نمیتواند بیشتر از {1} باشد")]
         public string EmailActivationCode { get; set; }
 
+        public string? ShopName { get; set; }
+
         #endregion
 
         #region Relations

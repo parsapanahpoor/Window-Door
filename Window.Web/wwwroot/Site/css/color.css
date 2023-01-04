@@ -125,17 +125,17 @@ a.button.border.white:hover {
     background-color: #274abb
 }
 
-.listing-img-container:after {
+/*.listing-img-container:after {
     background: linear-gradient(to bottom, transparent 60%, #274abb)
-}
+}*/
 
 .listing-badges .featured {
     background-color: #274abb
 }
 
-.list-layout .listing-img-container:after {
+/*.list-layout .listing-img-container:after {
     background: linear-gradient(to bottom, transparent 55%, #274abb)
-}
+}*/
 
 #titlebar.property-titlebar span.property-badge,
 .back-to-listings:hover,
@@ -171,7 +171,7 @@ a.button.border.white:hover {
     background-color: #274abb
 }
 
-.map-box .listing-img-container:after {
+.map-box:after {
     background: linear-gradient(to bottom, transparent 50%, #274abb)
 }
 
@@ -328,3 +328,4 @@ table.basic-table th {
 .time-slot label:hover span {
   color: #274abb;
 }
+   

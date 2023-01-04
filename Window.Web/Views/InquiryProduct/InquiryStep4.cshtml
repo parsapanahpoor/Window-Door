@@ -153,21 +153,14 @@
 
                                 <a href="single-property-page-1.html" class="listing-img-container" style="height: auto !important;">
 
-                                <div class="listing-badges">
-                                    <img style="height: auto; width: 60px; border-radius: 50px; margin-top: 10px; margin-right: 10px;" src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@product.BrandImage" alt="" >
-                                    <span>@product.BrandName</span>
+                                    <div class="listing-badges">
+                                        <img style="height: auto; width: 60px; border-radius: 50px; margin-top: 10px; margin-right: 10px;" src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@product.BrandImage" alt="">
+                                        <span>@product.BrandName</span>
 
-                                </div>
-
+                                    </div>
                                     <div class="listing-img-content">
-                                        @if (product.Price.HasValue)
-                                        {
-                                            <span class="listing-price">@product.Price.Value.ToString("#,000")  <i>ریال</i></span>
-                                        }
-                                        else
-                                        {
-                                            <span class="listing-price">وارد نشده  </span>
-                                        }
+
+
                                         @if (@product.Score == 0)
                                         {
                                             <span class="like-icon "></span>
@@ -231,20 +224,30 @@
 
                                 </a>
 
-                            <div class="listing-content">
+                                <div class="listing-content">
 
-                                <div class="listing-title">
-                                    <h4>
-                                        @product.UserName
-                                    </h4>
+                                    <!--<div class="listing-title">
+                                         <h4>
+                                    @product.UserName
+                                         </h4>
+                                     </div>-->
+
+                                    <div class="listing-footer"style="padding:8px 0px">
+                                        <a class="button" asp-action="AddScoreToSeller" asp-route-sellerId="@product.UserId" asp-area="" asp-controller="InquiryProduct" style="background-color: #c100d1;    padding: 10px 45px;">  parsapanahpoor</a>
+                                                                                <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="button btn-estealam" style="background-color: #13bbe2;"> نمایش اطلاعات فروشنده </a>
+                                    </div>
+
                                 </div>
+                                @if (product.Price.HasValue)
+                                {
+                                    <span class="listing-price">قیمت پیشنهادی:</span>
+                                    <span class="listing-price">@product.Price.Value.ToString("#,000")  <i>ریال</i></span>
 
-                                <div class="listing-footer">
-                                    <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="button" style="background-color: #13bbe2;"> نمایش اطلاعات فروشنده </a>
-                                    <a class="button" asp-action="AddScoreToSeller" asp-route-sellerId="@product.UserId" asp-area="" asp-controller="InquiryProduct" style="background-color: #c100d1;">  امتیاز دهی</a>
-                                </div>
-
-                            </div>
+                                }
+                                else
+                                {
+                                    <span class="listing-price">وارد نشده  </span>
+                                }
 
                             </div>
 
