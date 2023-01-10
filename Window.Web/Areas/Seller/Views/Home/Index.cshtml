@@ -56,3 +56,31 @@
 </div>
 
 @await Component.InvokeAsync("SellersInfos")
+
+@if (ViewBag.ShopNameIsEmpty != null && ViewBag.ShopNameIsEmpty == true)
+{
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-header bg-warning">
+                <span class="widget-caption">عدم نمایش نام فروشگاه </span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="config">
+                        <i class="fa fa-cog"></i>
+                    </a>
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bg-warning">
+                <p> لطفا از قسمت اطلاعات کاربری وارد بخش ویرایش اطلاعات کاربری شوید و برای نمایش نام فروشگاه خود این پارامتر را وراد نمایید </p>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+}

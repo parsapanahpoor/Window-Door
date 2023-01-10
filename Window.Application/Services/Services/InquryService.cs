@@ -3464,6 +3464,8 @@ namespace Window.Application.Services.Services
 
             #region پنجره ی کشویی 
 
+            #region UPVC
+
             #region پنجره ی  UPVC (id = 13)
 
             if (sample.Id == 13)
@@ -3767,6 +3769,193 @@ namespace Window.Application.Services.Services
 
             #endregion
 
+            #region AL
+
+            #region پنجره ی کشویی آلمینیومی دولنگه  (id = 58)
+
+            if (sample.Id == 58)
+            {
+                //Get Sample Segments
+                var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 46) != null)
+                {
+                    //قیمت فریم
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 46).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 45) != null)
+                {
+                    //لنگه ی کشویی
+                    totalPrice = totalPrice + ((2 * width) + (4 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 45).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 54) != null)
+                {
+                    //لاستیک فشاری
+                    totalPrice = totalPrice + ((2 * width) + (4 * height)) *  (2 *(userSegments.FirstOrDefault(p => p.SegmentId == 54).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 53) != null)
+                {
+                    //نوار مویی
+                    totalPrice = totalPrice + ((2 * width) + (4 * height)) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 53).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 44) != null)
+                {
+                    //اینترلاک
+                    totalPrice = totalPrice + ((2 *  height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 44).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 43) != null)
+                {
+                    //ریل کشویی
+                    totalPrice = totalPrice + ((width)) * (userSegments.FirstOrDefault(p => p.SegmentId == 43).Price);
+                }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 39) != null)
+                {
+                    //یراق کشویی
+                    totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 39).Price);
+                }
+
+            }
+
+            #endregion
+
+            #region پنجره ی کشویی آلمینیومی سه لنگه  (id = 59)
+
+            if (sample.Id == 59)
+            {
+                //Get Sample Segments
+                var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 46) != null)
+                {
+                    //قیمت فریم
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 46).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 45) != null)
+                {
+                    //لنگه ی کشویی
+                    totalPrice = totalPrice + ((2 * width) + (6 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 45).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 54) != null)
+                {
+                    //لاستیک فشاری
+                    totalPrice = totalPrice + ((2 * width) + (6 * height)) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 54).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 53) != null)
+                {
+                    //نوار مویی
+                    totalPrice = totalPrice + ((2 * width) + (6 * height)) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 53).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 44) != null)
+                {
+                    //اینترلاک
+                    totalPrice = totalPrice + ((4 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 44).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 43) != null)
+                {
+                    //ریل کشویی
+                    totalPrice = totalPrice + ((width)) * (userSegments.FirstOrDefault(p => p.SegmentId == 43).Price);
+                }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 39) != null)
+                {
+                    //یراق کشویی
+                    totalPrice = totalPrice + (userSegments.FirstOrDefault(p => p.SegmentId == 39).Price);
+                }
+            }
+
+            #endregion
+
+            #region پنجره ی کشویی آلمینیومی چهار لنگه  (id = 60)
+
+            if (sample.Id == 60)
+            {
+                //Get Sample Segments
+                var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 46) != null)
+                {
+                    //قیمت فریم
+                    totalPrice = totalPrice + (2 * (width + height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 46).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 45) != null)
+                {
+                    //لنگه ی کشویی
+                    totalPrice = totalPrice + ((2 * width) + (8 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 45).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 54) != null)
+                {
+                    //لاستیک فشاری
+                    totalPrice = totalPrice + ((2 * width) + (8 * height)) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 54).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 53) != null)
+                {
+                    //نوار مویی
+                    totalPrice = totalPrice + ((2 * width) + (8 * height)) * (2 * (userSegments.FirstOrDefault(p => p.SegmentId == 53).Price));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 44) != null)
+                {
+                    //اینترلاک
+                    totalPrice = totalPrice + ((4 * height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 44).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 43) != null)
+                {
+                    //ریل کشویی
+                    totalPrice = totalPrice + ((width)) * (userSegments.FirstOrDefault(p => p.SegmentId == 43).Price);
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 42) != null)
+                {
+                    //قفل چهار لنگه
+                    totalPrice = totalPrice + ((height)) * (userSegments.FirstOrDefault(p => p.SegmentId == 42).Price);
+                }
+
+                if (glassPricing != null)
+                {
+                    //قیمت شیشه
+                    totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                }
+
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 39) != null)
+                {
+                    //یراق کشویی
+                    totalPrice = totalPrice + (2* (userSegments.FirstOrDefault(p => p.SegmentId == 39).Price));
+                }
+            }
+
+            #endregion
+
+            #endregion
+
+            #endregion
+
             #endregion
 
             //Product Count
@@ -3919,6 +4108,7 @@ namespace Window.Application.Services.Services
                     model2.BrandImage = brand.BrandLogo;
 
                     model2.UserName = seller.Username;
+                    model2.ShopName = seller.ShopName;
                     model2.UserAvatar = seller.Avatar;
                     model2.UserId = seller.Id;
                     model2.Price = 0;

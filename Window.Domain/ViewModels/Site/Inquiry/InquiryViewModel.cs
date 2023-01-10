@@ -22,5 +22,7 @@ namespace Window.Domain.ViewModels.Site.Inquiry
         public double? Price { get; set; }
 
         public int? Score { get; set; }
+
+        public string? ShopName { get; set; }
     }
 }

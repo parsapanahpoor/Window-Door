@@ -312,6 +312,7 @@
                                     </td>
                                     <td class="tc vm">
                                         <a asp-action="SellerPersonalInfoDetail" asp-controller="SellerPersonalInfo" asp-area="Admin" asp-route-id="@seller.Market.Id" class="btn btn-azure btn-circle btn-xs"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                        <a asp-action="LoginWithUser" asp-controller="SellerPersonalInfo" asp-area="Admin" asp-route-userId="@seller.User.Id" class="btn btn-warning btn-circle btn-xs"><i class="glyphicon glyphicon-log-in"></i></a>
                                     </td>
                                 </tr>
                             }

@@ -232,9 +232,24 @@
                                          </h4>
                                      </div>-->
 
-                                    <div class="listing-footer"style="padding:8px 0px">
-                                        <a class="button" asp-action="AddScoreToSeller" asp-route-sellerId="@product.UserId" asp-area="" asp-controller="InquiryProduct" style="background-color: #c100d1;    padding: 10px 45px;">  parsapanahpoor</a>
-                                                                                <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="button btn-estealam" style="background-color: #13bbe2;"> نمایش اطلاعات فروشنده </a>
+                                    <div class="listing-footer" style="padding:8px 0px">
+
+                                        @if (string.IsNullOrEmpty(product.ShopName))
+                                        {
+                                            <a class="button" asp-action="AddScoreToSeller" asp-route-sellerId="@product.UserId" asp-area="" asp-controller="InquiryProduct" style="background-color: #c100d1;    padding: 10px 45px;">
+                                                وارد نشده است
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a class="button" asp-action="AddScoreToSeller" asp-route-sellerId="@product.UserId" asp-area="" asp-controller="InquiryProduct" style="background-color: #c100d1;    padding: 10px 45px;">
+                                                @product.ShopName
+                                            </a>
+                                        }
+
+
+
+                                        <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="button btn-estealam" style="background-color: #13bbe2;"> نمایش اطلاعات فروشنده </a>
                                     </div>
 
                                 </div>

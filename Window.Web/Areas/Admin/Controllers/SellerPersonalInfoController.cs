@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Window.Application.Security;
 using Window.Application.Services.Interfaces;
 using Window.Domain.ViewModels.Admin.PersonalInfo;
 using Window.Domain.ViewModels.Seller.PersonalInfo;
+using Window.Application.Interfaces;
 
 namespace Window.Web.Areas.Admin.Controllers
 {
@@ -15,10 +19,14 @@ namespace Window.Web.Areas.Admin.Controllers
 
         private readonly IStateService _stateService;
 
-        public SellerPersonalInfoController(ISellerService sellerService, IStateService stateService)
+        private readonly IUserService _userService;
+
+        public SellerPersonalInfoController(ISellerService sellerService, IStateService stateService
+                    , IUserService userService)
         {
             _sellerService = sellerService;
             _stateService = stateService;
+            _userService = userService;
         }
 
         #endregion
@@ -64,6 +72,10 @@ namespace Window.Web.Areas.Admin.Controllers
             #region Fill Model 
 
             var model = await _sellerService.FillListOfPersonalInfoViewModel(market.UserId);
+            if (model == null)
+            {
+                return NotFound();
+            }
 
             #endregion
 
@@ -107,6 +119,34 @@ namespace Window.Web.Areas.Admin.Controllers
             return View(viewModel);
 
             #endregion
+        }
+
+        #endregion
+
+        #region LoginWithUser
+
+        public async Task<IActionResult> LoginWithUser(ulong userId)
+        {
+            var user = await _userService.GetUserById(userId);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            var properties = new AuthenticationProperties { IsPersistent = false };
+
+            await HttpContext.SignInAsync(principal, properties);
+
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         #endregion

@@ -12,7 +12,7 @@ namespace Window.Application.StticTools
         #region Site
 
         public static string SiteFarsiName = "Windows";
-        public static string SiteAddress = "https://localhost:7075";
+        public static string SiteAddress = "https://panjerehyab.ir/";
         public static string merchant = "8f5510c9-10bd-4eb6-a3e2-2795a2f36edf";
 
         public static readonly string SiteLogo = "/content/images/site/logo/main/";

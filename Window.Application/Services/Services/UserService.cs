@@ -420,6 +420,7 @@ namespace Window.Application.Services
 
             user.Username = model.Username;
             user.Mobile = model.Mobile;
+            user.ShopName = model.ShopName;
 
             #endregion
 

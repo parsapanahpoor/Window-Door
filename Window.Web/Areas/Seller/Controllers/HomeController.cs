@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Window.Application.Services.Interfaces;
 using Window.Application.Extensions;
 using Window.Domain.ViewModels.Admin.Log;
+using Stimulsoft.System.Windows.Forms;
 
 namespace Window.Web.Areas.Seller.Controllers
 {
@@ -60,6 +61,17 @@ namespace Window.Web.Areas.Seller.Controllers
             ViewBag.CountOfTodayUserInInquiry = await _sellerService.CountOfTodayUserInInquiry(User.GetUserId());
             ViewBag.CountOfMonthUserInInquiry = await _sellerService.CountOfMonthUserInInquiry(User.GetUserId());
             ViewBag.CountOfYearUserInInquiry = await _sellerService.CountOfYearUserInInquiry(User.GetUserId());
+
+            #endregion
+
+            #region Empty Shop Name 
+
+            var user = await _userService.GetUserById(User.GetUserId());
+
+            if (string.IsNullOrEmpty(user.ShopName))
+            {
+                ViewBag.ShopNameIsEmpty = true;
+            }
 
             #endregion
 

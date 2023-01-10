@@ -46,7 +46,8 @@ namespace CRM.Data.Repository
                 {
                     Username = u.Username,
                     Mobile = u.Mobile,
-                    AvatarName = u.Avatar
+                    AvatarName = u.Avatar,
+                    ShopName = u.ShopName
                 }).FirstOrDefault());
         }
 

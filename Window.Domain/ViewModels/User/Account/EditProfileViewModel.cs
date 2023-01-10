@@ -26,6 +26,8 @@ public class EditProfileViewModel
     [AllowNull]
     public IFormFile? Avatar { get; set; }
 
+    public string ShopName { get; set; }
+
     #endregion
 }
 
