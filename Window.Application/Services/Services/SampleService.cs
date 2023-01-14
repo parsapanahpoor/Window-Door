@@ -253,7 +253,7 @@ namespace Window.Application.Services.Services
 
             #region Get Samples
 
-            var samples =  _context.Samples.Where(p => !p.IsDelete).AsQueryable();
+            var samples =  _context.Samples.Where(p => !p.IsDelete).OrderByDescending(p=> p.Priority).AsQueryable();
 
             if (log.SellerType == SellerType.Aluminium)
             {
@@ -272,7 +272,7 @@ namespace Window.Application.Services.Services
 
             #endregion
 
-            return await samples.OrderBy(p=> p.Priority).ToListAsync();
+            return await samples.ToListAsync();
         }
 
         public async Task<List<Sample>?> GetAllSample()
