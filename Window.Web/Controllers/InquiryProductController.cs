@@ -19,9 +19,10 @@ namespace Window.Web.Controllers
         private readonly ISampleService _sampleService;
         private readonly IInquiryService _inquiryService;
         private readonly ISellerService _sellerService;
+        private readonly IMarketService _marketService;
 
         public InquiryProductController(IProductService prodcutService, IStateService stateService, IBrandService brandService
-            , ISampleService sampleService, IInquiryService inquiryService, ISellerService sellerService)
+            , ISampleService sampleService, IInquiryService inquiryService, ISellerService sellerService, IMarketService marketService)
         {
             _productService = prodcutService;
             _stateService = stateService;
@@ -29,8 +30,7 @@ namespace Window.Web.Controllers
             _sampleService = sampleService;
             _inquiryService = inquiryService;
             _sellerService = sellerService;
-
-
+            _marketService = marketService;
         }
 
         #endregion
@@ -77,6 +77,7 @@ namespace Window.Web.Controllers
 
         #region Test For Step 2
 
+        [Authorize]
         public async Task<IActionResult> InquiryStep2(ulong StateId, ulong CityId, ProductType? ProductType, ProductKind? ProductKind, SellerType? SellerType, ulong? MainBrandId, ulong? GlassId, string UserMacAddress)
         {
             #region Model State Valdiation
@@ -118,8 +119,19 @@ namespace Window.Web.Controllers
         #region Inquiry Step 3
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> InquiryStep3(string userMacAddress)
         {
+            #region Check That If User Is Seller
+
+            if (await _sellerService.IsExistAnySellerInfo(User.GetUserId()))
+            {
+                TempData[WarningMessage] = "فروشندگان دسترسی به استعلام گیری تدارند."; 
+                return RedirectToAction(nameof(InquiryStep1));
+            }
+
+            #endregion
+
             #region Get Samples For Show In Page Model
 
             var samples = await _sampleService.GetListOfSamplesForShowInAPI(userMacAddress);
@@ -136,6 +148,7 @@ namespace Window.Web.Controllers
             return View(samples);
         }
 
+        [Authorize]
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> InquiryStep3(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string userMacAddress)
         {
@@ -205,6 +218,7 @@ namespace Window.Web.Controllers
 
         #region Inquiry Step 4 (proccess inquiry)
 
+        [Authorize]
         public async Task<IActionResult> InquiryStep4(string userMacAddress, string? brandTitle, int? orderByPrice, int? orderByScore, int pageId = 1)
         {
             #region Brand ViewBag
@@ -291,6 +305,7 @@ namespace Window.Web.Controllers
 
         #region Show Seller Persoanl Inormation 
 
+        [Authorize]
         public async Task<IActionResult> ShowSellerPersoanlInfo(ulong userId)
         {
             #region Fill Model 
@@ -449,6 +464,7 @@ namespace Window.Web.Controllers
         #region Get Lastest User Iquiry 
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetUserLastestInquiry(string userMacAddress)
         {
             #region Get User Ip Address
@@ -474,6 +490,7 @@ namespace Window.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> GetUserLastestInquiry(ulong inquiryDetailId, ulong sampleId, int width, int height, int? katibeSize, string userMacAddress, int? SampleCount)
         {
             #region Get User Ip Address
