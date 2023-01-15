@@ -87,7 +87,7 @@ public class WalletRepository : IWalletRepository
         else if (!string.IsNullOrEmpty(filter.UserFilter))
         {
             query = query.Where(w =>
-                        EF.Functions.Like(w.User.Email, $"%{filter.UserFilter}%") ||
+                        EF.Functions.Like(w.User.Mobile, $"%{filter.UserFilter}%") ||
                         EF.Functions.Like(w.User.Username, $"%{filter.UserFilter}%")
                     )
                 .AsQueryable();

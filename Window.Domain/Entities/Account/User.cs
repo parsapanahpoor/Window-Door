@@ -33,11 +33,6 @@ namespace Window.Domain.Entities.Account
         [MaxLength(100, ErrorMessage = "تعداد کاراکتر های {0} نمیتواند بیشتر از {1} باشد")]
         public string Password { get; set; }
 
-        [Display(Name = "ایمیل")]
-        [MaxLength(150, ErrorMessage = "تعداد کاراکتر های {0} نمیتواند بیشتر از {1} باشد")]
-        [EmailAddress(ErrorMessage = "ایمیل وارد شده معتبر نیست .")]
-        public string? Email { get; set; }
-
         [Display(Name = "آواتار")]
         [MaxLength(100, ErrorMessage = "تعداد کاراکتر های {0} نمیتواند بیشتر از {1} باشد")]
         public string? Avatar { get; set; }

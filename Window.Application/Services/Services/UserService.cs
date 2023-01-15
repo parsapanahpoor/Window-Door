@@ -93,7 +93,6 @@ namespace Window.Application.Services
             {
                 Mobile = model.Mobile.Trim().ToLower(),
                 Username = model.Username,
-                Email = model.Email.Trim().ToLower(),
                 Password = PasswordHelper.EncodePasswordMd5(model.Password),
                 EmailActivationCode = CodeGenerator.GenerateUniqCode(),
                 CreateDate = DateTime.Now,
@@ -206,11 +205,6 @@ namespace Window.Application.Services
 
         public async Task<AddNewUserResult> CreateUser(AddUserViewModel user, IFormFile avatar)
         {
-            if (await _userRepository.IsEmailExist(user.Email))
-            {
-                return AddNewUserResult.DuplicateEmail;
-            }
-
             if (await _userRepository.IsMobileExist(user.Mobile))
             {
                 return AddNewUserResult.DuplicateMobileNumber;
@@ -221,7 +215,6 @@ namespace Window.Application.Services
             {
                 Username = user.Username,
                 CreateDate = DateAndTime.Now,
-                Email = user.Email.SanitizeText(),
                 Mobile = user.Mobile.SanitizeText(),
                 Password = PasswordHelper.EncodePasswordMd5(user.Password).SanitizeText(),
                 IsAdmin = false,
@@ -242,11 +235,6 @@ namespace Window.Application.Services
         {
             #region Model State Validation 
 
-            if (await _userRepository.IsEmailExist(user.Email))
-            {
-                return AddNewUserResult.DuplicateEmail;
-            }
-
             if (await _userRepository.IsMobileExist(user.Mobile))
             {
                 return AddNewUserResult.DuplicateMobileNumber;
@@ -260,7 +248,6 @@ namespace Window.Application.Services
             {
                 Username = user.Username,
                 CreateDate = DateAndTime.Now,
-                Email = user.Email.SanitizeText(),
                 Mobile = user.Mobile.SanitizeText(),
                 EmailActivationCode = CodeGenerator.GenerateUniqCode(),
                 Password = PasswordHelper.EncodePasswordMd5(user.Password).SanitizeText(),
@@ -319,11 +306,6 @@ namespace Window.Application.Services
         {
             var userOldInfos = await _userRepository.GetUserById(user.Id);
 
-            if (await _userRepository.IsEmailExist(user.Email) && user.Email != userOldInfos.Email)
-            {
-                return EditUserResult.DuplicateEmail;
-            }
-
             if (await _userRepository.IsMobileExist(user.Mobile) && user.Mobile != userOldInfos.Mobile)
             {
                 return EditUserResult.DuplicateMobileNumber;
@@ -334,7 +316,6 @@ namespace Window.Application.Services
             if (editedUser != null)
             {
                 editedUser.Username = user.Username;
-                editedUser.Email = user.Email.SanitizeText();
                 editedUser.Mobile = user.Mobile.SanitizeText();
 
                 if (user.Password != null)
@@ -440,7 +421,6 @@ namespace Window.Application.Services
             return new EditUserViewModel()
             {
                 Username = user.Username,
-                Email = user.Email,
                 Mobile = user.Mobile,
                 Avatar = user.Avatar,
                 UserRoles = userRoleIds

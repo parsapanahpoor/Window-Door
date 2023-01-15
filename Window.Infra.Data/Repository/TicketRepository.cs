@@ -142,9 +142,9 @@ namespace Window.Data.Repository
                 query = query.Where(s => s.Title.Contains(filter.TicketTitle));
             }
 
-            if (!string.IsNullOrEmpty(filter.UserEmail))
+            if (!string.IsNullOrEmpty(filter.mobile))
             {
-                query = query.Where(s => s.Owner.Email.Contains(filter.UserEmail));
+                query = query.Where(s => s.Owner.Mobile.Contains(filter.mobile));
             }
 
             #endregion

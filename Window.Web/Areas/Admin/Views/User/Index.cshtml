@@ -115,9 +115,6 @@
                                     @Localizer["Username"]
                                 </th>
                                 <th>
-                                    @Localizer["Email"]
-                                </th>
-                                <th>
                                     @Localizer["Mobile"]
                                 </th>
                                 <th>
@@ -137,16 +134,6 @@
                                 <tr id="profile_@item.Id" remove-ajax-item="@item.Id">
                                     <td>
                                         @item.Username
-                                    </td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.Email))
-                                        {
-                                            @item.Email
-                                        }
-                                        else
-                                        {
-                                            <span>@Localizer["Unregistered"]</span>
-                                        }
                                     </td>
                                     <td>
                                         @if (!string.IsNullOrEmpty(item.Mobile))

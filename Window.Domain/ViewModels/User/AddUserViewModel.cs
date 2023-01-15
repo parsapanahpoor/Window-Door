@@ -18,9 +18,9 @@ namespace Window.Domain.ViewModels
         public string Username { get; set; }
 
         [MaxLength(200)]
-        [DisplayName("Email")]
+        [DisplayName("Mobile")]
         [Required(ErrorMessage = "Please Enter {0}")]
-        public string Email { get; set; }
+        public string mobile { get; set; }
 
         [MaxLength(200)]
         [DisplayName("Password")]

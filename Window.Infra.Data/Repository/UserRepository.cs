@@ -53,7 +53,7 @@ namespace CRM.Data.Repository
 
         public Task<bool> IsUserActive(string email)
         {
-            return Task.FromResult(_context.Users.Any(u => u.Email == email));
+            return Task.FromResult(_context.Users.Any(u => u.Mobile == email));
         }
 
         public Task<bool> IsUserExist(ulong userId)
@@ -63,7 +63,7 @@ namespace CRM.Data.Repository
 
         public Task<bool> IsEmailExist(string email)
         {
-            return Task.FromResult(_context.Users.Any(u => u.Email == email));
+            return Task.FromResult(_context.Users.Any(u => u.Mobile == email));
         }
 
         public Task<bool> IsMobileExist(string mobile)
@@ -73,7 +73,7 @@ namespace CRM.Data.Repository
 
         public Task<bool> IsPasswordValid(string email, string password)
         {
-            return Task.FromResult(_context.Users.Any(u => u.Email == email && u.Password == password));
+            return Task.FromResult(_context.Users.Any(u => u.Mobile == email && u.Password == password));
         }
 
         public async Task CreateUser(User user)
@@ -93,7 +93,7 @@ namespace CRM.Data.Repository
 
         public async Task<User?> GetUserByEmail(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Mobile == email);
         }
 
         public async Task<FilterUserViewModel> FilterUsers(FilterUserViewModel filter)
@@ -121,7 +121,7 @@ namespace CRM.Data.Repository
 
             if ((!string.IsNullOrEmpty(filter.Email)))
             {
-                query = query.Where(u => u.Email.Contains(filter.Email));
+                query = query.Where(u => u.Mobile.Contains(filter.Mobile));
             }
             if ((!string.IsNullOrEmpty(filter.Mobile)))
             {
@@ -196,7 +196,7 @@ namespace CRM.Data.Repository
 
             if ((!string.IsNullOrEmpty(filter.Email)))
             {
-                query = query.Where(u => u.Email.Contains(filter.Email));
+                query = query.Where(u => u.Mobile.Contains(filter.Mobile));
             }
             if ((!string.IsNullOrEmpty(filter.Mobile)))
             {

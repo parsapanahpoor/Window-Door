@@ -1297,10 +1297,6 @@ namespace Window.Application.Services.Services
 
             #region filter
 
-            if ((!string.IsNullOrEmpty(filter.Email)))
-            {
-                query = query.Where(u => u.User.Email.Contains(filter.Email));
-            }
             if ((!string.IsNullOrEmpty(filter.Mobile)))
             {
                 query = query.Where(u => u.User.Mobile.Contains(filter.Mobile));

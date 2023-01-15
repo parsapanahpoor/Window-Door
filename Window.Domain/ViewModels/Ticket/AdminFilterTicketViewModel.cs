@@ -33,7 +33,7 @@ namespace Window.Domain.ViewModels.Admin.Ticket
 
         public AdminTicketType? AdminTicketType { get; set; }
 
-        public string? UserEmail { get; set; }
+        public string? mobile { get; set; }
     }
 
     public enum AdminTicketFilterSeenByAdminStatus

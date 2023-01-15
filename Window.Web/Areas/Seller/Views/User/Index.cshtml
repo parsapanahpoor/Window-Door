@@ -92,9 +92,6 @@
                                             نام کاربری
                                         </th>
                                         <th>
-                                            ایمیل 
-                                        </th>
-                                        <th>
                                             موبایل
                                         </th>
                                    
@@ -108,16 +105,6 @@
                                         <tr id="profile_@item.Id" remove-ajax-item="@item.Id">
                                             <td>
                                                 @item.Username
-                                            </td>
-                                            <td>
-                                                @if (!string.IsNullOrEmpty(item.Email))
-                                                {
-                                                    @item.Email
-                                                }
-                                                else
-                                                {
-                                                    <span>وارد نشده</span>
-                                                }
                                             </td>
                                             <td>
                                                 @if (!string.IsNullOrEmpty(item.Mobile))

@@ -260,17 +260,6 @@
                                         <p> @seller.Market.MarketName</p>
                                     </td>
                                     <td class="tc vm">
-                                        <p>
-                                            @Localizer["Email"] :
-                                            @if (seller.User.Email == null)
-                                            {
-                                                <span class="mr-8px label label-orange">وارد نشده  </span>
-                                            }
-                                            else
-                                            {
-                                                @seller.User.Email
-                                            }
-                                        </p>
                                         @if (!string.IsNullOrEmpty(seller.User.Mobile))
                                         {
                                             <hr class="margin-7" />
