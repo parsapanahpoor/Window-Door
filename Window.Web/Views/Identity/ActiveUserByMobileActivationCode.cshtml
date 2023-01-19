@@ -1,0 +1,93 @@
+﻿@using Window.Web.Culture
+@model Window.Domain.ViewModels.Site.Account.ActiveMobileByActivationCodeViewModel
+
+@{
+    ViewData["Title"] = "فعالسازی حساب کاربری";
+    var Time = ViewBag.Time;
+    Layout = "Identity/_IdentityLayout";
+
+}
+
+@section Scripts
+    {
+    <partial name="_JqueryValidation" />
+
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_SweetAlertLocalizer" />
+
+    <script src="~/lib/Simple-Countdown-Timer-Plugin-jQuery/jquery.simple.timer.js"></script>
+    <script src="~/lib/Simple-Countdown-Timer-Plugin-jQuery/examples/bundle.js"></script>
+    <script src="~/lib/Simple-Countdown-Timer-Plugin-jQuery/examples/dojo.js"></script>
+
+    <script>
+        $(function () {
+
+            $("#timer").startTimer({
+                onComplete: function () {
+                    $("#SMS").css({ 'display': 'block' });
+                    $("#timer").css({ 'display': 'none' });
+                }
+            });
+
+        });
+    </script>
+}
+
+@section styles
+    {
+    <style>
+        .jst-hours {
+            float: left;
+        }
+
+        .jst-minutes {
+            float: left;
+        }
+
+        .jst-seconds {
+            float: left;
+        }
+
+        .jst-clearDiv {
+            clear: both;
+        }
+
+        .jst-timeout {
+            color: red;
+        }
+    </style>
+}
+
+<div class="login-container animated fadeInDown">
+    <form method="post" dir="" ltr" asp-antiforgery="true">
+                                        <input type="hidden" asp-for="Mobile" value=@ViewBag.Mobile />
+
+        <div class="loginbox bg-white">
+            <div class="loginbox-title">فعالسازی حساب کاربری</div>
+
+            <div class="loginbox-textbox">
+                <label asp-for="Mobile">کد فعال سازی :</label>
+                <input asp-for="MobileActiveCode" class="form-control" />
+                <span asp-validation-for="MobileActiveCode" class="text-danger small"></span>
+            </div>
+
+            <div class="remember-me-wrap" style="padding-left:50px;">
+                <p class="timerCounter" data-seconds-left="@Time" id="timer"></p>
+            </div>
+
+            <div class="loginbox-textbox">
+
+                <a id="SMS" asp-area="" asp-controller="Identity" asp-action="ActiveUserByMobileActivationCode" asp-route-Mobile="@ViewBag.Mobile" asp-route-Resend="true" class="btn btn-warning" style="display: none"><span> ارسال مجدد کد  </span></a>
+
+            </div>
+
+            <div class="loginbox-submit mt-3" dir="rtl">
+                <input type="submit" class="btn btn-primary" value="@Localizer["ارسال"]">
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+

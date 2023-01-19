@@ -22,6 +22,9 @@ Purchase: https://wrapbootstrap.com/theme/beyondadmin-adminapp-angularjs-mvc-WB0
     <link id="bootstrap-rtl-link" href="" rel="stylesheet" />
     <link href="/admin/css/font-awesome.min.css" rel="stylesheet" />
 
+    @await RenderSectionAsync("Styles", required: false)
+
+
     <!--Fonts-->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css">
 
@@ -48,7 +51,7 @@ Purchase: https://wrapbootstrap.com/theme/beyondadmin-adminapp-angularjs-mvc-WB0
     <script src="/lib/sweetalert/sweetalert.js"></script>
 <!--Beyond Scripts-->
     <script src="/admin/js/beyond.min.js"></script>
-    @RenderSection("Scripts", false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 <!--Body Ends-->
 </html>

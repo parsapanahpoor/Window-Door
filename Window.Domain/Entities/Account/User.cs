@@ -53,6 +53,16 @@ namespace Window.Domain.Entities.Account
 
         public string? ShopName { get; set; }
 
+        public bool IsMobileConfirm { get; set; } = false;
+
+        [Display(Name = "کد فعالسازی موبایل")]
+        [Required(ErrorMessage = "این فیلد الزامی است .")]
+        [MaxLength(100, ErrorMessage = "تعداد کاراکتر های {0} نمیتواند بیشتر از {1} باشد")]
+        public string MobileActivationCode { get; set; }
+
+        [Display(Name = "تاریخ انقضای تایم اس ام اس فعال سازی ")]
+        public DateTime? ExpireMobileSMSDateTime { get; set; } 
+
         #endregion
 
         #region Relations

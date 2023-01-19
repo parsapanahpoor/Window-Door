@@ -53,7 +53,7 @@ namespace CRM.Data.Repository
 
         public Task<bool> IsUserActive(string email)
         {
-            return Task.FromResult(_context.Users.Any(u => u.Mobile == email));
+            return Task.FromResult(_context.Users.Any(u => u.Mobile == email && u.IsMobileConfirm));
         }
 
         public Task<bool> IsUserExist(ulong userId)

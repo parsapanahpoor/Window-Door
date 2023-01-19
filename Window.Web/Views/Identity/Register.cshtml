@@ -19,18 +19,6 @@
 
             <div class="registerbox-caption text-right">@Localizer["اطلاعات خود را وارد کنید "]</div>
 
-            <div class="registerbox-textbox col-6">
-                <label asp-for="Username">نام کاربری </label>
-                <input asp-for="Username" class="form-control"/>
-                <span asp-validation-for="Username" class="text-danger small"></span>
-            </div>
-
-            <div class="registerbox-textbox">
-                <label asp-for="Email">ایمیل</label>
-                <input asp-for="Email" class="form-control"/>
-                <span asp-validation-for="Email" class="text-danger small"></span>
-            </div>
-            
             <div class="registerbox-textbox">
                 <label asp-for="Mobile">موبایل</label>
                 <input asp-for="Mobile" class="form-control" placeholder="@Localizer["مثال 09**********"]"/>

@@ -13,6 +13,8 @@ using Window.Domain.ViewModels.User.Account;
 using Window.Domain.ViewModels.Common;
 using Window.Application.Generators;
 using Window.Application.Security;
+using Window.Domain.ViewModels.Site.Account;
+using Window.Domain.ViewModels.Account;
 
 namespace Window.Application.Interfaces
 {
@@ -20,7 +22,7 @@ namespace Window.Application.Interfaces
     {
         #region Authentication
 
-        Task<bool> ResetPassword(ResetPasswordViewModel resetPassword);
+        Task<ResetPasswordResult> ResetUserPassword(ResetPasswordViewModel pass, string mobile);
 
         Task<RegisterUserResponse> RegisterUserAsync(RegisterUserViewModel model);
 
@@ -32,11 +34,15 @@ namespace Window.Application.Interfaces
 
         #region user account
 
+        Task<ForgotPasswordResult> RecoverUserPassword(ForgetPasswordViewModel forgot);
+
+        Task<ActiveMobileByActivationCodeResult> ActiveUserMobile(ActiveMobileByActivationCodeViewModel activeMobileByActivationCodeViewModel);
+
+        Task ResendActivationCodeSMS(string Mobile);
+
+        Task<bool> IsExistUserByMobile(string mobile);
+
         Task<User?> GetUserByEmailActivationCode(string emailActivationCode);
-
-        Task<ResetPasswordViewModel> GetResetPasswordViewModel(string emailActivationCode);
-
-        Task<bool> ForgotPasswordUser(ForgotPasswordViewModel forgotPassword);
 
         Task<EditProfileViewModel?> GetUserProfileForEditAsync(ulong userId);
 

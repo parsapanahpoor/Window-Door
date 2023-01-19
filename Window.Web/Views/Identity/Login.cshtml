@@ -18,9 +18,9 @@
             }
 
             <div class="loginbox-textbox">
-                <label asp-for="Email">ایمیل</label>
-                <input asp-for="Email" class="form-control"/>
-                <span asp-validation-for="Email" class="text-danger small"></span>
+                <label asp-for="Mobile">موبایل</label>
+                <input asp-for="Mobile" class="form-control" />
+                <span asp-validation-for="Mobile" class="text-danger small"></span>
             </div>
             
             <div class="loginbox-textbox">
@@ -39,7 +39,7 @@
             </div>
             
             <div class="loginbox-textbox">
-                <a asp-action="ForgotPassword">@Localizer["فراموشی روز عبور "]</a>
+                <a asp-action="ForgotPassword" asp-area="" asp-controller="Identity">@Localizer["فراموشی روز عبور "]</a>
             </div>
             
             <div class="loginbox-textbox">

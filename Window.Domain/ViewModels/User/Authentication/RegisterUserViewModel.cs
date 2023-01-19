@@ -10,17 +10,6 @@ public class RegisterUserViewModel
 
     [MaxLength(200, ErrorMessage = "Please Enter {0} Less Than {1} Character")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-    [DisplayName("Username")]
-    public string Username { get; set; }
-
-    [MaxLength(200, ErrorMessage = "Please Enter {0} Less Than {1} Character")]
-    [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-    [EmailAddress(ErrorMessage = "Please Enter Valid Email Address")]
-    [DisplayName("Email")]
-    public string Email { get; set; }
-
-    [MaxLength(200, ErrorMessage = "Please Enter {0} Less Than {1} Character")]
-    [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
     [DisplayName("Password")]
     [DataType(DataType.Password)]
     public string Password { get; set; }
