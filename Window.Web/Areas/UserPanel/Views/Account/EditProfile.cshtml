@@ -1,0 +1,112 @@
+﻿@model Window.Domain.ViewModels.User.Account.UserPanelEditUserInfoViewModel
+@using Window.Application.StaticTools
+@{
+    ViewData["Title"] = "ویرایش اظلاعات کاربری";
+}
+
+@using Window.Domain.ViewModels.User
+@using Window.Application.StticTools
+@using Window.Domain.Entities.Account
+
+@section scripts{
+    <partial name="_JqueryValidators" />
+
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imagename').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#ImageName").change(function () {
+            readURL(this);
+        });
+
+    </script>
+}
+
+    @section Breadcrumbs{
+    <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+            <h4>@ViewData["Title"]</h4>
+        </div>
+    </div>
+    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" asp-area="UserPanel" asp-controller="Home"> داشبورد کاربری </a></li>
+            <li class="breadcrumb-item"><a href="#"> ویرایش اطلاعات کاربری </a></li>
+        </ol>
+    </div>
+}
+    <form asp-controller="Account" asp-area="UserPanel" asp-action="EditProfile" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="UserId" />
+        <input type="hidden" asp-for="AvatarName" />
+        <div class="row">
+
+            <div class="col-xl-7 col-lg-7">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title"> اطلاعات کاربر </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="basic-form">
+
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label> نام کاربری </label>
+                                    <input asp-for="username" type="text" class="form-control" placeholder=" نام کاربری را وارد کنید ">
+                                    <span asp-validation-for="username" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>موبایل</label>
+                                    <input type="text" readonly asp-for="Mobile" class="form-control" placeholder="موبایل کاربر را وراد کنید ">
+                                    <span asp-validation-for="Mobile" class="text-danger"></span>
+                                </div>
+
+                            </div>
+
+                            <button type="submit" class="btn btn-outline-primary">ثبت </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-5 col-lg-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>عکس پروفایل</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="basic-form">
+                            <div class="form-row">
+                                <div class="card-body row">
+                                <img style="margin: auto; width: 252px" id="imagename" class="img-responsive rounded" src="@((string.IsNullOrEmpty(Model.AvatarName))? FilePaths.DefaultUserAvatar : FilePaths.UserAvatarPath + Model.AvatarName )" alt="upload_img">
+                                </div>
+                                <div class="input-group mb-3">
+
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">آپلود </span>
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="UserAvatar" id="ImageName">
+                                        <label class="custom-file-label">انتخاب فایل</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>

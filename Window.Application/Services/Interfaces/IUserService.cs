@@ -34,9 +34,13 @@ namespace Window.Application.Interfaces
 
         #region user account
 
+        Task<UserPanelEditUserInfoResult> EditUserInfoInUserPanel(UserPanelEditUserInfoViewModel edit, IFormFile? UserAvatar);
+
         Task<ForgotPasswordResult> RecoverUserPassword(ForgetPasswordViewModel forgot);
 
         Task<ActiveMobileByActivationCodeResult> ActiveUserMobile(ActiveMobileByActivationCodeViewModel activeMobileByActivationCodeViewModel);
+
+        Task<UserPanelEditUserInfoViewModel> FillUserPanelEditUserInfoViewModel(ulong userId);
 
         Task ResendActivationCodeSMS(string Mobile);
 

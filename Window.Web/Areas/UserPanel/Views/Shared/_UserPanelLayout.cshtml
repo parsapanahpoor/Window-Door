@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <partial name="_UserPanelMetaTags" />
+    <title>پنل کاربری | @ViewData["Title"] </title>
+    <partial name="_UserPanelHeaderReferences" />
+    @RenderSection("styles", false)
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child sk-bounce3"></div>
+        </div>
+    </div>
+
+    <div id="main-wrapper">
+
+        <div class="nav-header">
+            <a href="/" class="brand-logo">
+
+
+                @*                <img class="brand-title" src="/AdminContent/images/Agahi.png" alt="">
+                *@
+                @*<img class="logo-abbr" src="/AdminContent/images/logo-white.png" alt="">
+                <img class="logo-compact" src="/AdminContent/images/logo-text-white.png" alt="">
+                <img class="brand-title" src="/AdminContent/images/logo-text-white.png" alt="">*@
+            </a>
+
+            <div class="nav-control">
+                <div class="hamburger">
+                    <span class="line"></span><span class="line"></span><span class="line"></span>
+                </div>
+            </div>
+        </div>
+
+        @await Component.InvokeAsync("UserPanelChatbox")
+
+        @await Component.InvokeAsync("UserPanelHeader")
+
+        @await Component.InvokeAsync("UserPanelSideBar")
+
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    @await RenderSectionAsync("Breadcrumbs", true)
+                </div>
+
+                @RenderBody()
+
+            </div>
+        </div>
+
+    </div>
+
+    <partial name="_SharedModal" />
+
+    <partial name="_UserPanelFooterReferences" />
+
+    <partial name="_Modals" />
+
+    @RenderSection("scripts", false)
+
+    <partial name="_SiteMessages" />
+
+</body>
+
+</html>
+

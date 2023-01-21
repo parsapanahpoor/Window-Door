@@ -59,7 +59,7 @@ namespace Window.Web.Controllers
             switch (result)
             {
                 case RegisterUserResponse.EmailExist:
-                    ModelState.AddModelError("Email", _localizer["Email Exist"]);
+                    ModelState.AddModelError("Mobile", _localizer["Mobile Exist"]);
                     break;
                 case RegisterUserResponse.MobileExist:
                     ModelState.AddModelError("Mobile", _localizer["Mobile Exist"]);
@@ -183,7 +183,7 @@ namespace Window.Web.Controllers
                 switch (canUserLogin)
                 {
                     case LoginUserResponse.EmailNotFound:
-                        ModelState.AddModelError("Email", _localizer["Email Not Found"]);
+                        ModelState.AddModelError("Email", _localizer["موبایل وارد شده صحیح نمی باشد."]);
                         break;
                     case LoginUserResponse.UserNotActive:
                         ModelState.AddModelError("Error", _localizer["Your Account Is Not Active"]);
@@ -245,7 +245,7 @@ namespace Window.Web.Controllers
                         ModelState.AddModelError("Mobile", _localizer["کاربر مورد نظر یافت نشد"]);
                         break;
                     case ForgotPasswordResult.FailSendEmail:
-                        ModelState.AddModelError("Mobile", _localizer["در ارسال ایمیل مشکلی رخ داد"]);
+                        ModelState.AddModelError("Mobile", _localizer["در ارسال موبایل مشکلی رخ داد"]);
                         break;
                     case ForgotPasswordResult.UserIsBlocked:
                         ModelState.AddModelError("Mobile", _localizer["حساب کاربری شما بسته شده است!"]);

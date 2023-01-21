@@ -81,10 +81,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Areas\UserPanel\Controllers\" />
-	  <Folder Include="Areas\UserPanel\Data\" />
-	  <Folder Include="Areas\UserPanel\Models\" />
-	  <Folder Include="Areas\UserPanel\Views\" />
+	  <Folder Include="Areas\UserPanel\ActionFilterAttributes\" />
 	  <Folder Include="wwwroot\content\images\Sample\origin\" />
 	  <Folder Include="wwwroot\content\images\Sample\thumb\" />
 	  <Folder Include="wwwroot\content\images\sellerInfo\main\" />

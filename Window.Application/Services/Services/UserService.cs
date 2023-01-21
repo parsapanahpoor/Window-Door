@@ -149,6 +149,73 @@ namespace Window.Application.Services
 
         #region User
 
+        public async Task<UserPanelEditUserInfoViewModel> FillUserPanelEditUserInfoViewModel(ulong userId)
+        {
+            #region Get User By Id
+
+            var user = await GetUserById(userId);
+
+            if (user == null) return null;
+
+            #endregion
+
+            #region Fill View Model
+
+            UserPanelEditUserInfoViewModel model = new UserPanelEditUserInfoViewModel()
+            {
+                Mobile = user.Mobile,
+                UserId = user.Id,
+                AvatarName = user.Avatar,
+                username = user.Username,
+            };
+
+            #endregion
+
+            return model;
+        }
+
+        public async Task<UserPanelEditUserInfoResult> EditUserInfoInUserPanel(UserPanelEditUserInfoViewModel edit, IFormFile? UserAvatar)
+        {
+            #region Data Valdiation
+
+            var user = await GetUserById(edit.UserId);
+
+            if (user == null)
+            {
+                return UserPanelEditUserInfoResult.UserNotFound;
+            }
+
+            if (UserAvatar != null && !UserAvatar.IsImage())
+            {
+                return UserPanelEditUserInfoResult.NotValidImage;
+            }
+
+            if (UserAvatar != null)
+            {
+                if (!string.IsNullOrEmpty(user.Avatar))
+                {
+                    user.Avatar.DeleteImage(FilePaths.UserAvatarPathServer, FilePaths.UserAvatarPathThumbServer);
+                }
+
+                var imageName = CodeGenerator.GenerateUniqCode() + Path.GetExtension(UserAvatar.FileName);
+                UserAvatar.AddImageToServer(imageName, FilePaths.UserAvatarPathServer, 270, 270, FilePaths.UserAvatarPathThumbServer);
+                user.Avatar = imageName;
+            }
+
+            #endregion
+
+            #region Update User Field
+
+            user.Username = edit.username.SanitizeText();
+
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            #endregion
+
+            return UserPanelEditUserInfoResult.Success;
+        }
+
         public async Task<ActiveMobileByActivationCodeResult> ActiveUserMobile(ActiveMobileByActivationCodeViewModel activeMobileByActivationCodeViewModel)
         {
             #region Get User By Mobile

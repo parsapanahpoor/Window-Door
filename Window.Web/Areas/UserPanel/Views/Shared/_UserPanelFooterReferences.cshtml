@@ -1,0 +1,57 @@
+﻿
+<!--**********************************
+    Scripts
+***********************************-->
+<!-- Required vendors -->
+<script src="/AdminContent/vendor/global/global.min.js"></script>
+<script src="/AdminContent/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<script src="/AdminContent/vendor/chart.js/Chart.bundle.min.js"></script>
+<script src="/AdminContent/js/custom.min.js"></script>
+<!-- Apex Chart -->
+<script src="/AdminContent/vendor/apexchart/apexchart.js"></script>
+
+<!-- Vectormap -->
+<!-- Chart piety plugin files -->
+<script src="/AdminContent/vendor/peity/jquery.peity.min.js"></script>
+
+<!-- Chartist -->
+<script src="/AdminContent/vendor/chartist/js/chartist.min.js"></script>
+
+<!-- Dashboard 1 -->
+<script src="/AdminContent/js/dashboard/dashboard-1.js"></script>
+<!-- Svganimation scripts -->
+<script src="/AdminContent/vendor/svganimation/vivus.min.js"></script>
+<script src="/AdminContent/vendor/svganimation/svg.animation.js"></script>
+<script>
+    (function ($) {
+        "use strict"
+
+        var direction = getUrlParams('dir');
+        if (direction != 'rtl') { direction = 'ltr'; }
+
+        new dezSettings({
+            typography: "roboto",
+            version: "light",
+            layout: "vertical",
+            headerBg: "color_1",
+            navheaderBg: "color_3",
+            sidebarBg: "color_1",
+            sidebarStyle: "full",
+            sidebarPosition: "fixed",
+            headerPosition: "fixed",
+            containerLayout: "wide",
+            direction: direction
+        });
+
+    })(jQuery);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@7/dist/sweetalert2.all.min.js"></script>
+<script src="/js/notifications.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/AdminContent/custom/AdminCustom.js"></script>
+<script src="/AdminContent/js/adminCustom.js"></script>
+
+<!--Add By Developer-->
+<script src="~/common/notification/notifications.js"></script>
+<script src="~/common/custom/custom.js"></script>
