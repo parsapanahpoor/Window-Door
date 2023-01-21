@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Reflection;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
@@ -271,8 +272,6 @@ namespace Window.Web.Controllers
         {
             #region Send Model To View
 
-            ViewBag.Mobile = mobile;
-
             var user = await _userService.GetUserByEmail(mobile);
 
             if (user == null) return NotFound();
@@ -289,6 +288,8 @@ namespace Window.Web.Controllers
             var TimerMinut = expireMinut - DateTime.Now;
 
             ViewBag.Time = TimerMinut.TotalMinutes * 60;
+
+            ViewBag.Mobile = mobile;
 
             #endregion
 

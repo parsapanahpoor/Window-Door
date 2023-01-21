@@ -91,7 +91,7 @@ namespace Window.Application.Services.Services
             return filter;
         }
 
-        public async Task<bool> CreateMainBrand(MainBrand brand , IFormFile? brandLogo)
+        public async Task<bool> CreateMainBrand(MainBrand brand, IFormFile? brandLogo)
         {
             #region Add Image 
 
@@ -107,7 +107,7 @@ namespace Window.Application.Services.Services
             #region Add Method 
 
             await _context.MainBrands.AddAsync(brand);
-            await _context.SaveChangesAsync();  
+            await _context.SaveChangesAsync();
 
             #endregion
 
@@ -140,7 +140,7 @@ namespace Window.Application.Services.Services
 
         public async Task<MainBrand?> GetMainBrandById(ulong brandId)
         {
-            return await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == brandId);   
+            return await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == brandId);
         }
 
         public async Task<YaraghBrand?> GetYaraghBrandById(ulong brandId)
@@ -149,11 +149,11 @@ namespace Window.Application.Services.Services
         }
 
 
-        public async Task<bool> UpdateMainBrand(MainBrand mainBrand , IFormFile? brandLogo)
+        public async Task<bool> UpdateMainBrand(MainBrand mainBrand, IFormFile? brandLogo)
         {
             #region Get Brand By Id  
 
-            var brand = await _context.MainBrands.FirstOrDefaultAsync(p=> !p.IsDelete && p.Id == mainBrand.Id);
+            var brand = await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == mainBrand.Id);
 
             if (brand == null) return false;
 
@@ -229,7 +229,7 @@ namespace Window.Application.Services.Services
         {
             #region Get Brand By Brand Id
 
-            var mainBrand = await _context.MainBrands.FirstOrDefaultAsync(p=> !p.IsDelete && p.Id == brandId);
+            var mainBrand = await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == brandId);
             if (mainBrand == null) return false;
 
             #endregion
@@ -270,6 +270,44 @@ namespace Window.Application.Services.Services
             return await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.BrandName == name);
         }
 
+        public async Task<List<SelectListViewModel>> GetBrandsFromBrandType(int brandTypeId)
+        {
+            if (brandTypeId == 0)
+            {
+                return await _context.MainBrands.Where(s => !s.IsDelete && s.UPVC && !s.Alominum)
+                  .Select(s => new SelectListViewModel
+                  {
+                      Id = s.Id,
+                      Title = s.BrandName
+                  }).ToListAsync();
+            }
+            if (brandTypeId == 1)
+            {
+                return await _context.MainBrands.Where(s => !s.IsDelete && !s.UPVC && s.Alominum)
+              .Select(s => new SelectListViewModel
+              {
+                  Id = s.Id,
+                  Title = s.BrandName
+              }).ToListAsync();
+            }
+            return await _context.MainBrands.Where(s => !s.IsDelete)
+                .Select(s => new SelectListViewModel
+                {
+                    Id = s.Id,
+                    Title = s.BrandName
+                }).ToListAsync();
+        }
+
+        public async Task<List<SelectListViewModel>> GetUPVCBrands()
+        {
+            return await _context.MainBrands.Where(s => !s.IsDelete && s.UPVC && !s.Alominum)
+                .Select(s => new SelectListViewModel
+                {
+                    Id = s.Id,
+                    Title = s.BrandName
+                }).ToListAsync();
+        }
+
         public async Task<List<SelectListViewModel>> GetAllBrands()
         {
             return await _context.MainBrands.Where(s => !s.IsDelete)
@@ -283,7 +321,7 @@ namespace Window.Application.Services.Services
         //Get List Of Main Brands Of API
         public async Task<List<MainBrand>> GetListOfMainBrand()
         {
-            return await _context.MainBrands.Where(p=> !p.IsDelete).ToListAsync();
+            return await _context.MainBrands.Where(p => !p.IsDelete).ToListAsync();
         }
 
         #endregion

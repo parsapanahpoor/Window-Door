@@ -21,6 +21,7 @@ using Window.Application.Services.Interfaces;
 using Window.Application.Services.Implementation;
 using Window.Domain.ViewModels.Site.Account;
 using Window.Domain.ViewModels.Account;
+using Window.Application.StaticTools;
 
 namespace Window.Application.Services
 {
@@ -34,8 +35,11 @@ namespace Window.Application.Services
         private readonly WindowDbContext _context;
         private readonly IViewRenderService _viewRenderService;
         private IEmailSender _emailSender;
+        private static readonly HttpClient client = new HttpClient();
+        private readonly ISMSService _smsservice;
 
-        public UserService(IConfiguration configuration, IUserRepository userRepository, IWalletService walletService, WindowDbContext context, IEmailSender emailSender , IViewRenderService viewRenderService)
+        public UserService(IConfiguration configuration, IUserRepository userRepository, IWalletService walletService, WindowDbContext context
+                                , IEmailSender emailSender , IViewRenderService viewRenderService, ISMSService smsservice)
         {
             _configuration = configuration;
             _userRepository = userRepository;
@@ -43,6 +47,7 @@ namespace Window.Application.Services
             _context = context;
             _emailSender = emailSender;
             _viewRenderService = viewRenderService;
+            _smsservice = smsservice;
         }
 
         #endregion
@@ -106,12 +111,12 @@ namespace Window.Application.Services
 
             #region Send Verification Code SMS
 
-            //var result = $"https://api.kavenegar.com/v1/564672526D58694D3477685571796F7372574F576C476B6366785462356D3164683370395A2B61356D6E383D/verify/lookup.json?receptor={User.Mobile}&token={User.MobileActivationCode}&template=Register";
-            //var results = client.GetStringAsync(result);
+            var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={user.Mobile}&token={user.MobileActivationCode}&template=Register";
+            var results = client.GetStringAsync(result);
 
-            //var message = Messages.SendActivationRegisterSms(User.MobileActivationCode);
+            var message = Window.Application.StaticTools.Messages.SendActivationRegisterSms(user.MobileActivationCode);
 
-            //await _smsservice.SendSimpleSMS(User.Mobile, message);
+            await _smsservice.SendSimpleSMS(user.Mobile, message);
 
             #endregion
 
@@ -262,12 +267,12 @@ namespace Window.Application.Services
 
             #region Send Verification Code SMS
 
-            //var result = $"https://api.kavenegar.com/v1/564672526D58694D3477685571796F7372574F576C476B6366785462356D3164683370395A2B61356D6E383D/verify/lookup.json?receptor={user.Mobile}&token={user.MobileActivationCode}&template=Register";
-            //var results = client.GetStringAsync(result);
+            var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={user.Mobile}&token={user.MobileActivationCode}&template=Register";
+            var results = client.GetStringAsync(result);
 
-            //var message = Messages.SendActivationRegisterSms(user.MobileActivationCode);
+            var message = Window.Application.StaticTools.Messages.SendActivationRegisterSms(user.MobileActivationCode);
 
-            //await _smsservice.SendSimpleSMS(user.Mobile, message);
+            await _smsservice.SendSimpleSMS(user.Mobile, message);
 
             #endregion
         }
@@ -310,9 +315,9 @@ namespace Window.Application.Services
 
             #region Send Verification Code SMS
 
-            //var message = Messages.SendActivationRegisterSms(user.MobileActivationCode);
+            var message = Messages.SendActivationRegisterSms(user.MobileActivationCode);
 
-            //await _smsservice.SendSimpleSMS(user.Mobile, message);
+            await _smsservice.SendSimpleSMS(user.Mobile, message);
 
             #endregion
 

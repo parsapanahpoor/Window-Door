@@ -649,5 +649,59 @@ namespace Window.Web.Areas.Seller.Controllers
         }
 
         #endregion
+
+        #region Changes From Personal Info Page 
+
+        #region Add Work Sample
+
+        [HttpGet]
+        public async Task<IActionResult> AddWorkSample()
+        {
+            return View();
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddWorkSample(AddSellerWorkSampleViewModel workSample, IFormFile workSampleImage)
+        {
+            #region Model State Validaton 
+
+            if (!ModelState.IsValid)
+            {
+                TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد .";
+                return View(workSample);
+            }
+
+            #endregion
+
+            #region Add Personal Work Sample
+
+            workSample.UserId = User.GetUserId();
+
+            var result = await _sellerService.AddSellerWorkSample(workSample, workSampleImage);
+
+            switch (result)
+            {
+                case AddSellerWorkSampleResult.Success:
+                    TempData[SuccessMessage] = "عملیات با موفقیت انجام شده است .";
+                    return RedirectToAction(nameof(ListOfPersonalInfo));
+
+                case AddSellerWorkSampleResult.ImageNotFound:
+                    TempData[ErrorMessage] = "تصویر باید وارد شود .";
+                    break;
+
+                case AddSellerWorkSampleResult.Faild:
+                    TempData[ErrorMessage] = "عملیات با شکست مواجه شده است .";
+                    break;
+            }
+
+            #endregion
+
+            return View(workSample);
+        }
+
+
+        #endregion
+
+        #endregion
     }
 }

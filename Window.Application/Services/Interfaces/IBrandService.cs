@@ -15,6 +15,10 @@ namespace Window.Application.Services.Interfaces
         //Get Brand By Name
         Task<MainBrand> GetMainBrandByBrandName(string name);
 
+        Task<List<SelectListViewModel>> GetUPVCBrands();
+
+        Task<List<SelectListViewModel>> GetBrandsFromBrandType(int brandTypeId);
+
         //Get List Of Main Brands Of API
         Task<List<MainBrand>> GetListOfMainBrand();
 

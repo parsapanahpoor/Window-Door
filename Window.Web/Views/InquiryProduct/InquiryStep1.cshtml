@@ -63,7 +63,7 @@
     </style>
 }
 
-    @section Scripts
+@section Scripts
     {
 
     <script>
@@ -86,28 +86,46 @@
             }
         });
 
+        $("#SellerType").change(function () {
+            if ($("#SellerType :selected").val() !== '') {
+                $('#MainBrandId option:not(:first)').remove();
+                $.get("/Home/LoadBrands", { SellerType: $("#SellerType :selected").val() }).then(res => {
+                    if (res.data !== null) {
+                        $.each(res.data, function () {
+                            $("#MainBrandId").append(
+                                '<option value=' + this.id + '>' + this.title + '</option>'
+                            );
+                        });
+                        $("#MainBrandId").removeAttr("disabled");
+                    }
+                });
+            } else {
+                $('#MainBrandId option:not(:first)').remove();
+            }
+        });
+
     </script>
 
 }
 
 
-    <div class="parallax" data-background="/Site/images/1.jpg" data-color="#36383e" data-color-opacity="0.5" data-img-width="2500" data-img-height="1600" style="background-image: url(&quot;images/home-parallax-2.jpg&quot;); background-attachment: fixed; background-size: 1600px 1024px; background-position: 50% -215.14px;">
-        <div class="parallax-overlay" style="background-color: rgb(54, 56, 62); opacity: 0.5;"></div>
+<div class="parallax" data-background="/Site/images/1.jpg" data-color="#36383e" data-color-opacity="0.5" data-img-width="2500" data-img-height="1600" style="background-image: url(&quot;images/home-parallax-2.jpg&quot;); background-attachment: fixed; background-size: 1600px 1024px; background-position: 50% -215.14px;">
+    <div class="parallax-overlay" style="background-color: rgb(54, 56, 62); opacity: 0.5;"></div>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
 
-                    <form asp-action="InquiryStep2" asp-controller="InquiryProduct" asp-area="" id="filter-search" method="get">
-                        <input name="UserMacAddress" type="hidden" value="@ViewBag.UserId" />
+                <form asp-action="InquiryStep2" asp-controller="InquiryProduct" asp-area="" id="filter-search" method="get">
+                    <input name="UserMacAddress" type="hidden" value="@ViewBag.UserId" />
 
-                        <div class="search-container">
+                    <div class="search-container">
 
-                            <!-- Form -->
-                            <h2>یافتن درب و پنجره </h2>
+                        <!-- Form -->
+                        <h2>یافتن درب و پنجره </h2>
 
-                            <!-- Row With Forms -->
-                            <div class="row with-forms">
+                        <!-- Row With Forms -->
+                        <div class="row with-forms">
 
                             <!-- Status -->
                             <div class="col-md-4">
@@ -152,9 +170,9 @@
                             </div>
 
 
-                                                <!-- Property Type -->
-                                <div class="col-md-4">
-                                       <select asp-for="SellerType" data-placeholder="جنس کالا" class="chosen-select-no-single" style="display: none;">
+                            <!-- Property Type -->
+                            <div class="col-md-4">
+                                <select asp-for="SellerType" data-placeholder="جنس کالا" class="chosen-select-no-single" style="display: none;">
                                     <option value="0">UPVC</option>
                                     <option value="1">آلمینیوم</option>
                                 </select>
@@ -166,9 +184,9 @@
                                     <option value="@null">همه</option>
                                     @if (brand != null && brand.Any())
                                     {
-                                        foreach (var brands in brand)
+                                        foreach (var br in brand)
                                         {
-                                            <option value="@brands.Id"> @brands.Title </option>
+                                            <option value="@br.Id"> @br.Title </option>
                                         }
                                     }
                                 </select>
@@ -188,7 +206,7 @@
                             </div>
 
                         </div>
-        
+
                         <!-- Row With Forms -->
                         <div class="row with-forms" style="margin-top:15px">
 

@@ -13,6 +13,7 @@ using Window.Application.Extensions;
 using Window.Domain.Enums.SellerType;
 using System.Text.Json.Serialization;
 using System.Net;
+using Microsoft.AspNetCore.Mvc.Razor.Extensions;
 
 namespace Window.Web.Controllers
 {
@@ -243,6 +244,17 @@ namespace Window.Web.Controllers
             var result = await _stateService.GetStateChildren(stateId);
 
             return JsonResponseStatus.Success(result);
+        }
+
+        #endregion
+
+        #region Load Brands 
+
+        public async Task<IActionResult> LoadBrands(int SellerType)
+        {
+            var res = await _brandService.GetBrandsFromBrandType(SellerType);
+
+            return JsonResponseStatus.Success(res);
         }
 
         #endregion

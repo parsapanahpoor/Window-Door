@@ -52,7 +52,7 @@ namespace Window.Web.Controllers
 
             #region Brand ViewBag
 
-            ViewBag.Brand = await _brandService.GetAllBrands();
+            ViewBag.Brand = await _brandService.GetUPVCBrands();
 
             #endregion
 

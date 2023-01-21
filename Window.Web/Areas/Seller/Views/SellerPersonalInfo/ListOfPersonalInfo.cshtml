@@ -14,60 +14,60 @@
 }
 
 @section Scripts
-{
-<script src="/lib/Custom/SellerPersonalInfo.js"></script>
-<partial name="_JqueryValidation" />
+    {
+    <script src="/lib/Custom/SellerPersonalInfo.js"></script>
+    <partial name="_JqueryValidation" />
 
-<script>
+    <script>
 
         $("#CountryId").change(function () {
-        if ($("#CountryId :selected").val() !== '') {
-            $('#CityId option:not(:first)').remove();
-            $('#StateId option:not(:first)').remove();
-            $.get("/Home/LoadCities", { stateId: $("#CountryId :selected").val() }).then(res => {
-                if (res.data !== null) {
-                    $.each(res.data, function () {
-                        $("#StateId").append(
-                            '<option value=' + this.id + '>' + this.title + '</option>'
-                        );
-                    });
-                }
-            });
-        } else {
-            $('#StateId option:not(:first)').remove();
-            $('#CityId option:not(:first)').remove();
-        }
-    });
+            if ($("#CountryId :selected").val() !== '') {
+                $('#CityId option:not(:first)').remove();
+                $('#StateId option:not(:first)').remove();
+                $.get("/Home/LoadCities", { stateId: $("#CountryId :selected").val() }).then(res => {
+                    if (res.data !== null) {
+                        $.each(res.data, function () {
+                            $("#StateId").append(
+                                '<option value=' + this.id + '>' + this.title + '</option>'
+                            );
+                        });
+                    }
+                });
+            } else {
+                $('#StateId option:not(:first)').remove();
+                $('#CityId option:not(:first)').remove();
+            }
+        });
 
-    $("#StateId").change(function () {
-        if ($("#StateId :selected").val() !== '') {
-            $('#CityId option:not(:first)').remove();
-            $.get("/Home/LoadCities", { stateId: $("#StateId :selected").val() }).then(res => {
-                if (res.data !== null) {
-                    $.each(res.data, function () {
-                        $("#CityId").append(
-                            '<option value=' + this.id + '>' + this.title + '</option>'
-                        );
-                    });
-                }
-            });
-        } else {
-            $('#CityId option:not(:first)').remove();
-        }
-    });
+        $("#StateId").change(function () {
+            if ($("#StateId :selected").val() !== '') {
+                $('#CityId option:not(:first)').remove();
+                $.get("/Home/LoadCities", { stateId: $("#StateId :selected").val() }).then(res => {
+                    if (res.data !== null) {
+                        $.each(res.data, function () {
+                            $("#CityId").append(
+                                '<option value=' + this.id + '>' + this.title + '</option>'
+                            );
+                        });
+                    }
+                });
+            } else {
+                $('#CityId option:not(:first)').remove();
+            }
+        });
 
-</script>
+    </script>
 
 }
 
 @section Breadcrumb
-{
-<li>
-    <a asp-action="Index" asp-controller="Home" asp-area="Seller"> داشبورد </a>
-</li>
-<li>
-    <a href="javascript:void(0)"> @ViewData["Title"] </a>
-</li>
+    {
+    <li>
+        <a asp-action="Index" asp-controller="Home" asp-area="Seller"> داشبورد </a>
+    </li>
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
 }
 
 <div class="row">
@@ -121,31 +121,31 @@
                             <div class="widget-body">
                                 <div class="row">
 
-                                    <div class="form-group col-md-12 col-sm-12">
+                                    <div class="form-group col-md-3 col-sm-12">
                                         <label asp-for="NationalCode"></label>
                                         <input type="text" class="form-control" asp-for="NationalCode">
                                         <span class="text-danger" asp-validation-for="NationalCode"></span>
                                     </div>
 
-                                    <div class="form-group col-md-12 col-sm-12">
+                                    <div class="form-group col-md-3 col-sm-12">
                                         <label asp-for="SellerType">نوع فروشنده</label>
                                         <select asp-for="SellerType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.SellerType.SellerType))"></select>
                                         <span class="text-danger" asp-validation-for="SellerType"></span>
                                     </div>
 
-                                    <div class="form-group col-md-12 col-sm-12">
+                                    <div class="form-group col-md-3 col-sm-12">
                                         <label asp-for="CompanyName"></label>
                                         <input type="text" class="form-control" asp-for="CompanyName">
                                         <span class="text-danger" asp-validation-for="CompanyName"></span>
                                     </div>
 
-                                    <div class="form-group col-md-12 col-sm-12">
+                                    <div class="form-group col-md-3 col-sm-12">
                                         <label asp-for="PeriodTimesOfWork"></label>
                                         <input type="text" class="form-control" asp-for="PeriodTimesOfWork">
                                         <span class="text-danger" asp-validation-for="PeriodTimesOfWork"></span>
                                     </div>
 
-                                    <div class="form-group col-md-12">
+                                    <div class="form-group col-md-4 col-sm-12">
                                         <label asp-for="CountryId"></label>
                                         <select class="form-control" asp-for="CountryId">
                                             <option value=""> لطفا یک کشور را انتخاب کنید </option>
@@ -167,7 +167,7 @@
                                         <span class="text-danger" asp-validation-for="CountryId"></span>
                                     </div>
 
-                                    <div class="form-group col-md-12">
+                                    <div class="form-group col-md-4 col-sm-12">
                                         <label asp-for="StateId"></label>
                                         <select class="form-control" asp-for="StateId">
                                             <option value=""> لطفا یک استان را انتخاب کنید </option>
@@ -189,7 +189,7 @@
                                         <span class="text-danger" asp-validation-for="StateId"></span>
                                     </div>
 
-                                    <div class="form-group col-md-12">
+                                    <div class="form-group col-md-4 col-sm-12">
                                         <label asp-for="CityId"></label>
                                         <select asp-for="CityId" class="form-control">
                                             <option value=""> لطفا یک شهر را انتخاب کنید </option>
@@ -318,11 +318,18 @@
                 </form>
 
                 <div class="col-lg-12 col-sm-12">
-                    <div class="well with-header with-footer table-responsive" style="padding-bottom: 30px;">
+                    <div class="well with-header with-footer table-responsive">
                         <div class="header bordered-azure">
                             <div class="flex-style">
-                                <span> لیست نمونه کار  </span>
+                                <div class="widget-buttons">
+                                    <div class="row" style="margin-right: 10px;">
+
+                                        <a id="ShowUserCommentInAdminPanel" class="badge badge-success" asp-action="AddWorkSample" asp-controller="SellerPersonalInfo" asp-area="Seller">افزودن لیست نمونه کار</a>
+
+                                    </div>
+                                </div>
                             </div>
+                           
                         </div>
 
                         @if (Model.MarketWorkSamples != null && Model.MarketWorkSamples.Any())
@@ -364,20 +371,20 @@
                         {
                             <partial name="_SellerNotFoundPartial" />
                         }
-@*
+                        @*
                         <a onclick="LoadAddPersonalWorkSampleModalBody()" class="btn btn-labeled btn-success">
-                            <i class="btn-label glyphicon glyphicon-ok"></i>ثبت نمونه کار جدید
+                        <i class="btn-label glyphicon glyphicon-ok"></i>ثبت نمونه کار جدید
                         </a>*@
 
                     </div>
                 </div>
 
-            </div>
+      
             <div class="col-lg-12 col-sm-12">
-                <div class="well with-header with-footer table-responsive" style="padding-bottom: 30px;">
+                <div class="well with-header with-footer table-responsive">
                     <div class="header bordered-azure">
                         <div class="flex-style">
-                            <span> لیست لینک های ارتباطی  </span>
+                            <span>لیست لینک های ارتباطی</span>
                         </div>
                     </div>
 
@@ -421,14 +428,14 @@
                         <partial name="_SellerNotFoundPartial" />
                     }
 
-@*
+                    
                     <a onclick="LoadAddPersonalLinkModalBody()" class="btn btn-labeled btn-success">
-                        <i class="btn-label glyphicon glyphicon-ok"></i>ثبت لینک ارتباطی جدید
-                    </a>*@
+                    <i class="btn-label glyphicon glyphicon-ok"></i>ثبت لینک ارتباطی جدید
+                    </a>
 
                 </div>
             </div>
-
+            </div>
         </div>
     </div>
 </div>
