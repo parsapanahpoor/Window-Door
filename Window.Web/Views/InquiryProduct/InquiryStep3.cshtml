@@ -4,6 +4,27 @@
     ViewData["Title"] = "استعلام گیری";
 }
 
+@section Scripts
+    {
+    <script>
+
+        $(document).ready(function () {
+            $("#target").click(function () {
+
+                Swal.fire({
+                    title: "درخواست استعلام",
+                    text: "لطفا تا اعلام نتیجه ی استعلام خود شکیبا باشید. این روند ممکن است تا چند دقیقه زمان ببرد.",
+                    icon: 'success',
+                    showCancelButton: false,
+                    showConfirmButton: false
+                });
+
+            });
+        });
+
+    </script>
+}
+
 <div class="parallax titlebar" data-background="/Site/images/7.jpg" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -799.306px;">
     <div class="parallax-overlay" style="background-color: rgb(51, 51, 51); opacity: 0.7;"></div>
 
@@ -18,7 +39,7 @@
                     <nav id="breadcrumbs">
                         <ul>
                             <li>
-                                <a asp-action="InquiryStep4" asp-route-userMacAddress="@ViewBag.UserMacAddress" asp-controller="InquiryProduct" asp-area="" class="button">نمایش نتیجه ی استعلام </a>
+                                <a id="target" asp-action="InquiryStep4" asp-route-userMacAddress="@ViewBag.UserMacAddress" asp-controller="InquiryProduct" asp-area="" class="button">نمایش نتیجه ی استعلام </a>
                             </li>
                         </ul>
                     </nav>
@@ -48,7 +69,7 @@
                             <!-- Listing Item -->
                             <div class="listing-item" style="height:300px">
 
-                                <a  href="@Window.Application.StticTools.FilePaths.SampleOriginimage/@product.Image" class="listing-img-container" style="height: 273px;">
+                                <a href="@Window.Application.StticTools.FilePaths.SampleOriginimage/@product.Image" class="listing-img-container" style="height: 273px;">
 
                                     <div class="listing-badges">
                                         <span>@product.Id :  کد کالا</span>
@@ -77,7 +98,7 @@
                                         <li> حداکثر عرض  :@product.MaxWidth</li>
                                         <li>  حداکثر ارتفاع :@product.MaxHeight</li>
 
-                         
+
                                     </ul>
 
                                     <div class="listing-footer">

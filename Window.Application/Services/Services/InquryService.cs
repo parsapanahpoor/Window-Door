@@ -3168,10 +3168,10 @@ namespace Window.Application.Services.Services
                     totalPrice = totalPrice + ((height - katibeSize.Value) + width) * (userSegments.FirstOrDefault(p => p.SegmentId == 23).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 58) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 8) != null)
                 {
                     //ریل کشویی
-                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 58).Price);
+                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 8).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 12) != null)
@@ -3299,10 +3299,10 @@ namespace Window.Application.Services.Services
                     totalPrice = totalPrice + ((2* width) / 3) * (userSegments.FirstOrDefault(p => p.SegmentId == 23).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 58) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 8) != null)
                 {
                     //ریل کشویی
-                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 58).Price);
+                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 8).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 12) != null)
@@ -3430,10 +3430,10 @@ namespace Window.Application.Services.Services
                     totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 23).Price);
                 }
 
-                if (userSegments.FirstOrDefault(p => p.SegmentId == 58) != null)
+                if (userSegments.FirstOrDefault(p => p.SegmentId == 8) != null)
                 {
                     //ریل کشویی
-                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 58).Price);
+                    totalPrice = totalPrice + (width) * (userSegments.FirstOrDefault(p => p.SegmentId == 8).Price);
                 }
 
                 if (userSegments.FirstOrDefault(p => p.SegmentId == 36) != null)

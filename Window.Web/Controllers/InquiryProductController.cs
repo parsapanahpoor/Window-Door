@@ -219,7 +219,7 @@ namespace Window.Web.Controllers
         #region Inquiry Step 4 (proccess inquiry)
 
         [Authorize]
-        public async Task<IActionResult> InquiryStep4(string userMacAddress, string? brandTitle, int? orderByPrice, int? orderByScore, int pageId = 1)
+        public async Task<IActionResult> InquiryStep4(string userMacAddress, string? brandTitle, int? orderByPrice, int pageId = 1)
         {
             #region Brand ViewBag
 
@@ -261,19 +261,6 @@ namespace Window.Web.Controllers
             else if (orderByPrice == 2)
             {
                 model = model.OrderBy(p => p.Price).ToList();
-            }
-
-            #endregion
-
-            #region Order By Score
-
-            if (orderByScore == 1)
-            {
-                model = model.OrderByDescending(p => p.Score).ToList();
-            }
-            else if (orderByScore == 2)
-            {
-                model = model.OrderBy(p => p.Score).ToList();
             }
 
             #endregion

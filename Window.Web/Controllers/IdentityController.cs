@@ -142,7 +142,7 @@ namespace Window.Web.Controllers
                 switch (result)
                 {
                     case ActiveMobileByActivationCodeResult.Success:
-                        TempData["success"] = _localizer["ثبت نام شما باموفقیت انجام شده است ."].Value;
+                        TempData["success"] = _localizer["فعال سازی حساب کاربری شما با موفقیت انجام شده است."].Value;
                         return RedirectToAction(nameof(Login));
 
                     case ActiveMobileByActivationCodeResult.AccountNotFound:

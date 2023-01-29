@@ -114,9 +114,9 @@ namespace Window.Application.Services
             var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={user.Mobile}&token={user.MobileActivationCode}&template=Register";
             var results = client.GetStringAsync(result);
 
-            var message = Window.Application.StaticTools.Messages.SendActivationRegisterSms(user.MobileActivationCode);
+            //var message = Window.Application.StaticTools.Messages.SendActivationRegisterSms(user.MobileActivationCode);
 
-            await _smsservice.SendSimpleSMS(user.Mobile, message);
+            //await _smsservice.SendSimpleSMS(user.Mobile, message);
 
             #endregion
 
@@ -270,9 +270,9 @@ namespace Window.Application.Services
             var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={user.Mobile}&token={user.MobileActivationCode}&template=Register";
             var results = client.GetStringAsync(result);
 
-            var message = Window.Application.StaticTools.Messages.SendActivationRegisterSms(user.MobileActivationCode);
+            //var message = Window.Application.StaticTools.Messages.SendActivationRegisterSms(user.MobileActivationCode);
 
-            await _smsservice.SendSimpleSMS(user.Mobile, message);
+            //await _smsservice.SendSimpleSMS(user.Mobile, message);
 
             #endregion
         }
@@ -315,9 +315,12 @@ namespace Window.Application.Services
 
             #region Send Verification Code SMS
 
-            var message = Messages.SendActivationRegisterSms(user.MobileActivationCode);
+            var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={user.Mobile}&token={user.MobileActivationCode}&template=Register";
+            var results = client.GetStringAsync(result);
 
-            await _smsservice.SendSimpleSMS(user.Mobile, message);
+            //var message = Messages.SendActivationRegisterSms(user.MobileActivationCode);
+
+            //await _smsservice.SendSimpleSMS(user.Mobile, message);
 
             #endregion
 
