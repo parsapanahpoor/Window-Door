@@ -45,6 +45,7 @@ namespace Window.IOC.Container
             services.AddScoped<IAdminDashboardService, AdminDashboardService>();
             services.AddScoped<ITechnicalIssues, TechnicalIssuesService>();
             services.AddScoped<IConsulantService, ConsultantService>();
+            services.AddScoped<IContractService, ContractService>();
 
             #endregion
         }

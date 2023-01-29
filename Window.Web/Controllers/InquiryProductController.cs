@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
+using Window.Domain.Entities.Account;
 using Window.Domain.Enums.SellerType;
 using Window.Domain.Enums.Types;
 using Window.Domain.ViewModels.Site.Inquiry;
@@ -20,9 +21,11 @@ namespace Window.Web.Controllers
         private readonly IInquiryService _inquiryService;
         private readonly ISellerService _sellerService;
         private readonly IMarketService _marketService;
+        private readonly IContractService _contractService;
 
         public InquiryProductController(IProductService prodcutService, IStateService stateService, IBrandService brandService
-            , ISampleService sampleService, IInquiryService inquiryService, ISellerService sellerService, IMarketService marketService)
+            , ISampleService sampleService, IInquiryService inquiryService, ISellerService sellerService, IMarketService marketService  
+                    , IContractService contractService)
         {
             _productService = prodcutService;
             _stateService = stateService;
@@ -31,6 +34,7 @@ namespace Window.Web.Controllers
             _inquiryService = inquiryService;
             _sellerService = sellerService;
             _marketService = marketService;
+            _contractService = contractService;
         }
 
         #endregion
@@ -330,6 +334,13 @@ namespace Window.Web.Controllers
 
             #endregion
 
+            #region Contract Checker
+
+            ViewBag.CanInsertCommentAndStart = await _contractService.CanUserInsertCommentForSeller(User.GetUserId() , userId);
+            ViewBag.sellerId = userId; 
+
+            #endregion
+
             return View(model);
         }
 
@@ -553,6 +564,30 @@ namespace Window.Web.Controllers
             ViewBag.UserMacAddress = Ip;
 
             return RedirectToAction(nameof(GetUserLastestInquiry));
+        }
+
+        #endregion
+
+        #region Send Contract Request For Seller 
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> RequestForContract(ulong sellerId)
+        {
+            #region Create Contract Request 
+
+            var res = await _contractService.CreateContractRequestFromUser(User.GetUserId() , sellerId);
+
+            if (res)
+            {
+                TempData[SuccessMessage] = "درخواست قرارداد باموفقیت ارسال شده است.";
+                return RedirectToAction(nameof(ShowSellerPersoanlInfo), new { userId = sellerId });
+            }
+
+            #endregion
+
+            TempData[ErrorMessage] = "عملیات باخطا مواجه شده است.";
+            return RedirectToAction(nameof(ShowSellerPersoanlInfo) , new { userId = sellerId });
         }
 
         #endregion

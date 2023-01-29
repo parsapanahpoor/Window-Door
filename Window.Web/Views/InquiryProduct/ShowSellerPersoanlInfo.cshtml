@@ -11,6 +11,8 @@
     var countries = ViewData["Countries"] != null ? ViewData["Countries"] as List<SelectListViewModel> : null;
     var states = ViewData["States"] != null ? ViewData["States"] as List<SelectListViewModel> : null;
     var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
+    var canInsertComment = ViewBag.CanInsertCommentAndStart != null ? ViewBag.CanInsertCommentAndStart as Window.Domain.Entities.Contract.RequestForContract : null;
+    ulong sellerId = ViewBag.sellerId;
 }
 
 
@@ -20,16 +22,16 @@
     <partial name="_JqueryValidation" />
 }
 
-    <div id="titlebar" class="property-titlebar margin-bottom-0">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
+<div id="titlebar" class="property-titlebar margin-bottom-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
 
-                    <div class="property-title">
-                        <h2>@Model.CompanyName </h2>
-                        <span>
-                            <a href="#location" class="listing-address">
-                                <i class="fa fa-map-marker"></i>
+                <div class="property-title">
+                    <h2>@Model.CompanyName </h2>
+                    <span>
+                        <a href="#location" class="listing-address">
+                            <i class="fa fa-map-marker"></i>
                             @if (countries != null && countries.Any())
                             {
                                 foreach (var country in countries)
@@ -176,23 +178,36 @@
 
                 <div class="widget">
 
-                    <!-- Agent Widget -->
-                    <div class="agent-widget">
-                        <div class="agent-title">
-                            <div class="agent-photo"><img src="images/agent-avatar.jpg" alt=""></div>
-                            <div class="agent-details">
-                                <h4><a href="#">لورم اپیسوم</a></h4>
-                                <span><i class="sl sl-icon-call-in"></i>(123) 123-456</span>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
+                    @if (canInsertComment != null)
+                    {
+                        if (canInsertComment.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Accepted)
+                        {
+                            <!-- Agent Widget -->
+                            <div class="agent-widget">
+                                <div class="agent-title">
+                                    <div class="agent-details">
+                                        <h4><a href="#">افزودن نظر</a></h4>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
 
-                        <input type="text" placeholder="ایمیل" >
-                        <input type="text" placeholder="شماره تماس">
-                        <textarea>سلام. من از این ملک خوشم اومد . می خوام اطلاعات بیشتری رو دربارش بدونم.</textarea>
-                        <button class="button fullwidth margin-top-5">ارسال پیام</button>
-                    </div>
-                    <!-- Agent Widget / End -->
+                                <input type="text" placeholder="ایمیل">
+                                <input type="text" placeholder="شماره تماس">
+                                <textarea>سلام. من از این ملک خوشم اومد . می خوام اطلاعات بیشتری رو دربارش بدونم.</textarea>
+                                <button class="button fullwidth margin-top-5">ارسال پیام</button>
+                            </div>
+                            <!-- Agent Widget / End -->
+                        }
+
+                    }
+                    else
+                    {
+                        <div class="agent-widget">
+
+                            <a class="button fullwidth margin-top-5" asp-action="RequestForContract" asp-area="" asp-controller="InquiryProduct" asp-route-sellerId="@sellerId">درخواست قرارداد</a>
+
+                        </div>
+                    }
 
                 </div>
 
