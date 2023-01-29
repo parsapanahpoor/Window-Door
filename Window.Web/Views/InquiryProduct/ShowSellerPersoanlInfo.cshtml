@@ -20,7 +20,6 @@
     <partial name="_JqueryValidation" />
 }
 
-
     <div id="titlebar" class="property-titlebar margin-bottom-0">
         <div class="container">
             <div class="row">
@@ -69,6 +68,8 @@
                     <div>@Model.PeriodTimesOfWork</div>
                     <div class="sub-price"> ساعات پاسخ گویی</div>
                 </div>
+
+
 
             </div>
         </div>
@@ -127,6 +128,19 @@
                     <li>@Model.Resume</li>
                 </ul>
 
+                <h3 class="desc-headline">نظرات کاربران</h3>
+
+                <div class="agent-widget">
+                    <div class="agent-title">
+                        <div class="agent-photo"><img src="/Site/images/agent-avatar.jpg" alt=""></div>
+                        <div class="agent-details">
+                            <h4><a href="#">لورم اپیسوم</a></h4>
+                            <span><i class="sl sl-icon-call-in"></i>(123) 123-456</span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <textarea>سلام. من از این ملک خوشم اومد . می خوام اطلاعات بیشتری رو دربارش بدونم.</textarea>
+                </div>
 
             </div>
         </div>
@@ -151,9 +165,7 @@
                         {
                             @foreach (var sellerLinks in Model.MarketLinks)
                             {
-                                <input readonly type="text" placeholder="@sellerLinks.LinkTitle">
-                                <textarea>@sellerLinks.LinkValue</textarea>
-
+                                <a class="button border" target="_blank" href="@sellerLinks.LinkValue">@sellerLinks.LinkTitle </a>
                             }
                         }
 
@@ -161,6 +173,29 @@
                     <!-- Agent Widget / End -->
 
                 </div>
+
+                <div class="widget">
+
+                    <!-- Agent Widget -->
+                    <div class="agent-widget">
+                        <div class="agent-title">
+                            <div class="agent-photo"><img src="images/agent-avatar.jpg" alt=""></div>
+                            <div class="agent-details">
+                                <h4><a href="#">لورم اپیسوم</a></h4>
+                                <span><i class="sl sl-icon-call-in"></i>(123) 123-456</span>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <input type="text" placeholder="ایمیل" >
+                        <input type="text" placeholder="شماره تماس">
+                        <textarea>سلام. من از این ملک خوشم اومد . می خوام اطلاعات بیشتری رو دربارش بدونم.</textarea>
+                        <button class="button fullwidth margin-top-5">ارسال پیام</button>
+                    </div>
+                    <!-- Agent Widget / End -->
+
+                </div>
+
             </div>
         </div>
 

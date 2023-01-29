@@ -4,6 +4,7 @@ using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Article;
 using Window.Domain.Entities.Brand;
 using Window.Domain.Entities.Contact;
+using Window.Domain.Entities.Contract;
 using Window.Domain.Entities.Counseling;
 using Window.Domain.Entities.Glass;
 using Window.Domain.Entities.Inquiry;
@@ -64,6 +65,12 @@ namespace Window.Data.Context
         public DbSet<Ticket> Ticket { get; set; }
 
         public DbSet<TicketMessage> TicketMessages { get; set; }
+
+        #endregion
+
+        #region Contract 
+
+        public DbSet<RequestForContract> RequestForContracts { get; set; }
 
         #endregion
 
