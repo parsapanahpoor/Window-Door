@@ -182,6 +182,18 @@
                     {
                         if (canInsertComment.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Accepted)
                         {
+                            <a asp-action="AddScoreToSeller" asp-route-sellerId="@sellerId" asp-area="" asp-controller="InquiryProduct" class="button fullwidth margin-top-5">امتیاز دهی</a>
+                        }
+                    }
+
+                </div>
+
+                <div class="widget">
+
+                    @if (canInsertComment != null)
+                    {
+                        if (canInsertComment.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Accepted)
+                        {
                             <!-- Agent Widget -->
                             <div class="agent-widget">
                                 <div class="agent-title">
@@ -198,7 +210,14 @@
                             </div>
                             <!-- Agent Widget / End -->
                         }
+                        if (canInsertComment.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Decline)
+                        {
+                            <div class="agent-widget">
 
+                                <a class="button fullwidth margin-top-5" asp-action="RequestForContract" asp-area="" asp-controller="InquiryProduct" asp-route-sellerId="@sellerId">درخواست قرارداد</a>
+
+                            </div>
+                        }
                     }
                     else
                     {
@@ -210,6 +229,7 @@
                     }
 
                 </div>
+
 
             </div>
         </div>

@@ -10,6 +10,8 @@ using Window.Domain.Entities.Market;
 using Window.Domain.Entities.Product;
 using Window.Domain.Entities.MarketInfo;
 using Window.Domain.Entities.Log;
+using System.Diagnostics.Contracts;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Window.Domain.Entities.Account
 {
@@ -102,6 +104,15 @@ namespace Window.Domain.Entities.Account
         public ICollection<KhadamatePasAzForosh> KhadamatePasAzForosh { get; set; }
 
         public ICollection<LogForVisitSellerProfile> LogForVisitSellerProfiles { get; set; }
+
+        [InverseProperty("User")]
+        public ICollection<Contract.RequestForContract> UserRequest { get; set; }
+
+        [InverseProperty("Seller")]
+        public ICollection<Contract.RequestForContract> SellerRequest { get; set; }
+
+        [InverseProperty("User")]
+        public ICollection<Comment.Comment> Comment { get; set; }
 
         #endregion
     }

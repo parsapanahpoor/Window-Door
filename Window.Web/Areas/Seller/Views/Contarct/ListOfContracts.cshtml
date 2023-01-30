@@ -1,0 +1,130 @@
+﻿@using Window.Application.Extensions
+@using Window.Application.Convertors
+@model Window.Domain.ViewModels.Seller.Contract.FilterContractRequestSellerSideViewModel
+
+@{
+    ViewData["Title"] = "لیست درخواست های قرارداد ";
+}
+
+@section Styles
+    {
+
+}
+
+@section Scripts
+    {
+}
+
+@section breadcrumb {
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
+}
+
+<div class="row">
+
+    <div class="col-lg-12 col-sm-12">
+
+        <form asp-action="ListOfContracts" asp-controller="Contarct" asp-area="Seller" id="filter-search" method="get">
+            <input type="hidden" asp-for="Page" />
+
+        </form>
+
+        <div class="well with-header with-footer table-responsive">
+            <div class="header bordered-azure">
+                <div class="flex-style">
+                    <span>لیست قراردادها </span>
+                    <span>@Model.GetShownEntitiesPagesTitle()</span>
+                </div>
+            </div>
+
+            @if (Model.Entities != null && Model.Entities.Any())
+            {
+                <table class="table table-hover table-bordered tc vm">
+                    <thead class="tc vm">
+                        <tr class="tc vm">
+                            <th class="tc vm">
+                                آواتار کاربر
+                            </th>
+                            <th class="tc vm">
+                                موبایل کاربر
+                            </th>
+                            <th class="tc vm">
+                                وضعیت درخواست
+                            </th>   
+                            <th class="tc vm">
+                                تاریخ درخواست
+                            </th>
+                            <th class="tc vm">
+                                امکانات
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="tc vm">
+                        @foreach (var user in Model.Entities)
+                        {
+                            <tr class="tc vm" remove-ajax-item="@user.Id">
+
+                                <td class="vm">
+                                    <div class="flex-style-center">
+                                        <img src="@user.User.GetUserAvatar()" class="avatar-style" />
+                                        <div class="mr-10px">
+                                            <span> @user.User.Username </span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="tc vm">
+                                    <p> @user.User.Mobile </p>
+                                </td>
+
+                                <td class="tc vm">
+                                    @if (user.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Decline)
+                                    {
+                                        <span class="label label-danger">رد شده </span>
+                                    }
+                                    @if (user.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Accepted)
+                                    {
+                                        <span class="label label-success">پذیرفته  </span>
+                                    }
+                                    @if (user.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Waiting)
+                                    {
+                                        <span class="label label-warning">درانتظار </span>
+                                    }
+                                </td>
+
+                                <td class="tc vm">
+                                    <p> @user.CreateDate.ToShamsi() </p>
+                                </td>
+
+                                <td class="tc vm">
+
+                                    @if (user.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Accepted)
+                                    {
+                                        <a asp-action="DeclineRequestFromSeller" asp-controller="Contarct" asp-area="Seller" asp-route-requestId="@user.Id" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
+                                    }
+                                    @if (user.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Waiting)
+                                    {
+                                        <a asp-action="AcceptRequest" asp-controller="Contarct" asp-area="Seller" asp-route-requestId="@user.Id" class="btn btn-success btn-circle btn-xs"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <a asp-action="DeclineRequestFromSeller" asp-controller="Contarct" asp-area="Seller" asp-route-requestId="@user.Id" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
+                                    }
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="footer tc">
+                    <partial name="_SellerPaging" model="@Model.GetCurrentPaging()" />
+
+                </div>
+            }
+            else
+            {
+                <partial name="_SellerNotFoundPartial" />
+            }
+        </div>
+    </div>
+</div>
+

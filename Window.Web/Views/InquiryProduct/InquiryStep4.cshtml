@@ -224,13 +224,13 @@
 
                                         @if (string.IsNullOrEmpty(product.ShopName))
                                         {
-                                            <a class="button" asp-action="AddScoreToSeller" asp-route-sellerId="@product.UserId" asp-area="" asp-controller="InquiryProduct" style="background-color: #c100d1;    padding: 10px 45px;">
+                                            <a class="button" style="background-color: #c100d1;    padding: 10px 45px;">
                                                 وارد نشده است
                                             </a>
                                         }
                                         else
                                         {
-                                            <a class="button" asp-action="AddScoreToSeller" asp-route-sellerId="@product.UserId" asp-area="" asp-controller="InquiryProduct" style="background-color: #c100d1;    padding: 10px 45px;">
+                                            <a class="button"  style="background-color: #c100d1;    padding: 10px 45px;">
                                                 @product.ShopName
                                             </a>
                                         }

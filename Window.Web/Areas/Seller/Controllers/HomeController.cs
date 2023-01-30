@@ -17,19 +17,19 @@ namespace Window.Web.Areas.Seller.Controllers
         #region constructor
 
         private readonly IConfiguration _configuration;
-
         public IUserService _userService;
-
         private readonly IProductService _productService;
-
         private ISellerService _sellerService;
+        private readonly IContractService _contractService;
 
-        public HomeController(IConfiguration configuration, IUserService userService, IProductService productService, ISellerService sellerService)
+        public HomeController(IConfiguration configuration, IUserService userService, IProductService productService, ISellerService sellerService  
+                                , IContractService contractService)
         {
             _configuration = configuration;
             _userService = userService;
             _productService = productService;
             _sellerService = sellerService;
+            _contractService = contractService;
         }
 
         #endregion
@@ -61,6 +61,7 @@ namespace Window.Web.Areas.Seller.Controllers
             ViewBag.CountOfTodayUserInInquiry = await _sellerService.CountOfTodayUserInInquiry(User.GetUserId());
             ViewBag.CountOfMonthUserInInquiry = await _sellerService.CountOfMonthUserInInquiry(User.GetUserId());
             ViewBag.CountOfYearUserInInquiry = await _sellerService.CountOfYearUserInInquiry(User.GetUserId());
+            ViewBag.CountOfSellerWaitingRequest = await _contractService.CountOfUserWaitingContractRequest(User.GetUserId());
 
             #endregion
 

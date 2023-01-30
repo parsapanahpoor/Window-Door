@@ -3,6 +3,7 @@ using System.Globalization;
 using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Article;
 using Window.Domain.Entities.Brand;
+using Window.Domain.Entities.Comment;
 using Window.Domain.Entities.Contact;
 using Window.Domain.Entities.Contract;
 using Window.Domain.Entities.Counseling;
@@ -189,6 +190,12 @@ namespace Window.Data.Context
         public DbSet<LogInquiryForUser> LogInquiryForUsers { get; set; }
 
         public DbSet<LogInquiryForUserDetail> logInquiryForUserDetails { get; set; }
+
+        #endregion
+
+        #region Comment
+
+        public DbSet<Comment> Comments { get; set; }
 
         #endregion
 

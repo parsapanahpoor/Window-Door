@@ -17,7 +17,7 @@
 
     <div class="row">
 
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
             <div class="databox bg-white radius-bordered">
                 <div class="bg-success databox-right">
                 </div>
@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
         <div class="databox bg-white radius-bordered">
             <div class="bg-primary databox-right">
             </div>
@@ -41,13 +41,25 @@
         </div>
     </div>
 
-    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
         <div class="databox bg-white radius-bordered">
             <div class="bg-danger databox-right">
             </div>
             <div class="databox-left">
                 <span class="databox-number danger">@((ViewBag.CountOfYearUserInInquiry != null) ? ViewBag.CountOfYearUserInInquiry : 0)</span>
                 <div class="databox-text darkgray">تعداد بازدید از حساب شما دراین سال</div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="databox bg-white radius-bordered">
+            <div class="bg-danger databox-right">
+            </div>
+            <div class="databox-left">
+                <span class="databox-number danger">@((ViewBag.CountOfSellerWaitingRequest != null) ? ViewBag.CountOfSellerWaitingRequest : 0)</span>
+                <div class="databox-text darkgray">درخواست های قرارداد درانتظار برسی شما</div>
 
             </div>
         </div>

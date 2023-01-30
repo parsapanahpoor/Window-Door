@@ -67,6 +67,23 @@
 
             @if (ViewBag.SellerMastert == true)
             {
+                  <li>
+                    <a href="#" class="menu-dropdown">
+                        <i class="menu-icon fa fa-user"></i>
+                        <span class="menu-text"> درخواست های قرارداد  </span>
+
+                        <i class="menu-expand"></i>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a asp-area="Seller" asp-controller="Contarct" asp-action="ListOfContracts">
+                                <span class="menu-text">لیست درخواست ها </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li>
                     <a href="#" class="menu-dropdown">
                         <i class="menu-icon fa fa-user"></i>
