@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Window.Application.Extensions;
 using Window.Application.Interfaces;
+using Window.Application.Services.Interfaces;
 
 namespace Window.Web.Areas.ViewComponents
 {
@@ -21,7 +22,7 @@ namespace Window.Web.Areas.ViewComponents
 
         private readonly IUserService _userService;
 
-        public NewSideBarViewComponent(IUserService userService)
+        public NewSideBarViewComponent(IUserService userService )
         {
             _userService = userService;
         }

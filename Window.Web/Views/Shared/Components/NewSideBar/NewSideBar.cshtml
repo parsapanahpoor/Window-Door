@@ -4,6 +4,8 @@
 @using Window.Application.Convertors
 @using Window.Application.Extensions
 
+
+
 <header id="header-container" class="header-style-2">
 
     <!-- Header -->
@@ -126,7 +128,8 @@
                         <div class="user-menu">
                             <div class="user-name"><span><img style="width: 80px !important;height: 40px !important;" src="@Model.GetUserAvatar()" alt=""></span>سلام, @User.Identity.Name</div>
                             <ul>
-                                <li><a asp-area="Seller" asp-controller="Home" asp-action="Index"><i class="sl sl-icon-user"></i> پروفایل من </a></li>
+                                    <li><a asp-area="" asp-controller="Home" asp-action="LoginToThePanel"><i class="sl sl-icon-user"></i> پروفایل من </a></li>
+                               
                                 <li><a asp-action="Logout" asp-area="" asp-controller="Identity"><i class="sl sl-icon-power"></i> خروج </a></li>
                             </ul>
                         </div>

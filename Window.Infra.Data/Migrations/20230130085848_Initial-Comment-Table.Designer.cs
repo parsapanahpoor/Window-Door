@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Window.Data.Context;
 
@@ -11,9 +12,10 @@ using Window.Data.Context;
 namespace Window.Infra.Data.Migrations
 {
     [DbContext(typeof(WindowDbContext))]
-    partial class WindowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230130085848_Initial-Comment-Table")]
+    partial class InitialCommentTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +54,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 1m,
-                            CreateDate = new DateTime(2023, 1, 31, 11, 19, 32, 668, DateTimeKind.Local).AddTicks(1693),
+                            CreateDate = new DateTime(2023, 1, 30, 12, 28, 47, 710, DateTimeKind.Local).AddTicks(6547),
                             IsDelete = false,
                             RoleUniqueName = "Admin",
                             Title = "Admin"
@@ -60,7 +62,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 2m,
-                            CreateDate = new DateTime(2023, 1, 31, 11, 19, 32, 668, DateTimeKind.Local).AddTicks(1735),
+                            CreateDate = new DateTime(2023, 1, 30, 12, 28, 47, 710, DateTimeKind.Local).AddTicks(6584),
                             IsDelete = false,
                             RoleUniqueName = "Support",
                             Title = "Support"
@@ -68,7 +70,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 3m,
-                            CreateDate = new DateTime(2023, 1, 31, 11, 19, 32, 668, DateTimeKind.Local).AddTicks(1749),
+                            CreateDate = new DateTime(2023, 1, 30, 12, 28, 47, 710, DateTimeKind.Local).AddTicks(6598),
                             IsDelete = false,
                             RoleUniqueName = "Seller",
                             Title = "Seller"
@@ -76,7 +78,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 4m,
-                            CreateDate = new DateTime(2023, 1, 31, 11, 19, 32, 668, DateTimeKind.Local).AddTicks(1760),
+                            CreateDate = new DateTime(2023, 1, 30, 12, 28, 47, 710, DateTimeKind.Local).AddTicks(6618),
                             IsDelete = false,
                             RoleUniqueName = "SellerMaster",
                             Title = "SellerMaster"
@@ -346,9 +348,6 @@ namespace Window.Infra.Data.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<int>("RequestForContractStatus")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("SellerId")
                         .HasColumnType("decimal(20,0)");
 
@@ -455,6 +454,9 @@ namespace Window.Infra.Data.Migrations
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("RequestForContractStatus")
+                        .HasColumnType("int");
 
                     b.Property<int>("RequestForContractType")
                         .HasColumnType("int");
@@ -1305,7 +1307,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 1m,
-                            CreateDate = new DateTime(2023, 1, 31, 11, 19, 32, 668, DateTimeKind.Local).AddTicks(1781),
+                            CreateDate = new DateTime(2023, 1, 30, 12, 28, 47, 710, DateTimeKind.Local).AddTicks(6654),
                             IsDelete = false,
                             Name = "کشویی",
                             ProductType = 0
@@ -1313,7 +1315,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 2m,
-                            CreateDate = new DateTime(2023, 1, 31, 11, 19, 32, 668, DateTimeKind.Local).AddTicks(1796),
+                            CreateDate = new DateTime(2023, 1, 30, 12, 28, 47, 710, DateTimeKind.Local).AddTicks(6675),
                             IsDelete = false,
                             Name = "کتیبه",
                             ProductType = 0
@@ -1321,7 +1323,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 3m,
-                            CreateDate = new DateTime(2023, 1, 31, 11, 19, 32, 668, DateTimeKind.Local).AddTicks(1807),
+                            CreateDate = new DateTime(2023, 1, 30, 12, 28, 47, 710, DateTimeKind.Local).AddTicks(6693),
                             IsDelete = false,
                             Name = "کتیبه",
                             ProductType = 1
@@ -1329,7 +1331,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 4m,
-                            CreateDate = new DateTime(2023, 1, 31, 11, 19, 32, 668, DateTimeKind.Local).AddTicks(1818),
+                            CreateDate = new DateTime(2023, 1, 30, 12, 28, 47, 710, DateTimeKind.Local).AddTicks(6729),
                             IsDelete = false,
                             Name = "درب",
                             ProductType = 1
@@ -1337,7 +1339,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 5m,
-                            CreateDate = new DateTime(2023, 1, 31, 11, 19, 32, 668, DateTimeKind.Local).AddTicks(1829),
+                            CreateDate = new DateTime(2023, 1, 30, 12, 28, 47, 710, DateTimeKind.Local).AddTicks(6744),
                             IsDelete = false,
                             Name = "لولایی",
                             ProductType = 1

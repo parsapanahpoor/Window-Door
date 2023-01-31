@@ -20,8 +20,6 @@ namespace Window.Domain.Entities.Contract
 
         public RequestForContractType RequestForContractType { get; set; }
 
-        public RequestForContractStatus? RequestForContractStatus { get; set; }
-
         #endregion
 
         #region relations

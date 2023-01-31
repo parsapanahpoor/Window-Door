@@ -14,6 +14,7 @@ using Window.Domain.Enums.SellerType;
 using System.Text.Json.Serialization;
 using System.Net;
 using Microsoft.AspNetCore.Mvc.Razor.Extensions;
+using ZarinpalSandbox.Models;
 
 namespace Window.Web.Controllers
 {
@@ -22,22 +23,20 @@ namespace Window.Web.Controllers
         #region ctor
 
         private readonly ILogger<HomeController> _logger;
-
         private readonly IProductService _productService;
-
         private readonly IStateService _stateService;
-
         private readonly IBrandService _brandService;
-
         private readonly ISampleService _sampleService;
+        private readonly IContractService _contractService;
 
-        public HomeController(ILogger<HomeController> logger, IProductService prodcutService, IStateService stateService, IBrandService brandService, ISampleService sampleService)
+        public HomeController(ILogger<HomeController> logger, IProductService prodcutService, IStateService stateService, IBrandService brandService, ISampleService sampleService, IContractService contractService)
         {
             _logger = logger;
             _productService = prodcutService;
             _stateService = stateService;
             _brandService = brandService;
             _sampleService = sampleService;
+            _contractService = contractService;
         }
 
         #endregion
@@ -255,6 +254,31 @@ namespace Window.Web.Controllers
             var res = await _brandService.GetBrandsFromBrandType(SellerType);
 
             return JsonResponseStatus.Success(res);
+        }
+
+        #endregion
+
+        #region Test 
+
+        public async Task<IActionResult> Test()
+        {
+            return View(); 
+        }
+
+        #endregion
+
+        #region Login To The Panel
+
+        public async Task<IActionResult> LoginToThePanel()
+        {
+            var res = await _contractService.CheckThatIsExistAnyMarketByThisSellerId(User.GetUserId());
+
+            if (res)
+            {
+                return RedirectToAction("Index" , "Home" , new { area = "Seller"});
+            }
+
+            return RedirectToAction("Index", "Home", new { area = "UserPanel" });
         }
 
         #endregion

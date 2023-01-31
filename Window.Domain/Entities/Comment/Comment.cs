@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Common;
+using Window.Domain.Enums.RequestForContract;
 
 namespace Window.Domain.Entities.Comment
 {
@@ -18,6 +19,8 @@ namespace Window.Domain.Entities.Comment
         public ulong SellerId { get; set; }
 
         public string Description { get; set; }
+
+        public RequestForContractStatus RequestForContractStatus { get; set; }
 
         #endregion
 

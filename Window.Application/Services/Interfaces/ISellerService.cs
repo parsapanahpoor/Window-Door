@@ -65,6 +65,9 @@ namespace Window.Application.Services.Interfaces
 
         Task<ListOfPersonalInfoViewModel> FillListOfPersonalInfoViewModel(ulong userId);
 
+        //Check That Is Exist Any Market By This Seller Id
+        Task<bool> CheckThatIsExistAnyMarketByThisSellerId(ulong sellerId);
+
         Task UpdateSellerStateAfterEditPersonalInfo(ulong userId);
 
         Task<bool> AddSellerWorkSampleInModal(AddSellerWorkSampleViewModel workSample);

@@ -7,20 +7,16 @@
 @inject IHtmlLocalizer<SharedLocalizer> SharedHtmlLocalizer
 
 @{
-    ViewData["Title"] = "لیست اطلاعات فروشنده ";
     var countries = ViewData["Countries"] != null ? ViewData["Countries"] as List<SelectListViewModel> : null;
     var states = ViewData["States"] != null ? ViewData["States"] as List<SelectListViewModel> : null;
     var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
+    var comments = ViewBag.ListOfSellerCommentsForShow != null ? ViewBag.ListOfSellerCommentsForShow as List<Window.Domain.Entities.Comment.Comment> : null;
     var canInsertComment = ViewBag.CanInsertCommentAndStart != null ? ViewBag.CanInsertCommentAndStart as Window.Domain.Entities.Contract.RequestForContract : null;
     ulong sellerId = ViewBag.sellerId;
 }
 
 
-@section Scripts
-    {
-    <script src="/lib/Custom/SellerPersonalInfo.js"></script>
-    <partial name="_JqueryValidation" />
-}
+
 
 <div id="titlebar" class="property-titlebar margin-bottom-0">
     <div class="container">
@@ -79,43 +75,37 @@
 </div>
 
 
-<div class="container">
-    <div class="row margin-bottom-50">
-        <div class="col-md-12">
-
-            <!-- Slider Thumbs -->
-            <div class="property-slider-nav slick-initialized slick-slider">
-
-                <div class="slick-list draggable">
-
-                    <div class="slick-track" style="opacity: 1; width: 1188px; transform: translate3d(0px, 0px, 0px);">
-
-                        @if (Model.MarketWorkSamples != null && Model.MarketWorkSamples.Any())
-                        {
-                            @foreach (var link in Model.MarketWorkSamples)
-                            {
-                                <div class="item slick-slide slick-active" data-slick-index="0" aria-hidden="false" style="width: 188px;" tabindex="-1">
-                                    <img src="/content/images/sellerInfo/thumb/@link.WorkSampleImage" alt="">
-                                </div>
-                            }
-                        }
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="container">
+<div class="container" style="margin-bottom:50px;">
     <div class="row">
 
         <!-- Property Description -->
         <div class="col-lg-8 col-md-7 sp-content">
             <div class="property-description">
+
+                <!-- Accordion -->
+                <div class="style-1 fp-accordion">
+
+                    @if (Model.MarketWorkSamples != null && Model.MarketWorkSamples.Any())
+                    {
+                        <h3 class="desc-headline">لیست نمونه کارها</h3>
+
+                        <div class="accordion">
+
+                            @foreach (var link in Model.MarketWorkSamples)
+                            {
+                                <h3>@link.WorkSampleTitle  <i class="fa fa-angle-down"></i> </h3>
+                                <div>
+                                    <a class="floor-pic mfp-image" href="#">
+                                        <img src="/content/images/sellerInfo/thumb/@link.WorkSampleImage" alt="">
+                                    </a>
+    
+                                </div>
+                            }
+
+                        </div>
+                    }
+
+                </div>
 
                 <!-- Details -->
                 <h3 class="desc-headline">آدرس محل کار : </h3>
@@ -130,25 +120,42 @@
                     <li>@Model.Resume</li>
                 </ul>
 
-                <h3 class="desc-headline">نظرات کاربران</h3>
+                @if (comments != null && comments.Any())
+                {
+                    <h3 class="desc-headline">نظرات کاربران</h3>
 
-                <div class="agent-widget">
-                    <div class="agent-title">
-                        <div class="agent-photo"><img src="/Site/images/agent-avatar.jpg" alt=""></div>
-                        <div class="agent-details">
-                            <h4><a href="#">لورم اپیسوم</a></h4>
-                            <span><i class="sl sl-icon-call-in"></i>(123) 123-456</span>
+                    <!-- Accordion -->
+                    <div class="style-1 fp-accordion">
+                        <div class="accordion">
+
+                            @foreach (var user in comments)
+                            {
+                                  <h3>@user.User.Username<i class="fa fa-angle-down"></i> </h3>
+                            <div>
+                                <p>
+                                    @user.Description
+                                </p>
+                            </div> 
+                            }
+
                         </div>
-                        <div class="clearfix"></div>
                     </div>
-                    <textarea>سلام. من از این ملک خوشم اومد . می خوام اطلاعات بیشتری رو دربارش بدونم.</textarea>
-                </div>
+                }
+
+                <!-- Listing Item / End -->
+                <!-- Similar Listings Container / End -->
 
             </div>
         </div>
+        <!-- Property Description / End -->
+
 
 
         <div class="col-lg-4 col-md-5 sp-sidebar">
+
+            <h3 class="desc-headline"></h3>
+
+
             <div class="sidebar sticky right">
 
                 <!-- Widget -->
@@ -194,20 +201,22 @@
                     {
                         if (canInsertComment.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Accepted)
                         {
-                            <!-- Agent Widget -->
-                            <div class="agent-widget">
-                                <div class="agent-title">
-                                    <div class="agent-details">
-                                        <h4><a href="#">افزودن نظر</a></h4>
+                            <form asp-action="AddCommentFromUser" asp-area="" asp-controller="InquiryProduct" method="post">
+                                <input name="SellerId" value="@sellerId" type="hidden">
+                                <!-- Agent Widget -->
+                                <div class="agent-widget">
+                                    <div class="agent-title">
+                                        <div class="agent-details">
+                                            <h4><a href="#">افزودن نظر</a></h4>
+                                        </div>
+                                        <div class="clearfix"></div>
                                     </div>
-                                    <div class="clearfix"></div>
-                                </div>
 
-                                <input type="text" placeholder="ایمیل">
-                                <input type="text" placeholder="شماره تماس">
-                                <textarea>سلام. من از این ملک خوشم اومد . می خوام اطلاعات بیشتری رو دربارش بدونم.</textarea>
-                                <button class="button fullwidth margin-top-5">ارسال پیام</button>
-                            </div>
+                                    <textarea name="Description" placeholder="نظر خود را وارد کنید"></textarea>
+                                    <button type="submit"  class="button fullwidth margin-top-5">ارسال پیام</button>
+                                </div>
+                            </form>
+
                             <!-- Agent Widget / End -->
                         }
                         if (canInsertComment.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Decline)
@@ -237,6 +246,4 @@
 
     </div>
 </div>
-
-
 

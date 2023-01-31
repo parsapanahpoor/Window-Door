@@ -337,7 +337,8 @@ namespace Window.Web.Controllers
             #region Contract Checker
 
             ViewBag.CanInsertCommentAndStart = await _contractService.CanUserInsertCommentForSeller(User.GetUserId() , userId);
-            ViewBag.sellerId = userId; 
+            ViewBag.sellerId = userId;
+            ViewBag.ListOfSellerCommentsForShow = await _contractService.ListOfSellerCommentsForShow(userId);
 
             #endregion
 
@@ -588,6 +589,38 @@ namespace Window.Web.Controllers
 
             TempData[ErrorMessage] = "عملیات باخطا مواجه شده است.";
             return RedirectToAction(nameof(ShowSellerPersoanlInfo) , new { userId = sellerId });
+        }
+
+        #endregion
+
+        #region Add Comment For User 
+
+        public async Task<IActionResult> AddCommentFromUser(AddCommentSiteSideViewModel comment)
+        {
+            #region Model State Validation 
+
+            if (!ModelState.IsValid)
+            {
+                TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+                return RedirectToAction(nameof(ShowSellerPersoanlInfo) , new { userId = comment.SellerId });
+            }
+
+            #endregion
+
+            #region Add Comment Method 
+
+            var res = await _contractService.AddCommentFromUser(comment , User.GetUserId());
+
+            if (res)
+            {
+                TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+                return RedirectToAction(nameof(ShowSellerPersoanlInfo), new { userId = comment.SellerId });
+            }
+
+            #endregion
+
+            TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+            return RedirectToAction(nameof(ShowSellerPersoanlInfo), new { userId = comment.SellerId });
         }
 
         #endregion

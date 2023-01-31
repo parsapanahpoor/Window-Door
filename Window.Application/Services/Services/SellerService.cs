@@ -835,6 +835,19 @@ namespace Window.Application.Services.Services
             #endregion
         }
 
+        //Check That Is Exist Any Market By This Seller Id
+        public async Task<bool> CheckThatIsExistAnyMarketByThisSellerId(ulong sellerId)
+        {
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == sellerId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return false;
+
+            #endregion
+
+            return true; 
+        }
+
         public async Task<ListOfPersonalInfoViewModel> FillListOfPersonalInfoViewModel(ulong userId)
         {
             #region Validation User

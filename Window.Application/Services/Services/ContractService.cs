@@ -1,16 +1,20 @@
 ﻿using AngleSharp.Io;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Window.Application.Security;
 using Window.Application.Services.Interfaces;
 using Window.Data.Context;
 using Window.Domain.Entities.Account;
+using Window.Domain.Entities.Comment;
 using Window.Domain.Entities.Contract;
 using Window.Domain.ViewModels.Seller.Contract;
 using Window.Domain.ViewModels.Seller.Product;
+using Window.Domain.ViewModels.Site.Inquiry;
 
 namespace Window.Application.Services.Services
 {
@@ -28,6 +32,68 @@ namespace Window.Application.Services.Services
         #endregion
 
         #region Site Side
+
+        //Check That Is Exist Any Market By This Seller Id
+        public async Task<bool> CheckThatIsExistAnyMarketByThisSellerId(ulong sellerId)
+        {
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == sellerId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return false;
+
+            #endregion
+
+            return true;
+        }
+
+        //List Of seller Comments For Show
+        public async Task<List<Comment>?> ListOfSellerCommentsForShow(ulong sellerId)
+        {
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == sellerId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return null;
+
+            #endregion
+
+            return await _context.Comments.Include(p=> p.User)
+                                    .Where(p => !p.IsDelete && p.SellerId == sellerId).ToListAsync();
+        }
+
+        //Add Comment From User
+        public async Task<bool> AddCommentFromUser(AddCommentSiteSideViewModel comment , ulong userId)
+        {
+            #region Get Market By Id 
+
+            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == comment.SellerId).Select(p => p.Market).FirstOrDefaultAsync();
+            if (market == null) return false;
+
+            #endregion
+
+            #region Get User By User Id 
+
+            var user = await _context.Users.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == userId);
+            if (user == null) return false;
+
+            #endregion
+
+            #region Add Comment From User 
+
+            Comment model = new Comment()
+            {
+                UserId = userId,
+                SellerId = comment.SellerId,
+                Description = comment.Description.SanitizeText()
+            };
+
+            //Add To The Data Base
+            await _context.Comments.AddAsync(model);
+            await _context.SaveChangesAsync();
+
+            #endregion
+
+            return true;
+        }
 
         //Can User Insert Comment For Seller
         public async Task<RequestForContract?> CanUserInsertCommentForSeller(ulong userId , ulong sellerId)
@@ -86,7 +152,6 @@ namespace Window.Application.Services.Services
             {
                 UserId = userId,
                 SellerId = sellerId,
-                RequestForContractStatus = null,
                 RequestForContractType = Domain.Enums.RequestForContract.RequestForContractType.Waiting
             };
 
