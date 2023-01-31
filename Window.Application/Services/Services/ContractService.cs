@@ -83,7 +83,8 @@ namespace Window.Application.Services.Services
             {
                 UserId = userId,
                 SellerId = comment.SellerId,
-                Description = comment.Description.SanitizeText()
+                Description = comment.Description.SanitizeText(),
+                RequestForContractStatus = comment.ContractStep
             };
 
             //Add To The Data Base

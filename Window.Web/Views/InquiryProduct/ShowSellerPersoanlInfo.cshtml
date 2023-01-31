@@ -1,4 +1,5 @@
 ﻿@using Window.Application.StticTools
+@using Window.Application.Extensions
 @using Window.Domain.Enums
 @using Window.Application.StaticTools
 @using Window.Domain.ViewModels.Common
@@ -98,7 +99,7 @@
                                     <a class="floor-pic mfp-image" href="#">
                                         <img src="/content/images/sellerInfo/thumb/@link.WorkSampleImage" alt="">
                                     </a>
-    
+
                                 </div>
                             }
 
@@ -130,12 +131,22 @@
 
                             @foreach (var user in comments)
                             {
-                                  <h3>@user.User.Username<i class="fa fa-angle-down"></i> </h3>
-                            <div>
-                                <p>
-                                    @user.Description
-                                </p>
-                            </div> 
+                                <h3>
+                                    <img src="@user.User.GetUserAvatar()" style="width:50px;height:50px;border-radius:100%;margin-left:20px;" />
+                                    @user.User.Username
+                                    <i class="fa fa-angle-down"></i>
+                                </h3>
+                                <div>
+
+                                    
+                                        <p>مرحله ی قرارداد کاربر : @user.RequestForContractStatus </p>
+
+                                        <br>
+
+                                    <p>
+                                        @user.Description
+                                    </p>
+                                </div>
                             }
 
                         </div>
@@ -212,8 +223,18 @@
                                         <div class="clearfix"></div>
                                     </div>
 
+                                    <label> در چه مرحله ای از قرارداد هستید ؟ </label>
+                                    <select name="ContractStep" class="form-control">
+
+                                        <option>لطفا یک گزینه را انتخاب کنید </option>
+                                        <option value="0">درحال گفتگو بامجری </option>
+                                        <option value="1">قرار داد بسته شده است. </option>
+                                        <option value="2">مجری کار را انجام داده است. </option>
+
+                                    </select>
+
                                     <textarea name="Description" placeholder="نظر خود را وارد کنید"></textarea>
-                                    <button type="submit"  class="button fullwidth margin-top-5">ارسال پیام</button>
+                                    <button type="submit" class="button fullwidth margin-top-5">ارسال پیام</button>
                                 </div>
                             </form>
 
