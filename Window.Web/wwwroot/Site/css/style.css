@@ -12984,4 +12984,11 @@ body .daterangepicker .drp-buttons button.cancelBtn {
 	padding-right:32px;
 }
 
+@media (max-width:445px) {
+	.grid-layout .listing-item {
+	width:46%!important;
+	}
+
+	}
+
 

@@ -24,7 +24,7 @@ namespace Window.Web.Controllers
         private readonly IContractService _contractService;
 
         public InquiryProductController(IProductService prodcutService, IStateService stateService, IBrandService brandService
-            , ISampleService sampleService, IInquiryService inquiryService, ISellerService sellerService, IMarketService marketService  
+            , ISampleService sampleService, IInquiryService inquiryService, ISellerService sellerService, IMarketService marketService
                     , IContractService contractService)
         {
             _productService = prodcutService;
@@ -130,7 +130,7 @@ namespace Window.Web.Controllers
 
             if (await _sellerService.IsExistAnySellerInfo(User.GetUserId()))
             {
-                TempData[WarningMessage] = "فروشندگان دسترسی به استعلام گیری تدارند."; 
+                TempData[WarningMessage] = "فروشندگان دسترسی به استعلام گیری تدارند.";
                 return RedirectToAction(nameof(InquiryStep1));
             }
 
@@ -336,7 +336,7 @@ namespace Window.Web.Controllers
 
             #region Contract Checker
 
-            ViewBag.CanInsertCommentAndStart = await _contractService.CanUserInsertCommentForSeller(User.GetUserId() , userId);
+            ViewBag.CanInsertCommentAndStart = await _contractService.CanUserInsertCommentForSeller(User.GetUserId(), userId);
             ViewBag.sellerId = userId;
             ViewBag.ListOfSellerCommentsForShow = await _contractService.ListOfSellerCommentsForShow(userId);
 
@@ -577,7 +577,7 @@ namespace Window.Web.Controllers
         {
             #region Create Contract Request 
 
-            var res = await _contractService.CreateContractRequestFromUser(User.GetUserId() , sellerId);
+            var res = await _contractService.CreateContractRequestFromUser(User.GetUserId(), sellerId);
 
             if (res)
             {
@@ -588,7 +588,7 @@ namespace Window.Web.Controllers
             #endregion
 
             TempData[ErrorMessage] = "عملیات باخطا مواجه شده است.";
-            return RedirectToAction(nameof(ShowSellerPersoanlInfo) , new { userId = sellerId });
+            return RedirectToAction(nameof(ShowSellerPersoanlInfo), new { userId = sellerId });
         }
 
         #endregion
@@ -602,14 +602,14 @@ namespace Window.Web.Controllers
             if (!ModelState.IsValid)
             {
                 TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
-                return RedirectToAction(nameof(ShowSellerPersoanlInfo) , new { userId = comment.SellerId });
+                return RedirectToAction(nameof(ShowSellerPersoanlInfo), new { userId = comment.SellerId });
             }
 
             #endregion
 
             #region Add Comment Method 
 
-            var res = await _contractService.AddCommentFromUser(comment , User.GetUserId());
+            var res = await _contractService.AddCommentFromUser(comment, User.GetUserId());
 
             if (res)
             {

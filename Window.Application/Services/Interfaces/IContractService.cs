@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Comment;
 using Window.Domain.Entities.Contract;
+using Window.Domain.ViewModels.Admin.Contract;
 using Window.Domain.ViewModels.Seller.Contract;
 using Window.Domain.ViewModels.Site.Inquiry;
 
@@ -44,6 +45,13 @@ namespace Window.Application.Services.Interfaces
 
         //Accept Request From Seller
         Task<bool> AcceptRequestFromSeller(ulong requestId, ulong sellerId);
+
+        #endregion
+
+        #region Admin Side 
+
+        //Filter Contract From Admin Panel 
+        Task<FiltreContractAdminSideViewModel> FiltreContractAdminSide(FiltreContractAdminSideViewModel filter);
 
         #endregion
     }
