@@ -139,7 +139,7 @@
                                 <div>
 
                                     
-                                        <p>مرحله ی قرارداد کاربر : @user.RequestForContractStatus </p>
+                                        <p>مرحله ی قرارداد کاربر : @user.RequestForContractStatus.GetEnumName() </p>
 
                                         <br>
 
@@ -227,9 +227,12 @@
                                     <select name="ContractStep" class="form-control">
 
                                         <option>لطفا یک گزینه را انتخاب کنید </option>
-                                        <option value="0">درحال گفتگو بامجری </option>
-                                        <option value="1">قرار داد بسته شده است. </option>
-                                        <option value="2">مجری کار را انجام داده است. </option>
+                                        <option value="0">درخواست قرارداد </option>
+                                        <option value="1">عقد قرارداد </option>
+                                        <option value="2">اندازه گیری ساخت </option>
+                                        <option value="3">تولید و مونتاژ </option>
+                                        <option value="4">نصب و آبگیری </option>
+                                        <option value="5">تحویل پروژه </option>
 
                                     </select>
 

@@ -22,8 +22,9 @@ namespace Window.Application.Services
         #region Ctor
 
         public ITicketRepository _ticket;
-
         public IUserService _userService;
+        private static readonly HttpClient client = new HttpClient();
+
 
         public TicketService(ITicketRepository ticket, IUserService userService)
         {
@@ -367,6 +368,15 @@ namespace Window.Application.Services
             #region Add Ticket Message Method 
 
             await _ticket.AddMessage(message);
+
+            #endregion
+
+            #region Send SMS To Mr Motahed
+
+            string mrMotahedMobile = "09111571205";
+
+            var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={mrMotahedMobile}&token={user.Username}&template=SendTicket";
+            var results = client.GetStringAsync(result);
 
             #endregion
 
