@@ -84,6 +84,8 @@ namespace Window.Application.Services.Interfaces
 
         #region Admin Panel
 
+        Task<List<MarketPersonalInfo>?> WaitingForAcceptSellerPErsonalInfos();
+
         Task<Market?> GetMarketByMarketId(ulong marketId);
 
         Task<bool> ChangeMarketStateFromAdminPanel(ListOfPersonalInfoViewModel model, ulong marketId);

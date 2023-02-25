@@ -46,6 +46,9 @@ namespace Window.Application.Services.Interfaces
         //Accept Request From Seller
         Task<bool> AcceptRequestFromSeller(ulong requestId, ulong sellerId);
 
+        //Get Request By Request Id 
+        Task<RequestForContract?> GetRequestByRequestId(ulong requestId);
+
         #endregion
 
         #region Admin Side 

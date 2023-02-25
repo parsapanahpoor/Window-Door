@@ -64,6 +64,7 @@ namespace Window.Application.Services.Services
                 site.SMSForDisActiveFromToday = siteSetting.SMSForDisActiveFromToday;
                 site.SMSForDisActiveFrom3Day = siteSetting.SMSForDisActiveFrom3Day;
                 site.SMSForDisActiveFrom15Day = siteSetting.SMSForDisActiveFrom15Day;
+                site.ChargeOfNewMarkets = siteSetting.ChargeOfNewMarkets;
 
                 _context.SiteSettings.Update(site);
                 await _context.SaveChangesAsync();

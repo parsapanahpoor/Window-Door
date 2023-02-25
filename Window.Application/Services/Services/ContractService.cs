@@ -277,6 +277,12 @@ namespace Window.Application.Services.Services
             return true;
         }
 
+        //Get Request By Request Id 
+        public async Task<RequestForContract?> GetRequestByRequestId(ulong requestId)
+        {
+            return await _context.RequestForContracts.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == requestId);
+        }
+
         #endregion
 
         #region Admin Side 

@@ -23,6 +23,8 @@ namespace Window.Domain.Entities.SiteSetting
 
         public string SMSForDisActiveFrom15Day { get; set; }
 
+        public int ChargeOfNewMarkets { get; set; }
+
         #endregion
     }
 }

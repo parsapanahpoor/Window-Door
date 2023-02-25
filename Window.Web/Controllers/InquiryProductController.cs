@@ -311,12 +311,6 @@ namespace Window.Web.Controllers
 
             #endregion
 
-            #region Update Seller Activation Tariff
-
-            await _sellerService.UpdateSellerActivationTariff(userId, false, true);
-
-            #endregion
-
             #region Send SMS
 
             //var res = await _sellerService.SendSMSForSellerForSeenProfile(userId);

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
+using Window.Application.Services.Services;
+using Window.Domain.Entities.Account;
 using Window.Domain.ViewModels.Seller.Contract;
 
 namespace Window.Web.Areas.Seller.Controllers
@@ -11,10 +13,12 @@ namespace Window.Web.Areas.Seller.Controllers
         #region Ctor 
 
         private readonly IContractService _contractService;
+        private readonly ISellerService _sellerService;
 
-        public ContarctController(IContractService contractService)
+        public ContarctController(IContractService contractService, ISellerService sellerService)
         {
             _contractService = contractService;
+            _sellerService = sellerService;
         }
 
         #endregion
@@ -39,6 +43,16 @@ namespace Window.Web.Areas.Seller.Controllers
                 TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
                 return RedirectToAction(nameof(ListOfContracts));
             }
+
+            #region Update Seller Activation Tariff
+
+            var request =await _contractService.GetRequestByRequestId(requestId);
+            if (request is not null)
+            {
+                await _sellerService.UpdateSellerActivationTariff(request.UserId, false, true);
+            }
+
+            #endregion
 
             TempData[ErrorMessage] = "عملیات باشکست مواجه شده است.";
             return RedirectToAction(nameof(ListOfContracts));

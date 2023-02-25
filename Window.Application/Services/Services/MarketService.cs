@@ -49,7 +49,7 @@ namespace Window.Application.Services.Services
                 UserId = userId,
                 IsDelete = false,
                 CreateDate = DateTime.Now,
-                ActivationTariff = 5000000,
+                ActivationTariff = await _context.SiteSettings.Where(p=> !p.IsDelete).Select(p=> p.ChargeOfNewMarkets).FirstOrDefaultAsync(),
                 MarketPersonalsInfoState = MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller,
                 MarketName = titleName
             };

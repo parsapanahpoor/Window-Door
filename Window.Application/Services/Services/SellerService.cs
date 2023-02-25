@@ -1250,6 +1250,17 @@ namespace Window.Application.Services.Services
             #endregion
         }
 
+        public async Task<List<MarketPersonalInfo>?> WaitingForAcceptSellerPErsonalInfos()
+        {
+            return await  _context.MarketPersonalInfo
+                .Include(u => u.User)
+                .Include(p => p.Market)
+                .Where(p => !p.IsDelete&& p.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForConfirmPersonalInformations)
+                .OrderByDescending(p => p.CreateDate )
+                .ToListAsync();
+        }
+
+
         public async Task<ListOfSellersInfoViewModel> FilterPersonalInfo(ListOfSellersInfoViewModel filter)
         {
             var query = _context.MarketPersonalInfo
