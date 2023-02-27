@@ -175,7 +175,8 @@ namespace Window.Application.Services
                 OnWorking = false,
                 TicketStatus = TicketStatus.Answered,
                 OwnerId = addTicket.userId.Value,
-                CreateDate = DateTime.Now
+                CreateDate = DateTime.Now,
+                TicketType = addTicket.TicketType
             };
 
 

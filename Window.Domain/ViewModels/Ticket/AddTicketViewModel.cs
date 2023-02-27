@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Window.Domain.Enums.Ticket;
 
 namespace Window.Domain.ViewModels.Admin.Ticket
 {
@@ -39,6 +40,8 @@ namespace Window.Domain.ViewModels.Admin.Ticket
         public string Message { get; set; }
 
         public IFormFile? MessageFile { get; set; }
+
+        public TicketType TicketType { get; set; }
 
         #endregion
     }

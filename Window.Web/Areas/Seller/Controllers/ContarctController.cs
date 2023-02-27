@@ -40,19 +40,19 @@ namespace Window.Web.Areas.Seller.Controllers
             var res = await _contractService.AcceptRequestFromSeller(requestId , User.GetUserId());
             if (res)
             {
+                #region Update Seller Activation Tariff
+
+                var request = await _contractService.GetRequestByRequestId(requestId);
+                if (request is not null)
+                {
+                    await _sellerService.UpdateSellerActivationTariff(User.GetUserId(), false, true);
+                }
+
+                #endregion
+
                 TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
                 return RedirectToAction(nameof(ListOfContracts));
             }
-
-            #region Update Seller Activation Tariff
-
-            var request =await _contractService.GetRequestByRequestId(requestId);
-            if (request is not null)
-            {
-                await _sellerService.UpdateSellerActivationTariff(request.UserId, false, true);
-            }
-
-            #endregion
 
             TempData[ErrorMessage] = "عملیات باشکست مواجه شده است.";
             return RedirectToAction(nameof(ListOfContracts));
