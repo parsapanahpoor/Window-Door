@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Window.Application.Extensions;
+using Window.Application.Interfaces;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Entities.Account;
 using Window.Domain.Enums.SellerType;
@@ -22,10 +23,11 @@ namespace Window.Web.Controllers
         private readonly ISellerService _sellerService;
         private readonly IMarketService _marketService;
         private readonly IContractService _contractService;
+        private readonly IUserService _userService;
 
         public InquiryProductController(IProductService prodcutService, IStateService stateService, IBrandService brandService
             , ISampleService sampleService, IInquiryService inquiryService, ISellerService sellerService, IMarketService marketService
-                    , IContractService contractService)
+                    , IContractService contractService, IUserService userService)
         {
             _productService = prodcutService;
             _stateService = stateService;
@@ -35,6 +37,7 @@ namespace Window.Web.Controllers
             _sellerService = sellerService;
             _marketService = marketService;
             _contractService = contractService;
+            _userService = userService;
         }
 
         #endregion
@@ -130,8 +133,11 @@ namespace Window.Web.Controllers
 
             if (await _sellerService.IsExistAnySellerInfo(User.GetUserId()))
             {
-                TempData[WarningMessage] = "فروشندگان دسترسی به استعلام گیری تدارند.";
-                return RedirectToAction(nameof(InquiryStep1));
+                if (!await _userService.CheckThatIsUserAdminOrNot(User.GetUserId()))
+                {
+                    TempData[WarningMessage] = "فروشندگان دسترسی به استعلام گیری تدارند.";
+                    return RedirectToAction(nameof(InquiryStep1));
+                }
             }
 
             #endregion

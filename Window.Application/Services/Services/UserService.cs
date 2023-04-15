@@ -22,6 +22,7 @@ using Window.Application.Services.Implementation;
 using Window.Domain.ViewModels.Site.Account;
 using Window.Domain.ViewModels.Account;
 using Window.Application.StaticTools;
+using Window.Application.Convertors;
 
 namespace Window.Application.Services
 {
@@ -147,7 +148,26 @@ namespace Window.Application.Services
                 return LoginUserResponse.WrongPassword;
             }
 
+            #region Send Verification Code SMS
+
+            string date = $"{DateTime.Now.ToShamsi()}";
+
+            var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={model.Mobile}&token={DateTime.Now.ToShamsi()}&template=Wellcoming";
+            var results = client.GetStringAsync(result);
+
+            //var message = Window.Application.StaticTools.Messages.SendActivationRegisterSms(user.MobileActivationCode);
+
+            //await _smsservice.SendSimpleSMS(user.Mobile, message);
+
+            #endregion
+
             return LoginUserResponse.Success;
+        }
+
+        //Check That Is User Admin Or Not 
+        public async Task<bool> CheckThatIsUserAdminOrNot(ulong userId)
+        {
+            return await _context.Users.AnyAsync(p => !p.IsDelete && p.Id == userId && p.IsAdmin);
         }
 
         #endregion

@@ -22,6 +22,9 @@ namespace Window.Application.Interfaces
     {
         #region Authentication
 
+        //Check That Is User Admin Or Not 
+        Task<bool> CheckThatIsUserAdminOrNot(ulong userId);
+
         Task<ResetPasswordResult> ResetUserPassword(ResetPasswordViewModel pass, string mobile);
 
         Task<RegisterUserResponse> RegisterUserAsync(RegisterUserViewModel model);
