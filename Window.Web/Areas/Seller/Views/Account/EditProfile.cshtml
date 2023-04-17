@@ -2,102 +2,99 @@
 @using Window.Web.Culture
 @model Window.Domain.ViewModels.User.Account.EditProfileViewModel
 @{
-    ViewData["Title"] = Localizer["Edit Profile"];
-
-    var isRtl = ApplicationCultures.GetCurrentCulture().IsRtl;
+    ViewData["Title"] = "ویرایش اطلاعات کاربری";
 }
 
 @section breadcrumb
-{
-<li>
-    <a asp-controller="Account" asp-action="EditProfile">@Localizer["User Panel"]</a>
-</li>
-<li>
-    <a asp-action="EditProfile">@Localizer["Edit Profile Information"]</a>
-</li>
+    {
+    <li>
+        <a asp-controller="Account" asp-action="EditProfile">پنل فروشندگان</a>
+    </li>
+    <li>
+        <a asp-action="EditProfile">ویرایش اطلاعات کاربری</a>
+    </li>
 }
 
 <form method="post" asp-antiforgery="true" enctype="multipart/form-data">
-        <div class="col-lg-9 col-sm-12">
-            
-            @if (ViewData.ModelState.ErrorCount > 0)
-            {
-                <div asp-validation-summary="All" class="alert alert-danger"></div>
-            }
 
-            <div class="widget">
-                <div class="widget-header bordered-bottom bordered-blue">
-                    <span class="widget-caption"> @ViewData["Title"] </span>
+    <div class="col-lg-9 col-sm-12 col-xs-12">
+
+        <div id="settings" class="tab-pane  active">
+
+            <div class="widget-header bordered-bottom bordered-sky">
+                <span class="widget-caption">  @ViewData["Title"] </span>
+            </div>
+
+            <div class="widget-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="Username">نام کاربری </label>
+                            <input asp-for="Username" class="form-control" placeholder="نام کاربری " />
+
+                            <span class="text-danger" asp-validation-for="Username"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="Mobile">موبایل</label>
+
+                            <input asp-for="Mobile" class="form-control" readonly placeholder="موبایل" />
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="ShopName">نام فروشگاه</label>
+                            <input asp-for="ShopName" class="form-control" placeholder="نام فروشگاه" />
+
+                            <span class="text-danger" asp-validation-for="ShopName"></span>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="widget-body">
-                    <div>
-                        <div class="card">
-                            <div class="card-body">
 
-                                <div class="form-group col-xs-6">
-                                    <label asp-for="Username">نام کاربری</label>
-                                    <input asp-for="Username" class="form-control"/>
-                                    <span asp-validation-for="Username" class="text-danger"></span>
-                                </div>
+                <div>
+                    <button type="submit" class="btn btn-labeled btn-palegreen">
+                        <i class="btn-label glyphicon glyphicon-ok"></i>ویرایش
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                                <div class="form-group col-xs-6">
-                                    <label asp-for="Mobile"></label>
-                                    <input asp-for="Mobile" class="form-control @(isRtl ? "text-right" : "")" dir="ltr"/>
-                                    <span asp-validation-for="Mobile" class="text-danger"></span>
-                                </div>
-
-                            <div class="form-group col-xs-6">
-                                <label asp-for="ShopName">نام فروشگاه</label>
-                                <input asp-for="ShopName" class="form-control" />
-                                <span asp-validation-for="ShopName" class="text-danger"></span>
-                            </div>
-
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12 flex-style">
-                                <button type="submit" class="btn btn-labeled btn-blue">
-                                    <i class="btn-label glyphicon glyphicon-ok"></i>@Localizer["Edit"]
-                                </button>
-                            </div>
-                        </div>
-
+    <div class="col-lg-3 col-sm-3 col-xs-12 mt-4">
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-blue">
+                <span class="widget-caption"> @ViewData["Title"] </span>
+            </div>
+            <div class="widget-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label asp-for="Avatar" class="file-input-style  c-pointer" id="select-avatar-button">
+                            <i class="glyphicon glyphicon-upload"></i>
+                            <span class="mr-8px">@Localizer["Please select an image"]</span>
+                        </label>
+                    </div>
+                    <div class="col-md-12 tc text-center">
+                        <img class="img-responsive d-inline-block" id="user-avatar-preview" src="@(string.IsNullOrEmpty(Model.AvatarName) ? FilePaths.DefaultUserAvatar : FilePaths.UserAvatarPath + Model.AvatarName)" />
+                        <input asp-for="Avatar" accept="image/png,image/jpg,image/jpeg" class="d-none" />
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-lg-3 col-sm-12">
-            <div class="widget">
-                <div class="widget-header bordered-bottom bordered-blue">
-                    <span class="widget-caption"> @ViewData["Title"] </span>
-                </div>
-                <div class="widget-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label asp-for="Avatar" class="file-input-style  c-pointer" id="select-avatar-button">
-                                <i class="glyphicon glyphicon-upload"></i>
-                                <span class="mr-8px">@Localizer["Please select an image"]</span>
-                            </label>
-                        </div>
-                        <div class="col-md-12 tc text-center">
-                            <img class="img-responsive d-inline-block" id="user-avatar-preview" src="@(string.IsNullOrEmpty(Model.AvatarName) ? FilePaths.DefaultUserAvatar : FilePaths.UserAvatarPath + Model.AvatarName)"/>
-                            <input asp-for="Avatar" accept="image/png,image/jpg,image/jpeg" class="d-none"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    @* </div> *@
 </form>
 
 
 @section Scripts
-{
-    
-    <partial name="_ValidationScriptsPartial"/>
-    <partial name="_SweetAlertLocalizer"/>
+    {
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_SweetAlertLocalizer" />
     <script src="/UserPanel/Account/EditProfile.js"></script>
 }
+
+
+
