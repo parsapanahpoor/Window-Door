@@ -282,5 +282,14 @@ namespace Window.Web.Controllers
         }
 
         #endregion
+
+        #region Terms Conditions
+
+        public async Task<IActionResult> TermsConditions()
+        {
+            return View();
+        }
+
+        #endregion
     }
 }
