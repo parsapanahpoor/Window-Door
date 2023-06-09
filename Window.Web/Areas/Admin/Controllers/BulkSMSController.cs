@@ -23,7 +23,7 @@ public class BulkSMSController : AdminBaseController
 
     #region Sellers
 
-    #region List OF Employee Sent SMS
+    #region List OF Seller Sent SMS
 
     #endregion
 
