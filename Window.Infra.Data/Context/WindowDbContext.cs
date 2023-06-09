@@ -3,6 +3,7 @@ using System.Globalization;
 using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Article;
 using Window.Domain.Entities.Brand;
+using Window.Domain.Entities.BulkSMS;
 using Window.Domain.Entities.Comment;
 using Window.Domain.Entities.Contact;
 using Window.Domain.Entities.Contract;
@@ -66,6 +67,12 @@ namespace Window.Data.Context
         public DbSet<Ticket> Ticket { get; set; }
 
         public DbSet<TicketMessage> TicketMessages { get; set; }
+
+        #endregion
+
+        #region Bulk SMS
+
+        public DbSet<BulkSMS> BulkSMS { get; set; }
 
         #endregion
 

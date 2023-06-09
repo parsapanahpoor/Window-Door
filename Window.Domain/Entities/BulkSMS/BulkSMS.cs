@@ -5,7 +5,6 @@ namespace Window.Domain.Entities.BulkSMS;
 
 #endregion
 
-
 public sealed class BulkSMS : BaseEntity
 {
 	#region properties
@@ -16,5 +15,13 @@ public sealed class BulkSMS : BaseEntity
 
 	public bool IsSent { get; set; }
 
+	public BulkSMSTargetPersonType BulkSMSTargetPersonType { get; set; }
+
 	#endregion
+}
+
+public enum BulkSMSTargetPersonType
+{
+	Seller,
+	Customer
 }
