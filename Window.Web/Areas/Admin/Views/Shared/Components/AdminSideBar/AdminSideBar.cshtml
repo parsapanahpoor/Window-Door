@@ -61,6 +61,28 @@
 
         <li>
             <a href="#" class="menu-dropdown">
+                <i class="menu-icon glyphicon glyphicon-envelope"></i>
+                <span class="menu-text"> پیامک انبوه  </span>
+
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-controller="BulkSMS" asp-action="ListOFSellerSentSMS" asp-area="Admin">
+                        <span class="menu-text"> پیامک فروشندگان</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="BulkSMS" asp-action="ListOFCustomerSentSMS" asp-area="Admin">
+                        <span class="menu-text"> پیامک خریداران</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" class="menu-dropdown">
                 <i class="menu-icon fa fa-users"></i>
                 <span class="menu-text"> مدیریت اطلاعات فروشندگان </span>
 

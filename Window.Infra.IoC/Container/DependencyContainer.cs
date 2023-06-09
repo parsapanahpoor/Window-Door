@@ -46,6 +46,7 @@ namespace Window.IOC.Container
             services.AddScoped<ITechnicalIssues, TechnicalIssuesService>();
             services.AddScoped<IConsulantService, ConsultantService>();
             services.AddScoped<IContractService, ContractService>();
+            services.AddScoped<IBulkSMSService, BulkSMSService>();
 
             #endregion
         }
