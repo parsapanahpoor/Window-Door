@@ -18,7 +18,7 @@ public sealed class LogResultOfUserInquiryWithSellersInfo : BaseEntity
 
 	public ulong BrandId { get; set; }
 
-	public int Price { get; set; }
+	public double Price { get; set; }
 
 	public int SellerScore { get; set; }
 

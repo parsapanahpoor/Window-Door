@@ -43,5 +43,8 @@ namespace Window.Application.Services.Interfaces
         Task<bool> DeleteYaraghBrand(ulong brandId);
 
         Task<List<SelectListViewModel>> GetAllBrands();
+
+        //Get All Brands With As No Tracking
+        Task<List<SelectListViewModel>> GetAllBrandsWithAsNoTracking();
     }
 }

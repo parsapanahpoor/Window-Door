@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿#region Usings
+
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,64 +11,71 @@ using Window.Domain.Entities.Inquiry;
 using Window.Domain.Entities.Sample;
 using Window.Domain.ViewModels.Site.Inquiry;
 
-namespace Window.Application.Services.Interfaces
+namespace Window.Application.Services.Interfaces;
+
+#endregion
+
+public interface IInquiryService
 {
-    public interface IInquiryService
-    {
-        #region Site Side
+    #region Site Side
 
-        //Log Inquiry For User In Step 1
-        Task LogInquiryForUserPart1(FilterInquiryViewModel filter);
+    //Check Log Result User Inquiry
+    Task<int> CheckLogResultUserInquiry(string userMacAddress);
 
-        //Log Inquiry For User In Step 2
-        Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height, int? KatibeSize, string userMacAddress, int productCount);
+    //Log Inquiry For User In Step 1
+    Task LogInquiryForUserPart1(FilterInquiryViewModel filter);
 
-        Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress);
+    //Log Inquiry For User In Step 2
+    Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height, int? KatibeSize, string userMacAddress, int productCount);
 
-        Task<double?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, int productCount , int? katibeSizes, ulong userId , ulong glassId);
+    Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress , ulong userId);
 
-        Task<int?> InitializeSamplesPrice(List<Sample?> samples, User user, int height, int width);
+    //Initial Result Of User Inquiry
+    Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, ulong UserId, string userMacAddress);
 
-        //Update User Inqury In Last Step For Update Brand 
-        Task<bool> UpdateUserInquryInLastStep(string userMacAddress, string? brandTitle);
+    Task<double?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, int productCount , int? katibeSizes, ulong userId , ulong glassId);
 
-        //Calculate Seller Score 
-        Task<int> CalculateSellerScore(ulong userId);
+    Task<int?> InitializeSamplesPrice(List<Sample?> samples, User user, int height, int width);
 
-        //Check Is User Scored To Seller 
-        Task<bool> checkIsUserScoredToSeller(string macAddress, ulong sellerId);
+    //Update User Inqury In Last Step For Update Brand 
+    Task<bool> UpdateUserInquryInLastStep(string userMacAddress, string? brandTitle);
 
-        //Add Score For Seller
-        Task<bool> AddScoreForSeller(int score, ulong sellerId, string userMacAddress);
+    //Calculate Seller Score 
+    Task<int> CalculateSellerScore(ulong userId);
 
-        //Add Score For Seller
-        Task<bool> AddScoreForSeller(AddScoreToTheSellerViewModel model, string userMacAddress);
+    //Check Is User Scored To Seller 
+    Task<bool> checkIsUserScoredToSeller(string macAddress, ulong sellerId);
 
-        //Get Count Of Inquiry In Cities
-        Task<int> GetCountOfInquiryInCities(string cityName);
+    //Add Score For Seller
+    Task<bool> AddScoreForSeller(int score, ulong sellerId, string userMacAddress);
 
-        //Get Count Of Inquiry In State 
-        Task<int> CountOfInquiryInState(string stateName);
+    //Add Score For Seller
+    Task<bool> AddScoreForSeller(AddScoreToTheSellerViewModel model, string userMacAddress);
 
-        //Get User Lastest Inquiry 
-        Task<List<LogInquiryForUserDetail>?> GetUserLastestInquiryDetailForChange(string macAddress);
+    //Get Count Of Inquiry In Cities
+    Task<int> GetCountOfInquiryInCities(string cityName);
 
-        //Delete User Lastest Inquiry Detail 
-        Task<bool> DeleteUserLastestInquiryDetail(ulong inquiryDetailId, string macAddress);
+    //Get Count Of Inquiry In State 
+    Task<int> CountOfInquiryInState(string stateName);
 
-        //Update User Inquiry Detail
-        Task<bool> UpdateUserInquiryItrm(ulong inquiryDetailId , ulong sampleId, int width, int height, int? katibe, string macAddress, int? SampleCount);
+    //Get User Lastest Inquiry 
+    Task<List<LogInquiryForUserDetail>?> GetUserLastestInquiryDetailForChange(string macAddress);
 
-        #endregion
+    //Delete User Lastest Inquiry Detail 
+    Task<bool> DeleteUserLastestInquiryDetail(ulong inquiryDetailId, string macAddress);
 
-        #region Admin Side 
+    //Update User Inquiry Detail
+    Task<bool> UpdateUserInquiryItrm(ulong inquiryDetailId , ulong sampleId, int width, int height, int? katibe, string macAddress, int? SampleCount);
 
-        Task<int?> CountOfTodayInquiry();
+    #endregion
 
-        Task<int?> CountOfMonthInquiry();
+    #region Admin Side 
 
-        Task<int?> CountOfYearInquiry();
+    Task<int?> CountOfTodayInquiry();
 
-        #endregion
-    }
+    Task<int?> CountOfMonthInquiry();
+
+    Task<int?> CountOfYearInquiry();
+
+    #endregion
 }

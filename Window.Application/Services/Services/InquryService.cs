@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml.ConditionalFormatting;
 using System.Linq.Expressions;
+using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
 using Window.Data.Context;
 using Window.Domain.Entities.Account;
@@ -35,6 +36,22 @@ public class InquryService : IInquiryService
     #endregion
 
     #region Site Side 
+
+    //Check Log Result User Inquiry
+    public async Task<int> CheckLogResultUserInquiry(string userMacAddress)
+    {
+        #region Check That Current User Has Any Inquiry OR Not 
+
+        var inquiry = await _context.LogInquiryForUsers
+                                    .AsNoTracking()
+                                    .FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
+
+        #endregion
+
+        return await _context.logInquiryForUserDetails
+                             .AsNoTracking()
+                             .CountAsync(p=> !p.IsDelete && p. == userId);
+    }
 
     //Log Inquiry For User In Step 1
     public async Task LogInquiryForUserPart1(FilterInquiryViewModel filter)
@@ -257,7 +274,10 @@ public class InquryService : IInquiryService
     {
         #region Get User Inqury
 
-        var userInqury = await _context.LogInquiryForUsers.FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
+        var userInqury = await _context.LogInquiryForUsers
+                                       .AsNoTracking()
+                                       .FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
+
         if (userInqury == null) return false;
 
         if (brandTitle == "All")
@@ -328,17 +348,311 @@ public class InquryService : IInquiryService
         #endregion
     }
 
-    public async Task<double?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int incomeheight, int incomewidth, int productCount, int? katibeSizes, ulong userId, ulong glassId)
+    //Calculate Seller Score 
+    public async Task<int> CalculateSellerScore(ulong userId)
+    {
+        #region MyRegion
+
+        var sellerScores = await _context.ScoreForMarkets.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
+
+        var sehat = await _context.SehateEtelaAt.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
+
+        var pasazForosh = await _context.KhadamatePasAzForosh.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
+
+        var pasokhGoie = await _context.PasokhGoie.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
+
+        var taAhodeZaman = await _context.TaAhodeZamaneTahvil.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
+
+        #endregion
+
+        //If Score Dosent Exist Yet
+        if (sellerScores == null || !sellerScores.Any()
+            || sehat == null || !sehat.Any()
+            || pasazForosh == null || !pasazForosh.Any()
+            || pasokhGoie == null || !pasokhGoie.Any()
+            || taAhodeZaman == null || !taAhodeZaman.Any())
+        {
+            return 0;
+        }
+
+        var score = (sellerScores.Sum(p => p.Score) + sehat.Sum(p => p.Score) + pasazForosh.Sum(p => p.Score) + pasokhGoie.Sum(p => p.Score) + taAhodeZaman.Sum(p => p.Score))
+            / (sellerScores.Count() + sehat.Count() + pasazForosh.Count() + pasokhGoie.Count() + taAhodeZaman.Count());
+
+        return score;
+    }
+
+    //Calculate Seller Score With As No Tracking
+    public async Task<int> CalculateSellerScoreWithAsNoTracking(ulong userId)
+    {
+        #region MyRegion
+
+        var sellerScores = await _context.ScoreForMarkets
+                                         .AsNoTracking()
+                                         .Where(p => !p.IsDelete && p.UserId == userId)
+                                         .ToListAsync();
+
+        var sehat = await _context.SehateEtelaAt
+                                  .AsNoTracking()
+                                  .Where(p => !p.IsDelete && p.UserId == userId)
+                                  .ToListAsync();
+
+        var pasazForosh = await _context.KhadamatePasAzForosh
+                                        .AsNoTracking()
+                                        .Where(p => !p.IsDelete && p.UserId == userId)
+                                        .ToListAsync();
+
+        var pasokhGoie = await _context.PasokhGoie
+                                       .AsNoTracking()
+                                       .Where(p => !p.IsDelete && p.UserId == userId)
+                                       .ToListAsync();
+
+        var taAhodeZaman = await _context.TaAhodeZamaneTahvil
+                                         .AsNoTracking()
+                                         .Where(p => !p.IsDelete && p.UserId == userId)
+                                         .ToListAsync();
+
+        #endregion
+
+        //If Score Dosent Exist Yet
+        if (sellerScores == null || !sellerScores.Any()
+            || sehat == null || !sehat.Any()
+            || pasazForosh == null || !pasazForosh.Any()
+            || pasokhGoie == null || !pasokhGoie.Any()
+            || taAhodeZaman == null || !taAhodeZaman.Any())
+        {
+            return 0;
+        }
+
+        var score = (sellerScores.Sum(p => p.Score)
+                    + sehat.Sum(p => p.Score)
+                    + pasazForosh.Sum(p => p.Score)
+                    + pasokhGoie.Sum(p => p.Score)
+                    + taAhodeZaman.Sum(p => p.Score))
+                    /
+                    (sellerScores.Count()
+                    + sehat.Count()
+                    + pasazForosh.Count() 
+                    + pasokhGoie.Count()
+                    + taAhodeZaman.Count());
+
+        return score;
+    }
+
+    public async Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress , ulong userId)
+    {
+        #region Get User log 
+
+        var log = await _context.LogInquiryForUsers
+                                .AsNoTracking()
+                                .Where(p => p.UserMAcAddress == userMacAddress && !p.IsDelete)
+                                .Select(p=> p.Id)
+                                .FirstOrDefaultAsync();
+
+        if (log == null) return null;
+
+        var userInquiryResults = await _context.LogResultOfUserInquiryWithSellersInfos
+                                               .AsNoTracking()
+                                               .Where(p => p.UserId == userId && p.LogInquiryForUserId == log)
+                                               .ToListAsync();
+
+        #endregion
+
+        #region Fill Return Model
+
+        List<InquiryViewModel> model = new List<InquiryViewModel>();
+
+        if (userInquiryResults != null && userInquiryResults.Any())
+        {
+            foreach (var userInquiryResult in userInquiryResults)
+            {
+                //Update Sellers Activation Tarrifs
+                await _sellerService.UpdateSellerActivationTariff(userInquiryResult.SellerUserId, true, false);
+
+                InquiryViewModel modelChilds = new InquiryViewModel()
+                {
+                    BrandImage = await _context.MainBrands
+                                               .AsNoTracking()
+                                               .Where(p=> !p.IsDelete && p.Id == userInquiryResult.BrandId)
+                                               .Select(p=> p.BrandLogo)
+                                               .FirstOrDefaultAsync(),
+                    BrandName = await _context.MainBrands
+                                               .AsNoTracking()
+                                               .Where(p => !p.IsDelete && p.Id == userInquiryResult.BrandId)
+                                               .Select(p => p.BrandName)
+                                               .FirstOrDefaultAsync(),
+                    Price = userInquiryResult.Price,
+                    Score = userInquiryResult.SellerScore,
+                    ShopName = userInquiryResult.SellerShopName,
+                    UserAvatar = await _context.Users
+                                               .AsNoTracking()
+                                               .Where(p=> !p.IsDelete && p.Id == userId)
+                                               .Select(p=> p.Avatar)
+                                               .FirstOrDefaultAsync(),
+                    UserName = await _context.Users
+                                               .AsNoTracking()
+                                               .Where(p => !p.IsDelete && p.Id == userId)
+                                               .Select(p => p.Username)
+                                               .FirstOrDefaultAsync(),
+                    UserId = userId
+                };
+
+                model.Add(modelChilds);
+            }
+        }
+
+        #endregion
+
+        return model;
+    }
+
+    //Initial Result Of User Inquiry
+    public async Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, ulong UserId, string userMacAddress)
+    {
+        #region Get User Log By User Mac Address
+
+        var userLog = await _context.LogInquiryForUsers
+                                    .AsNoTracking()
+                                    .FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
+        if (userLog == null) return false;
+
+        #endregion
+
+        #region Add Log Detail
+
+        LogInquiryForUserDetail logDetail = new LogInquiryForUserDetail()
+        {
+            CreateDate = DateTime.Now,
+            Height = height,
+            IsDelete = false,
+            LogInquiryForUserId = userLog.Id,
+            SampleId = sampleId,
+            Width = width,
+            KatibeSize = katibeSize,
+            CountOfSample = SampleCount
+        };
+
+        await _context.logInquiryForUserDetails.AddAsync(logDetail);
+        await _context.SaveChangesAsync();
+
+        #endregion
+
+        #region Initial Inquiry Result
+
+        #region Get Sellers
+
+        List<ulong> sellersUserId = await _context.MarketPersonalInfo
+                                  .AsNoTracking()
+                                  .Include(p=> p.Market)
+                                  .Where(p => !p.IsDelete && p.CityId == userLog.CityId && p.CountryId == userLog.CountryId && p.StateId == userLog.StateId
+                                            && p.Market.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.ActiveMarketAccount)
+                                  .Select(p => p.UserId)
+                                  .ToListAsync();
+
+        #endregion
+
+        #region Get Brands
+
+        List<ulong> brands = new List<ulong>();
+
+        if (userLog.BrandId.HasValue)
+        {
+            var brand = await _context.MainBrands
+                                      .AsNoTracking()
+                                      .Where(p => !p.IsDelete && p.Id == userLog.BrandId)
+                                      .Select(p => p.Id)
+                                      .FirstOrDefaultAsync();
+
+            brands.Add(brand);
+        }
+
+        if (userLog.BrandId == null)
+        {
+            if (userLog.SellerType == Domain.Enums.SellerType.SellerType.UPC)
+            {
+                var getBrands = await _context.MainBrands
+                                              .AsNoTracking()
+                                              .Where(p => !p.IsDelete && p.UPVC)
+                                              .Select(p => p.Id)
+                                              .ToListAsync();
+
+                brands.AddRange(getBrands);
+            }
+            if (userLog.SellerType == Domain.Enums.SellerType.SellerType.Aluminium)
+            {
+                var getBrands = await _context.MainBrands
+                                              .AsNoTracking()
+                                              .Where(p => !p.IsDelete && p.Alominum)
+                                              .Select(p => p.Id)
+                                              .ToListAsync();
+
+                brands.AddRange(getBrands);
+            }
+        }
+
+        #endregion
+
+        #region Get Samples 
+
+        List<LogResultOfUserInquiryWithSellersInfo> logResults = new List<LogResultOfUserInquiryWithSellersInfo>();
+
+        foreach (var sellerUserId in sellersUserId)
+        {
+            foreach (var brandId in brands)
+            {
+                //Initial Inquiry Price
+                double? inquiryPrice = await InitialTotalSamplePriceWithAsNoTracking(brandId, sampleId, height, width, SampleCount, katibeSize, sellerUserId, userLog.GlassId.Value);
+
+                if (inquiryPrice.HasValue && inquiryPrice.Value != 0)
+                {
+                    #region Fill Log Result Of User Inquiry With Sellers Info
+
+                    LogResultOfUserInquiryWithSellersInfo logResuly = new LogResultOfUserInquiryWithSellersInfo()
+                    {
+                        BrandId = brandId,
+                        CreateDate = DateTime.Now,
+                        IsDelete = false,
+                        LogInquiryForUserId = userLog.Id,
+                        SellerShopName = await _context.Market
+                                                       .AsNoTracking()
+                                                       .Where(p => !p.IsDelete && p.UserId == sellerUserId)
+                                                       .Select(p => p.MarketName)
+                                                       .FirstOrDefaultAsync(),
+                        SellerUserId = sellerUserId,
+                        UserId = UserId,
+                        SellerScore = await CalculateSellerScoreWithAsNoTracking(sellerUserId),
+                        Price = inquiryPrice.Value
+                    };
+
+                    #endregion
+
+                    logResults.Add(logResuly);
+                }              
+            }
+        }
+
+        if (logResults != null && logResults.Any())
+        {
+            await _context.LogResultOfUserInquiryWithSellersInfos.AddRangeAsync(logResults);
+            await _context.SaveChangesAsync();
+        }
+
+        #endregion
+
+        #endregion
+
+        return true;
+    }
+
+    //Initial Total Sample Price With As No Tracking
+    public async Task<double?> InitialTotalSamplePriceWithAsNoTracking(ulong brandId, ulong sampleId, int incomeheight, int incomewidth, int productCount, int? katibeSizes, ulong userId, ulong glassId)
     {
         #region Proccess Height And Width
 
         double height = (double)incomeheight / (double)100;
         double width = (double)incomewidth / (double)100;
         double? katibeSize = 0;
-        if (katibeSizes.HasValue)
-        {
-            katibeSize = (double)katibeSizes / (double)100;
-        }
+
+        if (katibeSizes.HasValue)katibeSize = (double)katibeSizes / (double)100;
 
         #endregion
 
@@ -350,14 +664,23 @@ public class InquryService : IInquiryService
 
         #region Get User Segments Price 
 
-        var userSegments = await _context.SegmentPricings.Include(p => p.Product).Where(p => !p.IsDelete && p.Product.UserId == userId && p.Product.MainBrandId == brandId).ToListAsync();
+        var userSegments = await _context.SegmentPricings
+                                         .AsNoTracking()
+                                         .Where(p => !p.IsDelete && p.Product.UserId == userId && p.Product.MainBrandId == brandId)
+                                         .ToListAsync();
+
         if (userSegments == null || !userSegments.Any()) return null;
 
         #endregion
 
         #region Get Glasses Pricing
 
-        var glassPricing = await _context.GlassPricings.FirstOrDefaultAsync(p => !p.IsDelete && p.GlassId == glassId && p.UserId == userId);
+        var glassPricing = await _context.GlassPricings
+                                         .AsNoTracking()
+                                         .Where(p => !p.IsDelete && p.GlassId == glassId && p.UserId == userId)
+                                         .Select(p=> p.Price)
+                                         .FirstOrDefaultAsync();
+
         if (glassPricing == null) return null;
 
         #endregion
@@ -366,18 +689,20 @@ public class InquryService : IInquiryService
 
         #region Get Sample By Id 
 
-        var sample = await _context.Samples.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == sampleId);
-        if (sample == null) return null;
+        var samplesId = await _context.Samples
+                                     .AsNoTracking()
+                                     .Where(p => !p.IsDelete && p.Id == sampleId)
+                                     .Select(p=> p.Id)
+                                     .FirstOrDefaultAsync();
+
+        if (sampleId == null) return null;
 
         #endregion
 
         #region پنجره لولایی آلومینیومی فیکس 
 
-        if (sample.Id == 10)
+        if (samplesId == 10)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //فریم لولایی آلومینیومی
@@ -393,7 +718,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -401,11 +726,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی آلومینیومی دریچه 
 
-        if (sample.Id == 9)
+        if (samplesId == 9)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //قیمت فریم لولایی آلومینیومی
@@ -433,7 +755,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -441,11 +763,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی آلومینیومی لولایی  تک لنگه 
 
-        if (sample.Id == 8)
+        if (samplesId == 8)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //قیمت فریم لولایی آلومینیومی
@@ -473,7 +792,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -481,11 +800,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی آلومینیومی لولایی  دولنگه 
 
-        if (sample.Id == 34)
+        if (samplesId == 34)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //قیمت فریم لولایی آلومینیومی
@@ -525,7 +841,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -533,11 +849,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی آلومینیومی لولایی سه لنگه 
 
-        if (sample.Id == 35)
+        if (samplesId == 35)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //قیمت فریم لولایی آلومینیومی
@@ -577,7 +890,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -585,11 +898,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی آلومینیومی لولایی  چهار لنگه 
 
-        if (sample.Id == 36)
+        if (samplesId == 36)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //فریم لولایی آلومینیومی
@@ -629,7 +939,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -637,11 +947,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی آلومینیومی لولایی شش لنگه 
 
-        if (sample.Id == 37)
+        if (samplesId == 37)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //قیمت فریم لولایی آلومینیومی
@@ -681,7 +988,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -689,11 +996,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی UPVC فیکس 
 
-        if (sample.Id == 33)
+        if (samplesId == 33)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -715,7 +1019,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -723,11 +1027,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی UPVC دریچه
 
-        if (sample.Id == 32)
+        if (samplesId == 32)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -767,7 +1068,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -775,11 +1076,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی UPVC لولایی تک لنگه
 
-        if (sample.Id == 31)
+        if (samplesId == 31)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -819,7 +1117,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -827,11 +1125,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی UPVC لولایی  دولنگه
 
-        if (sample.Id == 30)
+        if (samplesId == 30)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -889,7 +1184,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -897,11 +1192,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی UPVC لولایی سه لنگه
 
-        if (sample.Id == 29)
+        if (samplesId == 29)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -959,7 +1251,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -967,11 +1259,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی UPVC لولایی  چهار لنگه
 
-        if (sample.Id == 28)
+        if (samplesId == 28)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -1029,7 +1318,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -1037,11 +1326,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی UPVC لولایی  شش لنگه 
 
-        if (sample.Id == 21)
+        if (samplesId == 21)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -1099,7 +1385,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -1107,11 +1393,8 @@ public class InquryService : IInquiryService
 
         #region درب لولایی سوییچی شیشه یکپارچه UPVC (id = 20)
 
-        if (sample.Id == 20)
+        if (samplesId == 20)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم
@@ -1151,7 +1434,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -1159,11 +1442,8 @@ public class InquryService : IInquiryService
 
         #region  درب لولایی سرویسی شیشه یکپارچه UPVC  (id = 19)
 
-        if (sample.Id == 19)
+        if (samplesId == 19)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم
@@ -1203,7 +1483,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -1211,11 +1491,8 @@ public class InquryService : IInquiryService
 
         #region  درب لولایی  بالکنی سوویچی UPVC (id = 18)
 
-        if (sample.Id == 18)
+        if (samplesId == 18)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم
@@ -1279,7 +1556,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * (height - ((double)60 / (double)100))));
+                totalPrice = totalPrice + (glassPricing * (width * (height - ((double)60 / (double)100))));
             }
         }
 
@@ -1287,11 +1564,8 @@ public class InquryService : IInquiryService
 
         #region   درب لولایی درب سرویسی UPVC (id = 17)
 
-        if (sample.Id == 17)
+        if (samplesId == 17)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم
@@ -1355,7 +1629,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * (height - ((double)120 / (double)100))));
+                totalPrice = totalPrice + (glassPricing * (width * (height - ((double)120 / (double)100))));
             }
         }
 
@@ -1363,11 +1637,8 @@ public class InquryService : IInquiryService
 
         #region درب لولایی درب بالکنی دوتکه شیشه یکپارچه سوویچیUPVC  (id = 16)
 
-        if (sample.Id == 16 && katibeSizes.HasValue)
+        if (samplesId == 16 && katibeSizes.HasValue)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم
@@ -1425,7 +1696,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -1433,11 +1704,8 @@ public class InquryService : IInquiryService
 
         #region  درب لولایی بالکنی دوتکه پنل دار سوویچیUPVC (id = 15)
 
-        if (sample.Id == 15 && katibeSizes.HasValue)
+        if (samplesId == 15 && katibeSizes.HasValue)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم
@@ -1501,7 +1769,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * (height - ((double)60 / (double)100))));
+                totalPrice = totalPrice + (glassPricing * (width * (height - ((double)60 / (double)100))));
             }
         }
 
@@ -1509,11 +1777,8 @@ public class InquryService : IInquiryService
 
         #region درب لولایی سوییچی شیشه یکپارچه Alminum (id = 38)
 
-        if (sample.Id == 38)
+        if (samplesId == 38)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //قیمت فریم
@@ -1541,7 +1806,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -1549,11 +1814,8 @@ public class InquryService : IInquiryService
 
         #region  درب لولایی سرویسی شیشه یکپارچه Alminum  (id = 39)
 
-        if (sample.Id == 39)
+        if (samplesId == 39)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //قیمت فریم
@@ -1581,7 +1843,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -1589,11 +1851,8 @@ public class InquryService : IInquiryService
 
         #region  درب لولایی  بالکنی سوویچی Alminum (id = 40)
 
-        if (sample.Id == 40)
+        if (samplesId == 40)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //قیمت فریم
@@ -1639,7 +1898,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * (height - ((double)60 / (double)100))));
+                totalPrice = totalPrice + (glassPricing * (width * (height - ((double)60 / (double)100))));
             }
         }
 
@@ -1647,11 +1906,8 @@ public class InquryService : IInquiryService
 
         #region   درب لولایی درب سرویسی Alminum (id = 41)
 
-        if (sample.Id == 41)
+        if (samplesId == 41)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //قیمت فریم
@@ -1697,7 +1953,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * (height - ((double)120 / (double)100))));
+                totalPrice = totalPrice + (glassPricing * (width * (height - ((double)120 / (double)100))));
             }
         }
 
@@ -1705,11 +1961,8 @@ public class InquryService : IInquiryService
 
         #region  درب لولایی  بالکنی سوویچیدرب لولایی آلومینیومی بالکنی دوتکه  شیشه  یکپارچه سوویچی (id = 42)
 
-        if (sample.Id == 42)
+        if (samplesId == 42)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //قیمت فریم
@@ -1749,7 +2002,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * (height)));
+                totalPrice = totalPrice + (glassPricing * (width * (height)));
             }
         }
 
@@ -1757,11 +2010,8 @@ public class InquryService : IInquiryService
 
         #region  درب لولایی بالکنی دوتکه پنل دار سوویچیUPVC (id = 43 checked)
 
-        if (sample.Id == 43 && katibeSize.HasValue)
+        if (samplesId == 43 && katibeSize.HasValue)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //قیمت فریم
@@ -1807,7 +2057,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * (height - ((double)60 / (double)100))));
+                totalPrice = totalPrice + (glassPricing * (width * (height - ((double)60 / (double)100))));
             }
         }
 
@@ -1819,11 +2069,8 @@ public class InquryService : IInquiryService
 
         #region پنجره ی فیکس لولایی کتیبه دار یو پی وی سی (id = 27)
 
-        if (sample.Id == 27)
+        if (samplesId == 27)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -1863,7 +2110,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -1871,11 +2118,8 @@ public class InquryService : IInquiryService
 
         #region پنجره ی دریچه لولایی کتیبه دار یو پی وی سی (id = 26)
 
-        if (sample.Id == 26)
+        if (samplesId == 26)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -1927,7 +2171,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 14) != null)
@@ -1942,11 +2186,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی تک لنگه کتیبه دار یو پی وی سی (id = 25)
 
-        if (sample.Id == 25)
+        if (samplesId == 25)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -1998,7 +2239,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 13) != null)
@@ -2013,11 +2254,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی پنجره لولایی دولنگه کتیبه دار یو پی وی سی (id = 24)
 
-        if (sample.Id == 24)
+        if (samplesId == 24)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -2069,7 +2307,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 13) != null)
@@ -2083,11 +2321,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی پنجره لولایی سه کتیبه دار یو پی وی سی (id = 23)
 
-        if (sample.Id == 23)
+        if (samplesId == 23)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -2157,7 +2392,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 13) != null)
@@ -2171,11 +2406,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی پنجره لولایی چهار کتیبه دار یو پی وی سی (id = 22)
 
-        if (sample.Id == 22)
+        if (samplesId == 22)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -2245,7 +2477,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 13) != null)
@@ -2259,11 +2491,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی پنجره لولایی شش کتیبه دار یو پی وی سی (id = 47)
 
-        if (sample.Id == 47)
+        if (samplesId == 47)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 34) != null)
             {
                 //قیمت فریم لولایی upvc
@@ -2351,7 +2580,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 13) != null)
@@ -2369,11 +2598,8 @@ public class InquryService : IInquiryService
 
         #region پنجره ی فیکس لولایی کتیبه دار آلمینیوم (id = 54)
 
-        if (sample.Id == 54)
+        if (samplesId == 54)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //فریم لولایی آلومینیومی 
@@ -2413,7 +2639,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -2421,11 +2647,8 @@ public class InquryService : IInquiryService
 
         #region پنجره ی دریچه ی لولایی کتیبه دار آلمینیوم (id = 53)
 
-        if (sample.Id == 53)
+        if (samplesId == 53)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //فریم لولایی آلومینیومی 
@@ -2471,7 +2694,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 41) != null)
@@ -2486,11 +2709,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی تک لنگه کتیبه دار آلمینیوم (id = 52)
 
-        if (sample.Id == 52)
+        if (samplesId == 52)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //فریم لولایی آلومینیومی 
@@ -2536,7 +2756,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 40) != null)
@@ -2551,11 +2771,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی پنجره لولایی دولنگه کتیبه دار آلمینیوم (id = 51)
 
-        if (sample.Id == 51)
+        if (samplesId == 51)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //فریم لولایی آلومینیومی 
@@ -2601,7 +2818,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 40) != null)
@@ -2615,11 +2832,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی پنجره لولایی سه لنگه کتیبه دار آلمینیوم (id = 50)
 
-        if (sample.Id == 50)
+        if (samplesId == 50)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //فریم لولایی آلومینیومی 
@@ -2683,7 +2897,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 40) != null)
@@ -2697,11 +2911,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی پنجره لولایی چهار لنگه کتیبه دار آلمینیوم (id = 49)
 
-        if (sample.Id == 49)
+        if (samplesId == 49)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //فریم لولایی آلومینیومی 
@@ -2765,7 +2976,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 40) != null)
@@ -2779,11 +2990,8 @@ public class InquryService : IInquiryService
 
         #region پنجره لولایی پنجره لولایی شش لنگه کتیبه دار آلمینیوم (id = 48)
 
-        if (sample.Id == 48)
+        if (samplesId == 48)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 52) != null)
             {
                 //فریم لولایی آلومینیومی 
@@ -2865,7 +3073,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 40) != null)
@@ -2887,15 +3095,12 @@ public class InquryService : IInquiryService
 
         #region   پنجره ی کشویی آلمینیوم دولنگه ی کتیبه دار (id = 44)   
 
-        if (sample.Id == 44)
+        if (samplesId == 44)
         {
             if (katibeSize == null)
             {
                 return null;
             }
-
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 46) != null)
             {
@@ -2954,7 +3159,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 39) != null)
@@ -2968,15 +3173,12 @@ public class InquryService : IInquiryService
 
         #region   پنجره ی کشویی آلمینیوم سه لنگه ی کتیبه دار (id = 45)   
 
-        if (sample.Id == 45)
+        if (samplesId == 45)
         {
             if (katibeSize == null)
             {
                 return null;
             }
-
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 46) != null)
             {
@@ -3053,7 +3255,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 39) != null)
@@ -3067,15 +3269,12 @@ public class InquryService : IInquiryService
 
         #region پنجره ی کشویی آلمینیوم چهار لنگه ی کتیبه دار (id = 46)       
 
-        if (sample.Id == 46)
+        if (samplesId == 46)
         {
             if (katibeSize == null)
             {
                 return null;
             }
-
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 46) != null)
             {
@@ -3158,7 +3357,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 39) != null)
@@ -3176,11 +3375,8 @@ public class InquryService : IInquiryService
 
         #region پنجره کشویی دو لنگه کتیبھدار UPVC
 
-        if (sample.Id == 55)
+        if (samplesId == 55)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 29) != null)
             {
                 //قیمت فریم
@@ -3280,7 +3476,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
         }
@@ -3289,11 +3485,8 @@ public class InquryService : IInquiryService
 
         #region پنجره کشویی سه لنگه کتیبھدار UPVC
 
-        if (sample.Id == 56)
+        if (samplesId == 56)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 29) != null)
             {
                 //قیمت فریم
@@ -3411,7 +3604,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
         }
@@ -3420,11 +3613,8 @@ public class InquryService : IInquiryService
 
         #region پنجره کشویی جهار لنگه کتیبھدار UPVC
 
-        if (sample.Id == 57)
+        if (samplesId == 57)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 29) != null)
             {
                 //قیمت فریم
@@ -3548,7 +3738,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
         }
@@ -3565,11 +3755,8 @@ public class InquryService : IInquiryService
 
         #region پنجره ی  UPVC (id = 13)
 
-        if (sample.Id == 13)
+        if (samplesId == 13)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 29) != null)
             {
                 //قیمت فریم
@@ -3657,7 +3844,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
         }
@@ -3666,11 +3853,8 @@ public class InquryService : IInquiryService
 
         #region   UPVC  (id = 12)
 
-        if (sample.Id == 12)
+        if (samplesId == 12)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 29) != null)
             {
                 //قیمت فریم
@@ -3758,7 +3942,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -3766,11 +3950,8 @@ public class InquryService : IInquiryService
 
         #region  پنجره ی  UPVC (id = 11)     
 
-        if (sample.Id == 11)
+        if (samplesId == 11)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 29) != null)
             {
                 //قیمت فریم
@@ -3858,7 +4039,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
         }
 
@@ -3870,11 +4051,8 @@ public class InquryService : IInquiryService
 
         #region پنجره ی کشویی آلمینیومی دولنگه  (id = 58)
 
-        if (sample.Id == 58)
+        if (samplesId == 58)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 46) != null)
             {
                 //قیمت فریم
@@ -3914,7 +4092,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 39) != null)
@@ -3929,11 +4107,8 @@ public class InquryService : IInquiryService
 
         #region پنجره ی کشویی آلمینیومی سه لنگه  (id = 59)
 
-        if (sample.Id == 59)
+        if (samplesId == 59)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 46) != null)
             {
                 //قیمت فریم
@@ -3973,7 +4148,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 39) != null)
@@ -3987,11 +4162,8 @@ public class InquryService : IInquiryService
 
         #region پنجره ی کشویی آلمینیومی چهار لنگه  (id = 60)
 
-        if (sample.Id == 60)
+        if (samplesId == 60)
         {
-            //Get Sample Segments
-            var simpleFixAluminumhIngedWindow = await _context.SampleSelectedSegments.Include(p => p.Segment).Where(p => !p.IsDelete && p.SampleId == sample.Id).Select(p => p.Segment).ToListAsync();
-
             if (userSegments.FirstOrDefault(p => p.SegmentId == 46) != null)
             {
                 //قیمت فریم
@@ -4037,7 +4209,7 @@ public class InquryService : IInquiryService
             if (glassPricing != null)
             {
                 //قیمت شیشه
-                totalPrice = totalPrice + (glassPricing.Price * (width * height));
+                totalPrice = totalPrice + (glassPricing * (width * height));
             }
 
             if (userSegments.FirstOrDefault(p => p.SegmentId == 39) != null)
@@ -4062,281 +4234,6 @@ public class InquryService : IInquiryService
         }
 
         return totalPrice;
-    }
-
-    //Calculate Seller Score 
-    public async Task<int> CalculateSellerScore(ulong userId)
-    {
-        #region MyRegion
-
-        var sellerScores = await _context.ScoreForMarkets.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
-
-        var sehat = await _context.SehateEtelaAt.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
-
-        var pasazForosh = await _context.KhadamatePasAzForosh.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
-
-        var pasokhGoie = await _context.PasokhGoie.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
-
-        var taAhodeZaman = await _context.TaAhodeZamaneTahvil.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
-
-        #endregion
-
-        //If Score Dosent Exist Yet
-        if (sellerScores == null || !sellerScores.Any()
-            || sehat == null || !sehat.Any()
-            || pasazForosh == null || !pasazForosh.Any()
-            || pasokhGoie == null || !pasokhGoie.Any()
-            || taAhodeZaman == null || !taAhodeZaman.Any())
-        {
-            return 0;
-        }
-
-        var score = (sellerScores.Sum(p => p.Score) + sehat.Sum(p => p.Score) + pasazForosh.Sum(p => p.Score) + pasokhGoie.Sum(p => p.Score) + taAhodeZaman.Sum(p => p.Score))
-            / (sellerScores.Count() + sehat.Count() + pasazForosh.Count() + pasokhGoie.Count() + taAhodeZaman.Count());
-
-        return score;
-    }
-
-    public async Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress)
-    {
-        #region Get User log 
-
-        var log = await _context.LogInquiryForUsers.FirstOrDefaultAsync(p => p.UserMAcAddress == userMacAddress && !p.IsDelete);
-        if (log == null) return null;
-
-        var logDetail = await _context.logInquiryForUserDetails.Where(p => !p.IsDelete && p.LogInquiryForUserId == log.Id).ToListAsync();
-        if (logDetail == null) return null;
-
-        #endregion
-
-        #region Initial Model 
-
-        List<InquiryViewModel> model = new List<InquiryViewModel>();
-
-        #endregion
-
-        #region Get Sellers
-
-        List<User> sellers = await _context.MarketPersonalInfo
-                                .Include(p => p.User)
-                                .Include(p => p.Market)
-                                .Where(p => !p.IsDelete && p.CityId == log.CityId && p.CountryId == log.CountryId && p.StateId == log.StateId
-                                 && p.Market.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.ActiveMarketAccount)
-                                .Select(p => p.User)
-                                .ToListAsync();
-
-        #endregion
-
-        #region Get Brands
-
-        List<MainBrand> brands = new List<MainBrand>();
-
-        if (log.BrandId.HasValue)
-        {
-            var brand = await _context.MainBrands
-                                      .AsNoTracking()
-                                      .FirstOrDefaultAsync(p => !p.IsDelete && p.Id == log.BrandId);
-
-            brands.Add(brand);
-        }
-
-        if (log.BrandId == null)
-        {
-            if (log.SellerType == Domain.Enums.SellerType.SellerType.UPC)
-            {
-                var getBrands = await _context.MainBrands
-                                              .AsNoTracking()
-                                              .Where(p => !p.IsDelete && p.UPVC)
-                                              .ToListAsync();
-
-                brands.AddRange(getBrands);
-            }
-            if (log.SellerType == Domain.Enums.SellerType.SellerType.Aluminium)
-            {
-                var getBrands = await _context.MainBrands
-                                              .AsNoTracking()
-                                              .Where(p => !p.IsDelete && p.Alominum)
-                                              .ToListAsync();
-
-                brands.AddRange(getBrands);
-            }
-        }
-
-        #endregion
-
-        #region Get Samples 
-
-        foreach (var seller in sellers)
-        {
-            await _sellerService.UpdateSellerActivationTariff(seller.Id, true, false);
-
-            foreach (var brand in brands)
-            {
-                InquiryViewModel model2 = new InquiryViewModel();
-
-                model2.BrandName = brand.BrandName;
-                model2.BrandImage = brand.BrandLogo;
-
-                model2.UserName = seller.Username;
-                model2.ShopName = seller.ShopName;
-                model2.UserAvatar = seller.Avatar;
-                model2.UserId = seller.Id;
-                model2.Price = 0;
-                model2.Score = await CalculateSellerScore(seller.Id);
-
-
-                foreach (var sample in logDetail)
-                {
-                    model2.Price = model2.Price + await InitialTotalSamplePrice(brand.Id, sample.SampleId.Value, sample.Height.Value, sample.Width.Value, sample.CountOfSample, sample.KatibeSize, seller.Id, log.GlassId.Value);
-                }
-
-                if (model2.Price.HasValue && model2.Price.Value != 0)
-                {
-                    model.Add(model2);
-                }
-            }
-        }
-
-        #endregion
-
-        return model;
-    }
-
-    //Initial Result Of User Inquiry
-    public async Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, ulong UserId, string userMacAddress)
-    {
-        #region Get User Log By User Mac Address
-
-        var userLog = await _context.LogInquiryForUsers
-                                    .AsNoTracking()
-                                    .FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
-        if (userLog == null) return false;
-
-        #endregion
-
-        #region Add Log Detail
-
-        LogInquiryForUserDetail logDetail = new LogInquiryForUserDetail()
-        {
-            CreateDate = DateTime.Now,
-            Height = height,
-            IsDelete = false,
-            LogInquiryForUserId = userLog.Id,
-            SampleId = sampleId,
-            Width = width,
-            KatibeSize = katibeSize,
-            CountOfSample = SampleCount
-        };
-
-        await _context.logInquiryForUserDetails.AddAsync(logDetail);
-        await _context.SaveChangesAsync();
-
-        #endregion
-
-        #region Initial Inquiry Result
-
-        #region Get Sellers
-
-        List<ulong> sellersUserId = await _context.MarketPersonalInfo
-                                  .AsNoTracking()
-                                  .Where(p => !p.IsDelete && p.CityId == userLog.CityId && p.CountryId == userLog.CountryId && p.StateId == userLog.StateId)
-                                  .Select(p => p.UserId)
-                                  .ToListAsync();
-
-        foreach (var sellerUserId in sellersUserId)
-        {
-            if (await _context.Market.AnyAsync(p=> !p.IsDelete && p.UserId == UserId && p.MarketPersonalsInfoState != Domain.Entities.Market.MarketPersonalsInfoState.ActiveMarketAccount))
-            {
-                sellersUserId.Remove(sellerUserId);
-            }
-        }
-
-        #endregion
-
-        #region Get Brands
-
-        List<ulong> brands = new List<ulong>();
-
-        if (userLog.BrandId.HasValue)
-        {
-            var brand = await _context.MainBrands
-                                      .AsNoTracking()
-                                      .Where(p => !p.IsDelete && p.Id == userLog.BrandId)
-                                      .Select(p=> p.Id)
-                                      .FirstOrDefaultAsync();
-
-            brands.Add(brand);
-        }
-
-        if (userLog.BrandId == null)
-        {
-            if (userLog.SellerType == Domain.Enums.SellerType.SellerType.UPC)
-            {
-                var getBrands = await _context.MainBrands
-                                              .AsNoTracking()
-                                              .Where(p => !p.IsDelete && p.UPVC)
-                                              .Select(p=> p.Id)
-                                              .ToListAsync();
-
-                brands.AddRange(getBrands);
-            }
-            if (userLog.SellerType == Domain.Enums.SellerType.SellerType.Aluminium)
-            {
-                var getBrands = await _context.MainBrands
-                                              .AsNoTracking()
-                                              .Where(p => !p.IsDelete && p.Alominum)
-                                              .Select(p=> p.Id)
-                                              .ToListAsync();
-
-                brands.AddRange(getBrands);
-            }
-        }
-
-        #endregion
-
-        #region Get Samples 
-
-        foreach (var sellerUserId in sellersUserId)
-        {
-            foreach (var brandId in brands)
-            {
-                #region Fill Log Result Of User Inquiry With Sellers Info
-
-                LogResultOfUserInquiryWithSellersInfo logResuly = new LogResultOfUserInquiryWithSellersInfo()
-                {
-                    BrandId = brandId
-                };
-
-                #endregion
-
-                InquiryViewModel model2 = new InquiryViewModel();
-
-                model2.BrandName = brand.BrandName;
-                model2.BrandImage = brand.BrandLogo;
-
-                model2.UserName = seller.Username;
-                model2.ShopName = seller.ShopName;
-                model2.UserAvatar = seller.Avatar;
-                model2.UserId = seller.Id;
-                model2.Price = 0;
-                model2.Score = await CalculateSellerScore(seller.Id);
-
-
-                foreach (var sample in logDetail)
-                {
-                    model2.Price = model2.Price + await InitialTotalSamplePrice(brand.Id, sample.SampleId.Value, sample.Height.Value, sample.Width.Value, sample.CountOfSample, sample.KatibeSize, seller.Id, log.GlassId.Value);
-                }
-
-                if (model2.Price.HasValue && model2.Price.Value != 0)
-                {
-                    model.Add(model2);
-                }
-            }
-        }
-
-        #endregion
-
-        #endregion
     }
 
     //Check Is User Scored To Seller 
@@ -4530,6 +4427,11 @@ public class InquryService : IInquiryService
     public async Task<int?> CountOfYearInquiry()
     {
         return await _context.LogForInquiry.Where(p => !p.IsDelete && p.CreateDate.Year == DateTime.Now.Year).CountAsync();
+    }
+
+    public Task<double?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, int productCount, int? katibeSizes, ulong userId, ulong glassId)
+    {
+        throw new NotImplementedException();
     }
 
     #endregion

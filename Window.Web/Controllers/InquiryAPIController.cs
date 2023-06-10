@@ -215,72 +215,7 @@ namespace Window.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Step4(string userMacAddress, string? brandTitle, int? orderByPrice, int? orderByScore, int pageId = 1)
         {
-            #region Update Inqury By Brand 
-
-            if (!string.IsNullOrEmpty(brandTitle))
-            {
-                var res = await _inquiryService.UpdateUserInquryInLastStep(userMacAddress, brandTitle);
-                if (!res) return NotFound();
-            }
-
-            #endregion
-
-            #region Fill Model
-
-            var model = await _inquiryService.ListOfInquiry(userMacAddress);
-            if (model == null)
-            {
-                JsonResponseStatus.Error();
-            }
-
-            #endregion
-
-            #region Oredr By Price Value
-
-            if (orderByPrice == 1)
-            {
-                model = model.OrderByDescending(p => p.Price).ToList();
-            }
-            else if (orderByPrice == 2)
-            {
-                model = model.OrderBy(p => p.Price).ToList();
-            }
-
-            #endregion
-
-            #region Order By Score
-
-            if (orderByScore == 1)
-            {
-                model = model.OrderByDescending(p => p.Score).ToList();
-            }
-            else if (orderByScore == 2)
-            {
-                model = model.OrderBy(p => p.Score).ToList();
-            }
-
-            #endregion
-
-            //#region Paginaition
-
-            //int take = 20;
-
-            //int skip = (pageId - 1) * take;
-
-            //int pageCount = (model.Count() / take);
-
-            //if ((pageCount % 2) == 0 || (pageCount % 2) != 0)
-            //{
-            //    pageCount += 1;
-            //}
-
-            ////var query = model.Skip(skip).Take(take).ToList();
-
-            //var viewModel = Tuple.Create(query, pageCount);
-
-            //#endregion
-
-            return JsonResponseStatus.Success(model);
+            return null;
         }
 
         #endregion

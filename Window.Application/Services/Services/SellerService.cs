@@ -1674,7 +1674,8 @@ namespace Window.Application.Services.Services
 
             #region Get Market By Seller Id 
 
-            var market = await _context.Market.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
+            var market = await _context.Market
+                                       .FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
 
             #endregion
 
@@ -1682,19 +1683,27 @@ namespace Window.Application.Services.Services
 
             if (listOfInquiry == true)
             {
-                var listOfInquiryTariff = await _context.SiteSettings.FirstOrDefaultAsync(p => !p.IsDelete);
-                if (listOfInquiryTariff != null)
+                var listOfInquiryTariff = await _context.SiteSettings
+                                                        .AsNoTracking()
+                                                        .Where(p => !p.IsDelete)
+                                                        .Select(p=> p.ChargeTariffAboutListOfInquiry)
+                                                        .FirstOrDefaultAsync();
+                if (listOfInquiryTariff != 0)
                 {
-                    tariffValue = listOfInquiryTariff.ChargeTariffAboutListOfInquiry;
+                    tariffValue = listOfInquiryTariff;
                 }
             }
 
             if (sellerDetail == true)
             {
-                var sellerDetailTariff = await _context.SiteSettings.FirstOrDefaultAsync(p => !p.IsDelete);
-                if (sellerDetailTariff != null)
+                var sellerDetailTariff = await _context.SiteSettings
+                                                        .AsNoTracking()
+                                                        .Where(p => !p.IsDelete)
+                                                        .Select(p => p.ChargeTariffAboutSellerDetail)
+                                                        .FirstOrDefaultAsync();
+                if (sellerDetailTariff != 0)
                 {
-                    tariffValue = sellerDetailTariff.ChargeTariffAboutSellerDetail;
+                    tariffValue = sellerDetailTariff;
                 }
             }
 

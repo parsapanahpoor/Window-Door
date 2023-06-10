@@ -166,6 +166,7 @@ public class InquiryProductController : SiteBaseController
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> InquiryStep3(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string userMacAddress)
     {
+      
         #region Get Samples For Show In Page Model
 
         var samples = await _sampleService.GetListOfSamplesForShowInAPI(userMacAddress);
@@ -214,9 +215,16 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
+        //Check User Inquiry Log Count 
+        if (await _inquiryService.CheckLogResultUserInquiry(userMacAddress) >= 4)
+        {
+            TempData[ErrorMessage] = "بیش از تعداد 4 محصول را نمی توان به طور همزمان مقدار دهی کرد.";
+            return View(samples);
+        }
+
         #region Add Log For User
 
-        var res = await _inquiryService.LogInquiryForUserPart2(sampleId, width, height, katibeSize, userMacAddress, SampleCount);
+        var res = await _inquiryService.InitialResultOfUserInquiry(sampleId, width, height , SampleCount, katibeSize, User.GetUserId(), userMacAddress);
         if (!res) return NotFound();
 
         #endregion
@@ -237,7 +245,7 @@ public class InquiryProductController : SiteBaseController
     {
         #region Brand ViewBag
 
-        ViewBag.Brand = await _brandService.GetAllBrands();
+        ViewBag.Brand = await _brandService.GetAllBrandsWithAsNoTracking();
 
         #endregion
 
@@ -253,7 +261,7 @@ public class InquiryProductController : SiteBaseController
 
         #region Fill Model
 
-        var model = await _inquiryService.ListOfInquiry(userMacAddress);
+        var model = await _inquiryService.ListOfInquiry(userMacAddress , User.GetUserId());
         if (model == null || !model.Any())
         {
             TempData[ErrorMessage] = "نتیجه ای برای استعلام شما یافت نشده است .";
@@ -279,27 +287,8 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
-        #region Paginaition
-
-        int take = 50;
-
-        int skip = (pageId - 1) * take;
-
-        int pageCount = (model.Count() / take);
-
-        if ((pageCount % 2) == 0 || (pageCount % 2) != 0)
-        {
-            pageCount += 1;
-        }
-
-        var query = model.Skip(skip).Take(take).ToList();
-
-        var viewModel = Tuple.Create(query, pageCount);
-
-        #endregion
-
         TempData[SuccessMessage] = "استعلام گیری با موفقیت انجام شده است .";
-        return View(viewModel);
+        return View(model);
     }
 
     #endregion

@@ -1,6 +1,6 @@
 ﻿@using Window.Application.Extensions
 @using Window.Application.Convertors
-@model Tuple<List<Window.Domain.ViewModels.Site.Inquiry.InquiryViewModel>, int>
+@model List<Window.Domain.ViewModels.Site.Inquiry.InquiryViewModel>
 @using Window.Domain.ViewModels.Admin.QuestionAnswer
 @using Window.Domain.Enums
 @using Window.Application.StaticTools
@@ -129,12 +129,12 @@
                     </div>
                 </div>
 
-                @if (Model.Item1 != null && Model.Item1.Any())
+                @if (Model != null && Model.Any())
                 {
                     <!-- Listings -->
                     <div class="listings-container grid-layout">
 
-                        @foreach (var product in Model.Item1)
+                        @foreach (var product in Model)
                         {
                             <!-- Listing Item -->
                             <div class="listing-item">

@@ -318,6 +318,20 @@ namespace Window.Application.Services.Services
                 }).ToListAsync();
         }
 
+        //Get All Brands With As No Tracking
+        public async Task<List<SelectListViewModel>> GetAllBrandsWithAsNoTracking()
+        {
+            return await _context.MainBrands
+                                .AsNoTracking()
+                                .Where(s => !s.IsDelete)
+                                .Select(s => new SelectListViewModel
+                                {
+                                    Id = s.Id,
+                                    Title = s.BrandName
+                                })
+                                .ToListAsync();
+        }
+
         //Get List Of Main Brands Of API
         public async Task<List<MainBrand>> GetListOfMainBrand()
         {
