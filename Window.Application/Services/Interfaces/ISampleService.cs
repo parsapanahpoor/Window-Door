@@ -41,6 +41,9 @@ namespace Window.Application.Services.Interfaces
 
         Task<List<Sample>?> GetAlllolaieKeshoieSample(ProductType productType);
 
+        //Get Sample By Id With As No Tracking
+        Task<Sample?> GetSampleBySampleIdWithAsNoTracking(ulong sampleId);
+
         Task<List<Sample>?> GetAllSampleUsingProductTypeAndProductKind(ProductKind productKind, ProductType productType);
 
         #endregion

@@ -179,7 +179,7 @@ public class InquiryProductController : SiteBaseController
 
         #region Check Is Exist Sample 
 
-        var sample = await _sampleService.GetSampleBySampleId(sampleId);
+        var sample = await _sampleService.GetSampleBySampleIdWithAsNoTracking(sampleId);
         if (samples == null || !samples.Any())
         {
             TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";

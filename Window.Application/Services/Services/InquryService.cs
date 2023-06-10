@@ -1,6 +1,8 @@
 ﻿#region Usings
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml.ConditionalFormatting;
 using System.Linq.Expressions;
 using Window.Application.Services.Interfaces;
 using Window.Data.Context;
@@ -63,7 +65,6 @@ public class InquryService : IInquiryService
             };
 
             await _context.LogInquiryForUsers.AddAsync(log);
-            await _context.SaveChangesAsync();
         }
 
         #endregion
@@ -95,13 +96,99 @@ public class InquryService : IInquiryService
             var logInquiryUserDetail = await _context.logInquiryForUserDetails
                                                      .Where(p => !p.IsDelete && p.LogInquiryForUserId == inquiry.Id)
                                                      .ToListAsync();
-            if (logInquiryUserDetail != null)
+            if (logInquiryUserDetail != null && logInquiryUserDetail.Any())
             {
                 _context.logInquiryForUserDetails.RemoveRange(logInquiryUserDetail);
             }
 
-            await _context.SaveChangesAsync();
+            var logResultOfUser = await _context.LogResultOfUserInquiryWithSellersInfos
+                                                .Where(p => !p.IsDelete && p.LogInquiryForUserId == inquiry.Id)
+                                                .ToListAsync();
+
+            if (logResultOfUser != null && logResultOfUser.Any())
+            {
+                _context.LogResultOfUserInquiryWithSellersInfos.RemoveRange(logResultOfUser);
+            }
         }
+
+        #endregion
+
+        #region Get Brands
+
+        List<MainBrand> brands = new List<MainBrand>();
+
+        if (filter.MainBrandId.HasValue)
+        {
+            var brand = await _context.MainBrands
+                                      .AsNoTracking()
+                                      .FirstOrDefaultAsync(p => !p.IsDelete && p.Id == filter.MainBrandId);
+
+            brands.Add(brand);
+        }
+
+        if (filter.MainBrandId == null)
+        {
+            if (filter.SellerType == Domain.Enums.SellerType.SellerType.UPC)
+            {
+                var getBrands = await _context.MainBrands
+                                              .AsNoTracking()
+                                              .Where(p => !p.IsDelete && p.UPVC)
+                                              .ToListAsync();
+
+                brands.AddRange(getBrands);
+            }
+            if (filter.SellerType == Domain.Enums.SellerType.SellerType.Aluminium)
+            {
+                var getBrands = await _context.MainBrands
+                                              .AsNoTracking()
+                                              .Where(p => !p.IsDelete && p.Alominum)
+                                              .ToListAsync();
+
+                brands.AddRange(getBrands);
+            }
+        }
+
+        #endregion
+
+        #region Log For Brands
+
+        foreach (var brand in brands)
+        {
+            InquiryViewModel model2 = new InquiryViewModel();
+
+            #region Add Log For Brands
+
+            LogForBrands logForBrands = new LogForBrands()
+            {
+                MainBrandId = brand.Id,
+                CountryId = filter.CountryId,
+                CityId = filter.CityId,
+                StateId = filter.StateId
+            };
+
+            await _context.LogForBrands.AddAsync(logForBrands);
+
+            #endregion
+        }
+
+        #region Log For Inquiry
+
+        if (filter.CountryId.HasValue && filter.CityId.HasValue && filter.StateId.HasValue && filter.SellerType.HasValue)
+        {
+            LogForInquiry logForInquiry = new LogForInquiry()
+            {
+                CityId = filter.CityId.Value,
+                StateId = filter.StateId.Value,
+                CountryId = filter.CountryId.Value,
+                SellerType = filter.SellerType.Value
+            };
+
+            await _context.LogForInquiry.AddAsync(logForInquiry);
+        }
+
+        #endregion
+
+        await _context.SaveChangesAsync();
 
         #endregion
     }
@@ -4028,40 +4115,6 @@ public class InquryService : IInquiryService
 
         #endregion
 
-        #region List Of Brand 
-
-        List<MainBrand> brands = new List<MainBrand>();
-
-        #endregion
-
-        #region Get Brands
-
-        if (log.BrandId.HasValue)
-        {
-            var brand = await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == log.BrandId);
-            if (brand == null) return null;
-
-            brands.Add(brand);
-        }
-
-        if (log.BrandId == null)
-        {
-            if (log.SellerType == Domain.Enums.SellerType.SellerType.UPC)
-            {
-                var getBrands = await _context.MainBrands.Where(p => !p.IsDelete && p.UPVC).ToListAsync();
-
-                brands.AddRange(getBrands);
-            }
-            if (log.SellerType == Domain.Enums.SellerType.SellerType.Aluminium)
-            {
-                var getBrands = await _context.MainBrands.Where(p => !p.IsDelete && p.Alominum).ToListAsync();
-
-                brands.AddRange(getBrands);
-            }
-        }
-
-        #endregion
-
         #region Get Sellers
 
         List<User> sellers = await _context.MarketPersonalInfo
@@ -4074,45 +4127,40 @@ public class InquryService : IInquiryService
 
         #endregion
 
-        #region Log For Brands
+        #region Get Brands
 
-        foreach (var brand in brands)
+        List<MainBrand> brands = new List<MainBrand>();
+
+        if (log.BrandId.HasValue)
         {
-            InquiryViewModel model2 = new InquiryViewModel();
+            var brand = await _context.MainBrands
+                                      .AsNoTracking()
+                                      .FirstOrDefaultAsync(p => !p.IsDelete && p.Id == log.BrandId);
 
-            #region Add Log For Brands
-
-            LogForBrands logForBrands = new LogForBrands()
-            {
-                MainBrandId = brand.Id,
-                CountryId = log.CountryId,
-                CityId = log.CityId,
-                StateId = log.StateId
-            };
-
-            await _context.LogForBrands.AddAsync(logForBrands);
-
-            #endregion
+            brands.Add(brand);
         }
 
-        #region Log For Inquiry
-
-        if (log.CountryId.HasValue && log.CityId.HasValue && log.StateId.HasValue && log.SellerType.HasValue)
+        if (log.BrandId == null)
         {
-            LogForInquiry logForInquiry = new LogForInquiry()
+            if (log.SellerType == Domain.Enums.SellerType.SellerType.UPC)
             {
-                CityId = log.CityId.Value,
-                StateId = log.StateId.Value,
-                CountryId = log.CountryId.Value,
-                SellerType = log.SellerType.Value
-            };
+                var getBrands = await _context.MainBrands
+                                              .AsNoTracking()
+                                              .Where(p => !p.IsDelete && p.UPVC)
+                                              .ToListAsync();
 
-            await _context.LogForInquiry.AddAsync(logForInquiry);
+                brands.AddRange(getBrands);
+            }
+            if (log.SellerType == Domain.Enums.SellerType.SellerType.Aluminium)
+            {
+                var getBrands = await _context.MainBrands
+                                              .AsNoTracking()
+                                              .Where(p => !p.IsDelete && p.Alominum)
+                                              .ToListAsync();
+
+                brands.AddRange(getBrands);
+            }
         }
-
-        #endregion
-
-        await _context.SaveChangesAsync();
 
         #endregion
 
@@ -4152,6 +4200,143 @@ public class InquryService : IInquiryService
         #endregion
 
         return model;
+    }
+
+    //Initial Result Of User Inquiry
+    public async Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, ulong UserId, string userMacAddress)
+    {
+        #region Get User Log By User Mac Address
+
+        var userLog = await _context.LogInquiryForUsers
+                                    .AsNoTracking()
+                                    .FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
+        if (userLog == null) return false;
+
+        #endregion
+
+        #region Add Log Detail
+
+        LogInquiryForUserDetail logDetail = new LogInquiryForUserDetail()
+        {
+            CreateDate = DateTime.Now,
+            Height = height,
+            IsDelete = false,
+            LogInquiryForUserId = userLog.Id,
+            SampleId = sampleId,
+            Width = width,
+            KatibeSize = katibeSize,
+            CountOfSample = SampleCount
+        };
+
+        await _context.logInquiryForUserDetails.AddAsync(logDetail);
+        await _context.SaveChangesAsync();
+
+        #endregion
+
+        #region Initial Inquiry Result
+
+        #region Get Sellers
+
+        List<ulong> sellersUserId = await _context.MarketPersonalInfo
+                                  .AsNoTracking()
+                                  .Where(p => !p.IsDelete && p.CityId == userLog.CityId && p.CountryId == userLog.CountryId && p.StateId == userLog.StateId)
+                                  .Select(p => p.UserId)
+                                  .ToListAsync();
+
+        foreach (var sellerUserId in sellersUserId)
+        {
+            if (await _context.Market.AnyAsync(p=> !p.IsDelete && p.UserId == UserId && p.MarketPersonalsInfoState != Domain.Entities.Market.MarketPersonalsInfoState.ActiveMarketAccount))
+            {
+                sellersUserId.Remove(sellerUserId);
+            }
+        }
+
+        #endregion
+
+        #region Get Brands
+
+        List<ulong> brands = new List<ulong>();
+
+        if (userLog.BrandId.HasValue)
+        {
+            var brand = await _context.MainBrands
+                                      .AsNoTracking()
+                                      .Where(p => !p.IsDelete && p.Id == userLog.BrandId)
+                                      .Select(p=> p.Id)
+                                      .FirstOrDefaultAsync();
+
+            brands.Add(brand);
+        }
+
+        if (userLog.BrandId == null)
+        {
+            if (userLog.SellerType == Domain.Enums.SellerType.SellerType.UPC)
+            {
+                var getBrands = await _context.MainBrands
+                                              .AsNoTracking()
+                                              .Where(p => !p.IsDelete && p.UPVC)
+                                              .Select(p=> p.Id)
+                                              .ToListAsync();
+
+                brands.AddRange(getBrands);
+            }
+            if (userLog.SellerType == Domain.Enums.SellerType.SellerType.Aluminium)
+            {
+                var getBrands = await _context.MainBrands
+                                              .AsNoTracking()
+                                              .Where(p => !p.IsDelete && p.Alominum)
+                                              .Select(p=> p.Id)
+                                              .ToListAsync();
+
+                brands.AddRange(getBrands);
+            }
+        }
+
+        #endregion
+
+        #region Get Samples 
+
+        foreach (var sellerUserId in sellersUserId)
+        {
+            foreach (var brandId in brands)
+            {
+                #region Fill Log Result Of User Inquiry With Sellers Info
+
+                LogResultOfUserInquiryWithSellersInfo logResuly = new LogResultOfUserInquiryWithSellersInfo()
+                {
+                    BrandId = brandId
+                };
+
+                #endregion
+
+                InquiryViewModel model2 = new InquiryViewModel();
+
+                model2.BrandName = brand.BrandName;
+                model2.BrandImage = brand.BrandLogo;
+
+                model2.UserName = seller.Username;
+                model2.ShopName = seller.ShopName;
+                model2.UserAvatar = seller.Avatar;
+                model2.UserId = seller.Id;
+                model2.Price = 0;
+                model2.Score = await CalculateSellerScore(seller.Id);
+
+
+                foreach (var sample in logDetail)
+                {
+                    model2.Price = model2.Price + await InitialTotalSamplePrice(brand.Id, sample.SampleId.Value, sample.Height.Value, sample.Width.Value, sample.CountOfSample, sample.KatibeSize, seller.Id, log.GlassId.Value);
+                }
+
+                if (model2.Price.HasValue && model2.Price.Value != 0)
+                {
+                    model.Add(model2);
+                }
+            }
+        }
+
+        #endregion
+
+        #endregion
     }
 
     //Check Is User Scored To Seller 

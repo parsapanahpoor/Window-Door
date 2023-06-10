@@ -113,6 +113,22 @@ public class SampleService : ISampleService
         return sample;
     }
 
+    //Get Sample By Id With As No Tracking
+    public async Task<Sample?> GetSampleBySampleIdWithAsNoTracking(ulong sampleId)
+    {
+        #region Get Sample 
+
+        var sample = await _context.Samples
+                                   .AsNoTracking()
+                                   .FirstOrDefaultAsync(p => p.Id == sampleId && !p.IsDelete);
+
+        if (sample == null) return null;
+
+        #endregion
+
+        return sample;
+    }
+
     public async Task<bool> EditSample(Sample sample, List<ulong> segmentsId, IFormFile? ArticleImage)
     {
         #region Get Sample
