@@ -216,7 +216,7 @@ public class InquiryProductController : SiteBaseController
         #endregion
 
         //Check User Inquiry Log Count 
-        if (await _inquiryService.CheckLogResultUserInquiry(userMacAddress) >= 4)
+        if (await _inquiryService.CheckLogResultUserInquiry(userMacAddress) > 4)
         {
             TempData[ErrorMessage] = "بیش از تعداد 4 محصول را نمی توان به طور همزمان مقدار دهی کرد.";
             return View(samples);

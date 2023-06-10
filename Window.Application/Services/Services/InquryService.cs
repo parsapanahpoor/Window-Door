@@ -50,7 +50,7 @@ public class InquryService : IInquiryService
 
         return await _context.logInquiryForUserDetails
                              .AsNoTracking()
-                             .CountAsync(p=> !p.IsDelete && p. == userId);
+                             .CountAsync(p => !p.IsDelete && p.LogInquiryForUserId == inquiry.Id);
     }
 
     //Log Inquiry For User In Step 1
@@ -431,21 +431,21 @@ public class InquryService : IInquiryService
                     /
                     (sellerScores.Count()
                     + sehat.Count()
-                    + pasazForosh.Count() 
+                    + pasazForosh.Count()
                     + pasokhGoie.Count()
                     + taAhodeZaman.Count());
 
         return score;
     }
 
-    public async Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress , ulong userId)
+    public async Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress, ulong userId)
     {
         #region Get User log 
 
         var log = await _context.LogInquiryForUsers
                                 .AsNoTracking()
                                 .Where(p => p.UserMAcAddress == userMacAddress && !p.IsDelete)
-                                .Select(p=> p.Id)
+                                .Select(p => p.Id)
                                 .FirstOrDefaultAsync();
 
         if (log == null) return null;
@@ -472,8 +472,8 @@ public class InquryService : IInquiryService
                 {
                     BrandImage = await _context.MainBrands
                                                .AsNoTracking()
-                                               .Where(p=> !p.IsDelete && p.Id == userInquiryResult.BrandId)
-                                               .Select(p=> p.BrandLogo)
+                                               .Where(p => !p.IsDelete && p.Id == userInquiryResult.BrandId)
+                                               .Select(p => p.BrandLogo)
                                                .FirstOrDefaultAsync(),
                     BrandName = await _context.MainBrands
                                                .AsNoTracking()
@@ -485,8 +485,8 @@ public class InquryService : IInquiryService
                     ShopName = userInquiryResult.SellerShopName,
                     UserAvatar = await _context.Users
                                                .AsNoTracking()
-                                               .Where(p=> !p.IsDelete && p.Id == userId)
-                                               .Select(p=> p.Avatar)
+                                               .Where(p => !p.IsDelete && p.Id == userId)
+                                               .Select(p => p.Avatar)
                                                .FirstOrDefaultAsync(),
                     UserName = await _context.Users
                                                .AsNoTracking()
@@ -542,7 +542,7 @@ public class InquryService : IInquiryService
 
         List<ulong> sellersUserId = await _context.MarketPersonalInfo
                                   .AsNoTracking()
-                                  .Include(p=> p.Market)
+                                  .Include(p => p.Market)
                                   .Where(p => !p.IsDelete && p.CityId == userLog.CityId && p.CountryId == userLog.CountryId && p.StateId == userLog.StateId
                                             && p.Market.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.ActiveMarketAccount)
                                   .Select(p => p.UserId)
@@ -593,8 +593,6 @@ public class InquryService : IInquiryService
 
         #region Get Samples 
 
-        List<LogResultOfUserInquiryWithSellersInfo> logResults = new List<LogResultOfUserInquiryWithSellersInfo>();
-
         foreach (var sellerUserId in sellersUserId)
         {
             foreach (var brandId in brands)
@@ -604,37 +602,49 @@ public class InquryService : IInquiryService
 
                 if (inquiryPrice.HasValue && inquiryPrice.Value != 0)
                 {
-                    #region Fill Log Result Of User Inquiry With Sellers Info
+                    var lastUserInquiryResult = await _context.LogResultOfUserInquiryWithSellersInfos
+                                                              .AsNoTracking()
+                                                              .FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == UserId && p.SellerUserId == sellerUserId
+                                                              && p.BrandId == brandId && p.LogInquiryForUserId == userLog.Id);
 
-                    LogResultOfUserInquiryWithSellersInfo logResuly = new LogResultOfUserInquiryWithSellersInfo()
+                    if (lastUserInquiryResult != null)
                     {
-                        BrandId = brandId,
-                        CreateDate = DateTime.Now,
-                        IsDelete = false,
-                        LogInquiryForUserId = userLog.Id,
-                        SellerShopName = await _context.Market
-                                                       .AsNoTracking()
-                                                       .Where(p => !p.IsDelete && p.UserId == sellerUserId)
-                                                       .Select(p => p.MarketName)
-                                                       .FirstOrDefaultAsync(),
-                        SellerUserId = sellerUserId,
-                        UserId = UserId,
-                        SellerScore = await CalculateSellerScoreWithAsNoTracking(sellerUserId),
-                        Price = inquiryPrice.Value
-                    };
+                        lastUserInquiryResult.Price = lastUserInquiryResult.Price + inquiryPrice.Value;
 
-                    #endregion
+                        _context.LogResultOfUserInquiryWithSellersInfos.Update(lastUserInquiryResult);
+                    }
 
-                    logResults.Add(logResuly);
-                }              
+                    else
+                    {
+                        #region Fill Log Result Of User Inquiry With Sellers Info
+
+                        LogResultOfUserInquiryWithSellersInfo logResuly = new LogResultOfUserInquiryWithSellersInfo()
+                        {
+                            BrandId = brandId,
+                            CreateDate = DateTime.Now,
+                            IsDelete = false,
+                            LogInquiryForUserId = userLog.Id,
+                            SellerShopName = await _context.Market
+                                                           .AsNoTracking()
+                                                           .Where(p => !p.IsDelete && p.UserId == sellerUserId)
+                                                           .Select(p => p.MarketName)
+                                                           .FirstOrDefaultAsync(),
+                            SellerUserId = sellerUserId,
+                            UserId = UserId,
+                            SellerScore = await CalculateSellerScoreWithAsNoTracking(sellerUserId),
+                            Price = inquiryPrice.Value
+                        };
+
+                        #endregion
+
+                        await _context.LogResultOfUserInquiryWithSellersInfos.AddAsync(logResuly);
+                    }
+
+                }
             }
         }
 
-        if (logResults != null && logResults.Any())
-        {
-            await _context.LogResultOfUserInquiryWithSellersInfos.AddRangeAsync(logResults);
-            await _context.SaveChangesAsync();
-        }
+        await _context.SaveChangesAsync();
 
         #endregion
 
@@ -652,7 +662,7 @@ public class InquryService : IInquiryService
         double width = (double)incomewidth / (double)100;
         double? katibeSize = 0;
 
-        if (katibeSizes.HasValue)katibeSize = (double)katibeSizes / (double)100;
+        if (katibeSizes.HasValue) katibeSize = (double)katibeSizes / (double)100;
 
         #endregion
 
@@ -678,7 +688,7 @@ public class InquryService : IInquiryService
         var glassPricing = await _context.GlassPricings
                                          .AsNoTracking()
                                          .Where(p => !p.IsDelete && p.GlassId == glassId && p.UserId == userId)
-                                         .Select(p=> p.Price)
+                                         .Select(p => p.Price)
                                          .FirstOrDefaultAsync();
 
         if (glassPricing == null) return null;
@@ -692,7 +702,7 @@ public class InquryService : IInquiryService
         var samplesId = await _context.Samples
                                      .AsNoTracking()
                                      .Where(p => !p.IsDelete && p.Id == sampleId)
-                                     .Select(p=> p.Id)
+                                     .Select(p => p.Id)
                                      .FirstOrDefaultAsync();
 
         if (sampleId == null) return null;
