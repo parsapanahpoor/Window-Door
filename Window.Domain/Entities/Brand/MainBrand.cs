@@ -32,6 +32,8 @@ namespace Window.Domain.Entities.Brand
 
         public int Priority { get; set; } = 0;
 
+        public string? Description { get; set; }
+
         #endregion
 
         #region relations

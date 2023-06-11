@@ -1,11 +1,36 @@
 ﻿@model List<Window.Domain.ViewModels.Site.Inquiry.ListOfBrandsWithCountOfSellersViewModel>
-
+@using Window.Application.StticTools
 @{
     ViewData["Title"] = "انتخاب برند مورد نظر";
+    string macAddress = ViewBag.UserMacAddress;
 }
 
 @section Scripts
     {
+    <script>
+
+        $(document).ready(function () {
+            $("#target").click(function () {
+
+                Swal.fire({
+                    title: 'استعلام تمام برندها',
+                    text: "استعلام تمامی برند ها به صورت یکجا زمان بیشتری نسبت به روش عادی نیاز دارد . آیا مایل به ادامه ی فرآیند می باشید ؟",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'بله',
+                    cancelButtonText: 'خیر',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "@FilePaths.SiteAddress/InquiryProduct/InquiryStep3";
+                    }
+                });
+
+            });
+        });
+
+    </script>
 }
 
 <div class="parallax titlebar" data-background="/Site/images/7.jpg" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -799.306px;">
@@ -19,13 +44,13 @@
                     <h2>برندها</h2>
                     <span>لیست بهترین برند های درب و پنجره </span>
 
-                    @*  <nav id="breadcrumbs">
-                    <ul>
-                    <li>
-                    <a id="target" asp-action="InquiryStep4" asp-route-userMacAddress="@ViewBag.UserMacAddress" asp-controller="InquiryProduct" asp-area="" class="button">نمایش نتیجه ی استعلام </a>
-                    </li>
-                    </ul>
-                    </nav>*@
+                 <nav id="breadcrumbs">
+                        <ul>
+                            <li>
+                                <button id="target" class="button">استعلام همزمان تمامی برندها </button>
+                            </li>
+                        </ul>
+                    </nav>
 
                 </div>
             </div>
@@ -64,7 +89,7 @@
                                     <h4><a href="single-property-page-1.html">@brand.Brand.BrandName</a></h4>
 
                                 </div>
-                                <h5 class="txt-cen"> تعداد فروشندگان این برند:</h5>
+                                <h5 class="txt-cen"> تعداد @brand.CountOfSellers فروشنده در پنجره یاب قطعات این برند را قیمت گذاری کرده اند.</h5>
                                 <ul class="listing-details">
 
                                     <li>تعداد @brand.CountOfSellers فروشنده در پنجره یاب قطعات این برند را قیمت گذاری کرده اند.</li>

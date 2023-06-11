@@ -67,14 +67,6 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
-        #region Get User Ip Address
-
-        string Ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
-
-        #endregion
-
-        ViewBag.UserId = Ip;
-
         return View();
     }
 
@@ -84,7 +76,7 @@ public class InquiryProductController : SiteBaseController
 
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> InquiryStep2(ulong StateId, ulong CityId, ProductType? ProductType, ProductKind? ProductKind, SellerType SellerType, ulong? GlassId, string UserMacAddress)
+    public async Task<IActionResult> InquiryStep2(ulong StateId, ulong CityId, ProductType? ProductType, ProductKind? ProductKind, SellerType SellerType, ulong? GlassId)
     {
         #region Check That If User Is Seller
 
@@ -116,7 +108,7 @@ public class InquiryProductController : SiteBaseController
             CountryId = 1,
             StateId = StateId,
             CityId = CityId,
-            UserMacAddress = UserMacAddress,
+            UserMacAddress = User.GetUserId().ToString(),
             SellerType = SellerType,
             GlassId = GlassId
         };
@@ -129,7 +121,7 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
-        ViewBag.UserMacAddress = UserMacAddress;
+        ViewBag.UserMacAddress = User.GetUserId().ToString();
 
         return View(await _brandService.ShowListOFBrandsByBrandType(SellerType));
     }
@@ -140,11 +132,11 @@ public class InquiryProductController : SiteBaseController
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> InquiryStep3(string userMacAddress , ulong? brandId)
+    public async Task<IActionResult> InquiryStep3( ulong? brandId)
     {
         #region Get Samples For Show In Page Model
 
-        var samples = await _sampleService.GetListOfSamplesForShowInAPI(userMacAddress);
+        var samples = await _sampleService.GetListOfSamplesForShowInAPI(User.GetUserId().ToString());
         if (samples == null || !samples.Any())
         {
             TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
@@ -157,12 +149,12 @@ public class InquiryProductController : SiteBaseController
 
         if (brandId.HasValue)
         {
-            await _inquiryService.UpdateLogUserInquiryRequest(userMacAddress , brandId.Value);
+            await _inquiryService.UpdateLogUserInquiryRequest(User.GetUserId().ToString(), brandId.Value);
         }
 
         #endregion
 
-        ViewBag.UserMacAddress = userMacAddress;
+        ViewBag.UserMacAddress = User.GetUserId().ToString();
 
         return View(samples);
     }
