@@ -73,7 +73,7 @@ public class InquryService : IInquiryService
                 CountryId = filter.CountryId,
                 CityId = filter.CityId,
                 StateId = filter.StateId,
-                BrandId = filter.MainBrandId,
+                BrandId = null,
                 CreateDate = DateTime.Now,
                 IsDelete = false,
                 SellerType = filter.SellerType,

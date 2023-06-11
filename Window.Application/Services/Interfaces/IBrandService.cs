@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Brand;
+using Window.Domain.Enums.SellerType;
 using Window.Domain.ViewModels.Admin.Brand;
 using Window.Domain.ViewModels.Common;
+using Window.Domain.ViewModels.Site.Inquiry;
 
 namespace Window.Application.Services.Interfaces
 {
@@ -21,6 +23,9 @@ namespace Window.Application.Services.Interfaces
 
         //Get List Of Main Brands Of API
         Task<List<MainBrand>> GetListOfMainBrand();
+
+        //Show List OF Brands By Brand Type 
+        Task<List<ListOfBrandsWithCountOfSellersViewModel>?> ShowListOFBrandsByBrandType(SellerType sellerType);
 
         Task<FilterMainBrandViewModel> FilterMainBrandViewModel(FilterMainBrandViewModel filter);
 

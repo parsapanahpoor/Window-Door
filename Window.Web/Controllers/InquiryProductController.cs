@@ -61,12 +61,6 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
-        #region Brand ViewBag
-
-        ViewBag.Brand = await _brandService.GetUPVCBrands();
-
-        #endregion
-
         #region Glasses ViewBag
 
         ViewBag.Glasses = await _productService.GetAllGlasses();
@@ -89,7 +83,8 @@ public class InquiryProductController : SiteBaseController
     #region Test For Step 2
 
     [Authorize]
-    public async Task<IActionResult> InquiryStep2(ulong StateId, ulong CityId, ProductType? ProductType, ProductKind? ProductKind, SellerType? SellerType, ulong? MainBrandId, ulong? GlassId, string UserMacAddress)
+    [HttpGet]
+    public async Task<IActionResult> InquiryStep2(ulong StateId, ulong CityId, ProductType? ProductType, ProductKind? ProductKind, SellerType SellerType, ulong? GlassId, string UserMacAddress)
     {
         #region Check That If User Is Seller
 
@@ -121,7 +116,6 @@ public class InquiryProductController : SiteBaseController
             CountryId = 1,
             StateId = StateId,
             CityId = CityId,
-            MainBrandId = MainBrandId,
             UserMacAddress = UserMacAddress,
             SellerType = SellerType,
             GlassId = GlassId
@@ -135,7 +129,7 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
-        return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = UserMacAddress });
+        return View(await _brandService.ShowListOFBrandsByBrandType(SellerType));
     }
 
     #endregion
@@ -166,7 +160,7 @@ public class InquiryProductController : SiteBaseController
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> InquiryStep3(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string userMacAddress)
     {
-      
+
         #region Get Samples For Show In Page Model
 
         var samples = await _sampleService.GetListOfSamplesForShowInAPI(userMacAddress);
@@ -224,7 +218,7 @@ public class InquiryProductController : SiteBaseController
 
         #region Add Log For User
 
-        var res = await _inquiryService.InitialResultOfUserInquiry(sampleId, width, height , SampleCount, katibeSize, User.GetUserId(), userMacAddress);
+        var res = await _inquiryService.InitialResultOfUserInquiry(sampleId, width, height, SampleCount, katibeSize, User.GetUserId(), userMacAddress);
         if (!res) return NotFound();
 
         #endregion
@@ -261,7 +255,7 @@ public class InquiryProductController : SiteBaseController
 
         #region Fill Model
 
-        var model = await _inquiryService.ListOfInquiry(userMacAddress , User.GetUserId());
+        var model = await _inquiryService.ListOfInquiry(userMacAddress, User.GetUserId());
         if (model == null || !model.Any())
         {
             TempData[ErrorMessage] = "نتیجه ای برای استعلام شما یافت نشده است .";

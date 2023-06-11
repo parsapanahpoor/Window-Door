@@ -1,0 +1,101 @@
+﻿@model List<Window.Domain.ViewModels.Site.Inquiry.ListOfBrandsWithCountOfSellersViewModel>
+
+@{
+    ViewData["Title"] = "انتخاب برند مورد نظر";
+}
+
+@section Scripts
+    {
+}
+
+<div class="parallax titlebar" data-background="/Site/images/7.jpg" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -799.306px;">
+    <div class="parallax-overlay" style="background-color: rgb(51, 51, 51); opacity: 0.7;"></div>
+
+    <div id="titlebar">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <h2>برندها</h2>
+                    <span>لیست بهترین برند های درب و پنجره </span>
+
+                    @*  <nav id="breadcrumbs">
+                    <ul>
+                    <li>
+                    <a id="target" asp-action="InquiryStep4" asp-route-userMacAddress="@ViewBag.UserMacAddress" asp-controller="InquiryProduct" asp-area="" class="button">نمایش نتیجه ی استعلام </a>
+                    </li>
+                    </ul>
+                    </nav>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row sticky-wrapper">
+
+        <div class="col-md-12">
+
+            <!-- Listings -->
+            <div class="listings-container list-layout">
+
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var brand in Model)
+                    {
+                        <input type="hidden" value="@ViewBag.UserMacAddress" name="userMacAddress" />
+
+                        <!-- Listing Item -->
+                        <div class="listing-item">
+
+                            <a href="@Window.Application.StticTools.FilePaths.BrandOriginimage/@brand.Brand.BrandLogo" class="listing-img-container" style="height: 273px;">
+
+                                <div class="listing-badges">
+                                    <span>@brand.Brand.Id :  کد برند</span>
+                                </div>
+
+                                <img src="@Window.Application.StticTools.FilePaths.BrandOriginimage/@brand.Brand.BrandLogo" alt="" style="height: 273px;">
+
+                            </a>
+
+                            <div class="listing-content">
+
+                                <div class="listing-title">
+                                    <h4><a href="single-property-page-1.html">@brand.Brand.BrandName</a></h4>
+
+                                </div>
+                                <h5 class="txt-cen"> تعداد فروشندگان این برند:</h5>
+                                <ul class="listing-details">
+
+                                    <li>تعداد @brand.CountOfSellers فروشنده در پنجره یاب قطعات این برند را قیمت گذاری کرده اند.</li>
+
+                                </ul>
+
+                                <div class="listing-footer">
+                                    <div class="row">
+
+                                        <div class="col-md-6 col-xs-6">
+                                            <a class="button">انتخاب برند</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="clearfix"></div>
+                        <!-- Listing Item / End -->
+                    }
+                }
+
+            </div>
+            <!-- Listings Container / End -->
+
+        </div>
+
+    </div>
+</div>

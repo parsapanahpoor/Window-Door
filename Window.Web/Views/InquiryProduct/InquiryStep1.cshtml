@@ -12,7 +12,6 @@
     var states = ViewData["States"] != null ? ViewData["States"] as List<SelectListViewModel> : null;
     var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
 
-    var brand = ViewBag.Brand != null ? ViewBag.Brand as List<SelectListViewModel> : null;
     var glass = ViewBag.Glasses != null ? ViewBag.Glasses as List<SelectListViewModel> : null;
 }
 
@@ -177,21 +176,7 @@
                                     <option value="1">آلومینیوم</option>
                                 </select>
                             </div>
-
-                            <!-- Status -->
-                            <div class="col-md-4">
-                                <select asp-for="MainBrandId" data-placeholder="برند" class="chosen-select-no-single" style="display: none;">
-                                    <option value="@null">همه</option>
-                                    @if (brand != null && brand.Any())
-                                    {
-                                        foreach (var br in brand)
-                                        {
-                                            <option value="@br.Id"> @br.Title </option>
-                                        }
-                                    }
-                                </select>
-                            </div>
-
+                            
                             <!-- Status -->
                             <div class="col-md-4">
                                 <select asp-for="GlassId" data-placeholder="نوع شیشه" class="chosen-select-no-single" style="display: none;">
