@@ -485,12 +485,12 @@ public class InquryService : IInquiryService
                     ShopName = userInquiryResult.SellerShopName,
                     UserAvatar = await _context.Users
                                                .AsNoTracking()
-                                               .Where(p => !p.IsDelete && p.Id == userId)
+                                               .Where(p => !p.IsDelete && p.Id == userInquiryResult.SellerUserId)
                                                .Select(p => p.Avatar)
                                                .FirstOrDefaultAsync(),
                     UserName = await _context.Users
                                                .AsNoTracking()
-                                               .Where(p => !p.IsDelete && p.Id == userId)
+                                               .Where(p => !p.IsDelete && p.Id == userInquiryResult.SellerUserId)
                                                .Select(p => p.Username)
                                                .FirstOrDefaultAsync(),
                     UserId = userId
@@ -532,7 +532,6 @@ public class InquryService : IInquiryService
         };
 
         await _context.logInquiryForUserDetails.AddAsync(logDetail);
-        await _context.SaveChangesAsync();
 
         #endregion
 
@@ -631,8 +630,8 @@ public class InquryService : IInquiryService
                                                            .FirstOrDefaultAsync(),
                             SellerUserId = sellerUserId,
                             UserId = UserId,
-                            SellerScore = await CalculateSellerScoreWithAsNoTracking(sellerUserId),
-                            Price = inquiryPrice.Value
+                            SellerScore = 0,
+                            Price = inquiryPrice.Value,
                         };
 
                         #endregion

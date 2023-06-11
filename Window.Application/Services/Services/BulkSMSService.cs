@@ -1,5 +1,6 @@
 ﻿#region Usings
 
+using AngleSharp.Io;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using System;
@@ -8,7 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Window.Application.Interfaces;
+using Window.Application.Services.Implementation;
 using Window.Application.Services.Interfaces;
+using Window.Application.StaticTools;
 using Window.Data.Context;
 using Window.Domain.Entities.BulkSMS;
 using Window.Domain.ViewModels.Admin.BulkSMS;
@@ -22,7 +25,6 @@ public class BulkSMSService : IBulkSMSService
     #region Ctor
 
     private readonly WindowDbContext _context;
-
     public BulkSMSService(WindowDbContext context)
     {
         _context = context;
@@ -51,7 +53,7 @@ public class BulkSMSService : IBulkSMSService
     }
 
     //Upload Sellers Excel File And Send SMS
-    public async Task<bool> UploadSellersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model)
+    public async Task<List<string>?> UploadSellersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model)
     {
         List<BulkSMS> bulkSMS = new List<BulkSMS>();
 
@@ -74,8 +76,9 @@ public class BulkSMSService : IBulkSMSService
                             IsSent = true,
                             BulkSMSTargetPersonType = BulkSMSTargetPersonType.Seller,
                             Username = workSheet.Cells[row, 1].Value.ToString().Trim(),
-                            Mobile= workSheet.Cells[row, 2].Value.ToString().Trim(),
-                        }); 
+                            Mobile = workSheet.Cells[row, 2].Value.ToString().Trim(),
+                            SMSText = model.SMSText
+                        });
                     }
 
                     #region Add List To the Data Base
@@ -84,19 +87,22 @@ public class BulkSMSService : IBulkSMSService
                     await _context.SaveChangesAsync();
 
                     #endregion
+
+                    return bulkSMS.Select(x => x.Mobile).ToList();
+
                 }
                 else
                 {
-                    return false;
+                    return null;
                 }
             }
         }
 
-        return true;
+        return null;
     }
 
     //Upload Customer Excel File And Send SMS
-    public async Task<bool> UploadCustomersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model)
+    public async Task<List<string>?> UploadCustomersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model)
     {
         List<BulkSMS> bulkSMS = new List<BulkSMS>();
 
@@ -120,6 +126,7 @@ public class BulkSMSService : IBulkSMSService
                             BulkSMSTargetPersonType = BulkSMSTargetPersonType.Customer,
                             Username = workSheet.Cells[row, 1].Value.ToString().Trim(),
                             Mobile = workSheet.Cells[row, 2].Value.ToString().Trim(),
+                            SMSText = model.SMSText
                         });
                     }
 
@@ -129,15 +136,17 @@ public class BulkSMSService : IBulkSMSService
                     await _context.SaveChangesAsync();
 
                     #endregion
+
+                    return bulkSMS.Select(x => x.Mobile).ToList();
                 }
                 else
                 {
-                    return false;
+                    return null;
                 }
             }
         }
 
-        return true;
+        return null;
     }
 
     #endregion

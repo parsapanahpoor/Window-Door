@@ -1,8 +1,11 @@
 ﻿#region Usings
 
+using AngleSharp.Io;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Window.Application.Services.Interfaces;
+using Window.Application.StaticTools;
 using Window.Domain.ViewModels.Admin.BulkSMS;
 
 namespace Window.Web.Areas.Admin.Controllers;
@@ -14,10 +17,12 @@ public class BulkSMSController : AdminBaseController
 	#region Ctor
 
 	private readonly IBulkSMSService _bulkSmsService;
+    private readonly ISMSService _smsService;
 
-	public BulkSMSController(IBulkSMSService bulkSMSService)
+	public BulkSMSController(IBulkSMSService bulkSMSService , ISMSService smsService)
 	{
 		_bulkSmsService= bulkSMSService;
+        _smsService= smsService;
 	}
 
     #endregion
@@ -56,8 +61,17 @@ public class BulkSMSController : AdminBaseController
         #endregion
 
         var res = await _bulkSmsService.UploadSellersExcelFileAndSendSMS(model);
-        if (res)
+        if (res != null && res.Any())
         {
+            #region Send SMS  
+
+            foreach (var item in res)
+            {
+                await _smsService.SendSimpleSMS(item, model.SMSText);
+            }
+
+            #endregion
+
             TempData[SuccessMessage] = "پیامک برای لیست فروشندگان ارسال گردید.";
             return RedirectToAction(nameof(ListOFSellerSentSMS));
         }
@@ -104,8 +118,17 @@ public class BulkSMSController : AdminBaseController
         #endregion
 
         var res = await _bulkSmsService.UploadCustomersExcelFileAndSendSMS(model);
-        if (res)
+        if (res != null && res.Any())
         {
+            #region Send SMS  
+
+            foreach (var item in res)
+            {
+                await _smsService.SendSimpleSMS(item, model.SMSText);
+            }
+
+            #endregion
+
             TempData[SuccessMessage] = "پیامک برای لیست فروشندگان ارسال گردید.";
             return RedirectToAction(nameof(ListOFCustomerSentSMS));
         }

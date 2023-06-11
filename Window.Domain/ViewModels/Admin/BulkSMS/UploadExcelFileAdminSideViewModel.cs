@@ -21,5 +21,9 @@ public class UploadExcelFileAdminSideViewModel
     [Required(ErrorMessage = "Please Enter {0}")]
     public IFormFile ExcelFile { get; set; }
 
+    [Display(Name = "متن پیامک")]
+    [Required(ErrorMessage = "Please Enter {0}")]
+    public string SMSText { get; set; }
+
     #endregion
 }

@@ -15,6 +15,8 @@ public sealed class BulkSMS : BaseEntity
 
 	public bool IsSent { get; set; }
 
+	public string SMSText { get; set; }
+
 	public BulkSMSTargetPersonType BulkSMSTargetPersonType { get; set; }
 
 	#endregion
