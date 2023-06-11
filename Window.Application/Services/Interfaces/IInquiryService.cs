@@ -19,6 +19,9 @@ public interface IInquiryService
 {
     #region Site Side
 
+    //Update Log User Inquiry Request
+    Task UpdateLogUserInquiryRequest(string userMacAddress, ulong brandId);
+
     //Check Log Result User Inquiry
     Task<int> CheckLogResultUserInquiry(string userMacAddress);
 

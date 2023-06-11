@@ -45,8 +45,6 @@
                 {
                     @foreach (var brand in Model)
                     {
-                        <input type="hidden" value="@ViewBag.UserMacAddress" name="userMacAddress" />
-
                         <!-- Listing Item -->
                         <div class="listing-item">
 
@@ -77,7 +75,12 @@
                                     <div class="row">
 
                                         <div class="col-md-6 col-xs-6">
-                                            <a class="button">انتخاب برند</a>
+                                            <a asp-action="InquiryStep3"
+                                       asp-area=""
+                                       asp-controller="InquiryProduct"
+                                       asp-route-userMacAddress="@ViewBag.UserMacAddress"
+                                       asp-route-brandId="@brand.Brand.Id"
+                                       class="button">انتخاب برند</a>
                                         </div>
 
                                     </div>

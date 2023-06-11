@@ -129,6 +129,8 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
+        ViewBag.UserMacAddress = UserMacAddress;
+
         return View(await _brandService.ShowListOFBrandsByBrandType(SellerType));
     }
 
@@ -138,7 +140,7 @@ public class InquiryProductController : SiteBaseController
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> InquiryStep3(string userMacAddress)
+    public async Task<IActionResult> InquiryStep3(string userMacAddress , ulong? brandId)
     {
         #region Get Samples For Show In Page Model
 
@@ -147,6 +149,15 @@ public class InquiryProductController : SiteBaseController
         {
             TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
             return NotFound();
+        }
+
+        #endregion
+
+        #region Update User Log 
+
+        if (brandId.HasValue)
+        {
+            await _inquiryService.UpdateLogUserInquiryRequest(userMacAddress , brandId.Value);
         }
 
         #endregion

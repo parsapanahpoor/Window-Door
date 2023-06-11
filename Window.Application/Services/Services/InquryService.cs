@@ -37,6 +37,22 @@ public class InquryService : IInquiryService
 
     #region Site Side 
 
+    //Update Log User Inquiry Request
+    public async Task UpdateLogUserInquiryRequest(string userMacAddress , ulong brandId)
+    {
+        //Get Brand 
+        var brand = await _context.LogInquiryForUsers.FirstOrDefaultAsync(p=> !p.IsDelete && p.UserMAcAddress == userMacAddress);
+
+        if (brand is not null)
+        {
+            brand.BrandId = brandId;
+
+            //Update User Log 
+            _context.LogInquiryForUsers.Update(brand);
+            await _context.SaveChangesAsync();
+        }
+    }
+
     //Check Log Result User Inquiry
     public async Task<int> CheckLogResultUserInquiry(string userMacAddress)
     {
