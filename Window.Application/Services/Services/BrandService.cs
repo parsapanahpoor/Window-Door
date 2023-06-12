@@ -356,16 +356,20 @@ public class BrandService : IBrandService
 
                 foreach (var brand in brands)
                 {
-                    ListOfBrandsWithCountOfSellersViewModel modelChild = new ListOfBrandsWithCountOfSellersViewModel()
+                    var CountOfSellers = await _context.Products
+                                                     .AsNoTracking()
+                                                     .Where(p => !p.IsDelete && p.MainBrandId == brand.Id)
+                                                     .CountAsync();
+                    if (CountOfSellers != 0)
                     {
-                        Brand = brand,
-                        CountOfSellers = await _context.Products
-                                                       .AsNoTracking()
-                                                       .Where(p => !p.IsDelete && p.MainBrandId == brand.Id)
-                                                       .CountAsync()
-                    };
+                        ListOfBrandsWithCountOfSellersViewModel modelChild = new ListOfBrandsWithCountOfSellersViewModel()
+                        {
+                            Brand = brand,
+                            CountOfSellers = CountOfSellers
+                        };
 
-                    model.Add(modelChild);
+                        model.Add(modelChild);
+                    }
                 }
 
                 return model;
@@ -386,16 +390,21 @@ public class BrandService : IBrandService
 
                 foreach (var brand in brands)
                 {
-                    ListOfBrandsWithCountOfSellersViewModel modelChild = new ListOfBrandsWithCountOfSellersViewModel()
-                    {
-                        Brand = brand,
-                        CountOfSellers = await _context.Products
-                                                       .AsNoTracking()
-                                                       .Where(p => !p.IsDelete && p.MainBrandId == brand.Id)
-                                                       .CountAsync()
-                    };
+                    var CountOfSellers = await _context.Products
+                                                     .AsNoTracking()
+                                                     .Where(p => !p.IsDelete && p.MainBrandId == brand.Id)
+                                                     .CountAsync();
 
-                    model.Add(modelChild);
+                    if (CountOfSellers != 0)
+                    {
+                        ListOfBrandsWithCountOfSellersViewModel modelChild = new ListOfBrandsWithCountOfSellersViewModel()
+                        {
+                            Brand = brand,
+                            CountOfSellers = CountOfSellers
+                        };
+
+                        model.Add(modelChild);
+                    }
                 }
 
                 return model;

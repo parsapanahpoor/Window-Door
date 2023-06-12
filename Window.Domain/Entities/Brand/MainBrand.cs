@@ -34,6 +34,8 @@ namespace Window.Domain.Entities.Brand
 
         public string? Description { get; set; }
 
+        public string? BrandSite { get; set; }
+
         #endregion
 
         #region relations

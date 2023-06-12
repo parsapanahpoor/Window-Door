@@ -111,7 +111,7 @@ public class BulkSMSService : IBulkSMSService
     }
 
     //Upload Customer Excel File And Send SMS
-    public async Task<BulkSMSResultViewModel?> UploadCustomersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model)
+    public async Task<List<BulkSMSResultViewModel>?> UploadCustomersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model)
     {
         List<BulkSMS> bulkSMS = new List<BulkSMS>();
         List<BulkSMSResultViewModel> returnModel = new List<BulkSMSResultViewModel>();

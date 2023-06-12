@@ -132,7 +132,7 @@ public class InquiryProductController : SiteBaseController
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> InquiryStep3( ulong? brandId)
+    public async Task<IActionResult> InquiryStep3(ulong? brandId)
     {
         #region Get Samples For Show In Page Model
 
@@ -156,6 +156,9 @@ public class InquiryProductController : SiteBaseController
 
         ViewBag.UserMacAddress = User.GetUserId().ToString();
 
+        var CountOfVerifySample = await _inquiryService.CheckLogResultUserInquiry(User.GetUserId().ToString());
+        ViewBag.CountOfVerifySample = 5 - CountOfVerifySample;
+
         return View(samples);
     }
 
@@ -163,26 +166,9 @@ public class InquiryProductController : SiteBaseController
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> InquiryStep3(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string userMacAddress)
     {
-
-        #region Get Samples For Show In Page Model
-
-        var samples = await _sampleService.GetListOfSamplesForShowInAPI(userMacAddress);
-        if (samples == null || !samples.Any())
-        {
-            TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
-            return NotFound();
-        }
-
-        #endregion
-
         #region Check Is Exist Sample 
 
         var sample = await _sampleService.GetSampleBySampleIdWithAsNoTracking(sampleId);
-        if (samples == null || !samples.Any())
-        {
-            TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
-            return NotFound();
-        }
 
         if (sample.MaxHeight < height)
         {
@@ -212,11 +198,14 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
+        var CountOfVerifySample = await _inquiryService.CheckLogResultUserInquiry(User.GetUserId().ToString());
+        ViewBag.CountOfVerifySample = 5 - CountOfVerifySample;
+
         //Check User Inquiry Log Count 
-        if (await _inquiryService.CheckLogResultUserInquiry(userMacAddress) > 4)
+        if (CountOfVerifySample == 5)
         {
-            TempData[ErrorMessage] = "بیش از تعداد 4 محصول را نمی توان به طور همزمان مقدار دهی کرد.";
-            return View(samples);
+            TempData[ErrorMessage] = "بیش از تعداد 5 محصول را نمی توان به طور همزمان مقدار دهی کرد.";
+            return RedirectToAction(nameof(InquiryStep3));
         }
 
         #region Add Log For User
@@ -230,7 +219,7 @@ public class InquiryProductController : SiteBaseController
 
         TempData[SuccessMessage] = "محصول مورد نظر به سبد شما اضافه شده است.";
         TempData[InfoMessage] = "شما میتوانید مجدد اندازه ی جدیدی را وارد کنید.";
-        return View(samples);
+        return RedirectToAction(nameof(InquiryStep3));
     }
 
     #endregion

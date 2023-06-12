@@ -41,6 +41,8 @@
                             <li>
                                 <a id="target" asp-action="InquiryStep4" asp-route-userMacAddress="@ViewBag.UserMacAddress" asp-controller="InquiryProduct" asp-area="" class="button">نمایش نتیجه ی استعلام </a>
                             </li>
+
+
                         </ul>
                     </nav>
 
@@ -58,6 +60,21 @@
             <!-- Listings -->
             <div class="listings-container list-layout">
 
+                @if (ViewBag.CountOfVerifySample == 0)
+                {
+                    <div class="notification error  closeable">
+                        <p> تعداد نمونه ی مجاز قابل انتخاب شما : <b>@ViewBag.CountOfVerifySample</b></p>
+                        <a class="close"></a>
+                    </div>
+                }
+                else
+                {
+                    <div class="notification success closeable">
+                        <p> تعداد نمونه ی مجاز قابل انتخاب شما : <b>@ViewBag.CountOfVerifySample</b></p>
+                        <a class="close"></a>
+                    </div>
+                }
+
                 @if (Model != null && Model.Any())
                 {
                     @foreach (var product in Model)
@@ -67,7 +84,7 @@
                             <input type="hidden" value="@ViewBag.UserMacAddress" name="userMacAddress" />
 
                             <!-- Listing Item -->
-                            <div class="listing-item" >
+                            <div class="listing-item">
 
                                 <a href="@Window.Application.StticTools.FilePaths.SampleOriginimage/@product.Image" class="listing-img-container" style="height: 273px;">
 
