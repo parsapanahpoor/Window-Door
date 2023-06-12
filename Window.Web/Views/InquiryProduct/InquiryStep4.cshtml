@@ -34,7 +34,6 @@
 }
 
     <form asp-action="InquiryStep4" asp-controller="InquiryProduct" asp-area="" method="get">
-        <input type="hidden" id="pageid" name="pageId" value="@ViewBag.pageId.ToString()" />
         <input type="hidden" name="userMacAddress" value="@ViewBag.userMacAddress" />
 
         <div class="parallax titlebar" data-background="/Site/images/3.jpg" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -546.894px;">
@@ -75,19 +74,7 @@
                             <!-- Row -->
                             <div class="row with-forms">
                                 <!-- Status -->
-                                <div class="col-md-12">
-                                    <select name="brandTitle" id="MainBrandId" data-placeholder="برند" class="chosen-select-no-single" style="display: block;">
-                                        <option value="@null">لطفا یکی از برند هارا انتخاب کنید </option>
-                                        <option value="All">همه </option>
-                                    @if (brand != null && brand.Any())
-                                    {
-                                        foreach (var brands in brand)
-                                        {
-                                            <option value="@brands.Title"> @brands.Title </option>
-                                        }
-                                    }
-                                </select><div class="chosen-container chosen-container-single chosen-container-single-nosearch" style="display: none;width: 100%;" title=""><a class="chosen-single chosen-default"><span>وضعیت</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off" readonly=""></div><ul class="chosen-results"></ul></div></div>
-                            </div>
+                            
                         </div>
                         <!-- Row / End -->
                         <!-- Row -->
@@ -139,7 +126,7 @@
                             <!-- Listing Item -->
                             <div class="listing-item">
 
-                                <a href="single-property-page-1.html" class="listing-img-container" style="height: auto !important;">
+                                <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="listing-img-container" style="height: auto !important;">
 
                                     <div class="listing-badges">
                                         <img style="height: auto; width: 60px; border-radius: 50px; margin-top: 10px; margin-right: 10px;" src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@product.BrandImage" alt="">
@@ -230,7 +217,7 @@
                                         }
                                         else
                                         {
-                                            <a class="button"  style="background-color: #c100d1;    padding: 10px 45px;">
+                                            <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="button" style="background-color: #c100d1;    padding: 10px 45px;">
                                                 @product.ShopName
                                             </a>
                                         }

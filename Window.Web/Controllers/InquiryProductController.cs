@@ -238,24 +238,8 @@ public class InquiryProductController : SiteBaseController
     #region Inquiry Step 4 (proccess inquiry)
 
     [Authorize]
-    public async Task<IActionResult> InquiryStep4(string userMacAddress, string? brandTitle, int? orderByPrice, int pageId = 1)
+    public async Task<IActionResult> InquiryStep4(string userMacAddress, int? orderByPrice)
     {
-        #region Brand ViewBag
-
-        ViewBag.Brand = await _brandService.GetAllBrandsWithAsNoTracking();
-
-        #endregion
-
-        #region Update Inqury By Brand 
-
-        if (!string.IsNullOrEmpty(brandTitle))
-        {
-            var res = await _inquiryService.UpdateUserInquryInLastStep(userMacAddress, brandTitle);
-            if (!res) return NotFound();
-        }
-
-        #endregion
-
         #region Fill Model
 
         var model = await _inquiryService.ListOfInquiry(userMacAddress, User.GetUserId());
@@ -267,7 +251,6 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
-        ViewBag.pageId = pageId;
         ViewBag.userMacAddress = userMacAddress;
         ViewBag.OredrByPrice = orderByPrice;
 

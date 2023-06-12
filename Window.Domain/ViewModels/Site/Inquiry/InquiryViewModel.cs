@@ -25,4 +25,18 @@ namespace Window.Domain.ViewModels.Site.Inquiry
 
         public string? ShopName { get; set; }
     }
+
+    public class brandInquiryViewModel
+    {
+        public string brandName { get; set; }
+
+        public string BreandLogo { get; set; }
+    }
+
+    public class UserInquiryViewModel
+    {
+        public string UserAvatar { get; set; }
+
+        public string Username { get; set; }
+    }
 }

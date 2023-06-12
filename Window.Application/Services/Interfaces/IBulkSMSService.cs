@@ -20,13 +20,13 @@ public interface IBulkSMSService
     Task<List<BulkSMS>> ListOFSellerSentSMS();
 
     //Upload Sellers Excel File And Send SMS
-    Task<List<string>?> UploadSellersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model);
+    Task<List<BulkSMSResultViewModel>?> UploadSellersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model);
 
     //List OF Customer Sent SMS
     Task<List<BulkSMS>> ListOFCustomerSentSMS();
 
     //Upload Customer Excel File And Send SMS
-    Task<List<string>?> UploadCustomersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model);
+    Task<List<BulkSMSResultViewModel>?> UploadCustomersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model);
 
     #endregion
 }

@@ -263,6 +263,7 @@ public class SampleService : ISampleService
         var log = await _context.LogInquiryForUsers
                                 .AsNoTracking()
                                 .FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
+
         if (log == null) return null;
 
         #endregion

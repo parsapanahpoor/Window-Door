@@ -27,3 +27,10 @@ public class UploadExcelFileAdminSideViewModel
 
     #endregion
 }
+
+public class BulkSMSResultViewModel
+{
+    public string UserMobiles { get; set; }
+
+    public string Usernames { get; set; }
+}

@@ -61,13 +61,14 @@ public class BulkSMSController : AdminBaseController
         #endregion
 
         var res = await _bulkSmsService.UploadSellersExcelFileAndSendSMS(model);
-        if (res != null && res.Any())
+        if (res != null )
         {
             #region Send SMS  
 
             foreach (var item in res)
             {
-                await _smsService.SendSimpleSMS(item, model.SMSText);
+                var smstext = $"{item.Usernames} عزیز .{Environment.NewLine} {model.SMSText}";
+                await _smsService.SendSimpleSMS(item.UserMobiles, smstext);
             }
 
             #endregion
@@ -124,7 +125,8 @@ public class BulkSMSController : AdminBaseController
 
             foreach (var item in res)
             {
-                await _smsService.SendSimpleSMS(item, model.SMSText);
+                var smstext = $"{item.Usernames} عزیز .{Environment.NewLine} {model.SMSText}";
+                await _smsService.SendSimpleSMS(item.UserMobiles, smstext);
             }
 
             #endregion

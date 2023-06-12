@@ -53,9 +53,10 @@ public class BulkSMSService : IBulkSMSService
     }
 
     //Upload Sellers Excel File And Send SMS
-    public async Task<List<string>?> UploadSellersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model)
+    public async Task<List<BulkSMSResultViewModel>?> UploadSellersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model)
     {
         List<BulkSMS> bulkSMS = new List<BulkSMS>();
+        List< BulkSMSResultViewModel > returnModel = new List<BulkSMSResultViewModel >();
 
         using (var stream = new MemoryStream())
         {
@@ -79,6 +80,14 @@ public class BulkSMSService : IBulkSMSService
                             Mobile = workSheet.Cells[row, 2].Value.ToString().Trim(),
                             SMSText = model.SMSText
                         });
+
+                        BulkSMSResultViewModel modelChild = new BulkSMSResultViewModel()
+                        {
+                            Usernames = workSheet.Cells[row, 1].Value.ToString().Trim(),
+                            UserMobiles = workSheet.Cells[row, 2].Value.ToString().Trim(),
+                        };
+
+                        returnModel.Add(modelChild);
                     }
 
                     #region Add List To the Data Base
@@ -88,7 +97,7 @@ public class BulkSMSService : IBulkSMSService
 
                     #endregion
 
-                    return bulkSMS.Select(x => x.Mobile).ToList();
+                    return returnModel;
 
                 }
                 else
@@ -102,9 +111,10 @@ public class BulkSMSService : IBulkSMSService
     }
 
     //Upload Customer Excel File And Send SMS
-    public async Task<List<string>?> UploadCustomersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model)
+    public async Task<BulkSMSResultViewModel?> UploadCustomersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model)
     {
         List<BulkSMS> bulkSMS = new List<BulkSMS>();
+        List<BulkSMSResultViewModel> returnModel = new List<BulkSMSResultViewModel>();
 
         using (var stream = new MemoryStream())
         {
@@ -128,6 +138,14 @@ public class BulkSMSService : IBulkSMSService
                             Mobile = workSheet.Cells[row, 2].Value.ToString().Trim(),
                             SMSText = model.SMSText
                         });
+
+                        BulkSMSResultViewModel modelChild = new BulkSMSResultViewModel()
+                        {
+                            Usernames = workSheet.Cells[row, 1].Value.ToString().Trim(),
+                            UserMobiles = workSheet.Cells[row, 2].Value.ToString().Trim(),
+                        };
+
+                        returnModel.Add(modelChild);
                     }
 
                     #region Add List To the Data Base
@@ -137,7 +155,7 @@ public class BulkSMSService : IBulkSMSService
 
                     #endregion
 
-                    return bulkSMS.Select(x => x.Mobile).ToList();
+                    return returnModel;
                 }
                 else
                 {

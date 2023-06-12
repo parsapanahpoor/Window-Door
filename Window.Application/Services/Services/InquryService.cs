@@ -13,6 +13,7 @@ using Window.Domain.Entities.Inquiry;
 using Window.Domain.Entities.Log;
 using Window.Domain.Entities.MarketInfo;
 using Window.Domain.Entities.Sample;
+using Window.Domain.Entities.Score;
 using Window.Domain.ViewModels.Site.Inquiry;
 
 namespace Window.Application.Services.Services;
@@ -456,19 +457,11 @@ public class InquryService : IInquiryService
 
     public async Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress, ulong userId)
     {
-        #region Get User log 
-
-        var log = await _context.LogInquiryForUsers
-                                .AsNoTracking()
-                                .Where(p => p.UserMAcAddress == userMacAddress && !p.IsDelete)
-                                .Select(p => p.Id)
-                                .FirstOrDefaultAsync();
-
-        if (log == null) return null;
+        #region Get User log
 
         var userInquiryResults = await _context.LogResultOfUserInquiryWithSellersInfos
                                                .AsNoTracking()
-                                               .Where(p => p.UserId == userId && p.LogInquiryForUserId == log)
+                                               .Where(p => p.UserId == userId)
                                                .ToListAsync();
 
         #endregion
@@ -484,31 +477,35 @@ public class InquryService : IInquiryService
                 //Update Sellers Activation Tarrifs
                 await _sellerService.UpdateSellerActivationTariff(userInquiryResult.SellerUserId, true, false);
 
+                var brand = await _context.MainBrands
+                                               .AsNoTracking()
+                                               .Where(p=> !p.IsDelete && p.Id == userInquiryResult.BrandId)
+                                               .Select(p=> new brandInquiryViewModel()
+                                               {
+                                                   brandName = p.BrandName,
+                                                   BreandLogo = p.BrandLogo
+                                               })
+                                               .FirstOrDefaultAsync();
+
+                var user = await _context.Users
+                                               .AsNoTracking()
+                                               .Where(p=> !p.IsDelete && p.Id == userInquiryResult.UserId)
+                                               .Select(p=> new UserInquiryViewModel()
+                                               {
+                                                   UserAvatar = p.Username,
+                                                   Username = p.Username,
+                                               })
+                                               .FirstOrDefaultAsync();
+
                 InquiryViewModel modelChilds = new InquiryViewModel()
                 {
-                    BrandImage = await _context.MainBrands
-                                               .AsNoTracking()
-                                               .Where(p => !p.IsDelete && p.Id == userInquiryResult.BrandId)
-                                               .Select(p => p.BrandLogo)
-                                               .FirstOrDefaultAsync(),
-                    BrandName = await _context.MainBrands
-                                               .AsNoTracking()
-                                               .Where(p => !p.IsDelete && p.Id == userInquiryResult.BrandId)
-                                               .Select(p => p.BrandName)
-                                               .FirstOrDefaultAsync(),
+                    BrandImage = brand.BreandLogo,
+                    BrandName =  brand.brandName,
                     Price = userInquiryResult.Price,
                     Score = userInquiryResult.SellerScore,
                     ShopName = userInquiryResult.SellerShopName,
-                    UserAvatar = await _context.Users
-                                               .AsNoTracking()
-                                               .Where(p => !p.IsDelete && p.Id == userInquiryResult.SellerUserId)
-                                               .Select(p => p.Avatar)
-                                               .FirstOrDefaultAsync(),
-                    UserName = await _context.Users
-                                               .AsNoTracking()
-                                               .Where(p => !p.IsDelete && p.Id == userInquiryResult.SellerUserId)
-                                               .Select(p => p.Username)
-                                               .FirstOrDefaultAsync(),
+                    UserAvatar = user.UserAvatar,
+                    UserName = user.Username,
                     UserId = userId
                 };
 
@@ -529,6 +526,7 @@ public class InquryService : IInquiryService
         var userLog = await _context.LogInquiryForUsers
                                     .AsNoTracking()
                                     .FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
+
         if (userLog == null) return false;
 
         #endregion
@@ -646,7 +644,11 @@ public class InquryService : IInquiryService
                                                            .FirstOrDefaultAsync(),
                             SellerUserId = sellerUserId,
                             UserId = UserId,
-                            SellerScore = 0,
+                            SellerScore = await _context.CalculatedSellersScores    
+                                                        .AsNoTracking()
+                                                        .Where(p=> !p.IsDelete && p.UserSellerId == sellerUserId)
+                                                        .Select(p=> p.CalculatedScore)
+                                                        .FirstOrDefaultAsync(),
                             Price = inquiryPrice.Value,
                         };
 
@@ -4370,6 +4372,29 @@ public class InquryService : IInquiryService
         #region Calculate Seller Score
 
         var score = await CalculateSellerScore(model.SellerId);
+
+        //Get Seller Calculated Score 
+        var calculatedScore = await _context.CalculatedSellersScores
+                                            .FirstOrDefaultAsync(p => !p.IsDelete && p.UserSellerId == model.SellerId);
+
+        if (calculatedScore == null)
+        {
+            CalculatedSellersScore calScore = new CalculatedSellersScore()
+            {
+                CalculatedScore = score,
+                UserSellerId = model.SellerId
+            };
+
+            await _context.CalculatedSellersScores.AddAsync(calScore);
+            await _context.SaveChangesAsync();
+        }
+        else 
+        {
+            calculatedScore.CalculatedScore = score;
+
+            _context.CalculatedSellersScores.Update(calculatedScore);
+            await _context.SaveChangesAsync();
+        }
 
         #endregion
 
