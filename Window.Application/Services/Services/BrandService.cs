@@ -167,6 +167,7 @@ public class BrandService : IBrandService
         brand.Priority = mainBrand.Priority;
         brand.Yaragh = mainBrand.Yaragh;
         brand.Description = mainBrand.Description;
+        brand.BrandSite = mainBrand.BrandSite;
 
         if (brandLogo != null && brandLogo.IsImage())
         {

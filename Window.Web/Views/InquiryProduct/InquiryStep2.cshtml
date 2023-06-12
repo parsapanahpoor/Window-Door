@@ -108,6 +108,14 @@
                                        class="button">انتخاب برند</a>
                                         </div>
 
+                                        @if (!string.IsNullOrEmpty(brand.Brand.BrandSite))
+                                        {
+                                                <div class="col-md-6 col-xs-6">
+                                            <a href="@brand.Brand.BrandSite" target="_blank"
+                                       class="button">وب سایت برند</a>
+                                        </div>
+                                        }
+
                                     </div>
                                 </div>
 
