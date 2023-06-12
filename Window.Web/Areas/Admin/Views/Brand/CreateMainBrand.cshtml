@@ -9,18 +9,18 @@
 }
 
 @section Scripts
-{
-<partial name="_JqueryValidation" />
-<script src="/admin/js/admin-custom.js"></script>
-<script src="/admin/js/CreateArticle.js"></script>
-<script src="/common/custom/custom.js"></script>
+    {
+    <partial name="_JqueryValidation" />
+    <script src="/admin/js/admin-custom.js"></script>
+    <script src="/admin/js/CreateArticle.js"></script>
+    <script src="/common/custom/custom.js"></script>
 }
 
 @section breadcrumb {
 
-<li>
-    <a href="javascript:void(0)"> @ViewData["Title"] </a>
-</li>
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
 }
 
 <form method="post" asp-action="CreateMainBrand" asp-controller="Brand" asp-area="Admin" enctype="multipart/form-data">
@@ -34,17 +34,24 @@
                     <div>
 
                         <div class="row">
+
                             <div class="form-group col-md-6 col-sm-12">
                                 <label asp-for="BrandName"></label>
                                 <input type="text" class="form-control" asp-for="BrandName">
                                 <span class="text-danger" asp-validation-for="BrandName"></span>
                             </div>
 
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label asp-for="Priority">اولویت نمایش</label>
-                                    <input type="number" min="1" class="form-control" asp-for="Priority">
-                                    <span class="text-danger" asp-validation-for="Priority"></span>
-                                </div>
+                            <div class="form-group col-md-6 col-sm-12">
+                                <label asp-for="Priority">اولویت نمایش</label>
+                                <input type="number" min="1" class="form-control" asp-for="Priority">
+                                <span class="text-danger" asp-validation-for="Priority"></span>
+                            </div>
+
+                            <div class="form-group col-md-12 col-sm-12">
+                                <label asp-for="Description">توضیحاتی درباره یبرند</label>
+                                <textarea type="text" class="form-control" asp-for="Description"></textarea>
+                                <span class="text-danger" asp-validation-for="Description"></span>
+                            </div>
 
                         </div>
 
@@ -91,7 +98,7 @@
                     </div>
                 </div>
 
-                   <div class="col-lg-12">
+                <div class="col-lg-12">
                     <div class="widget">
                         <div class="widget-header bordered-bottom bordered-yellow">
                             <span class="widget-caption"> وضعیت </span>
@@ -111,7 +118,7 @@
 
                                 </div>
 
-                                 <div class="col-md-12">
+                                <div class="col-md-12">
 
                                     <div class="form-group">
                                         <div class="checkbox">
@@ -124,18 +131,18 @@
 
                                 </div>
 
-                                    <div class="col-md-12">
+                                <div class="col-md-12">
 
-                                        <div class="form-group">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" asp-for="Yaragh">
-                                                    <span class="text"> یراق UPVC و آلمینیوم </span>
-                                                </label>
-                                            </div>
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" asp-for="Yaragh">
+                                                <span class="text"> یراق UPVC و آلمینیوم </span>
+                                            </label>
                                         </div>
-
                                     </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>

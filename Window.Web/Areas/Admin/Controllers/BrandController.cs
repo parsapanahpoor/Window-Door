@@ -42,9 +42,7 @@ namespace Window.Web.Areas.Admin.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateMainBrand(MainBrand brand, IFormFile? brandLogo)
-        {
-           
-
+        {       
             #region Create Brand Method
 
             var res = await _brandService.CreateMainBrand(brand, brandLogo);

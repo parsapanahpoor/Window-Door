@@ -19,6 +19,7 @@ using Window.Domain.Entities.MarketInfo;
 using Window.Domain.Entities.Product;
 using Window.Domain.Entities.QuestionAnswer;
 using Window.Domain.Entities.Sample;
+using Window.Domain.Entities.Score;
 using Window.Domain.Entities.Segment;
 using Window.Domain.Entities.SiteSetting;
 using Window.Domain.Entities.TechnicalIssues;
@@ -209,6 +210,12 @@ public class WindowDbContext : DbContext
     #region Comment
 
     public DbSet<Comment> Comments { get; set; }
+
+    #endregion
+
+    #region Score
+
+    public DbSet<CalculatedSellersScore> CalculatedSellersScores { get; set; }
 
     #endregion
 

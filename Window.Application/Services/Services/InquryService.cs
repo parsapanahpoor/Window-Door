@@ -4367,6 +4367,12 @@ public class InquryService : IInquiryService
 
         #endregion
 
+        #region Calculate Seller Score
+
+        var score = await CalculateSellerScore(model.SellerId);
+
+        #endregion
+
         return true;
     }
 
