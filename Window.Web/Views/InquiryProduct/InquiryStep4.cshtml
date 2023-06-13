@@ -190,22 +190,16 @@
 
                                     @if (!string.IsNullOrEmpty(product.UserAvatar))
                                     {
-                                        <img src="/content/images/user/thumb/@product.UserAvatar" alt="" style="height: auto;">
+                                        <img src="/content/images/user/thumb/@product.UserAvatar" alt="" style="height: auto; max-height:300px;">
                                     }
                                     else
                                     {
-                                        <img src="/Site/images/listing-01.jpg" alt="" style="height: auto;">
+                                        <img src="/Site/images/listing-01.jpg" alt="" style="height: auto;max-height:300px;">
                                     }
 
                                 </a>
 
                                 <div class="listing-content">
-
-                                    <!--<div class="listing-title">
-                                         <h4>
-                                    @product.UserName
-                                         </h4>
-                                     </div>-->
 
                                     <div class="listing-footer" style="padding:8px 0px">
 

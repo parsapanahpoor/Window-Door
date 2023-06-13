@@ -489,10 +489,10 @@ public class InquryService : IInquiryService
 
                 var user = await _context.Users
                                                .AsNoTracking()
-                                               .Where(p=> !p.IsDelete && p.Id == userInquiryResult.UserId)
+                                               .Where(p=> !p.IsDelete && p.Id == userInquiryResult.SellerUserId)
                                                .Select(p=> new UserInquiryViewModel()
                                                {
-                                                   UserAvatar = p.Username,
+                                                   UserAvatar = p.Avatar,
                                                    Username = p.Username,
                                                })
                                                .FirstOrDefaultAsync();
