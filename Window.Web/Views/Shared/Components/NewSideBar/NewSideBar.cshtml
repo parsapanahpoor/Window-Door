@@ -62,7 +62,7 @@
                         <a class="current" href="#">استعلام گیری</a>
                         <ul>
                             <li><a asp-area="" asp-controller="InquiryProduct" asp-action="InquiryStep1">استعلام گیری</a></li>
-                            <li><a asp-area="" asp-controller="InquiryProduct" asp-action="GetUserLastestInquiry">آخرین استعلام شما</a></li>
+                            <li><a asp-action="InquiryStep4" asp-route-userMacAddress="@Model.Id" asp-controller="InquiryProduct" asp-area="">آخرین استعلام شما</a></li>
                         </ul>
                     </li>
 
@@ -96,7 +96,7 @@
                         <a class="current" href="#">استعلام گیری</a>
                         <ul>
                             <li><a asp-area="" asp-controller="InquiryProduct" asp-action="InquiryStep1">استعلام گیری</a></li>
-                            <li><a asp-area="" asp-controller="InquiryProduct" asp-action="GetUserLastestInquiry">آخرین استعلام شما</a></li>
+                            <li><a asp-action="InquiryStep4" asp-route-userMacAddress="@Model.Id" asp-controller="InquiryProduct" asp-area="">آخرین استعلام شما</a></li>
                         </ul>
                     </li>
                     <li>
