@@ -79,6 +79,8 @@ public class WindowDbContext : DbContext
 
     public DbSet<BulkSMS> BulkSMS { get; set; }
 
+    public DbSet<AllBulkSMS> AllBulkSMSs { get; set; }
+
     #endregion
 
     #region Contract 

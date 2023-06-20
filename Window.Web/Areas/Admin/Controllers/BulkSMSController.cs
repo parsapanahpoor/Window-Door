@@ -142,4 +142,10 @@ public class BulkSMSController : AdminBaseController
     #endregion
 
     #endregion
+
+    #region All Bulk SMS 
+
+   
+
+    #endregion
 }

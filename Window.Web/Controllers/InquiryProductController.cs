@@ -229,6 +229,8 @@ public class InquiryProductController : SiteBaseController
     [Authorize]
     public async Task<IActionResult> InquiryStep4(string userMacAddress, int? orderByPrice)
     {
+        userMacAddress = User.GetUserId().ToString();
+
         #region Fill Model
 
         var model = await _inquiryService.ListOfInquiry(userMacAddress, User.GetUserId());
