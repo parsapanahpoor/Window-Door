@@ -18,12 +18,10 @@ public class BulkSMSController : AdminBaseController
     #region Ctor
 
     private readonly IBulkSMSService _bulkSmsService;
-    private readonly ISMSService _smsService;
 
-    public BulkSMSController(IBulkSMSService bulkSMSService, ISMSService smsService)
+    public BulkSMSController(IBulkSMSService bulkSMSService)
     {
         _bulkSmsService = bulkSMSService;
-        _smsService = smsService;
     }
 
     #endregion
@@ -64,15 +62,6 @@ public class BulkSMSController : AdminBaseController
         var res = await _bulkSmsService.UploadSellersExcelFileAndSendSMS(model);
         if (res != null)
         {
-            #region Send SMS  
-
-            foreach (var item in res)
-            {
-                var smstext = $"{item.Usernames} عزیز .{Environment.NewLine} {model.SMSText}";
-                await _smsService.SendSimpleSMS(item.UserMobiles, smstext);
-            }
-
-            #endregion
 
             TempData[SuccessMessage] = "پیامک برای لیست فروشندگان ارسال گردید.";
             return RedirectToAction(nameof(ListOFSellerSentSMS));
@@ -122,15 +111,6 @@ public class BulkSMSController : AdminBaseController
         var res = await _bulkSmsService.UploadCustomersExcelFileAndSendSMS(model);
         if (res != null && res.Any())
         {
-            #region Send SMS  
-
-            foreach (var item in res)
-            {
-                var smstext = $"{item.Usernames} عزیز .{Environment.NewLine} {model.SMSText}";
-                await _smsService.SendSimpleSMS(item.UserMobiles, smstext);
-            }
-
-            #endregion
 
             TempData[SuccessMessage] = "پیامک برای لیست فروشندگان ارسال گردید.";
             return RedirectToAction(nameof(ListOFCustomerSentSMS));

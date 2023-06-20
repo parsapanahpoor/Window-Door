@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Window.Application.Convertors;
 using Window.Application.Interfaces;
 using Window.Application.Services.Implementation;
 using Window.Application.Services.Interfaces;
@@ -192,23 +193,28 @@ public class BulkSMSService : IBulkSMSService
                         var username = workSheet.Cells[row, 1].Value.ToString().Trim();
                         var mobile = workSheet.Cells[row, 2].Value.ToString().Trim();
 
-                        bulkSMS.Add(new AllBulkSMS()
+                        if (!await _context.AllBulkSMSs.AnyAsync(p => !p.IsDelete && p.Mobile == mobile))
                         {
-                            CreateDate = DateTime.Now,
-                            IsDelete = false,
-                            Username = username,
-                            Mobile = mobile,
-                            CountOfSentSMS = 0,
-                            IsUserRegistered = ((await _context.Users.AnyAsync(p => !p.IsDelete && p.Mobile == mobile)) ? true : false),
-                            LastestSMSSent = null,
-                        });
-
+                            bulkSMS.Add(new AllBulkSMS()
+                            {
+                                CreateDate = DateTime.Now,
+                                IsDelete = false,
+                                Username = username.Replace(" ",""),
+                                Mobile = mobile,
+                                CountOfSentSMS = 0,
+                                IsUserRegistered = ((await _context.Users.AnyAsync(p => !p.IsDelete && p.Mobile == mobile)) ? true : false),
+                                LastestSMSSent = null,
+                            });
+                        }
                     }
 
                     #region Add List To the Data Base
 
-                    await _context.AllBulkSMSs.AddRangeAsync(bulkSMS);
-                    await _context.SaveChangesAsync();
+                    if (bulkSMS != null && bulkSMS.Any())
+                    {
+                        await _context.AllBulkSMSs.AddRangeAsync(bulkSMS);
+                        await _context.SaveChangesAsync();
+                    }
 
                     #endregion
 
@@ -257,7 +263,9 @@ public class BulkSMSService : IBulkSMSService
 
         #region Send Verification Code SMS
 
-        var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={bulkSMS.Mobile}&token={bulkSMS.Username}&template=UserTanks";
+        string username = bulkSMS.Username.Trim();
+
+        var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={bulkSMS.Mobile}&token={username}&template=UserTanks";
         var results = client.GetStringAsync(result);
 
         #endregion
