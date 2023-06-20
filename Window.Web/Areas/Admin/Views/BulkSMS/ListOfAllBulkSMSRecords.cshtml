@@ -115,6 +115,9 @@
                                         </td>
 
                                         <td class="sorting_1">
+
+                                            <a asp-action="SendSMSForAllBulkSMS" asp-area="Admin" asp-controller="BulkSMS" asp-route-Id="@user.Id" class="btn btn-success btn-circle btn-xs"><i class="glyphicon glyphicon-check"></i></a>
+                                            <a asp-action="DeleteBulkSMSRecord" asp-area="Admin" asp-controller="BulkSMS" asp-route-id="@user.Id" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></a>
                                         </td>
 
                                     </tr>

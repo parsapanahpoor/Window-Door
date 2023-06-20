@@ -37,5 +37,8 @@ public interface IBulkSMSService
     //Send SMS For All Bulk SMS
     Task<bool> SendSMSForAllBulkSMS(ulong bulkSMSRecordeId);
 
+    //Delete Bulk SMS Record
+    Task<bool> DeleteBulkSMSRecord(ulong id);
+
     #endregion
 }

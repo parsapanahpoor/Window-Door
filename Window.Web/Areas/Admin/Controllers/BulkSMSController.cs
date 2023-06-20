@@ -191,6 +191,7 @@ public class BulkSMSController : AdminBaseController
 
 
     #endregion
+
     #region Send SMS Fro All Bulk SMS
 
     //Send SMS Fro All Bulk SMS
@@ -200,12 +201,31 @@ public class BulkSMSController : AdminBaseController
         if (res)
         {
 
-            TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+            TempData[SuccessMessage] = "پیامک شما با موفقیت ارسال گردید.";
             return RedirectToAction(nameof(ListOfAllBulkSMSRecords));
         }
 
         TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
-        return View(model);
+        return RedirectToAction(nameof(ListOfAllBulkSMSRecords));
+    }
+
+    #endregion
+
+    #region Delete Bulk SMS Record
+
+    //Delete Bulk SMS Record
+    public async Task<IActionResult> DeleteBulkSMSRecord(ulong id)
+    {
+        var res = await _bulkSmsService.DeleteBulkSMSRecord(id);
+        if (res)
+        {
+
+            TempData[SuccessMessage] = "پیامک شما با موفقیت ارسال گردید.";
+            return RedirectToAction(nameof(ListOfAllBulkSMSRecords));
+        }
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+        return RedirectToAction(nameof(ListOfAllBulkSMSRecords));
     }
 
     #endregion

@@ -1,6 +1,7 @@
 ﻿#region Usings
 
 using AngleSharp.Io;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using System;
@@ -260,6 +261,29 @@ public class BulkSMSService : IBulkSMSService
 
         var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={bulkSMS.Mobile}&token={bulkSMS.Username}&template=UserTanks";
         var results = client.GetStringAsync(result);
+
+        #endregion
+
+        return true;
+    }
+
+    //Delete Bulk SMS Record
+    public async Task<bool> DeleteBulkSMSRecord(ulong id)
+    {
+        #region Get Bulk SMS Record 
+
+        var bulkSMS = await _context.AllBulkSMSs
+                                    .FirstOrDefaultAsync(p => !p.IsDelete && p.Id == id);
+        if (bulkSMS == null) return false;
+
+        #endregion
+
+        #region Delete Record
+
+        bulkSMS.IsDelete = true;
+
+        _context.AllBulkSMSs.Update(bulkSMS);
+        await _context.SaveChangesAsync();
 
         #endregion
 
