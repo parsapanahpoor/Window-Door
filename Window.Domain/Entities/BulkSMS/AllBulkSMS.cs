@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Window.Domain.Entities.Common;
 
 namespace Window.Domain.Entities.BulkSMS;
 
 #endregion
 
-public sealed class AllBulkSMS
+public sealed class AllBulkSMS : BaseEntity
 {
 	#region Properties
 

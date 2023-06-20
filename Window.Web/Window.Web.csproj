@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Areas\Admin\Views\BulkSMS\UploadExcelFileJustForAddUsersRecords.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Areas\Admin\Views\BulkSMS\UploadExcelFileJustForAddUsersRecords.cshtml" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map" />
@@ -83,6 +88,14 @@
 	  <Folder Include="wwwroot\content\images\sellerInfo\main\" />
 	  <Folder Include="wwwroot\content\images\sellerInfo\thumb\" />
 	  <Folder Include="wwwroot\Landing\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Areas\Admin\Views\BulkSMS\UploadExcelFileJustForAddUsersRecords.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Areas\Admin\Views\BulkSMS\UploadExcelFileJustForAddUsersRecords.cshtml" />
 	</ItemGroup>
 	
 </Project>

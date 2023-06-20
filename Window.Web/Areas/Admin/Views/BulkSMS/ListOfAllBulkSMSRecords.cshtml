@@ -1,0 +1,139 @@
+﻿@model List<Window.Domain.Entities.BulkSMS.AllBulkSMS>
+
+@using Window.Application.Convertors
+@using Window.Application.Extensions
+
+@{
+    ViewData["Title"] = "لیست کاربران برای ارسال پیامک";
+}
+
+@section breadcrumb
+    {
+
+    <li class="active">@ViewData["Title"]</li>
+}
+
+@section Styles
+    {
+    <link href="/admin/css/dataTables.bootstrap.rtl.css" rel="stylesheet" />
+}
+
+@section Scripts
+    {
+    <script src="~/admin/js/datatable/jquery.dataTables.min.js"></script>
+    <script src="~/admin/js/datatable/ZeroClipboard.js"></script>
+    <script src="~/admin/js/datatable/dataTables.tableTools.min.js"></script>
+    <script src="~/admin/js/datatable/dataTables.bootstrap.min.js"></script>
+    <script src="~/admin/js/datatable/datatables-init.js"></script>
+    <script>
+        InitiateSimpleDataTable.init();
+        InitiateEditableDataTable.init();
+        InitiateExpandableDataTable.init();
+        InitiateSearchableDataTable.init();
+    </script>
+
+    }
+
+<div class="page-body">
+
+    <div class="row text-center mb-3">
+        <a asp-action="UploadExcelFileJustForAddUsersRecords" asp-area="Admin" asp-controller="BulkSMS" class="exlStyle btn btn-primary">آپلود فایل جدید  </a>
+    </div>
+
+    <div class="row">
+
+        <div id="horizontal-form">
+
+            @if (Model != null && Model.Any())
+            {
+
+                <div class="widget-body no-padding">
+                    <div id="searchable_wrapper" class="dataTables_wrapper form-inline">
+
+                        <table class="table table-bordered table-hover table-striped dataTable" id="searchable" role="grid" aria-describedby="searchable_info">
+                            <thead class="bordered-darkorange">
+                                <tr role="row">
+
+                                    <th class="sorting" tabindex="0" aria-controls="searchable" rowspan="1" colspan="1" aria-label="Rendering engine: activate to sort column ascending">شماره موبایل </th>
+                                    <th class="sorting" tabindex="0" aria-controls="searchable" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" aria-sort="ascending">نام و نام خانوادگی </th>
+                                    <th class="sorting" tabindex="0" aria-controls="searchable" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" aria-sort="ascending">تعداد پیامک ارسالی </th>
+                                    <th class="sorting" tabindex="0" aria-controls="searchable" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" aria-sort="ascending">وضعیت </th>
+                                    <th class="sorting" tabindex="0" aria-controls="searchable" rowspan="1" colspan="1" aria-label="Platform: activate to sort column ascending">تاریخ آخرین ارسال پیامک </th>
+                                    <th class="sorting" tabindex="0" aria-controls="searchable" rowspan="1" colspan="1" aria-label="Platform: activate to sort column ascending">ارسال پیامک </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var user in Model)
+                                {
+                                    <tr role="row" class="even responsive" remove-ajax-item="@user.Id">
+
+                                        <td class="center ">
+
+                                            @user.Mobile
+
+                                        </td>
+
+                                        <td class="center ">
+
+                                            @user.Username
+
+                                        </td>
+
+                                        <td class="center ">
+
+                                            @user.CountOfSentSMS
+
+                                        </td>
+
+                                        <td class="center ">
+
+                                            @if (user.IsUserRegistered)
+                                            {
+                                                <p class="badge badge-success">ثبت نام شده</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="badge badge-danger">ثبت نام نشده</p>
+                                            }
+
+                                        </td>
+
+                                        <td class="sorting_1">
+
+                                            @if (user.LastestSMSSent.HasValue)
+                                            {
+                                                <p class="badge badge-success">@user.LastestSMSSent.Value.ToShamsi()</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="badge badge-danger">پیامک ارسال نشده</p>
+                                            }
+
+                                        </td>
+
+                                        <td class="sorting_1">
+                                        </td>
+
+                                    </tr>
+
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <partial name="_AdminNotFoundPartial" />
+            }
+
+        </div>
+    </div>
+
+</div>
+
+

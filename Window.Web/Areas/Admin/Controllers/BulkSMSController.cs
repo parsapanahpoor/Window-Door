@@ -4,6 +4,7 @@ using AngleSharp.Io;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Razor.Language.Extensions;
+using SixLabors.ImageSharp.ColorSpaces;
 using Window.Application.Services.Interfaces;
 using Window.Application.StaticTools;
 using Window.Domain.ViewModels.Admin.BulkSMS;
@@ -14,16 +15,16 @@ namespace Window.Web.Areas.Admin.Controllers;
 
 public class BulkSMSController : AdminBaseController
 {
-	#region Ctor
+    #region Ctor
 
-	private readonly IBulkSMSService _bulkSmsService;
+    private readonly IBulkSMSService _bulkSmsService;
     private readonly ISMSService _smsService;
 
-	public BulkSMSController(IBulkSMSService bulkSMSService , ISMSService smsService)
-	{
-		_bulkSmsService= bulkSMSService;
-        _smsService= smsService;
-	}
+    public BulkSMSController(IBulkSMSService bulkSMSService, ISMSService smsService)
+    {
+        _bulkSmsService = bulkSMSService;
+        _smsService = smsService;
+    }
 
     #endregion
 
@@ -34,7 +35,7 @@ public class BulkSMSController : AdminBaseController
     [HttpGet]
     public async Task<IActionResult> ListOFSellerSentSMS()
     {
-        return View(await _bulkSmsService.ListOFSellerSentSMS());    
+        return View(await _bulkSmsService.ListOFSellerSentSMS());
     }
 
     #endregion
@@ -42,12 +43,12 @@ public class BulkSMSController : AdminBaseController
     #region Upload Excel File 
 
     [HttpGet]
-	public async Task<IActionResult> UploadExcelFile()
-	{
-		return View();
-	}
+    public async Task<IActionResult> UploadExcelFile()
+    {
+        return View();
+    }
 
-	[HttpPost]
+    [HttpPost]
     public async Task<IActionResult> UploadExcelFile(UploadExcelFileAdminSideViewModel model)
     {
         #region Model State Validation 
@@ -61,7 +62,7 @@ public class BulkSMSController : AdminBaseController
         #endregion
 
         var res = await _bulkSmsService.UploadSellersExcelFileAndSendSMS(model);
-        if (res != null )
+        if (res != null)
         {
             #region Send SMS  
 
@@ -145,7 +146,69 @@ public class BulkSMSController : AdminBaseController
 
     #region All Bulk SMS 
 
-   
+    #region List Of All Bulk SMS Records
+
+    //List Of All Bulk SMS Records
+    public async Task<IActionResult> ListOfAllBulkSMSRecords()
+    {
+        return View(await _bulkSmsService.ListOfAllBulkSMSRecords()) ;
+    }
+
+    #endregion
+
+    #region Upload Excel File 
+
+    [HttpGet]
+    public async Task<IActionResult> UploadExcelFileJustForAddUsersRecords()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UploadExcelFileJustForAddUsersRecords(UploadExcelFileForBulkSMSAdminSideViewModel model)
+    {
+        #region Model State Validation 
+
+        if (!ModelState.IsValid)
+        {
+            TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+            return View(model);
+        }
+
+        #endregion
+
+        var res = await _bulkSmsService.UploadExcelFileJustForAddUsersRecords(model);
+        if (res)
+        {
+
+            TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+            return RedirectToAction(nameof(ListOfAllBulkSMSRecords));
+        }
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+        return View(model);
+    }
+
+
+    #endregion
+    #region Send SMS Fro All Bulk SMS
+
+    //Send SMS Fro All Bulk SMS
+    public async Task<IActionResult> SendSMSForAllBulkSMS(ulong id)
+    {
+        var res = await _bulkSmsService.SendSMSForAllBulkSMS(id);
+        if (res)
+        {
+
+            TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+            return RedirectToAction(nameof(ListOfAllBulkSMSRecords));
+        }
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+        return View(model);
+    }
+
+    #endregion
 
     #endregion
 }

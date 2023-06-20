@@ -28,5 +28,14 @@ public interface IBulkSMSService
     //Upload Customer Excel File And Send SMS
     Task<List<BulkSMSResultViewModel>?> UploadCustomersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model);
 
+    //Upload Excel File Just For Add Users Records
+    Task<bool> UploadExcelFileJustForAddUsersRecords(UploadExcelFileForBulkSMSAdminSideViewModel model);
+
+    //List Of All Bulk SMS Records
+    Task<List<AllBulkSMS>> ListOfAllBulkSMSRecords();
+
+    //Send SMS For All Bulk SMS
+    Task<bool> SendSMSForAllBulkSMS(ulong bulkSMSRecordeId);
+
     #endregion
 }

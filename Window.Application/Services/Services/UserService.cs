@@ -40,7 +40,7 @@ namespace Window.Application.Services
         private readonly ISMSService _smsservice;
 
         public UserService(IConfiguration configuration, IUserRepository userRepository, IWalletService walletService, WindowDbContext context
-                                , IEmailSender emailSender , IViewRenderService viewRenderService, ISMSService smsservice)
+                                , IEmailSender emailSender, IViewRenderService viewRenderService, ISMSService smsservice)
         {
             _configuration = configuration;
             _userRepository = userRepository;
@@ -107,6 +107,20 @@ namespace Window.Application.Services
                 MobileActivationCode = new Random().Next(10000, 999999).ToString(),
                 ExpireMobileSMSDateTime = DateTime.Now
             };
+
+            if (await _context.AllBulkSMSs.AnyAsync(p => !p.IsDelete && p.Mobile == user.Mobile))
+            {
+                var allBulkSMS = await _context.AllBulkSMSs
+                                               .FirstOrDefaultAsync(p => !p.IsDelete && p.Mobile == user.Mobile);
+
+                if (allBulkSMS != null)
+                {
+                    allBulkSMS.IsUserRegistered = true;
+
+                    _context.AllBulkSMSs.Update(allBulkSMS);
+                    await _context.SaveChangesAsync();
+                }
+            }
 
             await _userRepository.CreateUser(user);
 
