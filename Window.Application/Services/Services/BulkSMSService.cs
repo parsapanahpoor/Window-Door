@@ -61,7 +61,7 @@ public class BulkSMSService : IBulkSMSService
     public async Task<List<BulkSMSResultViewModel>?> UploadSellersExcelFileAndSendSMS(UploadExcelFileAdminSideViewModel model)
     {
         List<BulkSMS> bulkSMS = new List<BulkSMS>();
-        List< BulkSMSResultViewModel > returnModel = new List<BulkSMSResultViewModel >();
+        List<BulkSMSResultViewModel> returnModel = new List<BulkSMSResultViewModel>();
 
         using (var stream = new MemoryStream())
         {
@@ -192,19 +192,17 @@ public class BulkSMSService : IBulkSMSService
                         var username = workSheet.Cells[row, 1].Value.ToString().Trim();
                         var mobile = workSheet.Cells[row, 2].Value.ToString().Trim();
 
-                        if (!await _context.Users.AnyAsync(p=> !p.IsDelete && p.Mobile == mobile))
+                        bulkSMS.Add(new AllBulkSMS()
                         {
-                            bulkSMS.Add(new AllBulkSMS()
-                            {
-                                CreateDate = DateTime.Now,
-                                IsDelete = false,
-                                Username = username,
-                                Mobile = mobile,
-                                CountOfSentSMS = 0,
-                                IsUserRegistered = false,
-                                LastestSMSSent = null,
-                            });
-                        }
+                            CreateDate = DateTime.Now,
+                            IsDelete = false,
+                            Username = username,
+                            Mobile = mobile,
+                            CountOfSentSMS = 0,
+                            IsUserRegistered = ((await _context.Users.AnyAsync(p => !p.IsDelete && p.Mobile == mobile)) ? true : false),
+                            LastestSMSSent = null,
+                        });
+
                     }
 
                     #region Add List To the Data Base
@@ -232,8 +230,8 @@ public class BulkSMSService : IBulkSMSService
     {
         return await _context.AllBulkSMSs
                              .AsNoTracking()
-                             .Where(p=> !p.IsDelete)
-                             .ToListAsync(); 
+                             .Where(p => !p.IsDelete)
+                             .ToListAsync();
     }
 
     //Send SMS For All Bulk SMS
