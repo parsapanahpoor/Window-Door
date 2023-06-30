@@ -506,7 +506,7 @@ public class InquryService : IInquiryService
                     ShopName = userInquiryResult.SellerShopName,
                     UserAvatar = user.UserAvatar,
                     UserName = user.Username,
-                    UserId = userId
+                    UserId = userInquiryResult.SellerUserId
                 };
 
                 model.Add(modelChilds);
@@ -515,7 +515,7 @@ public class InquryService : IInquiryService
 
         #endregion
 
-        return model;
+        return model.OrderByDescending(p=> p.Price).ToList();
     }
 
     //Initial Result Of User Inquiry

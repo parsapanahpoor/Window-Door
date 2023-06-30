@@ -138,10 +138,10 @@
                                 </h3>
                                 <div>
 
-                                    
-                                        <p>مرحله ی قرارداد کاربر : @user.RequestForContractStatus.GetEnumName() </p>
 
-                                        <br>
+                                    <p>مرحله ی قرارداد کاربر : @user.RequestForContractStatus.GetEnumName() </p>
+
+                                    <br>
 
                                     <p>
                                         @user.Description
@@ -186,6 +186,60 @@
                             @foreach (var sellerLinks in Model.MarketLinks)
                             {
                                 <a class="button border" target="_blank" href="@sellerLinks.LinkValue">@sellerLinks.LinkTitle </a>
+                            }
+                        }
+
+                    </div>
+                    <!-- Agent Widget / End -->
+
+                </div>
+
+                <div class="widget">
+
+                    <!-- Agent Widget -->
+                    <div class="agent-widget">
+                        <div class="agent-title">
+                            <div class="agent-details">
+                                <h4><a href="#">میانگین امتیازات این فروشنده</a></h4>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        @if (Model.Score != null)
+                        {
+                            if (Model.Score.TaAhodZamaneTahvil != null)
+                            {
+                                <div class="notification warning closeable">
+                                    <p>امتیاز تعهد زمان تحویل : @Model.Score.TaAhodZamaneTahvil از 5</p>
+                                </div>
+                            }
+
+                            if (Model.Score.KeyfiateKar != null)
+                            {
+                                <div class="notification warning closeable">
+                                    <p>امتیاز کیفیت کار : @Model.Score.KeyfiateKar از 5</p>
+                                </div>
+                            }
+
+                            if (Model.Score.SehateEtelaAt != null)
+                            {
+                                <div class="notification warning closeable">
+                                    <p>امتیاز صحت اطلاعات : @Model.Score.SehateEtelaAt از 5</p>
+                                </div>
+                            }
+
+                            if (Model.Score.KhadamatePasAzForosh != null)
+                            {
+                                <div class="notification warning closeable">
+                                    <p>امتیاز خدمات پس ازفروش : @Model.Score.KhadamatePasAzForosh از 5</p>
+                                </div>
+                            }
+
+                            if (Model.Score.PasokhGoie != null)
+                            {
+                                <div class="notification warning closeable">
+                                    <p>امتیاز پاسخ گویی : @Model.Score.PasokhGoie از 5</p>
+                                </div>
                             }
                         }
 

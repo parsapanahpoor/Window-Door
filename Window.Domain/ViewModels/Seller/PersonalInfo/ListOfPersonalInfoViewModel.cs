@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Market;
 using Window.Domain.Enums.SellerType;
+using Window.Domain.ViewModels.Site.Inquiry;
 
 namespace Window.Domain.ViewModels.Seller.PersonalInfo
 {
@@ -76,6 +77,8 @@ namespace Window.Domain.ViewModels.Seller.PersonalInfo
         public List<MarketChargeInfo?> MarketChargeInfos { get; set; }
 
         public SellerType SellerType { get; set; }
+
+        public AddScoreToTheSellerViewModel Score { get; set; }
 
         #endregion
     }

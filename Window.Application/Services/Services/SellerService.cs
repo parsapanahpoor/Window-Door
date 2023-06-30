@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -845,7 +846,7 @@ namespace Window.Application.Services.Services
 
             #endregion
 
-            return true; 
+            return true;
         }
 
         public async Task<ListOfPersonalInfoViewModel> FillListOfPersonalInfoViewModel(ulong userId)
@@ -906,6 +907,91 @@ namespace Window.Application.Services.Services
                                        }).ToListAsync();
 
             model.MarketChargeInfos = await _context.MarketChargeInfo.Where(p => !p.IsDelete && p.UserId == userId).ToListAsync();
+
+            #region Initial Scores
+
+            AddScoreToTheSellerViewModel score = new AddScoreToTheSellerViewModel();
+
+            #region Keyfiate Kar
+
+            var sellerScores = await _context.ScoreForMarkets
+                                       .AsNoTracking()
+                                       .Where(p => !p.IsDelete && p.UserId == userId)
+                                       .ToListAsync();
+
+            if (sellerScores != null && sellerScores.Any())
+            {
+                var sum = sellerScores.Sum(p => p.Score);
+                var count = sellerScores.Count();
+                int res = sum / count;
+
+                score.KeyfiateKar = res;
+            }
+
+            #endregion
+
+            #region sehat
+
+            var sehat = await _context.SehateEtelaAt
+                                                .AsNoTracking()
+                                                .Where(p => !p.IsDelete && p.UserId == userId)
+                                                .ToListAsync();
+
+            if (sehat != null && sehat.Any())
+            {
+                score.SehateEtelaAt = sehat.Sum(p => p.Score) / sehat.Count();
+            }
+
+            #endregion
+
+            #region pasazForosh
+
+            var pasazForosh = await _context.KhadamatePasAzForosh
+                                                       .AsNoTracking()
+                                                       .Where(p => !p.IsDelete && p.UserId == userId)
+                                                       .ToListAsync();
+
+            if (pasazForosh != null && pasazForosh.Any())
+            {
+                score.KhadamatePasAzForosh = pasazForosh.Sum(p => p.Score) / pasazForosh.Count();
+            }
+
+            #endregion
+
+            #region pasokh Goie
+
+            var pasokhGoie = await _context.PasokhGoie
+                                         .AsNoTracking()
+                                         .Where(p => !p.IsDelete && p.UserId == userId)
+                                         .ToListAsync();
+
+            if (pasokhGoie != null && pasokhGoie.Any())
+            {
+                score.PasokhGoie = pasokhGoie.Sum(p => p.Score) / pasokhGoie.Count();
+            }
+
+            #endregion
+
+            #region taAhode Zaman
+
+            var taAhodeZaman = await _context.TaAhodeZamaneTahvil
+                                                      .AsNoTracking()
+                                                      .Where(p => !p.IsDelete && p.UserId == userId)
+                                                      .ToListAsync();
+
+            if (taAhodeZaman != null && taAhodeZaman.Any())
+            {
+                score.TaAhodZamaneTahvil = taAhodeZaman.Sum(p => p.Score) / taAhodeZaman.Count();
+            }
+
+            #endregion
+
+            if (score != null)
+            {
+                model.Score = score;
+            }
+
+            #endregion
 
             #endregion
 
@@ -1252,11 +1338,11 @@ namespace Window.Application.Services.Services
 
         public async Task<List<MarketPersonalInfo>?> WaitingForAcceptSellerPErsonalInfos()
         {
-            return await  _context.MarketPersonalInfo
+            return await _context.MarketPersonalInfo
                 .Include(u => u.User)
                 .Include(p => p.Market)
-                .Where(p => !p.IsDelete&& p.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForConfirmPersonalInformations)
-                .OrderByDescending(p => p.CreateDate )
+                .Where(p => !p.IsDelete && p.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForConfirmPersonalInformations)
+                .OrderByDescending(p => p.CreateDate)
                 .ToListAsync();
         }
 
@@ -1686,7 +1772,7 @@ namespace Window.Application.Services.Services
                 var listOfInquiryTariff = await _context.SiteSettings
                                                         .AsNoTracking()
                                                         .Where(p => !p.IsDelete)
-                                                        .Select(p=> p.ChargeTariffAboutListOfInquiry)
+                                                        .Select(p => p.ChargeTariffAboutListOfInquiry)
                                                         .FirstOrDefaultAsync();
                 if (listOfInquiryTariff != 0)
                 {
