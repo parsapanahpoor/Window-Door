@@ -52,11 +52,11 @@ namespace CRM.Web.Areas.Admin.ViewComponents
         {
             #region Get User Ip Address
 
-            string Ip = User.GetUserId().ToString();
+            string Ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
 
             #endregion
 
-            ViewBag.UserMacAddress = User.GetUserId();
+            ViewBag.UserMacAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
 
             var res = await _inquiryService.GetUserLastestInquiryDetailForChange(Ip);
             return View("NewChatBar", res);

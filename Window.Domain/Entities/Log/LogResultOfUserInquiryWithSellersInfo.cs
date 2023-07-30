@@ -10,7 +10,7 @@ public sealed class LogResultOfUserInquiryWithSellersInfo : BaseEntity
 {
 	#region properties
 
-	public ulong UserId { get; set; }
+	public string UserId { get; set; }
 
 	public ulong LogInquiryForUserId { get; set; }
 

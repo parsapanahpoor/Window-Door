@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stimulsoft.Blockly.Model;
 using System.Net;
 using Window.Application.Extensions;
 using Window.Application.Interfaces;
@@ -74,20 +75,19 @@ public class InquiryProductController : SiteBaseController
 
     #region Test For Step 2
 
-    [Authorize]
     [HttpGet]
     public async Task<IActionResult> InquiryStep2(ulong StateId, ulong CityId, ProductType? ProductType, ProductKind? ProductKind, SellerType SellerType, ulong? GlassId)
     {
         #region Check That If User Is Seller
 
-        if (await _sellerService.IsExistAnySellerInfo(User.GetUserId()))
-        {
-            if (!await _userService.CheckThatIsUserAdminOrNot(User.GetUserId()))
-            {
-                TempData[WarningMessage] = "فروشندگان دسترسی به استعلام گیری تدارند.";
-                return RedirectToAction(nameof(InquiryStep1));
-            }
-        }
+        //if (await _sellerService.IsExistAnySellerInfo(User.GetUserId()))
+        //{
+        //    if (!await _userService.CheckThatIsUserAdminOrNot(User.GetUserId()))
+        //    {
+        //        TempData[WarningMessage] = "فروشندگان دسترسی به استعلام گیری تدارند.";
+        //        return RedirectToAction(nameof(InquiryStep1));
+        //    }
+        //}
 
         #endregion
 
@@ -108,7 +108,7 @@ public class InquiryProductController : SiteBaseController
             CountryId = 1,
             StateId = StateId,
             CityId = CityId,
-            UserMacAddress = User.GetUserId().ToString(),
+            UserMacAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString(),
             SellerType = SellerType,
             GlassId = GlassId
         };
@@ -121,7 +121,7 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
-        ViewBag.UserMacAddress = User.GetUserId().ToString();
+        ViewBag.UserMacAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
 
         return View(await _brandService.ShowListOFBrandsByBrandType(SellerType));
     }
@@ -131,12 +131,11 @@ public class InquiryProductController : SiteBaseController
     #region Inquiry Step 3
 
     [HttpGet]
-    [Authorize]
     public async Task<IActionResult> InquiryStep3(ulong? brandId)
     {
         #region Get Samples For Show In Page Model
 
-        var samples = await _sampleService.GetListOfSamplesForShowInAPI(User.GetUserId().ToString());
+        var samples = await _sampleService.GetListOfSamplesForShowInAPI(Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString());
         if (samples == null || !samples.Any())
         {
             TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
@@ -149,20 +148,19 @@ public class InquiryProductController : SiteBaseController
 
         if (brandId.HasValue)
         {
-            await _inquiryService.UpdateLogUserInquiryRequest(User.GetUserId().ToString(), brandId.Value);
+            await _inquiryService.UpdateLogUserInquiryRequest(Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString(), brandId.Value);
         }
 
         #endregion
 
-        ViewBag.UserMacAddress = User.GetUserId().ToString();
+        ViewBag.UserMacAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
 
-        var CountOfVerifySample = await _inquiryService.CheckLogResultUserInquiry(User.GetUserId().ToString());
+        var CountOfVerifySample = await _inquiryService.CheckLogResultUserInquiry(Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString());
         ViewBag.CountOfVerifySample = 5 - CountOfVerifySample;
 
         return View(samples);
     }
 
-    [Authorize]
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> InquiryStep3(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string userMacAddress)
     {
@@ -198,7 +196,7 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
-        var CountOfVerifySample = await _inquiryService.CheckLogResultUserInquiry(User.GetUserId().ToString());
+        var CountOfVerifySample = await _inquiryService.CheckLogResultUserInquiry(Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString());
         ViewBag.CountOfVerifySample = 5 - CountOfVerifySample;
 
         //Check User Inquiry Log Count 
@@ -210,7 +208,7 @@ public class InquiryProductController : SiteBaseController
 
         #region Add Log For User
 
-        var res = await _inquiryService.InitialResultOfUserInquiry(sampleId, width, height, SampleCount, katibeSize, User.GetUserId(), userMacAddress);
+        var res = await _inquiryService.InitialResultOfUserInquiry(sampleId, width, height, SampleCount, katibeSize, Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString(), userMacAddress);
         if (!res) return NotFound();
 
         #endregion
@@ -226,14 +224,13 @@ public class InquiryProductController : SiteBaseController
 
     #region Inquiry Step 4 (proccess inquiry)
 
-    [Authorize]
     public async Task<IActionResult> InquiryStep4(string userMacAddress, int? orderByPrice)
     {
-        userMacAddress = User.GetUserId().ToString();
+        userMacAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
 
         #region Fill Model
 
-        var model = await _inquiryService.ListOfInquiry(userMacAddress, User.GetUserId());
+        var model = await _inquiryService.ListOfInquiry(userMacAddress, Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString());
         if (model == null || !model.Any())
         {
             TempData[ErrorMessage] = "نتیجه ای برای استعلام شما یافت نشده است .";

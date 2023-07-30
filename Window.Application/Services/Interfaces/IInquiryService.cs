@@ -31,10 +31,10 @@ public interface IInquiryService
     //Log Inquiry For User In Step 2
     Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height, int? KatibeSize, string userMacAddress, int productCount);
 
-    Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress , ulong userId);
+    Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress , string userId);
 
     //Initial Result Of User Inquiry
-    Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, ulong UserId, string userMacAddress);
+    Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string UserId, string userMacAddress);
 
     Task<double?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, int productCount , int? katibeSizes, ulong userId , ulong glassId);
 

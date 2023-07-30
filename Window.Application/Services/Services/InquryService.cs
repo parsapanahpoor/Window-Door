@@ -39,10 +39,10 @@ public class InquryService : IInquiryService
     #region Site Side 
 
     //Update Log User Inquiry Request
-    public async Task UpdateLogUserInquiryRequest(string userMacAddress , ulong brandId)
+    public async Task UpdateLogUserInquiryRequest(string userMacAddress, ulong brandId)
     {
         //Get Brand 
-        var brand = await _context.LogInquiryForUsers.FirstOrDefaultAsync(p=> !p.IsDelete && p.UserMAcAddress == userMacAddress);
+        var brand = await _context.LogInquiryForUsers.FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
 
         if (brand is not null)
         {
@@ -75,9 +75,9 @@ public class InquryService : IInquiryService
     {
         #region Check That Current User Has Any Inquiry OR Not 
 
-        var inquiry = await _context.LogInquiryForUsers
-                                    .AsNoTracking()
-                                    .FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == filter.UserMacAddress);
+            var inquiry = await _context.LogInquiryForUsers
+                                            .AsNoTracking()
+                                            .FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == filter.UserMacAddress);
 
         #endregion
 
@@ -455,7 +455,7 @@ public class InquryService : IInquiryService
         return score;
     }
 
-    public async Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress, ulong userId)
+    public async Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress, string userId)
     {
         #region Get User log
 
@@ -479,8 +479,8 @@ public class InquryService : IInquiryService
 
                 var brand = await _context.MainBrands
                                                .AsNoTracking()
-                                               .Where(p=> !p.IsDelete && p.Id == userInquiryResult.BrandId)
-                                               .Select(p=> new brandInquiryViewModel()
+                                               .Where(p => !p.IsDelete && p.Id == userInquiryResult.BrandId)
+                                               .Select(p => new brandInquiryViewModel()
                                                {
                                                    brandName = p.BrandName,
                                                    BreandLogo = p.BrandLogo
@@ -489,8 +489,8 @@ public class InquryService : IInquiryService
 
                 var user = await _context.Users
                                                .AsNoTracking()
-                                               .Where(p=> !p.IsDelete && p.Id == userInquiryResult.SellerUserId)
-                                               .Select(p=> new UserInquiryViewModel()
+                                               .Where(p => !p.IsDelete && p.Id == userInquiryResult.SellerUserId)
+                                               .Select(p => new UserInquiryViewModel()
                                                {
                                                    UserAvatar = p.Avatar,
                                                    Username = p.Username,
@@ -500,7 +500,7 @@ public class InquryService : IInquiryService
                 InquiryViewModel modelChilds = new InquiryViewModel()
                 {
                     BrandImage = brand.BreandLogo,
-                    BrandName =  brand.brandName,
+                    BrandName = brand.brandName,
                     Price = userInquiryResult.Price,
                     Score = userInquiryResult.SellerScore,
                     ShopName = userInquiryResult.SellerShopName,
@@ -515,11 +515,11 @@ public class InquryService : IInquiryService
 
         #endregion
 
-        return model.OrderByDescending(p=> p.Price).ToList();
+        return model.OrderByDescending(p => p.Price).ToList();
     }
 
     //Initial Result Of User Inquiry
-    public async Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, ulong UserId, string userMacAddress)
+    public async Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string UserId, string userMacAddress)
     {
         #region Get User Log By User Mac Address
 
@@ -644,10 +644,10 @@ public class InquryService : IInquiryService
                                                            .FirstOrDefaultAsync(),
                             SellerUserId = sellerUserId,
                             UserId = UserId,
-                            SellerScore = await _context.CalculatedSellersScores    
+                            SellerScore = await _context.CalculatedSellersScores
                                                         .AsNoTracking()
-                                                        .Where(p=> !p.IsDelete && p.UserSellerId == sellerUserId)
-                                                        .Select(p=> p.CalculatedScore)
+                                                        .Where(p => !p.IsDelete && p.UserSellerId == sellerUserId)
+                                                        .Select(p => p.CalculatedScore)
                                                         .FirstOrDefaultAsync(),
                             Price = inquiryPrice.Value,
                         };
@@ -4388,7 +4388,7 @@ public class InquryService : IInquiryService
             await _context.CalculatedSellersScores.AddAsync(calScore);
             await _context.SaveChangesAsync();
         }
-        else 
+        else
         {
             calculatedScore.CalculatedScore = score;
 
