@@ -1,0 +1,77 @@
+// 20220525120549
+// https://finder.createx.studio/json/map-options-city-guide.json
+
+{
+  "mapLayer": "https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=5vRQzd34MMsINEyeKPIs",
+  "scrollWheelZoom": false,
+  "coordinates": [
+    52.43,
+    13.405
+  ],
+  "zoom": 12,
+  "markers": [
+    {
+      "coordinates": [
+        52.52,
+        13.407
+      ],
+      "iconUrl": "img/map/marker-accomodation.png",
+      "className": "custom-marker-icon",
+      "popup": "<a href='city-guide-single.html' class='d-block'><img src='img/city-guide/catalog/02.jpg' alt='Image'></a><div class='card-body'><h5 class='card-title fs-base'><a href='city-guide-single.html' class='nav-link'>Grand Resort & Spa</a></h5><div class='d-flex align-items-center mb-2'><div class='star-rating mt-n1 me-2'><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-half active'></i></div><span class='fs-xs'><strong>4.6</strong> <span class='text-muted'>(43)</span></span></div><div class='mb-2'><i class='fi-map-pin text-muted fs-sm mt-n1 me-1'></i>Ollenhauer Str. 29, 10118, Berlin</div><div><i class='fi-credit-card text-muted fs-sm mt-n1 me-1'></i>$$$</div></div>"
+    },
+    {
+      "coordinates": [
+        52.51,
+        13.36
+      ],
+      "iconUrl": "img/map/marker-fitness.png",
+      "className": "custom-marker-icon",
+      "popup": "<a href='city-guide-single.html' class='d-block'><img src='img/city-guide/catalog/16.jpg' alt='Image'></a><div class='card-body'><h5 class='card-title fs-base'><a href='city-guide-single.html' class='nav-link'>Power Fitness Club</a></h5><div class='d-flex align-items-center mb-2'><div class='star-rating mt-n1 me-2'><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star'></i></div><span class='fs-xs'><strong>4.2</strong> <span class='text-muted'>(317)</span></span></div><div class='mb-2'><i class='fi-map-pin text-muted fs-sm mt-n1 me-1'></i>Genslerstraße 84, 10118, Berlin</div><div><i class='fi-credit-card text-muted fs-sm mt-n1 me-1'></i>$$</div></div>"
+    },
+    {
+      "coordinates": [
+        52.528,
+        13.37
+      ],
+      "iconUrl": "img/map/marker-cafe.png",
+      "className": "custom-marker-icon",
+      "popup": "<a href='city-guide-single.html' class='d-block'><img src='img/city-guide/catalog/17.jpg' alt='Image'></a><div class='card-body'><h5 class='card-title fs-base'><a href='city-guide-single.html' class='nav-link'>ClubFood Restaurant & Bar</a></h5><div class='d-flex align-items-center mb-2'><div class='star-rating mt-n1 me-2'><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-half active'></i></div><span class='fs-xs'><strong>4.7</strong> <span class='text-muted'>(239)</span></span></div><div class='mb-2'><i class='fi-map-pin text-muted fs-sm mt-n1 me-1'></i>Antwerpener str. 47, 13253, Berlin</div><div><i class='fi-credit-card text-muted fs-sm mt-n1 me-1'></i>$$</div></div>"
+    },
+    {
+      "coordinates": [
+        52.525,
+        13.45
+      ],
+      "iconUrl": "img/map/marker-nightlife.png",
+      "className": "custom-marker-icon",
+      "popup": "<a href='city-guide-single.html' class='d-block'><img src='img/city-guide/catalog/18.jpg' alt='Image'></a><div class='card-body'><h5 class='card-title fs-base'><a href='city-guide-single.html' class='nav-link'>Egoist Night Club & Bar</a></h5><div class='d-flex align-items-center mb-2'><div class='star-rating mt-n1 me-2'><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-half active'></i></div><span class='fs-xs'><strong>4.7</strong> <span class='text-muted'>(239)</span></span></div><div class='mb-2'><i class='fi-map-pin text-muted fs-sm mt-n1 me-1'></i>Antwerpener str. 47, 13253, Berlin</div><div><i class='fi-credit-card text-muted fs-sm mt-n1 me-1'></i>$$</div></div>"
+    },
+    {
+      "coordinates": [
+        52.503,
+        13.425
+      ],
+      "iconUrl": "img/map/marker-meds.png",
+      "className": "custom-marker-icon",
+      "popup": "<a href='city-guide-single.html' class='d-block'><img src='img/city-guide/catalog/19.jpg' alt='Image'></a><div class='card-body'><h5 class='card-title fs-base'><a href='city-guide-single.html' class='nav-link'>Fair Meds Pharmacy</a></h5><div class='d-flex align-items-center mb-2'><div class='star-rating mt-n1 me-2'><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i></div><span class='fs-xs'><strong>4.9</strong> <span class='text-muted'>(561)</span></span></div><div class='mb-2'><i class='fi-map-pin text-muted fs-sm mt-n1 me-1'></i>Lansstraße 81, D-11179, Berlin</div><div><i class='fi-credit-card text-muted fs-sm mt-n1 me-1'></i>$</div></div>"
+    },
+    {
+      "coordinates": [
+        52.54,
+        13.403
+      ],
+      "iconUrl": "img/map/marker-shopping.png",
+      "className": "custom-marker-icon",
+      "popup": "<a href='city-guide-single.html' class='d-block'><img src='img/city-guide/catalog/20.jpg' alt='Image'></a><div class='card-body'><h5 class='card-title fs-base'><a href='city-guide-single.html' class='nav-link'>Fetishist Shopping Mall</a></h5><div class='d-flex align-items-center mb-2'><div class='star-rating mt-n1 me-2'><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-half active'></i></div><span class='fs-xs'><strong>4.3</strong> <span class='text-muted'>(1274)</span></span></div><div class='mb-2'><i class='fi-map-pin text-muted fs-sm mt-n1 me-1'></i>Mellingburgredder 3, 13250, Berlin</div><div><i class='fi-credit-card text-muted fs-sm mt-n1 me-1'></i>$$</div></div>"
+    },
+    {
+      "coordinates": [
+        52.495,
+        13.39
+      ],
+      "iconUrl": "img/map/marker-museum.png",
+      "className": "custom-marker-icon",
+      "popup": "<a href='city-guide-single.html' class='d-block'><img src='img/city-guide/catalog/21.jpg' alt='Image'></a><div class='card-body'><h5 class='card-title fs-base'><a href='city-guide-single.html' class='nav-link'>Art & Culture Museum</a></h5><div class='d-flex align-items-center mb-2'><div class='star-rating mt-n1 me-2'><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i><i class='star-rating-icon fi-star-filled active'></i></div><span class='fs-xs'><strong>4.9</strong> <span class='text-muted'>(943)</span></span></div><div class='mb-2'><i class='fi-map-pin text-muted fs-sm mt-n1 me-1'></i>Lansstraße 105, D-11179, Berlin</div><div><i class='fi-credit-card text-muted fs-sm mt-n1 me-1'></i>$</div></div>"
+    }
+  ]
+}

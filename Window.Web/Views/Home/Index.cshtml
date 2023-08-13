@@ -1,314 +1,90 @@
 ﻿@{
-    Layout = null;
 }
-<!DOCTYPE HTML>
-<html lang="en-US">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>پنجره یاب |مرجع رسمی قیمت گذاری درب و پنجره</title>
-    <!-- Modernizr -->
-    <!-- <script src="/Landing/js/modernizr.js"></script> -->
-    <!-- Open Sans from Google Webfonts -->
-    <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'> -->
-    <!-- Main styles file -->
-    <link rel="shortcut icon" href="/admin/img/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="/Landing/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/Landing/css/styles.css" />
-    <link rel="stylesheet" href="/Landing/css/component.css" />
-    <!-- Icons via Font Awesome -->
-    <link rel="stylesheet" href="/Landing/css/font-awesome.min.css" />
 
-    @*Manifest*@
-    <link rel="manifest" href="~/Site/Manifest/manifest.json">
 
-    <!-- #94151D,#EF394E -->
-    <style>
-        @@media(min-width:1000px) {
-            .cs-style-4 li {
-                height: inherit;
-                width: 230px;
-            }
-        }
-
-        @@media(max-width:400px) {
-            h1 {
-                margin-top: -40px;
-            }
-        }
-
-        @@media(max-width:500px) {
-            h1 {
-                margin-top: 20px;
-            }
-        }
-
-        @@media(max-width:500px) {
-            .col-500 {
-                width: 320px !important;
-                height: 320px !important;
-            }
-
-            .col-501 {
-                width: 150px !important;
-                height: 150px !important;
-            }
-
-            .row {
-                margin: 0 auto;
-            }
-
-            .container {
-                width: auto;
-                margin-left: 0px !important;
-                margin-right: 0px !important;
-                padding-right: 0px;
-                padding-left: 0px;
-            }
-
-            .res_small {
-                display: none;
-            }
-
-            .res_h1 {
-                font-size: 16px;
-            }
-
-            .cs-style-4 figcaption a {
-                bottom: 2.9em !important;
-                right: 0 !important;
-                font-size: 10px !important;
-            }
-
-            .grid figcaption a {
-                padding: 5px 5.3px !important;
-                border-radius: 2px !important;
-            }
-
-            footer {
-                right: 0%;
-            }
-        }
-
-        @@media (min-width:501px) and (max-width:520px) {
-            h1 {
-                margin-top: 44px;
-            }
-
-            .row {
-                margin: 0 9px;
-            }
-
-            .col-520 {
-                width: 250px !important;
-                height: 250px !important;
-            }
-
-            .col-521 {
-                width: 110px !important;
-                height: 110px !important;
-            }
-        }
-
-        @@media (min-width:992px) and (max-width:1036px) {
-            .row-respansiv {
-                margin: 0 190px;
-            }
-
-            .traz {
-                margin: 0 74px;
-                transform: translate(0px, 0px);
-            }
-        }
-    </style>
-</head>
-<body class="color-scheme-sky">
-    <!-- Animated background -->
-    <canvas id="bg-canvas"></canvas>
-    <!--  -->
-    <!-- First screen -->
-    <div class="splash">
-        <div class="centered-unit">
-            <div class="container">
-                <!-- Main header -->
-                <h1 class="title_header">پنجره یاب</h1>
-                <!-- Sub header -->
-                <p class="lead"> مرجع قیمت گذاری درب و پنجره در ایران</p>
-                <div class="row row-respansiv over-hidden">
-                    <ul class="grid cs-style-4">
-                        <li class="col-md-3 col-sm-6 col-500 col-520">
-                            <figure>
-                                <div>
-                                    <a asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct">
-                                        <img src="/Landing/images/1.jpg" alt="image 1">
-                                    </a>
-                                </div>
-                                <!--<figcaption>
-                                  <h1>استعلام رایگان</h1>
-                                  <small>توی چند ثانیه هر درب و پنجره ای بخای استعلام میگیری</small>
-                                  <a href="#">کلیک کن</a>
-                                </figcaption>-->
-                                <a asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct"> <h4 class="res_h1">استعلام رایگان</h4>  </a>
-
-                            </figure>
-                        </li>
-
-                        <li class="col-md-3 col-sm-6 col-501 col-521">
-                            <figure>
-                                <div>
-                                    <a asp-action="ListOfTechnicalIssuse" asp-area="" asp-controller="TechnicalIssues">
-                                        <img src="/Landing/images/2.jpg" alt="image 2">
-                                    </a>
-                                </div>
-                                <!-- <figcaption>
-                                  <h1 class="res_h1">تضمین در خرید</h1>
-                                  <small class="res_small">انتخاب کن، تضمین با ما</small>
-                                  <a href="#">کلیک کن</a>
-                                </figcaption> -->
-                            </figure>
-                            <a asp-action="ListOfTechnicalIssuse" asp-area="" asp-controller="TechnicalIssues"> <h4 class="res_h1">تضمین در خرید</h4></a>
-                        </li>
-
-                        <li class="col-md-3 col-sm-6 col-501 col-521">
-
-                            <figure>
-                                <div>
-                                    <a asp-action="ListOfConsultant" asp-area="" asp-controller="Consultant">
-                                        <img src="/Landing/images/3.jpg" alt="image 3">
-                                    </a>
-                                </div>
-                                <!--<figcaption>
-                                   <h1 class="res_h1">مشاور رایگان</h1>
-                                   <small class="res_small">پشتیبان های ما توی انتخاب درست بهت کمک میکنند</small>
-                                   <a href="#">کلیک کن</a>
-                                 </figcaption>-->
-                            </figure>
-                            <a asp-action="ListOfConsultant" asp-area="" asp-controller="Consultant"><h4 class="res_h1">مشاوره رایگان</h4></a>
-                        </li>
-
-                        <li class="col-md-3 col-sm-6 col-501 col-521">
-                            <figure>
-                                <div>
-                                    <a asp-action="ListOfArticles" asp-area="" asp-controller="Article">
-                                        <img src="/Landing/images/4.jpg" alt="image 3">
-                                    </a>
-                                </div>
-                                <!--<figcaption>
-                                  <h1 class="res_h1">مسائل درب و پنجره</h1>
-                                  <small class="res_small">مقالات ما بهت توی انتخاب کمک میکنند</small>
-                                  <a href="#">کلیک کن</a>
-                                </figcaption>-->
-                            </figure>
-                            <a asp-action="ListOfArticles" asp-area="" asp-controller="Article"><h4 class="res_h1">نماها و پنجره های خاص</h4></a>
-                        </li>
-                    </ul>
+<!-- Hero-->
+<section class="container-fluid my-5 pt-5 pb-lg-4 px-xxl-4">
+    <div class="jarallax card align-items-center justify-content-center border-0 p-md-5 p-4 bg-secondary overflow-hidden mt-n3" style="min-height: 65vh; background-image: url(/FinderSample/img/real-estate/hero-image-v2.jpg);" data-jarallax data-speed="0.5">
+        <span class="img-overlay opacity-40"></span>
+        <div class="content-overlay" style="max-width: 856px;">
+            <h1 class="display-5 mb-5 pb-md-3 px-md-3 text-white text-center">راه آسان برای پیدا کردن یک ملک مناسب</h1>
+            <form class="form-group d-block">
+                <div class="row g-0">
+                    <div class="col-md-10 d-sm-flex align-items-center">
+                        <div class="dropdown w-sm-50 border-end-sm" data-bs-toggle="select">
+                            <button class="btn btn-lg btn-link dropdown-toggle ps-2 ps-sm-3" type="button" data-bs-toggle="dropdown"><i class="fi-home me-2"></i><span class="dropdown-toggle-label">اجاره</span></button>
+                            <input type="hidden">
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#"><span class="dropdown-item-label">اجاره</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span class="dropdown-item-label">فروش</span></a></li>
+                            </ul>
+                        </div>
+                        <hr class="d-sm-none my-2">
+                        <div class="dropdown w-sm-50 border-end-sm" data-bs-toggle="select">
+                            <button class="btn btn-lg btn-link dropdown-toggle ps-2 ps-sm-3" type="button" data-bs-toggle="dropdown"><i class="fi-map-pin me-2"></i><span class="dropdown-toggle-label">موقعیت</span></button>
+                            <input type="hidden">
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#"><span class="dropdown-item-label">خانه</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span class="dropdown-item-label">آپارتمان</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span class="dropdown-item-label">تجاری و اداری</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span class="dropdown-item-label">سوئیت</span></a></li>
+                            </ul>
+                        </div>
+                        <hr class="d-sm-none my-2">
+                        <div class="dropdown w-sm-50" data-bs-toggle="select">
+                            <button class="btn btn-lg btn-link dropdown-toggle ps-2 ps-sm-3" type="button" data-bs-toggle="dropdown"><i class="fi-list me-2"></i><span class="dropdown-toggle-label">نوع ملک</span></button>
+                            <input type="hidden">
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#"><span class="dropdown-item-label">خانه</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span class="dropdown-item-label">آپارتمان</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span class="dropdown-item-label">تجاری و اداری</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span class="dropdown-item-label">سوئیت</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span class="dropdown-item-label">زمین</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr class="d-md-none mt-2">
+                    <div class="col-md-2 d-sm-flex align-items-center pt-3 pt-md-0">
+                        <button class="btn btn-lg btn-icon btn-primary px-3 w-100" type="button">جستجو</button>
+                    </div>
                 </div>
-                <div class="row over-hidden traz">
-                    <ul class="grid cs-style-4">
-                        <li class="col-md-4 col-sm-6 col-501 col-521">
-                            <figure>
-                                <div>
-                                    <a asp-action="ListOfQuestionAndAnswers" asp-area="" asp-controller="QA">
-                                        <img src="/Landing/images/5.jpg" alt="image 1">
-                                    </a>
-                                </div>
-                                <!--<figcaption>
-                                  <h1 class="res_h1">سوالات متداول</h1>
-                                  <small class="res_small">به سوالات ذهنی ات پاسخ دادیم</small>
-                                  <a href="#">کلیک کن</a>
-                                </figcaption>-->
-                            </figure>
-                            <a asp-action="ListOfQuestionAndAnswers" asp-area="" asp-controller="QA"><h4 class="res_h1">سوالات متداول</h4></a>
-                        </li>
-
-                        <li class="col-md-4 col-sm-6 col-501 col-521">
-                            <figure>
-                                <div><img src="/Landing/images/6.jpg" alt="image 2"></div>
-                                <!-- <figcaption>
-                                  <h1 class="res_h1">باشگاه مشتریان</h1>
-                                  <small class="res_small">بهت میگیم کی بهمون ملحق بشی:)</small>
-                                  <a href="#">به زودی</a>
-                                </figcaption> -->
-                            </figure>
-                            <h4 class="res_h1">باشگاه مشتریان</h4>
-                        </li>
-
-                        <li class="col-md-4 col-sm-6 col-501 col-521">
-                            <figure>
-                                <div><img src="/Landing/images/7.jpg" alt="image 3"></div>
-                                <!-- <figcaption>
-                                  <h1 class="res_h1">فروشگاه</h1>
-                                  <small class="res_small">هر درب و پنجره ای که بخای برات میاریم</small>
-                                  <a href="#">به زودی</a>
-                                </figcaption> -->
-                            </figure>
-                            <h4 class="res_h1">فروشگاه</h4>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <footer class="footer" style="margin-bottom:30px;margin-top:30px">
-                <a href="https://www.fara-zaman.ir" class="footer-link" target="_blank">طراحی و توسعه توسط شرکت برنامه نویسی فـــرا زَمـــان</a>
-            </footer>
-
-                 <footer class="footer" style="margin-bottom:20px">
-           <a asp-action="TermsConditions" asp-area="" asp-controller="Home" class="footer-link mt-2 mb-2" >قوانین و مقررات و حریم خصوصی </a>
-            </footer>   
+            </form>
         </div>
-
     </div>
+</section>
 
-
-    <!-- JavaScripts -->
-    <script src="/Landing/js/jquery.js"></script>
-    <!-- <script src="/Landing/js/countdown.js"></script> -->
-    <script src="/Landing/js/bezierCanvas.js"></script>
-    <script src="/Landing/js/notifyMe.js"></script>
-    <script src="/Landing/js/modernizr.custom.js"></script>
-
-    @*PWA Downloader Confige*@
-    <script src="~/Site/js/PWADownloader.js"></script>
-
-    <partial name="_Notification" />
-    <!-- <script src="/Landing/js/toucheffects.js"></script> -->
-    <script type="text/javascript">
-        $().ready(function () {
-
-            // Activate countdownTimer plugin on a '.countdown' element
-            // $(".countdown").countdownTimer({
-            // 	// Set the end date for the countdown
-            // 	endTime: new Date("April 21, 2014 11:13:00 UTC+0200")
-            // });
-
-
-            // Activate notifyMe plugin on a '#notifyMe' element
-            $("#notifyMe").notifyMe();
-
-
-            // Activate bezierCanvas plugin on a #bg-canvas element
-            $("#bg-canvas").bezierCanvas({
-                maxStyles: 1,
-                maxLines: 100,
-                lineSpacing: 0.5,
-                colorBase: { r: 255, g: 255, b: 255 },
-                colorVariation: { r: 0, g: 0, b: 0 },
-                delayVariation: 0,
-                speedLinear: true,
-                globalAlpha: 0.7,
-                globalSpeed: 500,
-            });
-
-            // Add handler on 'Scroll down to learn more' link
-            // $().ready(function(){
-            // 	$(".overlap .more").click(function(e){
-            // 		e.preventDefault();
-            // 		$("body,html").animate({scrollTop: $(window).height()});
-            // 	});
-            // });
-
-
-        });
-    </script>
-</body>
-</html>
+<!-- Links-->
+<section class="container mb-5 pb-lg-5">
+    <div class="row row-cols-md-3 row-cols-1 gy-3">
+        <!-- Calculate property cost-->
+        <div class="col">
+            <div class="card card-hover h-100 border-0 bg-faded-warning position-relative">
+                <div class="card-body pb-2">
+                    <h5 class="mb-2 pb-1 ">محاسبه ارزش ملک</h5>
+                    <p class="mb-0">ما می توانیم اجاره تقریبی شما را محاسبه کنیم.</p>
+                </div>
+                <div class="card-footer py-1 border-0"><a class="stretched-link btn btn-link mb-3 px-0 text-warning" href="#cost-calculator" data-bs-toggle="modal">محاسبه</a></div>
+            </div>
+        </div>
+        <!-- Help center link-->
+        <div class="col">
+            <div class="card card-hover h-100 border-0 bg-faded-accent position-relative">
+                <div class="card-body pb-2">
+                    <h5 class="mb-2 pb-1 ">دیدن از مرکز پشتیبانی</h5>
+                    <p class="mb-0">در اینجا می توانید سوالات متداول را پیدا کنید.</p>
+                </div>
+                <div class="card-footer py-1 border-0"><a class="stretched-link btn btn-link mb-3 px-0 text-accent" href="real-estate-help-center.html">بیشتر بخوانید</a></div>
+            </div>
+        </div>
+        <!-- How it works link-->
+        <div class="col">
+            <div class="card card-hover h-100 border-0 bg-faded-success position-relative">
+                <div class="card-body pb-2">
+                    <h5 class="mb-2 pb-1 ">آشنایی با نحوه فعالیت</h5>
+                    <p class="mb-0">در اینجا یک راهنمای گام به گام برای اجاره کنندگان است.</p>
+                </div>
+                <div class="card-footer py-1 border-0"><a class="stretched-link btn btn-link mb-3 px-0 text-success" href="real-estate-about.html">شروع کنید</a></div>
+            </div>
+        </div>
+    </div>
+</section>

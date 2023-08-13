@@ -4,136 +4,56 @@
 @using Window.Application.Convertors
 @using Window.Application.Extensions
 
-<!-- Loading Container -->
-<div class="loading-container">
-    <div class="loader"></div>
-</div>
-<!--  /Loading Container -->
-<!-- Navbar -->
-<div class="navbar">
-    <div class="navbar-inner">
-        <div class="navbar-container">
-            <!-- Navbar Barnd -->
-            <!-- /Navbar Barnd -->
-            <!-- Sidebar Collapse -->
-            <div class="sidebar-collapse" id="sidebar-collapse">
-                <i class="collapse-icon fa fa-bars"></i>
-            </div>
-            <!-- /Sidebar Collapse -->
-            <!-- Account Area and Settings --->
-            <div class="navbar-header pull-left">
-                <div class="navbar-account">
-                    <ul class="account-area">
+<!-- Navbar-->
+<header class="navbar navbar-expand-lg navbar-light bg-light fixed-top" data-scroll-header>
+    <div class="container">
+        <a class="navbar-brand ms-3 ms-xl-4 logo" href="real-estate-home-v1.html"><img class="d-block" src="/FinderSample/img/logo/logo-dark.svg" width="116" alt="Finder"></a>
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 
+        <a class="btn btn-primary btn-sm ms-2 order-lg-3" href="/Login"><i class="fi-user me-2"></i>ورود</a>
 
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                             <li>
-                            <a class="wave in" id="chat-link" title="Chat" href="#">
-                                <i class="icon glyphicon glyphicon-comment"></i>
-@*                                <span class="badge">4</span>
-*@                            </a>
-                        </li>
+        <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
+            <ul class="navbar-nav navbar-nav-scroll" style="max-height: 35rem;">
 
-                          <li class="marli margin-left-10">
-
-                                <div class="add-to" style="padding-top: 6px;">
-                                    <button class="btn btn-success wave in add-to-btn">دانلود نسخه ی تحت وب</button>
-                                </div>
-
-                        </li>
-
-                        
-
-                            <li>
-                                <a class="login-area dropdown-toggle" data-toggle="dropdown">
-                                    <div class="avatar">
-                                        <img src="@Model.GetUserAvatar()">
-                                    </div>
-                                    <section>
-                                        <h2><span class="profile"><span>@Model.Username </span></span></h2>
-                                    </section>
-                                </a>
-                                <!--Login Area Dropdown-->
-                                <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area">
-                                    <li class="username"><a>@Model.GetFullName()</a></li>
-                                    <li class="email"><a>@Model.Username</a></li>
-                                    <!--Avatar Area-->
-                                    <li>
-                                        <div class="avatar-area">
-                                            <img src="@Model.GetUserAvatar()" class="avatar">
-                                        </div>
-                                    </li>
-                                    <!--Avatar Area-->
-                                    <!--Theme Selector Area-->
-                                    <li class="theme-area">
-                                        <ul class="colorpicker" id="skin-changer">
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#5DB2FF;" rel="/admin/css/skins/blue.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#2dc3e8;" rel="/admin/css/skins/azure.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#03B3B2;" rel="/admin/css/skins/teal.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#53a93f;" rel="/admin/css/skins/green.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#FF8F32;" rel="/admin/css/skins/orange.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#cc324b;" rel="/admin/css/skins/pink.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#AC193D;" rel="/admin/css/skins/darkred.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#8C0095;" rel="/admin/css/skins/purple.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#0072C6;" rel="/admin/css/skins/darkblue.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#585858;" rel="/admin/css/skins/gray.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#474544;" rel="/admin/css/skins/black.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#001940;" rel="/admin/css/skins/deepblue.min.css"></a></li>
-                                        </ul>
-                                    </li>
-                                    <!--/Theme Selector Area-->
-                                    <li class="dropdown-footer text-right">
-                                        <a href="/Logout">
-                                            خروج
-                                        </a>
-                                    </li>
-                                </ul>
-                                <!--/Login Area Dropdown-->
-                            </li>
-
-                            <li class="marli margin-left-10">
-
-                                <a class="btn btn-primary " title="" href="#">
-                                    @DateTime.Now.ToShamsi()
-                                </a>
-
-                            </li>
-                        }
-
-
-                        <!-- /Account Area -->
-                        <!--Note: notice that setting div must start right after account area list.
-                        no space must be between these elements-->
-                        <!-- Settings -->
+                <!-- Demos switcher-->
+                <li class="nav-item dropdown py-2 me-lg-2">
+                    <a class="nav-link dropdown-toggle align-items-center border-end-lg py-1 pe-lg-4" href="#" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fi-layers"></i> دموها</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="real-estate-home-v1.html"> دمو املاک <i class="fi-building fs-base opacity-50 me-2"></i></a></li>
+                        <li class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="car-finder-home.html"> دمو خرید خودرو <i class="fi-car fs-base opacity-50 me-2"></i></a></li>
+                        <li class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="job-board-home-v1.html"> دمو کاریابی <i class="fi-briefcase fs-base opacity-50 me-2"></i></a></li>
+                        <li class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="city-guide-home-v1.html"> دمو راهنمای سفر <i class="fi-map-pin fs-base opacity-50 me-2"></i></a></li>
+                        <li class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="index.html">صفحه اصلی <i class="fi-home fs-base opacity-50 me-2"></i></a></li>
+                        <li><a class="dropdown-item" href="components/typography.html">ابزارهای بوت استرپ <i class="fi-list fs-base opacity-50 me-2"></i></a></li>
                     </ul>
-                    @* <div class="setting">
-                    <a id="btn-setting" title="Setting" href="#">
-                    <i class="icon glyphicon glyphicon-cog"></i>
-                    </a>
-                    </div><div class="setting-container">
-                    <label>
-                    <input type="checkbox" id="checkbox_fixednavbar">
-                    <span class="text">نوار بالایی ثابت</span>
-                    </label>
-                    <label>
-                    <input type="checkbox" id="checkbox_fixedsidebar">
-                    <span class="text">منوی کناری ثابت</span>
-                    </label>
-                    <label>
-                    <input type="checkbox" id="checkbox_fixedbreadcrumbs">
-                    <span class="text">نوار بردکرامبز ثابت</span>
-                    </label>
-                    <label>
-                    <input type="checkbox" id="checkbox_fixedheader">
-                    <span class="text">نوار میانی ثابت</span>
-                    </label>
-                    </div>*@
-                    <!-- Settings -->
-                </div>
-            </div>
-            <!-- /Account Area and Settings -->
+                </li>
+
+                <!-- Menu items-->
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">خانه</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="real-estate-home-v1.html">خانه - نسخه 1</a></li>
+                        <li><a class="dropdown-item" href="real-estate-home-v2.html">خانه - نسخه 2</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">املاک</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="real-estate-catalog-rent.html">ملک برای اجاره</a></li>
+                        <li><a class="dropdown-item" href="real-estate-catalog-sale.html">ملک برای فروش</a></li>
+                        <li><a class="dropdown-item" href="real-estate-single-v1.html">جزئیات - نسخه 1</a></li>
+                        <li><a class="dropdown-item" href="real-estate-single-v2.html">جزئیات - نسخه 2</a></li>
+                    </ul>
+                </li>
+
+
+                <li class="nav-item d-lg-none"><a class="nav-link" href="#signin-modal" data-bs-toggle="modal"><i class="fi-user me-2"></i>ورود به حساب کاربری</a></li>
+            </ul>
         </div>
     </div>
-</div>
-<!-- /Navbar -->
+</header>

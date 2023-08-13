@@ -4,9 +4,51 @@
 @using Window.Application.Convertors
 @using Window.Domain.ViewModels.Common
 
-<!-- Compare Properties Widget
- ================================================== -->
-<div class="compare-slide-menu">
+
+<!-- Demo switcher (offcanvas)-->
+<button class="btn btn-icon btn-light rounded-circle shadow position-fixed top-50 start-0 translate-middle-y ms-3" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="تغییر دمو" style="z-index: 1035;">
+    <div class="d-flex align-items-center justify-content-center position-absolute top-0 start-0 w-100 h-100 rounded-circle" data-bs-toggle="offcanvas" data-bs-target="#demo-switcher"><i class="fi-layers"></i></div>
+</button>
+<div class="offcanvas offcanvas-end" id="demo-switcher">
+    <div class="offcanvas-header d-block border-bottom">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h2 class="h5 mb-0">انتخاب دمو</h2>
+            <button class="btn-close" type="button" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="d-flex"><a class="btn btn-outline-secondary btn-sm w-100 me-2" href="index.html"><i class="fi-home me-2"></i>خانه</a><a class="btn btn-outline-secondary btn-sm w-100" href="components/typography.html"><i class="fi-file me-2"></i>ابزارهای بوت استرپ</a></div>
+    </div>
+    <div class="offcanvas-body">
+        <div class="card card-hover shadow-sm mb-4">
+            <img class="card-img-top" src="/FinderSample/img/intro/demos/offcanvas/car-finder.jpg" alt="Car Finder Demo">
+            <div class="card-body p-3">
+                <h3 class="fs-base card-title text-center"><a class="nav-link stretched-link" href="car-finder-home.html">دمو ماشین</a></h3>
+            </div>
+        </div>
+        <div class="card card-hover shadow-sm mb-4">
+            <img class="card-img-top" src="/FinderSample/img/intro/demos/offcanvas/real-estate.jpg" alt="Real Estate Demo">
+            <div class="card-body p-3">
+                <h3 class="fs-base card-title text-center"><a class="nav-link stretched-link" href="real-estate-home-v1.html">دمو املاک</a></h3>
+            </div>
+        </div>
+        <div class="card card-hover shadow-sm mb-4">
+            <img class="card-img-top" src="/FinderSample/img/intro/demos/offcanvas/job-board.jpg" alt="Job Board Demo">
+            <div class="card-body p-3">
+                <h3 class="fs-base card-title text-center"><a class="nav-link stretched-link" href="job-board-home-v1.html">دمو کاریابی</a></h3>
+            </div>
+        </div>
+        <div class="card card-hover shadow-sm mb-4">
+            <img class="card-img-top" src="/FinderSample/img/intro/demos/offcanvas/city-guide.jpg" alt="City Guide Demo">
+            <div class="card-body p-3">
+                <h3 class="fs-base card-title text-center"><a class="nav-link stretched-link" href="city-guide-home-v1.html">دمو راهنمای سفر</a></h3>
+            </div>
+        </div>
+    </div>
+    <div class="offcanvas-footer border-top"><a class="btn btn-primary btn-lg w-100" href="https://themes.getbootstrap.com/product/finder-directory-listings-template-ui-kit/" target="_blank" rel="noopener"><i class="fi-cart fs-lg me-2"></i>مشاهده و خرید نسخه LTR</a></div>
+</div>
+
+
+
+@*<div class="compare-slide-menu">
 
     <div class="csm-trigger"></div>
 
@@ -47,5 +89,4 @@
         </div>
     </div>
 
-</div>
-<!-- Compare Properties Widget / End -->
+</div>*@
