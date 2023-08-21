@@ -13,6 +13,9 @@
     var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
 
     var glass = ViewBag.Glasses != null ? ViewBag.Glasses as List<SelectListViewModel> : null;
+
+    Layout = "/Views/InquiryProduct/_InquiryLayout.cshtml";
+
 }
 
 @section Styles
@@ -65,9 +68,14 @@
 @section Scripts
     {
 
+    <script src="/admin/js/jquery.min.js"></script>
+
     <script>
 
         $("#StateId").change(function () {
+
+            console.log("Hello");
+
             if ($("#StateId :selected").val() !== '') {
                 $('#CityId option:not(:first)').remove();
                 $.get("/Home/LoadCities", { stateId: $("#StateId :selected").val() }).then(res => {
@@ -108,107 +116,157 @@
 }
 
 
-<div class="parallax" data-background="/Site/images/1.jpg" data-color="#36383e" data-color-opacity="0.5" data-img-width="2500" data-img-height="1600" style="background-image: url(&quot;images/home-parallax-2.jpg&quot;); background-attachment: fixed; background-size: 1600px 1024px; background-position: 50% -215.14px;">
-    <div class="parallax-overlay" style="background-color: rgb(54, 56, 62); opacity: 0.5;"></div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
 
-                <form asp-action="InquiryStep2" asp-controller="InquiryProduct" asp-area="" id="filter-search" method="get">
-                    <input name="UserMacAddress" type="hidden" value="@ViewBag.UserId" />
 
-                    <div class="search-container">
+<div class="container mt-5 mb-md-4 py-5">
 
-                        <!-- Form -->
-                        <h2>یافتن درب و پنجره </h2>
+    <!-- Breadcrumb-->
+    <nav class="mb-3 mb-md-4 pt-md-3" aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">خانه</a></li>
+            <li class="breadcrumb-item active" aria-current="page">استعلام گیری - قدم اول</li>
+        </ol>
+    </nav>
 
-                        <!-- Row With Forms -->
-                        <div class="row with-forms">
+    <!-- Page content-->
+    <div class="row justify-content-center pb-sm-2">
+        <div class="col-lg-11 col-xl-10">
 
-                            <!-- Status -->
-                            <div class="col-md-4">
-                                <select asp-for="StateId" data-placeholder="استان" class="chosen-select-no-single" style="display: none;">
-                                    <option value=""> لطفا یک استان را انتخاب کنید </option>
-                                    @if (states != null && states.Any())
+            <!-- Page title-->
+            <div class="text-center pb-4 mb-3">
+                <h1 class="h4 mb-4 font-vazir">افزودن اطلاعات فردی</h1>
+                <p class="mb-4">در این صفحه شما می توانید اطلاعات فردی خود را وارد کرده تا باتوجه به آن ها اطلاعات بعذی برای شما نمایش داده شود.</p>
+            </div>
+
+            <!-- Steps-->
+            <div class="bg-light rounded-3 py-4 px-md-4 mb-3">
+                <div class="steps pt-4 pb-1">
+                    <div class="step active">
+                        <div class="step-progress"><span class="step-progress-start"></span><span class="step-progress-end"></span><span class="step-number">1</span></div>
+                        <div class="step-label"> نوع محصول</div>
+                    </div>
+                    <div class="step ">
+                        <div class="step-progress"><span class="step-progress-start"></span><span class="step-progress-end"></span><span class="step-number">2</span></div>
+                        <div class="step-label"> برند</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-progress"><span class="step-progress-start"></span><span class="step-progress-end"></span><span class="step-number">3</span></div>
+                        <div class="step-label"> درب و پنچره</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-progress"><span class="step-progress-start"></span><span class="step-progress-end"></span><span class="step-number">4</span></div>
+                        <div class="step-label"> نتیجه ی استعلام</div>
+                    </div>
+                </div>
+            </div>
+
+            <form asp-action="InquiryStep2" asp-controller="InquiryProduct" asp-area="" id="filter-search" method="get">
+                <input name="UserMacAddress" type="hidden" value="@ViewBag.UserId" />
+                <!-- Step 2: Education-->
+                <div class="bg-light rounded-3 p-4 p-md-5 mb-3">
+
+                    <h2 class="h5 font-vazir mb-4"><i class="fi-real-estate-house text-primary fs-4 mt-n1 me-2 pe-1"></i>اطلاعات اولیه</h2>
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 mb-4">
+
+                            <label class="form-label" for="pr-education-level"> استان سکونت شما <span class="text-danger">*</span></label>
+
+                            <select asp-for="StateId" class="form-select form-select-lg" id="StateId" required="">
+                                <option value=""> لطفا یک استان را انتخاب کنید </option>
+
+                                @if (states != null && states.Any())
+                                {
+                                    foreach (var state in states)
                                     {
-                                        foreach (var state in states)
+                                        if (Model != null && Model.StateId == state.Id)
                                         {
-                                            if (Model != null && Model.StateId == state.Id)
-                                            {
-                                                <option value="@state.Id" selected="selected"> @state.Title </option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@state.Id"> @state.Title </option>
-                                            }
+                                            <option value="@state.Id" selected="selected"> @state.Title </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@state.Id"> @state.Title </option>
                                         }
                                     }
-                                </select>
-                            </div>
+                                }
 
-                            <!-- City -->
-                            <div class="col-md-4">
-                                <select asp-for="CityId" data-placeholder="شهر" class="chosen-select-no-single" style="display: none;">
-                                    <option value=""> لطفا یک شهر را انتخاب کنید </option>
-                                    @if (cities != null && cities.Any())
-                                    {
-                                        foreach (var state in cities)
-                                        {
-                                            if (Model != null && Model.StateId == state.Id)
-                                            {
-                                                <option value="@state.Id" selected="selected"> @state.Title </option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@state.Id"> @state.Title </option>
-                                            }
-                                        }
-                                    }
-                                </select>
-                            </div>
-
-
-                            <!-- Property Type -->
-                            <div class="col-md-4">
-                                <select asp-for="SellerType" data-placeholder="جنس کالا" class="chosen-select-no-single" style="display: none;">
-                                    <option value="0">UPVC</option>
-                                    <option value="1">آلومینیوم</option>
-                                </select>
-                            </div>
-                            
-                            <!-- Status -->
-                            <div class="col-md-4">
-                                <select asp-for="GlassId" data-placeholder="نوع شیشه" class="chosen-select-no-single" style="display: none;">
-                                    @if (glass != null && glass.Any())
-                                    {
-                                        foreach (var glasses in glass)
-                                        {
-                                            <option value="@glasses.Id"> @glasses.Title </option>
-                                        }
-                                    }
-                                </select>
-                            </div>
+                            </select>
 
                         </div>
 
-                        <!-- Row With Forms -->
-                        <div class="row with-forms" style="margin-top:15px">
+                        <div class="col-sm-6 mb-4">
 
-                            <!-- Main Search Input -->
-                            <div class="col-md-12">
-                                <button class="button" style="margin-right: 0px;"> جست و جو  <i class="fa fa-search"></i></button>
-                            </div>
+                            <label class="form-label" for="pr-education-level"> شهر سکونت شما <span class="text-danger">*</span></label>
+
+                            <select asp-for="CityId" class="form-select form-select-lg" id="CityId" required="">
+                                <option value=""> لطفا یک شهر را انتخاب کنید </option>
+                                @if (cities != null && cities.Any())
+                                {
+                                    foreach (var state in cities)
+                                    {
+                                        if (Model != null && Model.StateId == state.Id)
+                                        {
+                                            <option value="@state.Id" selected="selected"> @state.Title </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@state.Id"> @state.Title </option>
+                                        }
+                                    }
+                                }
+
+                            </select>
 
                         </div>
-                        <!-- Row With Forms / End -->
+
+                        <div class="col-sm-6 mb-4">
+
+                            <label class="form-label" for="pr-education-level"> جنس کالا را انتخاب کنید <span class="text-danger">*</span></label>
+
+                            <select asp-for="SellerType" class="form-select form-select-lg" id="CityId" required="">
+
+                                <option value="0">UPVC</option>
+                                <option value="1">آلومینیوم</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-sm-6 mb-4">
+
+                            <label class="form-label" for="pr-education-level"> نوع شیشه را انتخاب کنید <span class="text-danger">*</span></label>
+
+                            <select asp-for="GlassId" class="form-select form-select-lg" id="CityId" required="">
+
+                                @if (glass != null && glass.Any())
+                                {
+                                    foreach (var glasses in glass)
+                                    {
+                                        <option value="@glasses.Id"> @glasses.Title </option>
+                                    }
+                                }
+
+                            </select>
+
+                        </div>
 
                     </div>
 
-                </form>
+                </div>
+                <!-- Navigation-->
+                <div class="d-flex flex-column flex-sm-row bg-light rounded-3 p-4 px-md-5">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill me-sm-auto">مرحله بعد<i class="fi-chevron-right fs-sm ms-2"></i></button>
+                </div>
 
-            </div>
+            </form>
         </div>
     </div>
-
 </div>
+
+
+
+
+

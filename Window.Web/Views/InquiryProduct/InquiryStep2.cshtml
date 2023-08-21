@@ -3,10 +3,100 @@
 @{
     ViewData["Title"] = "انتخاب برند مورد نظر";
     string macAddress = ViewBag.UserMacAddress;
+
+    Layout = "/Views/InquiryProduct/_InquiryLayout.cshtml";
+}
+
+@section Styles
+    {
+    <style>
+        .page-loading {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-transition: all .4s .2s ease-in-out;
+            transition: all .4s .2s ease-in-out;
+            background-color: #fff;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 9999;
+        }
+
+            .page-loading.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .page-loading-inner {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            -webkit-transition: opacity .2s ease-in-out;
+            transition: opacity .2s ease-in-out;
+            opacity: 0;
+        }
+
+        .page-loading.active > .page-loading-inner {
+            opacity: 1;
+        }
+
+        .page-loading-inner > span {
+            display: block;
+            font-size: 1rem;
+            font-weight: normal;
+            color: #666276;
+            ;
+        }
+
+        .page-spinner {
+            display: inline-block;
+            width: 2.75rem;
+            height: 2.75rem;
+            margin-bottom: .75rem;
+            vertical-align: text-bottom;
+            border: .15em solid #bbb7c5;
+            border-right-color: transparent;
+            border-radius: 50%;
+            -webkit-animation: spinner .75s linear infinite;
+            animation: spinner .75s linear infinite;
+        }
+
+        @@-webkit-keyframes spinner {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes spinner {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <!-- Vendor Styles-->
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/simplebar/dist/simplebar.min.css" />
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css" />
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/filepond/dist/filepond.min.css" />
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="/FinderSample/css/theme.min.css">
 }
 
 @section Scripts
     {
+
+    <script src="/admin/js/jquery.min.js"></script>
+
     <script>
 
         $(document).ready(function () {
@@ -33,106 +123,115 @@
     </script>
 }
 
-<div class="parallax titlebar" data-background="/Site/images/7.jpg" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -799.306px;">
-    <div class="parallax-overlay" style="background-color: rgb(51, 51, 51); opacity: 0.7;"></div>
 
-    <div id="titlebar">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
+<div class="container mt-5 mb-md-4 py-5">
 
-                    <h2>برندها</h2>
-                    <span>لیست بهترین برند های درب و پنجره </span>
+    <!-- Breadcrumb-->
+    <nav class="mb-3 mb-md-4 pt-md-3" aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">خانه</a></li>
+            <li class="breadcrumb-item active" aria-current="page">استعلام گیری - قدم دوم</li>
+        </ol>
+    </nav>
 
-                 <nav id="breadcrumbs">
-                        <ul>
-                            <li>
-                                <button id="target" class="button">استعلام همزمان تمامی برندها </button>
-                            </li>
-                        </ul>
-                    </nav>
+    <!-- Page content-->
+    <div class="row justify-content-center pb-sm-2">
+        <div class="col-lg-11 col-xl-10">
 
+            <div class="text-center pb-4 mb-3">
+                <h1 class="h4 mb-4 font-vazir">انتخاب برند موردنظر</h1>
+                <p class="mb-4">.در این بخش شما میتوانید لیست برند های موجود را مشاهده کنید و ار بین آن ها برند موردنظر خود را انتخاب کنید</p>
+                <button id="target" class="btn btn-primary btn-lg rounded-pill" type="button"><i class="fi-check me-2"></i>استعلام همزمان تمامی برندها</button>
+            </div>
+
+            <!-- Steps-->
+            <div class="bg-light rounded-3 py-4 px-md-4 mb-3">
+                <div class="steps pt-4 pb-1">
+                    <div class="step active">
+                        <div class="step-progress"><span class="step-progress-start"></span><span class="step-progress-end"></span><span class="step-number">1</span></div>
+                        <div class="step-label"> نوع محصول</div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-progress"><span class="step-progress-start"></span><span class="step-progress-end"></span><span class="step-number">2</span></div>
+                        <div class="step-label"> برند</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-progress"><span class="step-progress-start"></span><span class="step-progress-end"></span><span class="step-number">3</span></div>
+                        <div class="step-label"> درب و پنچره</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-progress"><span class="step-progress-start"></span><span class="step-progress-end"></span><span class="step-number">4</span></div>
+                        <div class="step-label"> نتیجه ی استعلام</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
-<div class="container">
-    <div class="row sticky-wrapper">
+            <div class="bg-light rounded-3 pt-4 pb-0 px-4 p-md-5 mb-3">
+                <!-- Title + Action buttons-->
+                <div class="d-md-flex align-items-center mb-4 pb-md-2">
 
-        <div class="col-md-12">
+                    <h2 class="h5 mb-md-0 font-vazir"><i class="fi-award text-primary fs-5 mt-n1 me-2 pe-1"></i>لطفا برند موردنظر خود را انتخاب کنید.</h2>
 
-            <!-- Listings -->
-            <div class="listings-container list-layout">
+                </div>
 
                 @if (Model != null && Model.Any())
                 {
-                    @foreach (var brand in Model)
+                    @foreach (var brand in Model.OrderByDescending(p => p.CountOfSellers))
                     {
-                        <!-- Listing Item -->
-                        <div class="listing-item">
+                        <!-- Listing Item / End -->
+                        <!-- Resume preview-->
+                        <div class="card shadow-sm p-md-2 mx-n4 mx-md-0">
+                            <div class="card-body p-4">
+                                <div class="d-sm-flex justify-content-between align-items-start pb-4">
 
-                            <a href="@Window.Application.StticTools.FilePaths.BrandThumbimage/@brand.Brand.BrandLogo" class="listing-img-container" style="height: 273px;">
+                                    <div class="flex-shrink-0 order-sm-2 mb-4">
+                                        <div class="col-xxl-12 col-md-12 col-sm-12 mb-3">
+                                            <a href="@Window.Application.StticTools.FilePaths.BrandOriginimage/@brand.Brand.BrandLogo">
 
-                                <div class="listing-badges">
-                                    <span>@brand.Brand.Id :  کد برند</span>
-                                </div>
+                                                <img class="d-block rounded-3 w-100 mx-auto" src="@Window.Application.StticTools.FilePaths.BrandOriginimage/@brand.Brand.BrandLogo" alt="Rounded image" style="max-width: 16rem;">
 
-                                <img src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@brand.Brand.BrandLogo" alt="" style="height: 273px;">
-
-                            </a>
-
-                            <div class="listing-content">
-
-                                <div class="listing-title">
-                                    <h4><a href="single-property-page-1.html">@brand.Brand.BrandName</a></h4>
-                                    <div class="listing-badges">
-                                        <span>تعداد @brand.CountOfSellers فروشنده </span>
-                                    </div>
-                                </div>
-                                <ul class="listing-details">
-
-                                    <li> @brand.Brand.Description </li>
-
-                                </ul>
-
-                                <div class="listing-footer">
-                                    <div class="row">
-
-                                        <div class="col-md-6 col-xs-6">
-                                            <a asp-action="InquiryStep3"
-                                       asp-area=""
-                                       asp-controller="InquiryProduct"
-                                       asp-route-userMacAddress="@ViewBag.UserMacAddress"
-                                       asp-route-brandId="@brand.Brand.Id"
-                                       class="button">انتخاب برند</a>
+                                            </a>
                                         </div>
+                                    </div>
+
+                                    <div class="order-sm-1">
+                                        <h3 class="h4 mb-sm-4 font-vazir">@brand.Brand.BrandName</h3>
+                                        <ul class="list-unstyled text-nav">
+                                            <li>کد برند: <span class="text-muted">@brand.Brand.Id </span> </li>
+                                            <li>تعداد فروشندگان در وب سایت: <span class="text-muted">@brand.CountOfSellers </span> </li>
+                                            <li>توضیحات : <span class="text-muted">@brand.Brand.Description</span> </li>
+                                        </ul>
 
                                         @if (!string.IsNullOrEmpty(brand.Brand.BrandSite))
                                         {
-                                                <div class="col-md-6 col-xs-6">
-                                            <a href="@brand.Brand.BrandSite" target="_blank"
-                                       class="button">وب سایت برند</a>
-                                        </div>
+                                            <a href="@brand.Brand.BrandSite" target="_blank" class="btn btn-warning mb-3 me-2">وب سایت برند</a>
+
                                         }
+
+                                        <a class="btn btn-accent bg-gradient mb-3 me-2"
+                                           asp-action="InquiryStep3"
+                                           asp-area=""
+                                           asp-controller="InquiryProduct"
+                                           asp-route-userMacAddress="@ViewBag.UserMacAddress"
+                                           asp-route-brandId="@brand.Brand.Id">انتخاب برند</a>
 
                                     </div>
                                 </div>
-
                             </div>
-
                         </div>
-
-                        <div class="clearfix"></div>
-                        <!-- Listing Item / End -->
                     }
                 }
 
             </div>
-            <!-- Listings Container / End -->
+
+            <div class="d-flex flex-column flex-sm-row bg-light rounded-3 p-4 px-md-5">
+                <a class="btn btn-outline-primary btn-lg rounded-pill mb-3 mb-sm-0"
+                   asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct"><i class="fi-chevron-left fs-sm me-2"></i>مرحله قبل</a>
+            </div>
 
         </div>
-
     </div>
 </div>
+
+
+
