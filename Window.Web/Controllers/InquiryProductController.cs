@@ -266,6 +266,8 @@ public class InquiryProductController : SiteBaseController
     [Authorize]
     public async Task<IActionResult> ShowSellerPersoanlInfo(ulong userId)
     {
+        string userMacAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
+
         #region Fill Model 
 
         var model = await _sellerService.FillListOfPersonalInfoViewModel(userId);
@@ -300,6 +302,9 @@ public class InquiryProductController : SiteBaseController
         ViewBag.CanInsertCommentAndStart = await _contractService.CanUserInsertCommentForSeller(User.GetUserId(), userId);
         ViewBag.sellerId = userId;
         ViewBag.ListOfSellerCommentsForShow = await _contractService.ListOfSellerCommentsForShow(userId);
+        ViewBag.CurrentUser = await _userService.GetUserById(User.GetUserId());
+        ViewBag.LastInquiry = await _inquiryService.ListOfInquiry(userMacAddress, Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString());
+
 
         #endregion
 

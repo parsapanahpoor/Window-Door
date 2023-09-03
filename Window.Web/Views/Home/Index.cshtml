@@ -1,5 +1,4 @@
-﻿@{
-}
+﻿@model Window.Domain.ViewModels.Site.Home.IndexViewModel
 
 
 <!-- Hero-->
@@ -56,3 +55,23 @@
         </div>
     </div>
 </section>
+
+@if (Model.TazminDarKharid != null)
+{
+    
+<section class="container mb-5 pb-sm-3 pb-lg-4">
+    <div class="bg-secondary rounded-3">
+        <div class="col-md-11 col-12 offset-md-1 p-md-0 p-2 d-flex align-items-center justify-content-between">
+            <div class="me-md-5 py-md-5 px-md-0 p-4" style="max-width: 526px;">
+                <h2 class="mb-md-4 ">
+                        تضمین درخرید <br>
+                </h2>
+                    <p class="mb-4 pb-md-3 fs-lg">@Model.TazminDarKharid.Description </p><a class="btn btn-lg btn-primary" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct"><i class="fi-search me-2"></i>درب و پنجره ی خود را پیدا کن !</a>
+            </div>
+            <div class="col-4 d-md-block d-none align-self-end px-0" style="display: block !important;"><img class="mt-n5" src="/FinderSample/img/real-estate/about/01.png" width="406" alt="Cover image"></div>
+        </div>
+    </div>
+</section>
+
+}
+

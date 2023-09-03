@@ -518,6 +518,70 @@ public class InquryService : IInquiryService
         return model.OrderByDescending(p => p.Price).ToList();
     }
 
+    public async Task<List<InquiryViewModel>?> ListOfInquiryLast6(string userMacAddress, string userId)
+    {
+        #region Get User log
+
+        var userInquiryResults = await _context.LogResultOfUserInquiryWithSellersInfos
+                                               .AsNoTracking()
+                                               .Where(p => p.UserId == userId)
+                                               .Take(10)
+                                               .ToListAsync();
+
+        #endregion
+
+        #region Fill Return Model
+
+        List<InquiryViewModel> model = new List<InquiryViewModel>();
+
+        if (userInquiryResults != null && userInquiryResults.Any())
+        {
+            foreach (var userInquiryResult in userInquiryResults)
+            {
+                //Update Sellers Activation Tarrifs
+                await _sellerService.UpdateSellerActivationTariff(userInquiryResult.SellerUserId, true, false);
+
+                var brand = await _context.MainBrands
+                                               .AsNoTracking()
+                                               .Where(p => !p.IsDelete && p.Id == userInquiryResult.BrandId)
+                                               .Select(p => new brandInquiryViewModel()
+                                               {
+                                                   brandName = p.BrandName,
+                                                   BreandLogo = p.BrandLogo
+                                               })
+                                               .FirstOrDefaultAsync();
+
+                var user = await _context.Users
+                                               .AsNoTracking()
+                                               .Where(p => !p.IsDelete && p.Id == userInquiryResult.SellerUserId)
+                                               .Select(p => new UserInquiryViewModel()
+                                               {
+                                                   UserAvatar = p.Avatar,
+                                                   Username = p.Username,
+                                               })
+                                               .FirstOrDefaultAsync();
+
+                InquiryViewModel modelChilds = new InquiryViewModel()
+                {
+                    BrandImage = brand.BreandLogo,
+                    BrandName = brand.brandName,
+                    Price = userInquiryResult.Price,
+                    Score = userInquiryResult.SellerScore,
+                    ShopName = userInquiryResult.SellerShopName,
+                    UserAvatar = user.UserAvatar,
+                    UserName = user.Username,
+                    UserId = userInquiryResult.SellerUserId
+                };
+
+                model.Add(modelChilds);
+            }
+        }
+
+        #endregion
+
+        return model.OrderByDescending(p => p.Price).ToList();
+    }
+
     //Initial Result Of User Inquiry
     public async Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string UserId, string userMacAddress)
     {

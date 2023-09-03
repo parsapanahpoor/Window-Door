@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using Window.Domain.Entities.Market;
+using Window.Domain.ViewModels.Site.Home;
 
 namespace Window.Application.Services.Interfaces
 {
@@ -22,5 +19,12 @@ namespace Window.Application.Services.Interfaces
         Task<List<MarketChargeInfo>?> GetListOfMarketsThatDisActiveIn3Day();
 
         Task<List<MarketChargeInfo>?> GetListOfMarketsThatDisActiveIn15Day();
+
+        #region Site Side 
+
+        //Fill Home Index ViewModel
+        Task<IndexViewModel> FillHomeIndexViewModel();
+
+        #endregion
     }
 }

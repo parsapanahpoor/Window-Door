@@ -126,53 +126,58 @@
         <!-- Filters sidebar (Offcanvas on mobile)-->
         <aside class="col-lg-4 col-xl-3 border-top-lg border-end-lg shadow-sm px-3 px-xl-4 px-xxl-5 pt-lg-2">
 
-            <div class="offcanvas offcanvas-start offcanvas-collapse" id="filters-sidebar">
+            <form asp-action="InquiryStep4" asp-controller="InquiryProduct" asp-area="" method="get">
+                <input type="hidden" name="userMacAddress" value="@ViewBag.userMacAddress" />
 
-                <div class="offcanvas-header d-flex d-lg-none align-items-center">
-                    <h2 class="h5 mb-0">فیلتر جستجو</h2>
-                    <button class="btn-close" type="button" data-bs-dismiss="offcanvas"></button>
-                </div>
+                <div class="offcanvas offcanvas-start offcanvas-collapse" id="filters-sidebar">
 
-                <div class="offcanvas-header d-block border-bottom pt-0 pt-lg-4 px-lg-0">
-                    <ul class="nav nav-tabs mb-0">
-                        <li class="nav-item"><a class="nav-link active" href="/"><i class="fi-users fs-base me-2"></i>برای اجاره</a></li>
-                    </ul>
-                </div>
-
-                <div class="offcanvas-body py-lg-4">
-
-                    <div class="pb-4 mb-2">
-                        <h3 class="h6">موقعیت مکانی</h3>
-                        <select class="form-select mb-2">
-                            <option value="" disabled="">انتخاب شهر</option>
-                            <option value="Chicago">شیکاگو</option>
-                            <option value="Dallas">پاریس</option>
-                            <option value="Los Angeles">لوس آنجلس</option>
-                            <option value="New York" selected="">نیویورک</option>
-                            <option value="San Diego">سن فرانسیسکو</option>
-                        </select>
+                    <div class="offcanvas-header d-flex d-lg-none align-items-center">
+                        <h2 class="h5 mb-0">فیلتر جستجو</h2>
+                        <button class="btn-close" type="button" data-bs-dismiss="offcanvas"></button>
                     </div>
 
-                    <div class="border-top py-4">
-                        <button class="btn btn-outline-primary" type="button"><i class="fi-rotate-right me-2"></i>حذف فیلتر</button>
+                    <div class="offcanvas-header d-block border-bottom pt-0 pt-lg-4 px-lg-0">
+                        <ul class="nav nav-tabs mb-0">
+                            <li class="nav-item"><a class="nav-link active" href="/"><i class="fi-users fs-base me-2"></i>لیست فروشندگان</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="offcanvas-body py-lg-4">
+
+                        <div class="pb-4 mb-2">
+                            <h3 class="h6">مرتب سازی بر اساس مبلغ</h3>
+                            <select class="form-select mb-2" name="orderByPrice">
+                                <option value="2"> از کمترین قیمت </option>
+                                <option value="1"> از بیشترین قیمت </option>
+                            </select>
+                        </div>
+
+                        <div class="border-top py-4">
+                            <button class="btn btn-translucent-success mb-3 me-2" type="submit">ثبت</button>
+                            <a asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct" class="btn btn-translucent-danger mb-3 me-2">استعلام مجدد</a>
+                        </div>
+
                     </div>
 
                 </div>
-            </div>
+
+            </form>
+
         </aside>
+
         <!-- Page content-->
         <div class="col-lg-8 col-xl-9 position-relative overflow-hidden pb-5 pt-4 px-3 px-xl-4 px-xxl-5">
 
             <!-- Breadcrumb-->
             <nav class="mb-3 pt-md-2" aria-label="Breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="real-estate-home-v1.html">خانه</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">ملک برای اجاره</li>
+                    <li class="breadcrumb-item"><a href="/">خانه</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">نتیجه ی استعلام شما</li>
                 </ol>
             </nav>
             <!-- Title-->
             <div class="d-sm-flex align-items-center justify-content-between pb-3 pb-sm-4">
-                <h1 class="h4 mb-sm-0">لیست املاک برای اجاره</h1>
+                <h1 class="h4 mb-sm-0">لیست فروشندگان براساس نتیجه ی استعلام شما</h1>
 
             </div>
 
@@ -211,7 +216,7 @@
 
                                                         @if (!string.IsNullOrEmpty(product.UserAvatar))
                                                         {
-                                                            <img src="@Window.Application.StticTools.FilePaths.DefaultSampleThumbimage/@product.BrandImage" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
+                                                            <img src="/content/images/user/thumb/@product.UserAvatar" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
                                                         }
                                                         else
                                                         {
@@ -225,7 +230,7 @@
                                         </div>
                                     </div>
                                     <div class="card-body position-relative pb-3">
-                                        <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">اجاره</h4>
+                                        <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">فروشنده :</h4>
                                         @if (string.IsNullOrEmpty(product.ShopName))
                                         {
                                             <h3 class="h6 mb-2 fs-base">
@@ -242,7 +247,7 @@
                                                 </a>
                                             </h3>
                                         }
-                                        <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
+                                        <p class="mb-2 fs-sm text-muted">برند انتخابی : @product.BrandName</p>
 
                                         @if (product.Price.HasValue)
                                         {
@@ -257,10 +262,10 @@
                                     <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
 
                                         <span class="d-inline-block mx-1 px-2 fs-sm">
-                                            @product.Score == 0
+                                            @product.Score
                                             <i class="fi-star-filled me-1 mt-n1 fs-lg text-muted"></i>
                                         </span>
-                                
+
                                     </div>
                                 </div>
 
@@ -274,135 +279,12 @@
 
 
             </div>
-            <!-- Pagination-->
-            <nav class="border-top pb-md-4 pt-4 mt-2" aria-label="Pagination">
-                <ul class="pagination mb-1">
-                    <li class="page-item d-sm-none"><span class="page-link page-link-static">1 / 5</span></li>
-                    <li class="page-item active d-none d-sm-block" aria-current="page"><span class="page-link">1<span class="visually-hidden">(صفحه جاری)</span></span></li>
-                    <li class="page-item d-none d-sm-block"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item d-none d-sm-block"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item d-none d-sm-block">...</li>
-                    <li class="page-item d-none d-sm-block"><a class="page-link" href="#">8</a></li>
-                    <li class="page-item"><a class="page-link" href="#" aria-label="Next"><i class="fi-chevron-right"></i></a></li>
-                </ul>
-            </nav>
+            
         </div>
     </div>
 </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<form asp-action="InquiryStep4" asp-controller="InquiryProduct" asp-area="" method="get">
-    <input type="hidden" name="userMacAddress" value="@ViewBag.userMacAddress" />
-
-    <div class="parallax titlebar" data-background="/Site/images/3.jpg" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -546.894px;">
-        <div class="parallax-overlay" style="background-color: rgb(51, 51, 51); opacity: 0.7;"></div>
-
-        <div id="titlebar">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <h2>نتیجه ی استعلام</h2>
-                        <span>لیست فروشندگان ارائه دهنده ی محصولات درخواستی شما</span>
-
-                        <!-- Breadcrumbs -->
-                        <nav id="breadcrumbs">
-                            <ul>
-                                @*  <li><a href="#">خانه</a></li>
-                                <li>آگهی ها</li>*@
-                            </ul>
-                        </nav>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="row sticky-wrapper">
-
-            <div class="col-md-4">
-                <div class="sidebar sticky right">
-
-                    <!-- Widget -->
-                    <div class="widget margin-bottom-40">
-                        <h3 class="margin-top-0 margin-bottom-35">فیلتر کردن نتیجه</h3>
-
-                        <!-- Row -->
-                        <div class="row with-forms">
-                            <!-- Status -->
-
-                        </div>
-                        <!-- Row / End -->
-                        <!-- Row -->
-                        <div class="row with-forms">
-                            <!-- Status -->
-                            <div class="col-md-12">
-                                <select name="orderByPrice" data-placeholder="مرتب سازی بر اساس مبلغ" class="chosen-select-no-single" style="display: block;">
-                                    <option value="2"> از کمترین قیمت </option>
-                                    <option value="1"> از بیشترین قیمت </option>
-                                </select><div class="chosen-container chosen-container-single chosen-container-single-nosearch" style="display: none;width: 100%;" title=""><a class="chosen-single chosen-default"><span>وضعیت</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off" readonly=""></div><ul class="chosen-results"></ul></div></div>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="button fullwidth margin-top-30">استعلام گیری</button>
-
-                        <a style="background-color: #ce0505 !important;" asp-action="InquiryStep1" asp-controller="InquiryProduct" asp-area="" class="button fullwidth margin-top-30">حذف استعلام</a>
-
-                    </div>
-                    <!-- Widget / End -->
-
-                </div>
-            </div>
-
-            <div class="col-md-8">
-
-
-                <!-- Sorting / Layout Switcher -->
-                <div class="row margin-bottom-15">
-
-                    <div class="col-md-6">
-                    </div>
-
-                    <div class="col-md-6">
-                        <!-- Layout Switcher -->
-                        <div class="layout-switcher">
-                            <a href="#" class="list"><i class="fa fa-th-list"></i></a>
-                            <a href="#" class="grid active"><i class="fa fa-th-large"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-        </div>
-
-    </div>
-
-</form>
 
 
 <button class="btn btn-primary btn-sm w-100 rounded-0 fixed-bottom d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#filters-sidebar"><i class="fi-filter me-2"></i>فیلتر</button>

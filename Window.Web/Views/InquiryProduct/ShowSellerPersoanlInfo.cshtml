@@ -6,322 +6,500 @@
 @model Window.Domain.ViewModels.Seller.PersonalInfo.ListOfPersonalInfoViewModel
 @inject IViewLocalizer Localizer
 @inject IHtmlLocalizer<SharedLocalizer> SharedHtmlLocalizer
+@using Window.Application.Convertors
 
 @{
+    ViewData["Title"] = Model.CompanyName;
+
     var countries = ViewData["Countries"] != null ? ViewData["Countries"] as List<SelectListViewModel> : null;
     var states = ViewData["States"] != null ? ViewData["States"] as List<SelectListViewModel> : null;
     var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
     var comments = ViewBag.ListOfSellerCommentsForShow != null ? ViewBag.ListOfSellerCommentsForShow as List<Window.Domain.Entities.Comment.Comment> : null;
     var canInsertComment = ViewBag.CanInsertCommentAndStart != null ? ViewBag.CanInsertCommentAndStart as Window.Domain.Entities.Contract.RequestForContract : null;
     ulong sellerId = ViewBag.sellerId;
+    var currentUser = ViewBag.CurrentUser as Window.Domain.Entities.Account.User;
+    var lastInquiry = ViewBag.LastInquiry as List<Window.Domain.ViewModels.Site.Inquiry.InquiryViewModel>;
+}
+
+@section Styles
+    {
+    <style>
+        .page-loading {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-transition: all .4s .2s ease-in-out;
+            transition: all .4s .2s ease-in-out;
+            background-color: #fff;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 9999;
+        }
+
+            .page-loading.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .page-loading-inner {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            -webkit-transition: opacity .2s ease-in-out;
+            transition: opacity .2s ease-in-out;
+            opacity: 0;
+        }
+
+        .page-loading.active > .page-loading-inner {
+            opacity: 1;
+        }
+
+        .page-loading-inner > span {
+            display: block;
+            font-size: 1rem;
+            font-weight: normal;
+            color: #666276;
+            ;
+        }
+
+        .page-spinner {
+            display: inline-block;
+            width: 2.75rem;
+            height: 2.75rem;
+            margin-bottom: .75rem;
+            vertical-align: text-bottom;
+            border: .15em solid #bbb7c5;
+            border-right-color: transparent;
+            border-radius: 50%;
+            -webkit-animation: spinner .75s linear infinite;
+            animation: spinner .75s linear infinite;
+        }
+
+        @@-webkit-keyframes spinner {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes spinner {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+
+    <!-- Vendor Styles-->
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/simplebar/dist/simplebar.min.css" />
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/lightgallery.js/dist/css/lightgallery.min.css" />
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/tiny-slider/dist/tiny-slider.css" />
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/flatpickr/dist/flatpickr.min.css" />
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/persain-date/persian-datepicker.min.css" />
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="/FinderSample/css/theme.min.css">
 }
 
 
+@section Scripts
+    {
+    <script src="/admin/js/jquery.min.js"></script>
+
+    <script>
+        (function () {
+            window.onload = function () {
+                var preloader = document.querySelector('.page-loading');
+                preloader.classList.remove('active');
+                setTimeout(function () {
+                    preloader.remove();
+                }, 2000);
+            };
+        })();
+
+    </script>
 
 
-<div id="titlebar" class="property-titlebar margin-bottom-0">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
+    <script src="/FinderSample/vendor/lightgallery.js/dist/js/lightgallery.min.html"></script>
+    <script src="/FinderSample/vendor/lg-fullscreen.js/dist/lg-fullscreen.min.html"></script>
+    <script src="/FinderSample/vendor/lg-zoom.js/dist/lg-zoom.min.html"></script>
+    <script src="/FinderSample/vendor/lg-thumbnail.js/dist/lg-thumbnail.min.html"></script>
+    <script src="/FinderSample/vendor/flatpickr/dist/flatpickr.min.js"></script>
+}
 
-                <div class="property-title">
-                    <h2>@Model.CompanyName </h2>
-                    <span>
-                        <a href="#location" class="listing-address">
-                            <i class="fa fa-map-marker"></i>
-                            @if (countries != null && countries.Any())
-                            {
-                                foreach (var country in countries)
-                                {
-                                    if (Model != null && Model.CountryId == country.Id)
-                                    {
-                                        @country.Title
-                                    }
-                                }
-                            },
-                            @if (states != null && states.Any())
-                            {
-                                foreach (var state in states)
-                                {
-                                    if (Model != null && Model.StateId == state.Id)
-                                    {
-                                        @state.Title
-                                    }
-                                }
-                            },
-                            @if (cities != null && cities.Any())
-                            {
-                                foreach (var city in cities)
-                                {
-                                    if (Model != null && Model.CityId == city.Id)
-                                    {
-                                        @city.Title
-                                    }
-                                }
-                            }
-                        </a>
-                    </span>
-                </div>
+<section class="container mt-5 mb-lg-5 mb-4 pt-5 pb-lg-5">
+    <!-- Breadcrumb-->
+    <nav class="mb-3 pt-md-3" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">خانه</a></li>
+            <li class="breadcrumb-item"><a href="#">صفحه ی فروشندگان</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.CompanyName</li>
+        </ol>
+    </nav>
+    <div class="row gy-5 pt-lg-2">
+        <div class="col-lg-7">
+            <div class="d-flex flex-column mt-4">
 
-                <div class="property-pricing">
-                    <div>@Model.PeriodTimesOfWork</div>
-                    <div class="sub-price"> ساعات پاسخ گویی</div>
-                </div>
-
-
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="container" style="margin-bottom:50px;">
-    <div class="row">
-
-        <!-- Property Description -->
-        <div class="col-lg-8 col-md-7 sp-content">
-            <div class="property-description">
-
-                <!-- Accordion -->
-                <div class="style-1 fp-accordion">
-
-                    @if (Model.MarketWorkSamples != null && Model.MarketWorkSamples.Any())
-                    {
-                        <h3 class="desc-headline">لیست نمونه کارها</h3>
-
-                        <div class="accordion">
-
-                            @foreach (var link in Model.MarketWorkSamples)
-                            {
-                                <h3>@link.WorkSampleTitle  <i class="fa fa-angle-down"></i> </h3>
-                                <div>
-                                    <a class="floor-pic mfp-image" href="#">
-                                        <img src="/content/images/sellerInfo/thumb/@link.WorkSampleImage" alt="">
-                                    </a>
-
-                                </div>
-                            }
-
-                        </div>
-                    }
-
-                </div>
-
-                <!-- Details -->
-                <h3 class="desc-headline">آدرس محل کار : </h3>
-                <ul class="property-features margin-top-0">
-                    <li>@Model.WorkAddress </li>
-                </ul>
-
-
-                <!-- Features -->
-                <h3 class="desc-headline">رزومه ی کاری</h3>
-                <ul class="property-features checkboxes margin-top-0">
-                    <li>@Model.Resume</li>
-                </ul>
-
-                @if (comments != null && comments.Any())
+                @if (Model.MarketWorkSamples != null && Model.MarketWorkSamples.Any())
                 {
-                    <h3 class="desc-headline">نظرات کاربران</h3>
+                    <!-- Carousel with slides count-->
+                    <div class="order-lg-1 order-2">
+                        <div class="tns-carousel-wrapper">
+                            <div class="tns-slides-count text-light">
+                                <i class="fi-image fs-lg me-2"></i>
+                                <div class="ps-1">
+                                    <span class="tns-current-slide fs-5 fw-bold">
+                                        1
 
-                    <!-- Accordion -->
-                    <div class="style-1 fp-accordion">
-                        <div class="accordion">
-
-                            @foreach (var user in comments)
-                            {
-                                <h3>
-                                    <img src="@user.User.GetUserAvatar()" style="width:50px;height:50px;border-radius:100%;margin-left:20px;" />
-                                    @user.User.Username
-                                    <i class="fa fa-angle-down"></i>
-                                </h3>
-                                <div>
-
-
-                                    <p>مرحله ی قرارداد کاربر : @user.RequestForContractStatus.GetEnumName() </p>
-
-                                    <br>
-
-                                    <p>
-                                        @user.Description
-                                    </p>
+                                    </span><span class="fs-5 fw-bold">/</span><span class="tns-total-slides fs-5 fw-bold">@Model.MarketWorkSamples.Count()</span>
                                 </div>
-                            }
+                            </div>
+                            <div class="tns-outer" id="tns1-ow">
+                                <div class="tns-controls" aria-label="Carousel Navigation" tabindex="0">
+                                    <button type="button" data-controls="prev" tabindex="-1" aria-controls="tns1">
+                                        <i class="fi-chevron-right"></i>
+                                    </button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns1">
+                                        <i class="fi-chevron-left"></i>
+                                    </button>
+                                </div>
+                                <div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">2</span>  of @Model.MarketWorkSamples.Count()</div>
+                                <div id="tns1-mw" class="tns-ovh" style="max-height: 405px;">
+                                    <div class="tns-inner" id="tns1-iw">
+                                        <div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" data-carousel-options="{&quot;navAsThumbnails&quot;: true, &quot;navContainer&quot;: &quot;#thumbnails&quot;, &quot;gutter&quot;: 12, &quot;responsive&quot;: {&quot;0&quot;:{&quot;controls&quot;: false},&quot;500&quot;:{&quot;controls&quot;: true}}}" id="tns1" style="transition-duration: 0s; transform: translate3d(-14.2857%, 0px, 0px);">
+                                            @{
+                                                int x = 0;
+                                            }
 
+                                            @foreach (var link in Model.MarketWorkSamples)
+                                            {
+
+                                                <div class="tns-item @((x==0) ? "tns-slide-active" :"")" id="tns1-item@(x)"><img class="rounded-3" src="/content/images/sellerInfo/main/@link.WorkSampleImage" alt="Image"></div>
+
+                                                {
+                                                    x++;
+                                                }
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <!-- Thumbnails nav-->
+                        @if (Model.MarketWorkSamples != null && Model.MarketWorkSamples.Any())
+                        {
+                            int i = 0;
+                            <ul class="tns-thumbnails mb-4" id="thumbnails" aria-label="Carousel Pagination">
+
+                                @foreach (var link in Model.MarketWorkSamples)
+                                {
+                                    <li class="tns-thumbnail" data-nav="@i" tabindex="-1" aria-label="Carousel Page 2" aria-controls="tns1"><img src="/content/images/sellerInfo/thumb/@link.WorkSampleImage" alt="Thumbnail"></li>
+
+                                    {
+                                        i++;
+                                    }
+
+                                }
+                            </ul>
+                        }
+
+
+                    </div>
+
+                }
+
+                <!-- Page title + Features-->
+                <div class="order-lg-2 order-1">
+                    <h1 class="h2 mb-2">آدرس محل کار :</h1>
+
+                    <p class="mb-2 pb-1 fs-lg">@Model.WorkAddress</p>
+
+                </div>
+            </div>
+
+            <!-- Overview-->
+            <h2 class="h5 mt-4">رزومه ی کاری</h2>
+            <p class="mb-4 pb-2">
+
+                @Model.Resume
+
+            </p>
+
+
+
+            @if (comments != null && comments.Any())
+            {
+                <div class="mb-4 pb-4 border-bottom mt-4">
+                    <h3 class="h5 pb-3 font-vazir">نظرات در رابطه با فروشنده</h3>
+                </div>
+
+                @foreach (var user in comments.OrderByDescending(p => p.CreateDate))
+                {
+                    <div class="mb-4 pb-4 border-bottom">
+                        <div class="d-flex justify-content-between mb-3">
+                            <div class="d-flex align-items-center pe-2">
+                                <img class="rounded-circle ms-1" src="@user.User.GetUserAvatar()" width="48" alt="Avatar">
+                                <div class="pe-2">
+                                    <h6 class="fs-base mb-0">@user.User.Username</h6><span class="star-rating">
+                                        مرحله ی قرارداد کاربر : @user.RequestForContractStatus.GetEnumName()
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="text-muted fs-sm">@user.CreateDate.ToStringShamsiDate()</span>
+                        </div>
+                        <p>
+                            @user.Description
+                        </p>
                     </div>
                 }
 
-                <!-- Listing Item / End -->
-                <!-- Similar Listings Container / End -->
+            }
 
-            </div>
         </div>
-        <!-- Property Description / End -->
+        <!-- Sidebar with details-->
+        <aside class="col-lg-5">
+            <div class="ps-lg-5">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+
+                    <div><span class="badge bg-success me-2 mb-2"> فروشنده ی تایید شده</span><span class="badge bg-info me-2 mb-2">جدید</span></div>
+                    <div class="text-nowrap">
+                        <button class="btn btn-icon btn-light-primary btn-xs shadow-sm rounded-circle ms-2 mb-2" type="button" data-bs-toggle="tooltip" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
+                        <div class="dropdown d-inline-block" data-bs-toggle="tooltip" title="" data-bs-original-title="لینک های ارتباطی">
+                            <button class="btn btn-icon btn-light-primary btn-xs shadow-sm rounded-circle ms-2 mb-2" type="button" data-bs-toggle="dropdown"><i class="fi-share"></i></button>
+
+                            @if (Model.MarketLinks != null && Model.MarketLinks.Any())
+                            {
+                                <div class="dropdown-menu dropdown-menu-end my-1">
+
+                                    @foreach (var sellerLinks in Model.MarketLinks)
+                                    {
+                                        <a class="dropdown-item" target="_blank" href="@sellerLinks.LinkValue">@sellerLinks.LinkTitle</a>
+                                    }
+                                </div>
+                            }
 
 
-
-        <div class="col-lg-4 col-md-5 sp-sidebar">
-
-            <h3 class="desc-headline"></h3>
-
-
-            <div class="sidebar sticky right">
-
-                <!-- Widget -->
-                <div class="widget">
-
-                    <!-- Agent Widget -->
-                    <div class="agent-widget">
-                        <div class="agent-title">
-                            <div class="agent-details">
-                                <h4><a href="#">لیست لینک های ارتباطی</a></h4>
-                            </div>
-                            <div class="clearfix"></div>
                         </div>
-
-                        @if (Model.MarketLinks != null && Model.MarketLinks.Any())
-                        {
-                            @foreach (var sellerLinks in Model.MarketLinks)
-                            {
-                                <a class="button border" target="_blank" href="@sellerLinks.LinkValue">@sellerLinks.LinkTitle </a>
-                            }
-                        }
-
                     </div>
-                    <!-- Agent Widget / End -->
 
                 </div>
 
-                <div class="widget">
+                <h3 class="h5 mb-2">مبلغ پیشنهادی فروشنده:</h3>
+                <h2 class="h3 mb-4 pb-2">@lastInquiry.Where(p=> p.UserId == sellerId).Select(p=> p.Price).FirstOrDefault().Value.ToString("#,000") ریال</h2>
 
-                    <!-- Agent Widget -->
-                    <div class="agent-widget">
-                        <div class="agent-title">
-                            <div class="agent-details">
-                                <h4><a href="#">میانگین امتیازات این فروشنده</a></h4>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-
-                        @if (Model.Score != null)
-                        {
-                            if (Model.Score.TaAhodZamaneTahvil != null)
-                            {
-                                <div class="notification warning closeable">
-                                    <p>امتیاز تعهد زمان تحویل : @Model.Score.TaAhodZamaneTahvil از 5</p>
-                                </div>
-                            }
-
-                            if (Model.Score.KeyfiateKar != null)
-                            {
-                                <div class="notification warning closeable">
-                                    <p>امتیاز کیفیت کار : @Model.Score.KeyfiateKar از 5</p>
-                                </div>
-                            }
-
-                            if (Model.Score.SehateEtelaAt != null)
-                            {
-                                <div class="notification warning closeable">
-                                    <p>امتیاز صحت اطلاعات : @Model.Score.SehateEtelaAt از 5</p>
-                                </div>
-                            }
-
-                            if (Model.Score.KhadamatePasAzForosh != null)
-                            {
-                                <div class="notification warning closeable">
-                                    <p>امتیاز خدمات پس ازفروش : @Model.Score.KhadamatePasAzForosh از 5</p>
-                                </div>
-                            }
-
-                            if (Model.Score.PasokhGoie != null)
-                            {
-                                <div class="notification warning closeable">
-                                    <p>امتیاز پاسخ گویی : @Model.Score.PasokhGoie از 5</p>
-                                </div>
-                            }
-                        }
-
+                <!-- Property details-->
+                <div class="card border-0 bg-secondary mb-4">
+                    <div class="card-body">
+                        <h5 class="mb-0 pb-3">مشخصات</h5>
+                        <ul class="list-unstyled mt-n2 mb-0">
+                            <li class="mt-2 mb-0"><b>نام شرکت: </b>@Model.CompanyName</li>
+                            <li class="mt-2 mb-0"><b>کشور: </b>@countries.Select(p=> p.Title).FirstOrDefault()</li>
+                            <li class="mt-2 mb-0"><b>استان: </b>@states.Select(p=> p.Title).FirstOrDefault()</li>
+                            <li class="mt-2 mb-0"><b>شهر: </b>@cities.Select(p=> p.Title).FirstOrDefault()</li>
+                            <li class="mt-2 mb-0"><b>ساعات پاسخ گویی: </b>@Model.PeriodTimesOfWork</li>
+                        </ul>
                     </div>
-                    <!-- Agent Widget / End -->
-
                 </div>
 
-                <div class="widget">
-
-                    @if (canInsertComment != null)
+                @if (canInsertComment != null)
+                {
+                    @if (canInsertComment.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Decline)
                     {
-                        if (canInsertComment.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Accepted)
-                        {
-                            <a asp-action="AddScoreToSeller" asp-route-sellerId="@sellerId" asp-area="" asp-controller="InquiryProduct" class="button fullwidth margin-top-5">امتیاز دهی</a>
-                        }
-                    }
-
-                </div>
-
-                <div class="widget">
-
-                    @if (canInsertComment != null)
-                    {
-                        if (canInsertComment.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Accepted)
-                        {
-                            <form asp-action="AddCommentFromUser" asp-area="" asp-controller="InquiryProduct" method="post">
-                                <input name="SellerId" value="@sellerId" type="hidden">
-                                <!-- Agent Widget -->
-                                <div class="agent-widget">
-                                    <div class="agent-title">
-                                        <div class="agent-details">
-                                            <h4><a href="#">افزودن نظر</a></h4>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-
-                                    <label> در چه مرحله ای از قرارداد هستید ؟ </label>
-                                    <select name="ContractStep" class="form-control">
-
-                                        <option>لطفا یک گزینه را انتخاب کنید </option>
-                                        <option value="0">درخواست قرارداد </option>
-                                        <option value="1">عقد قرارداد </option>
-                                        <option value="2">اندازه گیری ساخت </option>
-                                        <option value="3">تولید و مونتاژ </option>
-                                        <option value="4">نصب و آبگیری </option>
-                                        <option value="5">تحویل پروژه </option>
-
-                                    </select>
-
-                                    <textarea name="Description" placeholder="نظر خود را وارد کنید"></textarea>
-                                    <button type="submit" class="button fullwidth margin-top-5">ارسال پیام</button>
-                                </div>
-                            </form>
-
-                            <!-- Agent Widget / End -->
-                        }
-                        if (canInsertComment.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Decline)
-                        {
-                            <div class="agent-widget">
-
-                                <a class="button fullwidth margin-top-5" asp-action="RequestForContract" asp-area="" asp-controller="InquiryProduct" asp-route-sellerId="@sellerId">درخواست قرارداد</a>
-
-                            </div>
-                        }
+                        <a class="btn btn-lg btn-primary w-100 mb-3" asp-action="RequestForContract" asp-area="" asp-controller="InquiryProduct" asp-route-sellerId="@sellerId">درخواست قرارداد</a>
                     }
                     else
                     {
-                        <div class="agent-widget">
+                        <a class="btn btn-lg btn-primary w-100 mb-3" asp-action="RequestForContract" asp-area="" asp-controller="InquiryProduct" asp-route-sellerId="@sellerId">درخواست قرارداد</a>
+                    }
+                }
+                @if (canInsertComment != null)
+                {
+                    if (canInsertComment.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Accepted)
+                    {
+                        <a class="btn btn-lg btn-primary w-100 mb-3" asp-action="AddScoreToSeller" asp-route-sellerId="@sellerId" asp-area="" asp-controller="InquiryProduct">امتیاز دهی</a>
+                    }
+                }
 
-                            <a class="button fullwidth margin-top-5" asp-action="RequestForContract" asp-area="" asp-controller="InquiryProduct" asp-route-sellerId="@sellerId">درخواست قرارداد</a>
-
+                @if (Model.Score != null)
+                {
+                    <div class="card border-0 bg-secondary mb-4">
+                        <div class="card-body">
+                            <h5>امتیازات فروشنده : </h5>
+                            <ul class="list-unstyled row row-cols-md-2 row-cols-1 gy-2 mb-0 text-nowrap">
+                                @if (Model.Score.TaAhodZamaneTahvil != null)
+                                {
+                                    <li class="col-md-12"><i class="star-rating-icon fi-star-filled active"></i> امتیاز تعهد زمان تحویل : @Model.Score.TaAhodZamaneTahvil از 5</li>
+                                }
+                                @if (Model.Score.KeyfiateKar != null)
+                                {
+                                    <li class="col-md-12"><i class="star-rating-icon fi-star-filled active"></i> امتیاز کیفیت کار : @Model.Score.KeyfiateKar از 5 </li>
+                                }
+                                @if (Model.Score.SehateEtelaAt != null)
+                                {
+                                    <li class="col-md-12"><i class="star-rating-icon fi-star-filled active"></i> امتیاز صحت اطلاعات : @Model.Score.SehateEtelaAt از 5</li>
+                                }
+                                @if (Model.Score.KhadamatePasAzForosh != null)
+                                {
+                                    <li class="col-md-12"><i class="star-rating-icon fi-star-filled active"></i> امتیاز خدمات پس ازفروش : @Model.Score.KhadamatePasAzForosh از 5</li>
+                                }
+                                @if (Model.Score.PasokhGoie != null)
+                                {
+                                    <li class="col-md-12">
+                                        <i class="star-rating-icon fi-star-filled active"></i> امتیاز پاسخ گویی : @Model.Score.PasokhGoie از 5
+                                    </li>
+                                }
+                            </ul>
                         </div>
+                    </div>
+
+                }
+
+
+                @if (canInsertComment != null)
+                {
+                    if (canInsertComment.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Accepted)
+                    {
+
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <a class="text-decoration-none" href="/">
+                                        <img class="rounded-circle mb-2" src="@currentUser.GetUserAvatar()" width="60" alt="Avatar">
+                                        <h5 class="mb-1">@currentUser.Username</h5>
+                                        <div class="mb-1">
+                                            <span class="star-rating"><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i></span><span class="me-1 fs-sm text-muted">(@((comments == null) ? 0 : comments.Count()) نظر ثبت شده)</span>
+                                        </div>
+                                    </a>
+                                    <div class="me-4 flex-shrink-0"><a class="btn btn-icon btn-light-primary btn-xs shadow-sm rounded-circle ms-2 mb-2" href="#"><i class="fi-facebook"></i></a><a class="btn btn-icon btn-light-primary btn-xs shadow-sm rounded-circle ms-2 mb-2" href="#"><i class="fi-linkedin"></i></a></div>
+                                </div>
+                                <ul class="list-unstyled border-bottom mb-4 pb-4">
+                                    <li><a class="nav-link fw-normal p-0" href="#"><i class="fi-phone mt-n1 me-2 align-middle opacity-60"></i>@currentUser.Mobile</a></li>
+                                </ul>
+                                <!-- Contact form-->
+                                <form class="needs-validation" novalidate="" asp-action="AddCommentFromUser" asp-area="" asp-controller="InquiryProduct" method="post">
+                                    <input name="SellerId" value="@sellerId" type="hidden">
+
+                                    <div class="mb-3">
+                                        <label class="form-label" for="select-lg">در چه مرحله ای از قرارداد هستید ؟</label>
+                                        <select name="ContractStep" class="form-select form-select-lg" id="select-lg">
+                                            <option>لطفا یک گزینه را انتخاب کنید </option>
+                                            <option value="0">درخواست قرارداد </option>
+                                            <option value="1">عقد قرارداد </option>
+                                            <option value="2">اندازه گیری ساخت </option>
+                                            <option value="3">تولید و مونتاژ </option>
+                                            <option value="4">نصب و آبگیری </option>
+                                            <option value="5">تحویل پروژه </option>
+                                        </select>
+                                    </div>
+
+                                    <textarea name="Description" class="form-control mb-3" rows="3" placeholder="نظر خود را وارد کنید" style="resize: none;"></textarea>
+
+                                    <button class="btn btn-lg btn-primary d-block w-100" type="submit">ارسال پیام</button>
+                                </form>
+                            </div>
+                        </div>
+
                     }
 
-                </div>
-
+                }
 
             </div>
-        </div>
-
-
+        </aside>
     </div>
-</div>
+</section>
+
+
+<section class="container mb-5 pb-2 pb-lg-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h3 mb-0">آخرین استعلام شما</h2>
+    </div>
+    <div class="tns-carousel-wrapper tns-controls-outside-xxl tns-nav-outside tns-nav-outside-flush mx-n2">
+        <div class="tns-outer" id="tns2-ow">
+            <div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns2"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns2"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">9 to 12</span>  of 5</div><div id="tns2-mw" class="tns-ovh">
+                <div class="tns-inner" id="tns2-iw">
+                    <div class="tns-carousel-inner row gx-4 mx-0 pt-3 pb-4  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" data-carousel-options="{&quot;items&quot;: 4, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;500&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:3},&quot;992&quot;:{&quot;items&quot;:4}}}" id="tns2" style="transform: translate3d(-38.0952%, 0px, 0px);">
+
+                        @if (lastInquiry != null && lastInquiry.Any())
+                        {
+
+                            @foreach (var product in lastInquiry)
+                            {
+
+                                <div class="col tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
+                                    <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct">
+
+                                        <div class="card shadow-sm card-hover border-0 h-100">
+                                            <div class="card-img-top card-img-hover">
+                                                @if (!string.IsNullOrEmpty(product.UserAvatar))
+                                                {
+                                                    <img style="width: 100%;" src="/content/images/user/thumb/@product.UserAvatar" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
+                                                }
+                                                else
+                                                {
+                                                    <img src="/FinderSample/img/real-estate/catalog/13.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
+                                                }
+
+                                            </div>
+                                            <div class="card-body position-relative pb-3">
+                                                <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">فروشنده :</h4>
+                                                @if (string.IsNullOrEmpty(product.ShopName))
+                                                {
+                                                    <h3 class="h6 mb-2 fs-base">
+                                                        <a class="nav-link stretched-link" href="/">
+                                                            وارد نشده است
+                                                        </a>
+                                                    </h3>
+                                                }
+                                                else
+                                                {
+                                                    <h3 class="h6 mb-2 fs-base">
+                                                        <a class="nav-link stretched-link" asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct">
+                                                            @product.ShopName
+                                                        </a>
+                                                    </h3>
+                                                }
+                                                <p class="mb-2 fs-sm text-muted"></p>
+
+                                                @if (product.Price.HasValue)
+                                                {
+                                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>@product.Price.Value.ToString("#,000") ریال</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>وارد نشده</div>
+                                                }
+                                            </div>
+                                            <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
+
+                                                <span class="d-inline-block mx-1 px-2 fs-sm">
+                                                    @product.Score
+                                                    <i class="fi-star-filled me-1 mt-n1 fs-lg text-muted"></i>
+                                                </span>
+
+                                            </div>
+                                        </div>
+
+                                    </a>
+                                </div>
+
+                            }
+
+                        }
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 

@@ -33,6 +33,8 @@ public interface IInquiryService
 
     Task<List<InquiryViewModel>?> ListOfInquiry(string userMacAddress , string userId);
 
+    Task<List<InquiryViewModel>?> ListOfInquiryLast6(string userMacAddress, string userId);
+
     //Initial Result Of User Inquiry
     Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string UserId, string userMacAddress);
 
