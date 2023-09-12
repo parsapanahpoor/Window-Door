@@ -1,5 +1,12 @@
-﻿@model Window.Domain.ViewModels.Site.Home.IndexViewModel
+﻿@using Window.Application.Convertors;
+@using Window.Application.StticTools;
+@model Window.Domain.ViewModels.Site.Home.IndexViewModel
 
+@section Styles{
+
+
+
+}
 
 <!-- Hero-->
 <section class="container-fluid my-5 pt-5 pb-lg-4 px-xxl-4">
@@ -8,7 +15,7 @@
         <div class="content-overlay" style="max-width: 856px;">
             <h1 class="display-5 mb-5 pb-md-3 px-md-3 text-white text-center">راه آسان برای پیدا کردن یک ملک مناسب</h1>
             <form class="form-group d-block d-md-flex position-relative rounded-md-pill me-lg-n5" style="width: 100%;">
-      
+
                 <div class="d-sm-flex" style="width: 100%;">
 
                     <a class="btn btn-primary btn-lg rounded-pill w-100 w-md-auto me-sm-3" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct">
@@ -22,56 +29,194 @@
 
 <!-- Links-->
 <section class="container mb-5 pb-lg-5">
-    <div class="row row-cols-md-3 row-cols-1 gy-3">
-        <!-- Calculate property cost-->
-        <div class="col">
-            <div class="card card-hover h-100 border-0 bg-faded-warning position-relative">
-                <div class="card-body pb-2">
-                    <h5 class="mb-2 pb-1 ">محاسبه ارزش ملک</h5>
-                    <p class="mb-0">ما می توانیم اجاره تقریبی شما را محاسبه کنیم.</p>
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 justify-content-center">
+      
+            <!-- Feature item-->
+            <div class="col">
+                <div class="card border-0 shadow-sm card-hover h-100">
+                    <div class="card-body icon-box">
+                        <div class="icon-box-media bg-faded-warning text-warning rounded-circle mb-3"><i class="fi-cash"></i></div>
+                        <h3 class="h5 card-title">قیمت منصفانه</h3>
+                        <p class="card-text fs-sm">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
+                    </div>
                 </div>
-                <div class="card-footer py-1 border-0"><a class="stretched-link btn btn-link mb-3 px-0 text-warning" href="#cost-calculator" data-bs-toggle="modal">محاسبه</a></div>
+            </div>
+            <!-- Feature item-->
+            <div class="col">
+                <div class="card border-0 shadow-sm card-hover h-100">
+                    <div class="card-body icon-box">
+                        <div class="icon-box-media bg-faded-primary text-primary rounded-circle mb-3"><i class="fi-heart"></i></div>
+                        <h3 class="h5 card-title">آسایش خاطر</h3>
+                        <p class="card-text fs-sm">با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Feature item-->
+            <div class="col">
+                <div class="card border-0 shadow-sm card-hover h-100">
+                    <div class="card-body icon-box">
+                        <div class="icon-box-media bg-faded-success text-success rounded-circle mb-3"><i class="fi-users"></i></div>
+                        <h3 class="h5 card-title">تیم با تجربه</h3>
+                        <p class="card-text fs-sm">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
+                    </div>
+                </div>
+            </div>
+           
+            <!-- Feature item-->
+            <div class="col">
+                <div class="card border-0 shadow-sm card-hover h-100">
+                    <div class="card-body icon-box">
+                        <div class="icon-box-media bg-faded-warning text-warning rounded-circle mb-3"><i class="fi-checkbox-checked-alt"></i></div>
+                        <h3 class="h5 card-title">ارائه راه حل ساده</h3>
+                        <p class="card-text fs-sm">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- Help center link-->
-        <div class="col">
-            <div class="card card-hover h-100 border-0 bg-faded-accent position-relative">
-                <div class="card-body pb-2">
-                    <h5 class="mb-2 pb-1 ">دیدن از مرکز پشتیبانی</h5>
-                    <p class="mb-0">در اینجا می توانید سوالات متداول را پیدا کنید.</p>
-                </div>
-                <div class="card-footer py-1 border-0"><a class="stretched-link btn btn-link mb-3 px-0 text-accent" href="real-estate-help-center.html">بیشتر بخوانید</a></div>
-            </div>
-        </div>
-        <!-- How it works link-->
-        <div class="col">
-            <div class="card card-hover h-100 border-0 bg-faded-success position-relative">
-                <div class="card-body pb-2">
-                    <h5 class="mb-2 pb-1 ">آشنایی با نحوه فعالیت</h5>
-                    <p class="mb-0">در اینجا یک راهنمای گام به گام برای اجاره کنندگان است.</p>
-                </div>
-                <div class="card-footer py-1 border-0"><a class="stretched-link btn btn-link mb-3 px-0 text-success" href="real-estate-about.html">شروع کنید</a></div>
-            </div>
+</section>
+
+
+<section class="container mb-5 pb-2 pb-lg-4">
+    <div class="row align-items-center">
+        <div class="col-md-5"><img class="d-block mx-md-0 mx-auto mb-md-0 mb-4 rotate-img" src="/FinderSample/img/real-estate/illustrations/calculator.svg" width="416" alt="Illustration"></div>
+        <div class="col-xxl-6 col-md-7 text-md-start text-center">
+            <h2 class="">محاسبه آنلاین و سریع هزینه درب و پنجره ی دلخواه شما</h2>
+            <p class="pb-3 fs-lg"> ما درب و پنجره خوب زیادی داریم و یکی از آنها این درب و پنجره است و برای آن کاتالوگ شما را ترتیب داده ایم. لطفا بر روی زیر کلیک کنید!  <br> فضای داخلی از حجم ، فضا ، هوا ، نسبت ، با نور و روحیه خاص. این فضای داخلی برای همیشه ماندگار است. این واقعا موثر است و ما می توانیم به راحتی این کار را برای مشتریان خود مدیریت کنیم. </p><a class="btn btn-lg btn-primary" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct"><i class="fi-calculator me-2"></i>استعلام رایگان</a>
         </div>
     </div>
 </section>
+
+@if (Model.FreeConsultant != null)
+{
+    <section class="position-relative bg-white rounded-xxl-4 mb-5 pb-1 py-md-3 zindex-5" style="margin-top: -30px;">
+        <div class="container pt-5 mb-4 mb-md-5">
+            <h2 class="text-center ">مشاوره ی رایگان</h2>
+            <p class="mb-4 pb-2 mx-auto fs-lg text-center" style="max-width: 616px;">
+                افزایش آگاهی شما در دستور کار ما قرار دارد .
+
+            </p>
+            <!-- Features grid-->
+            <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 justify-content-center">
+                @foreach (var consultant in Model.FreeConsultant)
+                {
+                    <div class="col">
+                        <div class="card border-0 shadow-sm card-hover h-100">
+                            <div class="card-body icon-box">
+                                <div class="icon-box-media bg-faded-warning text-warning rounded-circle mb-3"><i class="fi-checkbox-checked-alt"></i></div>
+                                <h3 class="h5 card-title">@consultant.Title</h3>
+                                <p class="card-text fs-sm">@consultant.Description</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </section>
+}
+
+@if (Model.Articles != null && Model.Articles.Any())
+{
+
+    <section class="container mt-n3 mt-md-0 mb-5 pb-3 pb-lg-4">
+        <div class="d-flex align-items-end justify-content-between mb-4 pb-md-2">
+            <h2 class="h3 mb-0 ">نماها و پنجره های خاص</h2><a class="btn btn-link fw-normal ms-2 p-0" asp-action="ListOfArticles" asp-area="" asp-controller="Article">مشاهده همه<i class="fi-arrow-long-left ms-2"></i></a>
+        </div>
+        <!-- Carousel-->
+        <div class="tns-carousel-wrapper">
+
+            <div class="tns-outer" id="tns1-ow">
+                <div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">1</span>  of 2</div><div class="tns-inner" id="tns1-iw">
+                    <div class="tns-carousel-inner tns-slider tns-gallery tns-subpixel tns-calc tns-horizontal" data-carousel-options="{&quot;mode&quot;: &quot;gallery&quot;, &quot;speed&quot;: 800, &quot;nav&quot;: false, &quot;controlsContainer&quot;: &quot;#carousel-controls-lp&quot;}" id="tns1">
+
+                        @{
+                            int i = 0;
+                        }
+
+
+                        @foreach (var item in Model.Articles)
+                        {
+                            if (i == 0)
+                            {
+
+                                <!-- Item-->
+                                <div class="tns-item tns-fadeIn tns-slide-active" id="tns1-item0" style="left: 0%;">
+                                    <div class="row">
+                                        <div class="col-lg-8 col-md-7 mb-md-0 mb-3">
+                                            <div class="position-relative pr-lg-5">
+                                                <div class="position-absolute top-0 start-0 zindex-1 m-3 p-1"><span class="badge bg-info fs-sm me-2">جدید</span><span class="badge bg-success fs-sm me-2">تاییده شده</span></div><img class="rounded-3 zindex-5" src="@FilePaths.ArticleOriginimage/@item.Image" alt="Article image">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-5">
+                                            <span class="d-inline-block fs-sm text-uppercase text-primary mb-2 from-top">پیشنهاد استثنایی</span>
+                                            <div class="from-end delay-2">
+                                                <h3 class="h4 mb-2">@item.Title</h3>
+                                                <p class="mb-4 pb-md-2">@item.ShortDescription</p>
+                                            </div>
+                                            <div class="btn-group btn-group-lg scale-up delay-3" role="group" aria-label="خرید یا نشان کردن">
+                                                <a class="btn btn-primary" asp-action="ShowArticleDetailById" asp-route-id="@item.Id" asp-area="" asp-controller="Article">مشاهده ی جزییات و کسب اطلاعات</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <!-- Item-->
+                                <div class="tns-item tns-normal" id="tns1-item1" aria-hidden="true" tabindex="-1">
+                                    <div class="row">
+                                        <div class="col-lg-8 col-md-7 mb-md-0 mb-3">
+                                            <div class="position-relative pr-lg-5">
+                                                <div class="position-absolute top-0 start-0 zindex-1 m-3 p-1"><span class="badge bg-info fs-sm me-2">جدید</span><span class="badge bg-success fs-sm me-2">تاییده شده</span></div><img class="rounded-3 zindex-5" src="@FilePaths.ArticleOriginimage/@item.Image" alt="Article image">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-5">
+                                            <span class="d-inline-block fs-sm text-uppercase text-primary mb-2 from-top">پیشنهاد استثنایی</span>
+                                            <div class="from-end delay-2">
+                                                <h3 class="h4 mb-2">@item.Title</h3>
+                                              
+                                                <p class="mb-4 pb-md-2">@item.ShortDescription</p>
+                                            </div>
+                                            <div class="btn-group btn-group-lg scale-up delay-3" role="group" aria-label="Buy now or add to wishlist">
+                                                <a class="btn btn-primary" asp-action="ShowArticleDetailById" asp-route-id="@item.Id" asp-area="" asp-controller="Article">مشاهده ی جزییات و کسب اطلاعات</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            i++;
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Carousel custom controls-->
+        <div class="tns-carousel-controls pt-2 mt-4" id="carousel-controls-lp" aria-label="Carousel Navigation" tabindex="0">
+            <button class="me-3" type="button" aria-controls="tns1" tabindex="-1" data-controls="prev"><i class="fi-chevron-left fs-xs"></i></button>
+            <button type="button" aria-controls="tns1" tabindex="-1" data-controls="next"><i class="fi-chevron-right fs-xs"></i></button>
+        </div>
+    </section>
+}
+
 
 @if (Model.TazminDarKharid != null)
 {
-    
-<section class="container mb-5 pb-sm-3 pb-lg-4">
-    <div class="bg-secondary rounded-3">
-        <div class="col-md-11 col-12 offset-md-1 p-md-0 p-2 d-flex align-items-center justify-content-between">
-            <div class="me-md-5 py-md-5 px-md-0 p-4" style="max-width: 526px;">
-                <h2 class="mb-md-4 ">
+
+    <section class="container mb-5 pb-sm-3 pb-lg-4">
+        <div class="bg-secondary rounded-3">
+            <div class="col-md-11 col-12 offset-md-1 p-md-0 p-2 d-flex align-items-center justify-content-between">
+                <div class="me-md-5 py-md-5 px-md-0 p-4" style="max-width: 526px;">
+                    <h2 class="mb-md-4 ">
                         تضمین درخرید <br>
-                </h2>
+                    </h2>
                     <p class="mb-4 pb-md-3 fs-lg">@Model.TazminDarKharid.Description </p><a class="btn btn-lg btn-primary" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct"><i class="fi-search me-2"></i>درب و پنجره ی خود را پیدا کن !</a>
+                </div>
+                <div class="col-4 d-md-block d-none align-self-end px-0" style="display: block !important;"><img class="mt-n5" src="/FinderSample/img/real-estate/about/01.png" width="406" alt="Cover image"></div>
             </div>
-            <div class="col-4 d-md-block d-none align-self-end px-0" style="display: block !important;"><img class="mt-n5" src="/FinderSample/img/real-estate/about/01.png" width="406" alt="Cover image"></div>
         </div>
-    </div>
-</section>
+    </section>
 
 }
-

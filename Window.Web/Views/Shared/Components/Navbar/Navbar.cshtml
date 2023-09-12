@@ -7,7 +7,7 @@
 <!-- Navbar-->
 <header class="navbar navbar-expand-lg navbar-light bg-light fixed-top" data-scroll-header>
     <div class="container">
-        <a class="navbar-brand ms-3 ms-xl-4 logo" href="real-estate-home-v1.html"><img class="d-block" src="/FinderSample/img/logo/logo-dark.svg" width="116" alt="Finder"></a>
+        <a class="navbar-brand ms-3 ms-xl-4 logo" href="/"><img class="d-block" src="/FinderSample/img/logo/logo-dark.svg" width="116" alt="Finder"></a>
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 
         @if (!User.Identity.IsAuthenticated)
@@ -25,42 +25,51 @@
         <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
             <ul class="navbar-nav navbar-nav-scroll" style="max-height: 35rem;">
 
-                <!-- Demos switcher-->
-                <li class="nav-item dropdown py-2 me-lg-2">
-                    <a class="nav-link dropdown-toggle align-items-center border-end-lg py-1 pe-lg-4" href="#" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fi-layers"></i> دموها</a>
+                <!-- Menu items-->
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">استعلام </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="real-estate-home-v1.html"> دمو املاک <i class="fi-building fs-base opacity-50 me-2"></i></a></li>
-                        <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="car-finder-home.html"> دمو خرید خودرو <i class="fi-car fs-base opacity-50 me-2"></i></a></li>
-                        <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="job-board-home-v1.html"> دمو کاریابی <i class="fi-briefcase fs-base opacity-50 me-2"></i></a></li>
-                        <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="city-guide-home-v1.html"> دمو راهنمای سفر <i class="fi-map-pin fs-base opacity-50 me-2"></i></a></li>
-                        <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="index.html">صفحه اصلی <i class="fi-home fs-base opacity-50 me-2"></i></a></li>
-                        <li><a class="dropdown-item" href="components/typography.html">ابزارهای بوت استرپ <i class="fi-list fs-base opacity-50 me-2"></i></a></li>
+                        <li><a class="dropdown-item" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct">استعلام گیری</a></li>
                     </ul>
                 </li>
 
                 <!-- Menu items-->
-                <li class="nav-item dropdown active">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">خانه</a>
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        نماها و پنجره های خاص
+                    </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="real-estate-home-v1.html">خانه - نسخه 1</a></li>
-                        <li><a class="dropdown-item" href="real-estate-home-v2.html">خانه - نسخه 2</a></li>
+                        <li>
+                            <a class="dropdown-item" asp-action="ListOfArticles" asp-area="" asp-controller="Article">
+                                نماها و پنجره های خاص
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">املاک</a>
+                <!-- Menu items-->
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">سوالات متداول </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="real-estate-catalog-rent.html">ملک برای اجاره</a></li>
-                        <li><a class="dropdown-item" href="real-estate-catalog-sale.html">ملک برای فروش</a></li>
-                        <li><a class="dropdown-item" href="real-estate-single-v1.html">جزئیات - نسخه 1</a></li>
-                        <li><a class="dropdown-item" href="real-estate-single-v2.html">جزئیات - نسخه 2</a></li>
+                        <li><a class="dropdown-item" asp-action="ListOfQuestionAndAnswers" asp-area="" asp-controller="QA">سوالات متداول</a></li>
                     </ul>
                 </li>
 
+                 <!-- Menu items-->
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">ارتباط با ما  </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" asp-action="ContactUs" asp-area="" asp-controller="Home">ارتباط با ما</a></li>
+                    </ul>
+                </li>
+
+                <!-- Menu items-->
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">درباره ی ما  </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" asp-action="AboutUs" asp-area="" asp-controller="Home">درباره ی ما</a></li>
+                    </ul>
+                </li>
 
                 <li class="nav-item d-lg-none"><a class="nav-link" href="#signin-modal" data-bs-toggle="modal"><i class="fi-user me-2"></i>ورود به حساب کاربری</a></li>
             </ul>

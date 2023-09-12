@@ -293,5 +293,23 @@ namespace Window.Web.Controllers
         }
 
         #endregion
+
+        #region Contact US 
+
+        public async Task<IActionResult> ContactUs()
+        {
+            return View();
+        }
+
+        #endregion
+
+        #region About Us 
+
+        public async Task<IActionResult> AboutUs()
+        {
+            return View();
+        }
+
+        #endregion
     }
 }

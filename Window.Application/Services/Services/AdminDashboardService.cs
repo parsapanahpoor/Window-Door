@@ -78,6 +78,18 @@ namespace Window.Application.Services.Services
 
             #endregion
 
+            #region Free Consultant
+
+            model.FreeConsultant = await _context.Counselings.Where(p => !p.IsDelete).ToListAsync();
+
+            #endregion
+
+            #region Articles
+
+            model.Articles = await _context.Articles.Where(p => !p.IsDelete).Take(5).ToListAsync();
+
+            #endregion
+
             return model;
         }
 
