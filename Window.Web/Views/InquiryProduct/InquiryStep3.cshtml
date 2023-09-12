@@ -2,18 +2,123 @@
 
 @{
     ViewData["Title"] = "استعلام گیری";
+    Layout = "/Views/InquiryProduct/_InquiryLayout.cshtml";
+
+}
+
+@section Styles
+    {
+    <style>
+        .page-loading {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-transition: all .4s .2s ease-in-out;
+            transition: all .4s .2s ease-in-out;
+            background-color: #fff;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 9999;
+        }
+
+            .page-loading.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .page-loading-inner {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            -webkit-transition: opacity .2s ease-in-out;
+            transition: opacity .2s ease-in-out;
+            opacity: 0;
+        }
+
+        .page-loading.active > .page-loading-inner {
+            opacity: 1;
+        }
+
+        .page-loading-inner > span {
+            display: block;
+            font-size: 1rem;
+            font-weight: normal;
+            color: #666276;
+            ;
+        }
+
+        .page-spinner {
+            display: inline-block;
+            width: 2.75rem;
+            height: 2.75rem;
+            margin-bottom: .75rem;
+            vertical-align: text-bottom;
+            border: .15em solid #bbb7c5;
+            border-right-color: transparent;
+            border-radius: 50%;
+            -webkit-animation: spinner .75s linear infinite;
+            animation: spinner .75s linear infinite;
+        }
+
+        @@-webkit-keyframes spinner {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes spinner {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <!-- Vendor Styles-->
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/simplebar/dist/simplebar.min.css" />
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css" />
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/filepond/dist/filepond.min.css" />
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="/FinderSample/css/theme.min.css">
 }
 
 @section Scripts
     {
+    <script src="/admin/js/jquery.min.js"></script>
+
     <script>
 
         $(document).ready(function () {
-            $("#target").click(function () {
+            $(".target").click(function () {
+
+                console.log("hello");
 
                 Swal.fire({
                     title: "درخواست استعلام",
                     text: "لطفا تا اعلام نتیجه ی استعلام خود شکیبا باشید. این روند ممکن است تا چند دقیقه زمان ببرد.",
+                    icon: 'success',
+                    showCancelButton: false,
+                    showConfirmButton: false
+                });
+
+            });
+
+            $(".target1").click(function () {
+
+                console.log("hello");
+
+                Swal.fire({
+                    title: "ثبت اندازه",
+                    text: "لطفا تا ثبت اندازه های خود شکیبا باشید.",
                     icon: 'success',
                     showCancelButton: false,
                     showConfirmButton: false
@@ -25,211 +130,207 @@
     </script>
 }
 
-<div class="parallax titlebar" data-background="/Site/images/7.jpg" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -799.306px;">
-    <div class="parallax-overlay" style="background-color: rgb(51, 51, 51); opacity: 0.7;"></div>
 
-    <div id="titlebar">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
+<div class="container mt-5 mb-md-4 py-5">
 
-                    <h2>محصولات</h2>
-                    <span>لیست درب ها و پنجره ها </span>
+    <!-- Breadcrumb-->
+    <nav class="mb-3 mb-md-4 pt-md-3" aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">خانه</a></li>
+            <li class="breadcrumb-item active" aria-current="page">استعلام گیری - قدم سوم</li>
+        </ol>
+    </nav>
 
-                    <nav id="breadcrumbs">
-                        <ul>
-                            <li>
-                                <a id="target" asp-action="InquiryStep4" asp-route-userMacAddress="@ViewBag.UserMacAddress" asp-controller="InquiryProduct" asp-area="" class="button">نمایش نتیجه ی استعلام </a>
-                            </li>
+    <!-- Page content-->
+    <div class="row justify-content-center pb-sm-2">
+        <div class="col-lg-11 col-xl-10">
 
+            <div class="text-center pb-4 mb-3">
+                <h1 class="h4 mb-4 font-vazir">انتخاب نمونه ی مورد نظر</h1>
+                <p class="mb-4">در این قسمت شما می بایست نمونه ای مورد خود را انتخاب کنید . </p>
+                <a asp-action="InquiryStep4" asp-route-userMacAddress="@ViewBag.UserMacAddress" asp-controller="InquiryProduct" asp-area=""  class=" target btn btn-primary btn-lg rounded-pill"><i class="fi-check me-2"></i>نمایش نتیجه ی استعلام</a>
 
-                        </ul>
-                    </nav>
+            </div>
 
+            <!-- Steps-->
+            <div class="bg-light rounded-3 py-4 px-md-4 mb-3">
+                <div class="steps pt-4 pb-1">
+                    <div class="step active">
+                        <div class="step-progress"><span class="step-progress-start"></span><span class="step-progress-end"></span><span class="step-number">1</span></div>
+                        <div class="step-label"> نوع محصول</div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-progress"><span class="step-progress-start"></span><span class="step-progress-end"></span><span class="step-number">2</span></div>
+                        <div class="step-label"> برند</div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-progress"><span class="step-progress-start"></span><span class="step-progress-end"></span><span class="step-number">3</span></div>
+                        <div class="step-label"> درب و پنچره</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-progress"><span class="step-progress-start"></span><span class="step-progress-end"></span><span class="step-number">4</span></div>
+                        <div class="step-label"> نتیجه ی استعلام</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
-<div class="container">
-    <div class="row sticky-wrapper">
+            <div class="bg-light rounded-3 pt-4 pb-0 px-4 p-md-5 mb-3">
+                <!-- Title + Action buttons-->
+                <div class="d-md-flex align-items-center mb-4 pb-md-2">
 
-        <div class="col-md-12">
+                    <h2 class="h5 mb-md-0 font-vazir"><i class="fi-award text-primary fs-5 mt-n1 me-2 pe-1"></i>لطفا محصول موردنظر خود را انتخاب کنید.</h2>
 
-            <!-- Listings -->
-            <div class="listings-container list-layout">
+                </div>
+
+
 
                 @if (ViewBag.CountOfVerifySample == 0)
                 {
-                    <div class="notification error  closeable">
-                        <p> تعداد نمونه ی مجاز قابل انتخاب شما : <b>@ViewBag.CountOfVerifySample</b></p>
-                        <a class="close"></a>
+
+                    <div class="alert alert-danger mb-4" role="alert">
+                        <div class="d-flex">
+                            <i class="fi-alert-circle me-2 me-sm-3"></i>
+                            <p class="fs-sm mb-1"> تعداد نمونه ی مجاز قابل انتخاب شما : <b>@ViewBag.CountOfVerifySample</p>
+                        </div>
                     </div>
                 }
                 else
                 {
-                    <div class="notification success closeable">
-                        <p> تعداد نمونه ی مجاز قابل انتخاب شما : <b>@ViewBag.CountOfVerifySample</b></p>
-                        <a class="close"></a>
+                    <div class="alert alert-success mb-4" role="alert">
+                        <div class="d-flex">
+                            <i class="fi-alert-circle me-2 me-sm-3"></i>
+                            <p class="fs-sm mb-1">تعداد نمونه ی مجاز قابل انتخاب شما : @ViewBag.CountOfVerifySample</p>
+                        </div>
                     </div>
                 }
 
                 @if (Model != null && Model.Any())
                 {
-                    @foreach (var product in Model)
+                    foreach (var product in Model)
                     {
-                        <form asp-action="InquiryStep3" asp-controller="InquiryProduct" asp-area="" id="" method="post">
+                        <form asp-action="InquiryStep3" asp-controller="InquiryProduct" asp-area=""  method="post">
                             <input type="hidden" value="@product.Id" name="SampleId" />
                             <input type="hidden" value="@ViewBag.UserMacAddress" name="userMacAddress" />
 
-                            <!-- Listing Item -->
-                            <div class="listing-item">
+                            <div class="card shadow-sm mt-2 p-md-2 mx-n4 mx-md-0">
+                                <div class="card-body p-4">
+                                    <div class="d-sm-flex justify-content-between align-items-start pb-4">
+                                        <div class="flex-shrink-0 order-sm-2 mb-4">
+                                            <div class="col-xxl-12 col-md-12 col-sm-12 mb-3">
+                                                <a href="@Window.Application.StticTools.FilePaths.SampleThumbimage@product.Image">
 
-                                <a href="@Window.Application.StticTools.FilePaths.SampleOriginimage/@product.Image" class="listing-img-container" style="height: 273px;">
+                                                    <img class="d-block rounded-3 w-100 mx-auto" src="@Window.Application.StticTools.FilePaths.SampleThumbimage@product.Image" alt="Rounded image" style="max-width: 16rem;">
 
-                                    <div class="listing-badges">
-                                        <span>@product.Id :  کد کالا</span>
-                                    </div>
-
-                                    <img src="@Window.Application.StticTools.FilePaths.SampleOriginimage/@product.Image" alt="" style="height: 273px;">
-
-                                </a>
-
-                                <div class="listing-content">
-
-                                    <div class="listing-title">
-                                        <h4><a href="single-property-page-1.html">@product.SegmentName</a></h4>
-
-                                        <div class="listing-badges">
-                                            <span>@product.Id :  کد کالا</span>
+                                                </a>
+                                            </div>
                                         </div>
+
+                                        <div class="order-sm-1">
+                                            <h3 class="h4 mb-sm-4 font-vazir">@product.SegmentName</h3>
+
+                                            <ul class="list-unstyled text-nav">
+
+                                                <li>  کد محصول : <span class="text-muted">@product.Id </span> </li>
+                                                <li> <span class="fs-sm btn text-nav btn-outline-secondary btn-xs disabled opacity-100 rounded-pill me-2 mb-2 ms-1 mt-1"><i class="fi-alert-triange fs-xs me-2"></i>حداقل عرض : <span class="text-muted">@product.MinWidth سانتی متر </span></span> </li>
+                                                <li> <span class="fs-sm btn text-nav btn-outline-secondary btn-xs disabled opacity-100 rounded-pill me-2 mb-2 ms-1 mt-1"><i class="fi-alert-triange fs-xs me-2"></i>حداکثر عرض : <span class="text-muted">@product.MaxWidth سانتی متر</span> </span> </li>
+                                                <li> <span class="fs-sm btn text-nav btn-outline-secondary btn-xs disabled opacity-100 rounded-pill me-2 mb-2 ms-1 mt-1"><i class="fi-alert-triange fs-xs me-2"></i> حداقل ارتفاع : <span class="text-muted">@product.MinHeight سانتی متر</span></span> </li>
+                                                <li> <span class="fs-sm btn text-nav btn-outline-secondary btn-xs disabled opacity-100 rounded-pill me-2 mb-2 ms-1 mt-1"><i class="fi-alert-triange fs-xs me-2"></i>حداکثر ارتفاع :  <span class="text-muted">@product.MaxHeight سانتی متر</span></span> </li>
+
+                                            </ul>
+
+                                        </div>
+
                                     </div>
-                                    <h5 class="txt-cen">ابعاد را به سانتی متر وارد کنید</h5>
-                                    <ul class="listing-details">
 
-                                        <li>  حداقل عرض :@product.MinWidth</li>
-                                        <li> حداقل ارتفاع  :@product.MinHeight</li>
+                                    <div class="row border-top" style="padding: 20px 20px 0px 20px;">
 
+                                        @if (product.Id == 16 || product.Id == 15 || product.Id == 42 || product.Id == 43)
 
-                                        <li> حداکثر عرض  :@product.MaxWidth</li>
-                                        <li>  حداکثر ارتفاع :@product.MaxHeight</li>
+                                        {
+                                            <div class="col-sm-6 mb-4">
+                                                <label class="form-label" for="pr-study-field">عرض محصول <span class="text-danger">*</span></label>
+                                                <input class="form-control form-control-lg" type="text" min="0" step="1" name="Width" id="pr-study-field" placeholder="عرض را وارد کنید" required="">
+                                            </div>
+                                            <div class="col-sm-6 mb-4">
+                                                <label class="form-label" for="pr-college">ارتفاع محصول <span class="text-danger">*</span></label>
+                                                <input class="form-control form-control-lg" name="Height" min="0" step="1" type="text" id="pr-college" placeholder="ارتفاع را وارد کنید" required="">
+                                            </div>
+                                            <div class="col-sm-6 mb-4">
+                                                <label class="form-label" for="pr-college">عرض درب a <span class="text-danger">*</span></label>
+                                                <input class="form-control form-control-lg" type="text" min="0" step="1" name="katibeSize" id="pr-college" placeholder="عرض درب a" required="">
+                                            </div>
+                                            <div class="col-sm-6 mb-4">
+                                                <label class="form-label" for="pr-college">تعداد را وارد کنید <span class="text-danger">*</span></label>
+                                                <input class="form-control form-control-lg" type="text" min="1" name="SampleCount" id="pr-college" placeholder="تعداد را وارد کنید" required="">
+                                            </div>
 
-
-                                    </ul>
-
-                                    <div class="listing-footer">
-                                        <div class="row">
-
-                                            @if (product.Id == 16 || product.Id == 15 || product.Id == 42 || product.Id == 43)
-
+                                            <div class="col-sm-6 mb-4">
+                                                <button type="submit" class="target1 btn btn-success mb-3 me-2">ثبت</button>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            @if (product.Id == 26 || product.Id == 25 || product.Id == 24 || product.Id == 23 || product.Id == 22
+                                           || product.Id == 47 || product.Id == 48 || product.Id == 49 || product.Id == 50 || product.Id == 53
+                                           || product.Id == 52 || product.Id == 51 || product.Id == 44 || product.Id == 45 || product.Id == 46
+                                           || product.Id == 57 || product.Id == 56 || product.Id == 55)
                                             {
-                                                <div class="row">
-
-                                                    <div class="col-md-4 col-xs-6">
-                                                        <input type="text" min="0" step="1" name="Width" placeholder="عرض را وارد کنید">
-                                                    </div>
-
-                                                    <div class="col-md-4 col-xs-6">
-                                                        <input name="Height" min="0" step="1" type="text" placeholder="ارتفاع را وارد کنید">
-                                                    </div>
-
-                                                    <div class="col-md-4 col-xs-6">
-
-                                                        <input type="text" min="0" step="1" name="katibeSize" placeholder="عرض درب a">
-
-                                                    </div>
+                                                <div class="col-sm-6 mb-4">
+                                                    <label class="form-label" for="pr-study-field">عرض محصول <span class="text-danger">*</span></label>
+                                                    <input class="form-control form-control-lg" type="text" min="0" step="1" name="Width" id="pr-study-field" placeholder="عرض را وارد کنید" required="">
+                                                </div>
+                                                <div class="col-sm-6 mb-4">
+                                                    <label class="form-label" for="pr-college">ارتفاع محصول <span class="text-danger">*</span></label>
+                                                    <input class="form-control form-control-lg" name="Height" min="0" step="1" type="text" id="pr-college" placeholder="ارتفاع را وارد کنید" required="">
+                                                </div>
+                                                <div class="col-sm-6 mb-4">
+                                                    <label class="form-label" for="pr-college">عرض درب a <span class="text-danger">*</span></label>
+                                                    <input class="form-control form-control-lg" type="text" min="0" step="1" name="katibeSize" id="pr-college" placeholder="عرض درب a" required="">
+                                                </div>
+                                                <div class="col-sm-6 mb-4">
+                                                    <label class="form-label" for="pr-college">تعداد را وارد کنید <span class="text-danger">*</span></label>
+                                                    <input class="form-control form-control-lg" type="text" min="1" name="SampleCount" id="pr-college" placeholder="تعداد را وارد کنید" required="">
                                                 </div>
 
-                                                <div class="row">
-
-                                                    <div class="col-md-3 col-xs-6">
-
-                                                        <input type="text" min="1" name="SampleCount" placeholder="تعداد را وارد کنید">
-
-                                                    </div>
-
-                                                    <div class="col-md-3 col-xs-6">
-                                                        <button type="submit" class="button">ثیت</button>
-                                                    </div>
-
+                                                <div class="col-sm-6 mb-4">
+                                                    <button type="submit" class="target1 btn btn-success mb-3 me-2">ثبت</button>
                                                 </div>
                                             }
+
                                             else
                                             {
-                                                @if (product.Id == 26 || product.Id == 25 || product.Id == 24 || product.Id == 23 || product.Id == 22
-                                               || product.Id == 47 || product.Id == 48 || product.Id == 49 || product.Id == 50 || product.Id == 53
-                                               || product.Id == 52 || product.Id == 51 || product.Id == 44 || product.Id == 45 || product.Id == 46
-                                               || product.Id == 57 || product.Id == 56 || product.Id == 55)
-                                                {
-                                                    <div class="row">
-                                                        <div class="col-md-4 col-xs-6">
-                                                            <input type="text" min="0" step="1" name="Width" placeholder="عرض را وارد کنید">
-                                                        </div>
+                                                <div class="col-sm-4 mb-4">
+                                                    <label class="form-label" for="pr-study-field">عرض محصول <span class="text-danger">*</span></label>
+                                                    <input class="form-control form-control-lg" type="text" min="0" step="1" name="Width" id="pr-study-field" placeholder="عرض را وارد کنید" required="">
+                                                </div>
+                                                <div class="col-sm-4 mb-4">
+                                                    <label class="form-label" for="pr-college">ارتفاع محصول <span class="text-danger">*</span></label>
+                                                    <input class="form-control form-control-lg" name="Height" min="0" step="1" type="text" id="pr-college" placeholder="ارتفاع را وارد کنید" required="">
+                                                </div>
+                                                <div class="col-sm-4 mb-4">
+                                                    <label class="form-label" for="pr-college">تعداد را وارد کنید <span class="text-danger">*</span></label>
+                                                    <input class="form-control form-control-lg" type="text" min="1" name="SampleCount" id="pr-college" placeholder="تعداد را وارد کنید" required="">
+                                                </div>
 
-                                                        <div class="col-md-4 col-xs-6">
-                                                            <input name="Height" min="0" step="1" type="text" placeholder="ارتفاع را وارد کنید">
-                                                        </div>
-
-                                                        <div class="col-md-4 col-xs-6">
-
-                                                            <input type="number" min="0" step="1" name="katibeSize" placeholder="ارتفاع کتیبه " />
-
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="row">
-
-                                                        <div class="col-md-3 col-xs-6">
-                                                            <input type="text" min="1" name="SampleCount" placeholder="تعداد را وارد کنید">
-
-                                                        </div>
-
-                                                        <div class="col-md-3 col-xs-6">
-                                                            <button type="submit" class="button">ثبت</button>
-                                                        </div>
-
-                                                    </div>
-                                                }
-
-                                                else
-                                                {
-                                                    <div class="col-md-3 col-xs-6">
-                                                        <input type="text" min="0" step="1" name="Width" placeholder="عرض را وارد کنید">
-                                                    </div>
-
-                                                    <div class="col-md-3 col-xs-6">
-                                                        <input name="Height" min="0" step="1" type="text" placeholder="ارتفاع را وارد کنید">
-                                                    </div>
-
-                                                    <div class="col-md-3 col-xs-6">
-                                                        <input type="text" min="1" name="SampleCount" placeholder="تعداد را وارد کنید">
-                                                    </div>
-
-                                                    <div class="col-md-3 col-xs-6">
-                                                        <button type="submit" class="button">ثبت</button>
-                                                    </div>
-                                                }
+                                                <div class="col-sm-4 mb-4">
+                                                    <button type="submit" class="target1 btn btn-success mb-3 me-2">ثبت</button>
+                                                </div>
                                             }
-                                        </div>
+                                        }
+
                                     </div>
 
                                 </div>
-
                             </div>
-
-                            <div class="clearfix"></div>
-                            <!-- Listing Item / End -->
 
                         </form>
                     }
                 }
 
             </div>
-            <!-- Listings Container / End -->
+
 
         </div>
-
     </div>
 </div>
+

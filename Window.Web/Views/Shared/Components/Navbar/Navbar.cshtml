@@ -4,136 +4,75 @@
 @using Window.Application.Convertors
 @using Window.Application.Extensions
 
-<!-- Loading Container -->
-<div class="loading-container">
-    <div class="loader"></div>
-</div>
-<!--  /Loading Container -->
-<!-- Navbar -->
-<div class="navbar">
-    <div class="navbar-inner">
-        <div class="navbar-container">
-            <!-- Navbar Barnd -->
-            <!-- /Navbar Barnd -->
-            <!-- Sidebar Collapse -->
-            <div class="sidebar-collapse" id="sidebar-collapse">
-                <i class="collapse-icon fa fa-bars"></i>
-            </div>
-            <!-- /Sidebar Collapse -->
-            <!-- Account Area and Settings --->
-            <div class="navbar-header pull-left">
-                <div class="navbar-account">
-                    <ul class="account-area">
+<!-- Navbar-->
+<header class="navbar navbar-expand-lg navbar-light bg-light fixed-top" data-scroll-header>
+    <div class="container">
+        <a class="navbar-brand ms-3 ms-xl-4 logo" href="/"><img class="d-block" src="/FinderSample/img/logo/rsz_d.png" style="height: 50px;width: 50px;" alt="Finder"></a>
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <a class="btn btn-primary btn-sm ms-2 order-lg-3" asp-area="" asp-controller="Identity" asp-action="Login" > ورود</a>
+            <a class="btn btn-primary btn-sm ms-2 order-lg-3" asp-area="" asp-controller="Identity" asp-action="Register" > ثبت نام </a>
+        }
+        else
+        {
+            <a class="btn btn-primary btn-sm ms-2 order-lg-3" asp-area="" asp-controller="Home" asp-action="LoginToThePanel" > ورورد به پنل</a>
+            <a class="btn btn-primary btn-sm ms-2 order-lg-3" asp-area="" asp-controller="Market" asp-action="AddMarket" >ثبت فروشگاه </a>
 
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                             <li>
-                            <a class="wave in" id="chat-link" title="Chat" href="#">
-                                <i class="icon glyphicon glyphicon-comment"></i>
-@*                                <span class="badge">4</span>
-*@                            </a>
-                        </li>
+        }
 
-                          <li class="marli margin-left-10">
+        <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
+            <ul class="navbar-nav navbar-nav-scroll" style="max-height: 35rem;">
 
-                                <div class="add-to" style="padding-top: 6px;">
-                                    <button class="btn btn-success wave in add-to-btn">دانلود نسخه ی تحت وب</button>
-                                </div>
-
-                        </li>
-
-                        
-
-                            <li>
-                                <a class="login-area dropdown-toggle" data-toggle="dropdown">
-                                    <div class="avatar">
-                                        <img src="@Model.GetUserAvatar()">
-                                    </div>
-                                    <section>
-                                        <h2><span class="profile"><span>@Model.Username </span></span></h2>
-                                    </section>
-                                </a>
-                                <!--Login Area Dropdown-->
-                                <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area">
-                                    <li class="username"><a>@Model.GetFullName()</a></li>
-                                    <li class="email"><a>@Model.Username</a></li>
-                                    <!--Avatar Area-->
-                                    <li>
-                                        <div class="avatar-area">
-                                            <img src="@Model.GetUserAvatar()" class="avatar">
-                                        </div>
-                                    </li>
-                                    <!--Avatar Area-->
-                                    <!--Theme Selector Area-->
-                                    <li class="theme-area">
-                                        <ul class="colorpicker" id="skin-changer">
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#5DB2FF;" rel="/admin/css/skins/blue.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#2dc3e8;" rel="/admin/css/skins/azure.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#03B3B2;" rel="/admin/css/skins/teal.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#53a93f;" rel="/admin/css/skins/green.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#FF8F32;" rel="/admin/css/skins/orange.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#cc324b;" rel="/admin/css/skins/pink.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#AC193D;" rel="/admin/css/skins/darkred.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#8C0095;" rel="/admin/css/skins/purple.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#0072C6;" rel="/admin/css/skins/darkblue.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#585858;" rel="/admin/css/skins/gray.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#474544;" rel="/admin/css/skins/black.min.css"></a></li>
-                                            <li><a class="colorpick-btn" href="#" style="background-color:#001940;" rel="/admin/css/skins/deepblue.min.css"></a></li>
-                                        </ul>
-                                    </li>
-                                    <!--/Theme Selector Area-->
-                                    <li class="dropdown-footer text-right">
-                                        <a href="/Logout">
-                                            خروج
-                                        </a>
-                                    </li>
-                                </ul>
-                                <!--/Login Area Dropdown-->
-                            </li>
-
-                            <li class="marli margin-left-10">
-
-                                <a class="btn btn-primary " title="" href="#">
-                                    @DateTime.Now.ToShamsi()
-                                </a>
-
-                            </li>
-                        }
-
-
-                        <!-- /Account Area -->
-                        <!--Note: notice that setting div must start right after account area list.
-                        no space must be between these elements-->
-                        <!-- Settings -->
+                <!-- Menu items-->
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">استعلام </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct">استعلام گیری</a></li>
                     </ul>
-                    @* <div class="setting">
-                    <a id="btn-setting" title="Setting" href="#">
-                    <i class="icon glyphicon glyphicon-cog"></i>
+                </li>
+
+                <!-- Menu items-->
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        نماها و پنجره های خاص
                     </a>
-                    </div><div class="setting-container">
-                    <label>
-                    <input type="checkbox" id="checkbox_fixednavbar">
-                    <span class="text">نوار بالایی ثابت</span>
-                    </label>
-                    <label>
-                    <input type="checkbox" id="checkbox_fixedsidebar">
-                    <span class="text">منوی کناری ثابت</span>
-                    </label>
-                    <label>
-                    <input type="checkbox" id="checkbox_fixedbreadcrumbs">
-                    <span class="text">نوار بردکرامبز ثابت</span>
-                    </label>
-                    <label>
-                    <input type="checkbox" id="checkbox_fixedheader">
-                    <span class="text">نوار میانی ثابت</span>
-                    </label>
-                    </div>*@
-                    <!-- Settings -->
-                </div>
-            </div>
-            <!-- /Account Area and Settings -->
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" asp-action="ListOfArticles" asp-area="" asp-controller="Article">
+                                نماها و پنجره های خاص
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Menu items-->
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">سوالات متداول </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" asp-action="ListOfQuestionAndAnswers" asp-area="" asp-controller="QA">سوالات متداول</a></li>
+                    </ul>
+                </li>
+
+                 <!-- Menu items-->
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">ارتباط با ما  </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" asp-action="ContactUs" asp-area="" asp-controller="Home">ارتباط با ما</a></li>
+                    </ul>
+                </li>
+
+                <!-- Menu items-->
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">درباره ی ما  </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" asp-action="AboutUs" asp-area="" asp-controller="Home">درباره ی ما</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item d-lg-none"><a class="nav-link" href="#signin-modal" data-bs-toggle="modal"><i class="fi-user me-2"></i>ورود به حساب کاربری</a></li>
+            </ul>
         </div>
     </div>
-</div>
-<!-- /Navbar -->
+</header>

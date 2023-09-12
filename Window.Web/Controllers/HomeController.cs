@@ -28,8 +28,9 @@ namespace Window.Web.Controllers
         private readonly IBrandService _brandService;
         private readonly ISampleService _sampleService;
         private readonly IContractService _contractService;
+        private readonly IAdminDashboardService _adminDashboardService;
 
-        public HomeController(ILogger<HomeController> logger, IProductService prodcutService, IStateService stateService, IBrandService brandService, ISampleService sampleService, IContractService contractService)
+        public HomeController(ILogger<HomeController> logger, IProductService prodcutService, IStateService stateService, IBrandService brandService, ISampleService sampleService, IContractService contractService, IAdminDashboardService adminDashboardService)
         {
             _logger = logger;
             _productService = prodcutService;
@@ -37,6 +38,7 @@ namespace Window.Web.Controllers
             _brandService = brandService;
             _sampleService = sampleService;
             _contractService = contractService;
+            _adminDashboardService = adminDashboardService;
         }
 
         #endregion
@@ -45,7 +47,7 @@ namespace Window.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await _adminDashboardService.FillHomeIndexViewModel());
         }
 
         #endregion
@@ -286,6 +288,24 @@ namespace Window.Web.Controllers
         #region Terms Conditions
 
         public async Task<IActionResult> TermsConditions()
+        {
+            return View();
+        }
+
+        #endregion
+
+        #region Contact US 
+
+        public async Task<IActionResult> ContactUs()
+        {
+            return View();
+        }
+
+        #endregion
+
+        #region About Us 
+
+        public async Task<IActionResult> AboutUs()
         {
             return View();
         }

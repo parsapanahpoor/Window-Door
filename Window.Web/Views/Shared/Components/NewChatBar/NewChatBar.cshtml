@@ -4,48 +4,37 @@
 @using Window.Application.Convertors
 @using Window.Domain.ViewModels.Common
 
-<!-- Compare Properties Widget
- ================================================== -->
-<div class="compare-slide-menu">
 
-    <div class="csm-trigger"></div>
-
-    <div class="csm-content">
-        <h4>
-            انتخاب های قبلی شما
-            <div class="csm-mobile-trigger"></div>
-        </h4>
-
-        <div class="csm-properties">
-
-            @if (Model != null && Model.Any())
-            {
-
-                foreach (var item in Model)
-                {
-                    <!-- Property -->
-                    <div class="listing-item compact">
-                        <a  class="listing-img-container">
-                            <div class="listing-badges">
-                                <span>تعداد : @item.CountOfSample</span>
-                            </div>
-                            <div class="listing-img-content">
-                                <span class="listing-compact-title">@item.Sample.SegmentName <i> عرض : @item.Width (cm) - طول : @item.Height (cm)</i></span>
-                            </div>
-                            <img src="@Window.Application.StticTools.FilePaths.SampleThumbimage/@item.Sample.Image" alt="">
-                        </a>
-                    </div>
-
-           
-
-                }
-            }
-        </div>
-        <div class="csm-buttons">
-            <a style="background-color: green;" asp-action="InquiryStep4" asp-route-userMacAddress="@ViewBag.UserMacAddress" asp-controller="InquiryProduct" asp-area="" class="button">استعلام</a>
-            <a class="button reset" asp-action="InquiryStep1" asp-controller="InquiryProduct" asp-area="">بروز رسانی</a>
+<!-- Demo switcher (offcanvas)-->
+<button class="btn btn-icon btn-light rounded-circle shadow position-fixed top-50 start-0 translate-middle-y ms-3" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="انتخاب های قبلی شما" style="z-index: 1035;">
+    <div class="d-flex align-items-center justify-content-center position-absolute top-0 start-0 w-100 h-100 rounded-circle" data-bs-toggle="offcanvas" data-bs-target="#demo-switcher"><i class="fi-layers"></i></div>
+</button>
+<div class="offcanvas offcanvas-end" id="demo-switcher">
+    <div class="offcanvas-header d-block border-bottom">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h2 class="h5 mb-0">انتخاب های قبلی شما</h2>
+            <button class="btn-close" type="button" data-bs-dismiss="offcanvas"></button>
         </div>
     </div>
+    <div class="offcanvas-body">
 
+        @if (Model != null && Model.Any())
+        {
+
+            foreach (var item in Model)
+            {
+                <div class="card card-hover shadow-sm mb-4">
+                        <img class="card-img-top" src="@Window.Application.StticTools.FilePaths.SampleThumbimage/@item.Sample.Image" alt="Real Estate Demo">
+                        <div class="card-body p-3">
+                            <h3 class="fs-base card-title text-center"><a class="nav-link stretched-link" href="#">@item.Sample.SegmentName</a></h3>
+                        </div>
+                </div>
+
+            }
+        }
+
+   
+    </div>
+    <div class="offcanvas-footer border-top"><a class="btn btn-primary btn-lg w-100" asp-action="InquiryStep4" asp-route-userMacAddress="@ViewBag.UserMacAddress" asp-controller="InquiryProduct" asp-area="" target="_blank" rel="noopener"><i class="fi-cart fs-lg me-2"></i> استعلام</a></div>
 </div>
-<!-- Compare Properties Widget / End -->
+

@@ -1,13 +1,6 @@
-﻿using CRM.Domain.DTOs.StructuredApiDtos.Common;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Window.Application.Extensions;
+﻿using Microsoft.AspNetCore.Mvc;
 using Window.Application.Interfaces;
 using Window.Application.Services.Interfaces;
-using Window.Domain.ViewModels.Article;
-using Window.Web.HttpManager;
-using Window.Web.HttpServices;
 
 namespace Window.Web.Controllers
 {

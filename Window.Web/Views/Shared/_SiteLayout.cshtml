@@ -1,58 +1,49 @@
-﻿@using Window.Application.StticTools
-<!DOCTYPE html>
-<!--
-BeyondAdmin - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.6
-Version: 1.6.0
-Purchase: https://wrapbootstrap.com/theme/beyondadmin-adminapp-angularjs-mvc-WB06R48S4
--->
-<html xmlns="http://www.w3.org/1999/xhtml">
-<!-- Head -->
+﻿<!DOCTYPE html>
+<html lang="fa">
+
 <head>
-    <meta charset="utf-8" />
-    <title>@ViewData["Title"]</title>
 
-    <meta name="description" content="Dashboard" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <title>@ViewData["Title"] | پنجره یاب</title>
 
-    <partial name="_HeaderReferences" />
+    <!-- SEO Meta Tags-->
+    <meta name="description" content="Finder - Directory &amp; Listings Bootstrap Template">
+    <meta name="keywords" content="bootstrap, business, directory, listings, e-commerce, car dealer, city guide, real estate, job board, user account, multipurpose, ui kit, html5, css3, javascript, gallery, slider, touch">
+    <meta name="author" content="Createx Studio">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 
-    @await RenderSectionAsync("Styles", false)
+    <!-- CSS
+    ================================================== -->
+    <partial name="_NewHeaderReferences">
+
+                        @await RenderSectionAsync("Styles", false)
 
 </head>
-<body>
-    @await Component.InvokeAsync("Navbar")
-    <div class="main-container container-fluid">
-        <div class="page-container">
-            @await Component.InvokeAsync("SideBar")
-           
-                @await Component.InvokeAsync("ChatBar")
-            <div class="page-content">
-                <div class="page-breadcrumbs">
-                    <ul class="breadcrumb">
-                        <li>
-                            <i class="fa fa-home"></i>
-                            <a asp-area="Admin" asp-controller="Home" asp-action="Index">@SharedLocalizer["Home"]</a>
-                        </li>
-                    </ul>
-                </div>
-                <partial name="_PageHeader" />
-                <div class="page-body">
-                    @RenderBody()
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <partial name="_FooterReferences" />
+<!-- Body-->
+<body dir="rtl">
 
-    <partial name="_Notification" />
+    @await Component.InvokeAsync("NewChatBar")
 
-    <partial name="_Modals" />
-    <script src="~/lib/signalr/signalr.min.js"></script>
+    <partial name="_Loading">
 
-    @await RenderSectionAsync("Scripts", false)
+        <main class="page-wrapper">
+
+            @await Component.InvokeAsync("Navbar")
+
+            @RenderBody()
+
+        </main>
+
+        <partial name="_Footer">
+
+            <!-- Scripts
+            ================================================== -->
+            <partial name="_NewFooterReferences" />
+            <partial name="_Notification" />
+            <script src="~/lib/signalr/signalr.min.js"></script>
+            @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 </html>
+

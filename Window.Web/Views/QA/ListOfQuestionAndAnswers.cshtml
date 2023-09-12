@@ -7,64 +7,78 @@
     {
 }
 
-    @section Scripts
+@section Scripts
     {
 
 }
 
-    <div class="parallax titlebar" data-background="/Site/images/listing-05.jpg" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -274.894px;">
-        <div class="parallax-overlay" style="background-color: rgb(51, 51, 51); opacity: 0.7;"></div>
 
-        <div id="titlebar">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <h2>سوالات متداول</h2>
-                        <span>افزایش آگاهی شما در دستور کار ما قرار دارد .</span>
-
-                        <!-- Breadcrumbs -->
-                        <nav id="breadcrumbs">
-                            <ul>
-                                <li><a href="/">خانه</a></li>
-                            </ul>
-                        </nav>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-
-        <div class="row">
-
-            <div class="col-md-12">
-
-                <h4 class="headline margin-top-0 margin-bottom-20">سوال  های متدوال</h4>
-
-                <!-- Toggles Container -->
-                <div class="style-2">
-
-                @if (Model != null && Model.Any())
-                {
-                    foreach (var item in Model)
-                    {
-                        <div class="toggle-wrap">
-                            <span class="trigger"><a href="#"><i class="sl sl-icon-pin"></i>@item.Question <i class="sl sl-icon-plus"></i> </a></span>
-                            <div class="toggle-container" style="display: none;">
-                                <p>@item.Answer</p>
-                            </div>
-                        </div>
-                    }
-                }
-
-            </div>
-            <!-- Toggles Container / End -->
-        </div>
-
-    </div>
-
+<div class="container mt-5 mb-md-4 pt-5">
+    <nav class="mb-3 pt-md-3" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">خانه</a></li>
+            <li class="breadcrumb-item active" aria-current="page">سوالات متداول</li>
+        </ol>
+    </nav>
 </div>
 
 
+<section class="container mb-4 pb-lg-5">
+    <h1 class="mx-auto mb-4 pb-2 text-center " style="max-width: 856px;">سلام چجوری میتونیم کمک کنیم؟</h1>
+    <!-- Search form-->
+    <form class="form-group mb-4">
+        <div class="input-group input-group-lg">
+            <input class="form-control" type="text" placeholder="دنبال چی میگردی؟">
+        </div>
+        <button class="btn btn-primary btn-lg px-sm-4 px-3" type="submit"><i class="fi-search ms-sm-2"></i><span class="d-sm-inline d-none">جستجو</span></button>
+    </form>
+    <div class="d-flex flex-md-row flex-column align-items-md-center">
+        <div class="pb-2 mb-2 me-2 flex-shrink-0 fw-bold">بخش های محبوب:</div>
+        <div class="text-nowrap overflow-auto pb-2">
+            <div>
+                <a class="btn btn-xs btn-outline-secondary rounded-pill fw-normal mb-2 me-2" href="#">استعلام گیری</a>
+                <a class="btn btn-xs btn-outline-secondary rounded-pill fw-normal mb-2 me-2" href="#">تماس باما</a>
+                <a class="btn btn-xs btn-outline-secondary rounded-pill fw-normal mb-2 me-2" href="#">درباره ی ما</a>
+                <a class="btn btn-xs btn-outline-secondary rounded-pill fw-normal mb-2 me-2" href="#">درب و پنجره های خاص</a>
+                <a class="btn btn-xs btn-outline-secondary rounded-pill fw-normal mb-2 me-2" href="#">سوالات پرتکرار</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="container mb-md-5 mb-4 pb-lg-5">
+    <div class="row">
+
+        <!-- Content-->
+        <div class="col-lg-10 offset-xl-1 col-lg-10 faq-real">
+            <h2 class="mb-md-4 mb-3 pb-md-2">سوالات پرتکرار</h2>
+
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <div class="pb-md-2">
+                        <h3 class="h5"> @item.Question </h3>
+
+                        <p>
+                            @item.Answer
+                        </p>
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+</section>
+
+
+<section class="container mb-5 pb-lg-5">
+    <div class="row align-items-sm-center">
+        <div class="col-sm-5"><img src="/FinderSample/img/real-estate/illustrations/support.svg" alt="Illustration" class="rotate-img"></div>
+        <div class="col-md-6 offset-md-1 col-sm-7 text-sm-end text-center">
+            <h2 class="mb-4 pb-md-3">چیزی را که به دنبالش هستید پیدا نمی کنید؟</h2>
+            <a class="btn btn-lg btn-primary" asp-action="ContactUs" asp-area="" asp-controller="Home">اکنون با ما تماس بگیرید!</a>
+        </div>
+    </div>
+</section>

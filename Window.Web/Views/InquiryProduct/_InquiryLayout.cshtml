@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+ <meta charset="utf-8">
+    <title>@ViewData["Title"] | پنجره یاب</title>
+
+    <!-- SEO Meta Tags-->
+    <meta name="description" content="Finder - Directory &amp; Listings Bootstrap Template">
+    <meta name="keywords" content="bootstrap, business, directory, listings, e-commerce, car dealer, city guide, real estate, job board, user account, multipurpose, ui kit, html5, css3, javascript, gallery, slider, touch">
+    <meta name="author" content="Createx Studio">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+    <!-- CSS
+    ================================================== -->
+    <partial name="_NewHeaderReferences">
+
+    @await RenderSectionAsync("Styles", false)
+
+</head>
+
+<body class="bg-secondary" dir="rtl">
+
+    @await Component.InvokeAsync("NewChatBar")
+
+    <main class="page-wrapper">
+
+        @await Component.InvokeAsync("Navbar")
+        
+        @RenderBody()
+
+    </main>
+
+    <!-- Footer-->
+    <partial name="_Footer">
+
+        <!-- Scripts
+            ================================================== -->
+        <partial name="_NewFooterReferences" />
+        <partial name="_Notification" />
+        <script src="~/lib/signalr/signalr.min.js"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

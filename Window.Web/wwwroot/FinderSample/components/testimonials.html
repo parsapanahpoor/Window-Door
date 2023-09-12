@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="fa">
+  
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<head>
+    <meta charset="utf-8">
+    <title>قالب Finder | قالب چند منظوره فایندر املاک | بروزرسانی آگهی ملک</title>
+    <!-- SEO Meta Tags-->
+    <meta name="description" content="Finder - Directory &amp; Listings Bootstrap Template">
+    <meta name="keywords" content="bootstrap, business, directory, listings, e-commerce, car dealer, city guide, real estate, job board, user account, multipurpose, ui kit, html5, css3, javascript, gallery, slider, touch">
+    <meta name="author" content="Createx Studio">
+    <!-- Viewport-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon and Touch Icons-->
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <link rel="mask-icon" color="#5bbad5" href="../safari-pinned-tab.svg">
+    <meta name="msapplication-TileColor" content="#766df4">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Vendor Styles-->
+    <link rel="stylesheet" media="screen" href="../vendor/simplebar/dist/simplebar.min.css"/>
+    <link rel="stylesheet" media="screen" href="../vendor/prismjs/themes/prism.css"/>
+    <link rel="stylesheet" media="screen" href="../vendor/prismjs/plugins/toolbar/prism-toolbar.css"/>
+    <link rel="stylesheet" media="screen" href="../vendor/prismjs/plugins/line-numbers/prism-line-numbers.css"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="../css/theme.min.css">
+  </head>
+  <!-- Body-->
+  <body dir="rtl">
+    <main class="container-fluid px-xl-4 pb-3 pb-lg-4">
+      <!-- Main content-->
+      <section class="offcanvas-enabled-start row">
+        <div class="col-xl-9">
+          <!-- Navbar-->
+          <header class="navbar navbar-expand justify-content-end navbar-light bg-light fixed-top shadow-sm px-3 px-xl-4" data-scroll-header data-fixed-element><a class="navbar-brand d-lg-none" href="typography.html"><img src="../img/logo/logo-dark.svg" width="116" alt="Finder"></a>
+            <button class="navbar-toggler d-block d-lg-none me-3 ms-auto border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#componentsNav"><span class="navbar-toggler-icon"></span></button>
+            <ul class="navbar-nav ms-auto d-none d-lg-flex">
+              <li class="nav-item"><a class="nav-link" href="../index.html">پیش نمایش<i class="fi-eye-on align-middle fs-base me-2"></i></a></li>
+              <li class="nav-item mx-2 border-start"></li>
+              <li class="nav-item"><a class="nav-link" href="../docs/dev-setup.html">داکیومنت<i class="fi-file align-middle fs-base me-2"></i> </a></li>
+              <li class="nav-item mx-2 border-start"></li>
+            </ul>
+			<a class="btn btn-primary me-lg-3" href="https://www.rtl-theme.com/category/template-html/" target="_blank" rel="noopener"><i class="fi-cart me-2 d-none d-sm-inline-block fs-lg"></i>خرید قالب از راست چین</a>
+          </header>
+          <!-- Side navigation (Offcanvas)-->
+          <aside class="offcanvas offcanvas-start offcanvas-expand bg-dark" id="componentsNav">
+            <div class="offcanvas-header d-none d-lg-block pt-3 pb-4 bg-dark"><a class="navbar-brand py-2" href="typography.html"><img src="../img/logo/logo-light.svg" width="116" alt="Finder"></a><span class="badge bg-success">ابزارهای بوت استرپ</span></div>
+            <div class="offcanvas-header d-flex d-lg-none align-items-center bg-dark">
+              <div class="d-flex align-items-center">
+                <h5 class="offcanvas-title me-3 text-white">منو</h5><span class="badge bg-success">ابزارهای بوت استرپ</span>
+              </div>
+              <button class="btn-close btn-close-white" type="button" data-bs-dismiss="offcanvas"></button>
+            </div>
+            <div class="d-flex d-lg-none align-items-center py-4 px-3 border-top border-bottom border-light"><a class="btn btn-light btn-sm d-block w-100 me-2" href="../index.html"><i class="fi-eye-on me-2 fs-base"></i>پیش نمایش</a><a class="btn btn-info btn-sm d-block w-100" href="../docs/dev-setup.html"><i class="fi-file me-2 fs-base"></i>داکیومنت</a></div>
+            <div class="offcanvas-body pt-lg-2 pb-4" data-simplebar data-simplebar-inverse>
+              <h6 class="fs-base text-light mb-1 py-2 font-vazir">کدهای آماده متنی</h6>
+              <nav class="nav nav-light flex-column"><a class="nav-link fs-sm" href="typography.html">تایپوگرافی</a><a class="nav-link fs-sm" href="icon-font.html">آیکون فونت ها</a><a class="nav-link fs-sm" href="code.html">تگ code</a><a class="nav-link fs-sm" href="images.html">تصاویر</a><a class="nav-link fs-sm" href="tables.html">جداول</a></nav>
+              <hr class="text-light opacity-15 mx-n4 mt-4">
+              <h6 class="fs-base text-light mx-n4 mb-1 pt-4 pb-2 px-4">کدهای آماده</h6>
+              <nav class="nav nav-light flex-column"><a class="nav-link fs-sm" href="accordion.html">آکوردین (اسلاید کشویی)</a><a class="nav-link fs-sm" href="alerts.html">هشدارها</a><a class="nav-link fs-sm" href="badge.html">نشان ها</a><a class="nav-link fs-sm" href="breadcrumb.html">مسیر راهنما</a><a class="nav-link fs-sm" href="buttons.html">دکمه ها</a><a class="nav-link fs-sm" href="button-group.html">دکمه ها گروهی</a><a class="nav-link fs-sm" href="cards-basic.html">باکس های ساده</a><a class="nav-link fs-sm" href="cards-advanced.html">باکس های پیشرفته</a><a class="nav-link fs-sm" href="carousel.html">اسلایدر</a><a class="nav-link fs-sm" href="collapse.html">پنل های آکاردئونی (Collapse)</a><a class="nav-link fs-sm" href="date-picker.html">انتخاب کننده تاریخ / زمان</a><a class="nav-link fs-sm" href="dropdowns.html">منوهای کشویی (Dropdowns)</a><a class="nav-link fs-sm" href="file-uploader.html">فایل آپلودر</a><a class="nav-link fs-sm" href="forms.html">فرم ها</a><a class="nav-link fs-sm" href="form-group.html">فرم های گروهی</a><a class="nav-link fs-sm" href="gallery.html">گالری</a><a class="nav-link fs-sm" href="input-group.html">فرم های ورودی</a><a class="nav-link fs-sm" href="icon-box.html">باکس آیکن (Icon box)</a><a class="nav-link fs-sm" href="maps.html">نقشه</a><a class="nav-link fs-sm" href="list-group.html">لیست های گروهی</a><a class="nav-link fs-sm" href="modal.html">مودال (Modal)</a><a class="nav-link fs-sm" href="navbar.html">منو (Navbar)</a><a class="nav-link fs-sm" href="offcanvas.html">منو کشویی (Offcanvas)</a><a class="nav-link fs-sm" href="pagination.html">صفحه بندی (Pagination)</a><a class="nav-link fs-sm" href="parallax.html">پارالکس</a><a class="nav-link fs-sm" href="pills.html">پیل ها (Pills)</a><a class="nav-link fs-sm" href="placeholders.html">Placeholders</a><a class="nav-link fs-sm" href="popovers.html">پنچره های بازشو (Popovers)</a><a class="nav-link fs-sm" href="pricing.html">باکس ها قیمت گذاری</a><a class="nav-link fs-sm" href="progress.html">پروگرس بار (Progress)</a><a class="nav-link fs-sm" href="social-buttons.html">دکمه های شبکه اجتماعی</a><a class="nav-link fs-sm" href="spinners.html">آیکون لود (Spinners)</a><a class="nav-link fs-sm" href="steps.html">Steps</a><a class="nav-link fs-sm" href="tabs.html">تب ها</a><a class="nav-link fs-sm active" href="testimonials.html">مشتریان / نظرات</a><a class="nav-link fs-sm" href="toasts.html">کادر هشدار (Toasts)</a><a class="nav-link fs-sm" href="tooltips.html">پاپ آپ های کوچک (Tooltips)</a></nav>
+              <hr class="text-light opacity-15 mx-n4 mt-4">
+              <h6 class="fs-base text-light mx-n4 mb-1 pt-4 pb-2 px-4">کدهای کاربردی</h6>
+              <nav class="nav nav-light flex-column"><a class="nav-link fs-sm" href="https://getbootstrap.com/docs/5.1/utilities/background/" target="_blank" rel="noopener">بوت استرپ</a><a class="nav-link fs-sm" href="utilities.html">سایت Finder</a></nav>
+            </div>
+          </aside>
+          <!-- Page title-->
+          <div class="border-bottom mb-5 pt-5">
+            <h1 class="mt-5 pt-4">مشتریان / نظرات</h1>
+            <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+              <p class="text-muted"> این کامپوننت برای نمایش نظرات مشتریان راضی یا بررسی محصولات در وب سایت شما طراحی شده است.س</p>
+              <div class="pe-md-4 mb-3"><span class="badge bg-success">کامپوننت سایت</span></div>
+            </div>
+          </div>
+          <!-- Blockquote based-->
+          <section class="pb-5 mb-md-2" id="testimonial-blockquote">
+            <h2 class="h5 mb-3">نقل قول</h2>
+            <div class="card border-0 shadow-sm">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                  <li class="nav-item"><a class="nav-link active" href="#result1" data-bs-toggle="tab" role="tab" aria-controls="result1" aria-selected="true">نتیجه</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#html1" data-bs-toggle="tab" role="tab" aria-controls="html1" aria-selected="false">HTML</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#pug1" data-bs-toggle="tab" role="tab" aria-controls="pug1" aria-selected="false">Pug</a></li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="result1" role="tabpanel">
+                    <blockquote class="blockquote" style="max-width: 48rem;">
+                      <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+                      <footer class="d-flex align-items-center"><img class="rounded-circle ms-1" src="../img/avatars/04.jpg" width="48" alt="Avatar">
+                        <div class="pe-2">
+                          <h6 class="fs-base mb-0">رالف ادواردز</h6>
+                          <div class="text-muted fw-normal fs-sm">موسس شرکت</div>
+                        </div>
+                      </footer>
+                    </blockquote>
+                  </div>
+                  <div class="tab-pane fade" id="html1" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-html">&lt;!-- Simple blockquote based testimonial --&gt;
+&lt;blockquote class=&quot;blockquote&quot;&gt;
+  &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&lt;/p&gt;
+  &lt;footer class=&quot;d-flex align-items-center&quot;&gt;
+    &lt;img class=&quot;rounded-circle me-1&quot; src=&quot;path-to-avatar-image&quot; width=&quot;48&quot; alt=&quot;Avatar&quot;&gt;
+    &lt;div class=&quot;ps-2&quot;&gt;
+      &lt;h6 class=&quot;fs-base mb-0&quot;&gt;Ralph Edwards&lt;/h6&gt;
+      &lt;div class=&quot;text-muted fw-normal fs-sm&quot;&gt;Co-founder, CEO&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/footer&gt;
+&lt;/blockquote&gt;</code></pre>
+                  </div>
+                  <div class="tab-pane fade" id="pug1" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-pug">// Simple blockquote based testimonial
+blockquote.blockquote
+  p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  footer.d-flex.align-items-center
+    img(src=&quot;path-to-avatar-image&quot;, width=&quot;48&quot;, alt=&quot;Avatar&quot;).rounded-circle.me-1
+    .ps-2
+      h6.fs-base.mb-0 Ralph Edwards
+      .text-muted.fw-normal.fs-sm Co-founder, CEO
+</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Inside card: Basic-->
+          <section class="pb-5 mb-md-2" id="testimonial-card-basic">
+            <h2 class="h5 mb-3">پیش فرض</h2>
+            <div class="card border-0 shadow-sm">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                  <li class="nav-item"><a class="nav-link active" href="#result2" data-bs-toggle="tab" role="tab" aria-controls="result2" aria-selected="true">نتیجه</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#html2" data-bs-toggle="tab" role="tab" aria-controls="html2" aria-selected="false">HTML</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#pug2" data-bs-toggle="tab" role="tab" aria-controls="pug2" aria-selected="false">Pug</a></li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="result2" role="tabpanel">
+                    <div class="pt-3" style="max-width: 48rem;">
+                      <div class="card border-0 shadow-sm">
+                        <blockquote class="blockquote card-body">
+                          <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+                          <footer class="d-flex align-items-center"><img src="../img/job-board/company/zalo-lg.png" width="56" alt="Logo">
+                            <div class="pe-3">
+                              <h6 class="fs-base mb-0">شرکت زانکو</h6>
+                              <div class="text-muted fw-normal fs-sm">فلوید مایلز، رئیس بخش منابع انسانی</div>
+                            </div>
+                          </footer>
+                        </blockquote>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="html2" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-html">&lt;!-- Testimonial inside card: Basic --&gt;
+&lt;div class=&quot;card border-0 shadow-sm&quot;&gt;
+  &lt;blockquote class=&quot;blockquote card-body&quot;&gt;
+    &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&lt;/p&gt;
+    &lt;footer class=&quot;d-flex align-items-center&quot;&gt;
+      &lt;img src=&quot;path-to-image&quot; width=&quot;56&quot; alt=&quot;Logo&quot;&gt;
+      &lt;div class=&quot;ps-3&quot;&gt;
+        &lt;h6 class=&quot;fs-base mb-0&quot;&gt;Zalo Tech Company&lt;/h6&gt;
+        &lt;div class=&quot;text-muted fw-normal fs-sm&quot;&gt;Floyd Miles, Head of HR Department&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/footer&gt;
+  &lt;/blockquote&gt;
+&lt;/div&gt;</code></pre>
+                  </div>
+                  <div class="tab-pane fade" id="pug2" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-pug">// Testimonial inside card: Basic
+.card.border-0.shadow-sm
+  blockquote.blockquote.card-body
+    p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    footer.d-flex.align-items-center
+      img(src=&quot;path-to-image&quot;, width=&quot;56&quot;, alt=&quot;Logo&quot;)
+      .ps-3
+        h6.fs-base.mb-0 Zalo Tech Company
+        .text-muted.fw-normal.fs-sm Floyd Miles, Head of HR Department
+</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Inside card: Compound-->
+          <section class="pb-5 mb-md-2" id="testimonial-card-compound">
+            <h2 class="h5 mb-3">Compound</h2>
+            <div class="card border-0 shadow-sm">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                  <li class="nav-item"><a class="nav-link active" href="#result3" data-bs-toggle="tab" role="tab" aria-controls="result3" aria-selected="true">نتیجه</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#html3" data-bs-toggle="tab" role="tab" aria-controls="html3" aria-selected="false">HTML</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#pug3" data-bs-toggle="tab" role="tab" aria-controls="pug3" aria-selected="false">Pug</a></li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="result3" role="tabpanel">
+                    <div class="pt-3" style="max-width: 33rem;">
+                      <div class="card border-0 shadow-sm">
+                        <blockquote class="blockquote card-body">
+                          <h4 style="max-width: 20rem;" class="font-vazir">&quot;من بهترین محل اقامت را برای شما انتخاب خواهم کرد&quot;</h4>
+                          <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+                          <footer class="d-flex justify-content-between">
+                            <div class="pe-3">
+                              <h6 class="mb-0">فلوید مایلز</h6>
+                              <div class="text-muted fw-normal fs-sm mb-3">نماینده گروه امپراتوری امپریال</div><a class="btn btn-icon btn-light-primary btn-xs shadow-sm rounded-circle me-2 mb-2" href="#"><i class="fi-facebook"></i></a><a class="btn btn-icon btn-light-primary btn-xs shadow-sm rounded-circle me-2 mb-2" href="#"><i class="fi-twitter"></i></a><a class="btn btn-icon btn-light-primary btn-xs shadow-sm rounded-circle me-2 mb-2" href="#"><i class="fi-linkedin"></i></a>
+                            </div>
+                            <div><span class="star-rating"><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i></span>
+                              <div class="text-muted fs-sm mt-1">45 نظر</div>
+                            </div>
+                          </footer>
+                        </blockquote>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="html3" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-html">&lt;!-- Testimonial inside card: Compound --&gt;
+&lt;div class=&quot;card border-0 shadow-sm&quot;&gt;
+  &lt;blockquote class=&quot;blockquote card-body&quot;&gt;
+    &lt;h4 style=&quot;max-width: 20rem;&quot;&gt;&quot;I will select the best accommodation for you&quot;&lt;/h4&gt;
+    &lt;p&gt;Amet libero morbi venenatis ut est. Iaculis leo ultricies nunc id ante adipiscing. Vel metus odio at faucibus ac. Neque id placerat et id ut. Scelerisque eu mi ullamcorper sit urna. Est volutpat dignissim elementum nec.&lt;/p&gt;
+    &lt;footer class=&quot;d-flex justify-content-between&quot;&gt;
+      &lt;div class=&quot;pe-3&quot;&gt;
+        &lt;h6 class=&quot;mb-0&quot;&gt;Floyd Miles&lt;/h6&gt;
+        &lt;div class=&quot;text-muted fw-normal fs-sm mb-3&quot;&gt;Imperial Property Group Agent&lt;/div&gt;
+        &lt;a href=&quot;#&quot; class=&quot;btn btn-icon btn-light-primary btn-xs shadow-sm rounded-circle me-2 mb-2&quot;&gt;
+          &lt;i class=&quot;fi-facebook&quot;&gt;&lt;/i&gt;
+        &lt;/a&gt;
+        &lt;a href=&quot;#&quot; class=&quot;btn btn-icon btn-light-primary btn-xs shadow-sm rounded-circle me-2 mb-2&quot;&gt;
+          &lt;i class=&quot;fi-twitter&quot;&gt;&lt;/i&gt;
+        &lt;/a&gt;
+        &lt;a href=&quot;#&quot; class=&quot;btn btn-icon btn-light-primary btn-xs shadow-sm rounded-circle me-2 mb-2&quot;&gt;
+          &lt;i class=&quot;fi-linkedin&quot;&gt;&lt;/i&gt;
+        &lt;/a&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;div class=&quot;star-rating&quot;&gt;
+          &lt;i class=&quot;star-rating-icon fi-star-filled active&quot;&gt;&lt;/i&gt;
+          &lt;i class=&quot;star-rating-icon fi-star-filled active&quot;&gt;&lt;/i&gt;
+          &lt;i class=&quot;star-rating-icon fi-star-filled active&quot;&gt;&lt;/i&gt;
+          &lt;i class=&quot;star-rating-icon fi-star-filled active&quot;&gt;&lt;/i&gt;
+          &lt;i class=&quot;star-rating-icon fi-star-filled active&quot;&gt;&lt;/i&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;text-muted fs-sm mt-1&quot;&gt;45 reviews&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/footer&gt;
+  &lt;/blockquote&gt;
+&lt;/div&gt;</code></pre>
+                  </div>
+                  <div class="tab-pane fade" id="pug3" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-pug">// Testimonial inside card: Compound
+.card.border-0.shadow-sm
+  blockquote.blockquote.card-body
+    h4(style=&quot;max-width: 20rem;&quot;) 
+      | &quot;I will select the best accommodation for you&quot;
+    p Amet libero morbi venenatis ut est. Iaculis leo ultricies nunc id ante adipiscing. Vel metus odio at faucibus ac. Neque id placerat et id ut. Scelerisque eu mi ullamcorper sit urna. Est volutpat dignissim elementum nec.
+    footer.d-flex.justify-content-between
+      .pe-3
+        h6.mb-0 Floyd Miles
+        .text-muted.fw-normal.fs-sm.mb-3 Imperial Property Group Agent
+        a(href=&quot;#&quot;).btn.btn-icon.btn-light-primary.btn-xs.shadow-sm.rounded-circle.me-2.mb-2
+          i.fi-facebook
+        a(href=&quot;#&quot;).btn.btn-icon.btn-light-primary.btn-xs.shadow-sm.rounded-circle.me-2.mb-2
+          i.fi-twitter
+        a(href=&quot;#&quot;).btn.btn-icon.btn-light-primary.btn-xs.shadow-sm.rounded-circle.me-2.mb-2
+          i.fi-linkedin
+      div
+        +star-rating(5)
+        .text-muted.fs-sm.mt-1 45 reviews
+</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Review-->
+          <section class="pb-5 mb-md-2" id="testimonial-review">
+            <h2 class="h5 mb-3">نظرات</h2>
+            <div class="card border-0 shadow-sm">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                  <li class="nav-item"><a class="nav-link active" href="#result4" data-bs-toggle="tab" role="tab" aria-controls="result4" aria-selected="true">نتیجه</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#html4" data-bs-toggle="tab" role="tab" aria-controls="html4" aria-selected="false">HTML</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#pug4" data-bs-toggle="tab" role="tab" aria-controls="pug4" aria-selected="false">Pug</a></li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="result4" role="tabpanel">
+                    <div class="py-2" style="max-width: 48rem;">
+                      <div class="d-flex justify-content-between mb-3">
+                        <div class="d-flex align-items-center ps-2"><img class="rounded-circle me-1" src="../img/avatars/03.jpg" width="48" alt="Avatar">
+                          <div class="pe-2">
+                            <h6 class="fs-base mb-0">آنت بلک</h6><span class="star-rating"><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star"></i></span>
+                          </div>
+                        </div><span class="text-muted fs-sm">17 اردیبهشت, 1399</span>
+                      </div>
+                      <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+                      <div class="d-flex align-items-center">
+                        <button class="btn-like" type="button"><i class="fi-like"></i><span>(3)</span></button>
+                        <div class="border-end me-1">&nbsp;</div>
+                        <button class="btn-dislike" type="button"><i class="fi-dislike"></i><span>(0)</span></button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="html4" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-html">&lt;!-- Review --&gt;
+&lt;div class=&quot;d-flex justify-content-between mb-3&quot;&gt;
+  &lt;div class=&quot;d-flex align-items-center pe-2&quot;&gt;
+    &lt;img class=&quot;rounded-circle me-1&quot; src=&quot;path-to-avatar-image&quot; width=&quot;48&quot; alt=&quot;Avatar&quot;&gt;
+    &lt;div class=&quot;ps-2&quot;&gt;
+      &lt;h6 class=&quot;fs-base mb-0&quot;&gt;Annette Black&lt;/h6&gt;
+      &lt;div class=&quot;star-rating&quot;&gt;
+        &lt;i class=&quot;star-rating-icon fi-star-filled active&quot;&gt;&lt;/i&gt;
+        &lt;i class=&quot;star-rating-icon fi-star-filled active&quot;&gt;&lt;/i&gt;
+        &lt;i class=&quot;star-rating-icon fi-star-filled active&quot;&gt;&lt;/i&gt;
+        &lt;i class=&quot;star-rating-icon fi-star-filled active&quot;&gt;&lt;/i&gt;
+        &lt;i class=&quot;star-rating-icon fi-star&quot;&gt;&lt;/i&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;span class=&quot;text-muted fs-sm&quot;&gt;Jan 17, 2021&lt;/span&gt;
+&lt;/div&gt;
+&lt;p&gt;Elementum ut quam tincidunt egestas vitae elit, hendrerit. Ullamcorper nulla amet lobortis elit, nibh condimentum enim. Aliquam felis nisl tellus sodales lectus dictum tristique proin vitae. Odio fermentum viverra tortor quis.&lt;/p&gt;
+&lt;div class=&quot;d-flex align-items-center&quot;&gt;
+  &lt;button type=&quot;button&quot; class=&quot;btn-like&quot;&gt;
+    &lt;i class=&quot;fi-like&quot;&gt;&lt;/i&gt;
+    &lt;span&gt;(3)&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class=&quot;border-end me-1&quot;&gt;&nbsp;&lt;/div&gt;
+  &lt;button type=&quot;button&quot; class=&quot;btn-dislike&quot;&gt;
+    &lt;i class=&quot;fi-dislike&quot;&gt;&lt;/i&gt;
+    &lt;span&gt;(0)&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;</code></pre>
+                  </div>
+                  <div class="tab-pane fade" id="pug4" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-pug">// Review
+.d-flex.justify-content-between.mb-3
+  .d-flex.align-items-center.pe-2
+    img(src=&quot;path-to-avatar-image&quot;, width=&quot;48&quot;, alt=&quot;Avatar&quot;).rounded-circle.me-1
+    .ps-2
+      h6.fs-base.mb-0 Annette Black
+      +star-rating(4)
+  span.text-muted.fs-sm Jan 17, 2021
+p Elementum ut quam tincidunt egestas vitae elit, hendrerit. Ullamcorper nulla amet lobortis elit, nibh condimentum enim. Aliquam felis nisl tellus sodales lectus dictum tristique proin vitae. Odio fermentum viverra tortor quis.
+.d-flex.align-items-center
+  button(type=&quot;button&quot;).btn-like
+    i.fi-like
+    span (3)
+  .border-end.me-1 &nbsp;
+  button(type=&quot;button&quot;).btn-dislike
+    i.fi-dislike
+    span (0)
+</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Comment-->
+          <section class="pb-5 mb-md-2" id="testimonial-comment">
+            <h2 class="h5 mb-3">پاسخ به نظر</h2>
+            <div class="card border-0 shadow-sm">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                  <li class="nav-item"><a class="nav-link active" href="#result5" data-bs-toggle="tab" role="tab" aria-controls="result5" aria-selected="true">نتیجه</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#html5" data-bs-toggle="tab" role="tab" aria-controls="html5" aria-selected="false">HTML</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#pug5" data-bs-toggle="tab" role="tab" aria-controls="pug5" aria-selected="false">Pug</a></li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="result5" role="tabpanel">
+                    <div class="border-bottom pt-2 pb-4" style="max-width: 48rem;">
+                      <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center ps-2"><img class="rounded-circle ms-1" src="../img/avatars/06.jpg" width="48" alt="Avatar">
+                          <div class="pe-2">
+                            <h6 class="fs-base mb-0">باربارا پالسون</h6><span class="text-muted fs-sm">3 روز پیش</span>
+                          </div>
+                        </div>
+                        <button class="btn btn-link btn-sm" type="button"><i class="fi-reply fs-lg me-2"></i><span class="fw-normal">پاسخ دادن</span></button>
+                      </div>
+                      <div class="border-start border-4 pe-4 me-4 mt-4">
+                        <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+                        <div class="d-flex align-items-center ps-2"><img class="rounded-circle ms-1" src="../img/avatars/05.jpg" width="48" alt="Avatar">
+                          <div class="pe-2">
+                            <h6 class="fs-base mb-0">دنیل آدامز</h6><span class="text-muted fs-sm">2 روز پیش</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="html5" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-html">&lt;!-- Comment with reply --&gt;
+&lt;div class=&quot;border-bottom py-4&quot;&gt;
+  &lt;p&gt;Elementum ut quam tincidunt egestas vitae elit, hendrerit. Ullamcorper nulla amet lobortis elit, nibh condimentum enim. Aliquam felis nisl tellus sodales lectus dictum tristique proin vitae. Odio fermentum viverra tortor quis.&lt;/p&gt;
+  &lt;div class=&quot;d-flex justify-content-between align-items-center&quot;&gt;
+    &lt;div class=&quot;d-flex align-items-center pe-2&quot;&gt;
+      &lt;img class=&quot;rounded-circle me-1&quot; src=&quot;path-to-avatar-image&quot; width=&quot;48&quot; alt=&quot;Avatar&quot;&gt;
+      &lt;div class=&quot;ps-2&quot;&gt;
+        &lt;h6 class=&quot;fs-base mb-0&quot;&gt;Barbara Palson&lt;/h6&gt;
+        &lt;span class=&quot;text-muted fs-sm&quot;&gt;3 days ago&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn btn-link btn-sm&quot;&gt;
+      &lt;i class=&quot;fi-reply fs-lg me-2&quot;&gt;&lt;/i&gt;
+      &lt;span class=&quot;fw-normal&quot;&gt;Reply&lt;/span&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Comment reply --&gt;
+  &lt;div class=&quot;border-start border-4 ps-4 ms-4 mt-4&quot;&gt;
+    &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.&lt;/p&gt;
+    &lt;div class=&quot;d-flex align-items-center pe-2&quot;&gt;
+      &lt;img class=&quot;rounded-circle me-1&quot; src=&quot;path-to-avatar-image&quot; width=&quot;48&quot; alt=&quot;Avatar&quot;&gt;
+      &lt;div class=&quot;ps-2&quot;&gt;
+        &lt;h6 class=&quot;fs-base mb-0&quot;&gt;Daniel Adams&lt;/h6&gt;
+        &lt;span class=&quot;text-muted fs-sm&quot;&gt;2 days ago&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                  </div>
+                  <div class="tab-pane fade" id="pug5" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-pug">// Comment with reply
+.border-bottom.py-4
+  p Elementum ut quam tincidunt egestas vitae elit, hendrerit. Ullamcorper nulla amet lobortis elit, nibh condimentum enim. Aliquam felis nisl tellus sodales lectus dictum tristique proin vitae. Odio fermentum viverra tortor quis.
+  .d-flex.justify-content-between.align-items-center
+    .d-flex.align-items-center.pe-2
+      img(src=&quot;path-to-avatar-image&quot;, width=&quot;48&quot;, alt=&quot;Avatar&quot;).rounded-circle.me-1
+      .ps-2
+        h6.fs-base.mb-0 Barbara Palson
+        span.text-muted.fs-sm 3 days ago
+    button(type=&quot;button&quot;).btn.btn-link.btn-sm
+      i.fi-reply.fs-lg.me-2
+      span.fw-normal Reply
+
+  // Comment reply
+  .border-start.border-4.ps-4.ms-4.mt-4
+    p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
+    .d-flex.align-items-center.pe-2
+      img(src=&quot;path-to-avatar-image&quot;, width=&quot;48&quot;, alt=&quot;Avatar&quot;).rounded-circle.me-1
+      .ps-2
+        h6.fs-base.mb-0 Daniel Adams
+        span.text-muted.fs-sm 2 days ago
+</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Light version-->
+          <section class="pb-5 mb-md-2" id="testimonial-light">
+            <h2 class="h5 mb-3">نسخه Light</h2>
+            <div class="card border-0 shadow-sm">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                  <li class="nav-item"><a class="nav-link active" href="#result6" data-bs-toggle="tab" role="tab" aria-controls="result6" aria-selected="true">نتیجه</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#html6" data-bs-toggle="tab" role="tab" aria-controls="html6" aria-selected="false">HTML</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#pug6" data-bs-toggle="tab" role="tab" aria-controls="pug6" aria-selected="false">Pug</a></li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="tab-pane m-n3 p-3 bg-dark fade show active" id="result6" role="tabpanel">
+                    <div class="pt-3" style="max-width: 48rem;">
+                      <div class="card card-light mb-5">
+                        <blockquote class="blockquote card-body text-light">
+                          <p class="opacity-70">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+                          <footer class="d-flex align-items-center"><img src="../img/job-board/company/kibana-lg.png" width="56" alt="Logo">
+                            <div class="pe-3">
+                              <h6 class="fs-base text-light mb-0 fw-500">کیبانا الاستیک</h6>
+                              <div class="text-light fw-normal fs-sm opacity-50">نماینده گروه امپراتوری امپریال</div>
+                            </div>
+                          </footer>
+                        </blockquote>
+                      </div>
+                      <div class="d-flex justify-content-between mb-3">
+                        <div class="d-flex align-items-center ps-2"><img class="rounded-circle ms-1" src="../img/avatars/03.jpg" width="48" alt="Avatar">
+                          <div class="pe-2">
+                            <h6 class="fs-base text-light mb-0 fw-500">آنت بلک</h6>
+                            <div class="text-light"><span class="star-rating"><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star"></i></span>
+                            </div>
+                          </div>
+                        </div><span class="text-light opacity-50 fs-sm">17 خرداد, 1399</span>
+                      </div>
+                      <p class="text-light opacity-70">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+                      <div class="d-flex align-items-center">
+                        <button class="btn-like btn-light" type="button"><i class="fi-like"></i><span>(3)</span></button>
+                        <div class="border-end border-light me-1">&nbsp;</div>
+                        <button class="btn-dislike btn-light" type="button"><i class="fi-dislike"></i><span>(0)</span></button>
+                      </div>
+                      <div class="border-bottom border-light pt-5 pb-4 mb-4">
+                        <p class="text-light opacity-70">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <div class="d-flex align-items-center ps-2"><img class="rounded-circle ms-1" src="../img/avatars/06.jpg" width="48" alt="Avatar">
+                            <div class="pe-2">
+                              <h6 class="fs-base text-light mb-0 fw-500">باربارا پالسون</h6><span class="text-light opacity-50 fs-sm">3 روز پیش</span>
+                            </div>
+                          </div>
+                          <button class="btn btn-link btn-light btn-sm" type="button"><i class="fi-reply fs-lg me-2"></i><span class="fw-normal">پاسخ دادن</span></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="html6" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-html">&lt;!-- Light testimonial inside card --&gt;
+&lt;div class=&quot;card card-light&quot;&gt;
+  &lt;blockquote class=&quot;blockquote card-body text-light&quot;&gt;
+    &lt;p class=&quot;opacity-70&quot;&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&lt;/p&gt;
+    &lt;footer class=&quot;d-flex align-items-center&quot;&gt;
+      &lt;img src=&quot;path-to-image&quot; width=&quot;56&quot; alt=&quot;Logo&quot;&gt;
+      &lt;div class=&quot;ps-3&quot;&gt;
+        &lt;h6 class=&quot;fs-base text-light mb-0&quot;&gt;Elastic Kibana&lt;/h6&gt;
+        &lt;div class=&quot;text-light fw-normal fs-sm opacity-50&quot;&gt;Floyd Miles, Head of HR Department&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/footer&gt;
+  &lt;/blockquote&gt;
+&lt;/div&gt;
+
+&lt;!-- Light review --&gt;
+&lt;div class=&quot;d-flex justify-content-between mb-3&quot;&gt;
+  &lt;div class=&quot;d-flex align-items-center pe-2&quot;&gt;
+    &lt;img class=&quot;rounded-circle me-1&quot; src=&quot;paath-to-avatar-image&quot; width=&quot;48&quot; alt=&quot;Avatar&quot;&gt;
+    &lt;div class=&quot;ps-2&quot;&gt;
+      &lt;h6 class=&quot;fs-base text-light mb-0&quot;&gt;Annette Black&lt;/h6&gt;
+      &lt;div class=&quot;text-light&quot;&gt;
+        &lt;div class=&quot;star-rating&quot;&gt;
+          &lt;i class=&quot;star-rating-icon fi-star-filled active&quot;&gt;&lt;/i&gt;
+          &lt;i class=&quot;star-rating-icon fi-star-filled active&quot;&gt;&lt;/i&gt;
+          &lt;i class=&quot;star-rating-icon fi-star-filled active&quot;&gt;&lt;/i&gt;
+          &lt;i class=&quot;star-rating-icon fi-star-filled active&quot;&gt;&lt;/i&gt;
+          &lt;i class=&quot;star-rating-icon fi-star&quot;&gt;&lt;/i&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;span class=&quot;text-light opacity-50 fs-sm&quot;&gt;Jan 17, 2021&lt;/span&gt;
+&lt;/div&gt;
+&lt;p class=&quot;text-light opacity-70&quot;&gt;Elementum ut quam tincidunt egestas vitae elit, hendrerit. Ullamcorper nulla amet lobortis elit, nibh condimentum enim. Aliquam felis nisl tellus sodales lectus dictum tristique proin vitae. Odio fermentum viverra tortor quis.&lt;/p&gt;
+&lt;div class=&quot;d-flex align-items-center&quot;&gt;
+  &lt;button type=&quot;button&quot; class=&quot;btn-like btn-light&quot;&gt;
+    &lt;i class=&quot;fi-like&quot;&gt;&lt;/i&gt;
+    &lt;span&gt;(3)&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class=&quot;border-end border-light me-1&quot;&gt;&amp;nbsp;&lt;/div&gt;
+  &lt;button type=&quot;button&quot; class=&quot;btn-dislike btn-light&quot;&gt;
+    &lt;i class=&quot;fi-dislike&quot;&gt;&lt;/i&gt;
+    &lt;span&gt;(0)&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- Light comment --&gt;
+&lt;div class=&quot;border-bottom border-light py-4&quot;&gt;
+  &lt;p class=&quot;text-light opacity-70&quot;&gt;Elementum ut quam tincidunt egestas vitae elit, hendrerit. Ullamcorper nulla amet lobortis elit, nibh condimentum enim. Aliquam felis nisl tellus sodales lectus dictum tristique proin vitae. Odio fermentum viverra tortor quis.&lt;/p&gt;
+  &lt;div class=&quot;d-flex justify-content-between align-items-center&quot;&gt;
+    &lt;div class=&quot;d-flex align-items-center pe-2&quot;&gt;
+      &lt;img class=&quot;rounded-circle me-1&quot; src=&quot;path-to-avatar-image&quot; width=&quot;48&quot; alt=&quot;Avatar&quot;&gt;
+      &lt;div class=&quot;ps-2&quot;&gt;
+        &lt;h6 class=&quot;fs-base text-light mb-0&quot;&gt;Barbara Palson&lt;/h6&gt;
+        &lt;span class=&quot;text-light opacity-50 fs-sm&quot;&gt;3 days ago&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn btn-link btn-light btn-sm&quot;&gt;
+      &lt;i class=&quot;fi-reply fs-lg me-2&quot;&gt;&lt;/i&gt;
+      &lt;span class=&quot;fw-normal&quot;&gt;Reply&lt;/span&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                  </div>
+                  <div class="tab-pane fade" id="pug6" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-pug">// Light testimonial inside card
+.card.card-light
+  blockquote.blockquote.card-body.text-light
+    p.opacity-70 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    footer.d-flex.align-items-center
+      img(src=&quot;path-to-image&quot;, width=&quot;56&quot;, alt=&quot;Logo&quot;)
+      .ps-3
+        h6.fs-base.text-light.mb-0
+          | Elastic Kibana
+        .text-light.fw-normal.fs-sm.opacity-50
+          | Floyd Miles, Head of HR Department
+
+// Light review
+.d-flex.justify-content-between.mb-3
+  .d-flex.align-items-center.pe-2
+    img(src=&quot;path-to-avatar-image&quot;, width=&quot;48&quot;, alt=&quot;Avatar&quot;).rounded-circle.me-1
+    .ps-2
+      h6.fs-base.text-light.mb-0 Annette Black
+      .text-light
+        +star-rating(4)
+  span.text-light.opacity-50.fs-sm Jan 17, 2021
+p.text-light.opacity-70 Elementum ut quam tincidunt egestas vitae elit, hendrerit. Ullamcorper nulla amet lobortis elit, nibh condimentum enim. Aliquam felis nisl tellus sodales lectus dictum tristique proin vitae. Odio fermentum viverra tortor quis.
+.d-flex.align-items-center
+  button(type=&quot;button&quot;).btn-like.btn-light
+    i.fi-like
+    span (3)
+  .border-end.border-light.me-1 &amp;nbsp;
+  button(type=&quot;button&quot;).btn-dislike.btn-light
+    i.fi-dislike
+    span (0)
+
+// Light comment
+.border-bottom.border-light.py-4
+  p.text-light.opacity-70 Elementum ut quam tincidunt egestas vitae elit, hendrerit. Ullamcorper nulla amet lobortis elit, nibh condimentum enim. Aliquam felis nisl tellus sodales lectus dictum tristique proin vitae. Odio fermentum viverra tortor quis.
+  .d-flex.justify-content-between.align-items-center
+    .d-flex.align-items-center.pe-2
+      img(src=&quot;path-to-avatar-image&quot;, width=&quot;48&quot;, alt=&quot;Avatar&quot;).rounded-circle.me-1
+      .ps-2
+        h6.fs-base.text-light.mb-0
+          | Barbara Palson
+        span.text-light.opacity-50.fs-sm
+          | 3 days ago
+    button(type=&quot;button&quot;).btn.btn-link.btn-light.btn-sm
+      i.fi-reply.fs-lg.me-2
+      span.fw-normal Reply</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <!-- Quick (anchor) navigation-->
+        <div class="col-xl-3 d-none d-xl-block ps-4 ps-xxl-5">
+          <aside class="sticky-top pt-5">
+            <div class="pt-5 mt-5">
+              <div class="pe-4 border-start">
+                <h3 class="h6">پرش به</h3><a class="nav-link py-1 px-0 fs-sm fw-normal" data-scroll href="#testimonial-blockquote">نقل و قول</a><a class="nav-link py-1 px-0 fs-sm fw-normal" data-scroll href="#testimonial-card-basic">پیش فرض</a><a class="nav-link py-1 px-0 fs-sm fw-normal" data-scroll href="#testimonial-card-compound">Compound</a><a class="nav-link py-1 px-0 fs-sm fw-normal" data-scroll href="#testimonial-review">نظرات</a><a class="nav-link py-1 px-0 fs-sm fw-normal" data-scroll href="#testimonial-comment">پاسخ به نظر</a><a class="nav-link py-1 px-0 fs-sm fw-normal" data-scroll href="#testimonial-light">نسخه Light</a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <!-- Back to top button--><a class="btn-scroll-top" href="#top" data-scroll><span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span><i class="btn-scroll-top-icon fi-chevron-up">   </i></a>
+    <!-- Vendor scripts: js libraries and plugins-->
+    <script src="../vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/simplebar/dist/simplebar.min.js"></script>
+    <script src="../vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+    <script src="../vendor/prismjs/components/prism-core.min.js"></script>
+    <script src="../vendor/prismjs/components/prism-markup.min.js"></script>
+    <script src="../vendor/prismjs/components/prism-clike.min.js"></script>
+    <script src="../vendor/prismjs/components/prism-javascript.min.js"></script>
+    <script src="../vendor/prismjs/components/prism-pug.min.js"></script>
+    <script src="../vendor/prismjs/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script src="../vendor/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+    <script src="../vendor/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <!-- Main theme script-->
+    <script src="../js/theme.min.js"></script>
+  </body>
+</html>

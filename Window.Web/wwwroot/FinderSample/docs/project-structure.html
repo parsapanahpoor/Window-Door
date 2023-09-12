@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fa">
+  
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<head>
+    <meta charset="utf-8">
+    <title>قالب Finder | قالب چند منظوره فایندر | فایل راهنما</title>
+    <!-- SEO Meta Tags-->
+    <meta name="description" content="Finder - Directory &amp; Listings Bootstrap Template">
+    <meta name="keywords" content="bootstrap, business, directory, listings, e-commerce, car dealer, city guide, real estate, job board, user account, multipurpose, ui kit, html5, css3, javascript, gallery, slider, touch">
+    <meta name="author" content="Createx Studio">
+    <!-- Viewport-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon and Touch Icons-->
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <link rel="mask-icon" color="#5bbad5" href="../safari-pinned-tab.svg">
+    <meta name="msapplication-TileColor" content="#766df4">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Vendor Styles-->
+    <link rel="stylesheet" media="screen" href="../vendor/simplebar/dist/simplebar.min.css"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="../css/theme.min.css">
+  </head>
+  <!-- Body-->
+  <body dir="rtl">
+    <main class="container-fluid px-xl-4 pb-3 pb-lg-4">
+      <!-- Main content-->
+      <section class="offcanvas-enabled-start row">
+        <div class="col-xxl-9">
+          <!-- Navbar-->
+          <header class="navbar navbar-expand justify-content-end navbar-light bg-light fixed-top shadow-sm px-3 px-xl-4" data-scroll-header data-fixed-element><a class="navbar-brand d-lg-none" href="dev-setup.html"><img src="../img/logo/logo-dark.svg" width="116" alt="Finder"></a>
+            <button class="navbar-toggler d-block d-lg-none me-3 ms-auto border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#componentsNav"><span class="navbar-toggler-icon"></span></button>
+            <ul class="navbar-nav me-auto d-none d-lg-flex">
+              <li class="nav-item"><a class="nav-link" href="../index.html">مشاهده دموهای قالب<i class="fi-eye-on align-middle fs-base me-2"></i></a></li>
+              <li class="nav-item mx-2 border-end"></li>
+              <li class="nav-item"><a class="nav-link" href="../components/typography.html">ابزارهای بوت استرپ<i class="fi-list align-middle fs-base me-2"></i></a></li>
+              <li class="nav-item mx-2 border-end"></li>
+            </ul><a class="btn btn-primary me-lg-3" href="https://www.rtl-theme.com" target="_blank" rel="noopener"><i class="fi-cart me-2 d-none d-sm-inline-block fs-lg"></i>خرید از راست چین</a>
+          </header>
+          <!-- Side navigation (Offcanvas)-->
+          <aside class="offcanvas offcanvas-start offcanvas-expand bg-dark" id="componentsNav">
+            <div class="offcanvas-header d-none d-lg-block pt-3 pb-4 bg-dark"><a class="navbar-brand py-2" href="dev-setup.html"><img src="../img/logo/logo-light.svg" width="116" alt="Finder"></a><span class="badge bg-info">راهنمای نصب</span></div>
+            <div class="offcanvas-header d-flex d-lg-none align-items-center bg-dark">
+              <div class="d-flex align-items-center">
+                <h5 class="offcanvas-title me-3 text-white">منو</h5><span class="badge bg-info">راهنمای نصب</span>
+              </div>
+              <button class="btn-close btn-close-white" type="button" data-bs-dismiss="offcanvas"></button>
+            </div>
+            <div class="d-flex d-lg-none align-items-center py-4 px-3 border-top border-bottom border-light"><a class="btn btn-light btn-sm d-block w-100 me-2" href="../index.html"><i class="fi-eye-on me-2 fs-base"></i>پیش نمایش</a><a class="btn btn-success btn-sm d-block w-100" href="../components/typography.html"><i class="fi-list me-2 fs-base"></i>Components</a></div>
+            <div class="offcanvas-body pt-lg-2 pb-4" data-simplebar data-simplebar-inverse>
+              <h6 class="fs-base text-light mb-1 py-2">Contents</h6>
+              <nav class="nav nav-light flex-column"><a class="nav-link fs-sm" href="dev-setup.html">Dev environment setup</a><a class="nav-link fs-sm" href="working-with-gulp.html">Working with Gulp</a><a class="nav-link fs-sm active" href="project-structure.html">Project structure</a><a class="nav-link fs-sm" href="install-vendor-plugin.html">Installing Vendor plugins with Npm and Gulp</a><a class="nav-link fs-sm" href="using-preprocessors.html">Using Pug &amp; Sass</a><a class="nav-link fs-sm" href="autoprefixer.html">Browser support</a><a class="nav-link fs-sm" href="global-colors.html">Global colors</a><a class="nav-link fs-sm" href="components.html">Components</a><a class="nav-link fs-sm" href="utilities.html">Utility classes</a><a class="nav-link fs-sm" href="ui-icons.html">UI icons (Icon font)</a><a class="nav-link fs-sm" href="mailchimp.html">Mailchimp subscription form</a><a class="nav-link fs-sm" href="credits.html">Sources and credits</a><a class="nav-link fs-sm" href="changelog.html">Changelog</a></nav>
+            </div>
+          </aside>
+          <!-- Page title-->
+          <div class="border-bottom mb-5 pt-5">
+            <h1 class="mt-5 pt-4 pb-2">ساختار پروژه</h1>
+          </div>
+          <div class="pb-5">
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th class="w-25 font-vazir">پوشه / نام فایل</th>
+                    <th class="w-75 font-vazir">توضیحـات</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="w-25"><span class="text-nav fw-bold">Finder</span></td>
+                    <td class="w-75">این پوشه شامل تمام فایل های مربوط به قالب است.</td>
+                  </tr>
+                  <tr>
+                    <td class="w-25"><span class="text-nav fw-bold">Finder / src</span></td>
+                    <td class="w-75">این پوشه همه فایل‌های قالب را مانند .pug، .scss، .js را نگه می‌دارد که سپس در پوشه  <code>dist</code> پردازش می‌شوند (کامپایل یا کوچک می‌شوند).</td>
+                  </tr>
+                  <tr>
+                    <td class="w-25"><span class="text-nav fw-bold">Finder / dist</span></td>
+                    <td class="w-75">پوشه حاوی تمام فایل‌های قالب مانند html، .css، .js است که از پوشه <code>src</code> با استفاده از Node.js و Gulp پردازش (کامپایل/مینیفی‌شده) شده‌اند.</td>
+                  </tr>
+                  <tr>
+                    <td class="w-25"><span class="text-nav fw-bold">Finder / dist / vendor</span></td>
+                    <td class="w-75">این پوشه حاوی همه فایل‌های <code>.js / .css</code> است.</td>
+                  </tr>
+                  <tr>
+                    <td class="w-25"><span class="text-nav fw-bold">Finder / package.json</span></td>
+                    <td class="w-75">فایل حاوی meta data در مورد برنامه یا ماژول شما است. مهمتر از همه، فهرستی از وابستگی‌ها را برای نصب از npm هنگام اجرای نصب <kbd>npm</kbd> دارد.</td>
+                  </tr>
+                  <tr>
+                    <td class="w-25"><span class="text-nav fw-bold">Finder / gulpfile.js</span></td>
+                    <td class="w-75">فایل پیکربندی برای کتابخانه Gulp است. این شامل تمام وظایفی (taskهایی) است که می خواهید با Gulp انجام دهید. در مورد آن از بخش <a href='working-with-gulp.html'>Working with Gulp</a> یا در<a href='https://github.com/gulpjs/gulp/blob/v4.0.0/docs/API.md' target='_blank'> مستندات رسمی  Gulp</a> بیشتر بیاموزید.</td>
+                  </tr>
+                  <tr>
+                    <td class="w-25"><span class="text-nav fw-bold">Finder / src / js</span></td>
+                    <td class="w-75">این پوشه حاوی فایل <code>theme.js</code> و <code> کامپوننت ها</code> با همه ماژول ها است. <code>theme.js</code> به دو فایل <code>dist/js/theme.js</code> و <code>dist/js/theme.min.js</code> پردازش می‌شود (کامپایل / کوچک‌سازی شده).</td>
+                  </tr>
+                  <tr>
+                    <td class="w-25"><span class="text-nav fw-bold">Finder / src / scss</span></td>
+                    <td class="w-75">این پوشه حاوی تمام فایل های <code>sass</code> است و نتیجه کامپایل آن در پوشه <code>dist/css/</code> قرار خواهد گرفت.</td>
+                  </tr>
+                  <tr>
+                    <td class="w-25"><span class="text-nav fw-bold">Finder / src / templates</span></td>
+                    <td class="w-75">این پوشه حاوی تمام فایل‌های <code>pug</code> است که در پوشه های <code>dist</code>, <code>dist/components</code> و <code>dist/docs</code> به HTML کامپایل شده اند.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="alert alert-info d-flex fs-md mt-3 mb-4"><i class="fi-alert-circle lead me-2 me-sm-3"></i>
+              <div><span class='fw-bold'>نکته: </span> اگر از تنظیمات Pro Front-End با Node.js و Gulp استفاده نمی کنید و می خواهید مستقیماً فایل های html / css / js را ویرایش کنید، باید به دنبال پوشه <span class='fw-bold'>dist</span> باشید.</div>
+            </div>
+            <p>چه با Node.js و Gulp کار کنید یا نه، همچنان می‌توانید از پیش پردازنده‌های HTML و CSS بهره ببرید. برای یادگیری میتوانید بر روی این لینک کلیک کنید : <a href='using-preprocessors.html' class='fw-bold'> استفاده از Pug و Sass</a></p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- Back to top button--><a class="btn-scroll-top" href="#top" data-scroll><span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span><i class="btn-scroll-top-icon fi-chevron-up">   </i></a>
+    <!-- Vendor scripts: js libraries and plugins-->
+    <script src="../vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/simplebar/dist/simplebar.min.js"></script>
+    <script src="../vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+    <!-- Main theme script-->
+    <script src="../js/theme.min.js"></script>
+  </body>
+
+</html>

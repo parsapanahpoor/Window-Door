@@ -1,13 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Window.Application.Services.Interfaces;
 using Window.Data.Context;
-using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Market;
+using Window.Domain.ViewModels.Site.Home;
 
 namespace Window.Application.Services.Services
 {
@@ -65,6 +61,46 @@ namespace Window.Application.Services.Services
             return await _context.MarketChargeInfo.Include(p => p.MArket).ThenInclude(p => p.User)
                                .Where(p => !p.IsDelete && p.CurrentAccountCharge && p.EndDate.Year == DateTime.Now.Year
                                       && (DateTime.Now.DayOfYear - p.EndDate.DayOfYear <= 15) && (DateTime.Now.DayOfYear - p.EndDate.DayOfYear >= 4)).ToListAsync();
+        }
+
+        #endregion
+
+        #region Site Side 
+
+        //Fill Home Index ViewModel
+        public async Task<IndexViewModel> FillHomeIndexViewModel()
+        {
+            IndexViewModel model = new IndexViewModel();
+
+            #region Tazmin DarKharid 
+
+            model.TazminDarKharid = await  _context.TechnicalIssues.Where(p => !p.IsDelete).FirstOrDefaultAsync();
+
+            #endregion
+
+            #region Free Consultant
+
+            model.FreeConsultant = await _context.Counselings.Where(p => !p.IsDelete).ToListAsync();
+
+            #endregion
+
+            #region Articles
+
+            model.Articles = await _context.Articles.Where(p => !p.IsDelete).Take(5).ToListAsync();
+
+            #endregion
+
+            #region Main Brands
+
+            model.MainBrands = await _context.MainBrands
+                                             .AsNoTracking()
+                                             .Where(p=> !p.IsDelete && !string.IsNullOrEmpty(p.BrandSite))
+                                             .OrderByDescending(p=> p.Priority)
+                                             .Take(30)
+                                             .ToListAsync();
+            #endregion
+
+            return model;
         }
 
         #endregion

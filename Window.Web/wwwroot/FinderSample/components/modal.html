@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="fa">
+  
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<head>
+    <meta charset="utf-8">
+    <title>قالب Finder | قالب چند منظوره فایندر | ابزارهای بوت استرپ</title>
+    <!-- SEO Meta Tags-->
+    <meta name="description" content="Finder - Directory &amp; Listings Bootstrap Template">
+    <meta name="keywords" content="bootstrap, business, directory, listings, e-commerce, car dealer, city guide, real estate, job board, user account, multipurpose, ui kit, html5, css3, javascript, gallery, slider, touch">
+    <meta name="author" content="Createx Studio">
+    <!-- Viewport-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon and Touch Icons-->
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <link rel="mask-icon" color="#5bbad5" href="../safari-pinned-tab.svg">
+    <meta name="msapplication-TileColor" content="#766df4">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Vendor Styles-->
+    <link rel="stylesheet" media="screen" href="../vendor/simplebar/dist/simplebar.min.css"/>
+    <link rel="stylesheet" media="screen" href="../vendor/prismjs/themes/prism.css"/>
+    <link rel="stylesheet" media="screen" href="../vendor/prismjs/plugins/toolbar/prism-toolbar.css"/>
+    <link rel="stylesheet" media="screen" href="../vendor/prismjs/plugins/line-numbers/prism-line-numbers.css"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="../css/theme.min.css">
+  </head>
+  <!-- Body-->
+  <body dir="rtl">
+    <main class="container-fluid px-xl-4 pb-3 pb-lg-4">
+      <!-- Main content-->
+      <section class="offcanvas-enabled-start row">
+        <div class="col-xl-9">
+          <!-- Navbar-->
+          <header class="navbar navbar-expand justify-content-end navbar-light bg-light fixed-top shadow-sm px-3 px-xl-4" data-scroll-header data-fixed-element><a class="navbar-brand d-lg-none" href="typography.html"><img src="../img/logo/logo-dark.svg" width="116" alt="Finder"></a>
+            <button class="navbar-toggler d-block d-lg-none me-3 ms-auto border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#componentsNav"><span class="navbar-toggler-icon"></span></button>
+            <ul class="navbar-nav ms-auto d-none d-lg-flex">
+              <li class="nav-item"><a class="nav-link" href="../index.html">پیش نمایش<i class="fi-eye-on align-middle fs-base me-2"></i></a></li>
+              <li class="nav-item mx-2 border-start"></li>
+              <li class="nav-item"><a class="nav-link" href="../docs/dev-setup.html">داکیومنت<i class="fi-file align-middle fs-base me-2"></i> </a></li>
+              <li class="nav-item mx-2 border-start"></li>
+            </ul>
+			<a class="btn btn-primary me-lg-3" href="https://www.rtl-theme.com/category/template-html/" target="_blank" rel="noopener"><i class="fi-cart me-2 d-none d-sm-inline-block fs-lg"></i>خرید قالب از راست چین</a>
+          </header>
+          <!-- Side navigation (Offcanvas)-->
+          <aside class="offcanvas offcanvas-start offcanvas-expand bg-dark" id="componentsNav">
+            <div class="offcanvas-header d-none d-lg-block pt-3 pb-4 bg-dark"><a class="navbar-brand py-2" href="typography.html"><img src="../img/logo/logo-light.svg" width="116" alt="Finder"></a><span class="badge bg-success">ابزارهای بوت استرپ</span></div>
+            <div class="offcanvas-header d-flex d-lg-none align-items-center bg-dark">
+              <div class="d-flex align-items-center">
+                <h5 class="offcanvas-title me-3 text-white">منو</h5><span class="badge bg-success">ابزارهای بوت استرپ</span>
+              </div>
+              <button class="btn-close btn-close-white" type="button" data-bs-dismiss="offcanvas"></button>
+            </div>
+            <div class="d-flex d-lg-none align-items-center py-4 px-3 border-top border-bottom border-light"><a class="btn btn-light btn-sm d-block w-100 me-2" href="../index.html"><i class="fi-eye-on me-2 fs-base"></i>پیش نمایش</a><a class="btn btn-info btn-sm d-block w-100" href="../docs/dev-setup.html"><i class="fi-file me-2 fs-base"></i>داکیومنت</a></div>
+            <div class="offcanvas-body pt-lg-2 pb-4" data-simplebar data-simplebar-inverse>
+              <h6 class="fs-base text-light mb-1 py-2 font-vazir">کدهای آماده متنی</h6>
+              <nav class="nav nav-light flex-column"><a class="nav-link fs-sm" href="typography.html">تایپوگرافی</a><a class="nav-link fs-sm" href="icon-font.html">آیکون فونت ها</a><a class="nav-link fs-sm" href="code.html">تگ code</a><a class="nav-link fs-sm" href="images.html">تصاویر</a><a class="nav-link fs-sm" href="tables.html">جداول</a></nav>
+              <hr class="text-light opacity-15 mx-n4 mt-4">
+              <h6 class="fs-base text-light mx-n4 mb-1 pt-4 pb-2 px-4">کدهای آماده</h6>
+              <nav class="nav nav-light flex-column"><a class="nav-link fs-sm" href="accordion.html">آکوردین (اسلاید کشویی)</a><a class="nav-link fs-sm" href="alerts.html">هشدارها</a><a class="nav-link fs-sm" href="badge.html">نشان ها</a><a class="nav-link fs-sm" href="breadcrumb.html">مسیر راهنما</a><a class="nav-link fs-sm" href="buttons.html">دکمه ها</a><a class="nav-link fs-sm" href="button-group.html">دکمه ها گروهی</a><a class="nav-link fs-sm" href="cards-basic.html">باکس های ساده</a><a class="nav-link fs-sm" href="cards-advanced.html">باکس های پیشرفته</a><a class="nav-link fs-sm" href="carousel.html">اسلایدر</a><a class="nav-link fs-sm" href="collapse.html">پنل های آکاردئونی (Collapse)</a><a class="nav-link fs-sm" href="date-picker.html">انتخاب کننده تاریخ / زمان</a><a class="nav-link fs-sm" href="dropdowns.html">منوهای کشویی (Dropdowns)</a><a class="nav-link fs-sm" href="file-uploader.html">فایل آپلودر</a><a class="nav-link fs-sm" href="forms.html">فرم ها</a><a class="nav-link fs-sm" href="form-group.html">فرم های گروهی</a><a class="nav-link fs-sm" href="gallery.html">گالری</a><a class="nav-link fs-sm" href="input-group.html">فرم های ورودی</a><a class="nav-link fs-sm" href="icon-box.html">باکس آیکن (Icon box)</a><a class="nav-link fs-sm" href="maps.html">نقشه</a><a class="nav-link fs-sm" href="list-group.html">لیست های گروهی</a><a class="nav-link fs-sm active" href="modal.html">مودال (Modal)</a><a class="nav-link fs-sm" href="navbar.html">منو (Navbar)</a><a class="nav-link fs-sm" href="offcanvas.html">منو کشویی (Offcanvas)</a><a class="nav-link fs-sm" href="pagination.html">صفحه بندی (Pagination)</a><a class="nav-link fs-sm" href="parallax.html">پارالکس</a><a class="nav-link fs-sm" href="pills.html">پیل ها (Pills)</a><a class="nav-link fs-sm" href="placeholders.html">Placeholders</a><a class="nav-link fs-sm" href="popovers.html">پنچره های بازشو (Popovers)</a><a class="nav-link fs-sm" href="pricing.html">باکس ها قیمت گذاری</a><a class="nav-link fs-sm" href="progress.html">پروگرس بار (Progress)</a><a class="nav-link fs-sm" href="social-buttons.html">دکمه های شبکه اجتماعی</a><a class="nav-link fs-sm" href="spinners.html">آیکون لود (Spinners)</a><a class="nav-link fs-sm" href="steps.html">Steps</a><a class="nav-link fs-sm" href="tabs.html">تب ها</a><a class="nav-link fs-sm" href="testimonials.html">مشتریان / نظرات</a><a class="nav-link fs-sm" href="toasts.html">کادر هشدار (Toasts)</a><a class="nav-link fs-sm" href="tooltips.html">پاپ آپ های کوچک (Tooltips)</a></nav>
+              <hr class="text-light opacity-15 mx-n4 mt-4">
+              <h6 class="fs-base text-light mx-n4 mb-1 pt-4 pb-2 px-4">کدهای کاربردی</h6>
+              <nav class="nav nav-light flex-column"><a class="nav-link fs-sm" href="https://getbootstrap.com/docs/5.1/utilities/background/" target="_blank" rel="noopener">بوت استرپ</a><a class="nav-link fs-sm" href="utilities.html">سایت Finder</a></nav>
+            </div>
+          </aside>
+          <!-- Page title-->
+          <div class="border-bottom mb-5 pt-5">
+            <h1 class="mt-5 pt-4">مودال (Modal)</h1>
+            <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+              <p class="text-muted">دیالوگ هایی را برای لایت باکس ها، اعلان های کاربر و غیره به سایت خود اضافه کنید.</p>
+              <p class="pt-1 fs-sm pe-md-4"><a class="text-decoration-none text-nowrap" href="https://getbootstrap.com/docs/5.1/components/modal/" target="_blank" rel="noopener">مشاهده در سایت بوت استرپ<i class="fi-external-link align-middle ms-2 mt-n1"></i></a></p>
+            </div>
+          </div>
+          <!-- Small modal-->
+          <div class="modal fade" id="modalSmall" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-sm" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">عنوان</h4>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Default modal-->
+          <div class="modal fade" id="modalDefault" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">عنوان</h4>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">بستن</button>
+                  <button class="btn btn-primary btn-shadow btn-sm" type="button">ذخیره</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Large modal-->
+          <div class="modal fade" id="modalLarge" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">عنوان</h4>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">بستن</button>
+                  <button class="btn btn-primary btn-shadow btn-sm" type="button">ذخیره</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Extra large modal-->
+          <div class="modal fade" id="modalXL" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-xl" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">عنوان</h4>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">بستن</button>
+                  <button class="btn btn-primary btn-shadow btn-sm" type="button">ذخیره</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Long modal-->
+          <div class="modal fade" id="modalLong" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">عنوان</h4>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body fs-sm">
+                  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                  <p>کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+                  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                  <p>کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+				  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                  <p>کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+				  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                  <p>کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">بستن</button>
+                  <button class="btn btn-primary btn-shadow btn-sm" type="button">ذخیره</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Scrolling content-->
+          <div class="modal fade" id="modalScroll" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">عنوان</h4>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body fs-sm">
+                  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                  <p>کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+				  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                  <p>کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+				  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                  <p>کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+				  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                  <p>کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+				  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                  <p>کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+				  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                  <p>کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+				  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                  <p>کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">بستن</button>
+                  <button class="btn btn-primary btn-shadow btn-sm" type="button">ذخیره</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Vertically centered modal-->
+          <div class="modal fade" id="modalCentered" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">عنوان</h4>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">بستن</button>
+                  <button class="btn btn-primary btn-shadow btn-sm" type="button">ذخیره</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Modal markup-->
+          <section class="pb-5 mb-md-2" id="modal-markup">
+            <h2 class="h5 mb-3">پیش فرض</h2>
+            <div class="card border-0 shadow-sm">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                  <li class="nav-item"><a class="nav-link active" href="#result1" data-bs-toggle="tab" role="tab" aria-controls="result1" aria-selected="true">نتیجه</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#html1" data-bs-toggle="tab" role="tab" aria-controls="html1" aria-selected="false">HTML</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#pug1" data-bs-toggle="tab" role="tab" aria-controls="pug1" aria-selected="false">Pug</a></li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="result1" role="tabpanel">
+                    <style>
+                      .example-modal .modal {
+                        display: block;
+                        position: relative;
+                        top: auto;
+                        right: auto;
+                        bottom: auto;
+                        left: auto;
+                        z-index: 1;
+                      }
+                    </style>
+                    <div class="example-modal">
+                      <div class="modal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">عنوان</h5>
+                              <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                            </div>
+                            <div class="modal-footer">
+                              <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">بستن</button>
+                              <button class="btn btn-primary btn-shadow btn-sm" type="button">ذخیره</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="html1" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-html">&lt;!-- Modal markup --&gt;
+&lt;div class=&quot;modal&quot; tabindex=&quot;-1&quot; role=&quot;dialog&quot;&gt;
+  &lt;div class=&quot;modal-dialog&quot; role=&quot;document&quot;&gt;
+    &lt;div class=&quot;modal-content&quot;&gt;
+      &lt;div class=&quot;modal-header&quot;&gt;
+        &lt;h5 class=&quot;modal-title&quot;&gt;Modal title&lt;/h5&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn-close&quot; data-bs-dismiss=&quot;modal&quot; aria-label=&quot;Close&quot;&gt;&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;modal-body&quot;&gt;
+        &lt;p&gt;Modal body text goes here.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;modal-footer&quot;&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn btn-secondary btn-sm&quot; data-bs-dismiss=&quot;modal&quot;&gt;Close&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn btn-primary btn-sm&quot;&gt;Save changes&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                  </div>
+                  <div class="tab-pane fade" id="pug1" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-pug">// Modal markup
+.modal(tabindex=&quot;-1&quot;, role=&quot;dialog&quot;)
+  .modal-dialog(role=&quot;document&quot;)
+    .modal-content
+      .modal-header
+        h5.modal-title
+          | Modal title
+        button(type=&quot;button&quot;, class=&quot;btn-close&quot;, data-bs-dismiss=&quot;modal&quot;, aria-label=&quot;Close&quot;)
+      .modal-body
+        p Modal body text goes here.
+      .modal-footer
+        button(type=&quot;button&quot;, class=&quot;btn btn-secondary btn-sm&quot;, data-bs-dismiss=&quot;modal&quot;)
+          | Close
+        button(type=&quot;button&quot;, class=&quot;btn btn-primary btn-sm&quot;)
+          | Save changes
+</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Tabs and forms-->
+          <section class="pb-5 mb-md-2" id="modal-tabs-forms">
+            <h2 class="h5 mb-3">تب و فرم</h2>
+            <div class="card border-0 shadow-sm">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                  <li class="nav-item"><a class="nav-link active" href="#result2" data-bs-toggle="tab" role="tab" aria-controls="result2" aria-selected="true">نتیجه</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#html2" data-bs-toggle="tab" role="tab" aria-controls="html2" aria-selected="false">HTML</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#pug2" data-bs-toggle="tab" role="tab" aria-controls="pug2" aria-selected="false">Pug</a></li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="result2" role="tabpanel">
+                    <div class="example-modal">
+                      <div class="modal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <ul class="nav nav-tabs mb-0" role="tablist">
+                                <li class="nav-item"><a class="nav-link active" href="#signin" data-bs-toggle="tab" role="tab" aria-selected="true"><i class="fi-login fs-sm ms-2 me-n1"></i> ورود به حساب کاربری</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#signup" data-bs-toggle="tab" role="tab" aria-selected="false"><i class="fi-user fs-sm ms-2 me-n1"></i> ثبت نام</a></li>
+                              </ul>
+                              <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body tab-content py-4">
+                              <form class="tab-pane fade show active" autocomplete="off" id="signin">
+                                <div class="mb-3">
+                                  <label class="form-label" for="email1">پست الکترونیکی</label>
+                                  <input class="form-control" type="email" id="email1" placeholder="johndoe@example.com">
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label" for="pass1">رمزعبور</label>
+                                  <div class="password-toggle">
+                                    <input class="form-control" type="password" id="pass1">
+                                    <label class="password-toggle-btn">
+                                      <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                                <div class="mb-3 d-flex flex-wrap justify-content-between">
+                                  <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="remember">
+                                    <label class="form-check-label" for="remember">مرا به خاطر بسپار</label>
+                                  </div><a class="fs-sm" href="#">رمز عبور را فراموش کرده اید؟</a>
+                                </div>
+                                <button class="btn btn-primary d-block w-100" type="submit">ورود</button>
+                              </form>
+                              <form class="tab-pane fade" autocomplete="off" id="signup">
+                                <div class="mb-3">
+                                  <label class="form-label" for="name">نام کامل</label>
+                                  <input class="form-control" type="text" id="name" placeholder="آنت بلک">
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label" for="email2">پست الکترونیکی</label>
+                                  <input class="form-control" type="email" id="email2" placeholder="johndoe@example.com">
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label" for="pass2">رمز عبور</label>
+                                  <div class="password-toggle">
+                                    <input class="form-control" type="password" id="pass2">
+                                    <label class="password-toggle-btn">
+                                      <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label" for="pass3">تایید رمز عبور</label>
+                                  <div class="password-toggle">
+                                    <input class="form-control" type="password" id="pass3">
+                                    <label class="password-toggle-btn">
+                                      <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                                <button class="btn btn-primary d-block w-100" type="submit">ثبت نام</button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="html2" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-html">&lt;!-- Modal with tabs and forms --&gt;
+&lt;div class=&quot;modal&quot; tabindex=&quot;-1&quot; role=&quot;dialog&quot;&gt;
+  &lt;div class=&quot;modal-dialog&quot; role=&quot;document&quot;&gt;
+    &lt;div class=&quot;modal-content&quot;&gt;
+      &lt;div class=&quot;modal-header&quot;&gt;
+        &lt;ul class=&quot;nav nav-tabs mb-0&quot; role=&quot;tablist&quot;&gt;
+          &lt;li class=&quot;nav-item&quot;&gt;
+            &lt;a class=&quot;nav-link active&quot; href=&quot;#signin&quot; data-bs-toggle=&quot;tab&quot; role=&quot;tab&quot; aria-selected=&quot;true&quot;&gt;
+              &lt;i class=&quot;fi-login fs-sm me-2 ms-n1&quot;&gt;&lt;/i&gt;
+              Sign in
+            &lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;nav-item&quot;&gt;
+            &lt;a class=&quot;nav-link&quot; href=&quot;#signup&quot; data-bs-toggle=&quot;tab&quot; role=&quot;tab&quot; aria-selected=&quot;false&quot;&gt;
+              &lt;i class=&quot;fi-user fs-sm me-2 ms-n1&quot;&gt;&lt;/i&gt;
+              Sign up
+            &lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;button class=&quot;btn-close&quot; type=&quot;button&quot; data-bs-dismiss=&quot;modal&quot; aria-label=&quot;Close&quot;&gt;&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;modal-body tab-content py-4&quot;&gt;
+        &lt;form class=&quot;tab-pane fade show active&quot; autocomplete=&quot;off&quot; id=&quot;signin&quot;&gt;
+          &lt;div class=&quot;mb-3&quot;&gt;
+            &lt;label class=&quot;form-label&quot; for=&quot;email1&quot;&gt;Email address&lt;/label&gt;
+            &lt;input class=&quot;form-control&quot; type=&quot;email&quot; id=&quot;email1&quot; placeholder=&quot;johndoe@example.com&quot;&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;mb-3&quot;&gt;
+            &lt;label class=&quot;form-label&quot; for=&quot;pass1&quot;&gt;Password&lt;/label&gt;
+            &lt;div class=&quot;password-toggle&quot;&gt;
+              &lt;input class=&quot;form-control&quot; type=&quot;password&quot; id=&quot;pass1&quot;&gt;
+              &lt;label class=&quot;password-toggle-btn&quot;&gt;
+                &lt;input class=&quot;password-toggle-check&quot; type=&quot;checkbox&quot;&gt;
+                &lt;span class=&quot;password-toggle-indicator&quot;&gt;&lt;/span&gt;
+              &lt;/label&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;mb-3 d-flex flex-wrap justify-content-between&quot;&gt;
+            &lt;div class=&quot;form-check mb-2&quot;&gt;
+              &lt;input class=&quot;form-check-input&quot; type=&quot;checkbox&quot; id=&quot;remember&quot;&gt;
+              &lt;label class=&quot;form-check-label&quot; for=&quot;remember&quot;&gt;Remember me&lt;/label&gt;
+            &lt;/div&gt;
+            &lt;a class=&quot;fs-sm&quot; href=&quot;#&quot;&gt;Forgot password?&lt;/a&gt;
+          &lt;/div&gt;
+          &lt;button class=&quot;btn btn-primary d-block w-100&quot; type=&quot;submit&quot;&gt;Sign in&lt;/button&gt;
+        &lt;/form&gt;
+        &lt;form class=&quot;tab-pane fade&quot; autocomplete=&quot;off&quot; id=&quot;signup&quot;&gt;
+          &lt;div class=&quot;mb-3&quot;&gt;
+            &lt;label class=&quot;form-label&quot; for=&quot;name&quot;&gt;Full name&lt;/label&gt;
+            &lt;input class=&quot;form-control&quot; type=&quot;text&quot; id=&quot;name&quot; placeholder=&quot;John Doe&quot;&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;mb-3&quot;&gt;
+            &lt;label class=&quot;form-label&quot; for=&quot;email2&quot;&gt;Email address&lt;/label&gt;
+            &lt;input class=&quot;form-control&quot; type=&quot;email&quot; id=&quot;email2&quot; placeholder=&quot;johndoe@example.com&quot;&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;mb-3&quot;&gt;
+            &lt;label class=&quot;form-label&quot; for=&quot;pass2&quot;&gt;Password&lt;/label&gt;
+            &lt;div class=&quot;password-toggle&quot;&gt;
+              &lt;input class=&quot;form-control&quot; type=&quot;password&quot; id=&quot;pass2&quot;&gt;
+              &lt;label class=&quot;password-toggle-btn&quot;&gt;
+                &lt;input class=&quot;password-toggle-check&quot; type=&quot;checkbox&quot;&gt;
+                &lt;span class=&quot;password-toggle-indicator&quot;&gt;&lt;/span&gt;
+              &lt;/label&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;mb-3&quot;&gt;
+            &lt;label class=&quot;form-label&quot; for=&quot;pass3&quot;&gt;Confirm password&lt;/label&gt;
+            &lt;div class=&quot;password-toggle&quot;&gt;
+              &lt;input class=&quot;form-control&quot; type=&quot;password&quot; id=&quot;pass3&quot;&gt;
+              &lt;label class=&quot;password-toggle-btn&quot;&gt;
+                &lt;input class=&quot;password-toggle-check&quot; type=&quot;checkbox&quot;&gt;
+                &lt;span class=&quot;password-toggle-indicator&quot;&gt;&lt;/span&gt;
+              &lt;/label&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;button class=&quot;btn btn-primary d-block w-100&quot; type=&quot;submit&quot;&gt;Sign up&lt;/button&gt;
+        &lt;/form&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                  </div>
+                  <div class="tab-pane fade" id="pug2" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-pug">// Modal with tabs and forms
+.modal(tabindex=&quot;-1&quot;, role=&quot;dialog&quot;)
+  .modal-dialog(role=&quot;document&quot;)
+    .modal-content
+      .modal-header
+        ul(role=&quot;tablist&quot;).nav.nav-tabs.mb-0
+          li.nav-item
+            a(href=&quot;#signin&quot;, data-bs-toggle=&quot;tab&quot;, role=&quot;tab&quot;, aria-selected=&quot;true&quot;).nav-link.active
+              i.fi-login.fs-sm.me-2.ms-n1
+              | Sign in
+          li.nav-item
+            a(href=&quot;#signup&quot;, data-bs-toggle=&quot;tab&quot;, role=&quot;tab&quot;, aria-selected=&quot;false&quot;).nav-link
+              i.fi-user.fs-sm.me-2.ms-n1
+              | Sign up
+        button(type=&quot;button&quot;, class=&quot;btn-close&quot;, data-bs-dismiss=&quot;modal&quot;, aria-label=&quot;Close&quot;)
+      .modal-body.tab-content.py-4
+        form(autocomplete=&quot;off&quot;)#signin.tab-pane.fade.show.active
+          .mb-3
+            label(for=&quot;email1&quot;).form-label Email address
+            input(type=&quot;email&quot;, id=&quot;email1&quot;, placeholder=&quot;johndoe@example.com&quot;).form-control
+          .mb-3
+            label(for=&quot;pass1&quot;).form-label Password
+            .password-toggle
+              input(type=&quot;password&quot;, id=&quot;pass1&quot;).form-control
+              label.password-toggle-btn
+                input(type=&quot;checkbox&quot;).password-toggle-check
+                span.password-toggle-indicator
+          .mb-3.d-flex.flex-wrap.justify-content-between
+            .form-check.mb-2
+              input(type=&quot;checkbox&quot;, id=&quot;remember&quot;).form-check-input
+              label(for=&quot;remember&quot;).form-check-label Remember me
+            a(href=&quot;#&quot;).fs-sm Forgot password?
+          button(type=&quot;submit&quot;).btn.btn-primary.d-block.w-100
+            | Sign in
+        form(autocomplete=&quot;off&quot;)#signup.tab-pane.fade
+          .mb-3
+            label(for=&quot;name&quot;).form-label Full name
+            input(type=&quot;text&quot;, id=&quot;name&quot;, placeholder=&quot;John Doe&quot;).form-control
+          .mb-3
+            label(for=&quot;email2&quot;).form-label Email address
+            input(type=&quot;email&quot;, id=&quot;email2&quot;, placeholder=&quot;johndoe@example.com&quot;).form-control
+          .mb-3
+            label(for=&quot;pass2&quot;).form-label Password
+            .password-toggle
+              input(type=&quot;password&quot;, id=&quot;pass2&quot;).form-control
+              label.password-toggle-btn
+                input(type=&quot;checkbox&quot;).password-toggle-check
+                span.password-toggle-indicator
+          .mb-3
+            label(for=&quot;pass3&quot;).form-label Confirm password
+            .password-toggle
+              input(type=&quot;password&quot;, id=&quot;pass3&quot;).form-control
+              label.password-toggle-btn
+                input(type=&quot;checkbox&quot;).password-toggle-check
+                span.password-toggle-indicator
+          button(type=&quot;submit&quot;).btn.btn-primary.d-block.w-100
+            | Sign up
+</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Live demo-->
+          <section class="pb-5 mb-md-2" id="modal-demo">
+            <h2 class="h5 mb-3">پیش نمایش زنده</h2>
+            <div class="card border-0 shadow-sm">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                  <li class="nav-item"><a class="nav-link active" href="#result3" data-bs-toggle="tab" role="tab" aria-controls="result3" aria-selected="true">نتیجه</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#html3" data-bs-toggle="tab" role="tab" aria-controls="html3" aria-selected="false">HTML</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#pug3" data-bs-toggle="tab" role="tab" aria-controls="pug3" aria-selected="false">Pug</a></li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="result3" role="tabpanel">
+                    <button class="btn btn-outline-secondary me-2 mb-3" type="button" data-bs-toggle="modal" data-bs-target="#modalSmall">مودال کوچک</button>
+                    <button class="btn btn-outline-secondary me-2 mb-3" type="button" data-bs-toggle="modal" data-bs-target="#modalDefault">مودال پیش فرض</button>
+                    <button class="btn btn-outline-secondary me-2 mb-3" type="button" data-bs-toggle="modal" data-bs-target="#modalLarge">مودال بزرگ</button>
+                    <button class="btn btn-outline-secondary me-2 mb-3" type="button" data-bs-toggle="modal" data-bs-target="#modalXL">مودال بزرگ تر</button>
+                    <button class="btn btn-outline-secondary me-2 mb-3" type="button" data-bs-toggle="modal" data-bs-target="#modalLong">مودال با ارتفاع بیشتر</button>
+                    <button class="btn btn-outline-secondary me-2 mb-3" type="button" data-bs-toggle="modal" data-bs-target="#modalScroll">مودال با اسکرول</button>
+                    <button class="btn btn-outline-secondary mb-3" type="button" data-bs-toggle="modal" data-bs-target="#modalCentered">مودال وسط چین</button>
+                  </div>
+                  <div class="tab-pane fade" id="html3" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-html">&lt;!-- Make sure the actual modal markup is present on the page and has the right id --&gt;
+
+&lt;!-- Launch small modal --&gt;
+&lt;button type=&quot;button&quot; class=&quot;btn btn-outline-secondary&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#modalSmall&quot;&gt;
+  Small modal
+&lt;/button&gt;
+
+&lt;!-- Launch default modal --&gt;
+&lt;button type=&quot;button&quot; class=&quot;btn btn-outline-secondary&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#modalDefault&quot;&gt;
+  Default modal
+&lt;/button&gt;
+
+&lt;!-- Launch large modal --&gt;
+&lt;button type=&quot;button&quot; class=&quot;btn btn-outline-secondary&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#modalLarge&quot;&gt;
+  Large modal
+&lt;/button&gt;
+
+&lt;!-- Launch extra large modal --&gt;
+&lt;button type=&quot;button&quot; class=&quot;btn btn-outline-secondary&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#modalXL&quot;&gt;
+  Extra large modal
+&lt;/button&gt;
+
+&lt;!-- Launch long modal --&gt;
+&lt;button type=&quot;button&quot; class=&quot;btn btn-outline-secondary&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#modalLong&quot;&gt;
+  Long modal
+&lt;/button&gt;
+
+&lt;!-- Launch modal with srolling content --&gt;
+&lt;button type=&quot;button&quot; class=&quot;btn btn-outline-secondary&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#modalScroll&quot;&gt;
+  Srolling content
+&lt;/button&gt;
+
+&lt;!-- Launch vertically centered modal --&gt;
+&lt;button type=&quot;button&quot; class=&quot;btn btn-outline-secondary&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#modalCentered&quot;&gt;
+  Vertically centered modal
+&lt;/button&gt;</code></pre>
+                  </div>
+                  <div class="tab-pane fade" id="pug3" role="tabpanel">
+                    <pre class="line-numbers"><code class="lang-pug">//  Make sure the actual modal markup is present on the page and has the right id
+
+// Launch small modal
+button(type=&quot;button&quot;, class=&quot;btn btn-outline-secondary&quot;, data-bs-toggle=&quot;modal&quot;, data-bs-target=&quot;#modalSmall&quot;)
+  | Small modal
+
+// Launch default modal
+button(type=&quot;button&quot;, class=&quot;btn btn-outline-secondary&quot;, data-bs-toggle=&quot;modal&quot;, data-bs-target=&quot;#modalDefault&quot;)
+  | Default modal
+
+// Launch large modal
+button(type=&quot;button&quot;, class=&quot;btn btn-outline-secondary&quot;, data-bs-toggle=&quot;modal&quot;, data-bs-target=&quot;#modalLarge&quot;)
+  | Large modal
+
+// Launch extra large modal
+button(type=&quot;button&quot;, class=&quot;btn btn-outline-secondary&quot;, data-bs-toggle=&quot;modal&quot;, data-bs-target=&quot;#modalXL&quot;)
+  | Extra large modal
+
+// Launch long modal
+button(type=&quot;button&quot;, class=&quot;btn btn-outline-secondary&quot;, data-bs-toggle=&quot;modal&quot;, data-bs-target=&quot;#modalLong&quot;)
+  | Long modal
+
+// Launch modal with srolling content
+button(type=&quot;button&quot;, class=&quot;btn btn-outline-secondary&quot;, data-bs-toggle=&quot;modal&quot;, data-bs-target=&quot;#modalScroll&quot;)
+  | Srolling content
+
+// Launch vertically centered modal
+button(type=&quot;button&quot;, class=&quot;btn btn-outline-secondary&quot;, data-bs-toggle=&quot;modal&quot;, data-bs-target=&quot;#modalCentered&quot;)
+  | Vertically centered modal</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <!-- Quick (anchor) navigation-->
+        <div class="col-xl-3 d-none d-xl-block ps-4 ps-xxl-5">
+          <aside class="sticky-top pt-5">
+            <div class="pt-5 mt-5">
+              <div class="pe-4 border-start">
+                <h3 class="h6">پرش به</h3><a class="nav-link py-1 px-0 fs-sm fw-normal" data-scroll href="#modal-markup">پیش فرض</a><a class="nav-link py-1 px-0 fs-sm fw-normal" data-scroll href="#modal-tabs-forms">تب و فرم</a><a class="nav-link py-1 px-0 fs-sm fw-normal" data-scroll href="#modal-demo">پیش نمایش زنده</a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <!-- Back to top button--><a class="btn-scroll-top" href="#top" data-scroll><span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span><i class="btn-scroll-top-icon fi-chevron-up">   </i></a>
+    <!-- Vendor scripts: js libraries and plugins-->
+    <script src="../vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/simplebar/dist/simplebar.min.js"></script>
+    <script src="../vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+    <script src="../vendor/prismjs/components/prism-core.min.js"></script>
+    <script src="../vendor/prismjs/components/prism-markup.min.js"></script>
+    <script src="../vendor/prismjs/components/prism-clike.min.js"></script>
+    <script src="../vendor/prismjs/components/prism-javascript.min.js"></script>
+    <script src="../vendor/prismjs/components/prism-pug.min.js"></script>
+    <script src="../vendor/prismjs/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script src="../vendor/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+    <script src="../vendor/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <!-- Main theme script-->
+    <script src="../js/theme.min.js"></script>
+  </body>
+</html>

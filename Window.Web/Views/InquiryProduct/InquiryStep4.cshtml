@@ -14,9 +14,91 @@
 
 @section Styles
     {
+    <style>
+        .page-loading {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-transition: all .4s .2s ease-in-out;
+            transition: all .4s .2s ease-in-out;
+            background-color: #fff;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 9999;
+        }
+
+            .page-loading.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .page-loading-inner {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            -webkit-transition: opacity .2s ease-in-out;
+            transition: opacity .2s ease-in-out;
+            opacity: 0;
+        }
+
+        .page-loading.active > .page-loading-inner {
+            opacity: 1;
+        }
+
+        .page-loading-inner > span {
+            display: block;
+            font-size: 1rem;
+            font-weight: normal;
+            color: #666276;
+            ;
+        }
+
+        .page-spinner {
+            display: inline-block;
+            width: 2.75rem;
+            height: 2.75rem;
+            margin-bottom: .75rem;
+            vertical-align: text-bottom;
+            border: .15em solid #bbb7c5;
+            border-right-color: transparent;
+            border-radius: 50%;
+            -webkit-animation: spinner .75s linear infinite;
+            animation: spinner .75s linear infinite;
+        }
+
+        @@-webkit-keyframes spinner {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes spinner {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <!-- Vendor Styles-->
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/simplebar/dist/simplebar.min.css" />
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/tiny-slider/dist/tiny-slider.css" />
+    <link rel="stylesheet" media="screen" href="/FinderSample/vendor/nouislider/dist/nouislider.min.css" />
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="/FinderSample/css/theme.min.css">
 }
 
-    @section Scripts
+@section Scripts
     {
     <script>
 
@@ -33,221 +115,176 @@
     </script>
 }
 
-    <form asp-action="InquiryStep4" asp-controller="InquiryProduct" asp-area="" method="get">
-        <input type="hidden" name="userMacAddress" value="@ViewBag.userMacAddress" />
 
-        <div class="parallax titlebar" data-background="/Site/images/3.jpg" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -546.894px;">
-            <div class="parallax-overlay" style="background-color: rgb(51, 51, 51); opacity: 0.7;"></div>
 
-            <div id="titlebar">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
 
-                            <h2>نتیجه ی استعلام</h2>
-                            <span>لیست فروشندگان ارائه دهنده ی محصولات درخواستی شما</span>
 
-                            <!-- Breadcrumbs -->
-                            <nav id="breadcrumbs">
-                                <ul>
-                                    @*  <li><a href="#">خانه</a></li>
-                                <li>آگهی ها</li>*@
-                                </ul>
-                            </nav>
 
-                        </div>
+<div class="container-fluid mt-5 pt-5 p-0">
+    <div class="row g-0 mt-n3">
+
+        <!-- Filters sidebar (Offcanvas on mobile)-->
+        <aside class="col-lg-4 col-xl-3 border-top-lg border-end-lg shadow-sm px-3 px-xl-4 px-xxl-5 pt-lg-2">
+
+            <form asp-action="InquiryStep4" asp-controller="InquiryProduct" asp-area="" method="get">
+                <input type="hidden" name="userMacAddress" value="@ViewBag.userMacAddress" />
+
+                <div class="offcanvas offcanvas-start offcanvas-collapse" id="filters-sidebar">
+
+                    <div class="offcanvas-header d-flex d-lg-none align-items-center">
+                        <h2 class="h5 mb-0">فیلتر جستجو</h2>
+                        <button class="btn-close" type="button" data-bs-dismiss="offcanvas"></button>
                     </div>
+
+                    <div class="offcanvas-header d-block border-bottom pt-0 pt-lg-4 px-lg-0">
+                        <ul class="nav nav-tabs mb-0">
+                            <li class="nav-item"><a class="nav-link active" href="/"><i class="fi-users fs-base me-2"></i>لیست فروشندگان</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="offcanvas-body py-lg-4">
+
+                        <div class="pb-4 mb-2">
+                            <h3 class="h6">مرتب سازی بر اساس مبلغ</h3>
+                            <select class="form-select mb-2" name="orderByPrice">
+                                <option value="2"> از کمترین قیمت </option>
+                                <option value="1"> از بیشترین قیمت </option>
+                            </select>
+                        </div>
+
+                        <div class="border-top py-4">
+                            <button class="btn btn-translucent-success mb-3 me-2" type="submit">ثبت</button>
+                            <a asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct" class="btn btn-translucent-danger mb-3 me-2">استعلام مجدد</a>
+                        </div>
+
+                    </div>
+
                 </div>
+
+            </form>
+
+        </aside>
+
+        <!-- Page content-->
+        <div class="col-lg-8 col-xl-9 position-relative overflow-hidden pb-5 pt-4 px-3 px-xl-4 px-xxl-5">
+
+            <!-- Breadcrumb-->
+            <nav class="mb-3 pt-md-2" aria-label="Breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">خانه</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">نتیجه ی استعلام شما</li>
+                </ol>
+            </nav>
+            <!-- Title-->
+            <div class="d-sm-flex align-items-center justify-content-between pb-3 pb-sm-4">
+                <h1 class="h4 mb-sm-0">لیست فروشندگان براساس نتیجه ی استعلام شما</h1>
+
             </div>
-        </div>
 
-        <div class="container">
-            <div class="row sticky-wrapper">
+            <!-- Sorting-->
+            <div class="d-flex flex-sm-row flex-column align-items-sm-center align-items-stretch my-2">
 
-                <div class="col-md-4">
-                    <div class="sidebar sticky right">
-
-                        <!-- Widget -->
-                        <div class="widget margin-bottom-40">
-                            <h3 class="margin-top-0 margin-bottom-35">فیلتر کردن نتیجه</h3>
-
-                            <!-- Row -->
-                            <div class="row with-forms">
-                                <!-- Status -->
-                            
-                        </div>
-                        <!-- Row / End -->
-                        <!-- Row -->
-                        <div class="row with-forms">
-                            <!-- Status -->
-                            <div class="col-md-12">
-                                <select name="orderByPrice" data-placeholder="مرتب سازی بر اساس مبلغ" class="chosen-select-no-single" style="display: block;">
-                                    <option value="2"> از کمترین قیمت </option>
-                                    <option value="1"> از بیشترین قیمت </option>
-                                </select><div class="chosen-container chosen-container-single chosen-container-single-nosearch" style="display: none;width: 100%;" title=""><a class="chosen-single chosen-default"><span>وضعیت</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off" readonly=""></div><ul class="chosen-results"></ul></div></div>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="button fullwidth margin-top-30">استعلام گیری</button>
-
-                        <a style="background-color: #ce0505 !important;" asp-action="InquiryStep1" asp-controller="InquiryProduct" asp-area="" class="button fullwidth margin-top-30">حذف استعلام</a>
-
-                    </div>
-                    <!-- Widget / End -->
-
-                </div>
+                <hr class="d-none d-sm-block w-100 mx-4">
+                <div class="d-none d-sm-flex align-items-center flex-shrink-0 text-muted"><i class="fi-check-circle me-2"></i><span class="fs-sm mt-n1">@Model.Count() نتیجه یافت شد</span></div>
             </div>
 
-            <div class="col-md-8">
+            <!-- Catalog grid-->
+            <div class="row g-4 py-4">
 
-
-                <!-- Sorting / Layout Switcher -->
-                <div class="row margin-bottom-15">
-
-                    <div class="col-md-6">
-                    </div>
-
-                    <div class="col-md-6">
-                        <!-- Layout Switcher -->
-                        <div class="layout-switcher">
-                            <a href="#" class="list"><i class="fa fa-th-list"></i></a>
-                            <a href="#" class="grid active"><i class="fa fa-th-large"></i></a>
-                        </div>
-                    </div>
-                </div>
 
                 @if (Model != null && Model.Any())
                 {
-                    <!-- Listings -->
-                    <div class="listings-container grid-layout">
 
-                        @foreach (var product in Model)
-                        {
-                            <!-- Listing Item -->
-                            <div class="listing-item">
+                    @foreach (var product in Model)
+                    {
 
-                                <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="listing-img-container" style="height: auto !important;">
+                        <!-- Item-->
+                        <div class="col-sm-6 col-xl-4">
 
-                                    <div class="listing-badges">
-                                        <img style="height: auto; width: 60px; border-radius: 50px; margin-top: 10px; margin-right: 10px;" src="@Window.Application.StticTools.FilePaths.BrandThumbimage/@product.BrandImage" alt="">
-                                        <span>@product.BrandName</span>
+                            <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="listing-img-container" style="height: auto !important;">
 
+                                <div class="card shadow-sm card-hover border-0 h-100">
+                                    <div class="tns-carousel-wrapper card-img-top card-img-hover">
+
+                                        <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-info">@product.BrandName</span></div>
+
+                                        <div class="tns-outer" id="tns7-ow">
+
+                                            <div id="tns7-mw" class="tns-ovh">
+                                                <div class="tns-inner" id="tns7-iw">
+                                                    <div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns7" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);">
+
+                                                        @if (!string.IsNullOrEmpty(product.UserAvatar))
+                                                        {
+                                                            <img src="/content/images/user/thumb/@product.UserAvatar" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="/FinderSample/img/real-estate/catalog/13.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                    <div class="listing-img-content">
-
-
-                                        @if (@product.Score == 0)
-                                        {
-                                            <span class="like-icon "></span>
-                                            <span class="like-icon" style="padding-right: 50px;"></span>
-                                            <span class="like-icon" style="padding-right: 75px;"></span>
-                                            <span class="like-icon" style="padding-right: 100px;"></span>
-                                            <span class="like-icon" style="padding-right: 125px;"></span>
-                                        }
-                                        @if (@product.Score == 1)
-                                        {
-                                            <span class="like-icon liked"></span>
-                                            <span class="like-icon" style="padding-right: 50px;"></span>
-                                            <span class="like-icon" style="padding-right: 75px;"></span>
-                                            <span class="like-icon" style="padding-right: 100px;"></span>
-                                            <span class="like-icon" style="padding-right: 125px;"></span>
-                                        }
-                                        @if (@product.Score == 2)
-                                        {
-                                            <span class="like-icon liked"></span>
-                                            <span class="like-icon liked" style="padding-right: 50px;"></span>
-                                            <span class="like-icon" style="padding-right: 75px;"></span>
-                                            <span class="like-icon" style="padding-right: 100px;"></span>
-                                            <span class="like-icon" style="padding-right: 125px;"></span>
-                                        }
-                                        @if (@product.Score == 3)
-                                        {
-                                            <span class="like-icon liked"></span>
-                                            <span class="like-icon liked" style="padding-right: 50px;"></span>
-                                            <span class="like-icon liked" style="padding-right: 75px;"></span>
-                                            <span class="like-icon" style="padding-right: 100px;"></span>
-                                            <span class="like-icon" style="padding-right: 125px;"></span>
-                                        }
-                                        @if (@product.Score == 4)
-                                        {
-                                            <span class="like-icon liked"></span>
-                                            <span class="like-icon liked" style="padding-right: 50px;"></span>
-                                            <span class="like-icon liked" style="padding-right: 75px;"></span>
-                                            <span class="like-icon liked" style="padding-right: 100px;"></span>
-                                            <span class="like-icon" style="padding-right: 125px;"></span>
-                                        }
-                                        @if (@product.Score == 5)
-                                        {
-                                            <span class="like-icon liked"></span>
-                                            <span class="like-icon liked" style="padding-right: 50px;"></span>
-                                            <span class="like-icon liked" style="padding-right: 75px;"></span>
-                                            <span class="like-icon liked" style="padding-right: 100px;"></span>
-                                            <span class="like-icon liked" style="padding-right: 125px;"></span>
-                                        }
-
-                                    </div>
-
-
-                                    @if (!string.IsNullOrEmpty(product.UserAvatar))
-                                    {
-                                        <img src="/content/images/user/thumb/@product.UserAvatar" alt="" style="height: auto; max-height:300px;">
-                                    }
-                                    else
-                                    {
-                                        <img src="/Site/images/listing-01.jpg" alt="" style="height: auto;max-height:300px;">
-                                    }
-
-                                </a>
-
-                                <div class="listing-content">
-
-                                    <div class="listing-footer" style="padding:8px 0px">
-
+                                    <div class="card-body position-relative pb-3">
+                                        <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">فروشنده :</h4>
                                         @if (string.IsNullOrEmpty(product.ShopName))
                                         {
-                                            <a class="button" style="background-color: #c100d1;    padding: 10px 45px;">
-                                                وارد نشده است
-                                            </a>
+                                            <h3 class="h6 mb-2 fs-base">
+                                                <a class="nav-link stretched-link" href="/">
+                                                    وارد نشده است
+                                                </a>
+                                            </h3>
                                         }
                                         else
                                         {
-                                            <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="button" style="background-color: #c100d1;    padding: 10px 45px;">
-                                                @product.ShopName
-                                            </a>
+                                            <h3 class="h6 mb-2 fs-base">
+                                                <a class="nav-link stretched-link" asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct">
+                                                    @product.ShopName
+                                                </a>
+                                            </h3>
+                                        }
+                                        <p class="mb-2 fs-sm text-muted">برند انتخابی : @product.BrandName</p>
+
+                                        @if (product.Price.HasValue)
+                                        {
+                                            <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>@product.Price.Value.ToString("#,000") ریال</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>وارد نشده</div>
                                         }
 
-
-
-                                        <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="button btn-estealam" style="background-color: #13bbe2;"> نمایش اطلاعات فروشنده </a>
                                     </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
 
+                                        <span class="d-inline-block mx-1 px-2 fs-sm">
+                                            @product.Score
+                                            <i class="fi-star-filled me-1 mt-n1 fs-lg text-muted"></i>
+                                        </span>
+
+                                    </div>
                                 </div>
-                                @if (product.Price.HasValue)
-                                {
-                                    <span class="listing-price">قیمت پیشنهادی:</span>
-                                    <span class="listing-price">@product.Price.Value.ToString("#,000")  <i>ریال</i></span>
 
-                                }
-                                else
-                                {
-                                    <span class="listing-price">وارد نشده  </span>
-                                }
+                            </a>
 
-                            </div>
+                        </div>
 
-                            <div class="clearfix"></div>
-                            <!-- Listing Item / End -->
-                        }
+                    }
 
-
-                    </div>
                 }
 
+
             </div>
-
+            
         </div>
-
     </div>
+</div>
 
-</form>
 
+
+
+<button class="btn btn-primary btn-sm w-100 rounded-0 fixed-bottom d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#filters-sidebar"><i class="fi-filter me-2"></i>فیلتر</button>

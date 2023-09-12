@@ -12,7 +12,7 @@
     {
 }
 
-    @section Scripts
+@section Scripts
     {
     <script>
 
@@ -29,104 +29,70 @@
     </script>
 }
 
-    <form asp-action="ListOfArticles" asp-controller="Article" asp-area="" method="get">
-        <input type="hidden" id="pageid" name="pageId" value="@ViewBag.pageId.ToString()" />
 
-    <div class="parallax titlebar" data-background="/Site/images/listing-05.jpg" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -274.894px;">
-        <div class="parallax-overlay" style="background-color: rgb(51, 51, 51); opacity: 0.7;"></div>
+<div class="container-fluid mt-5 pt-5 p-0">
+    <div class="row g-0 mt-n3">
 
-        <div id="titlebar">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <h2>نماها و پنجره های خاص</h2>
-                        <span>افزایش آگاهی شما در دستور کار ما قرار دارد .</span>
-
-                        <!-- Breadcrumbs -->
-                        <nav id="breadcrumbs">
-                            <ul>
-                                <li><a href="/">خانه</a></li>
-                            </ul>
-                        </nav>
-
-                    </div>
-                </div>
+        <div class="col-lg-12 col-xl-12 position-relative overflow-hidden pb-5 pt-4 px-3 px-xl-4 px-xxl-5">
+            <!-- Map popup-->
+            <div class="map-popup invisible" id="map">
+                <button class="btn btn-icon btn-light btn-sm shadow-sm rounded-circle" type="button" data-bs-toggle-class="invisible" data-bs-target="#map"><i class="fi-x fs-xs"></i></button>
+                <div class="interactive-map leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" data-map-options-json="https://finder.createx.studio/json/map-options-real-estate-rent.json" tabindex="0"><div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(-28px, -17px, 0px);"><div class="leaflet-pane leaflet-tile-pane"><div class="leaflet-layer " style="z-index: 1; opacity: 1;"><div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 18; transform: translate3d(0px, 0px, 0px) scale(1);"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4824/6160.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(409px, 725px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4824/6159.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(409px, 213px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4823/6160.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(-103px, 725px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4825/6160.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(921px, 725px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4824/6161.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(409px, 1237px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4823/6159.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(-103px, 213px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4825/6159.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(921px, 213px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4823/6161.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(-103px, 1237px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4825/6161.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(921px, 1237px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4824/6158.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(409px, -299px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4824/6162.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(409px, 1749px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4823/6158.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(-103px, -299px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4825/6158.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(921px, -299px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4823/6162.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(-103px, 1749px, 0px); opacity: 1;"><img crossorigin="" alt="" role="presentation" src="https://api.maptiler.com/maps/pastel/14/4825/6162.png?key=5vRQzd34MMsINEyeKPIs" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(921px, 1749px, 0px); opacity: 1;"></div></div></div><div class="leaflet-pane leaflet-shadow-pane"><img src="../img/map/marker-shadow.png" class="leaflet-marker-shadow custom-marker-dot leaflet-zoom-animated" alt="" style="margin-left: -13px; margin-top: -41px; width: 41px; height: 41px; transform: translate3d(593px, 539px, 0px);"><img src="../img/map/marker-shadow.png" class="leaflet-marker-shadow custom-marker-dot leaflet-zoom-animated" alt="" style="margin-left: -13px; margin-top: -41px; width: 41px; height: 41px; transform: translate3d(547px, 462px, 0px);"><img src="../img/map/marker-shadow.png" class="leaflet-marker-shadow custom-marker-dot leaflet-zoom-animated" alt="" style="margin-left: -13px; margin-top: -41px; width: 41px; height: 41px; transform: translate3d(733px, 447px, 0px);"><img src="../img/map/marker-shadow.png" class="leaflet-marker-shadow custom-marker-dot leaflet-zoom-animated" alt="" style="margin-left: -13px; margin-top: -41px; width: 41px; height: 41px; transform: translate3d(500px, 613px, 0px);"><img src="../img/map/marker-shadow.png" class="leaflet-marker-shadow custom-marker-dot leaflet-zoom-animated" alt="" style="margin-left: -13px; margin-top: -41px; width: 41px; height: 41px; transform: translate3d(500px, 296px, 0px);"><img src="../img/map/marker-shadow.png" class="leaflet-marker-shadow custom-marker-dot leaflet-zoom-animated" alt="" style="margin-left: -13px; margin-top: -41px; width: 41px; height: 41px; transform: translate3d(593px, 287px, 0px);"><img src="../img/map/marker-shadow.png" class="leaflet-marker-shadow custom-marker-dot leaflet-zoom-animated" alt="" style="margin-left: -13px; margin-top: -41px; width: 41px; height: 41px; transform: translate3d(640px, 342px, 0px);"><img src="../img/map/marker-shadow.png" class="leaflet-marker-shadow custom-marker-dot leaflet-zoom-animated" alt="" style="margin-left: -13px; margin-top: -41px; width: 41px; height: 41px; transform: translate3d(477px, 416px, 0px);"></div><div class="leaflet-pane leaflet-overlay-pane"></div><div class="leaflet-pane leaflet-marker-pane"><img src="../img/map/marker-icon.png" class="leaflet-marker-icon custom-marker-dot leaflet-zoom-animated leaflet-interactive" alt="" tabindex="0" style="margin-left: -12px; margin-top: -39px; width: 25px; height: 39px; transform: translate3d(593px, 539px, 0px); z-index: 539;"><img src="../img/map/marker-icon.png" class="leaflet-marker-icon custom-marker-dot leaflet-zoom-animated leaflet-interactive" alt="" tabindex="0" style="margin-left: -12px; margin-top: -39px; width: 25px; height: 39px; transform: translate3d(547px, 462px, 0px); z-index: 462;"><img src="../img/map/marker-icon.png" class="leaflet-marker-icon custom-marker-dot leaflet-zoom-animated leaflet-interactive" alt="" tabindex="0" style="margin-left: -12px; margin-top: -39px; width: 25px; height: 39px; transform: translate3d(733px, 447px, 0px); z-index: 447;"><img src="../img/map/marker-icon.png" class="leaflet-marker-icon custom-marker-dot leaflet-zoom-animated leaflet-interactive" alt="" tabindex="0" style="margin-left: -12px; margin-top: -39px; width: 25px; height: 39px; transform: translate3d(500px, 613px, 0px); z-index: 613;"><img src="../img/map/marker-icon.png" class="leaflet-marker-icon custom-marker-dot leaflet-zoom-animated leaflet-interactive" alt="" tabindex="0" style="margin-left: -12px; margin-top: -39px; width: 25px; height: 39px; transform: translate3d(500px, 296px, 0px); z-index: 296;"><img src="../img/map/marker-icon.png" class="leaflet-marker-icon custom-marker-dot leaflet-zoom-animated leaflet-interactive" alt="" tabindex="0" style="margin-left: -12px; margin-top: -39px; width: 25px; height: 39px; transform: translate3d(593px, 287px, 0px); z-index: 287;"><img src="../img/map/marker-icon.png" class="leaflet-marker-icon custom-marker-dot leaflet-zoom-animated leaflet-interactive" alt="" tabindex="0" style="margin-left: -12px; margin-top: -39px; width: 25px; height: 39px; transform: translate3d(640px, 342px, 0px); z-index: 342;"><img src="../img/map/marker-icon.png" class="leaflet-marker-icon custom-marker-dot leaflet-zoom-animated leaflet-interactive" alt="" tabindex="0" style="margin-left: -12px; margin-top: -39px; width: 25px; height: 39px; transform: translate3d(477px, 416px, 0px); z-index: 416;"></div><div class="leaflet-pane leaflet-tooltip-pane"></div><div class="leaflet-pane leaflet-popup-pane"></div><div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(2.47005e+06px, 3.1541e+06px, 0px) scale(16384);"></div></div><div class="leaflet-control-container"><div class="leaflet-top leaflet-left"><div class="leaflet-control-zoom leaflet-bar leaflet-control"><a class="leaflet-control-zoom-in" href="#" title="Zoom in" role="button" aria-label="Zoom in">+</a><a class="leaflet-control-zoom-out" href="#" title="Zoom out" role="button" aria-label="Zoom out">−</a></div></div><div class="leaflet-top leaflet-right"></div><div class="leaflet-bottom leaflet-left"></div><div class="leaflet-bottom leaflet-right"><div class="leaflet-control-attribution leaflet-control"><a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | <a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a></div></div></div></div>
             </div>
-        </div>
-    </div>
-    <div class="container">
+            <!-- Breadcrumb-->
+            <nav class="mb-3 pt-md-2" aria-label="Breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">خانه</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">پنجره های خاص</li>
+                </ol>
+            </nav>
+            <!-- Title-->
+            <div class="d-sm-flex align-items-center justify-content-between pb-3 pb-sm-4">
+                <h1 class="h4 mb-sm-0">لیست درب و پنجره های خاص</h1><a class="d-inline-block fw-bold text-decoration-none py-1" href="#" data-bs-toggle-class="invisible" data-bs-target="#map"><i class="fi-map me-2"></i>مشاهده نقشه</a>
+            </div>
 
-        <!-- Blog Posts -->
-        <div class="blog-page">
-            <div class="row">
-                <div class="col-md-2">
-                    </div>
-                    <div class="col-md-8">
+            <!-- Catalog grid-->
+            <div class="row g-4 py-4">
 
                 @if (Model.Item1 != null && Model.Item1.Any())
                 {
                     foreach (var item in Model.Item1)
                     {
-                        <!-- Blog Post -->
-                        <div class="blog-post">
 
-                            <!-- Img -->
-                            <a a asp-action="ShowArticleDetailById" asp-route-id="@item.Id" asp-area="" asp-controller="Article" class="post-img">
-                                <img src="@FilePaths.ArticleOriginimage/@item.Image" alt="">
-                            </a>
-
-                            <!-- Content -->
-                            <div class="post-content">
-                                    <h3><a asp-action="ShowArticleDetailById" asp-route-id="@item.Id" asp-area="" asp-controller="Article">@item.Title </a></h3>
-
-                                <ul class="post-meta">
-                                    <li>@item.CreateDate.ToStringShamsiDate()</li>
-                                </ul>
-
-                                <p>
-                                    @item.ShortDescription
-                                </p>
-
-                                    <a asp-action="ShowArticleDetailById" asp-route-id="@item.Id" asp-area="" asp-controller="Article" class="read-more">ادامه <i class="fa fa-angle-left"></i></a>
+                        <!-- Item-->
+                        <div class="col-sm-6 col-xl-4">
+                            <div class="card shadow-sm card-hover border-0 h-100">
+                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
+                                    <a class="img-overlay" asp-action="ShowArticleDetailById" asp-route-id="@item.Id" asp-area="" asp-controller="Article"></a>
+                                    <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-success mb-1">تایید شده</span></div>
+                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
+                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
+                                    </div>
+                                    <div class="tns-outer" id="tns1-ow">
+                                      
+                                        <div id="tns1-mw" class="tns-ovh">
+                                            <div class="tns-inner" id="tns1-iw">
+                                                <div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" dir="ltr" id="tns1" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);">
+                                                    <img src="@FilePaths.ArticleOriginimage/@item.Image" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
+                                                </div>
+                                            </div>
+                                        </div>
+                                     
+                                    </div>
+                                </div>
+                                <div class="card-body position-relative pb-3">
+                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">@item.CreateDate.ToStringShamsiDate()</h4>
+                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" asp-action="ShowArticleDetailById" asp-route-id="@item.Id" asp-area="" asp-controller="Article">@item.Title</a></h3>
+                                    <p class="mb-2 fs-sm text-muted"> @item.ShortDescription</p>
+                                </div>
                             </div>
-
                         </div>
-                        <!-- Blog Post / End -->
-                    }
-
-                        
-                    @if (Model.Item2 > 1)
-                    {
-                        int pageCount = ViewBag.pageId;
-                        int next = pageCount + 1;
-                        int last = pageCount - 1;
-
-                        <!-- Pagination -->
-                        <div class="pagination-container margin-top-20">
-                            <nav class="pagination">
-                                <ul>
-                                    @for (int i = 1; i <= (int)Model.Item2; i++)
-                                    {
-                                        <li><a class="@((ViewBag.pageId == i ?"current-page":"")) " asp-action="ListOfArticles" asp-controller="Article" asp-area="" asp-route-pageId="@i">@i</a></li>
-                                    }
-                                </ul>
-                            </nav>
-                        </div>
-                        <!-- Pagination / End -->
                     }
                 }
 
-               
-                <div class="clearfix"></div>
-
             </div>
-
         </div>
-        <!-- Sidebar / End -->
-
-
     </div>
 </div>
 
-</form>
+
