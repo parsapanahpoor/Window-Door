@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Article;
+using Window.Domain.Entities.Brand;
 using Window.Domain.Entities.Counseling;
 using Window.Domain.Entities.TechnicalIssues;
 
@@ -18,6 +19,8 @@ namespace Window.Domain.ViewModels.Site.Home
         public List<Counseling> FreeConsultant { get; set; }
 
         public List<Entities.Article.Article> Articles { get; set; }
+
+        public List<MainBrand> MainBrands { get; set; }
 
         #endregion
     }

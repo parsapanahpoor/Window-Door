@@ -90,6 +90,16 @@ namespace Window.Application.Services.Services
 
             #endregion
 
+            #region Main Brands
+
+            model.MainBrands = await _context.MainBrands
+                                             .AsNoTracking()
+                                             .Where(p=> !p.IsDelete && !string.IsNullOrEmpty(p.BrandSite))
+                                             .OrderByDescending(p=> p.Priority)
+                                             .Take(30)
+                                             .ToListAsync();
+            #endregion
+
             return model;
         }
 
