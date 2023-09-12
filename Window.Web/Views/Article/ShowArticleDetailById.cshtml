@@ -12,85 +12,63 @@
     {
 }
 
-    @section Scripts
+@section Scripts
     {
 }
 
-    <div class="parallax titlebar" data-background="@FilePaths.ArticleThumbimage/@Model.Image" data-color="#333333" data-color-opacity="0.7" data-img-width="800" data-img-height="505" style="background-image: url(&quot;images/listings-parallax.jpg&quot;); background-attachment: fixed; background-size: 1600px 1010px; background-position: 50% -274.894px;">
-        <div class="parallax-overlay" style="background-color: rgb(51, 51, 51); opacity: 0.7;"></div>
 
-        <div id="titlebar">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
 
-                        <h2>@Model.Title</h2>
-                        <span>@Model.ShortDescription</span>
 
-                        <!-- Breadcrumbs -->
-                        <nav id="breadcrumbs">
-                            <ul>
-                                <li><a href="/">خانه</a></li>
-                            </ul>
-                        </nav>
-
-                    </div>
+<div class="container mt-5 mb-md-4 py-5">
+    <!-- Breadcrumb-->
+    <nav class="mb-3 pt-md-3" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">خانه</a></li>
+            <li class="breadcrumb-item"><a asp-action="ListOfArticles" asp-area="" asp-controller="Article">درب و پنجره های خاص</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> @Model.Title</li>
+        </ol>
+    </nav>
+    <!-- Post title + meta--><a class="nav-link d-inline-block fw-normal text-uppercase px-0 mb-2" href="#">درب و پنجره های خاص</a>
+    <h1 class="h2 mb-4 font-vazir">@Model.Title</h1>
+    <div class="mb-4 pb-1">
+        <ul class="list-unstyled d-flex flex-wrap mb-0 text-nowrap">
+            <li class="me-3"><i class="fi-calendar-alt me-2 mt-n1 opacity-60"></i>@Model.CreateDate.ToShamsi()</li>
+            <li class="me-3 border-end"></li>
+            <li class="me-3"><i class="fi-user  me-2 mt-n1 opacity-60"></i>@Model.Author.Username</li>
+        </ul>
+    </div>
+    <!-- Post content-->
+    <div class="mb-4 pb-md-3"><img class="rounded-3" src="@FilePaths.ArticleOriginimage/@Model.Image" alt="Post image"></div>
+    <div class="row">
+        <div class="col-lg-2 col-md-1 mb-md-0 mb-4 mt-md-n5">
+            <!-- Sharing-->
+            <div class="sticky-top py-md-5 mt-md-5">
+                <div class="d-flex flex-md-column align-items-center my-2 mt-md-4 pt-md-5">
+                    <div class="d-md-none fw-bold text-nowrap me-2 pe-1">اشتراک گذاری</div><a class="btn btn-icon btn-light-primary btn-xs shadow-sm rounded-circle mb-md-2 me-md-0 me-2" href="#" data-bs-toggle="tooltip" title="" data-bs-original-title="Share with Facebook" aria-label="Share with Facebook"><i class="fi-facebook"></i></a><a class="btn btn-icon btn-light-primary btn-xs shadow-sm rounded-circle mb-md-2 me-md-0 me-2" href="#" data-bs-toggle="tooltip" title="" data-bs-original-title="Share with Twitter" aria-label="Share with Twitter"><i class="fi-twitter"></i></a><a class="btn btn-icon btn-light-primary btn-xs shadow-sm rounded-circle mb-md-2 me-md-0 me-2" href="#" data-bs-toggle="tooltip" title="" data-bs-original-title="Share with LinkedIn" aria-label="Share with LinkedIn"><i class="fi-linkedin"></i></a>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="container">
-
-        <!-- Blog Posts -->
-        <div class="blog-page">
-            <div class="row">
-
-                <div class="col-md-2"></div>
-
-                <!-- Post Content -->
-                <div class="col-md-8">
-
-
-                    <!-- Blog Post -->
-                    <div class="blog-post single-post">
-
-                        <!-- Img -->
-                        <img class="post-img" src="@FilePaths.ArticleOriginimage/@Model.Image" alt="">
-
-                        <!-- Content -->
-                        <div class="post-content">
-                            <h3>@Model.Title</h3>
-
-                            <ul class="post-meta">
-                                <li>@Model.CreateDate.ToStringShamsiDate()</li>
-                            </ul>
-
-                            <p>
-                                @Model.ShortDescription
-                            </p>
-
-                            <p>
-                            @Html.Raw(Model.Description)
-                                </p>
-
-                        </div>
+        <div class="col-lg-8 col-md-10">
+            <!-- Author-->
+            <div class="mb-4 pb-md-3">
+                <a class="d-flex align-items-center text-body text-decoration-none" href="#">
+                    <img class="rounded-circle" src="@Model.Author.GetUserAvatar()" width="80" alt="Kristin Watson">
+                    <div class="pe-3">
+                        <h2 class="h6 mb-1">@Model.Author.Username</h2><span class="fs-sm">نویسنده</span>
                     </div>
-
-
-                    <!-- About Author -->
-                    <div class="about-author">
-                        <img src="@Model.Author.GetUserAvatar()" alt="">
-                        <div class="about-description">
-                            <h4>@Model.Author.Username</h4>
-                        </div>
-                    </div>
-
-                </div>
-                <!-- Content / End -->
-
+                </a>
             </div>
-            <!-- Sidebar / End -->
 
+            <blockquote class="blockquote font-vazir">
+                <p>
+                    @Html.Raw(Model.Description)
+                </p>
+            </blockquote>
+            <!-- Post tags-->
+            <div class="d-flex align-items-center my-md-5 my-4 py-md-4 py-3 border-top">
+                <div class="fw-bold text-nowrap mb-2 me-2 pe-1">برچسب: </div>
+                <div class="d-flex flex-wrap"><a class="btn btn-xs btn-outline-secondary rounded-pill fs-sm fw-normal me-2 mb-2" href="#">آموزشی</a><a class="btn btn-xs btn-outline-secondary rounded-pill fs-sm fw-normal me-2 mb-2" href="#">شغل</a><a class="btn btn-xs btn-outline-secondary rounded-pill fs-sm fw-normal mb-2" href="#">کسب و کار</a></div>
+            </div>
         </div>
     </div>
+</div>
