@@ -2,6 +2,10 @@
 @using Window.Application.StticTools;
 @model Window.Domain.ViewModels.Site.Home.IndexViewModel
 
+@{
+    ViewData["Title"] = "خانه";
+}
+
 @section Styles{
 
 
@@ -10,10 +14,10 @@
 
 <!-- Hero-->
 <section class="container-fluid my-5 pt-5 pb-lg-4 px-xxl-4">
-    <div class="jarallax card align-items-center justify-content-center border-0 p-md-5 p-4 bg-secondary overflow-hidden mt-n3" style="min-height: 65vh; background-image: url(/FinderSample/img/real-estate/hero-image-v2.jpg);" data-jarallax data-speed="0.5">
+    <div class="jarallax card align-items-center justify-content-center border-0 p-md-5 p-4 bg-secondary overflow-hidden mt-n3" style="min-height: 65vh; background-image: url(/FinderSample/img/real-estate/blog/02.jpg);" data-jarallax data-speed="0.5">
         <span class="img-overlay opacity-40"></span>
         <div class="content-overlay" style="max-width: 856px;">
-            <h1 class="display-5 mb-5 pb-md-3 px-md-3 text-white text-center">راه آسان برای پیدا کردن یک ملک مناسب</h1>
+            <h1 class="display-5 mb-5 pb-md-3 px-md-3 text-white text-center">راه آسان برای پیدا کردن درب و پنجره</h1>
             <form class="form-group d-block d-md-flex position-relative rounded-md-pill me-lg-n5" style="width: 100%;">
 
                 <div class="d-sm-flex" style="width: 100%;">
@@ -200,6 +204,29 @@
         </div>
     </section>
 }
+
+<section class="container mb-5 pb-lg-5 pb-md-4">
+    <div class="card py-lg-5 py-4 border-0 bg-secondary">
+        <div class="card-body p-4 text-center">
+            <h2 class="">فروشندگان معتبر</h2>
+            <p class="mx-auto mb-md-5 mb-4 pb-lg-3" style="max-width: 53.125rem;">ما جامع ترین دایرکتوری فروشندگان درب و پنجره را داریم تا به شما در رفع تمام نیازهای املاکتان کمک کنیم. .</p>
+            <!-- Agent ava's-->
+            <div class="d-flex align-items-center justify-content-center flex-wrap mb-md-5 mb-4 pb-lg-3 ps-3 pt-4">
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/39.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/40.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/41.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/42.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/43.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/44.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/45.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/46.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/47.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/48.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/49.jpg" width="110" alt="Avatar"></div>
+            </div><a class="btn btn-lg btn-primary w-sm-auto w-100" style="width: auto !important;" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct">یافتن درب و پنجره ی <i class="fi-chevron-right ms-2"></i></a>
+        </div>
+    </div>
+</section>
 
 
 @if (Model.TazminDarKharid != null)
