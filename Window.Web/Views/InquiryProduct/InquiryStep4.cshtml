@@ -112,6 +112,12 @@
             $("#formFilter").submit();
         }
 
+        $('#portfolio-vid').mouseover(function () {
+            $(this).get(0).play();
+        }).mouseout(function () {
+            $(this).get(0).pause();
+        })
+
     </script>
 }
 
@@ -168,6 +174,42 @@
         <!-- Page content-->
         <div class="col-lg-8 col-xl-9 position-relative overflow-hidden pb-5 pt-4 px-3 px-xl-4 px-xxl-5">
 
+            <div class="row row-cols-md-2 row-cols-1 gy-md-5 gy-4 mb-lg-5 mb-4 blog-list">
+
+                <article class="col pb-2 pb-md-1">
+                    <div class="d-block position-relative mb-3" href="real-estate-blog-single.html">
+                        <span class="badge bg-info position-absolute top-0 start-0 m-3 fs-sm">جدید</span>
+@*                        <img class="d-block rounded-3" src="/FinderSample/img/real-estate/blog/03.jpg" alt="Article image">*@
+
+                        <video class="d-block rounded-3" controls>
+                            <source src="/5b4553f8d15c0edec2fc9c24007deab025853916-144p.mp4" type="video/mp4">
+                        </video>
+                    </div><a class="fs-sm text-uppercase text-decoration-none" href="#">بازسازی خانه</a>
+                    <h3 class="h5 mb-2 pt-1"><a class="nav-link" href="real-estate-blog-single.html">10 روند شیک دکوراسیون اتاق ناهارخوری برای بهار</a></h3>
+                    <p class="mb-3">رم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان...</p><a class="d-flex align-items-center text-decoration-none" href="#">
+                        <img class="rounded-circle" src="/FinderSample/img/avatars/07.jpg" width="48" alt="Cody Fisher">
+                        <div class="pe-2">
+                            <h6 class="fs-base text-nav lh-base mb-1">کودی فیشر</h6>
+                            <div class="d-flex text-body fs-sm"><span class="me-2 pe-1"><i class="fi-calendar-alt opacity-70 mt-n1 ms-1 align-middle"></i>28 شهریور</span><span><i class="fi-chat-circle opacity-70 mt-n1 ms-1 align-middle"></i>0 کامنت</span></div>
+                        </div>
+                    </a>
+                </article>
+
+                <article class="col pb-2 pb-md-1">
+                    <a class="d-block position-relative mb-3" href="real-estate-blog-single.html"><span class="badge bg-info position-absolute top-0 start-0 m-3 fs-sm">جدید</span><img class="d-block rounded-3" src="/FinderSample/img/real-estate/blog/03.jpg" alt="Article image"></a><a class="fs-sm text-uppercase text-decoration-none" href="#">بازسازی خانه</a>
+                    <h3 class="h5 mb-2 pt-1"><a class="nav-link" href="real-estate-blog-single.html">10 روند شیک دکوراسیون اتاق ناهارخوری برای بهار</a></h3>
+                    <p class="mb-3">رم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان...</p><a class="d-flex align-items-center text-decoration-none" href="#">
+                        <img class="rounded-circle" src="/FinderSample/img/avatars/07.jpg" width="48" alt="Cody Fisher">
+                        <div class="pe-2">
+                            <h6 class="fs-base text-nav lh-base mb-1">کودی فیشر</h6>
+                            <div class="d-flex text-body fs-sm"><span class="me-2 pe-1"><i class="fi-calendar-alt opacity-70 mt-n1 ms-1 align-middle"></i>28 شهریور</span><span><i class="fi-chat-circle opacity-70 mt-n1 ms-1 align-middle"></i>0 کامنت</span></div>
+                        </div>
+                    </a>
+                </article>
+            </div>
+
+
+
             <!-- Breadcrumb-->
             <nav class="mb-3 pt-md-2" aria-label="Breadcrumb">
                 <ol class="breadcrumb">
@@ -201,34 +243,42 @@
                         <!-- Item-->
                         <div class="col-sm-6 col-xl-4">
 
-                            <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="listing-img-container" style="height: auto !important;">
 
-                                <div class="card shadow-sm card-hover border-0 h-100">
-                                    <div class="tns-carousel-wrapper card-img-top card-img-hover">
+                            <div class="card shadow-sm card-hover border-0 h-100">
+                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
 
-                                        <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-info">@product.BrandName</span></div>
+                                    <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-info">@product.BrandName</span></div>
 
-                                        <div class="tns-outer" id="tns7-ow">
+                                    <div class="tns-outer" id="tns7-ow">
 
-                                            <div id="tns7-mw" class="tns-ovh">
-                                                <div class="tns-inner" id="tns7-iw">
-                                                    <div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns7" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);">
+                                        <div id="tns7-mw" class="tns-ovh">
+                                            <div class="tns-inner" id="tns7-iw">
+                                                <div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns7" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);">
 
-                                                        @if (!string.IsNullOrEmpty(product.UserAvatar))
-                                                        {
-                                                            <img src="/content/images/user/thumb/@product.UserAvatar" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
-                                                        }
-                                                        else
-                                                        {
-                                                            <img src="/FinderSample/img/real-estate/catalog/13.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
-                                                        }
+                                                    @if (!string.IsNullOrEmpty(product.UserAvatar))
+                                                    {
+                                                        <video id="portfolio-vid" poster="/content/images/user/thumb/@product.UserAvatar" controls>
+                                                            <source src="/5b4553f8d15c0edec2fc9c24007deab025853916-144p.mp4" type="video/mp4">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    }
+                                                    else
+                                                    {
+                                                        <video id="portfolio-vid" poster="/FinderSample/img/real-estate/catalog/13.jpg" controls>
+                                                            <source src="/5b4553f8d15c0edec2fc9c24007deab025853916-144p.mp4" type="video/mp4">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                        @*                                                            <img src="/FinderSample/img/real-estate/catalog/13.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
+                                            *@                                                        }
 
-                                                    </div>
                                                 </div>
                                             </div>
-
                                         </div>
+
                                     </div>
+                                </div>
+                                <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="listing-img-container" style="height: auto !important;">
+
                                     <div class="card-body position-relative pb-3">
                                         <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">فروشنده :</h4>
                                         @if (string.IsNullOrEmpty(product.ShopName))
@@ -267,9 +317,8 @@
                                         </span>
 
                                     </div>
-                                </div>
-
-                            </a>
+                                </a>
+                            </div>
 
                         </div>
 
@@ -279,7 +328,7 @@
 
 
             </div>
-            
+
         </div>
     </div>
 </div>

@@ -117,6 +117,8 @@ public class WindowDbContext : DbContext
 
     public DbSet<MarketChargeInfo> MarketChargeInfo { get; set; }
 
+    public DbSet<SelersPersonalVideos> SelersPersonalVideos { get; set; }
+
     #endregion
 
     #region Article 
