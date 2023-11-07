@@ -856,7 +856,9 @@ namespace Window.Application.Services.Services
             var user = await _context.Users.FirstOrDefaultAsync(p => p.Id == userId && !p.IsDelete);
             if (user == null) return null;
 
-            var sellerPersonalInfo = await _context.MarketPersonalInfo.Include(p => p.Market).FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState != MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller);
+            var sellerPersonalInfo = await _context.MarketPersonalInfo
+                .Include(p => p.Market)
+                .FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState != MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller);
             if (sellerPersonalInfo == null) return null;
 
             var sellerLinks = await _context.MarketLinks.Where(p => p.UserId == userId && !p.IsDelete).ToListAsync();
@@ -1221,37 +1223,37 @@ namespace Window.Application.Services.Services
                     if (DateTime.Now.Month - marketChargeInfo.EndDate.Month >= 3)
                     {
                         //Delete Market Info 
-                        var marketInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => p.MarketId == market.Id);
-                        if (marketInfo != null)
-                        {
-                            marketInfo.IsDelete = true;
-                            _context.MarketPersonalInfo.Update(marketInfo);
-                            await _context.SaveChangesAsync();
-                        }
+                        //var marketInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => p.MarketId == market.Id);
+                        //if (marketInfo != null)
+                        //{
+                        //    marketInfo.IsDelete = true;
+                        //    _context.MarketPersonalInfo.Update(marketInfo);
+                        //    await _context.SaveChangesAsync();
+                        //}
 
                         //Delete Personal Sample
-                        var marketWorkSamples = await _context.MarketWorkSamle.Where(p => !p.IsDelete && p.MarketId == market.Id).ToListAsync();
-                        if (marketWorkSamples != null)
-                        {
-                            foreach (var item in marketWorkSamples)
-                            {
-                                item.IsDelete = true;
-                                _context.MarketWorkSamle.Update(item);
-                                await _context.SaveChangesAsync();
-                            }
-                        }
+                        //var marketWorkSamples = await _context.MarketWorkSamle.Where(p => !p.IsDelete && p.MarketId == market.Id).ToListAsync();
+                        //if (marketWorkSamples != null)
+                        //{
+                        //    foreach (var item in marketWorkSamples)
+                        //    {
+                        //        item.IsDelete = true;
+                        //        _context.MarketWorkSamle.Update(item);
+                        //        await _context.SaveChangesAsync();
+                        //    }
+                        //}
 
                         //Delete Links 
-                        var marketLinks = await _context.MarketLinks.Where(p => !p.IsDelete && p.MarketId == market.Id).ToListAsync();
-                        if (marketLinks != null)
-                        {
-                            foreach (var item in marketLinks)
-                            {
-                                item.IsDelete = true;
-                                _context.MarketLinks.Update(item);
-                                await _context.SaveChangesAsync();
-                            }
-                        }
+                        //var marketLinks = await _context.MarketLinks.Where(p => !p.IsDelete && p.MarketId == market.Id).ToListAsync();
+                        //if (marketLinks != null)
+                        //{
+                        //    foreach (var item in marketLinks)
+                        //    {
+                        //        item.IsDelete = true;
+                        //        _context.MarketLinks.Update(item);
+                        //        await _context.SaveChangesAsync();
+                        //    }
+                        //}
 
                         #region Update Market Info 
 

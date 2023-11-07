@@ -1,14 +1,10 @@
 ﻿using Window.Application.Interfaces;
-using Window.Application.Security;
 using Window.Domain.ViewModels.User;
 using Window.Web.HttpManager;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Window.Application.Services.Interfaces;
 using Window.Application.Extensions;
 using Window.Domain.ViewModels.Admin.Log;
-using Stimulsoft.System.Windows.Forms;
 
 namespace Window.Web.Areas.Seller.Controllers
 {

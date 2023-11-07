@@ -1,7 +1,7 @@
 {
-  "short_name": "Doors & Windows",
-  "name": "Doors & Windows",
-  "description": "This Is Doctor FAM Web Application",
+  "short_name": "Doors And Windows",
+  "name": "Doors And Windows",
+  "description": "This Is App About Doors And Windows Price",
   "icons": [
     {
       "src": "logo48.png",
@@ -39,8 +39,11 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "https://panjerehyab.ir/?utm_source=homescreen",
+  "start_url": "https://panjerehyab.com/?utm_source=homescreen",
   "background_color": "#3367D6",
   "display": "standalone",
-  "theme_color": "#3367D6"
+  "theme_color": "#3367D6",
+  "dir": "rtl",
+  "lang": "fa",
+  "orientation": "portrait"
 }
