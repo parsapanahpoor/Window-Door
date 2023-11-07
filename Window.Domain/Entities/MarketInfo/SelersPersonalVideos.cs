@@ -1,8 +1,12 @@
-﻿namespace Window.Domain.Entities.MarketInfo;
+﻿using Window.Domain.Entities.Common;
 
-public sealed class SelersPersonalVideos
+namespace Window.Domain.Entities.MarketInfo;
+
+public sealed class SelersPersonalVideos : BaseEntity
 {
     #region properties
+
+    public string Title { get; set; }
 
     public ulong UserId { get; set; }
 

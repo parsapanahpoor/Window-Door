@@ -66,6 +66,7 @@ builder.Services.AddControllersWithViews()
         };
     });
 
+builder.Services.AddResumingFileResult();
 builder.Services.AddMvc();
 
 #endregion

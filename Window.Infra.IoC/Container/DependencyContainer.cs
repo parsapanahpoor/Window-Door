@@ -7,6 +7,7 @@ using Window.Application.Services.Interfaces;
 using Window.Application.Services.Services;
 using Window.Data.Repository;
 using Window.Domain.Interfaces;
+using Window.Infra.Data.Repository;
 
 namespace Window.IOC.Container
 {
@@ -19,6 +20,7 @@ namespace Window.IOC.Container
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IWalletRepository, WalletRepository>();
             services.AddScoped<ITicketRepository, TicketRepository>();
+            services.AddScoped<ISellerPersonalVideoRepository, SellerPersonalVideoRepository>();
 
             #endregion
 
@@ -47,6 +49,7 @@ namespace Window.IOC.Container
             services.AddScoped<IConsulantService, ConsultantService>();
             services.AddScoped<IContractService, ContractService>();
             services.AddScoped<IBulkSMSService, BulkSMSService>();
+            services.AddScoped<ISellerPersonalVideoService, SellerPersonalVideoService>();
 
             #endregion
         }
