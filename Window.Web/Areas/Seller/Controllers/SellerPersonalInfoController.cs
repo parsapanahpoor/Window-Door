@@ -1,9 +1,7 @@
-﻿using AngleSharp.Io;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
-using Window.Application.Convertors;
 using Window.Application.Extensions;
 using Window.Application.Generators;
 using Window.Application.Interfaces;
@@ -11,150 +9,124 @@ using Window.Application.Services.Interfaces;
 using Window.Application.StticTools;
 using Window.Domain.DTOs.ZarinPal;
 using Window.Domain.Entities.Wallet;
-using Window.Domain.Interfaces;
 using Window.Domain.ViewModels.Seller.PersonalInfo;
 using Window.Web.HttpManager;
+using ZNetCS.AspNetCore.ResumingFileResults.Extensions;
 
-namespace Window.Web.Areas.Seller.Controllers
+namespace Window.Web.Areas.Seller.Controllers;
+
+public class SellerPersonalInfoController : SellerBaseController
 {
-    public class SellerPersonalInfoController : SellerBaseController
+    #region Ctor
+
+    private readonly ISellerService _sellerService;
+
+    private readonly IStateService _stateService;
+
+    private readonly IWalletService _walletService;
+
+    private readonly ISellerPersonalVideoService _sellerPersonalVideoService;
+
+    public SellerPersonalInfoController(ISellerService sellerService , IStateService stateService , IWalletService walletService
+                                            , ISellerPersonalVideoService sellerPersonalVideoService)
     {
-        #region Ctor
+        _sellerService = sellerService;
+        _stateService = stateService;
+        _walletService = walletService;
+        _sellerPersonalVideoService = sellerPersonalVideoService;
+    }
 
-        private readonly ISellerService _sellerService;
+    #endregion
 
-        private readonly IStateService _stateService;
+    #region Manage Link For Redirect To Currect Action
 
-        private readonly IWalletService _walletService;
+    public async Task<IActionResult> ManagePersonalInfoLink()
+    {
+        #region Is User Fill All Of Datas
 
-        public SellerPersonalInfoController(ISellerService sellerService , IStateService stateService , IWalletService walletService)
+        if (await _sellerService.IsUserFillAllOfPersonalInfoFiles(User.GetUserId()))
         {
-            _sellerService = sellerService;
-            _stateService = stateService;
-            _walletService = walletService;
+            return RedirectToAction(nameof(ListOfPersonalInfo));
         }
 
         #endregion
 
-        #region Manage Link For Redirect To Currect Action
+        #region Is User Fill Just Personal Info
 
-        public async Task<IActionResult> ManagePersonalInfoLink()
+        if (await _sellerService.IsUserJustFillUserPersonalInfo(User.GetUserId()))
         {
-            #region Is User Fill All Of Datas
-
-            if (await _sellerService.IsUserFillAllOfPersonalInfoFiles(User.GetUserId()))
-            {
-                return RedirectToAction(nameof(ListOfPersonalInfo));
-            }
-
-            #endregion
-
-            #region Is User Fill Just Personal Info
-
-            if (await _sellerService.IsUserJustFillUserPersonalInfo(User.GetUserId()))
-            {
-                return RedirectToAction(nameof(AddSellerPersonalLinks));
-            }
-
-            #endregion
-
-            #region Is User Just Fill Seller Personal Links 
-
-            if (await _sellerService.IsUserJustFillUserPersonalLinks(User.GetUserId()))
-            {
-                return RedirectToAction(nameof(AddSellerWorkSampleTitle));
-            }
-
-            #endregion
-
-            return RedirectToAction(nameof(AddPersonalInfo));
+            return RedirectToAction(nameof(AddSellerPersonalLinks));
         }
 
         #endregion
 
-        #region Page Of Seller Information
+        #region Is User Just Fill Seller Personal Links 
 
-        public async Task<IActionResult> PageOfManageSellerInformation()
+        if (await _sellerService.IsUserJustFillUserPersonalLinks(User.GetUserId()))
         {
-            #region Check User Charge
-
-            var res = await _sellerService.CheckUserCharge(User.GetUserId());
-            if (res == false) return NotFound();
-
-            #endregion
-
-            var model = await _sellerService.FillInformationOfSellerStateViewModel(User.GetUserId());
-            return View(model) ;
+            return RedirectToAction(nameof(AddSellerWorkSampleTitle));
         }
 
         #endregion
 
-        #region Add Pesonal Informations
+        return RedirectToAction(nameof(AddPersonalInfo));
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> AddPersonalInfo()
+    #endregion
+
+    #region Page Of Seller Information
+
+    public async Task<IActionResult> PageOfManageSellerInformation()
+    {
+        #region Check User Charge
+
+        var res = await _sellerService.CheckUserCharge(User.GetUserId());
+        if (res == false) return NotFound();
+
+        #endregion
+
+        var model = await _sellerService.FillInformationOfSellerStateViewModel(User.GetUserId());
+        return View(model) ;
+    }
+
+    #endregion
+
+    #region Add Pesonal Informations
+
+    [HttpGet]
+    public async Task<IActionResult> AddPersonalInfo()
+    {
+        #region Is Exist Personal Info
+
+        if (await _sellerService.IsExistSellerPersonalInformations(User.GetUserId()))
         {
-            #region Is Exist Personal Info
-
-            if (await _sellerService.IsExistSellerPersonalInformations(User.GetUserId()))
-            {
-                return RedirectToAction();
-            }
-
-            #endregion
-
-            ViewData["Countries"] = await _stateService.GetAllCountries();
-
-            return View();
+            return RedirectToAction();
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddPersonalInfo(AddSellerPersonalInfoViewModel info)
+        #endregion
+
+        ViewData["Countries"] = await _stateService.GetAllCountries();
+
+        return View();
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddPersonalInfo(AddSellerPersonalInfoViewModel info)
+    {
+        #region Is Exist Personal Info
+
+        if (await _sellerService.IsExistSellerPersonalInformations(User.GetUserId()))
         {
-            #region Is Exist Personal Info
+            return RedirectToAction();
+        }
 
-            if (await _sellerService.IsExistSellerPersonalInformations(User.GetUserId()))
-            {
-                return RedirectToAction();
-            }
+        #endregion
 
-            #endregion
+        #region Model State Valid
 
-            #region Model State Valid
-
-            if (!ModelState.IsValid)
-            {
-                TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد .";
-                ViewData["Countries"] = await _stateService.GetAllCountries();
-                ViewData["States"] = await _stateService.GetStateChildren(info.CountryId);
-                ViewData["Cities"] = await _stateService.GetStateChildren(info.StateId);
-
-                return View(info);
-            }
-
-            #endregion
-
-            #region Add Personal Info Methods
-
-            var result = await _sellerService.AddSellerPersonalInfo(info, User.GetUserId());
-
-            switch (result)
-            {
-                case AddSellerPersonalInfoResul.Success:
-                    TempData[SuccessMessage] = "عملیات با موفقیت انجام شده است .";
-                    return RedirectToAction(nameof(AddSellerPersonalLinks));
-
-                case AddSellerPersonalInfoResul.Faild:
-                    TempData[ErrorMessage] = "عملیات با شکست انجام شده است .";
-                    break;
-
-                case AddSellerPersonalInfoResul.ImagesNotFound:
-                    TempData[ErrorMessage] = "تصاویر در خواستی باید وارد شوند .";
-                    break;
-            };
-
-            #endregion
-
+        if (!ModelState.IsValid)
+        {
+            TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد .";
             ViewData["Countries"] = await _stateService.GetAllCountries();
             ViewData["States"] = await _stateService.GetStateChildren(info.CountryId);
             ViewData["Cities"] = await _stateService.GetStateChildren(info.StateId);
@@ -164,322 +136,423 @@ namespace Window.Web.Areas.Seller.Controllers
 
         #endregion
 
-        #region Add Seller Personal Links 
+        #region Add Personal Info Methods
 
-        [HttpGet]
-        public async Task<IActionResult> AddSellerPersonalLinks()
+        var result = await _sellerService.AddSellerPersonalInfo(info, User.GetUserId());
+
+        switch (result)
         {
-            #region Validate User Informations
+            case AddSellerPersonalInfoResul.Success:
+                TempData[SuccessMessage] = "عملیات با موفقیت انجام شده است .";
+                return RedirectToAction(nameof(AddSellerPersonalLinks));
 
-            if (!await _sellerService.IsExistSellerPersonalInformations(User.GetUserId()))
-            {
-                TempData[ErrorMessage] = "کاربر عزیز ابتدا باید اطلاعات شخصی را پر کنید .";
-                return RedirectToAction(nameof(AddPersonalInfo));
-            }
+            case AddSellerPersonalInfoResul.Faild:
+                TempData[ErrorMessage] = "عملیات با شکست انجام شده است .";
+                break;
 
-            #endregion
+            case AddSellerPersonalInfoResul.ImagesNotFound:
+                TempData[ErrorMessage] = "تصاویر در خواستی باید وارد شوند .";
+                break;
+        };
 
-            //Get Seller Links 
-            ViewBag.SellerLinks = await _sellerService.GetSellerLinksForShowInAddSellerLinksPage(User.GetUserId());
+        #endregion
 
-            return View();
-        }
+        ViewData["Countries"] = await _stateService.GetAllCountries();
+        ViewData["States"] = await _stateService.GetStateChildren(info.CountryId);
+        ViewData["Cities"] = await _stateService.GetStateChildren(info.StateId);
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddSellerPersonalLinks(AddSellerLinksViewModel links)
+        return View(info);
+    }
+
+    #endregion
+
+    #region Add Seller Personal Links 
+
+    [HttpGet]
+    public async Task<IActionResult> AddSellerPersonalLinks()
+    {
+        #region Validate User Informations
+
+        if (!await _sellerService.IsExistSellerPersonalInformations(User.GetUserId()))
         {
-            //Get Seller Links 
-            ViewBag.SellerLinks = await _sellerService.GetSellerLinksForShowInAddSellerLinksPage(User.GetUserId());
-
-            #region Validate User Informations
-
-            if (!await _sellerService.IsExistSellerPersonalInformations(User.GetUserId()))
-            {
-                TempData[ErrorMessage] = "کاربر عزیز ابتدا باید اطلاعات شخصی را پر کنید .";
-                return RedirectToAction(nameof(AddPersonalInfo));
-            }
-
-            #endregion
-
-            #region Model State Validations
-
-            if (!ModelState.IsValid)
-            {
-                TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد .";
-                return View();
-            }
-
-            #endregion
-
-            #region Add Link Method 
-
-            links.UserId = User.GetUserId();
-
-            var result = await _sellerService.AddSellerLinksFromSeller(links);
-
-            switch (result)
-            {
-                case AddSellerLinksResult.Success:
-                    TempData[SuccessMessage] = "اطلاعات لینک ما با موفقیت اضافه شده است .";
-                    return RedirectToAction(nameof(AddSellerPersonalLinks));
-
-                case AddSellerLinksResult.Faild:
-                    TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
-                    break;
-            }
-
-            #endregion
-
-            return View(links);
+            TempData[ErrorMessage] = "کاربر عزیز ابتدا باید اطلاعات شخصی را پر کنید .";
+            return RedirectToAction(nameof(AddPersonalInfo));
         }
 
         #endregion
 
-        #region Delete Seller Personal Links 
+        //Get Seller Links 
+        ViewBag.SellerLinks = await _sellerService.GetSellerLinksForShowInAddSellerLinksPage(User.GetUserId());
 
-        public async Task<IActionResult> DeleteSellersLinks(ulong id)
+        return View();
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddSellerPersonalLinks(AddSellerLinksViewModel links)
+    {
+        //Get Seller Links 
+        ViewBag.SellerLinks = await _sellerService.GetSellerLinksForShowInAddSellerLinksPage(User.GetUserId());
+
+        #region Validate User Informations
+
+        if (!await _sellerService.IsExistSellerPersonalInformations(User.GetUserId()))
         {
-            var result = await _sellerService.DeleteSellerLink(id, User.GetUserId());
-
-            if (result)
-            {
-                return ApiResponse.SetResponse(ApiResponseStatus.Success, null, "عملیات با موفقیت انجام شده است .");
-            }
-
-            return ApiResponse.SetResponse(ApiResponseStatus.Danger, null, "عملیات با شکست مواجه شده است .");
+            TempData[ErrorMessage] = "کاربر عزیز ابتدا باید اطلاعات شخصی را پر کنید .";
+            return RedirectToAction(nameof(AddPersonalInfo));
         }
 
         #endregion
 
-        #region Add Seller Work Sample Title 
+        #region Model State Validations
 
-        [HttpGet]
-        public async Task<IActionResult> AddSellerWorkSampleTitle()
+        if (!ModelState.IsValid)
         {
-            //Get Seller Work Samples 
-            ViewBag.SellerWorkSamples = await _sellerService.GetSellerWorkSampleForShowInAddSellerLinksPage(User.GetUserId());
-
+            TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد .";
             return View();
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddSellerWorkSampleTitle(AddSellerWorkSampleViewModel workSample, IFormFile workSampleImage)
+        #endregion
+
+        #region Add Link Method 
+
+        links.UserId = User.GetUserId();
+
+        var result = await _sellerService.AddSellerLinksFromSeller(links);
+
+        switch (result)
         {
-            //Get Seller Work Samples 
-            ViewBag.SellerWorkSamples = await _sellerService.GetSellerWorkSampleForShowInAddSellerLinksPage(User.GetUserId());
+            case AddSellerLinksResult.Success:
+                TempData[SuccessMessage] = "اطلاعات لینک ما با موفقیت اضافه شده است .";
+                return RedirectToAction(nameof(AddSellerPersonalLinks));
 
-            #region Model State Validaton 
+            case AddSellerLinksResult.Faild:
+                TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+                break;
+        }
 
-            if (!ModelState.IsValid)
-            {
-                TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد .";
-                return View(workSample);
-            }
+        #endregion
 
-            #endregion
+        return View(links);
+    }
 
-            #region Add Personal Work Sample
+    #endregion
 
-            workSample.UserId = User.GetUserId();
+    #region Delete Seller Personal Links 
 
-            var result = await _sellerService.AddSellerWorkSample(workSample, workSampleImage);
+    public async Task<IActionResult> DeleteSellersLinks(ulong id)
+    {
+        var result = await _sellerService.DeleteSellerLink(id, User.GetUserId());
 
-            switch (result)
-            {
-                case AddSellerWorkSampleResult.Success:
-                    TempData[SuccessMessage] = "عملیات با موفقیت انجام شده است .";
-                    return RedirectToAction(nameof(AddSellerWorkSampleTitle));
+        if (result)
+        {
+            return ApiResponse.SetResponse(ApiResponseStatus.Success, null, "عملیات با موفقیت انجام شده است .");
+        }
 
-                case AddSellerWorkSampleResult.ImageNotFound:
-                    TempData[ErrorMessage] = "تصویر باید وارد شود .";
-                    break;
+        return ApiResponse.SetResponse(ApiResponseStatus.Danger, null, "عملیات با شکست مواجه شده است .");
+    }
 
-                case AddSellerWorkSampleResult.Faild:
-                    TempData[ErrorMessage] = "عملیات با شکست مواجه شده است .";
-                    break;
-            }
+    #endregion
 
-            #endregion
+    #region Add Seller Work Sample Title 
 
+    [HttpGet]
+    public async Task<IActionResult> AddSellerWorkSampleTitle()
+    {
+        //Get Seller Work Samples 
+        ViewBag.SellerWorkSamples = await _sellerService.GetSellerWorkSampleForShowInAddSellerLinksPage(User.GetUserId());
+
+        return View();
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddSellerWorkSampleTitle(AddSellerWorkSampleViewModel workSample, IFormFile workSampleImage)
+    {
+        //Get Seller Work Samples 
+        ViewBag.SellerWorkSamples = await _sellerService.GetSellerWorkSampleForShowInAddSellerLinksPage(User.GetUserId());
+
+        #region Model State Validaton 
+
+        if (!ModelState.IsValid)
+        {
+            TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد .";
             return View(workSample);
         }
 
         #endregion
 
-        #region Delete Work Sample 
+        #region Add Personal Work Sample
 
-        public async Task<IActionResult> DeleteWorkSample(ulong id)
+        workSample.UserId = User.GetUserId();
+
+        var result = await _sellerService.AddSellerWorkSample(workSample, workSampleImage);
+
+        switch (result)
         {
-            var result = await _sellerService.DeleteSellerWorkSample(id, User.GetUserId());
+            case AddSellerWorkSampleResult.Success:
+                TempData[SuccessMessage] = "عملیات با موفقیت انجام شده است .";
+                return RedirectToAction(nameof(AddSellerWorkSampleTitle));
 
-            if (result)
+            case AddSellerWorkSampleResult.ImageNotFound:
+                TempData[ErrorMessage] = "تصویر باید وارد شود .";
+                break;
+
+            case AddSellerWorkSampleResult.Faild:
+                TempData[ErrorMessage] = "عملیات با شکست مواجه شده است .";
+                break;
+        }
+
+        #endregion
+
+        return View(workSample);
+    }
+
+    #endregion
+
+    #region Delete Work Sample 
+
+    public async Task<IActionResult> DeleteWorkSample(ulong id)
+    {
+        var result = await _sellerService.DeleteSellerWorkSample(id, User.GetUserId());
+
+        if (result)
+        {
+            return ApiResponse.SetResponse(ApiResponseStatus.Success, null, "عملیات با موفقیت انجام شده است .");
+        }
+
+        return ApiResponse.SetResponse(ApiResponseStatus.Danger, null, "عملیات با شکست مواجه شده است .");
+    }
+
+    #endregion
+
+    #region List Of Personal Info 
+
+    public async Task<IActionResult> ListOfPersonalInfo()
+    {
+        var model = await _sellerService.FillListOfPersonalInfoViewModel(User.GetUserId());
+
+        if (model == null) return RedirectToAction(nameof(ManagePersonalInfoLink));
+
+        ViewData["Countries"] = await _stateService.GetAllCountries();
+        ViewData["States"] = await _stateService.GetStateChildren(model.CountryId);
+        ViewData["Cities"] = await _stateService.GetStateChildren(model.StateId);
+
+        return View(model);
+    }
+
+    #endregion
+
+    #region Show Personal Link Form In Modal
+
+    [HttpGet("Show-AddPErsonalLink-Modal")]
+    public async Task<IActionResult> ShowAddPersonalInfoInModal()
+    {
+        return PartialView("_ShowAddPersonalInfoInModal");
+    }
+
+    #endregion
+
+    #region Add Personal Link In Modal 
+
+    public async Task<IActionResult> AddPersonalInfoInModal(AddSellerLinksViewModel link)
+    {
+        link.UserId = User.GetUserId();
+
+        var res = await _sellerService.AddSellerLinksFromSeller(link);
+        if (res == AddSellerLinksResult.Success)
+        {
+            await _sellerService.UpdateSellerStateAfterEditPersonalInfo(User.GetUserId());
+            return JsonResponseStatus.Success();
+        }
+
+        return JsonResponseStatus.Error();
+    }
+
+    #endregion
+
+    #region Personal Work Sample In Modal
+
+    [HttpGet("Show-AddPersonalWorkSample-Modal")]
+    public async Task<IActionResult> ShowAddPersonalWorlSampleInModal()
+    {
+        return PartialView("_ShowAddPersonalWorkSampleModal");
+    }
+
+    #endregion
+
+    #region Upload Work Sample Image In Modal
+
+    [HttpPost]
+    public async Task<IActionResult> UploadSellerWorkSampleImgeInModal(IFormFile file)
+    {
+        if (file != null)
+        {
+            if (Path.GetExtension(file.FileName) == ".png" || Path.GetExtension(file.FileName) == ".jpeg" || Path.GetExtension(file.FileName) == ".jpg")
             {
-                return ApiResponse.SetResponse(ApiResponseStatus.Success, null, "عملیات با موفقیت انجام شده است .");
-            }
+                var imageName = CodeGenerator.GenerateUniqCode() + Path.GetExtension(file.FileName);
+                file.AddImageToServer(imageName, FilePaths.SellerInfoPathServer, 270, 270, FilePaths.SellerInfoPathThumbServer);
+                return new JsonResult(new { status = "Success", imageName = imageName });
 
-            return ApiResponse.SetResponse(ApiResponseStatus.Danger, null, "عملیات با شکست مواجه شده است .");
-        }
-
-        #endregion
-
-        #region List Of Personal Info 
-
-        public async Task<IActionResult> ListOfPersonalInfo()
-        {
-            var model = await _sellerService.FillListOfPersonalInfoViewModel(User.GetUserId());
-
-            if (model == null) return RedirectToAction(nameof(ManagePersonalInfoLink));
-
-            ViewData["Countries"] = await _stateService.GetAllCountries();
-            ViewData["States"] = await _stateService.GetStateChildren(model.CountryId);
-            ViewData["Cities"] = await _stateService.GetStateChildren(model.StateId);
-
-            return View(model);
-        }
-
-        #endregion
-
-        #region Show Personal Link Form In Modal
-
-        [HttpGet("Show-AddPErsonalLink-Modal")]
-        public async Task<IActionResult> ShowAddPersonalInfoInModal()
-        {
-            return PartialView("_ShowAddPersonalInfoInModal");
-        }
-
-        #endregion
-
-        #region Add Personal Link In Modal 
-
-        public async Task<IActionResult> AddPersonalInfoInModal(AddSellerLinksViewModel link)
-        {
-            link.UserId = User.GetUserId();
-
-            var res = await _sellerService.AddSellerLinksFromSeller(link);
-            if (res == AddSellerLinksResult.Success)
-            {
-                await _sellerService.UpdateSellerStateAfterEditPersonalInfo(User.GetUserId());
-                return JsonResponseStatus.Success();
-            }
-
-            return JsonResponseStatus.Error();
-        }
-
-        #endregion
-
-        #region Personal Work Sample In Modal
-
-        [HttpGet("Show-AddPersonalWorkSample-Modal")]
-        public async Task<IActionResult> ShowAddPersonalWorlSampleInModal()
-        {
-            return PartialView("_ShowAddPersonalWorkSampleModal");
-        }
-
-        #endregion
-
-        #region Upload Work Sample Image In Modal
-
-        [HttpPost]
-        public async Task<IActionResult> UploadSellerWorkSampleImgeInModal(IFormFile file)
-        {
-            if (file != null)
-            {
-                if (Path.GetExtension(file.FileName) == ".png" || Path.GetExtension(file.FileName) == ".jpeg" || Path.GetExtension(file.FileName) == ".jpg")
-                {
-                    var imageName = CodeGenerator.GenerateUniqCode() + Path.GetExtension(file.FileName);
-                    file.AddImageToServer(imageName, FilePaths.SellerInfoPathServer, 270, 270, FilePaths.SellerInfoPathThumbServer);
-                    return new JsonResult(new { status = "Success", imageName = imageName });
-
-                }
-                else
-                {
-                    return new JsonResult(new { status = "Error" });
-                }
             }
             else
             {
                 return new JsonResult(new { status = "Error" });
             }
         }
+        else
+        {
+            return new JsonResult(new { status = "Error" });
+        }
+    }
+
+    #endregion
+
+    #region Add Personal Work Sample In Modal 
+
+    public async Task<IActionResult> AddPersonalWorkInSampleInModal(AddSellerWorkSampleViewModel link)
+    {
+        link.UserId = User.GetUserId();
+
+        var res = await _sellerService.AddSellerWorkSampleInModal(link);
+        if (res)
+        {
+            return JsonResponseStatus.Success();
+        }
+
+        return JsonResponseStatus.Error();
+    }
+
+    #endregion
+
+    #region Update Seller Personal Info 
+
+    [HttpPost , ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateSellerPersonlInfo(ListOfPersonalInfoViewModel model)
+    {
+        #region Update Personal Info Method
+
+        var res = await _sellerService.UpdateSellerPersonalInfoFromSellerPanel(model , User.GetUserId());
+
+        switch (res)
+        {
+            case UpdateSellerPersonalInfoResul.Success:
+                TempData[SuccessMessage] = "عملیات با موفقیت انجام شده است .";
+                return RedirectToAction(nameof(ListOfPersonalInfo));
+
+            case UpdateSellerPersonalInfoResul.Faild:
+                TempData[ErrorMessage] = "عملیات با شکست انجام شده است .";
+                break;
+
+            case UpdateSellerPersonalInfoResul.ImagesNotFound:
+                TempData[ErrorMessage] = "تصاویر در خواستی باید وارد شوند .";
+                break;
+
+            case UpdateSellerPersonalInfoResul.NotFound:
+                TempData[ErrorMessage] = "اطلاعات مورد نظر یافت نشده است .";
+                return RedirectToAction(nameof(ManagePersonalInfoLink));
+        };
 
         #endregion
 
-        #region Add Personal Work Sample In Modal 
+        ViewData["Countries"] = await _stateService.GetAllCountries();
+        ViewData["States"] = await _stateService.GetStateChildren(model.CountryId);
+        ViewData["Cities"] = await _stateService.GetStateChildren(model.StateId);
 
-        public async Task<IActionResult> AddPersonalWorkInSampleInModal(AddSellerWorkSampleViewModel link)
+        return RedirectToAction(nameof(ListOfPersonalInfo));
+    }
+
+    #endregion
+
+    #region Market Charge Information 
+
+    public async Task<IActionResult> MarketChargeInformation()
+    {
+        #region Check User Charge
+
+        var res = await _sellerService.CheckUserCharge(User.GetUserId());
+        if (res == false) return NotFound();
+
+        #endregion
+
+        return View(await _sellerService.FillMarketChargeInfoViewModel(User.GetUserId()));
+    }
+
+    #endregion
+
+    #region Charge Account
+
+    [HttpGet]
+    public async Task<IActionResult> BankPay()
+    {
+        #region Check User Account Charge Status
+
+        if (await _sellerService.HasMarketStateForPayAccountCharge(User.GetUserId()) == false)
         {
-            link.UserId = User.GetUserId();
-
-            var res = await _sellerService.AddSellerWorkSampleInModal(link);
-            if (res)
-            {
-                return JsonResponseStatus.Success();
-            }
-
-            return JsonResponseStatus.Error();
+            TempData[ErrorMessage] = "کاربر عزیز امکان پرداخت وجه برای شما وجود ندارد لطفا با پشتیبانی تماس بگیرید.";
+            return RedirectToAction(nameof(MarketChargeInformation));
         }
 
         #endregion
 
-        #region Update Seller Personal Info 
+        #region Get Market 
 
-        [HttpPost , ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateSellerPersonlInfo(ListOfPersonalInfoViewModel model)
+        var market = await _sellerService.GetMarketByUserId(User.GetUserId());
+        if(market == null) return NotFound();
+
+        #endregion
+
+        #region Tarif 
+
+        var tariff = await _sellerService.GetMarketAccountChargeTariff(User.GetUserId());
+        if (tariff == null)
         {
-            #region Update Personal Info Method
+            TempData[ErrorMessage] = "کاربر عزیز امکان پرداخت وجه برای شما وجود ندارد لطفا با پشتیبانی تماس بگیرید.";
+            return RedirectToAction(nameof(MarketChargeInformation));
+        }
+        if (tariff == 0)
+        {
+            //Charge User Wallet
+            await _sellerService.ChargeUserWallet(User.GetUserId(), tariff.Value);
 
-            var res = await _sellerService.UpdateSellerPersonalInfoFromSellerPanel(model , User.GetUserId());
+            //Pay Account Charge Tariff
+            await _sellerService.PayAccountChargeTariff(User.GetUserId(), tariff.Value);
 
-            switch (res)
-            {
-                case UpdateSellerPersonalInfoResul.Success:
-                    TempData[SuccessMessage] = "عملیات با موفقیت انجام شده است .";
-                    return RedirectToAction(nameof(ListOfPersonalInfo));
+            //Update Market State 
+            var result = await _sellerService.ChargeAccount(market.Id, User.GetUserId());
 
-                case UpdateSellerPersonalInfoResul.Faild:
-                    TempData[ErrorMessage] = "عملیات با شکست انجام شده است .";
-                    break;
-
-                case UpdateSellerPersonalInfoResul.ImagesNotFound:
-                    TempData[ErrorMessage] = "تصاویر در خواستی باید وارد شوند .";
-                    break;
-
-                case UpdateSellerPersonalInfoResul.NotFound:
-                    TempData[ErrorMessage] = "اطلاعات مورد نظر یافت نشده است .";
-                    return RedirectToAction(nameof(ManagePersonalInfoLink));
-            };
-
-            #endregion
-
-            ViewData["Countries"] = await _stateService.GetAllCountries();
-            ViewData["States"] = await _stateService.GetStateChildren(model.CountryId);
-            ViewData["Cities"] = await _stateService.GetStateChildren(model.StateId);
-
-            return RedirectToAction(nameof(ListOfPersonalInfo));
+            return RedirectToAction("Index" , "Home" , new { area = "Seller" });
         }
 
         #endregion
 
-        #region Market Charge Information 
+        #region Online Payment
 
-        public async Task<IActionResult> MarketChargeInformation()
+        return RedirectToAction("PaymentMethod", "Payment", new
         {
-            #region Check User Charge
+            area = "",
+            gatewayType = GatewayType.Zarinpal,
+            amount = tariff.Value,
+            description = "شارژ حساب کاربری ",
+            returURL = $"{FilePaths.SiteAddress}/ChargeAccount/" + market.Id,
+        });
 
-            var res = await _sellerService.CheckUserCharge(User.GetUserId());
-            if (res == false) return NotFound();
+        #endregion
+    }
 
-            #endregion
+    #endregion
 
-            return View(await _sellerService.FillMarketChargeInfoViewModel(User.GetUserId()));
-        }
+    #region Bank  Payment
+
+    [Route("ChargeAccount/{id}")]
+    public async Task<IActionResult> ChargeAccount(ulong id)
+    {
+        #region Get Market 
+
+        var market = await _sellerService.GetMarketByMarketId(id);
+        if (market == null) return NotFound();
 
         #endregion
 
-        #region Charge Account
-
-        [HttpGet]
-        public async Task<IActionResult> BankPay()
+        try
         {
             #region Check User Account Charge Status
 
@@ -491,12 +564,14 @@ namespace Window.Web.Areas.Seller.Controllers
 
             #endregion
 
-            #region Get Market 
+            #region Fill Parametrs
 
-            var market = await _sellerService.GetMarketByUserId(User.GetUserId());
-            if(market == null) return NotFound();
+            VerifyParameters parameters = new VerifyParameters();
 
-            #endregion
+            if (HttpContext.Request.Query["Authority"] != "")
+            {
+                parameters.authority = HttpContext.Request.Query["Authority"];
+            }
 
             #region Tarif 
 
@@ -506,202 +581,207 @@ namespace Window.Web.Areas.Seller.Controllers
                 TempData[ErrorMessage] = "کاربر عزیز امکان پرداخت وجه برای شما وجود ندارد لطفا با پشتیبانی تماس بگیرید.";
                 return RedirectToAction(nameof(MarketChargeInformation));
             }
-            if (tariff == 0)
-            {
-                //Charge User Wallet
-                await _sellerService.ChargeUserWallet(User.GetUserId(), tariff.Value);
-
-                //Pay Account Charge Tariff
-                await _sellerService.PayAccountChargeTariff(User.GetUserId(), tariff.Value);
-
-                //Update Market State 
-                var result = await _sellerService.ChargeAccount(market.Id, User.GetUserId());
-
-                return RedirectToAction("Index" , "Home" , new { area = "Seller" });
-            }
 
             #endregion
 
-            #region Online Payment
-
-            return RedirectToAction("PaymentMethod", "Payment", new
-            {
-                area = "",
-                gatewayType = GatewayType.Zarinpal,
-                amount = tariff.Value,
-                description = "شارژ حساب کاربری ",
-                returURL = $"{FilePaths.SiteAddress}/ChargeAccount/" + market.Id,
-            });
-
-            #endregion
-        }
-
-        #endregion
-
-        #region Bank  Payment
-
-        [Route("ChargeAccount/{id}")]
-        public async Task<IActionResult> ChargeAccount(ulong id)
-        {
-            #region Get Market 
-
-            var market = await _sellerService.GetMarketByMarketId(id);
-            if (market == null) return NotFound();
+            parameters.amount = tariff.ToString();
+            parameters.merchant_id = FilePaths.merchant;
 
             #endregion
 
-            try
+            using (HttpClient client = new HttpClient())
             {
-                #region Check User Account Charge Status
+                #region Verify Payment
 
-                if (await _sellerService.HasMarketStateForPayAccountCharge(User.GetUserId()) == false)
-                {
-                    TempData[ErrorMessage] = "کاربر عزیز امکان پرداخت وجه برای شما وجود ندارد لطفا با پشتیبانی تماس بگیرید.";
-                    return RedirectToAction(nameof(MarketChargeInformation));
-                }
+                var json = JsonConvert.SerializeObject(parameters);
 
-                #endregion
+                HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                #region Fill Parametrs
+                HttpResponseMessage response = await client.PostAsync(URLs.verifyUrl, content);
 
-                VerifyParameters parameters = new VerifyParameters();
+                string responseBody = await response.Content.ReadAsStringAsync();
 
-                if (HttpContext.Request.Query["Authority"] != "")
-                {
-                    parameters.authority = HttpContext.Request.Query["Authority"];
-                }
+                JObject jodata = JObject.Parse(responseBody);
 
-                #region Tarif 
+                string data = jodata["data"].ToString();
 
-                var tariff = await _sellerService.GetMarketAccountChargeTariff(User.GetUserId());
-                if (tariff == null)
-                {
-                    TempData[ErrorMessage] = "کاربر عزیز امکان پرداخت وجه برای شما وجود ندارد لطفا با پشتیبانی تماس بگیرید.";
-                    return RedirectToAction(nameof(MarketChargeInformation));
-                }
+                JObject jo = JObject.Parse(responseBody);
+
+                string errors = jo["errors"].ToString();
 
                 #endregion
 
-                parameters.amount = tariff.ToString();
-                parameters.merchant_id = FilePaths.merchant;
-
-                #endregion
-
-                using (HttpClient client = new HttpClient())
+                if (data != "[]")
                 {
-                    #region Verify Payment
+                    //Authority Code
+                    string refid = jodata["data"]["ref_id"].ToString();
 
-                    var json = JsonConvert.SerializeObject(parameters);
+                    //Get Wallet Transaction For Validation 
+                    var wallet = await _walletService.FindWalletTransactionForRedirectToTheBankPortal(User.GetUserId(), GatewayType.Zarinpal, parameters.authority, tariff.Value);
 
-                    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                    HttpResponseMessage response = await client.PostAsync(URLs.verifyUrl, content);
-
-                    string responseBody = await response.Content.ReadAsStringAsync();
-
-                    JObject jodata = JObject.Parse(responseBody);
-
-                    string data = jodata["data"].ToString();
-
-                    JObject jo = JObject.Parse(responseBody);
-
-                    string errors = jo["errors"].ToString();
-
-                    #endregion
-
-                    if (data != "[]")
+                    if (wallet != null)
                     {
-                        //Authority Code
-                        string refid = jodata["data"]["ref_id"].ToString();
+                        //Update Market State 
+                        var result = await _sellerService.ChargeAccount(id, User.GetUserId());
 
-                        //Get Wallet Transaction For Validation 
-                        var wallet = await _walletService.FindWalletTransactionForRedirectToTheBankPortal(User.GetUserId(), GatewayType.Zarinpal, parameters.authority, tariff.Value);
+                        await _walletService.UpdateWalletAndCalculateUserBalanceAfterBankingPayment(wallet);
 
-                        if (wallet != null)
-                        {
-                            //Update Market State 
-                            var result = await _sellerService.ChargeAccount(id, User.GetUserId());
+                        //Pay Tariff
+                        await _sellerService.PayHomeVisitTariff(User.GetUserId(), tariff.Value);
 
-                            await _walletService.UpdateWalletAndCalculateUserBalanceAfterBankingPayment(wallet);
-
-                            //Pay Tariff
-                            await _sellerService.PayHomeVisitTariff(User.GetUserId(), tariff.Value);
-
-                            return RedirectToAction("PaymentResult", "Payment", new { IsSuccess = true, refId = refid });
-                        }
-                    }
-                    else if (errors != "[]")
-                    {
-                        string errorscode = jo["errors"]["code"].ToString();
-
-                        return BadRequest($"error code {errorscode}");
-
+                        return RedirectToAction("PaymentResult", "Payment", new { IsSuccess = true, refId = refid });
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+                else if (errors != "[]")
+                {
+                    string errorscode = jo["errors"]["code"].ToString();
 
-                throw ex;
-            }
+                    return BadRequest($"error code {errorscode}");
 
-            return NotFound();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+
+            throw ex;
         }
 
-        #endregion
+        return NotFound();
+    }
 
-        #region Changes From Personal Info Page 
+    #endregion
 
-        #region Add Work Sample
+    #region Changes From Personal Info Page 
 
-        [HttpGet]
-        public async Task<IActionResult> AddWorkSample()
+    #region Add Work Sample
+
+    [HttpGet]
+    public async Task<IActionResult> AddWorkSample()
+    {
+        return View();
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddWorkSample(AddSellerWorkSampleViewModel workSample, IFormFile workSampleImage)
+    {
+        #region Model State Validaton 
+
+        if (!ModelState.IsValid)
         {
-            return View();
-        }
-
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddWorkSample(AddSellerWorkSampleViewModel workSample, IFormFile workSampleImage)
-        {
-            #region Model State Validaton 
-
-            if (!ModelState.IsValid)
-            {
-                TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد .";
-                return View(workSample);
-            }
-
-            #endregion
-
-            #region Add Personal Work Sample
-
-            workSample.UserId = User.GetUserId();
-
-            var result = await _sellerService.AddSellerWorkSample(workSample, workSampleImage);
-
-            switch (result)
-            {
-                case AddSellerWorkSampleResult.Success:
-                    TempData[SuccessMessage] = "عملیات با موفقیت انجام شده است .";
-                    return RedirectToAction(nameof(ListOfPersonalInfo));
-
-                case AddSellerWorkSampleResult.ImageNotFound:
-                    TempData[ErrorMessage] = "تصویر باید وارد شود .";
-                    break;
-
-                case AddSellerWorkSampleResult.Faild:
-                    TempData[ErrorMessage] = "عملیات با شکست مواجه شده است .";
-                    break;
-            }
-
-            #endregion
-
+            TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد .";
             return View(workSample);
         }
 
+        #endregion
+
+        #region Add Personal Work Sample
+
+        workSample.UserId = User.GetUserId();
+
+        var result = await _sellerService.AddSellerWorkSample(workSample, workSampleImage);
+
+        switch (result)
+        {
+            case AddSellerWorkSampleResult.Success:
+                TempData[SuccessMessage] = "عملیات با موفقیت انجام شده است .";
+                return RedirectToAction(nameof(ListOfPersonalInfo));
+
+            case AddSellerWorkSampleResult.ImageNotFound:
+                TempData[ErrorMessage] = "تصویر باید وارد شود .";
+                break;
+
+            case AddSellerWorkSampleResult.Faild:
+                TempData[ErrorMessage] = "عملیات با شکست مواجه شده است .";
+                break;
+        }
 
         #endregion
 
-        #endregion
+        return View(workSample);
     }
+
+
+    #endregion
+
+    #endregion
+
+    #region Personal Videos 
+
+    #region EditAndCreateVideos
+
+    [HttpGet]
+    public async Task<IActionResult> EditAndCreateVideos()
+    {
+        return View(await _sellerPersonalVideoService.FillAddOrEditSellerPersonalVideoDTO(User.GetUserId()));
+    }
+
+    [HttpPost , ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditAndCreateVideos(AddOrEditSellerPersonalVideoDTO model, IFormFile? Image)
+    {
+        if (ModelState.IsValid)
+        {
+            var res = await _sellerPersonalVideoService.EditSellerPersonalVideo(User.GetUserId(), model, Image);
+            if (res)
+            {
+                TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+                return RedirectToAction(nameof(PageOfManageSellerInformation));
+            }
+        }
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+        return View(model);
+    }
+
+    #endregion
+
+    #region Upload Chunk Attachment File
+
+    public IActionResult UploadCourseAttachmentFile(IFormFile? videoFile)
+    {
+        var result = videoFile.AddChunkFileToServer(FilePaths.SellerPersonalVideoAttachmentFilesChunkServerPath,
+            FilePaths.SellerPersonalVideoAttachmentFilesServerPath);
+
+        if (result == null)
+        {
+            return ApiResponse.SetResponse(ApiResponseStatus.Danger, null,"عملیات باشکست مواجه شده است .");
+        }
+        else if (result == string.Empty)
+        {
+            return ApiResponse.SetResponse(ApiResponseStatus.Success, null, "عملیات باموفقیت انجام شده است.");
+        }
+        else
+        {
+            return ApiResponse.SetResponse(ApiResponseStatus.Success, result, "عملیات باموفقیت انجام شده است.");
+        }
+    }
+
+    #endregion
+
+    #region Download Attachment File
+
+    public IActionResult DownloadAttachmentFile(string fileName)
+    {
+        if (string.IsNullOrEmpty(fileName))
+        {
+            return NotFound();
+        }
+
+        var webRoot = FilePaths.SellerPersonalVideoAttachmentFilesServerPath;
+
+        if (!System.IO.File.Exists(Path.Combine(webRoot, fileName)))
+        {
+            return NotFound();
+        }
+
+        var stream = System.IO.File.OpenRead(Path.Combine(webRoot, fileName));
+
+        var download = this.ResumingFile(stream, "application/octet-stream", fileName);
+
+        return download;
+    }
+
+    #endregion
+
+    #endregion
 }
