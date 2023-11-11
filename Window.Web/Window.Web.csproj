@@ -82,6 +82,7 @@
 	  <Folder Include="wwwroot\content\images\Sample\thumb\" />
 	  <Folder Include="wwwroot\content\images\sellerInfo\main\" />
 	  <Folder Include="wwwroot\content\images\sellerInfo\thumb\" />
+	  <Folder Include="wwwroot\content\images\SellerPersonalVideoAttachmentFiles\" />
 	  <Folder Include="wwwroot\Landing\" />
 	</ItemGroup>
 	

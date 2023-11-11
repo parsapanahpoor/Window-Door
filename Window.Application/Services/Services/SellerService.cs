@@ -888,6 +888,7 @@ namespace Window.Application.Services.Services
                 StateId = sellerPersonalInfo.StateId.Value,
                 CityId = sellerPersonalInfo.CityId.Value,
                 ActivationTariff = await _context.Market.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.ActivationTariff).FirstOrDefaultAsync(),
+                SelersPersonalVideos = await _context.SelersPersonalVideos.AsNoTracking().FirstOrDefaultAsync(p=> !p.IsDelete && p.UserId == userId)
             };
 
             model.MarketWorkSamples = await _context.MarketWorkSamle.Where(p => !p.IsDelete && p.UserId == userId)

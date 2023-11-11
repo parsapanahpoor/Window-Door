@@ -144,9 +144,59 @@
             <li class="breadcrumb-item active" aria-current="page">@Model.CompanyName</li>
         </ol>
     </nav>
+
+    <div class="col-md-12">
+    </div>
+
     <div class="row gy-5 pt-lg-2">
         <div class="col-lg-7">
+
+            <div class="d-flex flex-column">
+                <!-- Carousel with slides count-->
+                <div class="order-lg-1 order-2">
+                    <div class="tns-carousel-wrapper">
+                        <div class="tns-slides-count text-light">
+                            <i class="fi-image fs-lg me-2"></i>
+                            <div class="ps-1"><span class="tns-current-slide fs-5 fw-bold">1</span><span class="fs-5 fw-bold">/</span><span class="tns-total-slides fs-5 fw-bold">5</span></div>
+                        </div>
+                        <div class="tns-outer" id="tns1-ow">
+                        
+                            <div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">2</span>  of 5</div><div id="tns1-mw" class="tns-ovh">
+                                <div class="tns-inner" id="tns1-iw">
+                                    <div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" data-carousel-options="{&quot;navAsThumbnails&quot;: true, &quot;navContainer&quot;: &quot;#thumbnails&quot;, &quot;gutter&quot;: 12, &quot;responsive&quot;: {&quot;0&quot;:{&quot;controls&quot;: false},&quot;500&quot;:{&quot;controls&quot;: true}}}" id="tns1" style="transition-duration: 0s; transform: translate3d(-14.2857%, 0px, 0px);">
+                                        <div class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
+                                            <div class="ratio ratio-16x9">
+
+                                                @if (Model.SelersPersonalVideos != null)
+                                                {
+                                                    <video class="rounded-3" id="portfolio-vid" poster="@FilePaths.SellerPersonalVideoAttachmentFilesImagePath@Model.SelersPersonalVideos.BanerImage" controls>
+                                                        <source src="@FilePaths.SellerPersonalVideoAttachmentFilesPath@Model.SelersPersonalVideos.Videos" type="video/mp4">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                }
+                                                else
+                                                {
+                                                    <video id="portfolio-vid" poster="/site/manifest/logo512.png" controls>
+                                                        <source src="/-2147483648_-210649.mp4" type="video/mp4">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
             <div class="d-flex flex-column mt-4">
+
+                <h1 class="h2 mb-3">نمونه کارها :</h1>
 
                 @if (Model.MarketWorkSamples != null && Model.MarketWorkSamples.Any())
                 {
@@ -199,15 +249,19 @@
                             int i = 0;
                             <ul class="tns-thumbnails mb-4" id="thumbnails" aria-label="Carousel Pagination">
 
+
                                 @foreach (var link in Model.MarketWorkSamples)
                                 {
-                                    <li class="tns-thumbnail" data-nav="@i" tabindex="-1" aria-label="Carousel Page 2" aria-controls="tns1"><img src="/content/images/sellerInfo/thumb/@link.WorkSampleImage" alt="Thumbnail"></li>
+                                    <li class="tns-thumbnail" data-nav="@i" tabindex="-1" aria-label="Carousel Page 2" aria-controls="tns1">
+                                        <img src="/content/images/sellerInfo/thumb/@link.WorkSampleImage" alt="Thumbnail">
+                                    </li>
 
                                     {
                                         i++;
                                     }
 
                                 }
+
                             </ul>
                         }
 
@@ -217,7 +271,7 @@
                 }
 
                 <!-- Page title + Features-->
-                <div class="order-lg-2 order-1">
+                <div class="order-lg-2 order-1 mt-3">
                     <h1 class="h2 mb-2">آدرس محل کار :</h1>
 
                     <p class="mb-2 pb-1 fs-lg">@Model.WorkAddress</p>
