@@ -94,5 +94,20 @@ namespace Window.Application.StticTools
 
         #endregion
 
+        #region Seller Personal Video  Attachment Files
+
+        public static readonly string SellerPersonalVideoAttachmentFilesServerPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/SellerPersonalVideoAttachmentFiles/Files/");
+        public static readonly string SellerPersonalVideoAttachmentFilesChunkServerPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/SellerPersonalVideoAttachmentFiles/Chunks/");
+
+        public static readonly string SellerPersonalVideoAttachmentFilesPath = "/content/images/SellerPersonalVideoAttachmentFiles/Files/";
+
+        public static readonly string SellerPersonalVideoAttachmentFilesImagePath = "/content/images/SellerPersonalVideoAttachmentFiles/main/";
+        public static readonly string SellerPersonalVideoAttachmentFilesImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/SellerPersonalVideoAttachmentFiles/main/");
+
+        public static readonly string SellerPersonalVideoAttachmentFilesImagePathThumb = "/content/images/SellerPersonalVideoAttachmentFiles/thumb/";
+        public static readonly string SellerPersonalVideoAttachmentFilesImagePathThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/SellerPersonalVideoAttachmentFiles/thumb/");
+
+        #endregion
+
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Window.Domain.Entities.Market;
+using Window.Domain.Entities.MarketInfo;
 using Window.Domain.Enums.SellerType;
 using Window.Domain.ViewModels.Site.Inquiry;
 
@@ -38,6 +39,7 @@ namespace Window.Domain.ViewModels.Seller.PersonalInfo
         [Display(Name = "عکس جواز کسب")]
         [Required(ErrorMessage = "این فیلد الزامی است .")]
         public string PhotoOfBusinessLicense { get; set; }
+
         public IFormFile? ImageOfBusinessLicense { get; set; }
 
         [Display(Name = " عکس کارت ملی ")]
@@ -52,6 +54,7 @@ namespace Window.Domain.ViewModels.Seller.PersonalInfo
         [Display(Name = "لوگوی شرکت")]
         [Required(ErrorMessage = "این فیلد الزامی است .")]
         public string CompanyLogo { get; set; }
+
         public IFormFile? ImageCompanyLogo { get; set; }
 
         [Display(Name = " رزومه کاری")]
@@ -79,6 +82,8 @@ namespace Window.Domain.ViewModels.Seller.PersonalInfo
         public SellerType SellerType { get; set; }
 
         public AddScoreToTheSellerViewModel Score { get; set; }
+
+        public SelersPersonalVideos? SelersPersonalVideos { get; set; }
 
         #endregion
     }

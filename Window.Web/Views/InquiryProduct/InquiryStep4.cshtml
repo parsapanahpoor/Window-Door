@@ -3,7 +3,7 @@
 @model List<Window.Domain.ViewModels.Site.Inquiry.InquiryViewModel>
 @using Window.Domain.ViewModels.Admin.QuestionAnswer
 @using Window.Domain.Enums
-@using Window.Application.StaticTools
+@using Window.Application.StticTools
 @using Window.Domain.ViewModels.Common
 
 @{
@@ -112,12 +112,14 @@
             $("#formFilter").submit();
         }
 
+        $('#portfolio-vid').mouseover(function () {
+            $(this).get(0).play();
+        }).mouseout(function () {
+            $(this).get(0).pause();
+        })
+
     </script>
 }
-
-
-
-
 
 
 <div class="container-fluid mt-5 pt-5 p-0">
@@ -201,34 +203,53 @@
                         <!-- Item-->
                         <div class="col-sm-6 col-xl-4">
 
-                            <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="listing-img-container" style="height: auto !important;">
 
-                                <div class="card shadow-sm card-hover border-0 h-100">
-                                    <div class="tns-carousel-wrapper card-img-top card-img-hover">
+                            <div class="card shadow-sm card-hover border-0 h-100">
+                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
 
-                                        <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-info">@product.BrandName</span></div>
+                                    <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-info">@product.BrandName</span></div>
 
-                                        <div class="tns-outer" id="tns7-ow">
+                                    <div class="tns-outer" id="tns7-ow">
 
-                                            <div id="tns7-mw" class="tns-ovh">
-                                                <div class="tns-inner" id="tns7-iw">
-                                                    <div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns7" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);">
+                                        <div id="tns7-mw" class="tns-ovh">
+                                            <div class="tns-inner" id="tns7-iw">
+                                                <div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns7" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);">
 
-                                                        @if (!string.IsNullOrEmpty(product.UserAvatar))
+                                                    @if (!string.IsNullOrEmpty(product.SellerPersonalVideo) && !string.IsNullOrEmpty(product.SellerPersonalBanner))
+                                                    {
+                                                        <video id="portfolio-vid" poster="@FilePaths.SellerPersonalVideoAttachmentFilesImagePath@product.SellerPersonalBanner" controls>
+                                                            <source src="@FilePaths.SellerPersonalVideoAttachmentFilesPath@product.SellerPersonalVideo" type="video/mp4">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (!string.IsNullOrEmpty(product.UserAvatar))
                                                         {
-                                                            <img src="/content/images/user/thumb/@product.UserAvatar" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
-                                                        }
-                                                        else
+                                                            <video id="portfolio-vid" poster=" @FilePaths.UserAvatarPath/@product.UserAvatar" controls>
+                                                                <source src="/-2147483648_-210649.mp4" type="video/mp4">
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        }else
                                                         {
-                                                            <img src="/FinderSample/img/real-estate/catalog/13.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
+                                                            <video id="portfolio-vid" poster="/site/manifest/logo512.png" controls>
+                                                                <source src="/-2147483648_-210649.mp4" type="video/mp4">
+                                                                Your browser does not support the video tag.
+                                                            </video>
                                                         }
+                                                      
+                                                        @*                                                            <img src="/FinderSample/img/real-estate/catalog/13.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
+                                            *@
+                                                    }
 
-                                                    </div>
                                                 </div>
                                             </div>
-
                                         </div>
+
                                     </div>
+                                </div>
+                                <a asp-action="ShowSellerPersoanlInfo" asp-route-userId="@product.UserId" asp-area="" asp-controller="InquiryProduct" class="listing-img-container" style="height: auto !important;">
+
                                     <div class="card-body position-relative pb-3">
                                         <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">فروشنده :</h4>
                                         @if (string.IsNullOrEmpty(product.ShopName))
@@ -267,9 +288,8 @@
                                         </span>
 
                                     </div>
-                                </div>
-
-                            </a>
+                                </a>
+                            </div>
 
                         </div>
 
@@ -279,7 +299,7 @@
 
 
             </div>
-            
+
         </div>
     </div>
 </div>

@@ -506,7 +506,17 @@ public class InquryService : IInquiryService
                     ShopName = userInquiryResult.SellerShopName,
                     UserAvatar = user.UserAvatar,
                     UserName = user.Username,
-                    UserId = userInquiryResult.SellerUserId
+                    UserId = userInquiryResult.SellerUserId,
+                    SellerPersonalBanner = await _context.SelersPersonalVideos
+                                                         .AsNoTracking()
+                                                         .Where(p=> !p.IsDelete && p.UserId == userInquiryResult.SellerUserId)
+                                                         .Select(p=> p.BanerImage)
+                                                         .FirstOrDefaultAsync(),
+                    SellerPersonalVideo = await _context.SelersPersonalVideos
+                                                         .AsNoTracking()
+                                                         .Where(p => !p.IsDelete && p.UserId == userInquiryResult.SellerUserId)
+                                                         .Select(p => p.Videos)
+                                                         .FirstOrDefaultAsync(),
                 };
 
                 model.Add(modelChilds);

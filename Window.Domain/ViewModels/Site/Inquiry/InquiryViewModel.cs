@@ -24,6 +24,10 @@ namespace Window.Domain.ViewModels.Site.Inquiry
         public int? Score { get; set; }
 
         public string? ShopName { get; set; }
+
+        public string? SellerPersonalVideo { get; set; }
+
+        public string? SellerPersonalBanner { get; set; }
     }
 
     public class brandInquiryViewModel
