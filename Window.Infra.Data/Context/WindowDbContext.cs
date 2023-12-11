@@ -224,9 +224,9 @@ public class WindowDbContext : DbContext
 
     #endregion
 
-    #region Shop Category
+    #region Shop Categories 
 
-    public ShopCategory ShopCategories { get; set; }
+    public DbSet<ShopCategory> ShopCategories { get; set; }
 
     #endregion
 

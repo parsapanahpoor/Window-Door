@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Window.Data.Context;
 
@@ -11,9 +12,10 @@ using Window.Data.Context;
 namespace Window.Infra.Data.Migrations
 {
     [DbContext(typeof(WindowDbContext))]
-    partial class WindowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231211200420_Add-ShopCategory-Table")]
+    partial class AddShopCategoryTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +54,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 1m,
-                            CreateDate = new DateTime(2023, 12, 11, 23, 38, 16, 767, DateTimeKind.Local).AddTicks(2887),
+                            CreateDate = new DateTime(2023, 12, 11, 23, 34, 20, 324, DateTimeKind.Local).AddTicks(8454),
                             IsDelete = false,
                             RoleUniqueName = "Admin",
                             Title = "Admin"
@@ -60,7 +62,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 2m,
-                            CreateDate = new DateTime(2023, 12, 11, 23, 38, 16, 767, DateTimeKind.Local).AddTicks(2946),
+                            CreateDate = new DateTime(2023, 12, 11, 23, 34, 20, 324, DateTimeKind.Local).AddTicks(8481),
                             IsDelete = false,
                             RoleUniqueName = "Support",
                             Title = "Support"
@@ -68,7 +70,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 3m,
-                            CreateDate = new DateTime(2023, 12, 11, 23, 38, 16, 767, DateTimeKind.Local).AddTicks(2956),
+                            CreateDate = new DateTime(2023, 12, 11, 23, 34, 20, 324, DateTimeKind.Local).AddTicks(8491),
                             IsDelete = false,
                             RoleUniqueName = "Seller",
                             Title = "Seller"
@@ -76,7 +78,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 4m,
-                            CreateDate = new DateTime(2023, 12, 11, 23, 38, 16, 767, DateTimeKind.Local).AddTicks(2964),
+                            CreateDate = new DateTime(2023, 12, 11, 23, 34, 20, 324, DateTimeKind.Local).AddTicks(8505),
                             IsDelete = false,
                             RoleUniqueName = "SellerMaster",
                             Title = "SellerMaster"
@@ -1459,7 +1461,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 1m,
-                            CreateDate = new DateTime(2023, 12, 11, 23, 38, 16, 767, DateTimeKind.Local).AddTicks(2985),
+                            CreateDate = new DateTime(2023, 12, 11, 23, 34, 20, 324, DateTimeKind.Local).AddTicks(8525),
                             IsDelete = false,
                             Name = "کشویی",
                             ProductType = 0
@@ -1467,7 +1469,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 2m,
-                            CreateDate = new DateTime(2023, 12, 11, 23, 38, 16, 767, DateTimeKind.Local).AddTicks(2995),
+                            CreateDate = new DateTime(2023, 12, 11, 23, 34, 20, 324, DateTimeKind.Local).AddTicks(8536),
                             IsDelete = false,
                             Name = "کتیبه",
                             ProductType = 0
@@ -1475,7 +1477,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 3m,
-                            CreateDate = new DateTime(2023, 12, 11, 23, 38, 16, 767, DateTimeKind.Local).AddTicks(3003),
+                            CreateDate = new DateTime(2023, 12, 11, 23, 34, 20, 324, DateTimeKind.Local).AddTicks(8546),
                             IsDelete = false,
                             Name = "کتیبه",
                             ProductType = 1
@@ -1483,7 +1485,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 4m,
-                            CreateDate = new DateTime(2023, 12, 11, 23, 38, 16, 767, DateTimeKind.Local).AddTicks(3010),
+                            CreateDate = new DateTime(2023, 12, 11, 23, 34, 20, 324, DateTimeKind.Local).AddTicks(8554),
                             IsDelete = false,
                             Name = "درب",
                             ProductType = 1
@@ -1491,7 +1493,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 5m,
-                            CreateDate = new DateTime(2023, 12, 11, 23, 38, 16, 767, DateTimeKind.Local).AddTicks(3017),
+                            CreateDate = new DateTime(2023, 12, 11, 23, 34, 20, 324, DateTimeKind.Local).AddTicks(8563),
                             IsDelete = false,
                             Name = "لولایی",
                             ProductType = 1
@@ -1747,38 +1749,6 @@ namespace Window.Infra.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Segments");
-                });
-
-            modelBuilder.Entity("Window.Domain.Entities.ShopCategory", b =>
-                {
-                    b.Property<decimal>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(20,0)");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal?>("ParentId")
-                        .HasColumnType("decimal(20,0)");
-
-                    b.Property<decimal>("ShopCategoryTypeId")
-                        .HasColumnType("decimal(20,0)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShopCategoryTypeId");
-
-                    b.ToTable("ShopCategories");
                 });
 
             modelBuilder.Entity("Window.Domain.Entities.SiteSetting.EmailSetting", b =>
@@ -2500,17 +2470,6 @@ namespace Window.Infra.Data.Migrations
                     b.Navigation("Sample");
 
                     b.Navigation("Segment");
-                });
-
-            modelBuilder.Entity("Window.Domain.Entities.ShopCategory", b =>
-                {
-                    b.HasOne("Window.Domain.Entities.ShopCategory", "ShopCategoryType")
-                        .WithMany()
-                        .HasForeignKey("ShopCategoryTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ShopCategoryType");
                 });
 
             modelBuilder.Entity("Window.Domain.Entities.Wallet.Wallet", b =>
