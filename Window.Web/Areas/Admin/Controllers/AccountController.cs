@@ -3,7 +3,6 @@ using Window.Application.Interfaces;
 using Window.Domain.ViewModels.User.Account;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Window.Web.Areas.Seller.Controllers;
 using Window.Application.Security;
 
 namespace Window.Web.Areas.Admin.Controllers;

@@ -31,6 +31,7 @@ namespace Window.Domain.ViewModels.User
         public FilterUserOrderType OrderType { get; set; }
 
         #endregion
+
         public enum FilterUserOrderType
         {
             [Display(Name = "Descending")]
