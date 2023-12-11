@@ -1,5 +1,7 @@
 ﻿using CRM.Data.Repository;
 using Microsoft.Extensions.DependencyInjection;
+using Window.Application.Common.IUnitOfWork;
+using Window.Application.Common.UnitOfWork;
 using Window.Application.Interfaces;
 using Window.Application.Services;
 using Window.Application.Services.Implementation;
@@ -7,7 +9,9 @@ using Window.Application.Services.Interfaces;
 using Window.Application.Services.Services;
 using Window.Data.Repository;
 using Window.Domain.Interfaces;
+using Window.Domain.Interfaces.ShopCategory;
 using Window.Infra.Data.Repository;
+using Window.Infra.Data.Repository.ShopCategory;
 
 namespace Window.IOC.Container
 {
@@ -21,6 +25,8 @@ namespace Window.IOC.Container
             services.AddScoped<IWalletRepository, WalletRepository>();
             services.AddScoped<ITicketRepository, TicketRepository>();
             services.AddScoped<ISellerPersonalVideoRepository, SellerPersonalVideoRepository>();
+            services.AddScoped<IShopCategoryCommandRepository, ShopCategoryCommandRepository>();
+            services.AddScoped<IShopCategoryQueryRepository, ShopCategoryQueryRepository>();
 
             #endregion
 
@@ -50,6 +56,13 @@ namespace Window.IOC.Container
             services.AddScoped<IContractService, ContractService>();
             services.AddScoped<IBulkSMSService, BulkSMSService>();
             services.AddScoped<ISellerPersonalVideoService, SellerPersonalVideoService>();
+            services.AddScoped<IShopCategoryService, ShopCategoryService>();
+
+            #endregion
+
+            #region Unit Of Work 
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             #endregion
         }

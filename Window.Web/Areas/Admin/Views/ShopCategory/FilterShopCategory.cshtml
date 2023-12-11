@@ -1,0 +1,138 @@
+﻿@model Window.Domain.ViewModels.Admin.ShopCategory.FilterShopCategoryDTO
+@{
+    ViewData["Title"] = "فیلتر دسته بندی فروشگاه";
+}
+
+@section Styles
+    {
+
+}
+
+@section breadcrumb
+    {
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
+}
+
+<div class="row">
+    <div class="col-lg-3 col-sm-12">
+        @if (Model != null && Model.ParentId.HasValue)
+        {
+            <a class="btn btn-sky w-100 margin-bottom-10" asp-action="CreateShopCategory" asp-route-parentId="@Model.ParentId.Value" asp-controller="ShopCategory" asp-area="Admin">ایجاد دسته بندی جدید </a>
+        }
+        else
+        {
+            <a class="btn btn-sky w-100 margin-bottom-10" asp-action="CreateShopCategory" asp-controller="ShopCategory" asp-area="Admin">ایجاد دسته بندی جدید </a>
+        }
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-green">
+
+                <span class="widget-caption"> فیلتر دسته بندی </span>
+
+            </div>
+            <div class="widget-body">
+                <div>
+                    <form asp-action="FilterShopCategory" asp-controller="ShopCategory" asp-area="Admin" id="filter-search" method="get">
+                        <input type="hidden" asp-for="ParentId" />
+                        <input type="hidden" asp-for="Page" />
+
+                        <div class="form-group">
+                            <label asp-for="Title">عنوان </label>
+                            <input type="text" class="form-control" asp-for="Title">
+                        </div>
+
+                        <hr />
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
+                                    <i class="btn-label glyphicon glyphicon-filter"></i>اعمال فیلتر
+                                </button>
+
+                                @if (Context.Request.QueryString.HasValue)
+                                {
+                                    @if (Model.ParentId != null)
+                                    {
+                                        <a asp-area="Admin" asp-controller="ShopCategory" asp-action="FilterShopCategory" asp-route-ParentId="@Model.ParentId" class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                            <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-area="Admin" asp-controller="ShopCategory" asp-action="FilterShopCategory" class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                            <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
+                                        </a>
+                                    }
+
+                                }
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-sm-12">
+        <div class="well with-header with-footer table-responsive">
+            <div class="header bordered-azure">
+                <div class="flex-style">
+
+                    <span> لیست دسته بندی فروشگاه </span>
+
+                    <span>@Model.GetShownEntitiesPagesTitle()</span>
+                </div>
+            </div>
+
+            @if (Model.Entities != null && Model.Entities.Any())
+            {
+                <table class="table table-hover table-bordered tc vm">
+                    <thead class="tc vm">
+                        <tr class="tc vm">
+                            <th class="tc vm">
+                                عنوان
+                            </th>
+                            <th class="tc vm">
+                                عنوان یکتا
+                            </th>
+                            <th class="tc vm">
+                                امکانات
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="tc vm">
+                        @foreach (var ShopCategory in Model.Entities)
+                        {
+                            <tr class="tc vm" remove-ajax-item="@ShopCategory.Id">
+                                <td class="tc vm" style="max-width: 200px">
+                                    <p> @ShopCategory.Title </p>
+                                </td>
+                                <td class="tc vm">
+
+                                    <a asp-action="FilterShopCategory" asp-controller="ShopCategory" asp-area="Admin" asp-route-ParentId="@ShopCategory.Id" class="btn btn-primary btn-circle btn-xs"><i class="glyphicon glyphicon-list"></i></a>
+
+                                    <a asp-action="EditShopCategory" asp-controller="ShopCategory" asp-area="Admin" asp-route-id="@ShopCategory.Id" class="btn btn-warning btn-circle btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
+                                    <button onclick="DeleteAjax(@ShopCategory.Id, '@Url.Action("DeleteBranch", "ShopCategory", new {area = "Admin", ShopCategoryId = ShopCategory.Id})')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="footer tc">
+
+                    <partial name="_AdminPaging" model="@Model.GetCurrentPaging()" />
+
+                </div>
+            }
+            else
+            {
+                <partial name="_AdminNotFoundPartial" />
+            }
+        </div>
+    </div>
+</div>
+
+
+
