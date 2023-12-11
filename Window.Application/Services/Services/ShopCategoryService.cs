@@ -1,8 +1,11 @@
-﻿using Window.Application.Common.IUnitOfWork;
+﻿using Microsoft.EntityFrameworkCore;
+using Window.Application.Common.IUnitOfWork;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Entities;
+using Window.Domain.Enums.ShopCategory;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.ViewModels.Admin.ShopCategory;
+using Window.Domain.ViewModels.Admin.State;
 
 namespace Window.Application.Services.Services;
 
@@ -27,7 +30,7 @@ public class ShopCategoryService : IShopCategoryService
 
 	#region General Methods
 
-	public async Task<ShopCategory> GetShopCategoryById(ulong userId , CancellationToken token)
+	public async Task<Domain.Entities.ShopCategory> GetShopCategoryById(ulong userId , CancellationToken token)
 	{
 		return await _shopCategoryQueryRepository.GetByIdAsync(token , userId);
 	}
@@ -52,7 +55,7 @@ public class ShopCategoryService : IShopCategoryService
 
         #region Fill Model 
 
-        var shopCategory = new ShopCategory()
+        var shopCategory = new Domain.Entities.ShopCategory()
         {
             Title = shopCategoriesDTO.Title,
             ShopCategoryType = shopCategoriesDTO.ShopCategoryType
@@ -70,6 +73,44 @@ public class ShopCategoryService : IShopCategoryService
 
 
         return CreateShopCategoryResult.Success;
+    }
+
+    public async Task<EditShopCartDTO?> FillEditShopCategoryDTO(ulong shopCategoryId, CancellationToken cancellation )
+    {
+        var shopCategory = await GetShopCategoryById(shopCategoryId, cancellation);
+        if (shopCategory == null) return null;
+
+        var result = new EditShopCartDTO()
+        {
+            Title = shopCategory.Title,
+            ShopCategoryId = shopCategory.Id,
+            ParentId = shopCategory.ParentId,
+            ShopCategory = shopCategory.ShopCategoryType
+        };
+
+        return result;
+    }
+
+    public async Task<EditShopCartResult> EditShopCart(EditShopCartDTO shopCategoryViewModel, CancellationToken cancellation)
+    {
+        Domain.Entities.ShopCategory? shopCategory = await GetShopCategoryById(shopCategoryViewModel.ShopCategoryId, cancellation);
+        if (shopCategory == null)return EditShopCartResult.Fail;
+
+        if (shopCategoryViewModel.ParentId.HasValue && shopCategoryViewModel.ParentId.Value != 0)
+        {
+            if (await _shopCategoryQueryRepository.GetByIdAsync(cancellation , shopCategoryViewModel.ParentId.Value ) == null)
+            {
+                return EditShopCartResult.Fail;
+            }
+        }
+
+        shopCategory.Title = shopCategoryViewModel.Title;
+        shopCategory.ShopCategoryType = shopCategoryViewModel.ShopCategory;
+
+        _shopCategoryCommandRepository.Update(shopCategory);
+        await _unitOfWork.SaveChangesAsync();
+
+        return EditShopCartResult.Success;
     }
 
     #endregion

@@ -69,9 +69,9 @@ public class ShopCategoryController : AdminBaseController
                 TempData[SuccessMessage] = "عملیات با موفقیت انجام شد";
                 if (shopCategory.ParentId.HasValue)
                 {
-                    return RedirectToAction("FilterState", new { ParentId = shopCategory.ParentId.Value });
+                    return RedirectToAction("FilterShopCategory", new { ParentId = shopCategory.ParentId.Value });
                 }
-                return RedirectToAction("FilterState");
+                return RedirectToAction("FilterShopCategory");
 
             case CreateShopCategoryResult.Fail:
                 TempData[ErrorMessage] = "عملیات با شکست مواجه شد";
@@ -83,6 +83,48 @@ public class ShopCategoryController : AdminBaseController
         if (shopCategory.ParentId != null)
         {
             ViewBag.parentState = await _shopCategoryService.GetShopCategoryById(shopCategory.ParentId.Value, cancellation);
+        }
+
+        return View(shopCategory);
+    }
+
+    #endregion
+
+    #region Edit State
+
+    public async Task<IActionResult> EditState(ulong id , CancellationToken cancellation = default)
+    {
+        var result = await _shopCategoryService.FillEditShopCategoryDTO(id , cancellation);
+        if (result == null) return NotFound();
+
+        return View(result);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditState(EditShopCartDTO shopCategory, CancellationToken cancellation = default)
+    {
+        if (!ModelState.IsValid)
+        {
+            TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمیباشد";
+            return View(shopCategory);
+        }
+
+        var result = await _shopCategoryService.EditShopCart(shopCategory , cancellation);
+
+        switch (result)
+        {
+            case EditShopCartResult.Success:
+                TempData[SuccessMessage] = "عملیات با موفقیت انجام شد";
+                if (shopCategory.ParentId.HasValue)
+                {
+                    return RedirectToAction("FilterShopCategory", new { ParentId = shopCategory.ParentId.Value });
+                }
+                return RedirectToAction("FilterShopCategory");
+
+            case EditShopCartResult.Fail:
+                TempData[ErrorMessage] = "عملیات با شکست مواجه شد";
+                break;
         }
 
         return View(shopCategory);

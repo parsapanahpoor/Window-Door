@@ -4,13 +4,13 @@ namespace Window.Domain.Enums.ShopCategory;
 
 public enum ShopCategory
 {
-	[Display(Name = "پروفیل های -")]
+	[Display(Name = "پروفیل های UPVC")]
 	ProfilUPVC,
 
 	[Display(Name = "یراق آلومینیوم")]
 	ProfilAL,
 
-	[Display(Name = "یراق آلات پنجره -")]
+	[Display(Name = "یراق آلات پنجره UPVC")]
 	YaraghPanjerehUPVC,
 
 	[Display(Name = "یراق آلات پنجره آلومینیومی")]
