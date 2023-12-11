@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using Window.Domain.Entities;
 using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Article;
 using Window.Domain.Entities.Brand;
@@ -220,6 +221,12 @@ public class WindowDbContext : DbContext
     #region Score
 
     public DbSet<CalculatedSellersScore> CalculatedSellersScores { get; set; }
+
+    #endregion
+
+    #region Shop Category
+
+    public ShopCategory ShopCategories { get; set; }
 
     #endregion
 
