@@ -8,6 +8,11 @@
 
 }
 
+@section Scripts
+    {
+    <partial name="_AdminSweetAlertLocalizer" />
+}
+
 @section breadcrumb
     {
     <li>
@@ -110,7 +115,8 @@
                                     <a asp-action="FilterShopCategory" asp-controller="ShopCategory" asp-area="Admin" asp-route-ParentId="@ShopCategory.Id" class="btn btn-primary btn-circle btn-xs"><i class="glyphicon glyphicon-list"></i></a>
 
                                     <a asp-action="EditShopCategory" asp-controller="ShopCategory" asp-area="Admin" asp-route-id="@ShopCategory.Id" class="btn btn-warning btn-circle btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
-                                    <button onclick="DeleteAjax(@ShopCategory.Id, '@Url.Action("DeleteBranch", "ShopCategory", new {area = "Admin", ShopCategoryId = ShopCategory.Id})')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
+
+                                    <button onclick="DeleteAjax(@ShopCategory.Id, '@Url.Action("DeleteShopCategory", "ShopCategory", new {area = "Admin", ShopCategoryId = ShopCategory.Id})')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
                                 </td>
                             </tr>
                         }

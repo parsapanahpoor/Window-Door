@@ -1,11 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Window.Application.Common.IUnitOfWork;
+﻿using Window.Application.Common.IUnitOfWork;
 using Window.Application.Services.Interfaces;
-using Window.Domain.Entities;
-using Window.Domain.Enums.ShopCategory;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.ViewModels.Admin.ShopCategory;
-using Window.Domain.ViewModels.Admin.State;
 
 namespace Window.Application.Services.Services;
 
@@ -85,7 +81,7 @@ public class ShopCategoryService : IShopCategoryService
             Title = shopCategory.Title,
             ShopCategoryId = shopCategory.Id,
             ParentId = shopCategory.ParentId,
-            ShopCategory = shopCategory.ShopCategoryType
+            ShopCategoryType = shopCategory.ShopCategoryType
         };
 
         return result;
@@ -105,7 +101,7 @@ public class ShopCategoryService : IShopCategoryService
         }
 
         shopCategory.Title = shopCategoryViewModel.Title;
-        shopCategory.ShopCategoryType = shopCategoryViewModel.ShopCategory;
+        shopCategory.ShopCategoryType = shopCategoryViewModel.ShopCategoryType;
 
         _shopCategoryCommandRepository.Update(shopCategory);
         await _unitOfWork.SaveChangesAsync();
@@ -114,4 +110,17 @@ public class ShopCategoryService : IShopCategoryService
     }
 
     #endregion
+
+    public async Task<bool> DeleteShopCategory(ulong shopCategoryId, CancellationToken cancellation)
+    {
+        Domain.Entities.ShopCategory? shopCategory = await GetShopCategoryById(shopCategoryId, cancellation);
+        if (shopCategory == null)return false;
+
+        shopCategory.IsDelete = true;
+
+        _shopCategoryCommandRepository.Update(shopCategory);
+        await _unitOfWork.SaveChangesAsync();
+
+        return true;
+    }
 }

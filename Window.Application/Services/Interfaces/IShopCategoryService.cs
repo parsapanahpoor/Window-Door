@@ -17,5 +17,7 @@ public interface IShopCategoryService
 
     Task<EditShopCartResult> EditShopCart(EditShopCartDTO shopCategoryViewModel, CancellationToken cancellation);
 
+    Task<bool> DeleteShopCategory(ulong shopCategoryId, CancellationToken cancellation);
+
     #endregion
 }

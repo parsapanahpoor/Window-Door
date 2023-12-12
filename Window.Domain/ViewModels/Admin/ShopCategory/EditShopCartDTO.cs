@@ -13,7 +13,7 @@ public record EditShopCartDTO
     [MaxLength(300, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد")]
     public string Title { get; set; }
 
-    public Domain.Enums.ShopCategory.ShopCategory ShopCategory{ get; set; }
+    public Domain.Enums.ShopCategory.ShopCategory ShopCategoryType{ get; set; }
 
     public ulong ShopCategoryId { get; set; }
 

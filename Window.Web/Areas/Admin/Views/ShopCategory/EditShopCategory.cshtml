@@ -1,0 +1,71 @@
+﻿@using Window.Domain.Entities
+@model Window.Domain.ViewModels.Admin.ShopCategory.EditShopCartDTO
+
+@{
+    ViewData["Title"] = "ویرایش دسته بندی";
+    var parentId = ViewBag.parentId != null ? (ulong)ViewBag.parentId : (ulong?)null;
+    var parentShopCategory = ViewBag.parentShopCategory != null ? ViewBag.parentShopCategory as ShopCategory : null;
+}
+
+@section Scripts
+    {
+    <partial name="_JqueryValidation" />
+}
+
+@section breadcrumb
+    {
+    <li>
+        <a asp-area="Admin" asp-controller="ShopCategory" asp-action="FilterShopCategory"> مدیریت دسته بندی ها / </a>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
+}
+
+<form method="post" asp-action="EditShopCategory" asp-controller="ShopCategory" asp-area="Admin">
+    <input type="hidden" asp-for="ParentId" />
+    <input type="hidden" asp-for="ShopCategoryId" />
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-green">
+                
+                        <span class="widget-caption"> ویرایش دسته بندی  </span>
+                
+                </div>
+                <div class="widget-body">
+                    <div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-12">
+                                <label asp-for="Title"></label>
+                                <input type="text" class="form-control" asp-for="Title">
+                                <span class="text-danger" asp-validation-for="Title"></span>
+                            </div>
+
+                            <div class="form-group col-md-6 col-sm-12">
+                                <label asp-for="ShopCategoryType">@Localizer["دسته بندی"] </label>
+                                <select asp-for="ShopCategoryType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.ShopCategory.ShopCategory))">
+
+                                    <option>لطفا یک گزینه را انتخاب کنید </option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr class="margin-bottom-10 margin-top-10" />
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled btn-info">
+                                    <i class="btn-label glyphicon glyphicon-ok"></i>ثبت
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+

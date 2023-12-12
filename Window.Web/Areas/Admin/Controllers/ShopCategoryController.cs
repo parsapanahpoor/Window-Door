@@ -3,6 +3,7 @@ using Window.Application.Services.Implementation;
 using Window.Application.Services.Interfaces;
 using Window.Domain.ViewModels.Admin.ShopCategory;
 using Window.Domain.ViewModels.Admin.State;
+using Window.Web.HttpManager;
 
 namespace Window.Web.Areas.Admin.Controllers;
 
@@ -28,7 +29,7 @@ public class ShopCategoryController : AdminBaseController
 
     #endregion
 
-    #region Create State
+    #region Create ShopCategory
 
     [HttpGet]
     public async Task<IActionResult> CreateShopCategory(ulong? parentId , CancellationToken cancellation = default)
@@ -90,9 +91,9 @@ public class ShopCategoryController : AdminBaseController
 
     #endregion
 
-    #region Edit State
+    #region Edit ShopCategory
 
-    public async Task<IActionResult> EditState(ulong id , CancellationToken cancellation = default)
+    public async Task<IActionResult> EditShopCategory(ulong id , CancellationToken cancellation = default)
     {
         var result = await _shopCategoryService.FillEditShopCategoryDTO(id , cancellation);
         if (result == null) return NotFound();
@@ -102,7 +103,7 @@ public class ShopCategoryController : AdminBaseController
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditState(EditShopCartDTO shopCategory, CancellationToken cancellation = default)
+    public async Task<IActionResult> EditShopCategory(EditShopCartDTO shopCategory, CancellationToken cancellation = default)
     {
         if (!ModelState.IsValid)
         {
@@ -128,6 +129,18 @@ public class ShopCategoryController : AdminBaseController
         }
 
         return View(shopCategory);
+    }
+
+    #endregion
+
+    #region Delete ShopCategory
+
+    public async Task<IActionResult> DeleteShopCategory(ulong shopCategoryId , CancellationToken cancellation)
+    {
+        var result = await _shopCategoryService.DeleteShopCategory(shopCategoryId, cancellation);
+        if (result) return JsonResponseStatus.Success();
+
+        return JsonResponseStatus.Error();
     }
 
     #endregion

@@ -26,7 +26,7 @@ public class ShopCategoryQueryRepository : QueryGenericRepository<Domain.Entitie
 	{
 		var query = _context.ShopCategories
 							.AsNoTracking()
-							.Where(a => !a.IsDelete)
+							.Where(a => !a.IsDelete && !a.ParentId.HasValue)
 							.OrderByDescending(s => s.CreateDate)
 							.AsQueryable();
 
