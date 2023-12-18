@@ -4,27 +4,30 @@ namespace Window.Domain.Enums.ShopCategory;
 
 public enum ShopCategory
 {
-	[Display(Name = "پروفیل های UPVC")]
+	[Display(Name = "پروفیل upvc")]
 	ProfilUPVC,
 
-	[Display(Name = "یراق آلومینیوم")]
+	[Display(Name = "پروفیل آلومینیومی")]
 	ProfilAL,
 
-	[Display(Name = "یراق آلات پنجره UPVC")]
+	[Display(Name = "– پروفیل گالوانیزه ( تقویت )")]
+	ProfilGalvanize,
+
+	[Display(Name = "– یراق آلات درب و پنجره upvc")]
 	YaraghPanjerehUPVC,
 
-	[Display(Name = "یراق آلات پنجره آلومینیومی")]
+	[Display(Name = "– یراق آلات درب و پنجره آلومینیومی")]
 	YaraghPanjerehAL,
 
-	[Display(Name = "یراق های خاص")]
+	[Display(Name = "– یراق آلات درب و پنجره های خاص")]
 	YaraghKhas,
 
-	[Display(Name = "گالوانیزه")]
-	Galvanize,
+	[Display(Name = "– نوار مویی و لاستیکها")]
+	NavarMoie,
 
-	[Display(Name = "درب های چوبی و ضد سرقت")]
+	[Display(Name = "درب ضد سرقت و داخلی")]
 	DarbHayeZedeSerghat,
 
-	[Display(Name = "چهارچوب فلزی")]
-	ChaharChobFelezi
+	[Display(Name = "دیگر محصولات")]
+	OtherProducts
 }

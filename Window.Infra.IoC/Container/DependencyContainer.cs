@@ -15,7 +15,7 @@ using Window.Infra.Data.Repository.ShopCategory;
 
 namespace Window.IOC.Container
 {
-    public static class DependencyContainer
+	public static class DependencyContainer
     {
         public static void ConfigureDependencies(IServiceCollection services)
         {
