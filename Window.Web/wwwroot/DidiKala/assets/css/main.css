@@ -982,8 +982,8 @@ header.main-header .main-menu .list .list-item.mega-menu.mega-menu-col-2 li {
 }
 
 header.main-header .main-menu .list .list-item.mega-menu.mega-menu-col-3>.sub-menu {
-    min-width: 540px;
-    width: 540px;
+    width: auto;
+    height:auto;
 }
 
 header.main-header .main-menu .list .list-item.mega-menu.mega-menu-col-3 li {
