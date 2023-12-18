@@ -1,7 +1,11 @@
-﻿using Window.Domain.Entities;
-using Window.Domain.ViewModels.Admin.ShopCategory;
+﻿#region Using
 
+using Window.Domain.Entities;
+using Window.Domain.ViewModels.Admin.ShopCategory;
+using Window.Domain.ViewModels.Site.Shop.Landing;
 namespace Window.Application.Services.Interfaces;
+
+#endregion
 
 public interface IShopCategoryService
 {
@@ -18,6 +22,12 @@ public interface IShopCategoryService
     Task<EditShopCartResult> EditShopCart(EditShopCartDTO shopCategoryViewModel, CancellationToken cancellation);
 
     Task<bool> DeleteShopCategory(ulong shopCategoryId, CancellationToken cancellation);
+
+    #endregion
+
+    #region Site Side 
+
+    Task<List<ShopCategoriesDTO>?> FillShopCategoriesDTO(CancellationToken cancellationToken);
 
     #endregion
 }

@@ -1,52 +1,70 @@
-﻿using Window.Application.Common.IUnitOfWork;
+﻿#region Using
+
+using Window.Application.Common.IUnitOfWork;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.ViewModels.Admin.ShopCategory;
+using Window.Domain.ViewModels.Site.Shop.Landing;
 
 namespace Window.Application.Services.Services;
 
+#endregion
+
 public class ShopCategoryService : IShopCategoryService
 {
-	#region Ctor
+    #region Ctor
 
-	private readonly IShopCategoryCommandRepository _shopCategoryCommandRepository;
-	private IShopCategoryQueryRepository  _shopCategoryQueryRepository;
-	private readonly IUnitOfWork _unitOfWork;
+    private readonly IShopCategoryCommandRepository _shopCategoryCommandRepository;
+    private IShopCategoryQueryRepository _shopCategoryQueryRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-	public ShopCategoryService(IShopCategoryCommandRepository shopCategoryCommandRepository,
-							   IShopCategoryQueryRepository shopCategoryQueryRepository,
-							   IUnitOfWork unitOfWork)
-	{
-		_shopCategoryCommandRepository = shopCategoryCommandRepository;
-		_shopCategoryQueryRepository = shopCategoryQueryRepository;
-		_unitOfWork = unitOfWork;
-	}
-
-	#endregion
-
-	#region General Methods
-
-	public async Task<Domain.Entities.ShopCategory> GetShopCategoryById(ulong userId , CancellationToken token)
-	{
-		return await _shopCategoryQueryRepository.GetByIdAsync(token , userId);
-	}
-
-	#endregion
-
-	#region Admin Panel 
-
-	public async Task<FilterShopCategoryDTO> FilterShopCategory(FilterShopCategoryDTO filter)
-	{
-		return await _shopCategoryQueryRepository.FilterShopCategory(filter);
-	}
-
-    public async Task<CreateShopCategoryResult> CreateShopCategoryAdminSide(CreateShopCategoriesDTO shopCategoriesDTO , CancellationToken cancellationToken)
+    public ShopCategoryService(IShopCategoryCommandRepository shopCategoryCommandRepository,
+                               IShopCategoryQueryRepository shopCategoryQueryRepository,
+                               IUnitOfWork unitOfWork)
     {
-		//Validation For Parent Id
+        _shopCategoryCommandRepository = shopCategoryCommandRepository;
+        _shopCategoryQueryRepository = shopCategoryQueryRepository;
+        _unitOfWork = unitOfWork;
+    }
+
+    #endregion
+
+    #region General Methods
+
+    public async Task<Domain.Entities.ShopCategory> GetShopCategoryById(ulong userId, CancellationToken token)
+    {
+        return await _shopCategoryQueryRepository.GetByIdAsync(token, userId);
+    }
+
+    public async Task<bool> DeleteShopCategory(ulong shopCategoryId, CancellationToken cancellation)
+    {
+        Domain.Entities.ShopCategory? shopCategory = await GetShopCategoryById(shopCategoryId, cancellation);
+        if (shopCategory == null) return false;
+
+        shopCategory.IsDelete = true;
+
+        _shopCategoryCommandRepository.Update(shopCategory);
+        await _unitOfWork.SaveChangesAsync();
+
+        return true;
+    }
+
+    #endregion
+
+    #region Admin Panel 
+
+    public async Task<FilterShopCategoryDTO> FilterShopCategory(FilterShopCategoryDTO filter)
+    {
+        return await _shopCategoryQueryRepository.FilterShopCategory(filter);
+    }
+
+    public async Task<CreateShopCategoryResult> CreateShopCategoryAdminSide(CreateShopCategoriesDTO shopCategoriesDTO, CancellationToken cancellationToken)
+    {
+        //Validation For Parent Id
         if (shopCategoriesDTO.ParentId.HasValue && shopCategoriesDTO.ParentId.Value != 0)
         {
-            if(await GetShopCategoryById(shopCategoriesDTO.ParentId.Value , cancellationToken) == null)
-																			return CreateShopCategoryResult.Fail;
+            if (await GetShopCategoryById(shopCategoriesDTO.ParentId.Value, cancellationToken) == null)
+                return CreateShopCategoryResult.Fail;
         }
 
         #region Fill Model 
@@ -64,14 +82,14 @@ public class ShopCategoryService : IShopCategoryService
 
         #endregion
 
-        await _shopCategoryCommandRepository.AddAsync( shopCategory , cancellationToken) ;
-        await _unitOfWork.SaveChangesAsync() ;
+        await _shopCategoryCommandRepository.AddAsync(shopCategory, cancellationToken);
+        await _unitOfWork.SaveChangesAsync();
 
 
         return CreateShopCategoryResult.Success;
     }
 
-    public async Task<EditShopCartDTO?> FillEditShopCategoryDTO(ulong shopCategoryId, CancellationToken cancellation )
+    public async Task<EditShopCartDTO?> FillEditShopCategoryDTO(ulong shopCategoryId, CancellationToken cancellation)
     {
         var shopCategory = await GetShopCategoryById(shopCategoryId, cancellation);
         if (shopCategory == null) return null;
@@ -90,11 +108,11 @@ public class ShopCategoryService : IShopCategoryService
     public async Task<EditShopCartResult> EditShopCart(EditShopCartDTO shopCategoryViewModel, CancellationToken cancellation)
     {
         Domain.Entities.ShopCategory? shopCategory = await GetShopCategoryById(shopCategoryViewModel.ShopCategoryId, cancellation);
-        if (shopCategory == null)return EditShopCartResult.Fail;
+        if (shopCategory == null) return EditShopCartResult.Fail;
 
         if (shopCategoryViewModel.ParentId.HasValue && shopCategoryViewModel.ParentId.Value != 0)
         {
-            if (await _shopCategoryQueryRepository.GetByIdAsync(cancellation , shopCategoryViewModel.ParentId.Value ) == null)
+            if (await _shopCategoryQueryRepository.GetByIdAsync(cancellation, shopCategoryViewModel.ParentId.Value) == null)
             {
                 return EditShopCartResult.Fail;
             }
@@ -111,16 +129,12 @@ public class ShopCategoryService : IShopCategoryService
 
     #endregion
 
-    public async Task<bool> DeleteShopCategory(ulong shopCategoryId, CancellationToken cancellation)
+    #region Site Side 
+
+    public async Task<List<ShopCategoriesDTO>?> FillShopCategoriesDTO(CancellationToken cancellationToken)
     {
-        Domain.Entities.ShopCategory? shopCategory = await GetShopCategoryById(shopCategoryId, cancellation);
-        if (shopCategory == null)return false;
-
-        shopCategory.IsDelete = true;
-
-        _shopCategoryCommandRepository.Update(shopCategory);
-        await _unitOfWork.SaveChangesAsync();
-
-        return true;
+        return await _shopCategoryQueryRepository.FillShopCategoriesDTO(cancellationToken);
     }
+
+    #endregion
 }

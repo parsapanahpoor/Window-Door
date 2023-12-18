@@ -4,6 +4,7 @@ using Window.Data.Context;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.ViewModels.Admin.ShopCategory;
 using Window.Domain.ViewModels.Admin.State;
+using Window.Domain.ViewModels.Site.Shop.Landing;
 
 namespace Window.Infra.Data.Repository.ShopCategory;
 
@@ -54,4 +55,22 @@ public class ShopCategoryQueryRepository : QueryGenericRepository<Domain.Entitie
 	}
 
 	#endregion
+
+	#region Site Side
+
+	public async Task<List<ShopCategoriesDTO>?> FillShopCategoriesDTO(CancellationToken cancellationToken)
+	{
+		return await _context.ShopCategories
+							 .AsNoTracking()		
+							 .Where(p=> !p.IsDelete)
+							 .Select(p=> new ShopCategoriesDTO()
+							 {
+								 ShopCategoryId = p.Id,
+								 ShopCategoryTitle = p.Title,
+								 ParentId = p.ParentId,
+							 })
+							 .ToListAsync();
+	}
+
+    #endregion
 }

@@ -1,20 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using System.Diagnostics;
-using Window.Application.Services.Implementation;
 using Window.Application.Services.Interfaces;
 using Window.Domain.ViewModels.Site.Inquiry;
 using Window.Web.HttpManager;
-using Window.Web.Models;
 using System.Text.Json;
 using Window.Application.Extensions;
 using Window.Domain.Enums.SellerType;
-using System.Text.Json.Serialization;
-using System.Net;
-using Microsoft.AspNetCore.Mvc.Razor.Extensions;
-using ZarinpalSandbox.Models;
 
 namespace Window.Web.Controllers
 {
