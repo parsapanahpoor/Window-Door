@@ -18,7 +18,7 @@ public class ShopCategoriesBigPartViewComponent : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync(CancellationToken cancellationToken = default)
     {
-        return View("ShopCategoriesBigPart", await _shopCategoryService.FillShopCategoriesDTO(cancellationToken));
+        return View("ShopCategoriesBigPart", await _shopCategoryService.FillLargSideShopCategoriesDTO(cancellationToken));
     }
 
 }

@@ -28,7 +28,7 @@ public class ShopCategoryQueryRepository : QueryGenericRepository<Domain.Entitie
 		var query = _context.ShopCategories
 							.AsNoTracking()
 							.Where(a => !a.IsDelete && !a.ParentId.HasValue)
-							.OrderByDescending(s => s.CreateDate)
+							.OrderBy(s => s.Priority)
 							.AsQueryable();
 
 		if (filter.ParentId.HasValue)
@@ -54,11 +54,28 @@ public class ShopCategoryQueryRepository : QueryGenericRepository<Domain.Entitie
 		return filter;
 	}
 
-	#endregion
+    #endregion
 
-	#region Site Side
+    #region Site Side
 
-	public async Task<List<ShopCategoriesDTO>?> FillShopCategoriesDTO(CancellationToken cancellationToken)
+    public async Task<List<ShopCategoriesDTO>?> FillLargSideShopCategoriesDTO(CancellationToken cancellationToken)
+    {
+        return await _context.ShopCategories
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete && 
+									p.ShowOnSiteLanding)
+                             .Select(p => new ShopCategoriesDTO()
+                             {
+                                 ShopCategoryId = p.Id,
+                                 ShopCategoryTitle = p.Title,
+                                 ParentId = p.ParentId,
+								 Priority = p.Priority,
+								 ShowOnSiteLanding = p.ShowOnSiteLanding,
+                             })
+                             .ToListAsync();
+    }
+
+    public async Task<List<ShopCategoriesDTO>?> FillShopCategoriesDTO(CancellationToken cancellationToken)
 	{
 		return await _context.ShopCategories
 							 .AsNoTracking()		
@@ -68,7 +85,9 @@ public class ShopCategoryQueryRepository : QueryGenericRepository<Domain.Entitie
 								 ShopCategoryId = p.Id,
 								 ShopCategoryTitle = p.Title,
 								 ParentId = p.ParentId,
-							 })
+                                 Priority = p.Priority,
+                                 ShowOnSiteLanding = p.ShowOnSiteLanding,
+                             })
 							 .ToListAsync();
 	}
 

@@ -72,7 +72,9 @@ public class ShopCategoryService : IShopCategoryService
         var shopCategory = new Domain.Entities.ShopCategory()
         {
             Title = shopCategoriesDTO.Title,
-            ShopCategoryType = shopCategoriesDTO.ShopCategoryType
+            ShopCategoryType = shopCategoriesDTO.ShopCategoryType,
+            Priority = shopCategoriesDTO.Priority,
+            ShowOnSiteLanding = shopCategoriesDTO.ShowOnSiteLanding,
         };
 
         if (shopCategoriesDTO.ParentId != null && shopCategoriesDTO.ParentId != 0)
@@ -99,7 +101,9 @@ public class ShopCategoryService : IShopCategoryService
             Title = shopCategory.Title,
             ShopCategoryId = shopCategory.Id,
             ParentId = shopCategory.ParentId,
-            ShopCategoryType = shopCategory.ShopCategoryType
+            ShopCategoryType = shopCategory.ShopCategoryType,
+            Priority = shopCategory.Priority,
+            ShowOnSiteLanding = shopCategory.ShowOnSiteLanding,
         };
 
         return result;
@@ -119,6 +123,8 @@ public class ShopCategoryService : IShopCategoryService
         }
 
         shopCategory.Title = shopCategoryViewModel.Title;
+        shopCategory.ShowOnSiteLanding = shopCategoryViewModel.ShowOnSiteLanding;
+        shopCategory.Priority = shopCategoryViewModel.Priority;
         shopCategory.ShopCategoryType = shopCategoryViewModel.ShopCategoryType;
 
         _shopCategoryCommandRepository.Update(shopCategory);
@@ -134,6 +140,11 @@ public class ShopCategoryService : IShopCategoryService
     public async Task<List<ShopCategoriesDTO>?> FillShopCategoriesDTO(CancellationToken cancellationToken)
     {
         return await _shopCategoryQueryRepository.FillShopCategoriesDTO(cancellationToken);
+    }
+
+    public async Task<List<ShopCategoriesDTO>?> FillLargSideShopCategoriesDTO(CancellationToken cancellationToken)
+    {
+        return await _shopCategoryQueryRepository.FillLargSideShopCategoriesDTO(cancellationToken);
     }
 
     #endregion

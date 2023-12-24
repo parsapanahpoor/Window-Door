@@ -17,8 +17,6 @@ public sealed class ShopCategory : BaseEntity
 
     public bool ShowOnSiteLanding { get; set; }
 
-    public bool ShowOtherCategories { get; set; }
-
     public decimal Priority { get; set; }
 
     #endregion

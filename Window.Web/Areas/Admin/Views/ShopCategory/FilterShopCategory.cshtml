@@ -99,6 +99,12 @@
                                 عنوان
                             </th>
                             <th class="tc vm">
+                                الوییت نمایش
+                            </th>
+                            <th class="tc vm">
+                                وضعیت نمایش
+                            </th>
+                            <th class="tc vm">
                                 امکانات
                             </th>
                         </tr>
@@ -107,9 +113,28 @@
                         @foreach (var ShopCategory in Model.Entities)
                         {
                             <tr class="tc vm" remove-ajax-item="@ShopCategory.Id">
+
                                 <td class="tc vm" style="max-width: 200px">
                                     <p> @ShopCategory.Title </p>
                                 </td>
+
+                                <td class="tc vm" style="max-width: 200px">
+                                    <p> @ShopCategory.Priority </p>
+                                </td>
+
+                                <td class="tc vm" style="max-width: 200px">
+
+                                        @if (ShopCategory.ShowOnSiteLanding)
+                                        {
+                                            <p class="badge badge-warning">نمایش در بخش اصلی</p>
+                                        }
+                                        @if (!ShopCategory.ShowOnSiteLanding)
+                                        {
+                                            <p class="badge badge-info">نمایش در بخش جزئیات</p>
+                                        }
+
+                                </td>
+
                                 <td class="tc vm">
 
                                     <a asp-action="FilterShopCategory" asp-controller="ShopCategory" asp-area="Admin" asp-route-ParentId="@ShopCategory.Id" class="btn btn-primary btn-circle btn-xs"><i class="glyphicon glyphicon-list"></i></a>
@@ -118,6 +143,7 @@
 
                                     <button onclick="DeleteAjax(@ShopCategory.Id, '@Url.Action("DeleteShopCategory", "ShopCategory", new {area = "Admin", ShopCategoryId = ShopCategory.Id})')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
                                 </td>
+
                             </tr>
                         }
                     </tbody>

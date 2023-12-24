@@ -29,5 +29,7 @@ public interface IShopCategoryService
 
     Task<List<ShopCategoriesDTO>?> FillShopCategoriesDTO(CancellationToken cancellationToken);
 
+    Task<List<ShopCategoriesDTO>?> FillLargSideShopCategoriesDTO(CancellationToken cancellationToken);
+
     #endregion
 }

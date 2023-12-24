@@ -24,9 +24,9 @@
     <input type="hidden" asp-for="ParentId" />
     <input type="hidden" asp-for="ShopCategoryId" />
     <div class="row">
-        <div class="col-lg-12 col-sm-12">
+        <div class="col-lg-9 col-sm-12">
             <div class="widget">
-                <div class="widget-header bordered-bottom bordered-green">
+                <div class="widget-header bordered-bottom bordered-info">
                 
                         <span class="widget-caption"> ویرایش دسته بندی  </span>
                 
@@ -35,13 +35,13 @@
                     <div>
 
                         <div class="row">
-                            <div class="form-group col-md-6 col-sm-12">
+                            <div class="form-group col-md-4 col-sm-12">
                                 <label asp-for="Title"></label>
                                 <input type="text" class="form-control" asp-for="Title">
                                 <span class="text-danger" asp-validation-for="Title"></span>
                             </div>
 
-                            <div class="form-group col-md-6 col-sm-12">
+                            <div class="form-group col-md-4 col-sm-12">
                                 <label asp-for="ShopCategoryType">@Localizer["دسته بندی"] </label>
                                 <select asp-for="ShopCategoryType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.ShopCategory.ShopCategory))">
 
@@ -49,6 +49,13 @@
 
                                 </select>
                             </div>
+
+                            <div class="form-group col-md-4 col-sm-12">
+                                <label asp-for="Priority">الوییت نمایش</label>
+                                <input type="text" class="form-control" asp-for="Priority">
+                                <span class="text-danger" asp-validation-for="Priority"></span>
+                            </div>
+
                         </div>
 
                         <hr class="margin-bottom-10 margin-top-10" />
@@ -56,7 +63,7 @@
                         <div class="row">
                             <div class="col-md-12 flex-style">
                                 <button type="submit" class="btn btn-labeled btn-info">
-                                    <i class="btn-label glyphicon glyphicon-ok"></i>ثبت
+                                    <i class="btn-label glyphicon glyphicon-ok"></i>ویرایش
                                 </button>
                             </div>
                         </div>
@@ -65,6 +72,34 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-3 col-sm-12" style="height: 346px !important;">
+
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-info">
+                    <span class="widget-caption"> وضعیت نمایش </span>
+                </div>
+                <div class="widget-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" asp-for="ShowOnSiteLanding">
+                                        <span class="text"> نمایش در بخش اصلی </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 </form>
 

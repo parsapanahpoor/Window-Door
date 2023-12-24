@@ -10,5 +10,9 @@ public record ShopCategoriesDTO
 
     public ulong? ParentId { get; set; }
 
+    public bool ShowOnSiteLanding { get; set; }
+
+    public decimal Priority { get; set; }
+
     #endregion
 }

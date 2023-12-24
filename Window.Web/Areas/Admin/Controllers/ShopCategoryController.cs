@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Window.Application.Services.Implementation;
 using Window.Application.Services.Interfaces;
 using Window.Domain.ViewModels.Admin.ShopCategory;
-using Window.Domain.ViewModels.Admin.State;
 using Window.Web.HttpManager;
-
 namespace Window.Web.Areas.Admin.Controllers;
 
 public class ShopCategoryController : AdminBaseController

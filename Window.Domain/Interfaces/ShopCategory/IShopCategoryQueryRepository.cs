@@ -18,6 +18,8 @@ public interface IShopCategoryQueryRepository
 
     #region Site Side 
 
+    Task<List<ShopCategoriesDTO>?> FillLargSideShopCategoriesDTO(CancellationToken cancellationToken);
+
     Task<List<ShopCategoriesDTO>?> FillShopCategoriesDTO(CancellationToken cancellationToken);
 
     #endregion
