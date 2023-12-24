@@ -1,8 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 using Window.Domain.Entities.Common;
-using Window.Domain.Enums.ShopCategory;
-
 namespace Window.Domain.Entities;
 
 public sealed class ShopCategory : BaseEntity
@@ -18,5 +15,11 @@ public sealed class ShopCategory : BaseEntity
 
     public ulong? ParentId { get; set; }
 
-	#endregion
+    public bool ShowOnSiteLanding { get; set; }
+
+    public bool ShowOtherCategories { get; set; }
+
+    public decimal Priority { get; set; }
+
+    #endregion
 }

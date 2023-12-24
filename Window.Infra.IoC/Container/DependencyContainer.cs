@@ -10,8 +10,10 @@ using Window.Application.Services.Services;
 using Window.Data.Repository;
 using Window.Domain.Interfaces;
 using Window.Domain.Interfaces.ShopCategory;
+using Window.Domain.Interfaces.ShopProduct;
 using Window.Infra.Data.Repository;
 using Window.Infra.Data.Repository.ShopCategory;
+using Window.Infra.Data.Repository.ShopProduct;
 
 namespace Window.IOC.Container
 {
@@ -27,8 +29,8 @@ namespace Window.IOC.Container
             services.AddScoped<ISellerPersonalVideoRepository, SellerPersonalVideoRepository>();
             services.AddScoped<IShopCategoryCommandRepository, ShopCategoryCommandRepository>();
             services.AddScoped<IShopCategoryQueryRepository, ShopCategoryQueryRepository>();
-            services.AddScoped<IShopCategoryCommandRepository, ShopCategoryCommandRepository>();
-            services.AddScoped<IShopCategoryQueryRepository, ShopCategoryQueryRepository>();
+            services.AddScoped<IShopProductCommandRepository, ShopProductCommandRepository>();
+            services.AddScoped<IShopProductQueryRepository, ShopProductQueryRepository>();
 
             #endregion
 

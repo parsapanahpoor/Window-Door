@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-namespace Window.Web.Controllers;
+﻿namespace Window.Web.Controllers;
 
 public class ShopProductController : SiteBaseController
 {
