@@ -46,50 +46,28 @@
         </ul>
     </li>
 
-    @if (Model != null && Model.Any())
-    {
-        foreach (var firstCategories in Model.Where(p => !p.ParentId.HasValue))
-        {
-            <li class="list-item list-item-has-children mega-menu mega-menu-col-3">
-                <a class="nav-link" href="#">@firstCategories.ShopCategoryTitle</a>
 
+    <li class="list-item list-item-has-children mega-menu mega-menu-col-3">
+        <a class="nav-link" href="#">دسته بندی اول</a>
+        <ul class="sub-menu nav">
+
+            <li class="list-item list-item-has-children" style="width: 100% !important;">
+                <a class="nav-link" href="#">دسته بندی دوم</a>
                 <ul class="sub-menu nav">
 
-                    @if (Model.Where(s => s.ParentId.HasValue && s.ParentId == firstCategories.ShopCategoryId) != null &&
-                   Model.Where(s => s.ParentId.HasValue && s.ParentId == firstCategories.ShopCategoryId).Any())
-                    {
-                        foreach (var secondCategories in Model.Where(s => s.ParentId.HasValue && s.ParentId == firstCategories.ShopCategoryId))
-                        {
-                            <li class="list-item list-item-has-children">
-                                <a class="nav-link" href="#">@secondCategories.ShopCategoryTitle</a>
-                                <ul class="sub-menu nav">
-
-                                    @if (Model.Where(t => t.ParentId.HasValue && t.ParentId == secondCategories.ShopCategoryId) != null &&
-                                   Model.Where(t => t.ParentId.HasValue && t.ParentId == secondCategories.ShopCategoryId).Any())
-                                    {
-                                        foreach (var thirdCategories in Model.Where(t => t.ParentId.HasValue && t.ParentId == secondCategories.ShopCategoryId))
-                                        {
-                                            <li class="list-item">
-                                                <a class="nav-link" href="#">@thirdCategories.ShopCategoryTitle</a>
-                                            </li>
-                                        }
-                                    }
-
-                                </ul>
-                            </li>
-
-                        }
-                    }
+                    <li class="list-item">
+                        <a class="nav-link" href="#">دسته بندی سوم</a>
+                    </li>
 
                     <li class="list-item">
-                        <a href="#">
-                            <img src="/DidiKala/assets/img/theme/mega-menu.jpg" alt="">
-                        </a>
+                        <a class="nav-link" href="#">دسته بندی سوم</a>
                     </li>
+
                 </ul>
             </li>
 
-        }
-    }
+
+        </ul>
+    </li>
 
 </ul>

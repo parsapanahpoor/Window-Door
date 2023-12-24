@@ -27,6 +27,8 @@ namespace Window.IOC.Container
             services.AddScoped<ISellerPersonalVideoRepository, SellerPersonalVideoRepository>();
             services.AddScoped<IShopCategoryCommandRepository, ShopCategoryCommandRepository>();
             services.AddScoped<IShopCategoryQueryRepository, ShopCategoryQueryRepository>();
+            services.AddScoped<IShopCategoryCommandRepository, ShopCategoryCommandRepository>();
+            services.AddScoped<IShopCategoryQueryRepository, ShopCategoryQueryRepository>();
 
             #endregion
 
@@ -57,6 +59,7 @@ namespace Window.IOC.Container
             services.AddScoped<IBulkSMSService, BulkSMSService>();
             services.AddScoped<ISellerPersonalVideoService, SellerPersonalVideoService>();
             services.AddScoped<IShopCategoryService, ShopCategoryService>();
+            services.AddScoped<IShopProductService, ShopProductService>();
 
             #endregion
 

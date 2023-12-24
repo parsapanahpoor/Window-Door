@@ -1115,8 +1115,8 @@ header.main-header .main-menu>ul>li.category-list>ul>li.active>ul {
 }
 
 header.main-header .main-menu>ul>li.category-list>ul>li>ul {
-    width: 870px;
-    height: 450px;
+    width: 1200px;
+    height: 500px;
     overflow: hidden;
     position: absolute;
     right: 220px;
@@ -1127,7 +1127,7 @@ header.main-header .main-menu>ul>li.category-list>ul>li>ul {
     flex-direction: column;
     flex-wrap: wrap;
     align-content: flex-start;
-    max-height: 418px;
+    max-height: 500px;
     display: none;
 }
 
@@ -1171,7 +1171,7 @@ header.main-header .main-menu>ul>li.category-list .sublist--title:hover::after {
 header.main-header .main-menu>ul>li.category-list .sublist--item {
     color: #a6a6a6;
     font-size: 13px;
-    line-height: 27px;
+    line-height: 25px;
 }
 
 header.main-header .main-menu>ul>li.category-list>ul>li>ul>li .list-item--image:hover {
