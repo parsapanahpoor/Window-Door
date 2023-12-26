@@ -3,6 +3,8 @@
 using Window.Domain.Entities;
 using Window.Domain.ViewModels.Admin.ShopCategory;
 using Window.Domain.ViewModels.Site.Shop.Landing;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
+
 namespace Window.Application.Services.Interfaces;
 
 #endregion
@@ -30,6 +32,10 @@ public interface IShopCategoryService
     Task<List<ShopCategoriesDTO>?> FillShopCategoriesDTO(CancellationToken cancellationToken);
 
     Task<List<ShopCategoriesDTO>?> FillLargSideShopCategoriesDTO(CancellationToken cancellationToken);
+
+    Task<List<ShopCategoriesForShowInFilterShopProduct>> FillShopCategoriesForShowInFilterShopProduct(ulong shopCategoryParentId, CancellationToken cancellationToken);
+
+    Task<string?> GetShopCategoryTitle(ulong shopCategoryId, CancellationToken cancellationToken);
 
     #endregion
 }

@@ -5,6 +5,7 @@ using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.ViewModels.Admin.ShopCategory;
 using Window.Domain.ViewModels.Admin.State;
 using Window.Domain.ViewModels.Site.Shop.Landing;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Infra.Data.Repository.ShopCategory;
 
@@ -89,6 +90,31 @@ public class ShopCategoryQueryRepository : QueryGenericRepository<Domain.Entitie
                                  ShowOnSiteLanding = p.ShowOnSiteLanding,
                              })
 							 .ToListAsync();
+	}
+
+	public async Task<List<ShopCategoriesForShowInFilterShopProduct>> FillShopCategoriesForShowInFilterShopProduct(ulong shopCategoryParentId, CancellationToken cancellationToken)
+	{
+		return await _context.ShopCategories
+							 .AsNoTracking()
+							 .Where(p => !p.IsDelete &&
+									p.ParentId == shopCategoryParentId)
+							 .OrderBy(p => p.Priority)
+							 .Select(p=> new ShopCategoriesForShowInFilterShopProduct()
+							 {
+								 ShopCategoryId = p.Id,
+								 ShopCategoryTitle = p.Title,
+							 })
+							 .ToListAsync();
+	}
+
+	public async Task<string?> GetShopCategoryTitle(ulong shopCategoryId , CancellationToken cancellationToken)
+	{
+		return await _context.ShopCategories
+							 .AsNoTracking()
+							 .Where(p => !p.IsDelete &&
+									p.Id == shopCategoryId)
+							 .Select(p => p.Title)
+							 .FirstOrDefaultAsync();
 	}
 
     #endregion

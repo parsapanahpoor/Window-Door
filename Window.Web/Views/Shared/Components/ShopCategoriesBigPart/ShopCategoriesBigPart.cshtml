@@ -10,7 +10,7 @@
 
             @if (Model != null && Model.Any())
             {
-                foreach (var firstCategories in Model.Where(p => !p.ParentId.HasValue).OrderBy(p=> p.Priority))
+                foreach (var firstCategories in Model.Where(p => !p.ParentId.HasValue).OrderBy(p => p.Priority))
                 {
                     <li>
                         <a href="#">@firstCategories.ShopCategoryTitle</a>
@@ -31,6 +31,15 @@
                                         {
                                             <li class="sublist--item"><a href="#">@thirdCategories.ShopCategoryTitle</a></li>
                                         }
+
+                                        <li class="sublist--item">
+                                            <a asp-action="FilterProducts"
+                                               asp-area=""
+                                               asp-controller="ShopProduct"
+                                               asp-route-ShopCategoryParentId="@secondCategories.ShopCategoryId">
+                                                سایر @secondCategories.ShopCategoryTitle ...
+                                            </a>
+                                        </li>
                                     }
 
                                 }

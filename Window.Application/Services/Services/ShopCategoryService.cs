@@ -1,10 +1,12 @@
 ﻿#region Using
 
+using Microsoft.EntityFrameworkCore;
 using Window.Application.Common.IUnitOfWork;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.ViewModels.Admin.ShopCategory;
 using Window.Domain.ViewModels.Site.Shop.Landing;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Application.Services.Services;
 
@@ -145,6 +147,16 @@ public class ShopCategoryService : IShopCategoryService
     public async Task<List<ShopCategoriesDTO>?> FillLargSideShopCategoriesDTO(CancellationToken cancellationToken)
     {
         return await _shopCategoryQueryRepository.FillLargSideShopCategoriesDTO(cancellationToken);
+    }
+
+    public async Task<List<ShopCategoriesForShowInFilterShopProduct>> FillShopCategoriesForShowInFilterShopProduct(ulong shopCategoryParentId , CancellationToken cancellationToken)
+    {
+        return await _shopCategoryQueryRepository.FillShopCategoriesForShowInFilterShopProduct(shopCategoryParentId , cancellationToken);
+    }
+
+    public async Task<string?> GetShopCategoryTitle(ulong shopCategoryId, CancellationToken cancellationToken)
+    {
+        return await _shopCategoryQueryRepository.GetShopCategoryTitle(shopCategoryId, cancellationToken);
     }
 
     #endregion
