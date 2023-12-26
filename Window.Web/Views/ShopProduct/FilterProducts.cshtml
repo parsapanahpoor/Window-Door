@@ -6,6 +6,10 @@
 
     var shopCategories = ViewData["ListOfShopCategories"] as List<ShopCategoriesForShowInFilterShopProduct>;
     var SelectedParentCategoryTitle = ViewData["SelectedParentCategoryTitle"] as string;
+
+    var brands = ViewData["Brands"] as List<ListOfBrandsForFilterProductsDTO>;
+
+    var colors = ViewData["Colors"] as List<ListOfColorsForFilterProductsDTO>;
 }
 
 <main class="main-content dt-sl mb-3" style="margin-top: 209.167px; transform: none;">
@@ -58,9 +62,9 @@
                                                     {
                                                         foreach (var shopCategory in shopCategories)
                                                         {
-                                                         <div class="custom-control custom-checkbox">
-                                                                <input type="checkbox" class="custom-control-input" id="customCheck1@(shopCategory.ShopCategoryId)">
-                                                               <label class="custom-control-label" for="customCheck1@(shopCategory.ShopCategoryId)">@shopCategory.ShopCategoryTitle</label>
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" class="custom-control-input" id="customCheckTitle@(shopCategory.ShopCategoryId)">
+                                                                <label class="custom-control-label" for="customCheckTitle@(shopCategory.ShopCategoryId)">@shopCategory.ShopCategoryTitle</label>
                                                             </div>
                                                         }
                                                     }
@@ -70,116 +74,63 @@
                                         </div>
                                     }
 
-                                    <div class="card">
-                                        <div class="card-header" id="headingTwo">
-                                            <h2 class="mb-0">
-                                                <button class="btn btn-block text-right collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                    برند
-                                                    <i class="mdi mdi-chevron-down"></i>
-                                                </button>
-                                            </h2>
-                                        </div>
-                                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                                            <div class="card-body">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck7">
-                                                    <label class="custom-control-label" for="customCheck7">همه</label>
-                                                </div>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck8">
-                                                    <label class="custom-control-label" for="customCheck8">پوما</label>
-                                                </div>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck9">
-                                                    <label class="custom-control-label" for="customCheck9">آدیداس</label>
-                                                </div>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck10">
-                                                    <label class="custom-control-label" for="customCheck10">نایک</label>
+                                    @if (brands != null && brands.Any())
+                                    {
+                                        <div class="card">
+                                            <div class="card-header" id="headingTwo">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-block text-right collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                        برند
+                                                        <i class="mdi mdi-chevron-down"></i>
+                                                    </button>
+                                                </h2>
+                                            </div>
+                                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                                <div class="card-body">
+
+                                                    @foreach (var brand in brands)
+                                                    {
+
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="customCheckBrand@(brand.Id)">
+                                                            <label class="custom-control-label" for="customCheckBrand@(brand.Id)">@brand.BrandTitle</label>
+                                                        </div>
+
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="card-header" id="headingThree">
-                                            <h2 class="mb-0">
-                                                <button class="btn btn-block text-right collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                    فروشنده
-                                                    <i class="mdi mdi-chevron-down"></i>
-                                                </button>
-                                            </h2>
-                                        </div>
-                                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                                            <div class="card-body">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck11">
-                                                    <label class="custom-control-label" for="customCheck11">همه</label>
-                                                </div>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck12">
-                                                    <label class="custom-control-label" for="customCheck12">
-                                                        دیدی
-                                                        کالا
-                                                    </label>
-                                                </div>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck13">
-                                                    <label class="custom-control-label" for="customCheck13">
-                                                        فروشنده
-                                                        رسمی برند
-                                                    </label>
+                                    }
+
+                                    @if (colors != null && colors.Any())
+                                    {
+                                        <div class="card">
+                                            <div class="card-header" id="headingFour">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-block text-right collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                                        رنگها
+                                                        <i class="mdi mdi-chevron-down"></i>
+                                                    </button>
+                                                </h2>
+                                            </div>
+                                            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+                                                <div class="card-body">
+
+                                                    @foreach (var color in colors)
+                                                    {
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="customCheckColor@(color.Id)">
+                                                            <label class="custom-control-label" for="customCheckColor@(color.Id)">@color.ColorTitle</label>
+                                                            <span class="filter-color" style="background-color: @color.ColorCode"></span>
+                                                        </div>
+                                                    }
+
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="card-header" id="headingFour">
-                                            <h2 class="mb-0">
-                                                <button class="btn btn-block text-right collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                                    رنگها
-                                                    <i class="mdi mdi-chevron-down"></i>
-                                                </button>
-                                            </h2>
-                                        </div>
-                                        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
-                                            <div class="card-body">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck14">
-                                                    <label class="custom-control-label" for="customCheck14">مشکی</label>
-                                                    <span class="filter-color" style="background-color: rgb(0,0,0)"></span>
-                                                </div>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck15">
-                                                    <label class="custom-control-label" for="customCheck15">
-                                                        نوک
-                                                        مدادی
-                                                    </label>
-                                                    <span class="filter-color" style="background-color: rgb(105,105,105)"></span>
-                                                </div>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck16">
-                                                    <label class="custom-control-label" for="customCheck16">
-                                                        آبی
-                                                        روشن
-                                                    </label>
-                                                    <span class="filter-color" style="background-color: rgb(64,170,255)"></span>
-                                                </div>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck17">
-                                                    <label class="custom-control-label" for="customCheck17">
-                                                        نقره
-                                                        ای
-                                                    </label>
-                                                    <span class="filter-color" style="background-color: rgb(222,222,222)"></span>
-                                                </div>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck18">
-                                                    <label class="custom-control-label" for="customCheck18">زرد</label>
-                                                    <span class="filter-color" style="background-color: rgb(255,255,0)"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+                                    }
+
                                 </div>
                             </div>
 

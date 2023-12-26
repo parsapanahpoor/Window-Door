@@ -4,6 +4,7 @@ using Window.Data.Context;
 using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.ViewModels.Admin.ShopCategory;
 using Window.Domain.ViewModels.Admin.ShopColor;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Infra.Data.Repository.ShopColors;
 
@@ -44,5 +45,24 @@ public class ShopColorsQueryRepository : QueryGenericRepository<Domain.Entities.
 		return filter;
 	}
 
-	#endregion
+    #endregion
+
+    #region Site Side
+
+    public async Task<List<ListOfColorsForFilterProductsDTO>> FillListOfColorsForFilterProductsDTO(CancellationToken cancellationToken)
+    {
+        return await _context.ShopColors
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete)
+                             .OrderBy(s => s.Priority)
+                             .Select(p => new ListOfColorsForFilterProductsDTO()
+                             {
+                                 ColorTitle = p.ColorTitle,
+                                 Id = p.Id,
+								 ColorCode = p.ColorCode,
+                             })
+                            .ToListAsync();
+    }
+
+    #endregion
 }

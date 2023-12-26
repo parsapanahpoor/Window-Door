@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Window.Application.Services.Interfaces;
 using Window.Domain.ViewModels.Site.Shop.ShopProduct;
-
 namespace Window.Web.Controllers;
 
 public class ShopProductController : SiteBaseController
@@ -9,10 +8,16 @@ public class ShopProductController : SiteBaseController
     #region Ctor
 
     private readonly IShopCategoryService _shopCategoryService;
+    private readonly IShopBrandsService _shopBrandsService;
+    private readonly IShopColorService _shopColorService;
 
-    public ShopProductController(IShopCategoryService shopCategoryService)
+    public ShopProductController(IShopCategoryService shopCategoryService ,
+                                 IShopBrandsService shopBrandsService , 
+                                 IShopColorService shopColorService)
     {
         _shopCategoryService = shopCategoryService;
+        _shopBrandsService = shopBrandsService;
+        _shopColorService = shopColorService;
     }
 
     #endregion
@@ -29,6 +34,10 @@ public class ShopProductController : SiteBaseController
             ViewData["ListOfShopCategories"] = await _shopCategoryService.FillShopCategoriesForShowInFilterShopProduct(filter.ShopCategoryParentId.Value , cancellationToken);
             ViewData["SelectedParentCategoryTitle"] = await _shopCategoryService.GetShopCategoryTitle(filter.ShopCategoryParentId.Value , cancellationToken);
         }
+
+        ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellationToken);
+
+        ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellationToken);
 
         #endregion
 

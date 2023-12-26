@@ -1,4 +1,5 @@
 ﻿using Window.Domain.ViewModels.Admin.ShopColor;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Application.Services.Interfaces;
 
@@ -23,4 +24,10 @@ public interface IShopColorService
 	Task<bool> DeleteShopColor(ulong shopColorId, CancellationToken cancellation);
 
 	#endregion
+
+	#region Site Side
+
+	Task<List<ListOfColorsForFilterProductsDTO>> FillListOfColorsForFilterProductsDTO(CancellationToken cancellationToken);
+
+    #endregion
 }

@@ -24,6 +24,7 @@ using Window.Domain.Entities.Score;
 using Window.Domain.Entities.Segment;
 using Window.Domain.Entities.ShopBrands;
 using Window.Domain.Entities.ShopColors;
+using Window.Domain.Entities.ShopProduct;
 using Window.Domain.Entities.SiteSetting;
 using Window.Domain.Entities.TechnicalIssues;
 using Window.Domain.Entities.Wallet;
@@ -223,6 +224,12 @@ public class WindowDbContext : DbContext
     #region Score
 
     public DbSet<CalculatedSellersScore> CalculatedSellersScores { get; set; }
+
+    #endregion
+
+    #region Shop Product
+
+    public DbSet<ShopProduct> ShopProducts { get; set; }
 
     #endregion
 

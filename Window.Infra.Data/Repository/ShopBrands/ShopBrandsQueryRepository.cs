@@ -3,19 +3,20 @@ using Window.Data;
 using Window.Data.Context;
 using Window.Domain.Interfaces.ShopBrands;
 using Window.Domain.ViewModels.Admin.ShopBrand;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Infra.Data.Repository.ShopBrands;
 
 public class ShopBrandsQueryRepository : QueryGenericRepository<Domain.Entities.ShopBrands.ShopBrand>, IShopBrandsQueryRepository
 {
-	#region Ctor
+    #region Ctor
 
-	private readonly WindowDbContext _context;
+    private readonly WindowDbContext _context;
 
-	public ShopBrandsQueryRepository(WindowDbContext context) : base(context)
-	{
-		_context = context;
-	}
+    public ShopBrandsQueryRepository(WindowDbContext context) : base(context)
+    {
+        _context = context;
+    }
 
     #endregion
 
@@ -41,6 +42,24 @@ public class ShopBrandsQueryRepository : QueryGenericRepository<Domain.Entities.
         await filter.Paging(query);
 
         return filter;
+    }
+
+    #endregion
+
+    #region Site Side
+
+    public async Task<List<ListOfBrandsForFilterProductsDTO>> FillListOfBrandsForFilterProductsDTO(CancellationToken cancellationToken)
+    {
+        return await _context.ShopBrands
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete)
+                             .OrderBy(s => s.Priority)
+                             .Select(p => new ListOfBrandsForFilterProductsDTO()
+                             {
+                                 BrandTitle = p.ShopBrandTitle,
+                                 Id = p.Id,
+                             })
+                            .ToListAsync();
     }
 
     #endregion

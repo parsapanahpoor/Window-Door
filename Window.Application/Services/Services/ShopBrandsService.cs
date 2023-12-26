@@ -1,7 +1,9 @@
-﻿using Window.Application.Common.IUnitOfWork;
+﻿using Microsoft.EntityFrameworkCore;
+using Window.Application.Common.IUnitOfWork;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Interfaces.ShopBrands;
 using Window.Domain.ViewModels.Admin.ShopBrand;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Application.Services.Services;
 
@@ -99,6 +101,15 @@ public class ShopBrandsService : IShopBrandsService
         await _unitOfWork.SaveChangesAsync();
 
         return true;
+    }
+
+    #endregion
+
+    #region Site Side
+
+    public async Task<List<ListOfBrandsForFilterProductsDTO>> FillListOfBrandsForFilterProductsDTO(CancellationToken cancellationToken)
+    {
+        return await _shopBrandsQueryRepository.FillListOfBrandsForFilterProductsDTO(cancellationToken);
     }
 
     #endregion

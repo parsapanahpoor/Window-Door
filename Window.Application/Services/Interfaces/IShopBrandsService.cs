@@ -1,4 +1,5 @@
 ﻿using Window.Domain.ViewModels.Admin.ShopBrand;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Application.Services.Interfaces;
 
@@ -21,6 +22,12 @@ public interface IShopBrandsService
     Task<EditShopBrandResult> EditShopBrand(EditShopBrandDTO shopBrandViewModel, CancellationToken cancellation);
 
     Task<bool> DeleteShopBrand(ulong shopBrandId, CancellationToken cancellation);
+
+    #endregion
+
+    #region Site Side
+
+    Task<List<ListOfBrandsForFilterProductsDTO>> FillListOfBrandsForFilterProductsDTO(CancellationToken cancellationToken);
 
     #endregion
 }

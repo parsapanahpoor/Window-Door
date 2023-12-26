@@ -1,8 +1,10 @@
-﻿using Window.Application.Common.IUnitOfWork;
+﻿using Microsoft.EntityFrameworkCore;
+using Window.Application.Common.IUnitOfWork;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.ViewModels.Admin.ShopCategory;
 using Window.Domain.ViewModels.Admin.ShopColor;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Application.Services.Services;
 
@@ -105,5 +107,14 @@ public class ShopColorService : IShopColorService
 		return true;
 	}
 
-	#endregion
+    #endregion
+
+    #region Site Side
+
+    public async Task<List<ListOfColorsForFilterProductsDTO>> FillListOfColorsForFilterProductsDTO(CancellationToken cancellationToken)
+    {
+		return await _shopColorsQueryRepository.FillListOfColorsForFilterProductsDTO(cancellationToken);
+    }
+
+    #endregion
 }
