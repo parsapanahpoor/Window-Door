@@ -365,6 +365,23 @@
         </li>
 
         <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-ticket"></i>
+                <span class="menu-text"> @SharedLocalizer["برند های فروشگاه"] </span>
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-action="FilterShopBrands" asp-controller="ShopBrand" asp-area="Admin">
+                        <span class="menu-text"> @SharedLocalizer["لیست برند های"] </span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
+        <li>
             <a asp-controller="SiteSetting" asp-action="AddOrEditSiteSetting">
                 <i class="menu-icon glyphicon glyphicon-wrench"></i>
                 <span class="menu-text"> تنظیمات سایت  </span>

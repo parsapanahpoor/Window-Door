@@ -8,5 +8,7 @@ public sealed class ShopBrand : BaseEntity
 
     public string ShopBrandTitle { get; set; }
 
+    public decimal Priority { get; set; }
+
     #endregion
 }
