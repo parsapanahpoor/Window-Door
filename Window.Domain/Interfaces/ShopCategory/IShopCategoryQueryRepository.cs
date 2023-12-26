@@ -1,6 +1,8 @@
 ﻿#region Usings
 
+using Microsoft.EntityFrameworkCore;
 using Window.Domain.ViewModels.Admin.ShopCategory;
+using Window.Domain.ViewModels.Common;
 using Window.Domain.ViewModels.Site.Shop.Landing;
 using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
@@ -10,9 +12,17 @@ namespace Window.Domain.Interfaces.ShopCategory;
 
 public interface IShopCategoryQueryRepository
 {
-	#region Admin Side 
+    #region General Methods
 
-	Task<FilterShopCategoryDTO> FilterShopCategory(FilterShopCategoryDTO filter);
+    Task<List<SelectListViewModel>> GetAllMainShopCategoriesCategories(CancellationToken cancellationToken);
+
+    Task<List<SelectListViewModel>> GetCategoriesChildrent(ulong parentId, CancellationToken cancellationToken);
+
+    #endregion
+
+    #region Admin Side 
+
+    Task<FilterShopCategoryDTO> FilterShopCategory(FilterShopCategoryDTO filter);
 
     Task<Domain.Entities.ShopCategory> GetByIdAsync(CancellationToken cancellationToken, params object[] ids);
 

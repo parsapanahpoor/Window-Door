@@ -2,6 +2,7 @@
 
 using Window.Domain.Entities;
 using Window.Domain.ViewModels.Admin.ShopCategory;
+using Window.Domain.ViewModels.Common;
 using Window.Domain.ViewModels.Site.Shop.Landing;
 using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
@@ -11,9 +12,17 @@ namespace Window.Application.Services.Interfaces;
 
 public interface IShopCategoryService
 {
-	#region Admin Panel
+    #region General Methods
 
-	Task<FilterShopCategoryDTO> FilterShopCategory(FilterShopCategoryDTO filter);
+    Task<List<SelectListViewModel>> GetAllMainShopCategoriesCategories(CancellationToken cancellationToken);
+
+    Task<List<SelectListViewModel>> GetCategoriesChildrent(ulong parentId, CancellationToken cancellationToken);
+
+    #endregion
+
+    #region Admin Panel
+
+    Task<FilterShopCategoryDTO> FilterShopCategory(FilterShopCategoryDTO filter);
 
     Task<ShopCategory> GetShopCategoryById(ulong userId, CancellationToken token);
 

@@ -109,5 +109,16 @@ namespace Window.Application.StticTools
 
         #endregion
 
+        #region Products
+
+        public static readonly string ProductsPath = "/content/images/Products/main/";
+        public static readonly string ProductsPathServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/Products/main/");
+
+        public static readonly string ProductsPathThumb = "/content/images/Products/thumb/";
+        public static readonly string ProductsPathThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/Products/thumb/");
+
+        public static readonly string DefaultProductAvatar = "/content/images/no-image.png";
+
+        #endregion
     }
 }

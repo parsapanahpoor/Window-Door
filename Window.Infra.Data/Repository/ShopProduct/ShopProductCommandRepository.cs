@@ -4,7 +4,7 @@ using Window.Domain.Interfaces.ShopProduct;
 
 namespace Window.Infra.Data.Repository.ShopProduct;
 
-public class ShopProductCommandRepository : CommandGenericRepository<Domain.Entities.ShopCategory>, IShopProductCommandRepository
+public class ShopProductCommandRepository : CommandGenericRepository<Domain.Entities.ShopProduct.ShopProduct>, IShopProductCommandRepository
 {
     #region Ctor
 

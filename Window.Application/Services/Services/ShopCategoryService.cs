@@ -5,6 +5,7 @@ using Window.Application.Common.IUnitOfWork;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.ViewModels.Admin.ShopCategory;
+using Window.Domain.ViewModels.Common;
 using Window.Domain.ViewModels.Site.Shop.Landing;
 using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
@@ -32,6 +33,16 @@ public class ShopCategoryService : IShopCategoryService
     #endregion
 
     #region General Methods
+
+    public async Task<List<SelectListViewModel>> GetCategoriesChildrent(ulong parentId, CancellationToken cancellationToken)
+    {
+        return await _shopCategoryQueryRepository.GetCategoriesChildrent(parentId, cancellationToken);
+    }
+
+    public async Task<List<SelectListViewModel>> GetAllMainShopCategoriesCategories(CancellationToken cancellationToken)
+    {
+        return await _shopCategoryQueryRepository.GetAllMainShopCategoriesCategories(cancellationToken);
+    }
 
     public async Task<Domain.Entities.ShopCategory> GetShopCategoryById(ulong userId, CancellationToken token)
     {
