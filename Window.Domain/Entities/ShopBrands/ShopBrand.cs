@@ -1,6 +1,8 @@
-﻿namespace Window.Domain.Entities.ShopBrands;
+﻿using Window.Domain.Entities.Common;
 
-public class ShopBrand
+namespace Window.Domain.Entities.ShopBrands;
+
+public sealed class ShopBrand : BaseEntity
 {
     #region properties
 

@@ -22,9 +22,11 @@ using Window.Domain.Entities.QuestionAnswer;
 using Window.Domain.Entities.Sample;
 using Window.Domain.Entities.Score;
 using Window.Domain.Entities.Segment;
+using Window.Domain.Entities.ShopBrands;
 using Window.Domain.Entities.SiteSetting;
 using Window.Domain.Entities.TechnicalIssues;
 using Window.Domain.Entities.Wallet;
+using Window.Domain.ShopColors;
 
 namespace Window.Data.Context;
 
@@ -227,6 +229,18 @@ public class WindowDbContext : DbContext
     #region Shop Categories 
 
     public DbSet<ShopCategory> ShopCategories { get; set; }
+
+    #endregion
+
+    #region Shop Brands
+
+    public DbSet<ShopBrand> ShopBrands { get; set; }
+
+    #endregion
+
+    #region Shop Colors
+
+    public DbSet<ShopColor> ShopColors { get; set; }
 
     #endregion
 
