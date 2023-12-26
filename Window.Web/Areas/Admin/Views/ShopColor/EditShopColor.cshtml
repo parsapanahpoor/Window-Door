@@ -1,0 +1,73 @@
+﻿@using Window.Domain.Entities
+@model Window.Domain.ViewModels.Admin.ShopColor.EditShopColorDTO
+
+@{
+    ViewData["Title"] = "ویرایش رنگ";
+}
+
+@section Scripts
+    {
+    <partial name="_JqueryValidation" />
+}
+
+@section breadcrumb
+    {
+    <li>
+        <a asp-area="Admin" asp-controller="ShopColor" asp-action="FilterShopColors"> مدیریت رنگ ها / </a>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
+}
+
+<form method="post" asp-action="EditShopColor" asp-controller="ShopColor" asp-area="Admin">
+    <input type="hidden" asp-for="Id" />
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-info">
+
+                    <span class="widget-caption"> ویرایش رنگ  </span>
+
+                </div>
+                <div class="widget-body">
+                    <div>
+
+                        <div class="row">
+                            <div class="form-group col-md-4 col-sm-12">
+                                <label asp-for="Title">عنوان</label>
+                                <input type="text" class="form-control" asp-for="Title">
+                                <span class="text-danger" asp-validation-for="Title"></span>
+                            </div>
+
+                            <div class="form-group col-md-4 col-sm-12">
+                                <label asp-for="ColorCode">کد رنگ نمایشی</label>
+                                <input type="text" class="form-control" asp-for="ColorCode">
+                                <span class="text-danger" asp-validation-for="ColorCode"></span>
+                            </div>
+
+                            <div class="form-group col-md-4 col-sm-12">
+                                <label asp-for="Priority">الوییت نمایش</label>
+                                <input type="text" class="form-control" asp-for="Priority">
+                                <span class="text-danger" asp-validation-for="Priority"></span>
+                            </div>
+
+                        </div>
+
+                        <hr class="margin-bottom-10 margin-top-10" />
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled btn-info">
+                                    <i class="btn-label glyphicon glyphicon-ok"></i>ویرایش
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+

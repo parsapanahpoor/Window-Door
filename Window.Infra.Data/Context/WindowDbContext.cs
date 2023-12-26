@@ -23,10 +23,10 @@ using Window.Domain.Entities.Sample;
 using Window.Domain.Entities.Score;
 using Window.Domain.Entities.Segment;
 using Window.Domain.Entities.ShopBrands;
+using Window.Domain.Entities.ShopColors;
 using Window.Domain.Entities.SiteSetting;
 using Window.Domain.Entities.TechnicalIssues;
 using Window.Domain.Entities.Wallet;
-using Window.Domain.ShopColors;
 
 namespace Window.Data.Context;
 

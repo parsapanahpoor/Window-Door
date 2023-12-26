@@ -9,10 +9,14 @@ using Window.Application.Services.Interfaces;
 using Window.Application.Services.Services;
 using Window.Data.Repository;
 using Window.Domain.Interfaces;
+using Window.Domain.Interfaces.ShopBrands;
 using Window.Domain.Interfaces.ShopCategory;
+using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.Interfaces.ShopProduct;
 using Window.Infra.Data.Repository;
+using Window.Infra.Data.Repository.ShopBrands;
 using Window.Infra.Data.Repository.ShopCategory;
+using Window.Infra.Data.Repository.ShopColors;
 using Window.Infra.Data.Repository.ShopProduct;
 
 namespace Window.IOC.Container
@@ -32,11 +36,17 @@ namespace Window.IOC.Container
             services.AddScoped<IShopProductCommandRepository, ShopProductCommandRepository>();
             services.AddScoped<IShopProductQueryRepository, ShopProductQueryRepository>();
 
-            #endregion
+            services.AddScoped<IShopBrandsCommandRepository, ShopBrandsCommandRepository>();
+            services.AddScoped<IShopBrandsQueryRepository, ShopBrandsQueryRepository>();
 
-            #region Serviecs
+			services.AddScoped<IShopColorsCommandRepository, ShopColorsCommandRepository>();
+			services.AddScoped<IShopColorsQueryRepository, ShopColorsQueryRepository>();
 
-            services.AddScoped<IUserService, UserService>();
+			#endregion
+
+			#region Serviecs
+
+			services.AddScoped<IUserService, UserService>();
             services.AddScoped<IWalletService, WalletService>();
             services.AddScoped<ITicketService, TicketService>();
             services.AddScoped<IPermissionService, PermissionService>();
@@ -62,6 +72,8 @@ namespace Window.IOC.Container
             services.AddScoped<ISellerPersonalVideoService, SellerPersonalVideoService>();
             services.AddScoped<IShopCategoryService, ShopCategoryService>();
             services.AddScoped<IShopProductService, ShopProductService>();
+            services.AddScoped<IShopBrandsService, ShopBrandsService>();
+            services.AddScoped<IShopColorService, ShopColorService>();
 
             #endregion
 

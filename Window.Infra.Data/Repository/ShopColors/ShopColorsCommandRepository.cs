@@ -3,7 +3,7 @@ using Window.Data.Context;
 using Window.Domain.Interfaces.ShopColors;
 namespace Window.Infra.Data.Repository.ShopColors;
 
-public class ShopColorsCommandRepository : CommandGenericRepository<Domain.Entities.ShopCategory>, IShopColorsCommandRepository
+public class ShopColorsCommandRepository : CommandGenericRepository<Domain.Entities.ShopColors.ShopColor>, IShopColorsCommandRepository
 {
 	#region Ctor
 

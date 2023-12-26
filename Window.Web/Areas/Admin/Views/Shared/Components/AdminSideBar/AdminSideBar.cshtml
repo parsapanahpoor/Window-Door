@@ -348,6 +348,23 @@
         </li>
 
         <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-ticket"></i>
+                <span class="menu-text"> @SharedLocalizer["رنگ های فروشگاه"] </span>
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-action="FilterShopColors" asp-controller="ShopColor" asp-area="Admin">
+                        <span class="menu-text"> @SharedLocalizer["لیست رنگ های"] </span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
+        <li>
             <a asp-controller="SiteSetting" asp-action="AddOrEditSiteSetting">
                 <i class="menu-icon glyphicon glyphicon-wrench"></i>
                 <span class="menu-text"> تنظیمات سایت  </span>
