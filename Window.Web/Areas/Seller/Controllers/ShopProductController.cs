@@ -59,6 +59,48 @@ public class ShopProductController : SellerBaseController
         return View();
     }
 
+    [HttpPost , ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateProduct(CreateShopProductSellerSideDTO model , IFormFile NewsImage,  CancellationToken cancellation = default)
+    {
+        #region Model State Validation 
+
+        if (!ModelState.IsValid)
+        {
+            #region View Bags
+
+            ViewData["MianCategory"] = await _shopCategoryService.GetAllMainShopCategoriesCategories(cancellation);
+
+            ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellation);
+
+            ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
+
+            #endregion
+
+            TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+            return View(model);
+        }
+
+        #endregion
+
+        #region Add Product To The Data Base
+
+
+
+        #endregion
+
+        #region View Bags
+
+        ViewData["MianCategory"] = await _shopCategoryService.GetAllMainShopCategoriesCategories(cancellation);
+
+        ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellation);
+
+        ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
+
+        #endregion
+
+        return View(model);
+    }
+
     #endregion
 
     #region Load Sub Categories

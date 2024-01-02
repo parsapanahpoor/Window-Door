@@ -1,5 +1,7 @@
 ﻿using Window.Data;
 using Window.Data.Context;
+using Window.Domain.Entities.Product;
+using Window.Domain.Entities.ShopProduct;
 using Window.Domain.Interfaces.ShopProduct;
 
 namespace Window.Infra.Data.Repository.ShopProduct;
@@ -14,6 +16,21 @@ public class ShopProductCommandRepository : CommandGenericRepository<Domain.Enti
     {
         _context = context;
     }
+
+    #endregion
+
+    #region General Methods 
+
+    public void DeleteRange(IEnumerable<ProductTag> productTags)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task AddShopTagAsync(ProductTag tag, CancellationToken cancellationToken)
+    {
+        await _context.ProductTags.AddAsync(tag);
+    }
+
 
     #endregion
 }

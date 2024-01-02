@@ -147,7 +147,7 @@
                         <div class="widget-body">
                             <div class="form-group">
                                 <label> برندها </label>
-                                <select asp-for="ShopColorId" class="form-control">
+                                <select asp-for="ShopBrandId" class="form-control">
                                     <option value="">انتخاب کنید </option>
                                     @if (brands != null && brands.Any())
                                     {
@@ -157,7 +157,7 @@
                                         }
                                     }
                                 </select>
-                                <span class="text-danger" asp-validation-for="ShopColorId"></span>
+                                <span class="text-danger" asp-validation-for="ShopBrandId"></span>
                             </div>
 
                         </div>

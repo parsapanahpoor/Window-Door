@@ -231,6 +231,8 @@ public class WindowDbContext : DbContext
 
     public DbSet<ShopProduct> ShopProducts { get; set; }
 
+    public DbSet<ProductTag> ProductTags { get; set; }
+
     #endregion
 
     #region Shop Categories 
@@ -243,11 +245,15 @@ public class WindowDbContext : DbContext
 
     public DbSet<ShopBrand> ShopBrands { get; set; }
 
+    public DbSet<ShopProductsSelectedBrands> ShopProductsSelectedBrands { get; set; }
+
     #endregion
 
     #region Shop Colors
 
     public DbSet<ShopColor> ShopColors { get; set; }
+
+    public DbSet<ShopProductsSelectedColors> ShopProductsSelectedColors { get; set; }
 
     #endregion
 

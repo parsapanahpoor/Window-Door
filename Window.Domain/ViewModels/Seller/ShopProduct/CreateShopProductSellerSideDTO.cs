@@ -49,4 +49,5 @@ public enum CreateShopProductFromSellerPanelResult
     Faild,
     [Display(Name = "دسته بندی وارد نشده است ")]
     MainCategoryNotFound,
+    SellerIsNotFound
 }
