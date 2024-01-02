@@ -23,7 +23,7 @@ using Window.Domain.Entities.Sample;
 using Window.Domain.Entities.Score;
 using Window.Domain.Entities.Segment;
 using Window.Domain.Entities.ShopBrands;
-using Window.Domain.Entities.ShopCategory;
+using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopColors;
 using Window.Domain.Entities.ShopProduct;
 using Window.Domain.Entities.SiteSetting;

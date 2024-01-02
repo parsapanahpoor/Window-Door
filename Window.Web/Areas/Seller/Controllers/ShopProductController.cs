@@ -32,7 +32,7 @@ public class ShopProductController : SellerBaseController
 
     #region Filter Products
 
-    public async Task<IActionResult> FilterProducts(FilterShopProductSellerSideDTO filter , CancellationToken cancellation = default)
+    public async Task<IActionResult> FilterShopProducts(FilterShopProductSellerSideDTO filter , CancellationToken cancellation = default)
     {
         filter.SellerUserId = User.GetUserId();
 
@@ -89,7 +89,7 @@ public class ShopProductController : SellerBaseController
         {
             case CreateShopProductFromSellerPanelResult.Success:
                 TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
-                return RedirectToAction(nameof(FilterProducts));
+                return RedirectToAction(nameof(FilterShopProducts));
 
             case CreateShopProductFromSellerPanelResult.Faild:
                 TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";

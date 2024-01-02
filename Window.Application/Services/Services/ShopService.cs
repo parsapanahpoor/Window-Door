@@ -7,9 +7,11 @@ using Window.Application.Services.Interfaces;
 using Window.Application.StticTools;
 using Window.Domain.Entities.Article;
 using Window.Domain.Entities.ShopBrands;
+using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopColors;
 using Window.Domain.Entities.ShopProduct;
 using Window.Domain.Interfaces.ShopBrands;
+using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.Interfaces.ShopProduct;
 using Window.Domain.ViewModels.Seller.ShopProduct;
@@ -24,6 +26,7 @@ public class ShopProductService : IShopProductService
     private readonly IShopProductQueryRepository _shopProductQueryRepository;
     private readonly IShopBrandsCommandRepository _shopBrandsCommand;
     private readonly IShopColorsCommandRepository _shopColorsCommand;
+    private readonly IShopCategoryCommandRepository _shopCategoryCommand;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ISellerService _marketService;
 
@@ -32,7 +35,8 @@ public class ShopProductService : IShopProductService
                               IUnitOfWork unitOfWork,
                               ISellerService marketService,
                               IShopBrandsCommandRepository shopBrandsCommand,
-                              IShopColorsCommandRepository shopColorsCommand)
+                              IShopColorsCommandRepository shopColorsCommand,
+                              IShopCategoryCommandRepository shopCategoryCommand)
     {
         _shopProductCommandRepository = shopProductCommandRepository;
         _shopProductQueryRepository = shopProductQueryRepository;
@@ -40,6 +44,7 @@ public class ShopProductService : IShopProductService
         _marketService = marketService;
         _shopBrandsCommand = shopBrandsCommand;
         _shopColorsCommand = shopColorsCommand;
+        _shopCategoryCommand = shopCategoryCommand;
     }
 
     #endregion
@@ -138,6 +143,54 @@ public class ShopProductService : IShopProductService
 
             await _shopColorsCommand.AddShopProductSelectedColorAsync(selectedColor, cancellation);
         };
+
+        #endregion
+
+        #region Selected Shop Categories
+
+        //First Step
+        if (model.MainCategory != 0)
+        {
+            var selectedMainCategory = new ShopProductSelectedCategories()
+            {
+                ShopCategoryId = model.MainCategory,
+                ShopProductId= product.Id,
+            };
+
+            await _shopCategoryCommand.AddShopProductSelectedCategoriesAsync(selectedMainCategory , cancellation) ;
+        }
+
+        //Seconde Step
+        if (model.FirstSubCategory.HasValue && model.FirstSubCategory != 0)
+        {
+            var selectedSecondeCategory = new ShopProductSelectedCategories()
+            {
+                ShopCategoryId = model.FirstSubCategory.Value,
+                ShopProductId = product.Id,
+            };
+
+            await _shopCategoryCommand.AddShopProductSelectedCategoriesAsync(selectedSecondeCategory, cancellation);
+        }
+        else
+        {
+            return CreateShopProductFromSellerPanelResult.MainCategoryNotFound;
+        }
+
+        //Third Step
+        if (model.SecondeSubCategory.HasValue && model.SecondeSubCategory != 0)
+        {
+            var selectedThirdCategory = new ShopProductSelectedCategories()
+            {
+                ShopCategoryId = model.SecondeSubCategory.Value,
+                ShopProductId = product.Id,
+            };
+
+            await _shopCategoryCommand.AddShopProductSelectedCategoriesAsync(selectedThirdCategory, cancellation);
+        }
+        else
+        {
+            return CreateShopProductFromSellerPanelResult.MainCategoryNotFound;
+        }
 
         #endregion
 

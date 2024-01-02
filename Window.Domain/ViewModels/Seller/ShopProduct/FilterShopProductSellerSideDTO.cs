@@ -8,7 +8,7 @@ public class FilterShopProductSellerSideDTO : BasePaging<Domain.Entities.ShopPro
 
     public ulong SellerUserId { get; set; }
 
-    public string ProductName { get; set; }
+    public string? ProductName { get; set; }
 
     #endregion
 }
