@@ -6,7 +6,11 @@ using Window.Application.Security;
 using Window.Application.Services.Interfaces;
 using Window.Application.StticTools;
 using Window.Domain.Entities.Article;
+using Window.Domain.Entities.ShopBrands;
+using Window.Domain.Entities.ShopColors;
 using Window.Domain.Entities.ShopProduct;
+using Window.Domain.Interfaces.ShopBrands;
+using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.Interfaces.ShopProduct;
 using Window.Domain.ViewModels.Seller.ShopProduct;
 
@@ -14,22 +18,28 @@ namespace Window.Application.Services.Services;
 
 public class ShopProductService : IShopProductService
 {
-	#region Ctor
+    #region Ctor
 
-	private readonly IShopProductCommandRepository _shopProductCommandRepository;
-	private readonly IShopProductQueryRepository _shopProductQueryRepository;
-	private readonly IUnitOfWork _unitOfWork;
+    private readonly IShopProductCommandRepository _shopProductCommandRepository;
+    private readonly IShopProductQueryRepository _shopProductQueryRepository;
+    private readonly IShopBrandsCommandRepository _shopBrandsCommand;
+    private readonly IShopColorsCommandRepository _shopColorsCommand;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ISellerService _marketService;
 
-    public ShopProductService(IShopProductCommandRepository shopProductCommandRepository ,
-                              IShopProductQueryRepository shopProductQueryRepository ,
-                              IUnitOfWork unitOfWork ,
-                              ISellerService marketService) 
+    public ShopProductService(IShopProductCommandRepository shopProductCommandRepository,
+                              IShopProductQueryRepository shopProductQueryRepository,
+                              IUnitOfWork unitOfWork,
+                              ISellerService marketService,
+                              IShopBrandsCommandRepository shopBrandsCommand,
+                              IShopColorsCommandRepository shopColorsCommand)
     {
         _shopProductCommandRepository = shopProductCommandRepository;
         _shopProductQueryRepository = shopProductQueryRepository;
         _unitOfWork = unitOfWork;
         _marketService = marketService;
+        _shopBrandsCommand = shopBrandsCommand;
+        _shopColorsCommand = shopColorsCommand;
     }
 
     #endregion
@@ -38,12 +48,12 @@ public class ShopProductService : IShopProductService
 
     public async Task<FilterShopProductSellerSideDTO> FilterShopProductSellerSide(FilterShopProductSellerSideDTO filter, CancellationToken cancellation)
     {
-        return await _shopProductQueryRepository.FilterShopProductSellerSide(filter , cancellation);
+        return await _shopProductQueryRepository.FilterShopProductSellerSide(filter, cancellation);
     }
 
-    public async Task<CreateShopProductFromSellerPanelResult> AddShopProductToTheDataBase(ulong sellerId ,
-                                                                                  CreateShopProductSellerSideDTO model, 
-                                                                                  IFormFile newsImage, 
+    public async Task<CreateShopProductFromSellerPanelResult> AddShopProductToTheDataBase(ulong sellerId,
+                                                                                  CreateShopProductSellerSideDTO model,
+                                                                                  IFormFile newsImage,
                                                                                   CancellationToken cancellation)
     {
         #region Get Market By UserId 
@@ -103,19 +113,38 @@ public class ShopProductService : IShopProductService
 
         #region Products Selected Brands
 
+        if (model.ShopBrandId != 0)
+        {
+            var selectedBrand = new ShopProductsSelectedBrands()
+            {
+                ShopBrandId = model.ShopBrandId,
+                ShopProductId = product.Id,
+            };
 
+            await _shopBrandsCommand.AddShopProductSelectedBrandAsync(selectedBrand , cancellation);
+        };
 
         #endregion
 
         #region Products Selected Colors
 
+        if (model.ShopColorId != 0)
+        {
+            var selectedColor = new ShopProductsSelectedColors()
+            {
+                ColorId = model.ShopColorId,
+                ShopProductId = product.Id,
+            };
 
+            await _shopColorsCommand.AddShopProductSelectedColorAsync(selectedColor, cancellation);
+        };
 
         #endregion
 
         await _unitOfWork.SaveChangesAsync();
 
+        return CreateShopProductFromSellerPanelResult.Success;
     }
 
-#endregion
+    #endregion
 }

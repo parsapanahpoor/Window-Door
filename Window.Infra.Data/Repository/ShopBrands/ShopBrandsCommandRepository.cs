@@ -1,5 +1,6 @@
 ﻿using Window.Data;
 using Window.Data.Context;
+using Window.Domain.Entities.ShopBrands;
 using Window.Domain.Interfaces.ShopBrands;
 namespace Window.Infra.Data.Repository.ShopBrands;
 
@@ -14,5 +15,10 @@ public class ShopBrandsCommandRepository : CommandGenericRepository<Domain.Entit
 		_context = context;
 	}
 
-	#endregion
+    #endregion
+
+    public async Task AddShopProductSelectedBrandAsync(ShopProductsSelectedBrands selectedBrands, CancellationToken cancellationToken)
+    {
+        await _context.ShopProductsSelectedBrands.AddAsync(selectedBrands);
+    }
 }

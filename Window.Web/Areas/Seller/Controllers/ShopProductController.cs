@@ -84,7 +84,28 @@ public class ShopProductController : SellerBaseController
 
         #region Add Product To The Data Base
 
+        var res = await _shopProductService.AddShopProductToTheDataBase(User.GetUserId() , model , NewsImage, cancellation);
+        switch (res)
+        {
+            case CreateShopProductFromSellerPanelResult.Success:
+                TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+                return RedirectToAction(nameof(FilterProducts));
 
+            case CreateShopProductFromSellerPanelResult.Faild:
+                TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+                break;
+
+            case CreateShopProductFromSellerPanelResult.MainCategoryNotFound:
+                TempData[ErrorMessage] = "دسته بندی های محصول انتخاب نشده است";
+                break;
+
+            case CreateShopProductFromSellerPanelResult.SellerIsNotFound:
+                TempData[ErrorMessage] = "فروشنده ی مورد نظر یافت نشده است.";
+                break;
+
+            default:
+                break;
+        }
 
         #endregion
 

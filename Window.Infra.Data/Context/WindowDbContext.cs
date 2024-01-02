@@ -23,6 +23,7 @@ using Window.Domain.Entities.Sample;
 using Window.Domain.Entities.Score;
 using Window.Domain.Entities.Segment;
 using Window.Domain.Entities.ShopBrands;
+using Window.Domain.Entities.ShopCategory;
 using Window.Domain.Entities.ShopColors;
 using Window.Domain.Entities.ShopProduct;
 using Window.Domain.Entities.SiteSetting;
@@ -238,6 +239,8 @@ public class WindowDbContext : DbContext
     #region Shop Categories 
 
     public DbSet<ShopCategory> ShopCategories { get; set; }
+
+    public DbSet<ShopProductSelectedCategories> ShopProductSelectedCategories { get; set; }
 
     #endregion
 
