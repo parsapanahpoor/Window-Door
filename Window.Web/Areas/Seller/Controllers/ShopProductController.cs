@@ -1,8 +1,10 @@
 ﻿#region Using
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
+using Window.Application.Services.Services;
 using Window.Domain.ViewModels.Seller.ShopProduct;
 using Window.Web.HttpManager;
 namespace Window.Web.Areas.Seller.Controllers;
@@ -180,6 +182,31 @@ public class ShopProductController : SellerBaseController
         #endregion
 
         return View(model);
+    }
+
+    #endregion
+
+    #region Delete Shop Product 
+
+    public async Task<IActionResult> DeleteShopProduct(ulong shopProductId , CancellationToken cancellation)
+    {
+        var result = await _shopProductService.DeleteArticleAdminSide(shopProductId, User.GetUserId() ,cancellation) ;
+        if (result)
+        {
+            return JsonResponseStatus.Success();
+        }
+
+        return JsonResponseStatus.Error();
+    }
+
+    #endregion
+
+    #region Edit Product Category
+
+    [HttpGet]
+    public async Task<IActionResult> EditProductCategory(ulong productId, CancellationToken cancellation)
+    {
+        return View();
     }
 
     #endregion

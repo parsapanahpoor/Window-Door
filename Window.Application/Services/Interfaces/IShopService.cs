@@ -20,5 +20,7 @@ public interface IShopProductService
 
     Task<EditShopProductFromSellerPanelResult> EditShopProductSellerSide(EditShopProductSellerSideDTO newProduct, ulong sellerId, IFormFile? newsImage, CancellationToken cancellation);
 
+    Task<bool> DeleteArticleAdminSide(ulong productId, ulong sellerId, CancellationToken cancellation);
+
     #endregion
 }

@@ -46,6 +46,12 @@
                                 <span class="text-danger" asp-validation-for="Title"></span>
                             </div>
 
+                            <div class="form-group col-md-12 col-sm-12">
+                                <label asp-for="Price">قیمت</label>
+                                <input type="text" class="form-control" NumericInput="1" asp-for="Price">
+                                <span class="text-danger" asp-validation-for="Price"></span>
+                            </div>
+
                             <div class="clearfix"></div>
 
                             <div class="form-group col-md-12 col-sm-12">
@@ -94,7 +100,7 @@
 
                 <div class="col-lg-12">
                     <div class="widget">
-                        <div class="widget-header bordered-bottom bordered-green">
+                        <div class="widget-header bordered-bottom bordered-primary">
                             <span class="widget-caption"> برند محصول   </span>
                         </div>
                         <div class="widget-body">
@@ -120,7 +126,7 @@
 
                 <div class="col-lg-12">
                     <div class="widget">
-                        <div class="widget-header bordered-bottom bordered-green">
+                        <div class="widget-header bordered-bottom bordered-primary">
                             <span class="widget-caption"> رنگ محصول   </span>
                         </div>
                         <div class="widget-body">
@@ -147,7 +153,7 @@
 
                 <div class="col-lg-12">
                     <div class="widget">
-                        <div class="widget-header bordered-bottom bordered-green">
+                        <div class="widget-header bordered-bottom bordered-primary">
                             <span class="widget-caption"> تصویر محصول </span>
                         </div>
                         <div class="widget-body">
@@ -164,6 +170,10 @@
 
                                 @{
                                     var avatarUrl = FilePaths.DefaultProductAvatar;
+                                    if (Model != null && !string.IsNullOrEmpty(Model.ProductImage))
+                                    {
+                                        avatarUrl = $"{FilePaths.ProductsPathThumb}{Model.ProductImage}";
+                                    }
                                 }
 
                                 <div class="col-md-12 tc mt-10px">

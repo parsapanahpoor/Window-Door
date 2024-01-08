@@ -266,5 +266,50 @@ public class ShopProductService : IShopProductService
         return await _shopProductQueryRepository.GetShopProductSelectedCategories(productId, token);
     }
 
+    public async Task<bool> DeleteArticleAdminSide(ulong productId , ulong sellerId, CancellationToken cancellation)
+    {
+        #region Get Market By UserId 
+
+        var market = await _marketService.GetMarketByUserId(sellerId);
+        if (market == null) return false;
+
+        #endregion
+
+        #region Get Product By Id 
+
+        var oldProduct = await _shopProductQueryRepository.GetByIdAsync(cancellation, productId);
+        if (oldProduct == null) return false;
+        if (oldProduct.SellerUserId != sellerId) return false;
+
+        #endregion
+
+        #region Delete Product File 
+
+        if (!string.IsNullOrEmpty(oldProduct.ProductImage))
+        {
+            oldProduct.ProductImage.DeleteImage(FilePaths.ProductsPathServer, FilePaths.ProductsPathThumbServer);
+        }
+
+        #endregion
+
+        #region Update Article Field 
+
+        oldProduct.IsDelete = true;
+
+        #endregion
+
+        #region Shop Product Tags 
+
+        var productTags = await _shopProductQueryRepository.GetListOfProductTagsByProductId(oldProduct.Id, cancellation);
+        if (productTags != null && productTags.Any()) _shopProductCommandRepository.DeleteRange(productTags);
+
+        #endregion
+
+        _shopProductCommandRepository.Update(oldProduct);
+        await _unitOfWork.SaveChangesAsync();
+
+        return true;
+    }
+
     #endregion
 }

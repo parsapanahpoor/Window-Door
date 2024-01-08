@@ -106,9 +106,11 @@
 
                                 <td class="tc vm">
 
-                                    <a asp-action="EditProduct" asp-controller="ShopProduct" asp-area="Seller" asp-route-productId="@product.Id" class="btn btn-warning btn-circle btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
+                                    <a asp-action="EditProduct" asp-controller="ShopProduct" asp-area="Seller" asp-route-productId="@product.Id" class="btn btn-warning btn-circle btn-xs">ویرایش</a>
 
-                                    <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteShopBrand", "ShopBrand", new {area = "Seller", ShopBrandId = product.Id})')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
+                                    <a asp-action="EditProductCategory" asp-controller="ShopProduct" asp-area="Seller" asp-route-productId="@product.Id" class="btn btn-primary btn-circle btn-xs">دسته بندی </a>
+
+                                    <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteShopProduct", "ShopProduct", new {area = "Seller", shopProductId = product.Id})')" class="btn btn-danger btn-circle btn-xs">حذف</button>
                                 </td>
 
                             </tr>
