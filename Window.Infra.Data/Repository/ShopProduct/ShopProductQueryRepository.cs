@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Window.Data;
 using Window.Data.Context;
+using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopProduct;
 using Window.Domain.Interfaces.ShopProduct;
 using Window.Domain.ViewModels.Admin.ShopColor;
@@ -61,6 +62,14 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
                              .AsNoTracking() 
                              .Where(p=> p.ShopProductId == productId)
                              .Select(p => p.ShopCategoryId)
+                             .ToListAsync();
+    }
+
+    public async Task<List<ShopProductSelectedCategories>?> GetListOf_ShopProductSelectedCategories_ByProductId(ulong productId , 
+                                                                                                                CancellationToken cancellation)
+    {
+        return await _context.ShopProductSelectedCategories
+                             .Where(p=> !p.IsDelete && p.ShopProductId == productId)
                              .ToListAsync();
     }
 

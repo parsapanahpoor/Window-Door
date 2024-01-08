@@ -106,11 +106,11 @@
 
                                 <td class="tc vm">
 
-                                    <a asp-action="EditProduct" asp-controller="ShopProduct" asp-area="Seller" asp-route-productId="@product.Id" class="btn btn-warning btn-circle btn-xs">ویرایش</a>
+                                    <a asp-action="EditProduct" asp-controller="ShopProduct" asp-area="Seller" asp-route-productId="@product.Id" class="badge badge-warning btn-xs">ویرایش</a>
 
-                                    <a asp-action="EditProductCategory" asp-controller="ShopProduct" asp-area="Seller" asp-route-productId="@product.Id" class="btn btn-primary btn-circle btn-xs">دسته بندی </a>
+                                    <a asp-action="EditProductCategory" asp-controller="ShopProduct" asp-area="Seller" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">دسته بندی </a>
 
-                                    <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteShopProduct", "ShopProduct", new {area = "Seller", shopProductId = product.Id})')" class="btn btn-danger btn-circle btn-xs">حذف</button>
+                                    <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteShopProduct", "ShopProduct", new {area = "Seller", shopProductId = product.Id})')" class="badge badge-danger  btn-xs">حذف</button>
                                 </td>
 
                             </tr>

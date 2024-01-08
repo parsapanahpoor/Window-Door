@@ -34,6 +34,8 @@ public interface IShopCategoryQueryRepository
 
     Task<List<ShopCategoriesDTO>?> FillShopCategoriesDTO(CancellationToken cancellationToken);
 
+    Task<List<Domain.Entities.ShopCategory>?> GetListOfShopCategories(CancellationToken cancellationToken);
+
     Task<List<ShopCategoriesForShowInFilterShopProduct>> FillShopCategoriesForShowInFilterShopProduct(ulong shopCategoryParentId, CancellationToken cancellationToken);
 
     Task<string?> GetShopCategoryTitle(ulong shopCategoryId, CancellationToken cancellationToken);

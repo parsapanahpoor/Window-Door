@@ -206,7 +206,30 @@ public class ShopProductController : SellerBaseController
     [HttpGet]
     public async Task<IActionResult> EditProductCategory(ulong productId, CancellationToken cancellation)
     {
-        return View();
+        ViewData["ProductId"] = productId;  
+
+        return View(await _shopProductService.FillListOfSellerProductCategoriesDTO(User.GetUserId() , productId , cancellation));
+    }
+
+    [HttpPost , ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditProductCategory(ulong productId, List<ulong>? Permissions,  CancellationToken cancellation)
+    {
+        #region Update Doctor Speciality Info
+
+        var res = await _shopProductService.UpdateDoctorSpecialitySelected(Permissions , User.GetUserId() , productId , cancellation);
+        if (res)
+        {
+            TempData[SuccessMessage] = "دسته بندی های انتخابی باموفقیت ثبت گردید.";
+
+            return RedirectToAction(nameof(FilterShopProducts));
+        }
+
+        #endregion
+
+        ViewData["ProductId"] = productId;
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+        return View(await _shopProductService.FillListOfSellerProductCategoriesDTO(User.GetUserId(), productId, cancellation));
     }
 
     #endregion

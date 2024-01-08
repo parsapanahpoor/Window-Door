@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Window.Data;
 using Window.Data.Context;
+using Window.Domain.Entities;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.ViewModels.Admin.ShopCategory;
 using Window.Domain.ViewModels.Admin.State;
@@ -125,6 +126,14 @@ public class ShopCategoryQueryRepository : QueryGenericRepository<Domain.Entitie
                                  Priority = p.Priority,
                                  ShowOnSiteLanding = p.ShowOnSiteLanding,
                              })
+                             .ToListAsync();
+    }
+
+    public async Task<List<Domain.Entities.ShopCategory>?> GetListOfShopCategories(CancellationToken cancellationToken)
+    {
+        return await _context.ShopCategories
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete)
                              .ToListAsync();
     }
 

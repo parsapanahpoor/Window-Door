@@ -1,0 +1,130 @@
+﻿@model List<Window.Domain.ViewModels.Seller.Product.ListOfSellerProductCategoriesDTO>
+
+@{
+    ViewData["Title"] = " دسته بندی محصولات";
+
+    var productId = ViewData["ProductId"] as ulong?;
+}
+
+@section Scripts
+{
+    <partial name="_JqueryValidation" />
+}
+
+@section Breadcrumb
+{
+    <li>
+        <a asp-action="FilterShopProducts" asp-controller="ShopProduct" asp-area="Seller"> لیست محصولات </a>
+    </li>
+}
+
+<form method="post" asp-action="EditProductCategory" asp-controller="ShopProduct" asp-area="Seller">
+    <input name="productId" type="hidden" value="@productId" />
+
+    <div class="row">
+
+        <div class="col-lg-12 col-sm-12">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-blue flex-style">
+
+                            <span class="widget-caption" style="margin-top:10px;"> دسته بندی های خود را انتخاب کنید </span>
+
+                            <div class="checkbox" style="margin-left:10px" type="submit">
+                                <input style="margin-top:10px;margin-left:10px" type="submit" class="btn btn-success" value="ثبت">
+                            </div>
+
+                        </div>
+
+                        <div class="widget-body @((Model != null && Model.Any()) ? "no-padding" : "")">
+
+                            @if (Model != null && Model.Any())
+                            {
+                                <div class="panel-group accordion">
+                                    @foreach (var permission in Model.Where(s => s.ShopCategory.ParentId == null))
+                                    {
+                                        var isPermissionSelected = false;
+
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a class="accordion-toggle @((isPermissionSelected) ? "" : "collapsed")" data-toggle="collapse" href="#permission-@permission.ShopCategory.Id" aria-expanded="@((isPermissionSelected) ? "true" : "false")">
+                                                        @permission.ShopCategory.Title
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="permission-@permission.ShopCategory.Id" class="panel-collapse collapse @((isPermissionSelected) ? "in" : "")" aria-expanded="@((isPermissionSelected) ? "true" : "false")" style="height: @((isPermissionSelected) ? "auto" : "0")">
+                                                <div class="panel-body" style="padding: 5px 15px 15px 15px !important">
+
+                                                    @if (Model.Any(s => s.ShopCategory.ParentId.HasValue && s.ShopCategory.ParentId.Value == permission.ShopCategory.Id))
+                                                    {
+                                                        @foreach (var subPermission in Model.Where(s => s.ShopCategory.ParentId.HasValue && s.ShopCategory.ParentId.Value == permission.ShopCategory.Id))
+                                                        {
+                                                            var isSecondCategorySelected = subPermission.IsSelectedBySellerProduct;
+
+                                                            <div class="panel panel-default">
+                                                                <div class="panel-heading">
+                                                                    <h4 class="panel-title">
+                                                                        <a class="accordion-toggle @((isSecondCategorySelected) ? "" : "collapsed")" data-toggle="collapse" href="#permission-@subPermission.ShopCategory.Id" aria-expanded="@((isSecondCategorySelected) ? "true" : "false")">
+                                                                            @subPermission.ShopCategory.Title
+                                                                        </a>
+                                                                    </h4>
+                                                                </div>
+                                                                <div id="permission-@subPermission.ShopCategory.Id" class="panel-collapse collapse @((isSecondCategorySelected) ? "in" : "")" aria-expanded="@((isSecondCategorySelected) ? "true" : "false")" style="height: @((isSecondCategorySelected) ? "auto" : "0")">
+                                                                    <div class="panel-body" style="padding: 5px 15px 0 15px !important">
+
+                                                                        <div class="form-group">
+                                                                            <div class="checkbox">
+                                                                                <label>
+                                                                                    <input type="checkbox" value="@subPermission.ShopCategory.Id" name="Permissions" data-id="@subPermission.ShopCategory.Id" data-parentId="@permission.ShopCategory.Id" @((isSecondCategorySelected) ? "checked" : "")>
+                                                                                    <span class="text"> @subPermission.ShopCategory.Title </span>
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        @if (Model.Any(s => s.ShopCategory.ParentId.HasValue && s.ShopCategory.ParentId.Value == subPermission.ShopCategory.Id))
+                                                                        {
+                                                                            <hr style="margin-top: 10px !important; margin-bottom: 10px !important" />
+
+                                                                            @foreach (var thirdCategory in Model.Where(s => s.ShopCategory.ParentId.HasValue && s.ShopCategory.ParentId.Value == subPermission.ShopCategory.Id))
+                                                                            {
+                                                                                var isThirdCategorySelected = thirdCategory.IsSelectedBySellerProduct;
+
+                                                                                <div class="form-group">
+                                                                                    <div class="checkbox">
+                                                                                        <label>
+                                                                                            <input type="checkbox" value="@thirdCategory.ShopCategory.Id" name="Permissions" data-id="@thirdCategory.ShopCategory.Id" data-parentId="@subPermission.ShopCategory.Id" @((isThirdCategorySelected) ? "checked" : "")>
+                                                                                            <span class="text"> @thirdCategory.ShopCategory.Title </span>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                        }
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <partial name="_SellerNotFoundPartial" />
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>

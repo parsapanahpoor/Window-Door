@@ -3,17 +3,20 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
+using System.Threading;
 using Window.Application.Common.IUnitOfWork;
 using Window.Application.Extensions;
 using Window.Application.Security;
 using Window.Application.Services.Interfaces;
 using Window.Application.StticTools;
 using Window.Domain.Entities.Article;
+using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopProduct;
 using Window.Domain.Interfaces.ShopBrands;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.Interfaces.ShopProduct;
+using Window.Domain.ViewModels.Seller.Product;
 using Window.Domain.ViewModels.Seller.ShopProduct;
 
 namespace Window.Application.Services.Services;
@@ -31,6 +34,7 @@ public class ShopProductService : IShopProductService
     private readonly IShopBrandsQueryRepository _shopBrandsQueryRepository;
     private readonly IShopColorsQueryRepository _shopColorsQueryRepository;
     private readonly IShopCategoryCommandRepository _shopCategoryCommand;
+    private readonly IShopCategoryQueryRepository _shopCategoryQueryRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ISellerService _marketService;
 
@@ -42,7 +46,8 @@ public class ShopProductService : IShopProductService
                               IShopColorsCommandRepository shopColorsCommand,
                               IShopCategoryCommandRepository shopCategoryCommand,
                               IShopBrandsQueryRepository shopBrandsQueryRepository,
-                              IShopColorsQueryRepository shopColorsQueryRepository)
+                              IShopColorsQueryRepository shopColorsQueryRepository,
+                              IShopCategoryQueryRepository shopCategoryQueryRepository)
     {
         _shopProductCommandRepository = shopProductCommandRepository;
         _shopProductQueryRepository = shopProductQueryRepository;
@@ -53,6 +58,7 @@ public class ShopProductService : IShopProductService
         _shopCategoryCommand = shopCategoryCommand;
         _shopBrandsQueryRepository = shopBrandsQueryRepository;
         _shopColorsQueryRepository = shopColorsQueryRepository;
+        _shopCategoryQueryRepository = shopCategoryQueryRepository;
 
     }
 
@@ -133,7 +139,7 @@ public class ShopProductService : IShopProductService
         return CreateShopProductFromSellerPanelResult.Success;
     }
 
-    public async Task<EditShopProductSellerSideDTO?> FillEditShopProductSellerSideDTO(ulong productId , ulong sellerId , CancellationToken token)
+    public async Task<EditShopProductSellerSideDTO?> FillEditShopProductSellerSideDTO(ulong productId, ulong sellerId, CancellationToken token)
     {
         #region Get Market By UserId 
 
@@ -144,8 +150,8 @@ public class ShopProductService : IShopProductService
 
         #region Get Product By Id 
 
-        var product = await _shopProductQueryRepository.GetByIdAsync(token , productId);
-        if(product == null) return null;
+        var product = await _shopProductQueryRepository.GetByIdAsync(token, productId);
+        if (product == null) return null;
         if (product.SellerUserId != sellerId) return null;
 
         #endregion
@@ -176,12 +182,12 @@ public class ShopProductService : IShopProductService
         return model;
     }
 
-    public async Task<EditShopProductFromSellerPanelResult> EditShopProductSellerSide (EditShopProductSellerSideDTO newProduct, ulong sellerId ,IFormFile? newsImage, CancellationToken cancellation)
+    public async Task<EditShopProductFromSellerPanelResult> EditShopProductSellerSide(EditShopProductSellerSideDTO newProduct, ulong sellerId, IFormFile? newsImage, CancellationToken cancellation)
     {
         #region Get Market By UserId 
 
         var market = await _marketService.GetMarketByUserId(sellerId);
-        if (market == null) return  EditShopProductFromSellerPanelResult.SellerIsNotFound;
+        if (market == null) return EditShopProductFromSellerPanelResult.SellerIsNotFound;
 
         #endregion
 
@@ -189,17 +195,17 @@ public class ShopProductService : IShopProductService
 
         var oldProduct = await _shopProductQueryRepository.GetByIdAsync(cancellation, newProduct.ShopProductId);
         if (oldProduct == null) return EditShopProductFromSellerPanelResult.Faild;
-        if (oldProduct.SellerUserId != sellerId) return  EditShopProductFromSellerPanelResult.SellerIsNotFound;
+        if (oldProduct.SellerUserId != sellerId) return EditShopProductFromSellerPanelResult.SellerIsNotFound;
 
         #endregion
 
         #region Brand and Color Validator
 
-        if (!await _shopBrandsQueryRepository.IsExistBrandById(newProduct.ShopBrandId, cancellation)) 
-                                              return EditShopProductFromSellerPanelResult.Faild;
+        if (!await _shopBrandsQueryRepository.IsExistBrandById(newProduct.ShopBrandId, cancellation))
+            return EditShopProductFromSellerPanelResult.Faild;
 
         if (!await _shopColorsQueryRepository.IsExistColorById(newProduct.ShopColorId, cancellation))
-                                              return EditShopProductFromSellerPanelResult.Faild;
+            return EditShopProductFromSellerPanelResult.Faild;
 
         #endregion
 
@@ -235,7 +241,7 @@ public class ShopProductService : IShopProductService
 
         #region Shop Tags
 
-        var productTags = await _shopProductQueryRepository.GetListOfProductTagsByProductId(oldProduct.Id , cancellation);
+        var productTags = await _shopProductQueryRepository.GetListOfProductTagsByProductId(oldProduct.Id, cancellation);
         if (productTags != null && productTags.Any()) _shopProductCommandRepository.DeleteRange(productTags);
 
         if (!string.IsNullOrEmpty(newProduct.ProductTag))
@@ -266,7 +272,7 @@ public class ShopProductService : IShopProductService
         return await _shopProductQueryRepository.GetShopProductSelectedCategories(productId, token);
     }
 
-    public async Task<bool> DeleteArticleAdminSide(ulong productId , ulong sellerId, CancellationToken cancellation)
+    public async Task<bool> DeleteArticleAdminSide(ulong productId, ulong sellerId, CancellationToken cancellation)
     {
         #region Get Market By UserId 
 
@@ -306,6 +312,115 @@ public class ShopProductService : IShopProductService
         #endregion
 
         _shopProductCommandRepository.Update(oldProduct);
+        await _unitOfWork.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<List<ListOfSellerProductCategoriesDTO>?> FillListOfSellerProductCategoriesDTO(ulong sellerId,
+                                                                                                    ulong productId,
+                                                                                                    CancellationToken cancellationToken)
+    {
+        #region Get Market By UserId 
+
+        var market = await _marketService.GetMarketByUserId(sellerId);
+        if (market == null) return null;
+
+        #endregion
+
+        #region Get Product By Id 
+
+        var oldProduct = await _shopProductQueryRepository.GetByIdAsync(cancellationToken, productId);
+        if (oldProduct == null) return null;
+        if (oldProduct.SellerUserId != sellerId) return null;
+
+        #endregion
+
+        #region Get Product Selected Categories
+
+        var productSelectedCategoryId = await _shopProductQueryRepository.GetShopProductSelectedCategories(productId, cancellationToken);
+
+        #endregion
+
+        #region Get List Of Categories
+
+        var categories = await _shopCategoryQueryRepository.GetListOfShopCategories(cancellationToken);
+        if (categories == null) return null;
+
+        #endregion
+
+        #region Fill Model 
+
+        var ListOfSellerProductCategories = new List<ListOfSellerProductCategoriesDTO>();
+
+        foreach (var category in categories)
+        {
+            var reutnItems = new ListOfSellerProductCategoriesDTO();
+
+            reutnItems.ShopCategory = category;
+
+            if (productSelectedCategoryId != null && productSelectedCategoryId.Any() && productSelectedCategoryId.Contains(category.Id))
+            {
+                reutnItems.IsSelectedBySellerProduct = true;
+            }
+            else
+            {
+                reutnItems.IsSelectedBySellerProduct = false;
+            }
+
+            ListOfSellerProductCategories.Add(reutnItems);
+        }
+
+        #endregion
+
+        return ListOfSellerProductCategories;
+    }
+
+    //Update Product Selected Categrory
+    public async Task<bool> UpdateDoctorSpecialitySelected(List<ulong>? categoryIds,
+                                                           ulong sellerId,
+                                                           ulong productId,
+                                                           CancellationToken cancellation)
+    {
+        #region Get Market By UserId 
+
+        var market = await _marketService.GetMarketByUserId(sellerId);
+        if (market == null) return false;
+
+        #endregion
+
+        #region Get Product By Id 
+
+        var oldProduct = await _shopProductQueryRepository.GetByIdAsync(cancellation, productId);
+        if (oldProduct == null) return false;
+        if (oldProduct.SellerUserId != sellerId) return false;
+
+        #endregion
+
+        #region Update Product Selected Categories
+
+        //remove all Product Selected Categories
+        var productSelectedCategories = await _shopProductQueryRepository.GetListOf_ShopProductSelectedCategories_ByProductId(productId, cancellation);
+        if (productSelectedCategories != null && productSelectedCategories.Any())
+            _shopProductCommandRepository.DeleteRangeProductSelectedCategories(productSelectedCategories);
+
+        //add Categories To The Seller Product
+        if (categoryIds != null && categoryIds.Any())
+        {
+            foreach (var categoryId in categoryIds)
+            {
+                var shopProductSelectedCategories = new ShopProductSelectedCategories
+                {
+                    ShopProductId = productId,
+                    ShopCategoryId = categoryId,
+                };
+
+                await _shopCategoryCommand.AddShopProductSelectedCategoriesAsync(shopProductSelectedCategories, cancellation);
+            }
+        }
+
+        #endregion
+
         await _unitOfWork.SaveChangesAsync();
 
         return true;
