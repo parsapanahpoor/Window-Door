@@ -64,5 +64,11 @@ public class ShopColorsQueryRepository : QueryGenericRepository<Domain.Entities.
                             .ToListAsync();
     }
 
+	public async Task<bool> IsExistColorById(ulong colorId, CancellationToken cancellation)
+	{
+		return await _context.ShopColors
+							 .AnyAsync(p => !p.IsDelete && p.Id == colorId);
+	}
+
     #endregion
 }

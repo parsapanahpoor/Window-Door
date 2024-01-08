@@ -18,5 +18,7 @@ public interface IShopProductService
 
     Task<List<ulong>> GetShopProductSelectedCategories(ulong productId, CancellationToken token);
 
+    Task<EditShopProductFromSellerPanelResult> EditShopProductSellerSide(EditShopProductSellerSideDTO newProduct, ulong sellerId, IFormFile? newsImage, CancellationToken cancellation);
+
     #endregion
 }

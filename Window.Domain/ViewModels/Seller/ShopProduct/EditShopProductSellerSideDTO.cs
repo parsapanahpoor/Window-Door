@@ -21,15 +21,7 @@ public record EditShopProductSellerSideDTO
     [Display(Name = "متن ")]
     public string? Description { get; set; }
 
-    [Display(Name = "سرگروه")]
-    [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-    public ulong MainCategory { get; set; }
-
-    [Display(Name = "زیر گروه اول")]
-    public ulong? FirstSubCategory { get; set; }
-
-    [Display(Name = "زیر گروه دوم")]
-    public ulong? SecondeSubCategory { get; set; }
+    public string Price { get; set; }
 
     [Display(Name = "تگ  ")]
     [MaxLength(300, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]

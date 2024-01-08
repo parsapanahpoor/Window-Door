@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿#region Using
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using Window.Application.Common.IUnitOfWork;
 using Window.Application.Extensions;
 using Window.Application.Security;
 using Window.Application.Services.Interfaces;
 using Window.Application.StticTools;
 using Window.Domain.Entities.Article;
-using Window.Domain.Entities.ShopBrands;
-using Window.Domain.Entities.ShopCategories;
-using Window.Domain.Entities.ShopColors;
 using Window.Domain.Entities.ShopProduct;
 using Window.Domain.Interfaces.ShopBrands;
 using Window.Domain.Interfaces.ShopCategory;
@@ -19,6 +18,8 @@ using Window.Domain.ViewModels.Seller.ShopProduct;
 
 namespace Window.Application.Services.Services;
 
+#endregion
+
 public class ShopProductService : IShopProductService
 {
     #region Ctor
@@ -27,6 +28,8 @@ public class ShopProductService : IShopProductService
     private readonly IShopProductQueryRepository _shopProductQueryRepository;
     private readonly IShopBrandsCommandRepository _shopBrandsCommand;
     private readonly IShopColorsCommandRepository _shopColorsCommand;
+    private readonly IShopBrandsQueryRepository _shopBrandsQueryRepository;
+    private readonly IShopColorsQueryRepository _shopColorsQueryRepository;
     private readonly IShopCategoryCommandRepository _shopCategoryCommand;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ISellerService _marketService;
@@ -37,7 +40,9 @@ public class ShopProductService : IShopProductService
                               ISellerService marketService,
                               IShopBrandsCommandRepository shopBrandsCommand,
                               IShopColorsCommandRepository shopColorsCommand,
-                              IShopCategoryCommandRepository shopCategoryCommand)
+                              IShopCategoryCommandRepository shopCategoryCommand,
+                              IShopBrandsQueryRepository shopBrandsQueryRepository,
+                              IShopColorsQueryRepository shopColorsQueryRepository)
     {
         _shopProductCommandRepository = shopProductCommandRepository;
         _shopProductQueryRepository = shopProductQueryRepository;
@@ -46,6 +51,9 @@ public class ShopProductService : IShopProductService
         _shopBrandsCommand = shopBrandsCommand;
         _shopColorsCommand = shopColorsCommand;
         _shopCategoryCommand = shopCategoryCommand;
+        _shopBrandsQueryRepository = shopBrandsQueryRepository;
+        _shopColorsQueryRepository = shopColorsQueryRepository;
+
     }
 
     #endregion
@@ -79,6 +87,9 @@ public class ShopProductService : IShopProductService
             ProductColorId = model.ShopColorId,
             ProductName = model.Title,
             SellerUserId = sellerId,
+            LongDescription = model.Description,
+            ShortDescription = model.ShortDescription,
+            Price = model.Price
         };
 
         if (newsImage != null && newsImage.IsImage())
@@ -148,11 +159,106 @@ public class ShopProductService : IShopProductService
             ShopColorId = product.ProductColorId,
             Title = product.ProductName,
             ProductImage = product.ProductImage,
+            Description = product.LongDescription,
+            Price = product.Price,
+            ShortDescription = product.ShortDescription,
         };
 
         #endregion
 
+        #region Product Tags
+
+        var tags = await _shopProductQueryRepository.GetListOfProductTagsByProductId(product.Id, token);
+        model.ProductTag = string.Join(",", tags.Select(p => p.TagTitle).ToList());
+
+        #endregion
+
         return model;
+    }
+
+    public async Task<EditShopProductFromSellerPanelResult> EditShopProductSellerSide (EditShopProductSellerSideDTO newProduct, ulong sellerId ,IFormFile? newsImage, CancellationToken cancellation)
+    {
+        #region Get Market By UserId 
+
+        var market = await _marketService.GetMarketByUserId(sellerId);
+        if (market == null) return  EditShopProductFromSellerPanelResult.SellerIsNotFound;
+
+        #endregion
+
+        #region Get Product By Id 
+
+        var oldProduct = await _shopProductQueryRepository.GetByIdAsync(cancellation, newProduct.ShopProductId);
+        if (oldProduct == null) return EditShopProductFromSellerPanelResult.Faild;
+        if (oldProduct.SellerUserId != sellerId) return  EditShopProductFromSellerPanelResult.SellerIsNotFound;
+
+        #endregion
+
+        #region Brand and Color Validator
+
+        if (!await _shopBrandsQueryRepository.IsExistBrandById(newProduct.ShopBrandId, cancellation)) 
+                                              return EditShopProductFromSellerPanelResult.Faild;
+
+        if (!await _shopColorsQueryRepository.IsExistColorById(newProduct.ShopColorId, cancellation))
+                                              return EditShopProductFromSellerPanelResult.Faild;
+
+        #endregion
+
+        #region Update Product Fields
+
+        oldProduct.ProductName = newProduct.Title.SanitizeText();
+        oldProduct.ShortDescription = newProduct.ShortDescription.SanitizeText();
+        oldProduct.LongDescription = newProduct.Description.SanitizeText();
+        oldProduct.Price = newProduct.Price.SanitizeText();
+        oldProduct.ProductBrandId = newProduct.ShopBrandId;
+        oldProduct.ProductColorId = newProduct.ShopColorId;
+
+        #endregion
+
+        #region  Image
+
+        if (newsImage != null)
+        {
+            var imageName = Guid.NewGuid() + Path.GetExtension(newsImage.FileName);
+            newsImage.AddImageToServer(imageName, FilePaths.ProductsPathServer, 400, 300, FilePaths.ProductsPathThumbServer);
+
+            if (!string.IsNullOrEmpty(oldProduct.ProductImage))
+            {
+                oldProduct.ProductImage.DeleteImage(FilePaths.ProductsPathServer, FilePaths.ProductsPathThumbServer);
+            }
+
+            oldProduct.ProductImage = imageName;
+        }
+
+        #endregion
+
+        _shopProductCommandRepository.Update(oldProduct);
+
+        #region Shop Tags
+
+        var productTags = await _shopProductQueryRepository.GetListOfProductTagsByProductId(oldProduct.Id , cancellation);
+        if (productTags != null && productTags.Any()) _shopProductCommandRepository.DeleteRange(productTags);
+
+        if (!string.IsNullOrEmpty(newProduct.ProductTag))
+        {
+            List<string> tagsList = newProduct.ProductTag.Split(',').ToList<string>();
+            foreach (var itemTag in tagsList)
+            {
+                var newTag = new ProductTag
+                {
+                    ProductId = oldProduct.Id,
+                    TagTitle = itemTag,
+                    IsDelete = false,
+                    CreateDate = DateTime.Now
+                };
+                await _shopProductCommandRepository.AddShopTagAsync(newTag, cancellation);
+            }
+        }
+
+        #endregion
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return EditShopProductFromSellerPanelResult.Success;
     }
 
     public async Task<List<ulong>> GetShopProductSelectedCategories(ulong productId, CancellationToken token)

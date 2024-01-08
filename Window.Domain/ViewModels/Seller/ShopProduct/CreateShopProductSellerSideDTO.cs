@@ -28,6 +28,8 @@ public class CreateShopProductSellerSideDTO
 
     public ulong ShopBrandId { get; set; }
 
+    public string Price { get; set; }
+
     #endregion
 }
 

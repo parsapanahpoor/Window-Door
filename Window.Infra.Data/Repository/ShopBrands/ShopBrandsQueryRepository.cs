@@ -62,5 +62,11 @@ public class ShopBrandsQueryRepository : QueryGenericRepository<Domain.Entities.
                             .ToListAsync();
     }
 
+    public async Task<bool> IsExistBrandById(ulong brandId , CancellationToken cancellation)
+    {
+        return await _context.ShopBrands
+                             .AnyAsync(p=> !p.IsDelete && p.Id == brandId);
+    }
+
     #endregion
 }

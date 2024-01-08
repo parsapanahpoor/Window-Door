@@ -129,10 +129,6 @@ public class ShopProductController : SellerBaseController
 
         #region View Bags
 
-        ViewData["MianCategory"] = await _shopCategoryService.GetAllMainShopCategoriesCategories(cancellation);
-
-        ViewData["SelectedCategories"] = await _shopProductService.GetShopProductSelectedCategories( productId , cancellation);
-
         ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellation);
 
         ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
@@ -140,6 +136,50 @@ public class ShopProductController : SellerBaseController
         #endregion
 
         return View(product);
+    }
+
+    [HttpPost , ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditProduct(EditShopProductSellerSideDTO model, IFormFile? NewsImage, CancellationToken cancellation)
+    {
+        #region Edit Product
+
+        if (ModelState.IsValid) 
+        {
+            var res = await _shopProductService.EditShopProductSellerSide(model , User.GetUserId() , NewsImage, cancellation);
+            switch (res)
+            {
+                case EditShopProductFromSellerPanelResult.Success:
+                    TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+                    return RedirectToAction(nameof(FilterShopProducts));
+
+                case EditShopProductFromSellerPanelResult.Faild:
+                    TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+                    break;
+
+                case EditShopProductFromSellerPanelResult.MainCategoryNotFound:
+                    TempData[ErrorMessage] = "دسته بندی های محصول انتخاب نشده است";
+                    break;
+
+                case EditShopProductFromSellerPanelResult.SellerIsNotFound:
+                    TempData[ErrorMessage] = "فروشنده ی مورد نظر یافت نشده است.";
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        #endregion
+
+        #region View Bags
+
+        ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellation);
+
+        ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
+
+        #endregion
+
+        return View(model);
     }
 
     #endregion

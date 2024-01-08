@@ -23,7 +23,7 @@ public class ShopProductCommandRepository : CommandGenericRepository<Domain.Enti
 
     public void DeleteRange(IEnumerable<ProductTag> productTags)
     {
-        throw new NotImplementedException();
+        _context.ProductTags.RemoveRange(productTags);
     }
 
     public async Task AddShopTagAsync(ProductTag tag, CancellationToken cancellationToken)

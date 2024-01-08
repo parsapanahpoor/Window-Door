@@ -15,5 +15,11 @@ public sealed class ShopProduct : BaseEntity
 
     public string ProductName { get; set; }
 
+    public string ShortDescription { get; set; }
+
+    public string LongDescription { get; set; }
+
+    public string Price { get; set; }
+
     #endregion
 }

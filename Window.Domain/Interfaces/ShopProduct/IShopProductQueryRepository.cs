@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Window.Domain.Entities.ShopProduct;
 using Window.Domain.ViewModels.Seller.ShopProduct;
 
 namespace Window.Domain.Interfaces.ShopProduct;
@@ -16,6 +17,8 @@ public interface IShopProductQueryRepository
     Task<FilterShopProductSellerSideDTO> FilterShopProductSellerSide(FilterShopProductSellerSideDTO filter, CancellationToken cancellation);
 
     Task<List<ulong>> GetShopProductSelectedCategories(ulong productId, CancellationToken token);
+
+    Task<List<ProductTag>> GetListOfProductTagsByProductId(ulong productId, CancellationToken cancellation);
 
     #endregion
 }

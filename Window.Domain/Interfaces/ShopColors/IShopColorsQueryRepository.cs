@@ -19,5 +19,7 @@ public interface IShopColorsQueryRepository
 
     Task<List<ListOfColorsForFilterProductsDTO>> FillListOfColorsForFilterProductsDTO(CancellationToken cancellationToken);
 
+    Task<bool> IsExistColorById(ulong colorId, CancellationToken cancellation);
+
     #endregion
 }

@@ -18,5 +18,7 @@ public interface IShopBrandsQueryRepository
 
     Task<List<ListOfBrandsForFilterProductsDTO>> FillListOfBrandsForFilterProductsDTO(CancellationToken cancellationToken);
 
+    Task<bool> IsExistBrandById(ulong brandId, CancellationToken cancellation);
+
     #endregion
 }
