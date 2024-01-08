@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading;
+﻿#region Using
+
+using Microsoft.AspNetCore.Mvc;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
-using Window.Application.Services.Services;
 using Window.Domain.ViewModels.Seller.ShopProduct;
 using Window.Web.HttpManager;
-
 namespace Window.Web.Areas.Seller.Controllers;
+
+#endregion
 
 public class ShopProductController : SellerBaseController
 {
@@ -48,8 +49,6 @@ public class ShopProductController : SellerBaseController
     {
         #region View Bags
 
-        ViewData["MianCategory"] = await _shopCategoryService.GetAllMainShopCategoriesCategories(cancellation);
-
         ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellation);
 
         ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
@@ -67,8 +66,6 @@ public class ShopProductController : SellerBaseController
         if (!ModelState.IsValid)
         {
             #region View Bags
-
-            ViewData["MianCategory"] = await _shopCategoryService.GetAllMainShopCategoriesCategories(cancellation);
 
             ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellation);
 
@@ -110,8 +107,6 @@ public class ShopProductController : SellerBaseController
         #endregion
 
         #region View Bags
-
-        ViewData["MianCategory"] = await _shopCategoryService.GetAllMainShopCategoriesCategories(cancellation);
 
         ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellation);
 

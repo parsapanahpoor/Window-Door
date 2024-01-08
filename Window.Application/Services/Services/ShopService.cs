@@ -117,54 +117,6 @@ public class ShopProductService : IShopProductService
 
         #endregion
 
-        #region Selected Shop Categories
-
-        //First Step
-        if (model.MainCategory != 0)
-        {
-            var selectedMainCategory = new ShopProductSelectedCategories()
-            {
-                ShopCategoryId = model.MainCategory,
-                ShopProductId= product.Id,
-            };
-
-            await _shopCategoryCommand.AddShopProductSelectedCategoriesAsync(selectedMainCategory , cancellation) ;
-        }
-
-        //Seconde Step
-        if (model.FirstSubCategory.HasValue && model.FirstSubCategory != 0)
-        {
-            var selectedSecondeCategory = new ShopProductSelectedCategories()
-            {
-                ShopCategoryId = model.FirstSubCategory.Value,
-                ShopProductId = product.Id,
-            };
-
-            await _shopCategoryCommand.AddShopProductSelectedCategoriesAsync(selectedSecondeCategory, cancellation);
-        }
-        else
-        {
-            return CreateShopProductFromSellerPanelResult.MainCategoryNotFound;
-        }
-
-        //Third Step
-        if (model.SecondeSubCategory.HasValue && model.SecondeSubCategory != 0)
-        {
-            var selectedThirdCategory = new ShopProductSelectedCategories()
-            {
-                ShopCategoryId = model.SecondeSubCategory.Value,
-                ShopProductId = product.Id,
-            };
-
-            await _shopCategoryCommand.AddShopProductSelectedCategoriesAsync(selectedThirdCategory, cancellation);
-        }
-        else
-        {
-            return CreateShopProductFromSellerPanelResult.MainCategoryNotFound;
-        }
-
-        #endregion
-
         await _unitOfWork.SaveChangesAsync();
 
         return CreateShopProductFromSellerPanelResult.Success;

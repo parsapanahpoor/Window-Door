@@ -6,17 +6,20 @@
 @{
     ViewData["Title"] = "افزودن محصول جدید";
 
-    var MainCat = ViewData["MianCategory"] != null ? ViewData["MianCategory"] as List<SelectListViewModel> : null;
-
     var brands = ViewData["Brands"] as List<ListOfBrandsForFilterProductsDTO>;
 
     var colors = ViewData["Colors"] as List<ListOfColorsForFilterProductsDTO>;
 }
 
+@section Styles
+{
+    <link href="~/lib/custom/custom.css" rel="stylesheet" />
+}
+
 @section Scripts
     {
     <partial name="_JqueryValidation" />
-    <script src="/admin/js/CreateShopProduct.js"></script>
+    <script src="~/lib/custom/custom.js"></script>
 }
 
 @section Breadcrumb
@@ -89,55 +92,6 @@
 
         <div class="col-lg-3 col-sm-12">
             <div class="row">
-
-                <div class="col-lg-12">
-                    <div class="widget">
-                        <div class="widget-header bordered-bottom bordered-green">
-                            <span class="widget-caption"> دسته بندی محصول   </span>
-                        </div>
-                        <div class="widget-body">
-                            <div class="form-group">
-                                <label asp-for="MainCategory"> سرگروه </label>
-                                <select asp-for="MainCategory" class="form-control">
-                                    <option value="">انتخاب کنید </option>
-                                    @if (MainCat != null && MainCat.Any())
-                                    {
-                                        foreach (var cat in MainCat)
-                                        {
-                                            if (Model != null && Model.MainCategory == cat.Id)
-                                            {
-                                                <option value="@cat.Id" selected="selected"> @cat.Title </option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@cat.Id"> @cat.Title </option>
-                                            }
-                                        }
-                                    }
-                                </select>
-                                <span class="text-danger" asp-validation-for="MainCategory"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="FirstSubCategory"> زیرگروه اول  </label>
-                                <select asp-for="FirstSubCategory" class="form-control">
-                                    <option value="">انتخاب کنید </option>
-                                </select>
-                                <span class="text-danger" asp-validation-for="FirstSubCategory"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="SecondeSubCategory"> زیرگروه دوم  </label>
-                                <select asp-for="SecondeSubCategory" class="form-control">
-                                    <option value="">انتخاب کنید </option>
-                                </select>
-                                <span class="text-danger" asp-validation-for="SecondeSubCategory"></span>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
 
                 <div class="col-lg-12">
                     <div class="widget">
