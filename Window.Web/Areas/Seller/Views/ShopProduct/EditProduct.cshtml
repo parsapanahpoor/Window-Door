@@ -1,0 +1,249 @@
+﻿@using Window.Application.StticTools;
+@using Window.Domain.ViewModels.Common
+@using Window.Domain.ViewModels.Site.Shop.ShopProduct
+@model Window.Domain.ViewModels.Seller.ShopProduct.EditShopProductSellerSideDTO
+
+@{
+    ViewData["Title"] = "افزودن محصول جدید";
+
+    var MainCat = ViewData["MianCategory"] != null ? ViewData["MianCategory"] as List<SelectListViewModel> : null;
+
+    var brands = ViewData["Brands"] as List<ListOfBrandsForFilterProductsDTO>;
+
+    var colors = ViewData["Colors"] as List<ListOfColorsForFilterProductsDTO>;
+
+    var selectedcategories = ViewData["SelectedCategories"] as List<ulong>;
+}
+
+@section Scripts
+{
+    <partial name="_JqueryValidation" />
+    <script src="/admin/js/CreateShopProduct.js"></script>
+}
+
+@section Breadcrumb
+{
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
+}
+
+<form method="post" asp-action="EditProduct" asp-controller="ShopProduct" asp-area="Seller" enctype="multipart/form-data">
+    <input asp-for="ShopProductId" type="hidden" />
+    <input asp-for="ProductImage" type="hidden" />
+
+    <div class="row">
+        <div class="col-lg-9 col-sm-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-primary">
+                    <span class="widget-caption"> @ViewData["Title"] </span>
+                </div>
+                <div class="widget-body">
+                    <div>
+
+                        <div class="row">
+
+                            <div class="form-group col-md-12 col-sm-12">
+                                <label asp-for="Title"></label>
+                                <input type="text" class="form-control" asp-for="Title">
+                                <span class="text-danger" asp-validation-for="Title"></span>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="form-group col-md-12 col-sm-12">
+                                <label asp-for="ShortDescription"></label>
+                                <input type="text" class="form-control" asp-for="ShortDescription">
+                                <span class="text-danger" asp-validation-for="ShortDescription"></span>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="form-group col-md-12 col-sm-12">
+                                <label asp-for="ProductTag"></label>
+                                <input type="text" class="form-control" class="form-control" tagify="1" asp-for="ProductTag">
+                                <span class="text-danger" asp-validation-for="ProductTag"></span>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="form-group col-md-12">
+                                <label asp-for="Description"></label>
+                                <textarea class="form-control" ckeditor="1" asp-for="Description"></textarea>
+                                <span class="text-danger" asp-validation-for="Description"></span>
+
+                            </div>
+
+                        </div>
+
+                        <hr class="margin-bottom-10 margin-top-10" />
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled btn-primary">
+                                    <i class="btn-label glyphicon glyphicon-ok"></i>ویرایش
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-3 col-sm-12">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-green">
+                            <span class="widget-caption"> دسته بندی محصول   </span>
+                        </div>
+                        <div class="widget-body">
+                            <div class="form-group">
+                                <label asp-for="MainCategory"> سرگروه </label>
+                                <select asp-for="MainCategory" class="form-control">
+                                    <option value="">انتخاب کنید </option>
+                                    @if (MainCat != null && MainCat.Any())
+                                    {
+                                        foreach (var cat in MainCat)
+                                        {
+                                            if (selectedcategories != null && selectedcategories.Contains(cat.Id))
+                                            {
+                                                <option value="@cat.Id" selected="selected"> @cat.Title </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@cat.Id"> @cat.Title </option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                                <span class="text-danger" asp-validation-for="MainCategory"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="FirstSubCategory"> زیرگروه اول  </label>
+                                <select asp-for="FirstSubCategory" class="form-control">
+                                    <option value="">انتخاب کنید </option>
+                                    @if (MainCat != null && MainCat.Any())
+                                    {
+                                        foreach (var cat in MainCat)
+                                        {
+                                            if (selectedcategories != null && selectedcategories.Contains(cat.Id))
+                                            {
+                                                <option value="@cat.Id" selected="selected"> @cat.Title </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@cat.Id"> @cat.Title </option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                                <span class="text-danger" asp-validation-for="FirstSubCategory"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="SecondeSubCategory"> زیرگروه دوم  </label>
+                                <select asp-for="SecondeSubCategory" class="form-control">
+                                    <option value="">انتخاب کنید </option>
+                                </select>
+                                <span class="text-danger" asp-validation-for="SecondeSubCategory"></span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-green">
+                            <span class="widget-caption"> برند محصول   </span>
+                        </div>
+                        <div class="widget-body">
+                            <div class="form-group">
+                                <label> برندها </label>
+                                <select asp-for="ShopBrandId" class="form-control">
+                                    <option value="">انتخاب کنید </option>
+                                    @if (brands != null && brands.Any())
+                                    {
+                                        foreach (var brand in brands)
+                                        {
+                                            <option value="@brand.Id"> @brand.BrandTitle </option>
+                                        }
+                                    }
+                                </select>
+                                <span class="text-danger" asp-validation-for="ShopBrandId"></span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-lg-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-green">
+                            <span class="widget-caption"> رنگ محصول   </span>
+                        </div>
+                        <div class="widget-body">
+
+                            <div class="form-group">
+                                <label> رنگ ها </label>
+                                <select asp-for="ShopColorId" class="form-control">
+                                    <option value="">انتخاب کنید </option>
+                                    @if (colors != null && colors.Any())
+                                    {
+                                        foreach (var color in colors)
+                                        {
+                                            <option value="@color.Id"> @color.ColorTitle </option>
+                                        }
+                                    }
+                                </select>
+                                <span class="text-danger" asp-validation-for="ShopColorId"></span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-lg-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-green">
+                            <span class="widget-caption"> تصویر محصول </span>
+                        </div>
+                        <div class="widget-body">
+                            <div class="row">
+
+                                <input type="file" class="display-none" name="NewsImage" id="UserAvatar" ImageInput="1" accept=".jpg,.jpeg,.png" />
+
+                                <div class="col-md-12">
+                                    <label for="UserAvatar" class="file-input-style">
+                                        <i class="glyphicon glyphicon-upload"></i>
+                                        <span class="mr-8px"> لطفا یک تصویر را انتخاب کنید</span>
+                                    </label>
+                                </div>
+
+                                @{
+                                    var avatarUrl = FilePaths.DefaultProductAvatar;
+                                }
+
+                                <div class="col-md-12 tc mt-10px">
+                                    <img src="@avatarUrl" class="image-style" ImageFile="1" />
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>

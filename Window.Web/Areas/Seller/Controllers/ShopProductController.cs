@@ -124,6 +124,31 @@ public class ShopProductController : SellerBaseController
 
     #endregion
 
+    #region Edit Product
+
+    [HttpGet]
+    public async Task<IActionResult> EditProduct(ulong productId , CancellationToken cancellation)
+    {
+        var product = await _shopProductService.FillEditShopProductSellerSideDTO(productId , User.GetUserId() , cancellation);
+        if (product == null) return NotFound();
+
+        #region View Bags
+
+        ViewData["MianCategory"] = await _shopCategoryService.GetAllMainShopCategoriesCategories(cancellation);
+
+        ViewData["SelectedCategories"] = await _shopProductService.GetShopProductSelectedCategories( productId , cancellation);
+
+        ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellation);
+
+        ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
+
+        #endregion
+
+        return View(product);
+    }
+
+    #endregion
+
     #region Load Sub Categories
 
     public async Task<IActionResult> LoadSubCategories(ulong MainCategoryId , CancellationToken cancellationToken = default)

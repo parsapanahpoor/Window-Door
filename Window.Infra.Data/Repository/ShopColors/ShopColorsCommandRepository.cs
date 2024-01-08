@@ -16,9 +16,4 @@ public class ShopColorsCommandRepository : CommandGenericRepository<Domain.Entit
 	}
 
     #endregion
-
-    public async Task AddShopProductSelectedColorAsync(ShopProductsSelectedColors selectedColors, CancellationToken cancellationToken)
-    {
-		await _context.ShopProductsSelectedColors.AddAsync(selectedColors) ;
-    }
 }

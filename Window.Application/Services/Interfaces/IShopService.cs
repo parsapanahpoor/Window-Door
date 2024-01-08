@@ -14,5 +14,9 @@ public interface IShopProductService
                                                                                   IFormFile newsImage,
                                                                                   CancellationToken cancellation);
 
+    Task<EditShopProductSellerSideDTO?> FillEditShopProductSellerSideDTO(ulong productId, ulong sellerId, CancellationToken token);
+
+    Task<List<ulong>> GetShopProductSelectedCategories(ulong productId, CancellationToken token);
+
     #endregion
 }

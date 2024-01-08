@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Window.Application.Common.IUnitOfWork;
 using Window.Application.Extensions;
 using Window.Application.Security;
@@ -116,36 +117,6 @@ public class ShopProductService : IShopProductService
 
         #endregion
 
-        #region Products Selected Brands
-
-        if (model.ShopBrandId != 0)
-        {
-            var selectedBrand = new ShopProductsSelectedBrands()
-            {
-                ShopBrandId = model.ShopBrandId,
-                ShopProductId = product.Id,
-            };
-
-            await _shopBrandsCommand.AddShopProductSelectedBrandAsync(selectedBrand , cancellation);
-        };
-
-        #endregion
-
-        #region Products Selected Colors
-
-        if (model.ShopColorId != 0)
-        {
-            var selectedColor = new ShopProductsSelectedColors()
-            {
-                ColorId = model.ShopColorId,
-                ShopProductId = product.Id,
-            };
-
-            await _shopColorsCommand.AddShopProductSelectedColorAsync(selectedColor, cancellation);
-        };
-
-        #endregion
-
         #region Selected Shop Categories
 
         //First Step
@@ -197,6 +168,44 @@ public class ShopProductService : IShopProductService
         await _unitOfWork.SaveChangesAsync();
 
         return CreateShopProductFromSellerPanelResult.Success;
+    }
+
+    public async Task<EditShopProductSellerSideDTO?> FillEditShopProductSellerSideDTO(ulong productId , ulong sellerId , CancellationToken token)
+    {
+        #region Get Market By UserId 
+
+        var market = await _marketService.GetMarketByUserId(sellerId);
+        if (market == null) return null;
+
+        #endregion
+
+        #region Get Product By Id 
+
+        var product = await _shopProductQueryRepository.GetByIdAsync(token , productId);
+        if(product == null) return null;
+        if (product.SellerUserId != sellerId) return null;
+
+        #endregion
+
+        #region Fill DTO 
+
+        EditShopProductSellerSideDTO model = new EditShopProductSellerSideDTO()
+        {
+            ShopProductId = product.Id,
+            ShopBrandId = product.ProductBrandId,
+            ShopColorId = product.ProductColorId,
+            Title = product.ProductName,
+            ProductImage = product.ProductImage,
+        };
+
+        #endregion
+
+        return model;
+    }
+
+    public async Task<List<ulong>> GetShopProductSelectedCategories(ulong productId, CancellationToken token)
+    {
+        return await _shopProductQueryRepository.GetShopProductSelectedCategories(productId, token);
     }
 
     #endregion

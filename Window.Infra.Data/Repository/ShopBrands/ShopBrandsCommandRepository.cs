@@ -16,9 +16,4 @@ public class ShopBrandsCommandRepository : CommandGenericRepository<Domain.Entit
 	}
 
     #endregion
-
-    public async Task AddShopProductSelectedBrandAsync(ShopProductsSelectedBrands selectedBrands, CancellationToken cancellationToken)
-    {
-        await _context.ShopProductsSelectedBrands.AddAsync(selectedBrands);
-    }
 }
