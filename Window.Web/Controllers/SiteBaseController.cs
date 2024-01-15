@@ -1,20 +1,23 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Window.Web.Areas.Admin.ActionFilterAttributes;
+using Window.Presentation.Filter;
 
-namespace Window.Web.Controllers
+namespace Window.Web.Controllers;
+
+
+[CatchExceptionFilter]
+public class SiteBaseController : Controller
 {
+    public static string SuccessMessage = "SuccessMessage";
+    public static string ErrorMessage = "ErrorMessage";
+    public static string InfoMessage = "InfoMessage";
+    public static string WarningMessage = "WarningMessage";
 
-    public class SiteBaseController : Controller
-    {
-        public static string SuccessMessage = "SuccessMessage";
-        public static string ErrorMessage = "ErrorMessage";
-        public static string InfoMessage = "InfoMessage";
-        public static string WarningMessage = "WarningMessage";
+    // Swal Messages Temp Data Key
+    public static string SwalSuccess = "success";
+    public static string SwalError = "error";
+    public static string SwalInfo = "info";
 
-        // Swal Messages Temp Data Key
-        public static string SwalSuccess = "success";
-        public static string SwalError = "error";
-        public static string SwalInfo = "info";
-    }
+    private ISender? _mediator;
+    protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<ISender>();
 }

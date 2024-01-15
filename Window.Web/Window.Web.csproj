@@ -62,6 +62,9 @@
 		<PackageReference Include="ZNetCS.AspNetCore.ResumingFileResults" Version="2.2.0" />
 		<PackageReference Include="ZarinpalSandbox" Version="2.0.4" />
 	    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
+		<PackageReference Include="MediatR" Version="12.2.0" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.0" />
 
 	</ItemGroup>
 

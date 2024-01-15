@@ -14,6 +14,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="FluentValidation" Version="11.8.1" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.1" />
+		<PackageReference Include="MediatR" Version="12.2.0" />
+		
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.39" />
 		<PackageReference Include="HtmlSanitizer" Version="6.0.453" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
@@ -26,6 +30,11 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Window.Domain\Window.Domain.csproj" />
 		<ProjectReference Include="..\Window.Infra.Data\Window.Infra.Data.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="CQRS\SellerPanel\ShopProducts\Commands\" />
+	  <Folder Include="CQRS\SellerPanel\ShopProducts\Queries\" />
 	</ItemGroup>
 	
 </Project>

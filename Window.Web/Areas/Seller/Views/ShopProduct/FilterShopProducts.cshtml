@@ -110,6 +110,10 @@
 
                                     <a asp-action="EditProductCategory" asp-controller="ShopProduct" asp-area="Seller" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">دسته بندی </a>
 
+                                    <a asp-action="ProductGallery" asp-controller="ShopProduct" asp-area="Seller" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">گالری تصاویر </a>
+
+                                    <a asp-action="ProductFeatures" asp-controller="ShopProduct" asp-area="Seller" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">ویژگی های محصول</a>
+
                                     <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteShopProduct", "ShopProduct", new {area = "Seller", shopProductId = product.Id})')" class="badge badge-danger  btn-xs">حذف</button>
                                 </td>
 
