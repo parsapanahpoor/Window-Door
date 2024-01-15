@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Stimulsoft.Report;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Entities.Market;

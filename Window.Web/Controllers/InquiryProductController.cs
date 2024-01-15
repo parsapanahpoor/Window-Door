@@ -2,12 +2,10 @@
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Stimulsoft.Blockly.Model;
 using System.Net;
 using Window.Application.Extensions;
 using Window.Application.Interfaces;
 using Window.Application.Services.Interfaces;
-using Window.Domain.Entities.Account;
 using Window.Domain.Enums.SellerType;
 using Window.Domain.Enums.Types;
 using Window.Domain.ViewModels.Site.Inquiry;
