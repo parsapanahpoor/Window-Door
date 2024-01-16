@@ -120,5 +120,17 @@ namespace Window.Application.StticTools
         public static readonly string DefaultProductAvatar = "/content/images/no-image.png";
 
         #endregion
+
+        #region Products Gallery
+
+        public static readonly string ProductsGalleryPath = "/content/images/ProductsGallery/main/";
+        public static readonly string ProductsGalleryPathServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/ProductsGallery/main/");
+
+        public static readonly string ProductsGalleryPathThumb = "/content/images/ProductsGallery/thumb/";
+        public static readonly string ProductsGalleryPathThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/ProductsGallery/thumb/");
+
+        public static readonly string DefaultProductsGalleryAvatar = "/content/images/no-image.png";
+
+        #endregion
     }
 }

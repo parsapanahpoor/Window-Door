@@ -13,6 +13,7 @@ using Window.Application.SiteServices;
 using Window.Data.Context;
 using Window.Domain.SharedResource;
 using Window.IOC.Container;
+using Window.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +69,12 @@ builder.Services.AddControllersWithViews()
 
 builder.Services.AddResumingFileResult();
 builder.Services.AddMvc();
+
+builder.Services.AddControllers();
+{
+    builder.Services.RegisterApplicationServices();
+}
+
 
 #endregion
 

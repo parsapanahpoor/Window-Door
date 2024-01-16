@@ -31,10 +31,5 @@
 		<ProjectReference Include="..\Window.Domain\Window.Domain.csproj" />
 		<ProjectReference Include="..\Window.Infra.Data\Window.Infra.Data.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="CQRS\SellerPanel\ShopProducts\Commands\" />
-	  <Folder Include="CQRS\SellerPanel\ShopProducts\Queries\" />
-	</ItemGroup>
 	
 </Project>

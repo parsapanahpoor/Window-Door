@@ -4,6 +4,8 @@ public record ProductGalleriesDTO
 {
     #region properties
 
+    public ulong Id { get; set; }
+
     public ulong ProductGalleryId { get; set; }
 
     public string ImageName { get; set; }

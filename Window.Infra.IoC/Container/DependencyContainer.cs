@@ -13,11 +13,13 @@ using Window.Domain.Interfaces.ShopBrands;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.Interfaces.ShopProduct;
+using Window.Domain.Interfaces.ShopProductGallery;
 using Window.Infra.Data.Repository;
 using Window.Infra.Data.Repository.ShopBrands;
 using Window.Infra.Data.Repository.ShopCategory;
 using Window.Infra.Data.Repository.ShopColors;
 using Window.Infra.Data.Repository.ShopProduct;
+using Window.Infra.Data.Repository.ShopProductGallery;
 
 namespace Window.IOC.Container
 {
@@ -42,11 +44,14 @@ namespace Window.IOC.Container
 			services.AddScoped<IShopColorsCommandRepository, ShopColorsCommandRepository>();
 			services.AddScoped<IShopColorsQueryRepository, ShopColorsQueryRepository>();
 
-			#endregion
+            services.AddScoped<IShopProductGalleryCommandRepository, ShopProductGalleryCommandRepository>();
+            services.AddScoped<IShopProductGalleryQueryRepository, ShopProductGalleryQueryRepository>();
 
-			#region Serviecs
+            #endregion
 
-			services.AddScoped<IUserService, UserService>();
+            #region Serviecs
+
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IWalletService, WalletService>();
             services.AddScoped<ITicketService, TicketService>();
             services.AddScoped<IPermissionService, PermissionService>();

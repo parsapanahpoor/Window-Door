@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Window.Application.CQRS.SellerPanel.ShopProducts.Queries.ListOfProductGallery;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
 using Window.Application.Services.Services;
@@ -241,6 +242,36 @@ public class ShopProductController : SellerBaseController
         var result = await _shopCategoryService.GetCategoriesChildrent(MainCategoryId , cancellationToken);
 
         return JsonResponseStatus.Success(result);
+    }
+
+    #endregion
+
+    #region Product Gallery 
+
+    [HttpGet]
+    public async Task<IActionResult> ProductGallery(ListOfProductGalleryQuery request , CancellationToken token)
+    {
+        #region Get Products Gallery 
+
+        ViewData["ListOfProductGalleries"] = Mediator.Send(request , token);
+
+        #endregion
+
+        return View();
+    }
+
+    [HttpPost , ValidateAntiForgeryToken]
+    public async Task<IActionResult> ProductGallery(CreateShopProductGalleryDTO model, 
+                                                    IFormFile NewsImage,
+                                                    CancellationToken cancellation)
+    {
+        #region Get Products Gallery 
+
+        ViewData["ListOfProductGalleries"] = Mediator.Send(request, token);
+
+        #endregion
+
+        return View();
     }
 
     #endregion
