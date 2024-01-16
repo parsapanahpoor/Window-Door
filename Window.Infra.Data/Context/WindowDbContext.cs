@@ -26,6 +26,7 @@ using Window.Domain.Entities.ShopBrands;
 using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopColors;
 using Window.Domain.Entities.ShopProduct;
+using Window.Domain.Entities.ShopProductFeature;
 using Window.Domain.Entities.ShopProductGallery;
 using Window.Domain.Entities.SiteSetting;
 using Window.Domain.Entities.TechnicalIssues;
@@ -254,6 +255,12 @@ public class WindowDbContext : DbContext
     #region Shop Colors
 
     public DbSet<ShopColor> ShopColors { get; set; }
+
+    #endregion
+
+    #region Shop Product Feature
+
+    public DbSet<ShopProductFeature> ShopProductFeature { get; set; }
 
     #endregion
 

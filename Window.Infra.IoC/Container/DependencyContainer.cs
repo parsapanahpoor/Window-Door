@@ -14,6 +14,7 @@ using Window.Domain.Interfaces.ShopBrands;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.Interfaces.ShopProduct;
+using Window.Domain.Interfaces.ShopProductFeature;
 using Window.Domain.Interfaces.ShopProductGallery;
 using Window.Infra.Data.Repository;
 using Window.Infra.Data.Repository.Maket;
@@ -21,6 +22,7 @@ using Window.Infra.Data.Repository.ShopBrands;
 using Window.Infra.Data.Repository.ShopCategory;
 using Window.Infra.Data.Repository.ShopColors;
 using Window.Infra.Data.Repository.ShopProduct;
+using Window.Infra.Data.Repository.ShopProductFeature;
 using Window.Infra.Data.Repository.ShopProductGallery;
 
 namespace Window.IOC.Container
@@ -51,6 +53,9 @@ namespace Window.IOC.Container
 
             services.AddScoped<IMarketQueryRepository, MarketQueryRepository>();
             services.AddScoped<IMarketCommandRepository, MarketCommandRepository>();
+
+            services.AddScoped<IShopProductFeatureCommandRepository, ShopProductFeatureCommandRepository>();
+            services.AddScoped<IShopProductFeatureQueryRepository, ShopProductFeatureQueryRepository>();
 
             #endregion
 

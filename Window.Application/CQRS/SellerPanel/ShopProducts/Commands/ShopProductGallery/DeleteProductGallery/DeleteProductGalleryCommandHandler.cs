@@ -67,8 +67,6 @@ public record DeleteProductGalleryCommandHandler : IRequestHandler<DeleteProduct
             productGallery.ImageName.DeleteImage(FilePaths.ProductsGalleryPathServer, FilePaths.ProductsGalleryPathThumbServer);
         }
 
-        productGallery.ImageName = "deleted";
-
         _shopProductGalleryCommandRepository.Update(productGallery);
         await _unitOfWork.SaveChangesAsync();
 

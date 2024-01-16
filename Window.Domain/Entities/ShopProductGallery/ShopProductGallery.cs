@@ -7,7 +7,7 @@ public sealed class ShopProductGallery : BaseEntity
 
     public ulong ProductId { get; set; }
 
-    public string ImageName { get; set; }
+    public string? ImageName { get; set; }
 
     #endregion
 }
