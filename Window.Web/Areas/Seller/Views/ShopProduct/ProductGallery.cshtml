@@ -27,6 +27,7 @@
 }
 
 <form method="post" asp-action="ProductGallery" asp-controller="ShopProduct" asp-area="Seller" enctype="multipart/form-data">
+    <input asp-for="ProductId" type="hidden" />
     <div class="row">
 
         <div class="col-lg-3 col-sm-12">
@@ -109,7 +110,7 @@
 
                                         <td class="tc vm">
 
-                                            <button onclick="DeleteAjax(@gallery.Id, '@Url.Action("DeleteShopProductsGallery", "ShopProduct", new {area = "Seller", productGalleryId = gallery.Id})')" class="badge badge-danger  btn-xs">حذف</button>
+                                            <button onclick="DeleteAjax(@gallery.Id, '@Url.Action("DeleteProductGallery", "ShopProduct", new {area = "Seller", galleryId = gallery.Id})')" class="badge badge-danger  btn-xs">حذف</button>
 
                                         </td>
 

@@ -9,12 +9,14 @@ using Window.Application.Services.Interfaces;
 using Window.Application.Services.Services;
 using Window.Data.Repository;
 using Window.Domain.Interfaces;
+using Window.Domain.Interfaces.Maket;
 using Window.Domain.Interfaces.ShopBrands;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.Interfaces.ShopProduct;
 using Window.Domain.Interfaces.ShopProductGallery;
 using Window.Infra.Data.Repository;
+using Window.Infra.Data.Repository.Maket;
 using Window.Infra.Data.Repository.ShopBrands;
 using Window.Infra.Data.Repository.ShopCategory;
 using Window.Infra.Data.Repository.ShopColors;
@@ -46,6 +48,9 @@ namespace Window.IOC.Container
 
             services.AddScoped<IShopProductGalleryCommandRepository, ShopProductGalleryCommandRepository>();
             services.AddScoped<IShopProductGalleryQueryRepository, ShopProductGalleryQueryRepository>();
+
+            services.AddScoped<IMarketQueryRepository, MarketQueryRepository>();
+            services.AddScoped<IMarketCommandRepository, MarketCommandRepository>();
 
             #endregion
 

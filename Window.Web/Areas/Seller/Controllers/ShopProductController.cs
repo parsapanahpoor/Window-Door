@@ -2,6 +2,8 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.CreateShopProductGallery;
+using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.DeleteProductGallery;
 using Window.Application.CQRS.SellerPanel.ShopProducts.Queries.ListOfProductGallery;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
@@ -249,11 +251,11 @@ public class ShopProductController : SellerBaseController
     #region Product Gallery 
 
     [HttpGet]
-    public async Task<IActionResult> ProductGallery(ListOfProductGalleryQuery request , CancellationToken token)
+    public async Task<IActionResult> ProductGallery(ListOfProductGalleryQuery query , CancellationToken token = default)
     {
         #region Get Products Gallery 
 
-        ViewData["ListOfProductGalleries"] = Mediator.Send(request , token);
+        ViewData["ListOfProductGalleries"] =await  Mediator.Send(query, token);
 
         #endregion
 
@@ -263,15 +265,56 @@ public class ShopProductController : SellerBaseController
     [HttpPost , ValidateAntiForgeryToken]
     public async Task<IActionResult> ProductGallery(CreateShopProductGalleryDTO model, 
                                                     IFormFile NewsImage,
-                                                    CancellationToken cancellation)
+                                                    CancellationToken cancellation= default)
     {
-        #region Get Products Gallery 
+        #region Map DTOs
 
-        ViewData["ListOfProductGalleries"] = Mediator.Send(request, token);
+        CreateProductGalleryQuery command = new CreateProductGalleryQuery()
+        {
+            image = NewsImage,
+            productId = model.ProductId,
+            sellerUserId = User.GetUserId(),
+        };
+
+        ListOfProductGalleryQuery query = new ListOfProductGalleryQuery()
+        {
+            productId = model.ProductId
+        };
 
         #endregion
 
-        return View();
+        #region Add Gallery
+
+        var res = await Mediator.Send(command , cancellation);
+        if (res)
+        {
+            TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+            return RedirectToAction(nameof(ProductGallery) , new { productId  = model.ProductId});
+        }
+
+        #endregion
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+        ViewData["ListOfProductGalleries"] = Mediator.Send(query, cancellation);
+
+        return View(model);
+    }
+
+    #endregion
+
+    #region Delete Product Gallery
+
+    [HttpGet]
+    public async Task<IActionResult> DeleteProductGallery(DeleteProductGalleryCommand command , CancellationToken token = default) 
+    {
+        command.userSellerId = User.GetUserId();
+        var res = await Mediator.Send(command , token);
+        if (res)
+        {
+            return JsonResponseStatus.Success();
+        }
+
+        return JsonResponseStatus.Error();
     }
 
     #endregion

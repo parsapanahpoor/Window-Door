@@ -2,5 +2,8 @@
 
 namespace Window.Application.CQRS.SellerPanel.ShopProducts.Queries.ListOfProductGallery;
 
-public record ListOfProductGalleryQuery(ulong productId) : IRequest<List<ProductGalleriesDTO>>;
+public class ListOfProductGalleryQuery : IRequest<List<ProductGalleriesDTO>>
+{
+    public ulong productId { get; set; }
+}
 

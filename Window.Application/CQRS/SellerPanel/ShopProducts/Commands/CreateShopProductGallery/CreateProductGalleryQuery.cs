@@ -2,4 +2,11 @@
 
 namespace Window.Application.CQRS.SellerPanel.ShopProducts.Commands.CreateShopProductGallery;
 
-public record CreateProductGalleryQuery(ulong sellerUserId , ulong productId , IFormFile image) : IRequest<bool>;
+public class CreateProductGalleryQuery : IRequest<bool>
+{
+    public ulong sellerUserId { get; set; }
+
+    public ulong productId { get; set; }
+
+    public IFormFile image { get; set; }
+}
