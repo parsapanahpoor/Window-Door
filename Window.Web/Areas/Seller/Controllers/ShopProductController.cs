@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.CreateShopProductGallery;
+using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.CreateShopShopProductFeature;
 using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.DeleteProductGallery;
 using Window.Application.CQRS.SellerPanel.ShopProducts.Queries.ListOfProductGallery;
 using Window.Application.Extensions;
@@ -23,9 +24,9 @@ public class ShopProductController : SellerBaseController
     private readonly IShopBrandsService _shopBrandsService;
     private readonly IShopColorService _shopColorService;
 
-    public ShopProductController(IShopProductService shopProductService, 
+    public ShopProductController(IShopProductService shopProductService,
                                  IShopCategoryService shopCategoryService,
-                                 IShopColorService shopColorService  , 
+                                 IShopColorService shopColorService,
                                  IShopBrandsService shopBrandsService)
     {
         _shopProductService = shopProductService;
@@ -38,11 +39,11 @@ public class ShopProductController : SellerBaseController
 
     #region Filter Products
 
-    public async Task<IActionResult> FilterShopProducts(FilterShopProductSellerSideDTO filter , CancellationToken cancellation = default)
+    public async Task<IActionResult> FilterShopProducts(FilterShopProductSellerSideDTO filter, CancellationToken cancellation = default)
     {
         filter.SellerUserId = User.GetUserId();
 
-        return View(await _shopProductService.FilterShopProductSellerSide(filter , cancellation));
+        return View(await _shopProductService.FilterShopProductSellerSide(filter, cancellation));
     }
 
     #endregion
@@ -63,8 +64,8 @@ public class ShopProductController : SellerBaseController
         return View();
     }
 
-    [HttpPost , ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateProduct(CreateShopProductSellerSideDTO model , IFormFile NewsImage,  CancellationToken cancellation = default)
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateProduct(CreateShopProductSellerSideDTO model, IFormFile NewsImage, CancellationToken cancellation = default)
     {
         #region Model State Validation 
 
@@ -86,7 +87,7 @@ public class ShopProductController : SellerBaseController
 
         #region Add Product To The Data Base
 
-        var res = await _shopProductService.AddShopProductToTheDataBase(User.GetUserId() , model , NewsImage, cancellation);
+        var res = await _shopProductService.AddShopProductToTheDataBase(User.GetUserId(), model, NewsImage, cancellation);
         switch (res)
         {
             case CreateShopProductFromSellerPanelResult.Success:
@@ -127,9 +128,9 @@ public class ShopProductController : SellerBaseController
     #region Edit Product
 
     [HttpGet]
-    public async Task<IActionResult> EditProduct(ulong productId , CancellationToken cancellation)
+    public async Task<IActionResult> EditProduct(ulong productId, CancellationToken cancellation)
     {
-        var product = await _shopProductService.FillEditShopProductSellerSideDTO(productId , User.GetUserId() , cancellation);
+        var product = await _shopProductService.FillEditShopProductSellerSideDTO(productId, User.GetUserId(), cancellation);
         if (product == null) return NotFound();
 
         #region View Bags
@@ -143,14 +144,14 @@ public class ShopProductController : SellerBaseController
         return View(product);
     }
 
-    [HttpPost , ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> EditProduct(EditShopProductSellerSideDTO model, IFormFile? NewsImage, CancellationToken cancellation)
     {
         #region Edit Product
 
-        if (ModelState.IsValid) 
+        if (ModelState.IsValid)
         {
-            var res = await _shopProductService.EditShopProductSellerSide(model , User.GetUserId() , NewsImage, cancellation);
+            var res = await _shopProductService.EditShopProductSellerSide(model, User.GetUserId(), NewsImage, cancellation);
             switch (res)
             {
                 case EditShopProductFromSellerPanelResult.Success:
@@ -191,9 +192,9 @@ public class ShopProductController : SellerBaseController
 
     #region Delete Shop Product 
 
-    public async Task<IActionResult> DeleteShopProduct(ulong shopProductId , CancellationToken cancellation)
+    public async Task<IActionResult> DeleteShopProduct(ulong shopProductId, CancellationToken cancellation)
     {
-        var result = await _shopProductService.DeleteArticleAdminSide(shopProductId, User.GetUserId() ,cancellation) ;
+        var result = await _shopProductService.DeleteArticleAdminSide(shopProductId, User.GetUserId(), cancellation);
         if (result)
         {
             return JsonResponseStatus.Success();
@@ -209,17 +210,17 @@ public class ShopProductController : SellerBaseController
     [HttpGet]
     public async Task<IActionResult> EditProductCategory(ulong productId, CancellationToken cancellation)
     {
-        ViewData["ProductId"] = productId;  
+        ViewData["ProductId"] = productId;
 
-        return View(await _shopProductService.FillListOfSellerProductCategoriesDTO(User.GetUserId() , productId , cancellation));
+        return View(await _shopProductService.FillListOfSellerProductCategoriesDTO(User.GetUserId(), productId, cancellation));
     }
 
-    [HttpPost , ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditProductCategory(ulong productId, List<ulong>? Permissions,  CancellationToken cancellation)
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditProductCategory(ulong productId, List<ulong>? Permissions, CancellationToken cancellation)
     {
         #region Update Doctor Speciality Info
 
-        var res = await _shopProductService.UpdateDoctorSpecialitySelected(Permissions , User.GetUserId() , productId , cancellation);
+        var res = await _shopProductService.UpdateDoctorSpecialitySelected(Permissions, User.GetUserId(), productId, cancellation);
         if (res)
         {
             TempData[SuccessMessage] = "دسته بندی های انتخابی باموفقیت ثبت گردید.";
@@ -239,33 +240,35 @@ public class ShopProductController : SellerBaseController
 
     #region Load Sub Categories
 
-    public async Task<IActionResult> LoadSubCategories(ulong MainCategoryId , CancellationToken cancellationToken = default)
+    public async Task<IActionResult> LoadSubCategories(ulong MainCategoryId, CancellationToken cancellationToken = default)
     {
-        var result = await _shopCategoryService.GetCategoriesChildrent(MainCategoryId , cancellationToken);
+        var result = await _shopCategoryService.GetCategoriesChildrent(MainCategoryId, cancellationToken);
 
         return JsonResponseStatus.Success(result);
     }
 
     #endregion
 
+    #region Gallery
+
     #region Product Gallery 
 
     [HttpGet]
-    public async Task<IActionResult> ProductGallery(ListOfProductGalleryQuery query , CancellationToken token = default)
+    public async Task<IActionResult> ProductGallery(ListOfProductGalleryQuery query, CancellationToken token = default)
     {
         #region Get Products Gallery 
 
-        ViewData["ListOfProductGalleries"] =await  Mediator.Send(query, token);
+        ViewData["ListOfProductGalleries"] = await Mediator.Send(query, token);
 
         #endregion
 
         return View();
     }
 
-    [HttpPost , ValidateAntiForgeryToken]
-    public async Task<IActionResult> ProductGallery(CreateShopProductGalleryDTO model, 
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> ProductGallery(CreateShopProductGalleryDTO model,
                                                     IFormFile NewsImage,
-                                                    CancellationToken cancellation= default)
+                                                    CancellationToken cancellation = default)
     {
         #region Map DTOs
 
@@ -285,11 +288,11 @@ public class ShopProductController : SellerBaseController
 
         #region Add Gallery
 
-        var res = await Mediator.Send(command , cancellation);
+        var res = await Mediator.Send(command, cancellation);
         if (res)
         {
             TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
-            return RedirectToAction(nameof(ProductGallery) , new { productId  = model.ProductId});
+            return RedirectToAction(nameof(ProductGallery), new { productId = model.ProductId });
         }
 
         #endregion
@@ -305,10 +308,10 @@ public class ShopProductController : SellerBaseController
     #region Delete Product Gallery
 
     [HttpGet]
-    public async Task<IActionResult> DeleteProductGallery(DeleteProductGalleryCommand command , CancellationToken token = default) 
+    public async Task<IActionResult> DeleteProductGallery(DeleteProductGalleryCommand command, CancellationToken token = default)
     {
         command.userSellerId = User.GetUserId();
-        var res = await Mediator.Send(command , token);
+        var res = await Mediator.Send(command, token);
         if (res)
         {
             return JsonResponseStatus.Success();
@@ -316,6 +319,83 @@ public class ShopProductController : SellerBaseController
 
         return JsonResponseStatus.Error();
     }
+
+    #endregion
+
+    #endregion
+
+    #region Product Feature
+
+    #region Product Feature 
+
+    [HttpGet]
+    public async Task<IActionResult> ProductFeature(CreateShopProductFeatureQuery query, CancellationToken token = default)
+    {
+        #region Get Products Feature 
+
+        ViewData["ListOfProductFeatures"] = await Mediator.Send(query, token);
+
+        #endregion
+
+        return View();
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> ProductGallery(CreateShopProductGalleryDTO model,
+                                                    IFormFile NewsImage,
+                                                    CancellationToken cancellation = default)
+    {
+        #region Map DTOs
+
+        CreateProductGalleryQuery command = new CreateProductGalleryQuery()
+        {
+            image = NewsImage,
+            productId = model.ProductId,
+            sellerUserId = User.GetUserId(),
+        };
+
+        ListOfProductGalleryQuery query = new ListOfProductGalleryQuery()
+        {
+            productId = model.ProductId
+        };
+
+        #endregion
+
+        #region Add Gallery
+
+        var res = await Mediator.Send(command, cancellation);
+        if (res)
+        {
+            TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+            return RedirectToAction(nameof(ProductGallery), new { productId = model.ProductId });
+        }
+
+        #endregion
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+        ViewData["ListOfProductGalleries"] = Mediator.Send(query, cancellation);
+
+        return View(model);
+    }
+
+    #endregion
+
+    #region Delete Product Gallery
+
+    [HttpGet]
+    public async Task<IActionResult> DeleteProductGallery(DeleteProductGalleryCommand command, CancellationToken token = default)
+    {
+        command.userSellerId = User.GetUserId();
+        var res = await Mediator.Send(command, token);
+        if (res)
+        {
+            return JsonResponseStatus.Success();
+        }
+
+        return JsonResponseStatus.Error();
+    }
+
+    #endregion
 
     #endregion
 }

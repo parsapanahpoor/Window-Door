@@ -3,6 +3,7 @@ using Window.Data;
 using Window.Data.Context;
 using Window.Domain.Interfaces.ShopProductFeature;
 using Window.Domain.ViewModels.Admin.ShopBrand;
+using Window.Domain.ViewModels.Seller.ShopProduct;
 using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Infra.Data.Repository.ShopProductFeature;
@@ -20,9 +21,23 @@ public class ShopProductFeatureQueryRepository : QueryGenericRepository<Domain.E
 
     #endregion
 
-    #region Admin 
+    #region Seller Side 
 
-
+    public async Task<List<ProductFeaturesDTO>?> FillProductFeaturesDTO(ulong productId, CancellationToken token)
+    {
+        return await _context.ShopProductFeature
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.ProductId == productId)
+                             .Select(p => new ProductFeaturesDTO()
+                             {
+                                 ProductFeatureId = productId,
+                                 Id = p.Id,
+                                 Title = p.FeatureTitle,
+                                 Value = p.FeatureValue
+                             })
+                             .ToListAsync();
+    }
 
     #endregion
 
