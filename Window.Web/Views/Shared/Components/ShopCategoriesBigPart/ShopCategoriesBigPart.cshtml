@@ -29,14 +29,19 @@
                                     {
                                         foreach (var thirdCategories in Model.Where(t => t.ParentId.HasValue && t.ParentId == secondCategories.ShopCategoryId).OrderBy(p => p.Priority))
                                         {
-                                            <li class="sublist--item"><a href="#">@thirdCategories.ShopCategoryTitle</a></li>
+                                            <li class="sublist--item">
+                                                <a asp-action="FilterProducts"
+                                                   asp-area=""
+                                                   asp-controller="ShopProduct"
+                                                   asp-route-shopCategories="@thirdCategories.ShopCategoryId">@thirdCategories.ShopCategoryTitle</a>
+                                            </li>
                                         }
 
                                         <li class="sublist--item">
                                             <a asp-action="FilterProducts"
                                                asp-area=""
                                                asp-controller="ShopProduct"
-                                               asp-route-ShopCategoryParentId="@secondCategories.ShopCategoryId">
+                                               asp-route-shopCategories="@secondCategories.ShopCategoryId">
                                                 سایر @secondCategories.ShopCategoryTitle ...
                                             </a>
                                         </li>

@@ -6,7 +6,7 @@ public class ProductFeaturesDTO
 
     public ulong Id { get; set; }
 
-    public ulong ProductFeatureId { get; set; }
+    public ulong ProductId { get; set; }
 
     public string Title { get; set; }
 

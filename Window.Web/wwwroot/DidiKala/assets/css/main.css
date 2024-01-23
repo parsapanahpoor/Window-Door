@@ -982,8 +982,8 @@ header.main-header .main-menu .list .list-item.mega-menu.mega-menu-col-2 li {
 }
 
 header.main-header .main-menu .list .list-item.mega-menu.mega-menu-col-3>.sub-menu {
-    width: auto;
-    height:auto;
+    min-width: 540px;
+    width: 540px;
 }
 
 header.main-header .main-menu .list .list-item.mega-menu.mega-menu-col-3 li {
@@ -1115,8 +1115,8 @@ header.main-header .main-menu>ul>li.category-list>ul>li.active>ul {
 }
 
 header.main-header .main-menu>ul>li.category-list>ul>li>ul {
-    width: 1200px;
-    height: 500px;
+    width: 870px;
+    height: 450px;
     overflow: hidden;
     position: absolute;
     right: 220px;
@@ -1127,7 +1127,7 @@ header.main-header .main-menu>ul>li.category-list>ul>li>ul {
     flex-direction: column;
     flex-wrap: wrap;
     align-content: flex-start;
-    max-height: 500px;
+    max-height: 418px;
     display: none;
 }
 
@@ -1170,8 +1170,8 @@ header.main-header .main-menu>ul>li.category-list .sublist--title:hover::after {
 
 header.main-header .main-menu>ul>li.category-list .sublist--item {
     color: #a6a6a6;
-    font-size: 14px;
-    line-height: 25px;
+    font-size: 13px;
+    line-height: 27px;
 }
 
 header.main-header .main-menu>ul>li.category-list>ul>li>ul>li .list-item--image:hover {

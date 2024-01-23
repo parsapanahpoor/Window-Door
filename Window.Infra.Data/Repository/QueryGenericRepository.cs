@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Window.Data.Context;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Data;
 

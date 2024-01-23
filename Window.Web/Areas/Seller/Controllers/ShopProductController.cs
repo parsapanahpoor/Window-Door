@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.CreateShopProductGallery;
 using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.CreateShopShopProductFeature;
 using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.DeleteProductGallery;
+using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.DeleteShopProductFeature;
+using Window.Application.CQRS.SellerPanel.ShopProducts.Queries.ListOfProductFeature;
 using Window.Application.CQRS.SellerPanel.ShopProducts.Queries.ListOfProductGallery;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
@@ -329,7 +331,8 @@ public class ShopProductController : SellerBaseController
     #region Product Feature 
 
     [HttpGet]
-    public async Task<IActionResult> ProductFeature(CreateShopProductFeatureQuery query, CancellationToken token = default)
+    public async Task<IActionResult> ProductFeature(ListOfProductFeatureQuery query, 
+                                                    CancellationToken token = default)
     {
         #region Get Products Feature 
 
@@ -341,20 +344,20 @@ public class ShopProductController : SellerBaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> ProductGallery(CreateShopProductGalleryDTO model,
-                                                    IFormFile NewsImage,
+    public async Task<IActionResult> ProductFeature(ProductFeaturesDTO model,
                                                     CancellationToken cancellation = default)
     {
         #region Map DTOs
 
-        CreateProductGalleryQuery command = new CreateProductGalleryQuery()
+        CreateShopProductFeatureQuery command = new CreateShopProductFeatureQuery()
         {
-            image = NewsImage,
+            FeatureTitle = model.Title,
+            FeatureValue = model.Value,
             productId = model.ProductId,
             sellerUserId = User.GetUserId(),
         };
 
-        ListOfProductGalleryQuery query = new ListOfProductGalleryQuery()
+        ListOfProductFeatureQuery query = new ListOfProductFeatureQuery()
         {
             productId = model.ProductId
         };
@@ -367,7 +370,7 @@ public class ShopProductController : SellerBaseController
         if (res)
         {
             TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
-            return RedirectToAction(nameof(ProductGallery), new { productId = model.ProductId });
+            return RedirectToAction(nameof(ProductFeature), new { productId = model.ProductId });
         }
 
         #endregion
@@ -380,12 +383,12 @@ public class ShopProductController : SellerBaseController
 
     #endregion
 
-    #region Delete Product Gallery
+    #region Delete Product Feature
 
     [HttpGet]
-    public async Task<IActionResult> DeleteProductGallery(DeleteProductGalleryCommand command, CancellationToken token = default)
+    public async Task<IActionResult> DeleteProductFeature(DeleteShopProductFeatureCommand command, CancellationToken token = default)
     {
-        command.userSellerId = User.GetUserId();
+        command.SellerUserId = User.GetUserId();
         var res = await Mediator.Send(command, token);
         if (res)
         {

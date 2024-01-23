@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Window.Data;
 using Window.Data.Context;
+using Window.Domain.Entities.Product;
 using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopProduct;
 using Window.Domain.Interfaces.ShopProduct;
 using Window.Domain.ViewModels.Admin.ShopColor;
 using Window.Domain.ViewModels.Seller.ShopProduct;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Infra.Data.Repository.ShopProduct;
 
@@ -18,6 +20,90 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
     public ShopProductQueryRepository(WindowDbContext context) : base(context)
     {
         _context = context;
+    }
+
+    #endregion
+
+    #region Site Side 
+
+    //List Of Products
+    public async Task<FilterShopProductDTO> FilterProducts(FilterShopProductDTO model, CancellationToken cancellation)
+    {
+        var query = _context.ShopProducts
+            .AsNoTracking()
+            .Where(s => !s.IsDelete)
+            .OrderByDescending(s => s.CreateDate)
+            .AsQueryable();
+
+        #region Filter
+
+        //Color
+        if (model.ColorsId != null && model.ColorsId.Any())
+        {
+            query = query.Where(p => model.ColorsId.Contains(p.ProductColorId));
+        }
+
+        //Brand
+        if (model.BrandId != null && model.BrandId.Any())
+        {
+            query = query.Where(p => model.BrandId.Contains(p.ProductBrandId));
+        }
+
+        //Title
+        if (!string.IsNullOrEmpty(model.ProductTitle))
+        {
+            query = query.Where(p => p.ProductName.Contains(model.ProductTitle));
+        }
+
+        //ShopCategory
+        if (model.shopCategories != null && model.shopCategories.Any())
+        {
+            var categoryProducts = _context.ShopProductSelectedCategories
+                            .AsNoTracking()
+                            .Include(p => p.ShopProduct)
+                            .Where(p => !p.IsDelete && model.shopCategories.Contains(p.ShopCategoryId))
+                            .Select(p => p.ShopProduct)
+                            .Distinct()
+                            .AsQueryable();
+
+            query = from q in query
+                    join c in categoryProducts
+                    on q.Id equals c.Id
+                    select new Domain.Entities.ShopProduct.ShopProduct
+                    {
+                        Id = q.Id,
+                        CreateDate = q.CreateDate,
+                        IsDelete = q.IsDelete,
+                        Price = q.Price,
+                        ProductName = q.ProductName,
+                        LongDescription = q.LongDescription,
+                        ProductBrandId = q.ProductBrandId,
+                        ProductColorId = q.ProductColorId,
+                        ProductImage = q.ProductImage,
+                        SellerUserId = q.SellerUserId,
+                        ShortDescription = q.ShortDescription,
+                    };
+        }
+
+        #endregion
+
+        #region Price
+
+        if (model.MinPrice.HasValue)
+        {
+            query = query.Where(p => p.Price >= model.MinPrice.Value);
+        }
+
+        if (model.MaxPrice.HasValue)
+        {
+            query = query.Where(p => p.Price <= model.MaxPrice.Value);
+        }
+
+        #endregion
+
+        await model.Paging(query.Distinct());
+
+        return model;
     }
 
     #endregion

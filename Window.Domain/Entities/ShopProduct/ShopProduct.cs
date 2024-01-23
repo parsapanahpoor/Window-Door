@@ -1,4 +1,5 @@
 ﻿using Window.Domain.Entities.Common;
+using Window.Domain.Entities.ShopCategories;
 namespace Window.Domain.Entities.ShopProduct;
 
 public sealed class ShopProduct : BaseEntity
@@ -19,7 +20,13 @@ public sealed class ShopProduct : BaseEntity
 
     public string LongDescription { get; set; }
 
-    public string Price { get; set; }
+    public decimal Price { get; set; }
+
+    #endregion
+
+    #region Navigation
+
+    public List<ShopProductSelectedCategories> ShopProductSelectedCategories { get; set; }
 
     #endregion
 }

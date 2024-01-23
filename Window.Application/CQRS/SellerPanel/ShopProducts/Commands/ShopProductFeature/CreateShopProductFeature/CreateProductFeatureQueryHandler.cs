@@ -53,7 +53,7 @@ public record CreateShopProductFeatureQueryHandler : IRequestHandler<CreateShopP
 
         #endregion
 
-        #region Add Gallery
+        #region Add ShopProductFeature
 
         ShopProductFeature ShopProductFeature = new ShopProductFeature()
         {

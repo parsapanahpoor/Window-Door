@@ -214,7 +214,7 @@ public class ShopProductService : IShopProductService
         oldProduct.ProductName = newProduct.Title.SanitizeText();
         oldProduct.ShortDescription = newProduct.ShortDescription.SanitizeText();
         oldProduct.LongDescription = newProduct.Description.SanitizeText();
-        oldProduct.Price = newProduct.Price.SanitizeText();
+        oldProduct.Price = newProduct.Price;
         oldProduct.ProductBrandId = newProduct.ShopBrandId;
         oldProduct.ProductColorId = newProduct.ShopColorId;
 

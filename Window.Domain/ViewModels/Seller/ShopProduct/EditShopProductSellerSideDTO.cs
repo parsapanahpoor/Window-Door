@@ -21,7 +21,7 @@ public record EditShopProductSellerSideDTO
     [Display(Name = "متن ")]
     public string? Description { get; set; }
 
-    public string Price { get; set; }
+    public decimal Price { get; set; }
 
     [Display(Name = "تگ  ")]
     [MaxLength(300, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]

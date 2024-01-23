@@ -2,11 +2,20 @@
 using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopProduct;
 using Window.Domain.ViewModels.Seller.ShopProduct;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Domain.Interfaces.ShopProduct;
 
 public interface IShopProductQueryRepository
 {
+
+    #region Site Side 
+
+    //List Of Products
+    Task<FilterShopProductDTO> FilterProducts(FilterShopProductDTO model, CancellationToken cancellation);
+
+    #endregion
+
     #region General Methods
 
     Task<Domain.Entities.ShopProduct.ShopProduct> GetByIdAsync(CancellationToken cancellationToken, params object[] ids);

@@ -31,7 +31,7 @@ public class ShopProductFeatureQueryRepository : QueryGenericRepository<Domain.E
                                     p.ProductId == productId)
                              .Select(p => new ProductFeaturesDTO()
                              {
-                                 ProductFeatureId = productId,
+                                 ProductId = productId,
                                  Id = p.Id,
                                  Title = p.FeatureTitle,
                                  Value = p.FeatureValue

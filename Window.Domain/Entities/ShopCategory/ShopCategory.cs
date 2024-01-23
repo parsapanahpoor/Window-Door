@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Window.Domain.Entities.Common;
+using Window.Domain.Entities.ShopCategories;
 namespace Window.Domain.Entities;
 
 public sealed class ShopCategory : BaseEntity
@@ -18,6 +19,12 @@ public sealed class ShopCategory : BaseEntity
     public bool ShowOnSiteLanding { get; set; }
 
     public decimal Priority { get; set; }
+
+    #endregion
+
+    #region Navigation
+
+    public List<ShopProductSelectedCategories> ShopProductSelectedCategories { get; set; }
 
     #endregion
 }
