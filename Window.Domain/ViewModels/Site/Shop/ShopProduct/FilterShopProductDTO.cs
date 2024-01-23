@@ -18,6 +18,8 @@ public class FilterShopProductDTO : BasePaging<Entities.ShopProduct.ShopProduct>
 
     public List<ulong>? shopCategories { get; set; }
 
+    public ulong? ShopCategoryParentId { get; set; }
+
     #endregion
 }
 

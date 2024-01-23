@@ -45,9 +45,14 @@ public class ShopProductController : SiteBaseController
 
         #region View Data
 
+        if (filter.ShopCategoryParentId.HasValue )
+        {
+            ViewData["ListOfShopCategories"] = await _shopCategoryService.FillShopCategoriesForShowInFilterShopProduct(filter.ShopCategoryParentId.Value, cancellationToken);
+            ViewData["SelectedParentCategoryMainTitle"] = await _shopCategoryService.GetShopCategoryTitle(filter.ShopCategoryParentId.Value, cancellationToken);
+        }
+
         if (filter.shopCategories != null && filter.shopCategories.Any() && filter.shopCategories.Count() == 1)
         {
-            ViewData["ListOfShopCategories"] = await _shopCategoryService.FillShopCategoriesForShowInFilterShopProduct(filter.shopCategories.First(), cancellationToken);
             ViewData["SelectedParentCategoryTitle"] = await _shopCategoryService.GetShopCategoryTitle(filter.shopCategories.First(), cancellationToken);
         }
 

@@ -9,6 +9,7 @@
 
     var shopCategories = ViewData["ListOfShopCategories"] as List<ShopCategoriesForShowInFilterShopProduct>;
     var SelectedParentCategoryTitle = ViewData["SelectedParentCategoryTitle"] as string;
+    var SelectedParentCategoryMainTitle = ViewData["SelectedParentCategoryMainTitle"] as string;
 
     var brands = ViewData["Brands"] as List<ListOfBrandsForFilterProductsDTO>;
 
@@ -30,6 +31,9 @@
                         </div>
                     </div><div class="dt-sn dt-sn--box mb-3">
                         <form asp-action="FilterProducts" asp-area="" asp-controller="ShopProduct" method="get">
+                            <input asp-for="ShopCategoryParentId" type="hidden"/>
+                            <input asp-for="ProductTitle" type="hidden"/>
+
                             <div class="col-12">
                                 <div class="section-title text-sm-title title-wide mb-1 no-after-title-wide">
                                     <h2>فیلتر محصولات</h2>
@@ -54,15 +58,27 @@
                                                 <h2 class="mb-0">
                                                     <button class="btn btn-block text-right" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                         دسته بندی های @SelectedParentCategoryTitle
-                                                        @if (shopCategories != null && shopCategories.Any())
-                                                        {
+                                                  
+                                                    </button>
+                                                    @if (Model.shopCategories != null && Model.shopCategories.Any())
+                                                    {
+                                                        <input name="shopCategories" type="hidden" value="@Model.shopCategories.First()" />
+                                                    }
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (shopCategories != null && shopCategories.Any())
+                                    {
+                                        <div class="card">
+                                            <div class="card-header" id="headingOne">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-block text-right" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                        دسته بندی های @SelectedParentCategoryMainTitle
                                                             <i class="mdi mdi-chevron-down"></i>
-                                                        }
                                                     </button>
                                                 </h2>
                                             </div>
-                                            @if (shopCategories != null && shopCategories.Any())
-                                            {
                                                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
                                                     <div class="card-body">
 
@@ -71,14 +87,14 @@
                                                             if (Model.shopCategories != null && Model.shopCategories.Any() && Model.shopCategories.Contains(shopCategory.ShopCategoryId))
                                                             {
                                                                 <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" id="customCheckTitle@(shopCategory.ShopCategoryId)" asp-for="shopCategories" checked="checked">
+                                                                    <input type="checkbox" class="custom-control-input" id="customCheckTitle@(shopCategory.ShopCategoryId)" name="shopCategories" value="@shopCategory.ShopCategoryId" checked="checked">
                                                                     <label class="custom-control-label" for="customCheckTitle@(shopCategory.ShopCategoryId)">@shopCategory.ShopCategoryTitle</label>
                                                                 </div>
                                                             }
                                                             else
                                                             {
                                                                 <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" id="customCheckTitle@(shopCategory.ShopCategoryId)" asp-for="shopCategories">
+                                                                    <input type="checkbox" class="custom-control-input" id="customCheckTitle@(shopCategory.ShopCategoryId)" name="shopCategories" value="@shopCategory.ShopCategoryId">
                                                                     <label class="custom-control-label" for="customCheckTitle@(shopCategory.ShopCategoryId)">@shopCategory.ShopCategoryTitle</label>
                                                                 </div>
                                                             }
@@ -87,9 +103,9 @@
 
                                                     </div>
                                                 </div>
-                                            }
                                         </div>
                                     }
+
 
                                     @if (brands != null && brands.Any())
                                     {
@@ -235,8 +251,8 @@
                                                     <h5 class="product-title">
                                                         <a href="shop-single.html">@product.ProductName</a>
                                                     </h5>
-                                                    <a class="product-meta" href="shop-categories.html">لباس زنانه</a>
-                                                    <span class="product-price">@product.Price.ToString("#,000")  تومان</span>
+                                                    <a class="product-meta" href="shop-categories.html">@product.ShortDescription</a>
+                                                    <span class="product-price">@product.Price.ToString("#,000")  ریال</span>
                                                 </div>
                                             </div>
                                         </div>

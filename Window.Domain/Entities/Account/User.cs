@@ -71,6 +71,8 @@ namespace Window.Domain.Entities.Account
 
         public ICollection<UserRole> UserRoles { get; set; }
 
+        public ICollection<ShopProduct.ShopProduct> ShopProducts { get; set; }
+
         public ICollection<Ticket> Tickets { get; set; }
 
         public ICollection<TicketMessage> TicketMessages { get; set; }

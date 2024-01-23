@@ -1,4 +1,6 @@
-﻿using Window.Domain.Entities.Common;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Window.Domain.Entities.Account;
+using Window.Domain.Entities.Common;
 using Window.Domain.Entities.ShopCategories;
 namespace Window.Domain.Entities.ShopProduct;
 
@@ -27,6 +29,9 @@ public sealed class ShopProduct : BaseEntity
     #region Navigation
 
     public List<ShopProductSelectedCategories> ShopProductSelectedCategories { get; set; }
+
+    [ForeignKey("SellerUserId")]
+    public User User { get; set; }
 
     #endregion
 }
