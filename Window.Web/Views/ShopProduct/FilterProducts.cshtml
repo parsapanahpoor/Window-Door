@@ -31,8 +31,8 @@
                         </div>
                     </div><div class="dt-sn dt-sn--box mb-3">
                         <form asp-action="FilterProducts" asp-area="" asp-controller="ShopProduct" method="get">
-                            <input asp-for="ShopCategoryParentId" type="hidden"/>
-                            <input asp-for="ProductTitle" type="hidden"/>
+                            <input asp-for="ShopCategoryParentId" type="hidden" />
+                            <input asp-for="ProductTitle" type="hidden" />
 
                             <div class="col-12">
                                 <div class="section-title text-sm-title title-wide mb-1 no-after-title-wide">
@@ -58,7 +58,7 @@
                                                 <h2 class="mb-0">
                                                     <button class="btn btn-block text-right" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                         دسته بندی های @SelectedParentCategoryTitle
-                                                  
+
                                                     </button>
                                                     @if (Model.shopCategories != null && Model.shopCategories.Any())
                                                     {
@@ -75,34 +75,34 @@
                                                 <h2 class="mb-0">
                                                     <button class="btn btn-block text-right" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                         دسته بندی های @SelectedParentCategoryMainTitle
-                                                            <i class="mdi mdi-chevron-down"></i>
+                                                        <i class="mdi mdi-chevron-down"></i>
                                                     </button>
                                                 </h2>
                                             </div>
-                                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
-                                                    <div class="card-body">
+                                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
+                                                <div class="card-body">
 
-                                                        @foreach (var shopCategory in shopCategories)
+                                                    @foreach (var shopCategory in shopCategories)
+                                                    {
+                                                        if (Model.shopCategories != null && Model.shopCategories.Any() && Model.shopCategories.Contains(shopCategory.ShopCategoryId))
                                                         {
-                                                            if (Model.shopCategories != null && Model.shopCategories.Any() && Model.shopCategories.Contains(shopCategory.ShopCategoryId))
-                                                            {
-                                                                <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" id="customCheckTitle@(shopCategory.ShopCategoryId)" name="shopCategories" value="@shopCategory.ShopCategoryId" checked="checked">
-                                                                    <label class="custom-control-label" for="customCheckTitle@(shopCategory.ShopCategoryId)">@shopCategory.ShopCategoryTitle</label>
-                                                                </div>
-                                                            }
-                                                            else
-                                                            {
-                                                                <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" id="customCheckTitle@(shopCategory.ShopCategoryId)" name="shopCategories" value="@shopCategory.ShopCategoryId">
-                                                                    <label class="custom-control-label" for="customCheckTitle@(shopCategory.ShopCategoryId)">@shopCategory.ShopCategoryTitle</label>
-                                                                </div>
-                                                            }
-
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" class="custom-control-input" id="customCheckTitle@(shopCategory.ShopCategoryId)" name="shopCategories" value="@shopCategory.ShopCategoryId" checked="checked">
+                                                                <label class="custom-control-label" for="customCheckTitle@(shopCategory.ShopCategoryId)">@shopCategory.ShopCategoryTitle</label>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" class="custom-control-input" id="customCheckTitle@(shopCategory.ShopCategoryId)" name="shopCategories" value="@shopCategory.ShopCategoryId">
+                                                                <label class="custom-control-label" for="customCheckTitle@(shopCategory.ShopCategoryId)">@shopCategory.ShopCategoryTitle</label>
+                                                            </div>
                                                         }
 
-                                                    </div>
+                                                    }
+
                                                 </div>
+                                            </div>
                                         </div>
                                     }
 
@@ -228,9 +228,11 @@
 
                                         <div class="col-lg-3 col-md-4 col-sm-6 col-12 px-10 mb-1 px-res-0">
                                             <div class="product-card mb-2 mx-res-0">
+
                                                 <div class="promotion-badge">
                                                     فروش ویژه
                                                 </div>
+
                                                 <div class="product-head">
                                                     <div class="rating-stars">
                                                         <i class="mdi mdi-star active"></i>
@@ -243,17 +245,30 @@
                                                         <span>20%</span>
                                                     </div>
                                                 </div>
-                                                <a class="product-thumb" href="shop-single.html">
-                                                    <img src="@FilePaths.ProductsPathThumb/@product.ProductImage" alt="Product Thumbnail">
+
+                                                <a class="product-thumb"
+                                                   asp-action="ShopProductDetail"
+                                                   asp-area=""
+                                                   asp-controller="ShopProduct"
+                                                   asp-route-productId="@product.Id">
+                                                   <img src="@FilePaths.ProductsPathThumb/@product.ProductImage" alt="Product Thumbnail">
                                                 </a>
+
                                                 <div class="product-card-body">
 
                                                     <h5 class="product-title">
-                                                        <a href="shop-single.html">@product.ProductName</a>
+                                                        <a asp-action="ShopProductDetail"
+                                                           asp-area=""
+                                                           asp-controller="ShopProduct"
+                                                           asp-route-productId="@product.Id">@product.ProductName</a>
                                                     </h5>
-                                                    <a class="product-meta" href="shop-categories.html">@product.ShortDescription</a>
+                                                    <a class="product-meta" asp-action="SellerDetail"
+                                                       asp-area=""
+                                                       asp-controller="ShopSeller"
+                                                       asp-route-sellerId="@product.User.Id">@product.User.Username</a>
                                                     <span class="product-price">@product.Price.ToString("#,000")  ریال</span>
                                                 </div>
+
                                             </div>
                                         </div>
 

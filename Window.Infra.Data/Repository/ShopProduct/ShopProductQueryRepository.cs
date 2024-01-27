@@ -30,7 +30,7 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
     public async Task<FilterShopProductDTO> FilterProducts(FilterShopProductDTO model, CancellationToken cancellation)
     {
         var query = _context.ShopProducts
-            .AsNoTracking()
+            .Include(p=> p.User)
             .Where(s => !s.IsDelete)
             .OrderByDescending(s => s.CreateDate)
             .AsQueryable();
@@ -82,6 +82,7 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
                         ProductImage = q.ProductImage,
                         SellerUserId = q.SellerUserId,
                         ShortDescription = q.ShortDescription,
+                        User = q.User,
                     };
         }
 

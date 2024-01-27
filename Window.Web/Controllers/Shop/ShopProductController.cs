@@ -66,4 +66,14 @@ public class ShopProductController : SiteBaseController
     }
 
     #endregion
+
+    #region ShopProduct Detail
+
+    [HttpGet]
+    public async Task<IActionResult> ShopProductDetail(ulong productId , CancellationToken cancellationToken=default)
+    {
+        return View();
+    }
+
+    #endregion
 }
