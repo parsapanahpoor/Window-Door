@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Window.Application.Services.Interfaces;
+using Window.Domain.ViewModels.Site.Shop.Landing;
 namespace Window.Web.ViewComponents;
 
 public class ShopCategoriesBigPartViewComponent : ViewComponent
@@ -8,17 +8,26 @@ public class ShopCategoriesBigPartViewComponent : ViewComponent
     #region Ctor
 
     private readonly IShopCategoryService _shopCategoryService;
+    private readonly IBrandService _brandService;
 
-    public ShopCategoriesBigPartViewComponent(IShopCategoryService shopCategoryService)
+    public ShopCategoriesBigPartViewComponent(IShopCategoryService shopCategoryService, 
+                                              IBrandService brandService)
     {
         _shopCategoryService = shopCategoryService;
+        _brandService = brandService;
     }
 
     #endregion
 
     public async Task<IViewComponentResult> InvokeAsync(CancellationToken cancellationToken = default)
     {
-        return View("ShopCategoriesBigPart", await _shopCategoryService.FillLargSideShopCategoriesDTO(cancellationToken));
+        ShopSiteBarDTO model = new ShopSiteBarDTO()
+        {
+            ShopCategoriesDTOs = await _shopCategoryService.FillLargSideShopCategoriesDTO(cancellationToken),
+            ShopBrandsDTOs = await _brandService.FillShopBrandsDTOForSiteSideBar(cancellationToken)
+        };
+
+        return View("ShopCategoriesBigPart", model);
     }
 
 }
@@ -28,17 +37,26 @@ public class ShopCategoriesShortPartViewComponent : ViewComponent
     #region Ctor
 
     private readonly IShopCategoryService _shopCategoryService;
+    private readonly IBrandService _brandService;
 
-    public ShopCategoriesShortPartViewComponent(IShopCategoryService shopCategoryService)
+    public ShopCategoriesShortPartViewComponent(IShopCategoryService shopCategoryService,
+                                                IBrandService brandService)
     {
         _shopCategoryService = shopCategoryService;
+        _brandService = brandService;
     }
 
     #endregion
 
     public async Task<IViewComponentResult> InvokeAsync(CancellationToken cancellationToken = default)
     {
-        return View("ShopCategoriesShortPart", await _shopCategoryService.FillShopCategoriesDTO(cancellationToken));
+        ShopSiteBarDTO model = new ShopSiteBarDTO()
+        {
+            ShopCategoriesDTOs = await _shopCategoryService.FillLargSideShopCategoriesDTO(cancellationToken),
+            ShopBrandsDTOs = await _brandService.FillShopBrandsDTOForSiteSideBar(cancellationToken)
+        };
+
+        return View("ShopCategoriesShortPart", model);
     }
 
 }

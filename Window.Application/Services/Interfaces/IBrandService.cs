@@ -1,19 +1,26 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Window.Domain.Entities.Brand;
 using Window.Domain.Enums.SellerType;
 using Window.Domain.ViewModels.Admin.Brand;
 using Window.Domain.ViewModels.Common;
 using Window.Domain.ViewModels.Site.Inquiry;
+using Window.Domain.ViewModels.Site.Shop.Landing;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Application.Services.Interfaces
 {
     public interface IBrandService
     {
+        #region Site Side 
+
+        //Fill ShopBrandsDTO For SiteSide Bar
+        Task<List<ShopBrandsDTO>?> FillShopBrandsDTOForSiteSideBar(CancellationToken cancellationToken);
+
+        //Fill List Of Brands For Filter Products 
+        Task<List<ListOfBrandsForFilterProductsDTO>> FillListOfBrandsForFilterProductsDTO(CancellationToken cancellationToken);
+
+        #endregion
+
         //Get Brand By Name
         Task<MainBrand> GetMainBrandByBrandName(string name);
 

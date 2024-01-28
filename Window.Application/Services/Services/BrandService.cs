@@ -15,6 +15,8 @@ using Window.Domain.Enums.SellerType;
 using Window.Domain.ViewModels.Admin.Brand;
 using Window.Domain.ViewModels.Common;
 using Window.Domain.ViewModels.Site.Inquiry;
+using Window.Domain.ViewModels.Site.Shop.Landing;
+using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Application.Services.Services;
 
@@ -265,6 +267,35 @@ public class BrandService : IBrandService
     #endregion
 
     #region Site Side
+
+    //Fill ShopBrandsDTO For SiteSide Bar
+    public async Task<List<ShopBrandsDTO>?> FillShopBrandsDTOForSiteSideBar(CancellationToken cancellationToken)
+    {
+        return await _context.MainBrands
+                             .AsNoTracking()
+                             .Where(p=>!p.IsDelete)
+                             .OrderBy(p => p.Priority)
+                             .Select(p=> new ShopBrandsDTO()
+                             {
+                                 ShopBrandId = p.Id,
+                                 ShopBrandTitle = p.BrandName
+                             })
+                             .ToListAsync();
+    }
+
+    //Fill List Of Brands For Filter Products 
+    public async Task<List<ListOfBrandsForFilterProductsDTO>> FillListOfBrandsForFilterProductsDTO(CancellationToken cancellationToken)
+    {
+        return await _context.MainBrands
+                             .AsNoTracking()
+                             .Where(p=> !p.IsDelete)
+                             .Select(p=> new ListOfBrandsForFilterProductsDTO()
+                             {
+                                 BrandTitle = p.BrandName,
+                                 Id = p.Id
+                             })
+                             .ToListAsync();
+    }
 
     //Get Brand By Name
     public async Task<MainBrand> GetMainBrandByBrandName(string name)

@@ -22,7 +22,6 @@ using Window.Domain.Entities.QuestionAnswer;
 using Window.Domain.Entities.Sample;
 using Window.Domain.Entities.Score;
 using Window.Domain.Entities.Segment;
-using Window.Domain.Entities.ShopBrands;
 using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopColors;
 using Window.Domain.Entities.ShopProduct;
@@ -243,12 +242,6 @@ public class WindowDbContext : DbContext
     public DbSet<ShopCategory> ShopCategories { get; set; }
 
     public DbSet<ShopProductSelectedCategories> ShopProductSelectedCategories { get; set; }
-
-    #endregion
-
-    #region Shop Brands
-
-    public DbSet<ShopBrand> ShopBrands { get; set; }
 
     #endregion
 

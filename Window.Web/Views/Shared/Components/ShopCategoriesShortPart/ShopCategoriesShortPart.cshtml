@@ -1,4 +1,4 @@
-﻿@model List<Window.Domain.ViewModels.Site.Shop.Landing.ShopCategoriesDTO>
+﻿@model Window.Domain.ViewModels.Site.Shop.Landing.ShopSiteBarDTO
 
 <div class="side-menu">
 
@@ -17,9 +17,9 @@
 
     <ul class="navbar-nav dt-sl">
 
-        @if (Model != null && Model.Any())
+        @if (Model.ShopCategoriesDTOs != null && Model.ShopCategoriesDTOs.Any())
         {
-            foreach (var firstCategories in Model.Where(p => !p.ParentId.HasValue).OrderBy(p => p.Priority))
+            foreach (var firstCategories in Model.ShopCategoriesDTOs.Where(p => !p.ParentId.HasValue).OrderBy(p => p.Priority))
             {
                 <li class="sub-menu">
                     <a asp-action="FilterProducts"
@@ -28,10 +28,10 @@
                        asp-route-shopCategories="@firstCategories.ShopCategoryId">@firstCategories.ShopCategoryTitle</a>
                     <ul>
 
-                        @if (Model.Where(s => s.ParentId.HasValue && s.ParentId == firstCategories.ShopCategoryId) != null &&
-                       Model.Where(s => s.ParentId.HasValue && s.ParentId == firstCategories.ShopCategoryId).Any())
+                        @if (Model.ShopCategoriesDTOs.Where(s => s.ParentId.HasValue && s.ParentId == firstCategories.ShopCategoryId) != null &&
+                       Model.ShopCategoriesDTOs.Where(s => s.ParentId.HasValue && s.ParentId == firstCategories.ShopCategoryId).Any())
                         {
-                            foreach (var secondCategories in Model.Where(s => s.ParentId.HasValue && s.ParentId == firstCategories.ShopCategoryId).OrderBy(p => p.Priority))
+                            foreach (var secondCategories in Model.ShopCategoriesDTOs.Where(s => s.ParentId.HasValue && s.ParentId == firstCategories.ShopCategoryId).OrderBy(p => p.Priority))
                             {
                                 <li class="sub-menu">
                                     <a asp-action="FilterProducts"
@@ -40,10 +40,10 @@
                                        asp-route-shopCategories="@secondCategories.ShopCategoryId">@secondCategories.ShopCategoryTitle</a>
                                     <ul>
 
-                                        @if (Model.Where(t => t.ParentId.HasValue && t.ParentId == secondCategories.ShopCategoryId) != null &&
-                                       Model.Where(t => t.ParentId.HasValue && t.ParentId == secondCategories.ShopCategoryId).Any())
+                                        @if (Model.ShopCategoriesDTOs.Where(t => t.ParentId.HasValue && t.ParentId == secondCategories.ShopCategoryId) != null &&
+                                       Model.ShopCategoriesDTOs.Where(t => t.ParentId.HasValue && t.ParentId == secondCategories.ShopCategoryId).Any())
                                         {
-                                            foreach (var thirdCategories in Model.Where(t => t.ParentId.HasValue && t.ParentId == secondCategories.ShopCategoryId).OrderBy(p => p.Priority))
+                                            foreach (var thirdCategories in Model.ShopCategoriesDTOs.Where(t => t.ParentId.HasValue && t.ParentId == secondCategories.ShopCategoryId).OrderBy(p => p.Priority))
                                             {
                                                 <li>
                                                     <a asp-action="FilterProducts"
@@ -64,6 +64,25 @@
 
             }
         }
+
+        @if (Model.ShopBrandsDTOs != null && Model.ShopBrandsDTOs.Any())
+        {
+            <li class="sub-menu">
+                <a href="#">برندهای محصولات</a>
+                <ul>
+                    @foreach (var brand in Model.ShopBrandsDTOs)
+                    {
+                        <li>
+                            <a asp-action="FilterProducts"
+                               asp-area=""
+                               asp-controller="ShopProduct"
+                               asp-route-BrandId="@brand.ShopBrandId">@brand.ShopBrandTitle</a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+
 
     </ul>
 </div>

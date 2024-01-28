@@ -10,7 +10,6 @@ using Window.Application.Services.Services;
 using Window.Data.Repository;
 using Window.Domain.Interfaces;
 using Window.Domain.Interfaces.Maket;
-using Window.Domain.Interfaces.ShopBrands;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.Interfaces.ShopProduct;
@@ -18,7 +17,6 @@ using Window.Domain.Interfaces.ShopProductFeature;
 using Window.Domain.Interfaces.ShopProductGallery;
 using Window.Infra.Data.Repository;
 using Window.Infra.Data.Repository.Maket;
-using Window.Infra.Data.Repository.ShopBrands;
 using Window.Infra.Data.Repository.ShopCategory;
 using Window.Infra.Data.Repository.ShopColors;
 using Window.Infra.Data.Repository.ShopProduct;
@@ -27,7 +25,7 @@ using Window.Infra.Data.Repository.ShopProductGallery;
 
 namespace Window.IOC.Container
 {
-	public static class DependencyContainer
+    public static class DependencyContainer
     {
         public static void ConfigureDependencies(IServiceCollection services)
         {
@@ -41,9 +39,6 @@ namespace Window.IOC.Container
             services.AddScoped<IShopCategoryQueryRepository, ShopCategoryQueryRepository>();
             services.AddScoped<IShopProductCommandRepository, ShopProductCommandRepository>();
             services.AddScoped<IShopProductQueryRepository, ShopProductQueryRepository>();
-
-            services.AddScoped<IShopBrandsCommandRepository, ShopBrandsCommandRepository>();
-            services.AddScoped<IShopBrandsQueryRepository, ShopBrandsQueryRepository>();
 
 			services.AddScoped<IShopColorsCommandRepository, ShopColorsCommandRepository>();
 			services.AddScoped<IShopColorsQueryRepository, ShopColorsQueryRepository>();
@@ -87,7 +82,6 @@ namespace Window.IOC.Container
             services.AddScoped<ISellerPersonalVideoService, SellerPersonalVideoService>();
             services.AddScoped<IShopCategoryService, ShopCategoryService>();
             services.AddScoped<IShopProductService, ShopProductService>();
-            services.AddScoped<IShopBrandsService, ShopBrandsService>();
             services.AddScoped<IShopColorService, ShopColorService>();
 
             #endregion

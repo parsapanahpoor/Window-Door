@@ -9,16 +9,17 @@ public class ShopProductController : SiteBaseController
     #region Ctor
 
     private readonly IShopCategoryService _shopCategoryService;
-    private readonly IShopBrandsService _shopBrandsService;
     private readonly IShopColorService _shopColorService;
+    private readonly IBrandService _brandService;
 
     public ShopProductController(IShopCategoryService shopCategoryService,
-                                 IShopBrandsService shopBrandsService,
-                                 IShopColorService shopColorService)
+                                 IShopColorService shopColorService,
+                                 IBrandService brandService)
     {
         _shopCategoryService = shopCategoryService;
-        _shopBrandsService = shopBrandsService;
         _shopColorService = shopColorService;
+        _brandService = brandService;
+
     }
 
     #endregion
@@ -56,7 +57,7 @@ public class ShopProductController : SiteBaseController
             ViewData["SelectedParentCategoryTitle"] = await _shopCategoryService.GetShopCategoryTitle(filter.shopCategories.First(), cancellationToken);
         }
 
-        ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellationToken);
+        ViewData["Brands"] = await _brandService.FillListOfBrandsForFilterProductsDTO(cancellationToken);
 
         ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellationToken);
 

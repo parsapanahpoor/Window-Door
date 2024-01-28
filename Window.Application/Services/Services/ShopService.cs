@@ -1,18 +1,13 @@
 ﻿#region Using
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
-using System.Threading;
 using Window.Application.Common.IUnitOfWork;
 using Window.Application.Extensions;
 using Window.Application.Security;
 using Window.Application.Services.Interfaces;
 using Window.Application.StticTools;
-using Window.Domain.Entities.Article;
 using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopProduct;
-using Window.Domain.Interfaces.ShopBrands;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.Interfaces.ShopProduct;
@@ -29,9 +24,7 @@ public class ShopProductService : IShopProductService
 
     private readonly IShopProductCommandRepository _shopProductCommandRepository;
     private readonly IShopProductQueryRepository _shopProductQueryRepository;
-    private readonly IShopBrandsCommandRepository _shopBrandsCommand;
     private readonly IShopColorsCommandRepository _shopColorsCommand;
-    private readonly IShopBrandsQueryRepository _shopBrandsQueryRepository;
     private readonly IShopColorsQueryRepository _shopColorsQueryRepository;
     private readonly IShopCategoryCommandRepository _shopCategoryCommand;
     private readonly IShopCategoryQueryRepository _shopCategoryQueryRepository;
@@ -42,10 +35,8 @@ public class ShopProductService : IShopProductService
                               IShopProductQueryRepository shopProductQueryRepository,
                               IUnitOfWork unitOfWork,
                               ISellerService marketService,
-                              IShopBrandsCommandRepository shopBrandsCommand,
                               IShopColorsCommandRepository shopColorsCommand,
                               IShopCategoryCommandRepository shopCategoryCommand,
-                              IShopBrandsQueryRepository shopBrandsQueryRepository,
                               IShopColorsQueryRepository shopColorsQueryRepository,
                               IShopCategoryQueryRepository shopCategoryQueryRepository)
     {
@@ -53,10 +44,8 @@ public class ShopProductService : IShopProductService
         _shopProductQueryRepository = shopProductQueryRepository;
         _unitOfWork = unitOfWork;
         _marketService = marketService;
-        _shopBrandsCommand = shopBrandsCommand;
         _shopColorsCommand = shopColorsCommand;
         _shopCategoryCommand = shopCategoryCommand;
-        _shopBrandsQueryRepository = shopBrandsQueryRepository;
         _shopColorsQueryRepository = shopColorsQueryRepository;
         _shopCategoryQueryRepository = shopCategoryQueryRepository;
 
@@ -200,9 +189,6 @@ public class ShopProductService : IShopProductService
         #endregion
 
         #region Brand and Color Validator
-
-        if (!await _shopBrandsQueryRepository.IsExistBrandById(newProduct.ShopBrandId, cancellation))
-            return EditShopProductFromSellerPanelResult.Faild;
 
         if (!await _shopColorsQueryRepository.IsExistColorById(newProduct.ShopColorId, cancellation))
             return EditShopProductFromSellerPanelResult.Faild;

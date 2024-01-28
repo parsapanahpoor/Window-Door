@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Window.Domain.ViewModels.Admin.ShopBrand;
-using Window.Domain.ViewModels.Seller.ShopProduct;
-using Window.Domain.ViewModels.Site.Shop.ShopProduct;
+﻿using Window.Domain.ViewModels.Seller.ShopProduct;
 
 namespace Window.Domain.Interfaces.ShopProductGallery;
 

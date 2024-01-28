@@ -23,18 +23,19 @@ public class ShopProductController : SellerBaseController
 
     private readonly IShopProductService _shopProductService;
     private readonly IShopCategoryService _shopCategoryService;
-    private readonly IShopBrandsService _shopBrandsService;
     private readonly IShopColorService _shopColorService;
+    private readonly IBrandService _brandService;
 
     public ShopProductController(IShopProductService shopProductService,
                                  IShopCategoryService shopCategoryService,
                                  IShopColorService shopColorService,
-                                 IShopBrandsService shopBrandsService)
+                                 IBrandService brandService)
     {
         _shopProductService = shopProductService;
         _shopCategoryService = shopCategoryService;
         _shopColorService = shopColorService;
-        _shopBrandsService = shopBrandsService;
+        _brandService = brandService;
+
     }
 
     #endregion
@@ -57,7 +58,7 @@ public class ShopProductController : SellerBaseController
     {
         #region View Bags
 
-        ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellation);
+        ViewData["Brands"] = await _brandService.FillListOfBrandsForFilterProductsDTO(cancellation);
 
         ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
 
@@ -75,7 +76,7 @@ public class ShopProductController : SellerBaseController
         {
             #region View Bags
 
-            ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellation);
+            ViewData["Brands"] = await _brandService.FillListOfBrandsForFilterProductsDTO(cancellation);
 
             ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
 
@@ -116,7 +117,7 @@ public class ShopProductController : SellerBaseController
 
         #region View Bags
 
-        ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellation);
+        ViewData["Brands"] = await _brandService.FillListOfBrandsForFilterProductsDTO(cancellation);
 
         ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
 
@@ -137,7 +138,7 @@ public class ShopProductController : SellerBaseController
 
         #region View Bags
 
-        ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellation);
+        ViewData["Brands"] = await _brandService.FillListOfBrandsForFilterProductsDTO(cancellation);
 
         ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
 
@@ -181,7 +182,7 @@ public class ShopProductController : SellerBaseController
 
         #region View Bags
 
-        ViewData["Brands"] = await _shopBrandsService.FillListOfBrandsForFilterProductsDTO(cancellation);
+        ViewData["Brands"] = await _brandService.FillListOfBrandsForFilterProductsDTO(cancellation);
 
         ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
 

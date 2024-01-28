@@ -2,9 +2,7 @@
 using Window.Data;
 using Window.Data.Context;
 using Window.Domain.Interfaces.ShopProductGallery;
-using Window.Domain.ViewModels.Admin.ShopBrand;
 using Window.Domain.ViewModels.Seller.ShopProduct;
-using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Infra.Data.Repository.ShopProductGallery;
 
