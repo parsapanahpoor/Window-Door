@@ -1,6 +1,7 @@
-﻿
+﻿@model Window.Domain.ViewModels.Site.Shop.ShopProduct.ShopProductDetailDTO
+
 @{
-    ViewData["Title"] = "جزییات محصول";
+    ViewData["Title"] = $"جزییات محصول {Model.ProductName}";
     Layout = "_ShopLayout";
 }
 
@@ -514,21 +515,13 @@
             <section class="tabs-product-info mb-3 dt-sl">
                 <div class="ah-tab-wrapper border-bottom dt-sl">
                     <div class="ah-tab dt-sl">
-                        <a class="ah-tab-item" data-ah-tab-active="true" href="" style="transform: translateX(0px);"><i class="mdi mdi-glasses"></i>نقد و بررسی</a>
-                        <a class="ah-tab-item" href="" style="transform: translateX(0px);"><i class="mdi mdi-format-list-checks"></i>مشخصات</a>
-                        <a class="ah-tab-item" href="" style="transform: translateX(0px);"><i class="mdi mdi-comment-text-multiple-outline"></i>نظرات کاربران</a>
-                        <a class="ah-tab-item" href="" style="transform: translateX(0px);">
+                        <a class="ah-tab-item" data-ah-tab-active="true"  style="transform: translateX(0px);"><i class="mdi mdi-glasses"></i>نقد و بررسی</a>
+                        <a class="ah-tab-item"  style="transform: translateX(0px);"><i class="mdi mdi-format-list-checks"></i>مشخصات</a>
+                        <a class="ah-tab-item"  style="transform: translateX(0px);"><i class="mdi mdi-comment-text-multiple-outline"></i>نظرات کاربران</a>
+                        <a class="ah-tab-item"  style="transform: translateX(0px);">
                             <i class="mdi mdi-comment-question-outline"></i>پرسش و
                             پاسخ
                         </a>
-                    </div>
-                    <div class="ah-tab-overflow-wrapper" data-ah-tab-active="false">
-                        <button type="menu" class="ah-tab-overflow-menu"></button><div class="ah-tab-overflow-list">
-                            <a class="ah-tab-item" data-ah-tab-active="true" href=""><i class="mdi mdi-glasses"></i>نقد و بررسی</a><a class="ah-tab-item" href=""><i class="mdi mdi-format-list-checks"></i>مشخصات</a><a class="ah-tab-item" href=""><i class="mdi mdi-comment-text-multiple-outline"></i>نظرات کاربران</a><a class="ah-tab-item" href="">
-                                <i class="mdi mdi-comment-question-outline"></i>پرسش و
-                                پاسخ
-                            </a>
-                        </div>
                     </div>
                 </div>
                 <div class="ah-tab-content-wrapper product-info px-4 dt-sl">

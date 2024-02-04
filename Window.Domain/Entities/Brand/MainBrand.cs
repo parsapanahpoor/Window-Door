@@ -9,6 +9,8 @@ public sealed class MainBrand : BaseEntity
 {
     #region properties
 
+    public ulong BrandCategor { get; set; }
+
     public bool UPVC { get; set; }
 
     public bool Alominum { get; set; }

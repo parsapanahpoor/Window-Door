@@ -149,6 +149,8 @@ public class WindowDbContext : DbContext
 
     public DbSet<MainBrand> MainBrands { get; set; }
 
+    public DbSet<BrandCategory> BrandCategories{ get; set; }
+
     public DbSet<YaraghBrand> YaraghBrands { get; set; }
 
     #endregion
