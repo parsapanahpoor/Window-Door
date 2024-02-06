@@ -14,6 +14,7 @@ using Window.Domain.Enums.BrandType;
 using Window.Domain.Enums.SellerType;
 using Window.Domain.ViewModels.Admin.Brand;
 using Window.Domain.ViewModels.Common;
+using Window.Domain.ViewModels.Seller.ShopProduct;
 using Window.Domain.ViewModels.Site.Inquiry;
 using Window.Domain.ViewModels.Site.Shop.Landing;
 using Window.Domain.ViewModels.Site.Shop.ShopProduct;
@@ -31,6 +32,18 @@ public class BrandService : IBrandService
     public BrandService(WindowDbContext context)
     {
         _context = context;
+    }
+
+    #endregion
+
+    #region Genral Methods
+
+    public async Task<List<BrandCategory>?> GetListOfBrandCategories()
+    {
+        return await _context.BrandCategories
+                             .AsNoTracking()
+                             .Where(p=> !p.IsDelete)
+                             .ToListAsync();
     }
 
     #endregion
@@ -156,7 +169,6 @@ public class BrandService : IBrandService
         #region Get Brand By Id  
 
         var brand = await _context.MainBrands.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == mainBrand.Id);
-
         if (brand == null) return false;
 
         #endregion
@@ -170,6 +182,7 @@ public class BrandService : IBrandService
         brand.Yaragh = mainBrand.Yaragh;
         brand.Description = mainBrand.Description;
         brand.BrandSite = mainBrand.BrandSite;
+        brand.BrandCategorId = mainBrand.BrandCategorId;
 
         if (brandLogo != null && brandLogo.IsImage())
         {
@@ -263,6 +276,37 @@ public class BrandService : IBrandService
         return true;
     }
 
+
+    #endregion
+
+    #region Seller Side
+
+    public async Task<ulong?> GetShopProductSelectedBrandByProductId(ulong productId , CancellationToken cancellation)
+    {
+        return await _context.ShopProducts
+                             .AsNoTracking()
+                             .Where(p=> !p.IsDelete &&
+                                    p.Id == productId)
+                             .Select(p=> p.ProductBrandId)  
+                             .FirstOrDefaultAsync();
+    }
+
+    public async Task<List<ShopProductsBrandDTO>?> FillShopProductsBrandDTO(CancellationToken cancellation)
+    {
+        return await _context.BrandCategories
+                             .AsNoTracking()
+                             .Where(p=> !p.IsDelete)
+                             .Select(p=> new ShopProductsBrandDTO()
+                             {
+                                 BrandCategory = p,
+                                 MainBrands = _context.MainBrands
+                                                           .AsNoTracking()
+                                                           .Where(s=> !s.IsDelete && 
+                                                                  s.BrandCategorId == p.Id)
+                                                           .ToList(),     
+                             })
+                             .ToListAsync();
+    }
 
     #endregion
 

@@ -5,6 +5,8 @@
 
 @{
     ViewData["Title"] = "ویرایش برند جدید";
+
+    var brandsCategories = TempData["BrandCategories"] as List<Window.Domain.Entities.Brand.BrandCategory>;
 }
 
 @section Scripts
@@ -112,6 +114,32 @@
 
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-primary">
+                            <span class="widget-caption"> برند محصول   </span>
+                        </div>
+                        <div class="widget-body">
+                            <div class="form-group">
+                                <label> برندها </label>
+                                <select asp-for="BrandCategorId" class="form-control">
+                                    <option value="">انتخاب کنید </option>
+                                    @if (brandsCategories != null && brandsCategories.Any())
+                                    {
+                                        foreach (var brandCategory in brandsCategories)
+                                        {
+                                            <option value="@brandCategory.Id"> @brandCategory.CatgeoryTitle </option>
+                                        }
+                                    }
+                                </select>
+                                <span class="text-danger" asp-validation-for="BrandCategorId"></span>
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
 

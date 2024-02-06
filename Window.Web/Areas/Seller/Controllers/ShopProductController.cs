@@ -6,6 +6,7 @@ using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.CreateShopProduc
 using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.CreateShopShopProductFeature;
 using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.DeleteProductGallery;
 using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.DeleteShopProductFeature;
+using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.ProductBrands;
 using Window.Application.CQRS.SellerPanel.ShopProducts.Queries.ListOfProductFeature;
 using Window.Application.CQRS.SellerPanel.ShopProducts.Queries.ListOfProductGallery;
 using Window.Application.Extensions;
@@ -332,7 +333,7 @@ public class ShopProductController : SellerBaseController
     #region Product Feature 
 
     [HttpGet]
-    public async Task<IActionResult> ProductFeature(ListOfProductFeatureQuery query, 
+    public async Task<IActionResult> ProductFeature(ListOfProductFeatureQuery query,
                                                     CancellationToken token = default)
     {
         #region Get Products Feature 
@@ -401,5 +402,50 @@ public class ShopProductController : SellerBaseController
 
     #endregion
 
+    #endregion
+
+    #region Product Brand
+
+    [HttpGet]
+    public async Task<IActionResult> ProductBrand(ulong productId,
+                                                  CancellationToken cancellationToken)
+    {
+        ViewData["SelectedBrandId"] = await _brandService.GetShopProductSelectedBrandByProductId(productId, cancellationToken);
+        ViewData["ProductId"] = productId;
+
+        return View(await _brandService.FillShopProductsBrandDTO(cancellationToken));
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> ProductBrand(ulong productId,
+                                                  List<ulong>? Permissions,
+                                                  CancellationToken cancellationToken)
+    {
+        #region Add Brand To The Product
+
+        ProductBrandsCommand command = new ProductBrandsCommand()
+        {
+            BrandId = Permissions.First(),
+            ProductId = productId,
+            UserId = User.GetUserId() 
+        };
+
+        #endregion
+
+        #region Update Product
+
+        var res = await Mediator.Send(command, cancellationToken);
+        if (res) 
+        {
+            TempData[SuccessMessage] = "برند انتخابی باموفقیت ثبت گردید.";
+            return RedirectToAction(nameof(FilterShopProducts));
+        }
+
+        #endregion
+
+        ViewData["SelectedBrandId"] = await _brandService.GetShopProductSelectedBrandByProductId(productId, cancellationToken);
+
+        return View(await _brandService.FillShopProductsBrandDTO(cancellationToken));
+    }
     #endregion
 }

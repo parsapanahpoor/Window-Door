@@ -9,13 +9,15 @@ public sealed class MainBrand : BaseEntity
 {
     #region properties
 
-    public ulong BrandCategor { get; set; }
+    public ulong BrandCategorId { get; set; }
 
     public bool UPVC { get; set; }
 
     public bool Alominum { get; set; }
 
     public bool Yaragh { get; set; }
+
+    public bool ShowInSiteMenue { get; set; }
 
     [Display(Name = "نام برند")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]

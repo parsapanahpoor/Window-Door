@@ -1,62 +1,81 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿#region Usings
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Window.Domain.Entities.Brand;
 using Window.Domain.Enums.SellerType;
 using Window.Domain.ViewModels.Admin.Brand;
 using Window.Domain.ViewModels.Common;
+using Window.Domain.ViewModels.Seller.ShopProduct;
 using Window.Domain.ViewModels.Site.Inquiry;
 using Window.Domain.ViewModels.Site.Shop.Landing;
 using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
-namespace Window.Application.Services.Interfaces
+namespace Window.Application.Services.Interfaces;
+
+#endregion
+
+public interface IBrandService
 {
-    public interface IBrandService
-    {
-        #region Site Side 
+    #region Seller Side
 
-        //Fill ShopBrandsDTO For SiteSide Bar
-        Task<List<ShopBrandsDTO>?> FillShopBrandsDTOForSiteSideBar(CancellationToken cancellationToken);
+    Task<ulong?> GetShopProductSelectedBrandByProductId(ulong productId, CancellationToken cancellation);
 
-        //Fill List Of Brands For Filter Products 
-        Task<List<ListOfBrandsForFilterProductsDTO>> FillListOfBrandsForFilterProductsDTO(CancellationToken cancellationToken);
+    Task<List<ShopProductsBrandDTO>?> FillShopProductsBrandDTO(CancellationToken cancellation);
 
-        #endregion
+    #endregion
 
-        //Get Brand By Name
-        Task<MainBrand> GetMainBrandByBrandName(string name);
+    #region Genral Methods
 
-        Task<List<SelectListViewModel>> GetUPVCBrands();
+    Task<List<BrandCategory>?> GetListOfBrandCategories();
 
-        Task<List<SelectListViewModel>> GetBrandsFromBrandType(int brandTypeId);
+    #endregion
 
-        //Get List Of Main Brands Of API
-        Task<List<MainBrand>> GetListOfMainBrand();
+    #region Site Side 
 
-        //Show List OF Brands By Brand Type 
-        Task<List<ListOfBrandsWithCountOfSellersViewModel>?> ShowListOFBrandsByBrandType(SellerType sellerType);
+    //Fill ShopBrandsDTO For SiteSide Bar
+    Task<List<ShopBrandsDTO>?> FillShopBrandsDTOForSiteSideBar(CancellationToken cancellationToken);
 
-        Task<FilterMainBrandViewModel> FilterMainBrandViewModel(FilterMainBrandViewModel filter);
+    //Fill List Of Brands For Filter Products 
+    Task<List<ListOfBrandsForFilterProductsDTO>> FillListOfBrandsForFilterProductsDTO(CancellationToken cancellationToken);
 
-        Task<bool> CreateMainBrand(MainBrand brand, IFormFile? brandLogo);
+    #endregion
 
-        Task<MainBrand?> GetMainBrandById(ulong brandId);
+    //Get Brand By Name
+    Task<MainBrand> GetMainBrandByBrandName(string name);
 
-        Task<bool> UpdateMainBrand(MainBrand mainBrand, IFormFile? brandLogo);
+    Task<List<SelectListViewModel>> GetUPVCBrands();
 
-        Task<bool> DeleteMainBrand(ulong brandId);
+    Task<List<SelectListViewModel>> GetBrandsFromBrandType(int brandTypeId);
 
-        Task<FilterYaraghBrandViewModel> FilterYaraghBrandViewModel(FilterYaraghBrandViewModel filter);
+    //Get List Of Main Brands Of API
+    Task<List<MainBrand>> GetListOfMainBrand();
 
-        Task<bool> CreateYaraghBrand(YaraghBrand brand, IFormFile? brandLogo);
+    //Show List OF Brands By Brand Type 
+    Task<List<ListOfBrandsWithCountOfSellersViewModel>?> ShowListOFBrandsByBrandType(SellerType sellerType);
 
-        Task<YaraghBrand?> GetYaraghBrandById(ulong brandId);
+    Task<FilterMainBrandViewModel> FilterMainBrandViewModel(FilterMainBrandViewModel filter);
 
-        Task<bool> UpdateYaraghBrand(YaraghBrand mainBrand, IFormFile? brandLogo);
+    Task<bool> CreateMainBrand(MainBrand brand, IFormFile? brandLogo);
 
-        Task<bool> DeleteYaraghBrand(ulong brandId);
+    Task<MainBrand?> GetMainBrandById(ulong brandId);
 
-        Task<List<SelectListViewModel>> GetAllBrands();
+    Task<bool> UpdateMainBrand(MainBrand mainBrand, IFormFile? brandLogo);
 
-        //Get All Brands With As No Tracking
-        Task<List<SelectListViewModel>> GetAllBrandsWithAsNoTracking();
-    }
+    Task<bool> DeleteMainBrand(ulong brandId);
+
+    Task<FilterYaraghBrandViewModel> FilterYaraghBrandViewModel(FilterYaraghBrandViewModel filter);
+
+    Task<bool> CreateYaraghBrand(YaraghBrand brand, IFormFile? brandLogo);
+
+    Task<YaraghBrand?> GetYaraghBrandById(ulong brandId);
+
+    Task<bool> UpdateYaraghBrand(YaraghBrand mainBrand, IFormFile? brandLogo);
+
+    Task<bool> DeleteYaraghBrand(ulong brandId);
+
+    Task<List<SelectListViewModel>> GetAllBrands();
+
+    //Get All Brands With As No Tracking
+    Task<List<SelectListViewModel>> GetAllBrandsWithAsNoTracking();
 }

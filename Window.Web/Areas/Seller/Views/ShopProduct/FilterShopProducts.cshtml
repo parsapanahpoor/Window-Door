@@ -114,6 +114,8 @@
 
                                     <a asp-action="ProductFeature" asp-controller="ShopProduct" asp-area="Seller" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">ویژگی های محصول</a>
 
+                                    <a asp-action="ProductBrand" asp-controller="ShopProduct" asp-area="Seller" asp-route-productId="@product.Id" class="badge badge-warning  btn-xs">برندها</a>
+
                                     <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteShopProduct", "ShopProduct", new {area = "Seller", shopProductId = product.Id})')" class="badge badge-danger  btn-xs">حذف</button>
                                 </td>
 
