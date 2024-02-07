@@ -14,6 +14,9 @@ public interface IShopProductFeatureQueryRepository
 
     Task<bool> IsExistBrandById(ulong brandId, CancellationToken cancellation);
 
+    Task<List<Domain.Entities.ShopProductFeature.ShopProductFeature>?> GetListOfProductFeaturesByProductId(ulong productId,
+                                                                                                                    CancellationToken cancellation);
+
     #endregion
 
     #region Seller Side 

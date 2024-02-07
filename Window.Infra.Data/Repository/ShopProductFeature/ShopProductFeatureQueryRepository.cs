@@ -47,5 +47,15 @@ public class ShopProductFeatureQueryRepository : QueryGenericRepository<Domain.E
                              .AnyAsync(p=> !p.IsDelete && p.Id == brandId);
     }
 
+    public async Task<List<Domain.Entities.ShopProductFeature.ShopProductFeature>?> GetListOfProductFeaturesByProductId(ulong productId , 
+                                                                                                                        CancellationToken cancellation)
+    {
+        return await _context.ShopProductFeature
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.ProductId == productId)
+                             .ToListAsync();
+    }
+
     #endregion
 }

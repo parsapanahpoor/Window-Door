@@ -183,6 +183,7 @@ public class BrandService : IBrandService
         brand.Description = mainBrand.Description;
         brand.BrandSite = mainBrand.BrandSite;
         brand.BrandCategorId = mainBrand.BrandCategorId;
+        brand.ShowInSiteMenue = mainBrand.ShowInSiteMenue;
 
         if (brandLogo != null && brandLogo.IsImage())
         {
@@ -312,19 +313,42 @@ public class BrandService : IBrandService
 
     #region Site Side
 
-    //Fill ShopBrandsDTO For SiteSide Bar
-    public async Task<List<ShopBrandsDTO>?> FillShopBrandsDTOForSiteSideBar(CancellationToken cancellationToken)
+    //Fill Site Side 
+    public async Task<ShopProductDetailBrand?> FillShopProductDetailBrand(ulong brandId , CancellationToken cancellation)
     {
         return await _context.MainBrands
                              .AsNoTracking()
-                             .Where(p=>!p.IsDelete)
-                             .OrderBy(p => p.Priority)
-                             .Select(p=> new ShopBrandsDTO()
+                             .Where(p => !p.IsDelete &&
+                                    p.Id == brandId)
+                             .Select(p => new ShopProductDetailBrand()
                              {
-                                 ShopBrandId = p.Id,
-                                 ShopBrandTitle = p.BrandName
+                                 BrandId = brandId,
+                                 BrandTitle = p.BrandName
                              })
-                             .ToListAsync();
+                             .FirstOrDefaultAsync();
+    }
+
+    //Fill ShopBrandsDTO For SiteSide Bar
+    public async Task<List<ShopBrandForMenuDTO>?> FillShopBrandsDTOForSiteSideBar(CancellationToken cancellationToken)
+    {
+        return await _context.BrandCategories
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete)
+                             .Select(p => new ShopBrandForMenuDTO()
+                             {
+                                 BrandCategory = p,
+                                 ShopBrands = _context.MainBrands
+                                                      .AsNoTracking()
+                                                      .Where(s => !s.IsDelete &&
+                                                             s.BrandCategorId == p.Id)
+                                                      .Select(s=> new ShopBrandsDTO()
+                                                      {
+                                                          ShopBrandId = s.Id,   
+                                                          ShopBrandTitle = s.BrandName
+                                                      })
+                                                      .ToList()
+                             })
+                             .ToListAsync() ;
     }
 
     //Fill List Of Brands For Filter Products 

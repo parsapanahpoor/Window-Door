@@ -52,5 +52,15 @@ public class ShopProductGalleryQueryRepository : QueryGenericRepository<Domain.E
                              .AnyAsync(p=> !p.IsDelete && p.Id == brandId);
     }
 
+    public async Task<List<string?>> GetProductGalleriesImages(ulong productId , CancellationToken cancellation)
+    {
+        return await _context.ShopProductGalleries
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.ProductId == productId)
+                             .Select(p=> p.ImageName)
+                             .ToListAsync();
+    }
+
     #endregion
 }

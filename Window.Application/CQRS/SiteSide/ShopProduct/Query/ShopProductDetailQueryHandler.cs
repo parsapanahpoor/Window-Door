@@ -1,5 +1,11 @@
-﻿using Window.Domain.Interfaces.ShopColors;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using Window.Application.Interfaces;
+using Window.Application.Services.Interfaces;
+using Window.Domain.Interfaces;
+using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.Interfaces.ShopProduct;
+using Window.Domain.Interfaces.ShopProductFeature;
+using Window.Domain.Interfaces.ShopProductGallery;
 using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Application.CQRS.SiteSide.ShopProduct.Query;
@@ -10,19 +16,61 @@ public record ShopProductDetailQueryHandler : IRequestHandler<ShopProductDetailQ
 
     private readonly IShopColorsQueryRepository _shopColorsQueryRepository;
     private readonly IShopProductQueryRepository _shopProductQueryRepository;
+    private readonly IShopProductGalleryQueryRepository _shopProductGalleryQueryRepository;
+    private readonly IBrandService _brandService;
+    private readonly IShopProductFeatureQueryRepository _shopProductFeatureQueryRepository;
+    private readonly IUserRepository _userRepository;
 
     public ShopProductDetailQueryHandler(IShopColorsQueryRepository shopColorsQueryRepository , 
-                                         IShopProductQueryRepository shopProductQueryRepository)
+                                         IShopProductQueryRepository shopProductQueryRepository , 
+                                         IBrandService brandService ,
+                                         IShopProductGalleryQueryRepository shopProductGalleryQueryRepository , 
+                                         IShopProductFeatureQueryRepository shopProductFeatureQueryRepository,
+                                         IUserRepository userRepository)
     {
         _shopColorsQueryRepository = shopColorsQueryRepository;
         _shopProductQueryRepository = shopProductQueryRepository;
+        _brandService = brandService;
+        _shopProductGalleryQueryRepository = shopProductGalleryQueryRepository;
+        _shopProductFeatureQueryRepository = shopProductFeatureQueryRepository;
+        _userRepository = userRepository;
     }
 
-    public Task<ShopProductDetailDTO> Handle(ShopProductDetailQuery request, CancellationToken cancellationToken)
+    public async Task<ShopProductDetailDTO?> Handle(ShopProductDetailQuery request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        #region Get Shop Product
+
+        var product = await _shopProductQueryRepository.GetByIdAsync(cancellationToken , request.productId);
+        if (product == null) return null;
+
+        #endregion
+
+        #region Fill Return Model 
+
+        ShopProductDetailDTO model = new()
+        {
+            Brand = await _brandService.FillShopProductDetailBrand(product.ProductBrandId, cancellationToken),
+            Color = await _shopColorsQueryRepository.FillShopProductDetailColor(product.ProductColorId, cancellationToken),
+            LongDescription = product.LongDescription,
+            Price = product.Price,
+            ProductId = product.Id,
+            ProductImage = product.ProductImage,
+            ProductName = product.ProductName,
+            ShortDescription = product.ShortDescription,
+            Seller = await _userRepository.FillSeller(product.SellerUserId , cancellationToken),
+            ShopProductFeatures = await _shopProductFeatureQueryRepository.GetListOfProductFeaturesByProductId(product.Id , cancellationToken)
+        };
+
+        var productImages = new List<string>();
+        productImages.Add(product.ProductImage);
+        productImages.AddRange(await _shopProductGalleryQueryRepository.GetProductGalleriesImages(request.productId, cancellationToken));
+
+        model.ProductPirctures = productImages;
+
+        #endregion
+
+        return model;
     }
 
     #endregion
-
 }

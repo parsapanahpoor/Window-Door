@@ -71,9 +71,16 @@ public class ShopProductController : SiteBaseController
     #region ShopProduct Detail
 
     [HttpGet]
-    public async Task<IActionResult> ShopProductDetail(ulong productId , CancellationToken cancellationToken=default)
+    public async Task<IActionResult> ShopProductDetail(ShopProductDetailQuery query , CancellationToken cancellationToken=default)
     {
-        return View();
+        var model = await Mediator.Send(query , cancellationToken);
+        if (model == null)
+        {
+            TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+            return RedirectToAction("Index" , "Home");
+        }
+
+        return View(model);
     }
 
     #endregion

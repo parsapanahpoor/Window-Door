@@ -45,9 +45,23 @@ public class ShopColorsQueryRepository : QueryGenericRepository<Domain.Entities.
 		return filter;
 	}
 
-    #endregion
+	#endregion
 
-    #region Site Side
+	#region Site Side
+
+	public async Task<ShopProductDetailColor?> FillShopProductDetailColor(ulong colorId , CancellationToken cancellation)
+	{
+		return await _context.ShopColors
+							 .AsNoTracking()
+							 .Where(p => !p.IsDelete &&
+									p.Id == colorId)
+							 .Select(p => new ShopProductDetailColor()
+							 {
+								 ColorId = colorId,
+								 ColorTitle = p.ColorTitle
+							 })
+							 .FirstOrDefaultAsync();
+	}
 
     public async Task<List<ListOfColorsForFilterProductsDTO>> FillListOfColorsForFilterProductsDTO(CancellationToken cancellationToken)
     {

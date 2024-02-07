@@ -17,6 +17,37 @@
 
     <ul class="navbar-nav dt-sl">
 
+        @if (Model.ShopBrandsDTOs != null && Model.ShopBrandsDTOs.Any())
+        {
+            <li class="sub-menu">
+                <a href="#">برندهای محصولات</a>
+                <ul>
+                    @foreach (var brandCategory in Model.ShopBrandsDTOs)
+                    {
+                        <li class="sub-menu">
+                            <a>@brandCategory.BrandCategory.CatgeoryTitle</a>
+                            <ul>
+                                @if (brandCategory.ShopBrands != null && brandCategory.ShopBrands.Any())
+                                {
+                                    foreach (var brand in brandCategory.ShopBrands)
+                                    {
+                                        <li class="sublist--item">
+                                            <a asp-action="FilterProducts"
+                                               asp-area=""
+                                               asp-controller="ShopProduct"
+                                               asp-route-BrandId="@brand.ShopBrandId">@brand.ShopBrandTitle</a>
+                                        </li>
+                                    }
+                                }
+
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+
+
         @if (Model.ShopCategoriesDTOs != null && Model.ShopCategoriesDTOs.Any())
         {
             foreach (var firstCategories in Model.ShopCategoriesDTOs.Where(p => !p.ParentId.HasValue).OrderBy(p => p.Priority))
@@ -64,25 +95,6 @@
 
             }
         }
-
-        @if (Model.ShopBrandsDTOs != null && Model.ShopBrandsDTOs.Any())
-        {
-            <li class="sub-menu">
-                <a href="#">برندهای محصولات</a>
-                <ul>
-                    @foreach (var brand in Model.ShopBrandsDTOs)
-                    {
-                        <li>
-                            <a asp-action="FilterProducts"
-                               asp-area=""
-                               asp-controller="ShopProduct"
-                               asp-route-BrandId="@brand.ShopBrandId">@brand.ShopBrandTitle</a>
-                        </li>
-                    }
-                </ul>
-            </li>
-        }
-
 
     </ul>
 </div>

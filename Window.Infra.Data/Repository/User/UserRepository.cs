@@ -245,6 +245,25 @@ namespace CRM.Data.Repository
 
         #endregion
 
+        #region Site Side 
+
+        public async Task<Window.Domain.ViewModels.Site.Shop.ShopProduct.Seller?> FillSeller(ulong userId ,
+                                                                                             CancellationToken cancellation)
+        {
+            return await _context.Users
+                                 .AsNoTracking()
+                                 .Where(p=> !p.IsDelete &&
+                                        p.Id == userId)
+                                 .Select(p=> new Window.Domain.ViewModels.Site.Shop.ShopProduct.Seller()
+                                 {
+                                     SellerUserId = userId,
+                                     Username = p.Username
+                                 })
+                                 .FirstOrDefaultAsync();
+        }
+
+        #endregion
+
         #region save changes
 
         public async Task SaveChanges()

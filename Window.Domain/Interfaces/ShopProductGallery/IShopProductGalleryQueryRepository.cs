@@ -14,6 +14,8 @@ public interface IShopProductGalleryQueryRepository
 
     Task<bool> IsExistBrandById(ulong brandId, CancellationToken cancellation);
 
+    Task<List<string?>> GetProductGalleriesImages(ulong productId, CancellationToken cancellation);
+
     #endregion
 
     #region Seller Side 

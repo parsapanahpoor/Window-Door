@@ -8,7 +8,7 @@ public record ShopSiteBarDTO
 
     public List<ShopCategoriesDTO>? ShopCategoriesDTOs { get; set; }
 
-    public List<ShopBrandsDTO>? ShopBrandsDTOs { get; set; }
+    public List<ShopBrandForMenuDTO>? ShopBrandsDTOs { get; set; }
 
     #endregion
 }

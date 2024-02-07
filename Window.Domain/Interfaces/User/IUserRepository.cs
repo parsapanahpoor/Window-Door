@@ -48,10 +48,16 @@ namespace Window.Domain.Interfaces
 
         #endregion
 
+        #region Site Side 
+
+        Task<Window.Domain.ViewModels.Site.Shop.ShopProduct.Seller?> FillSeller(ulong userId,
+                                                                                     CancellationToken cancellation);
+
+        #endregion
+
         #region save changees
         Task SaveChanges();
 
         #endregion
-
     }
 }

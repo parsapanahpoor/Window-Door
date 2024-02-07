@@ -6,7 +6,6 @@ namespace Window.Domain.Interfaces.ShopColors;
 
 public interface IShopColorsQueryRepository
 {
-
 	#region Admin 
 
 	Task<FilterShopColorDTO> FilterShopColor(FilterShopColorDTO filter, CancellationToken cancellation);
@@ -16,6 +15,8 @@ public interface IShopColorsQueryRepository
     #endregion
 
     #region Site Side
+
+    Task<ShopProductDetailColor?> FillShopProductDetailColor(ulong colorId, CancellationToken cancellation);
 
     Task<List<ListOfColorsForFilterProductsDTO>> FillListOfColorsForFilterProductsDTO(CancellationToken cancellationToken);
 

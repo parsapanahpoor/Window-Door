@@ -33,8 +33,11 @@ public interface IBrandService
 
     #region Site Side 
 
+    //Fill Site Side 
+    Task<ShopProductDetailBrand?> FillShopProductDetailBrand(ulong brandId, CancellationToken cancellation);
+
     //Fill ShopBrandsDTO For SiteSide Bar
-    Task<List<ShopBrandsDTO>?> FillShopBrandsDTOForSiteSideBar(CancellationToken cancellationToken);
+    Task<List<ShopBrandForMenuDTO>?> FillShopBrandsDTOForSiteSideBar(CancellationToken cancellationToken);
 
     //Fill List Of Brands For Filter Products 
     Task<List<ListOfBrandsForFilterProductsDTO>> FillListOfBrandsForFilterProductsDTO(CancellationToken cancellationToken);

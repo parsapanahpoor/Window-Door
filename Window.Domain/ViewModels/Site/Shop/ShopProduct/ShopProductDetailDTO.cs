@@ -18,6 +18,8 @@ public record ShopProductDetailDTO
 
     public decimal Price { get; set; }
 
+    public Seller Seller { get; set; }
+
     public ShopProductDetailColor Color { get; set; }
 
     public ShopProductDetailBrand Brand { get; set; }
@@ -50,4 +52,11 @@ public record ShopProductDetailBrand
     public string BrandTitle { get; set; }
 
     #endregion
+}
+
+public record Seller
+{
+    public ulong SellerUserId { get; set; }
+
+    public string Username { get; set; }
 }
