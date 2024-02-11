@@ -1,4 +1,6 @@
-﻿
+﻿@model Window.Domain.ViewModels.Site.Shop.SellerDetail.SellerDetailDTO
+@using Window.Application.Convertors
+@using Window.Application.StticTools;
 
 @{
     ViewData["Title"] = "اطلاعات فروشنده";
@@ -26,343 +28,97 @@
     <!-- Breadcrumb-->
     <nav class="mb-4 pt-md-3" aria-label="Breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="real-estate-home-v1.html">خانه</a></li>
-            <li class="breadcrumb-item"><a href="#">نمایندگان</a></li>
-            <li class="breadcrumb-item active" aria-current="page">فلوید مایلز</li>
+            <li class="breadcrumb-item"><a href="/">خانه</a></li>
+            <li class="breadcrumb-item"><a href="#">فروشندگان پنجره یاب</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.UserDetail.SellerUsername</li>
         </ol>
     </nav>
     <div class="row">
         <!-- Sidebar (Agent's info)-->
         <aside class="col-lg-3 col-md-4 mb-5">
             <div class="pe-lg-3">
-                <img class="d-block rounded-circle mx-auto mx-md-0 mb-3" src="/FinderSample/img/avatars/31.jpg" width="120" alt="Floyd Miles">
-                <h2 class="h4 text-center text-md-start mb-1 font-vair">فلوید مایلز</h2>
-                <p class="text-center text-md-start mb-2 pb-1">نماینده گروه امپراتوری املاک</p>
+                @if (!string.IsNullOrEmpty(Model.UserDetail.SellerImageName))
+                {
+                    <img class="d-block rounded-circle mx-auto mx-md-0 mb-3" src="@FilePaths.UserAvatarPath@Model.UserDetail.SellerImageName" width="120" alt="Floyd Miles">
+                }
+                else
+                {
+                    <img class="d-block rounded-circle mx-auto mx-md-0 mb-3" src="@FilePaths.DefaultProductAvatar" width="120" alt="Floyd Miles">
+                }
+
+                <h2 class="h4 text-center text-md-start mb-1 font-vair">@Model.UserDetail.SellerUsername</h2>
+                @if (!string.IsNullOrEmpty(Model.UserDetail.ShopCenterName))
+                {
+                    <p class="text-center text-md-start mb-2 pb-1">@Model.UserDetail.ShopCenterName</p>
+                }
                 <div class="d-flex justify-content-center justify-content-md-start border-bottom pb-4 mb-4">
                     <span class="star-rating"><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i><i class="star-rating-icon fi-star-filled active"></i></span><a class="ms-2" href="real-estate-vendor-reviews.html">45 نظر</a>
                 </div>
-                <div class="border-bottom pb-4 mb-4">
-                    <p class="fs-sm mb-0">سلام! من بهترن اقامتگاه را برای شماانتخاب میکنم ، لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است.</p>
-                    <div class="collapse" id="seeMore">
-                        <p class="fs-sm mb-0">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-                    </div>
-                    <div class="text-right text-md-start"><a class="collapse-label collapsed fs-sm" href="#seeMore" data-bs-toggle="collapse" data-bs-label-collapsed="مشاهده بیشتر" data-bs-label-expanded="بستن" role="button" aria-expanded="false" aria-controls="seeMore"></a></div>
-                </div>
                 <ul class="d-table list-unstyled mx-auto mx-md-0 mb-3 mb-md-4">
-                    <li class="mb-2"><a class="nav-link fw-normal p-0" href="tel:3025550107"><i class="fi-phone text-primary mt-n1 me-2 align-middle"></i>(302) 555-0107</a></li>
-                    <li><a class="nav-link fw-normal p-0" href="mailto:floyd_miles@email.com"><i class="fi-mail text-primary mt-n1 me-2 align-middle"></i>floyd_miles@email.com</a></li>
+                    <li class="mb-2"><i class="fi-phone text-primary mt-n1 me-2 align-middle"></i>@Model.UserDetail.SellerMobile</li>
+                    <li class="mb-2">تاریخ عضویت : @Model.UserDetail.RegisterDate.ToShamsi() </li>
                 </ul>
-                <div class="text-center text-md-start"><a class="btn btn-icon btn-light-primary btn-xs rounded-circle shadow-sm me-2" href="#"><i class="fi-facebook"></i></a><a class="btn btn-icon btn-light-primary btn-xs rounded-circle shadow-sm" href="#"><i class="fi-linkedin"></i></a></div>
-                <div class="text-center text-md-start pt-md-2 mt-4"><a class="btn btn-primary" href="#message-modal" data-bs-toggle="modal"><i class="fi-chat-left fs-sm me-2"></i>ارسال پیام</a></div>
             </div>
         </aside>
         <!-- Content-->
         <div class="col-lg-9 col-md-8">
-            <h1 class="h2 text-right text-sm-start mb-4 font-vazir">ملک های پیشنهادی</h1>
+            <h1 class="h2 text-right text-sm-start mb-4 font-vazir">محصولات @Model.UserDetail.SellerUsername</h1>
             <!-- Nav tabs + Sorting-->
-            <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between mb-4">
-                <ul class="nav nav-tabs flex-nowrap mb-sm-0" role="tablist">
-                    <li class="nav-item"><a class="nav-link fs-sm active" href="#for-rent" data-bs-toggle="tab" role="tab" aria-controls="for-rent" aria-selected="true">اجاره</a></li>
-                    <li class="nav-item"><a class="nav-link fs-sm" href="#for-sale" data-bs-toggle="tab" role="tab" aria-controls="for-sale" aria-selected="false">فروش</a></li>
-                </ul>
-                <div class="d-flex align-items-center ms-sm-4">
-                    <label class="fs-sm me-2 pe-1 text-nowrap" for="sortby"><i class="fi-arrows-sort text-muted mt-n1 me-2"></i>مرتب سازی براساس:</label>
-                    <select class="form-select form-select-sm" id="sortby">
-                        <option>جدیدترین</option>
-                        <option>پربازدیدترین</option>
-                        <option>قیمت بالا</option>
-                        <option>قیمت پایین</option>
-                        <option>امتیاز بالا</option>
-                        <option>امتیاز میانگین</option>
-                    </select>
-                </div>
-            </div>
+
             <div class="tab-content">
                 <!-- For rent tab-->
                 <div class="tab-pane fade show active" id="for-rent" role="tabpanel">
                     <div class="row g-4 g-md-3 g-lg-4 pt-2">
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-success mb-1">تایید</span><span class="d-table badge bg-info">جدید</span></div>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
+
+                        @if (Model.ShopCards != null && Model.ShopCards.Any())
+                        {
+                            foreach (var product in Model.ShopCards)
+                            {
+                                <!-- Item-->
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="card shadow-sm card-hover border-0 h-100">
+                                        <div class="tns-carousel-wrapper card-img-top card-img-hover">
+
+                                            <a class="img-overlay"
+                                               asp-action="ShopProductDetail"
+                                               asp-area=""
+                                               asp-controller="ShopProduct"
+                                               asp-route-productId="@product.ProductId"></a>
+
+                                            <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-success mb-1">فروشی</span></div>
+
+                                            <div class="content-overlay end-0 top-0 pt-3 ps-3">
+                                                <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
+                                            </div>
+                                            <div class="tns-outer" id="tns1-ow">
+                                                <div class="tns-controls" aria-label="Carousel Navigation" tabindex="0">
+                                                </div>
+                                                <div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">
+                                                    slide <span class="current">
+                                                        3
+                                                    </span>  of 2
+                                                </div><div id="tns1-mw" class="tns-ovh">
+                                                    <div class="tns-inner" id="tns1-iw">
+
+                                                        <div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns1" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);">
+                                                            <img src="@FilePaths.ProductsPathThumb@product.ProductImage" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns1" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns1" style="" aria-label="Carousel Page 2"></button></div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body position-relative pb-3">
+                                            <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">@product.ShopProductName</a></h3>
+                                            <p class="mb-2 fs-sm text-muted">برند محصول : @product.BrandName</p>
+                                            <p class="mb-2 fs-sm text-muted">رنگ محصول : @product.ColorName</p>
+                                            <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>@product.Price.ToString("#,000") ریال </div>
+                                        </div>
                                     </div>
-                                    <div class="tns-outer" id="tns1-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns1"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns1"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns1-mw" class="tns-ovh"><div class="tns-inner" id="tns1-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns1" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/01.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/01.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/01.jpg" alt="Image" class="tns-item tns-slide-active" id="tns1-item0"><img src="/FinderSample/img/real-estate/catalog/01.jpg" alt="Image" class="tns-item" id="tns1-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/01.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/01.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns1" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns1" style="" aria-label="Carousel Page 2"></button></div></div>
                                 </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">اجاره</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">ویلا بلوک آبشار | 140 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>2560000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">3<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-success mb-1">تایید</span><span class="d-table badge bg-danger">ویژه</span></div>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
-                                    </div>
-                                    <div class="tns-outer" id="tns2-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns2"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns2"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns2-mw" class="tns-ovh"><div class="tns-inner" id="tns2-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns2" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/02.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/02.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/02.jpg" alt="Image" class="tns-item tns-slide-active" id="tns2-item0"><img src="/FinderSample/img/real-estate/catalog/02.jpg" alt="Image" class="tns-item" id="tns2-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/02.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/02.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns2" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns2" style="" aria-label="Carousel Page 2"></button></div></div>
-                                </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">اجاره</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">آپارتمان 2 خواب | 85 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>854000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">4<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-success">تایید</span></div>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
-                                    </div>
-                                    <div class="tns-outer" id="tns3-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns3"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns3"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns3-mw" class="tns-ovh"><div class="tns-inner" id="tns3-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns3" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/03.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/03.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/03.jpg" alt="Image" class="tns-item tns-slide-active" id="tns3-item0"><img src="/FinderSample/img/real-estate/catalog/03.jpg" alt="Image" class="tns-item" id="tns3-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/03.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/03.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns3" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns3" style="" aria-label="Carousel Page 2"></button></div></div>
-                                </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">اجاره</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">اقامتگاه ویلایی | 200 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>133000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
-                                    </div>
-                                    <div class="tns-outer" id="tns4-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns4"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns4"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns4-mw" class="tns-ovh"><div class="tns-inner" id="tns4-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns4" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/30.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/30.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/30.jpg" alt="Image" class="tns-item tns-slide-active" id="tns4-item0"><img src="/FinderSample/img/real-estate/catalog/30.jpg" alt="Image" class="tns-item" id="tns4-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/30.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/30.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns4" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns4" style="" aria-label="Carousel Page 2"></button></div></div>
-                                </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">اجاره</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">ویلا بلوک آبشار | 140 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>187000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">4<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-info">جدید</span></div>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
-                                    </div>
-                                    <div class="tns-outer" id="tns5-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns5"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns5"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns5-mw" class="tns-ovh"><div class="tns-inner" id="tns5-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns5" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/31.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/31.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/31.jpg" alt="Image" class="tns-item tns-slide-active" id="tns5-item0"><img src="/FinderSample/img/real-estate/catalog/31.jpg" alt="Image" class="tns-item" id="tns5-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/31.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/31.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns5" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns5" style="" aria-label="Carousel Page 2"></button></div></div>
-                                </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">اجاره</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">آپارتمان 2 خواب | 85 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>854000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">4<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
-                                    </div>
-                                    <div class="tns-outer" id="tns6-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns6"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns6"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns6-mw" class="tns-ovh"><div class="tns-inner" id="tns6-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns6" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/32.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/32.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/32.jpg" alt="Image" class="tns-item tns-slide-active" id="tns6-item0"><img src="/FinderSample/img/real-estate/catalog/32.jpg" alt="Image" class="tns-item" id="tns6-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/32.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/32.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns6" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns6" style="" aria-label="Carousel Page 2"></button></div></div>
-                                </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">اجاره</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">اقامتگاه ویلایی | 200 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>133000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-success mb-1">تایید</span><span class="d-table badge bg-info">جدید</span></div>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
-                                    </div>
-                                    <div class="tns-outer" id="tns7-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns7"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns7"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns7-mw" class="tns-ovh"><div class="tns-inner" id="tns7-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns7" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/04.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/04.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/04.jpg" alt="Image" class="tns-item tns-slide-active" id="tns7-item0"><img src="/FinderSample/img/real-estate/catalog/04.jpg" alt="Image" class="tns-item" id="tns7-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/04.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/04.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns7" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns7" style="" aria-label="Carousel Page 2"></button></div></div>
-                                </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">اجاره</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">ویلا بلوک آبشار | 140 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>2560000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">4<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-success">تایید</span></div>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="Add to Wishlist" aria-label="Add to Wishlist"><i class="fi-heart"></i></button>
-                                    </div>
-                                    <div class="tns-outer" id="tns8-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns8"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns8"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns8-mw" class="tns-ovh"><div class="tns-inner" id="tns8-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns8" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/05.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/05.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/05.jpg" alt="Image" class="tns-item tns-slide-active" id="tns8-item0"><img src="/FinderSample/img/real-estate/catalog/05.jpg" alt="Image" class="tns-item" id="tns8-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/05.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/05.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns8" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns8" style="" aria-label="Carousel Page 2"></button></div></div>
-                                </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">اجاره</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">آپارتمان 2 خواب | 85 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>854000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">4<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-success mb-1">تایید</span><span class="d-table badge bg-danger">ویژه</span></div>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
-                                    </div>
-                                    <div class="tns-outer" id="tns9-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns9"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns9"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns9-mw" class="tns-ovh"><div class="tns-inner" id="tns9-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns9" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/33.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/33.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/33.jpg" alt="Image" class="tns-item tns-slide-active" id="tns9-item0"><img src="/FinderSample/img/real-estate/catalog/33.jpg" alt="Image" class="tns-item" id="tns9-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/33.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/33.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns9" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns9" style="" aria-label="Carousel Page 2"></button></div></div>
-                                </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">اجاره</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">اقامتگاه ویلایی | 200 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>133000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center mt-1 pt-4"><a class="d-inline-block fw-bold text-decoration-none p-2 pb-0" href="#"><i class="fi-refresh fs-sm me-2"></i>مشاهده بیشتر</a></div>
-                </div>
-                <!-- For sale tab-->
-                <div class="tab-pane fade" id="for-sale" role="tabpanel">
-                    <div class="row g-4 g-md-3 g-lg-4 py-2">
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-success">تایید</span></div>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
-                                    </div>
-                                    <div class="tns-outer" id="tns10-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns10"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns10"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns10-mw" class="tns-ovh"><div class="tns-inner" id="tns10-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns10" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/34.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/34.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/34.jpg" alt="Image" class="tns-item tns-slide-active" id="tns10-item0"><img src="/FinderSample/img/real-estate/catalog/34.jpg" alt="Image" class="tns-item" id="tns10-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/34.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/34.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns10" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns10" style="" aria-label="Carousel Page 2"></button></div></div>
-                                </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">فروش</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">ویلا بلوک آبشار | 140 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>2560000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">3<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-info">جدید</span></div>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
-                                    </div>
-                                    <div class="tns-outer" id="tns11-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns11"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns11"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns11-mw" class="tns-ovh"><div class="tns-inner" id="tns11-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns11" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/35.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/35.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/35.jpg" alt="Image" class="tns-item tns-slide-active" id="tns11-item0"><img src="/FinderSample/img/real-estate/catalog/35.jpg" alt="Image" class="tns-item" id="tns11-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/35.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/35.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns11" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns11" style="" aria-label="Carousel Page 2"></button></div></div>
-                                </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">فروش</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">آپارتمان 2 خواب | 85 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>854000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">4<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
-                                    </div>
-                                    <div class="tns-outer" id="tns12-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns12"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns12"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns12-mw" class="tns-ovh"><div class="tns-inner" id="tns12-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns12" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/36.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/36.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/36.jpg" alt="Image" class="tns-item tns-slide-active" id="tns12-item0"><img src="/FinderSample/img/real-estate/catalog/36.jpg" alt="Image" class="tns-item" id="tns12-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/36.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/36.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns12" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns12" style="" aria-label="Carousel Page 2"></button></div></div>
-                                </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">فروش</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">اقامتگاه ویلایی | 200 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>133000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
-                                    </div>
-                                    <div class="tns-outer" id="tns13-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns13"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns13"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns13-mw" class="tns-ovh"><div class="tns-inner" id="tns13-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns13" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/37.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/37.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/37.jpg" alt="Image" class="tns-item tns-slide-active" id="tns13-item0"><img src="/FinderSample/img/real-estate/catalog/37.jpg" alt="Image" class="tns-item" id="tns13-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/37.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/37.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns13" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns13" style="" aria-label="Carousel Page 2"></button></div></div>
-                                </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">فروش</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">ویلا بلوک آبشار | 140 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>2560000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">4<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">2<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
-                        <!-- Item-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card shadow-sm card-hover border-0 h-100">
-                                <div class="tns-carousel-wrapper card-img-top card-img-hover">
-                                    <a class="img-overlay" href="real-estate-single-v1.html"></a>
-                                    <div class="position-absolute start-0 top-0 pt-3 pe-3"><span class="d-table badge bg-success">تایید</span></div>
-                                    <div class="content-overlay end-0 top-0 pt-3 ps-3">
-                                        <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="" data-bs-original-title="نشان کردن" aria-label="نشان کردن"><i class="fi-heart"></i></button>
-                                    </div>
-                                    <div class="tns-outer" id="tns14-ow"><div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns14"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns14"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">3</span>  of 2</div><div id="tns14-mw" class="tns-ovh"><div class="tns-inner" id="tns14-iw"><div class="tns-carousel-inner  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns14" style="transition-duration: 0s; transform: translate3d(-33.3333%, 0px, 0px);"><img src="/FinderSample/img/real-estate/catalog/38.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/38.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/38.jpg" alt="Image" class="tns-item tns-slide-active" id="tns14-item0"><img src="/FinderSample/img/real-estate/catalog/38.jpg" alt="Image" class="tns-item" id="tns14-item1" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/38.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"><img src="/FinderSample/img/real-estate/catalog/38.jpg" alt="Image" class="tns-item tns-slide-cloned" aria-hidden="true" tabindex="-1"></div></div></div><div class="tns-nav" aria-label="Carousel Pagination"><button type="button" data-nav="0" aria-controls="tns14" style="" aria-label="Carousel Page 1 (Current Slide)" class="tns-nav-active"></button><button type="button" data-nav="1" tabindex="-1" aria-controls="tns14" style="" aria-label="Carousel Page 2"></button></div></div>
-                                </div>
-                                <div class="card-body position-relative pb-3">
-                                    <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">فروش</h4>
-                                    <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">اقامتگاه ویلایی | 200 متر مربع</a></h3>
-                                    <p class="mb-2 fs-sm text-muted">ایران، تهران ، خیابان آزادی</p>
-                                    <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>133000 تومان</div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap"><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-bed me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-bath me-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block mx-1 px-2 fs-sm">1<i class="fi-car me-1 mt-n1 fs-lg text-muted"></i></span></div>
-                            </div>
-                        </div>
+                            }
+                        }
+
                     </div>
                 </div>
             </div>

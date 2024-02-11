@@ -7,6 +7,7 @@ using Window.Domain.Entities.ShopProduct;
 using Window.Domain.Interfaces.ShopProduct;
 using Window.Domain.ViewModels.Admin.ShopColor;
 using Window.Domain.ViewModels.Seller.ShopProduct;
+using Window.Domain.ViewModels.Site.Shop.SellerDetail;
 using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Infra.Data.Repository.ShopProduct;
@@ -52,7 +53,7 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
         //Title
         if (!string.IsNullOrEmpty(model.ProductTitle))
         {
-            query = query.Where(p => p.ProductName.Contains(model.ProductTitle));
+            query = query.Where(p => p.ProductName.Contains(model.ProductTitle) || p.User.Username.Contains(model.ProductTitle));
         }
 
         //ShopCategory
@@ -105,6 +106,34 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
         await model.Paging(query.Distinct());
 
         return model;
+    }
+
+    public async Task<List<ShopCard>> FillShopCard(ulong sellerUserId , CancellationToken cancellation)
+    {
+        return await _context.ShopProducts
+                             .AsNoTracking()
+                             .Where(p=> !p.IsDelete &&
+                                    p.SellerUserId == sellerUserId)
+                             .Select(p=> new ShopCard()
+                             {
+                                 BrandName = _context.MainBrands
+                                                     .AsNoTracking()
+                                                     .Where(s=> !s.IsDelete && 
+                                                            s.Id == p.ProductBrandId)
+                                                     .Select(s=> s.BrandName)
+                                                     .FirstOrDefault(),
+                                 ColorName = _context.ShopColors
+                                                     .AsNoTracking()
+                                                     .Where(s => !s.IsDelete &&
+                                                            s.Id == p.ProductColorId)
+                                                     .Select(s => s.ColorTitle)
+                                                     .FirstOrDefault(),
+                                 Price = p.Price,
+                                 ShopProductName = p.ProductName , 
+                                 ProductId = p.Id,
+                                 ProductImage = p.ProductImage,
+                             })
+                             .ToListAsync();
     }
 
     #endregion

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Window.Application.CQRS.SiteSide.ShopSeller.ShopSellerDetail;
 namespace Window.Web.Controllers.Shop;
 
 public class ShopSellerController : SiteBaseController
@@ -11,9 +12,13 @@ public class ShopSellerController : SiteBaseController
 
     #region Seller Detail
 
-    public async Task<IActionResult> SellerDetail(ulong sellerId , CancellationToken cancellation)
+    public async Task<IActionResult> SellerDetail(ShopSellerDetailQuery shopSellerDetail ,
+                                                  CancellationToken cancellation = default)
     {
-        return View();
+        var model = await Mediator.Send(shopSellerDetail , cancellation);
+        if (ModelState == null) return NotFound(); 
+
+        return View(model);
     }
 
     #endregion

@@ -2,6 +2,7 @@
 using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopProduct;
 using Window.Domain.ViewModels.Seller.ShopProduct;
+using Window.Domain.ViewModels.Site.Shop.SellerDetail;
 using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
 namespace Window.Domain.Interfaces.ShopProduct;
@@ -13,6 +14,8 @@ public interface IShopProductQueryRepository
 
     //List Of Products
     Task<FilterShopProductDTO> FilterProducts(FilterShopProductDTO model, CancellationToken cancellation);
+
+    Task<List<ShopCard>> FillShopCard(ulong sellerUserId, CancellationToken cancellation);
 
     #endregion
 

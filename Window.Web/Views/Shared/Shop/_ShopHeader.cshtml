@@ -19,29 +19,16 @@
                 </div>
                 <div class="col-lg-6 col-md-5 hidden-sm">
                     <div class="search-area dt-sl">
-                        <form action="" class="search">
-                            <input type="text"
-                                   placeholder="نام کالا، برند و یا دسته مورد نظر خود را جستجو کنید…">
-                            <i class="far fa-search search-icon"></i>
+                        <form asp-action="FilterProducts" id="SearchNormalSize" 
+                              asp-area=""
+                              asp-controller="ShopProduct" class="search" method="get">
+                            <input name="ProductTitle" type="text"
+                                   placeholder="نام کالا و یا نام فورشنده ی نظر خود را جستجو کنید…">
+                            <i class="far fa-search search-icon" onclick="SearchNormalSize()"></i>
                             <button class="close-search-result" type="button">
                                 <i class="mdi mdi-close"></i>
                             </button>
-                            <div class="search-result">
-                                <ul>
-                                    <li>
-                                        <a href="#">موبایل</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">مد و پوشاک</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">میکروفن</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">میز تلویزیون</a>
-                                    </li>
-                                </ul>
-                            </div>
+                         
                         </form>
                     </div>
                 </div>

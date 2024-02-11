@@ -9,9 +9,11 @@
     </div>
 
     <div class="search-box-side-menu dt-sl text-center mt-2 mb-3">
-        <form action="">
-            <input type="text" name="s" placeholder="جستجو کنید...">
-            <i class="mdi mdi-magnify"></i>
+        <form asp-action="FilterProducts" id="SearchShortSize"
+              asp-area=""
+              asp-controller="ShopProduct" method="get">
+            <input type="text" name="ProductTitle" placeholder="جستجو کنید...">
+            <i class="mdi mdi-magnify" onclick="SearchShortSize()"></i>
         </form>
     </div>
 
