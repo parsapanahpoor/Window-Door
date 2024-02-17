@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Window.Domain.Entities.Brand;
 using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopProduct;
 using Window.Domain.ViewModels.Seller.ShopProduct;
+using Window.Domain.ViewModels.Site.Shop.Landing;
 using Window.Domain.ViewModels.Site.Shop.SellerDetail;
 using Window.Domain.ViewModels.Site.Shop.ShopProduct;
 
@@ -16,6 +18,12 @@ public interface IShopProductQueryRepository
     Task<FilterShopProductDTO> FilterProducts(FilterShopProductDTO model, CancellationToken cancellation);
 
     Task<List<ShopCard>> FillShopCard(ulong sellerUserId, CancellationToken cancellation);
+
+    Task<List<LastestShopProducts>> FillLastestShopProducts(CancellationToken cancellation);
+
+    Task<List<LastestSellers>> ListOfLastestSellers(CancellationToken cancellation);
+
+    Task<List<LastestBrands>> LastestMainBrands(CancellationToken cancellationToken);
 
     #endregion
 

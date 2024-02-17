@@ -1,0 +1,66 @@
+﻿@using Window.Application.StticTools
+@model List<Window.Domain.ViewModels.Site.Shop.Landing.LastestShopProducts>
+
+@if (Model!= null && Model.Any())
+{
+    <section class="slider-section mb-5 amazing-section" style="background: #ef394e">
+        <div class="container main-container">
+            <div class="row mb-3">
+                <!-- Start Product-Slider -->
+                <div class="col-12">
+                    <div class="product-carousel carousel-lg owl-carousel owl-theme">
+                        <div class="item">
+                            <div class="amazing-product text-center pt-5">
+                                <a href="#">
+                                    <img src="/DidiKala/assets/img/theme/amazing-1.png" alt="">
+                                </a>
+                                <a href="#" class="view-all-amazing-btn">
+                                    مشاهده همه
+                                </a>
+                            </div>
+                        </div>
+
+                        @foreach (var product in Model)
+                        {
+                            <div class="item">
+                                <div class="product-card mb-3">
+                                    <div class="product-head">
+                                        <div class="rating-stars">
+                                            <i class="mdi mdi-star active"></i>
+                                            <i class="mdi mdi-star active"></i>
+                                            <i class="mdi mdi-star active"></i>
+                                            <i class="mdi mdi-star active"></i>
+                                            <i class="mdi mdi-star active"></i>
+                                        </div>
+                                    </div>
+                                    <a class="product-thumb" asp-action="ShopProductDetail"
+                                       asp-area=""
+                                       asp-controller="ShopProduct"
+                                       asp-route-productId="@product.ProductId">
+                                        <img src="@FilePaths.ProductsPathThumb/@product.ProductImage" alt="Product Thumbnail">
+                                    </a>
+                                    <div class="product-card-body">
+                                        <h5 class="product-title">
+                                            <a asp-action="ShopProductDetail"
+                                               asp-area=""
+                                               asp-controller="ShopProduct"
+                                               asp-route-productId="@product.ProductId">@product.ProductTitle</a>
+                                        </h5>
+                                        <a class="product-meta" asp-action="SellerDetail"
+                                           asp-area=""
+                                           asp-controller="ShopSeller"
+                                           asp-route-sellerId="@product.SellerInfo.SellerId">@product.SellerInfo.SellerUsername</a>
+                                        <span class="product-price">@product.ProductPrice.ToString("#,000")  ریال</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+}

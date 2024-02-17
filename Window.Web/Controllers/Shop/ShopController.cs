@@ -1,6 +1,7 @@
 ﻿#region Usings
 
 using Microsoft.AspNetCore.Mvc;
+using Window.Application.CQRS.SiteSide.ShopLanding;
 namespace Window.Web.Controllers;
 
 #endregion
@@ -15,9 +16,11 @@ public class ShopController : SiteBaseController
 
     #region Shop Landing
 
-    public async Task<IActionResult> ShopLanding()
+    public async Task<IActionResult> ShopLanding(CancellationToken cancellation = default)
     {
-        return View();
+        var model = await Mediator.Send(new ShopLandingQuery() , cancellation);
+
+        return View(model);
     }
 
     #endregion

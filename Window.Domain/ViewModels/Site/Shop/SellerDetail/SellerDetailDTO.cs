@@ -36,15 +36,15 @@ public record ShopCard
 
     public ulong ProductId { get; set; }
 
-    public string ShopProductName { get; set; }
+    public string? ShopProductName { get; set; }
 
-    public string ColorName { get; set; }
+    public string? ColorName { get; set; }
 
-    public string BrandName { get; set; }
+    public string? BrandName { get; set; }
 
     public decimal Price { get; set; }
 
-    public string ProductImage { get; set; }
+    public string? ProductImage { get; set; }
 
     #endregion
 }
