@@ -1,4 +1,4 @@
-﻿namespace Window.Application.CQRS.SiteSide.ShopOrder;
+﻿namespace Window.Application.CQRS.SiteSide.ShopOrder.Query;
 
 public class ShopOrderQuery : IRequest<AddToShopOrderRes>
 {

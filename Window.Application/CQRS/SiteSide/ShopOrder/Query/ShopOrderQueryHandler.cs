@@ -1,11 +1,10 @@
-﻿
-using Window.Application.Common.IUnitOfWork;
+﻿using Window.Application.Common.IUnitOfWork;
 using Window.Domain.Entities.ShopOrder;
 using Window.Domain.Interfaces;
 using Window.Domain.Interfaces.Order;
 using Window.Domain.Interfaces.ShopProduct;
 
-namespace Window.Application.CQRS.SiteSide.ShopOrder;
+namespace Window.Application.CQRS.SiteSide.ShopOrder.Query;
 
 public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopOrderRes>
 {
@@ -17,10 +16,10 @@ public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopO
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserRepository _userRepository;
 
-    public ShopOrderQueryHandler(IOrderCommandRepository orderCommandRepository ,
-                                 IOrderQueryRepository orderQueryRepository ,
-                                 IShopProductQueryRepository shopProductQueryRepository ,
-                                 IUnitOfWork unitOfWork ,
+    public ShopOrderQueryHandler(IOrderCommandRepository orderCommandRepository,
+                                 IOrderQueryRepository orderQueryRepository,
+                                 IShopProductQueryRepository shopProductQueryRepository,
+                                 IUnitOfWork unitOfWork,
                                  IUserRepository userRepository)
     {
         _orderCommandRepository = orderCommandRepository;
@@ -36,7 +35,7 @@ public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopO
     {
         #region Get Product By Id
 
-        var product = await _shopProductQueryRepository.GetByIdAsync(cancellationToken , request.productId);
+        var product = await _shopProductQueryRepository.GetByIdAsync(cancellationToken, request.productId);
         if (product == null) return AddToShopOrderRes.Faild;
 
         #endregion
@@ -50,7 +49,7 @@ public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopO
 
         #region Is Exist Any Order
 
-        var order = await _orderQueryRepository.IsExistAnyWaitingOrder(request.userId , cancellationToken);
+        var order = await _orderQueryRepository.IsExistAnyWaitingOrder(request.userId, cancellationToken);
 
         if (order == null)
         {
@@ -63,7 +62,7 @@ public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopO
                 UserId = request.userId
             };
 
-            await _orderCommandRepository.AddAsync(newOrder , cancellationToken);
+            await _orderCommandRepository.AddAsync(newOrder, cancellationToken);
             await _unitOfWork.SaveChangesAsync();
 
             //Add Order Detail
@@ -76,13 +75,13 @@ public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopO
                 ProductId = product.Id,
             };
 
-            await _orderCommandRepository.AddOrderDetailAsync(orderDetail , cancellationToken);
+            await _orderCommandRepository.AddOrderDetailAsync(orderDetail, cancellationToken);
             await _unitOfWork.SaveChangesAsync();
         }
         else
         {
             //Is Exist Order Detail By This Product Id
-            var orderDetail = await _orderQueryRepository.Get_OrderDetail_ByOrderIdAndProductId(order.Id , product.Id , cancellationToken);
+            var orderDetail = await _orderQueryRepository.Get_OrderDetail_ByOrderIdAndProductId(order.Id, product.Id, cancellationToken);
             if (orderDetail == null)
             {
                 //Add OrderDetail

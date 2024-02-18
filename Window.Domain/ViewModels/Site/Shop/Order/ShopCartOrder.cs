@@ -1,6 +1,6 @@
 ﻿namespace Window.Domain.ViewModels.Site.Shop.Order;
 
-public class ShopCartOrder 
+public class ShopCartOrderDTO
 {
     #region properties
 
@@ -17,9 +17,7 @@ public class ShopCartOrderDetailItems
 
     public ulong ProductId { get; set; }
 
-    public ShopCartOrderProductSellerInfo SellerUserInfo { get; set; }
-
-    public ShopCartOrderProductSellerInfo Products { get; set; }
+    public Product? Products { get; set; }
 
     #endregion
 }
@@ -31,8 +29,6 @@ public class ShopCartOrderProductSellerInfo
     public ulong SellerUserId { get; set; }
 
     public string SellerUsername { get; set; }
-
-    public Product Products { get; set; }
 
     #endregion
 }
@@ -47,7 +43,13 @@ public class Product
 
     public string ProductTitle { get; set; }
 
-    public Color Color { get; set; }
+    public string ProductImage { get; set; }
+
+    public decimal ProductPrice { get; set; }
+
+    public Color? Color { get; set; }
+
+    public ShopCartOrderProductSellerInfo? SellerInfo { get; set; }
 
     #endregion
 }
