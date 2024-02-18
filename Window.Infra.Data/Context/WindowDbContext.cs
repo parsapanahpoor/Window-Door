@@ -24,6 +24,7 @@ using Window.Domain.Entities.Score;
 using Window.Domain.Entities.Segment;
 using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopColors;
+using Window.Domain.Entities.ShopOrder;
 using Window.Domain.Entities.ShopProduct;
 using Window.Domain.Entities.ShopProductFeature;
 using Window.Domain.Entities.ShopProductGallery;
@@ -262,6 +263,14 @@ public class WindowDbContext : DbContext
     #region Shop Product Gallery
 
     public DbSet<ShopProductGallery> ShopProductGalleries { get; set; }
+
+    #endregion
+
+    #region Order 
+
+    public DbSet<Order> Orders { get; set; }
+
+    public DbSet<OrderDetail> OrderDetails { get; set; }
 
     #endregion
 
