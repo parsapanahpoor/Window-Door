@@ -15,8 +15,6 @@ public class ShopCartOrderDetailItems
 {
     #region properties
 
-    public ulong ProductId { get; set; }
-
     public Product? Products { get; set; }
 
     #endregion

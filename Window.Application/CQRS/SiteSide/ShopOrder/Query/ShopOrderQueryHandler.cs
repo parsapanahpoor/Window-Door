@@ -94,7 +94,7 @@ public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopO
                     ProductId = product.Id,
                 };
 
-                await _orderCommandRepository.AddOrderDetailAsync(orderDetail, cancellationToken);
+                await _orderCommandRepository.AddOrderDetailAsync(newOrderDetail, cancellationToken);
                 await _unitOfWork.SaveChangesAsync();
             }
             else
@@ -108,6 +108,6 @@ public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopO
 
         #endregion
 
-        throw new NotImplementedException();
+        return AddToShopOrderRes.Success;
     }
 }

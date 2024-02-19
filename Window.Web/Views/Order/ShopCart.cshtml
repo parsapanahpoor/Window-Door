@@ -36,35 +36,33 @@
                                                 {
                                                     <div class="cart-item py-4 px-3">
                                                         <div class="item-thumbnail">
-                                                            <a href="#">
-                                                                <img src="@FilePaths.ProductsPathThumb@productItem.Products" alt="item">
+                                                            <a asp-action="ShopProductDetail"
+                                                               asp-area=""
+                                                               asp-controller="ShopProduct"
+                                                               asp-route-productId="@productItem.Products.ProductId">
+                                                                <img src="@FilePaths.ProductsPathThumb@productItem.Products.ProductImage" alt="item">
                                                             </a>
                                                         </div>
                                                         <div class="item-info flex-grow-1">
                                                             <div class="item-title">
                                                                 <h2>
-                                                                    <a href="#">
-                                                                        گوشی موبایل شیائومی مدل Mi 10 Lite 5G M2002J9G
-                                                                        دو
-                                                                        سیم‌ کارت
-                                                                        ظرفیت
-                                                                        128 گیگابایت
+                                                                    <a asp-action="ShopProductDetail"
+                                                                       asp-area=""
+                                                                       asp-controller="ShopProduct"
+                                                                       asp-route-productId="@productItem.Products.ProductId">
+                                                                        @productItem.Products.ProductTitle
                                                                     </a>
                                                                 </h2>
                                                             </div>
                                                             <div class="item-detail">
                                                                 <ul>
                                                                     <li>
-                                                                        <span class="color" style="background-color: #9E9E9E;"></span>
-                                                                        <span>خاکستری</span>
-                                                                    </li>
-                                                                    <li>
-                                                                        <i class="far fa-shield-check text-muted"></i>
-                                                                        <span>گارانتی ۱۸ ماهه</span>
+                                                                        <span class="color" style="background-color: @productItem.Products.Color.ColorCode;"></span>
+                                                                        <span>@productItem.Products.Color.ColorTitle</span>
                                                                     </li>
                                                                     <li>
                                                                         <i class="far fa-store-alt text-muted"></i>
-                                                                        <span>نام فروشنده</span>
+                                                                        <span>نام فروشنده : @productItem.Products.SellerInfo.SellerUsername</span>
                                                                     </li>
                                                                     <li>
                                                                         <i class="far fa-clipboard-check text-primary"></i>
@@ -75,18 +73,34 @@
                                                                     <div class="item-quantity">
                                                                         <div class="num-block">
                                                                             <div class="num-in">
-                                                                                <span class="plus"></span>
-                                                                                <input type="text" class="in-num" value="1" readonly="">
-                                                                                <span class="minus dis"></span>
+                                                                                <a asp-action="PlusProductInShopCart"
+                                                                                   asp-area=""
+                                                                                   asp-controller="Order"
+                                                                                   asp-route-productId="@productItem.Products.ProductId"
+                                                                                   style="margin-top: 5px;font-weight: bold;"
+                                                                                   class="plus">+</a>
+
+                                                                                <input type="text" class="in-num" value="@productItem.Products.ProductEntity" readonly="">
+
+                                                                                <a asp-action="MinusProductInShopCart"
+                                                                                   asp-area=""
+                                                                                   asp-controller="Order"
+                                                                                   asp-route-productId="@productItem.Products.ProductId"
+                                                                                   style="margin-top: 5px;font-weight: bold;"
+                                                                                   class="minus dis">-</a>
                                                                             </div>
                                                                         </div>
-                                                                        <button class="item-remove-btn mr-3">
+                                                                        <a asp-action="DeleteProductFromShopOrder"
+                                                                           asp-area=""
+                                                                           asp-controller="Order"
+                                                                           asp-route-ProductId="@productItem.Products.ProductId"
+                                                                           class="item-remove-btn mr-3">
                                                                             <i class="far fa-trash-alt"></i>
                                                                             حذف
-                                                                        </button>
+                                                                        </a>
                                                                     </div>
                                                                     <div class="item-price">
-                                                                        ۱۰,۷۰۹,۰۰۰<span class="text-sm mr-1">تومان</span>
+                                                                        @productItem.Products.ProductPrice.ToString("#,000")<span class="text-sm mr-1">ریال</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -106,13 +120,7 @@
                                     <div class="dt-sn dt-sn--box border mb-2">
                                         <ul class="checkout-summary-summary">
                                             <li>
-                                                <span>مبلغ کل (۲ کالا)</span><span>۱۶,۸۹۷,۰۰۰ تومان</span>
-                                            </li>
-                                            <li class="checkout-summary-discount">
-                                                <span>سود شما از خرید</span><span>
-                                                    <span>(۱٪)</span>۲۰۰,۰۰۰
-                                                    تومان
-                                                </span>
+                                                <span>مبلغ کل (@Model.ProductItems.Count() کالا)</span><span>@Model.TotalPrice.ToString("#,000") ریال</span>
                                             </li>
                                             <li>
                                                 <span>
@@ -121,13 +129,6 @@
                                                     </span>
                                                 </span><span>وابسته به آدرس</span>
                                             </li>
-                                            <li class="checkout-club-container">
-                                                <span>
-                                                    دیدیکلاب<span class="help-sn" data-toggle="tooltip" data-html="true" data-placement="bottom" title="" data-original-title="<div class='help-container is-right'><div class='help-arrow'></div><p class='help-text'>با امتیازهای خود در باشگاه مشتریان دیجی کالا (دیجی کلاب) از بین جوایز متنوع انتخاب کنید.</p></div>">
-                                                        <span class="mdi mdi-information-outline"></span>
-                                                    </span>
-                                                </span><span><span>۱۵۰+</span><span> امتیاز</span></span>
-                                            </li>
                                         </ul>
                                         <div class="checkout-summary-devider">
                                             <div></div>
@@ -135,8 +136,8 @@
                                         <div class="checkout-summary-content">
                                             <div class="checkout-summary-price-title">مبلغ قابل پرداخت:</div>
                                             <div class="checkout-summary-price-value">
-                                                <span class="checkout-summary-price-value-amount">۱۶,۶۹۷,۰۰۰</span>
-                                                تومان
+                                                <span class="checkout-summary-price-value-amount">@Model.TotalPrice.ToString("#,000")</span>
+                                                ریال
                                             </div>
                                             <a href="#" class="mb-2 d-block">
                                                 <button class="btn-primary-cm btn-with-icon w-100 text-center pr-0">

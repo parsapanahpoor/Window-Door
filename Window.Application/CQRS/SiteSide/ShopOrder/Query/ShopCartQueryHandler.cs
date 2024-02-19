@@ -37,12 +37,19 @@ public record ShopCartQueryHandler : IRequestHandler<ShopCartQuery, ShopCartOrde
         var orderDetailIds = await _orderQueryRepository.GetOrderDetailIds_OrderDetails_ByOrderId(order.Id , cancellationToken);
         if (orderDetailIds == null) return null;
 
+        List<ShopCartOrderDetailItems> shopCartOrderDetailItems1 = new List<ShopCartOrderDetailItems>();    
+
         foreach (var orderDetailId in orderDetailIds)
         {
-            model.ProductItems.Add(await _orderQueryRepository.FillShopCartOrderDetailItems(orderDetailId , cancellationToken));
+            ShopCartOrderDetailItems shopCartOrderDetailItems = new ShopCartOrderDetailItems();
+            shopCartOrderDetailItems = await _orderQueryRepository.FillShopCartOrderDetailItems(orderDetailId, cancellationToken);
+
+            shopCartOrderDetailItems1.Add(shopCartOrderDetailItems);
         }
 
-        model.TotalPrice = (int)model.ProductItems.Sum(p => p.Products.ProductPrice);
+        model.ProductItems = shopCartOrderDetailItems1;
+
+        model.TotalPrice = (int)model.ProductItems.Sum(p => p.Products.ProductPrice * p.Products.ProductEntity);
 
         return model;
     }

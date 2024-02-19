@@ -233,34 +233,30 @@
                                         </ul>
 
                                         <div class="product-seller-row product-seller-row--price">
-                                            <div class="product-seller-price-info">
+                                      @*       <div class="product-seller-price-info">
                                                 <div class="product-seller-price-prev">
                                                     4,900,000
                                                 </div>
                                                 <div class="product-seller-price-off">
                                                     5٪
                                                 </div>
-                                            </div>
+                                            </div> *@
                                             <div class="product-seller-price-real">
                                                 <div class="product-seller-price-raw">@Model.Price.ToString("#,000") </div>
                                                 ریال
-                                            </div>
+                                            </div>@* 
                                             <div class="product-additional-item product-additional-item--no-icon">
                                                 <span>321,600</span>&nbsp; تومان تخفیف سازمانی کسر گردیده است.
-                                            </div>
+                                            </div> *@
                                         </div>
                                         <div class="product-seller-row product-seller-row--add-to-cart">
-                                            <a href="#" class="btn-add-to-cart btn-add-to-cart--full-width stack-menu__link">
+                                            <a asp-action="AddToShopCart"
+                                               asp-area=""
+                                               asp-controller="Order"
+                                               asp-route-productId="@Model.ProductId"
+                                            class="btn-add-to-cart btn-add-to-cart--full-width stack-menu__link">
                                                 <span class="btn-add-to-cart-txt">افزودن به سبد خرید</span>
                                             </a>
-                                            <div class="product-seller-digiclub">
-                                                <img src="/DidiKala/assets/img/digiclub.png" alt="">
-                                                <div>
-                                                    دریافت
-                                                    <span>۱۵۰</span>
-                                                    امتیاز دیجی‌کلاب با خرید این کالا
-                                                </div>
-                                            </div>
                                         </div>
                                     </nav>
                                 </div>
@@ -921,212 +917,9 @@
                 </section>
                 <!-- End tabs -->
             </div>
-            <!-- End Product -->
-            <!-- Start Product-Slider -->
-            <section class="slider-section dt-sl mb-5">
-                <div class="row mb-3">
-                    <div class="col-12">
-                        <div class="section-title text-sm-title title-wide no-after-title-wide">
-                            <h2>خریداران این محصول، محصولات زیر را هم خریده‌اند</h2>
-                            <a href="#">مشاهده همه</a>
-                        </div>
-                    </div>
 
-                    <!-- Start Product-Slider -->
-                    <div class="col-12">
-                        <div class="product-carousel carousel-lg owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+            @*Lastest Shop Products*@
+            @await Component.InvokeAsync("LastestShopProducts")
 
-
-
-
-
-
-
-                            <div class="owl-stage-outer">
-                                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 1553px;">
-                                    <div class="owl-item active" style="width: 211.733px; margin-left: 10px;">
-                                        <div class="item">
-                                            <div class="product-card mb-3">
-                                                <div class="product-head">
-                                                    <div class="rating-stars">
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                    </div>
-                                                    <div class="discount">
-                                                        <span>20%</span>
-                                                    </div>
-                                                </div>
-                                                <a class="product-thumb" href="shop-single.html">
-                                                    <img src="/DidiKala/assets/img/products/07.jpg" alt="Product Thumbnail">
-                                                </a>
-                                                <div class="product-card-body">
-                                                    <h5 class="product-title">
-                                                        <a href="shop-single.html">مانتو زنانه</a>
-                                                    </h5>
-                                                    <a class="product-meta" href="shop-categories.html">لباس زنانه</a>
-                                                    <span class="product-price">157,000 تومان</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><div class="owl-item active" style="width: 211.733px; margin-left: 10px;">
-                                        <div class="item">
-                                            <div class="product-card mb-3">
-                                                <div class="product-head">
-                                                    <div class="rating-stars">
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                    </div>
-                                                </div>
-                                                <a class="product-thumb" href="shop-single.html">
-                                                    <img src="/DidiKala/assets/img/products/017.jpg" alt="Product Thumbnail">
-                                                </a>
-                                                <div class="product-card-body">
-                                                    <h5 class="product-title">
-                                                        <a href="shop-single.html">کت مردانه</a>
-                                                    </h5>
-                                                    <a class="product-meta" href="shop-categories.html">لباس مردانه</a>
-                                                    <span class="product-price">199,000 تومان</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><div class="owl-item active" style="width: 211.733px; margin-left: 10px;">
-                                        <div class="item">
-                                            <div class="product-card mb-3">
-                                                <div class="product-head">
-                                                    <div class="rating-stars">
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                    </div>
-                                                </div>
-                                                <a class="product-thumb" href="shop-single.html">
-                                                    <img src="/DidiKala/assets/img/products/013.jpg" alt="Product Thumbnail">
-                                                </a>
-                                                <div class="product-card-body">
-                                                    <h5 class="product-title">
-                                                        <a href="shop-single.html">مانتو زنانه مدل هودی تیک تین</a>
-                                                    </h5>
-                                                    <a class="product-meta" href="shop-categories.html">لباس زنانه</a>
-                                                    <span class="product-price">135,000 تومان</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><div class="owl-item active" style="width: 211.733px; margin-left: 10px;">
-                                        <div class="item">
-                                            <div class="product-card mb-3">
-                                                <div class="product-head">
-                                                    <div class="rating-stars">
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                    </div>
-                                                </div>
-                                                <a class="product-thumb" href="shop-single.html">
-                                                    <img src="/DidiKala/assets/img/products/09.jpg" alt="Product Thumbnail">
-                                                </a>
-                                                <div class="product-card-body">
-                                                    <h5 class="product-title">
-                                                        <a href="shop-single.html">مانتو زنانه</a>
-                                                    </h5>
-                                                    <a class="product-meta" href="shop-categories.html">لباس زنانه</a>
-                                                    <span class="product-price">145,000 تومان</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><div class="owl-item active" style="width: 211.733px; margin-left: 10px;">
-                                        <div class="item">
-                                            <div class="product-card mb-3">
-                                                <div class="product-head">
-                                                    <div class="rating-stars">
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                    </div>
-                                                </div>
-                                                <a class="product-thumb" href="shop-single.html">
-                                                    <img src="/DidiKala/assets/img/products/010.jpg" alt="Product Thumbnail">
-                                                </a>
-                                                <div class="product-card-body">
-                                                    <h5 class="product-title">
-                                                        <a href="shop-single.html">مانتو زنانه</a>
-                                                    </h5>
-                                                    <a class="product-meta" href="shop-categories.html">لباس زنانه</a>
-                                                    <span class="product-price">170,000 تومان</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><div class="owl-item active" style="width: 211.733px; margin-left: 10px;">
-                                        <div class="item">
-                                            <div class="product-card mb-3">
-                                                <div class="product-head">
-                                                    <div class="rating-stars">
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                    </div>
-                                                    <div class="discount">
-                                                        <span>20%</span>
-                                                    </div>
-                                                </div>
-                                                <a class="product-thumb" href="shop-single.html">
-                                                    <img src="/DidiKala/assets/img/products/011.jpg" alt="Product Thumbnail">
-                                                </a>
-                                                <div class="product-card-body">
-                                                    <h5 class="product-title">
-                                                        <a href="shop-single.html">مانتو زنانه</a>
-                                                    </h5>
-                                                    <a class="product-meta" href="shop-categories.html">لباس زنانه</a>
-                                                    <span class="product-price">185,000 تومان</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><div class="owl-item active" style="width: 211.733px; margin-left: 10px;">
-                                        <div class="item">
-                                            <div class="product-card mb-3">
-                                                <div class="product-head">
-                                                    <div class="rating-stars">
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                    </div>
-                                                </div>
-                                                <a class="product-thumb" href="shop-single.html">
-                                                    <img src="/DidiKala/assets/img/products/019.jpg" alt="Product Thumbnail">
-                                                </a>
-                                                <div class="product-card-body">
-                                                    <h5 class="product-title">
-                                                        <a href="shop-single.html">تیشرت مردانه</a>
-                                                    </h5>
-                                                    <a class="product-meta" href="shop-categories.html">لباس مردانه</a>
-                                                    <span class="product-price">54,000 تومان</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><div class="owl-nav"><button type="button" role="presentation" class="owl-prev disabled"><i class="mdi mdi mdi-chevron-right"></i></button><button type="button" role="presentation" class="owl-next"><i class="mdi mdi mdi-chevron-left"></i></button></div><div class="owl-dots"><button role="button" class="owl-dot active"><span></span></button><button role="button" class="owl-dot"><span></span></button></div><div class="owl-thumbs"></div>
-                        </div>
-                    </div>
-                    <!-- End Product-Slider -->
-
-                </div>
-            </section>
-            <!-- End Product-Slider -->
         </div>
 </main>

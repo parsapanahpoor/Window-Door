@@ -2,7 +2,9 @@
 <header class="main-header">
     <!-- Start ads -->
     <div class="ads-header-wrapper">
-        <a href="#" class="ads-header hidden-sm" target="_blank"
+        <a asp-action="ShopLanding"
+           asp-area=""
+           asp-controller="shop" class="ads-header hidden-sm" target="_blank"
            style="background-image: url(/DidiKala/assets/img/banner/large-ads.jpg)"></a>
     </div>
     <!-- End ads -->
@@ -12,7 +14,9 @@
             <div class="row">
                 <div class="col-lg-2 col-md-3 col-6">
                     <div class="logo-area">
-                        <a href="#">
+                        <a asp-action="ShopLanding"
+                           asp-area=""
+                           asp-controller="shop">
                             <img src="/DidiKala/assets/img/logo.png" alt="">
                         </a>
                     </div>
@@ -73,135 +77,8 @@
                 @*Big Part Of Categories*@
                 @await Component.InvokeAsync("ShopCategoriesBigPart")
 
-                <div class="nav mr-auto">
-                    <div class="nav-item cart--wrapper">
-                        <a class="nav-link" href="#">
-                            <span class="label-dropdown">سبد خرید</span>
-                            <i class="mdi mdi-cart-outline"></i>
-                            <span class="count">2</span>
-                        </a>
-                        <div class="header-cart-info">
-                            <div class="header-cart-info-header">
-                                <div class="header-cart-info-count">
-                                    3 کالا
-                                </div>
-                                <a href="#" class="header-cart-info-link">
-                                    <span>مشاهده سبد خرید</span>
-                                </a>
-                            </div>
-                            <ul class="header-basket-list do-nice-scroll">
-                                <li class="cart-item">
-                                    <a href="#" class="header-basket-list-item">
-                                        <div class="header-basket-list-item-image">
-                                            <img src="/DidiKala/assets/img/cart/1.jpg" alt="">
-                                        </div>
-                                        <div class="header-basket-list-item-content">
-                                            <p class="header-basket-list-item-title">
-                                                گوشی موبایل سامسونگ مدل Galaxy A30 SM-A305F/DS دو سیم کارت ظرفیت
-                                                64 گیگابایت
-                                            </p>
-                                            <div class="header-basket-list-item-footer">
-                                                <div class="header-basket-list-item-props">
-                                                    <span class="header-basket-list-item-props-item">
-                                                        1 x
-                                                    </span>
-                                                    <span class="header-basket-list-item-props-item">
-                                                        <div class="header-basket-list-item-color-badge"
-                                                             style="background: #2196f3"></div>
-                                                        آبی
-                                                    </span>
-                                                </div>
-                                                <button class="header-basket-list-item-remove">
-                                                    <i class="far fa-trash-alt"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="cart-item">
-                                    <a href="#" class="header-basket-list-item">
-                                        <div class="header-basket-list-item-image">
-                                            <img src="/DidiKala/assets/img/cart/2.jpg" alt="">
-                                        </div>
-                                        <div class="header-basket-list-item-content">
-                                            <p class="header-basket-list-item-title">
-                                                گوشی موبایل هوآوی مدل Y9 2019 JKM-LX1 دو سیم کارت ظرفیت 64
-                                                گیگابایت
-                                            </p>
-                                            <div class="header-basket-list-item-footer">
-                                                <div class="header-basket-list-item-props">
-                                                    <span class="header-basket-list-item-props-item">
-                                                        1 x
-                                                    </span>
-                                                    <span class="header-basket-list-item-props-item">
-                                                        <div class="header-basket-list-item-color-badge"
-                                                             style="background: #212121"></div>
-                                                        سفید
-                                                    </span>
-                                                </div>
-                                                <button class="header-basket-list-item-remove">
-                                                    <i class="far fa-trash-alt"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="cart-item">
-                                    <a href="#" class="header-basket-list-item">
-                                        <div class="header-basket-list-item-image">
-                                            <img src="/DidiKala/assets/img/cart/3.jpg" alt="">
-                                        </div>
-                                        <div class="header-basket-list-item-content">
-                                            <p class="header-basket-list-item-title">
-                                                گوشی موبایل سامسونگ مدل Galaxy A70 SM-A705FN/DS دو سیم‌کارت
-                                                ظرفیت 128 گیگابایت
-                                            </p>
-                                            <div class="header-basket-list-item-footer">
-                                                <div class="header-basket-list-item-props">
-                                                    <span class="header-basket-list-item-props-item">
-                                                        1 x
-                                                    </span>
-                                                    <span class="header-basket-list-item-props-item">
-                                                        <div class="header-basket-list-item-color-badge"
-                                                             style="background: #FFFFFF"></div>
-                                                        سفید
-                                                    </span>
-                                                </div>
-                                                <button class="header-basket-list-item-remove">
-                                                    <i class="far fa-trash-alt"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="header-cart-info-footer">
-                                <div class="header-cart-info-total">
-                                    <span class="header-cart-info-total-text">مبلغ قابل پرداخت:</span>
-                                    <p class="header-cart-info-total-amount">
-                                        <span class="header-cart-info-total-amount-number">
-                                            9,500,000 <span>تومان</span>
-                                        </span>
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <a href="#" class="header-cart-info-submit">
-                                        ثبت سفارش
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="btn-menu">
-                    <div class="align align__justify">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </button>
+                @*Shop Cart*@
+                @await Component.InvokeAsync("ShopCart")
 
                 @*Short Part Of Categories*@
                 @await Component.InvokeAsync("ShopCategoriesShortPart")

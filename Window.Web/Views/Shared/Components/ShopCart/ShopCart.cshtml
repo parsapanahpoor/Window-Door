@@ -1,0 +1,124 @@
+﻿@model Window.Domain.ViewModels.Site.Shop.Order.ShopCartOrderDTO;
+@using Window.Application.StaticTools;
+@using Window.Application.Extensions;
+@using Window.Application.StticTools
+
+@if (Model != null && Model.ProductItems != null && Model.ProductItems.Any())
+{
+    <div class="nav mr-auto">
+        <div class="nav-item cart--wrapper">
+            <a class="nav-link" 
+               asp-action="ShopCart"
+               asp-area=""
+               asp-controller="Order">
+                <span class="label-dropdown">سبد خرید</span>
+                <i class="mdi mdi-cart-outline"></i>
+                <span class="count">@((Model != null) ? Model.ProductItems.Count() : 0)</span>
+            </a>
+
+            <div class="header-cart-info">
+                <div class="header-cart-info-header">
+                    <div class="header-cart-info-count">
+                        @((Model != null) ? Model.ProductItems.Count() : 0) کالا
+                    </div>
+                    <a asp-action="ShopCart"
+                       asp-area=""
+                       asp-controller="Order" class="header-cart-info-link">
+                        <span>مشاهده سبد خرید</span>
+                    </a>
+                </div>
+                <ul class="header-basket-list do-nice-scroll">
+
+                    @if (Model.ProductItems != null && Model.ProductItems.Any())
+                    {
+                        foreach (var productItem in Model.ProductItems)
+                        {
+
+                            <li class="cart-item">
+                                <a asp-action="ShopProductDetail"
+                                   asp-area=""
+                                   asp-controller="ShopProduct"
+                                   asp-route-productId="@productItem.Products.ProductId" class="header-basket-list-item">
+                                    <div class="header-basket-list-item-image">
+                                        <img src="@FilePaths.ProductsPathThumb@productItem.Products.ProductImage" alt="">
+                                    </div>
+                                    <div class="header-basket-list-item-content">
+                                        <p class="header-basket-list-item-title">
+                                            @productItem.Products.ProductTitle
+                                        </p>
+                                        <div class="header-basket-list-item-footer">
+                                            <div class="header-basket-list-item-props">
+                                                <span class="header-basket-list-item-props-item">
+                                                    @productItem.Products.ProductEntity x
+                                                </span>
+                                                <span class="header-basket-list-item-props-item">
+                                                    <div class="header-basket-list-item-color-badge"
+                                                         style="background: @productItem.Products.Color.ColorCode;"></div>
+                                                    @productItem.Products.Color.ColorTitle
+                                                </span>
+                                            </div>
+                                            <a asp-action="DeleteProductFromShopOrder"
+                                               asp-area=""
+                                               asp-controller="Order"
+                                               asp-route-ProductId="@productItem.Products.ProductId"
+                                                class="header-basket-list-item-remove">
+                                                <i class="far fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+
+                        }
+                    }
+                </ul>
+                <div class="header-cart-info-footer">
+                    <div class="header-cart-info-total">
+                        <span class="header-cart-info-total-text">مبلغ قابل پرداخت:</span>
+                        <p class="header-cart-info-total-amount">
+                            <span class="header-cart-info-total-amount-number">
+                                @Model.TotalPrice.ToString("#,000") <span>ریال</span>
+                            </span>
+                        </p>
+                    </div>
+
+                    <div>
+                        <a asp-action="ShopCart"
+                           asp-area=""
+                           asp-controller="Order" 
+                           class="header-cart-info-submit">
+                             سبد خرید
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="nav mr-auto">
+        <div class="nav-item cart--wrapper">
+            <a class="nav-link" href="#">
+                <span class="label-dropdown">سبد خرید</span>
+                <i class="mdi mdi-cart-outline"></i>
+                <span class="count">0</span>
+            </a>
+
+            <div class="header-cart-info">
+                <div class="header-cart-info-header">
+                    <div class="header-cart-info-count">
+                        0 کالا
+                    </div>
+                    <a href="#" class="header-cart-info-link">
+                        <span>مشاهده سبد خرید</span>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+}

@@ -1,0 +1,75 @@
+﻿@using Window.Application.StticTools
+@model List<Window.Domain.ViewModels.Site.Shop.Landing.LastestShopProducts>
+
+@if (Model != null && Model.Any())
+{
+    <!-- Start Product-Slider -->
+    <section class="slider-section dt-sl mb-5">
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="section-title text-sm-title title-wide no-after-title-wide">
+                    <h2>خریداران این محصول، محصولات زیر را هم خریده‌اند</h2>
+                </div>
+            </div>
+
+            <!-- Start Product-Slider -->
+            <div class="col-12">
+                <div class="product-carousel carousel-lg owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+
+                    <div class="owl-stage-outer">
+                        <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 1553px;">
+
+
+                            @foreach (var product in Model)
+                            {
+                                <div class="owl-item active" style="width: 211.733px; margin-left: 10px;">
+                                    <div class="item">
+                                        <div class="product-card mb-3">
+                                            <div class="product-head">
+                                                <div class="rating-stars">
+                                                    <i class="mdi mdi-star active"></i>
+                                                    <i class="mdi mdi-star active"></i>
+                                                    <i class="mdi mdi-star active"></i>
+                                                    <i class="mdi mdi-star active"></i>
+                                                    <i class="mdi mdi-star active"></i>
+                                                </div>
+                                            </div>
+                                            <a class="product-thumb" asp-action="ShopProductDetail"
+                                               asp-area=""
+                                               asp-controller="ShopProduct"
+                                               asp-route-productId="@product.ProductId">
+                                                <img src="@FilePaths.ProductsPathThumb/@product.ProductImage" alt="Product Thumbnail">
+                                            </a>
+                                            <div class="product-card-body">
+                                                <h5 class="product-title">
+                                                    <a asp-action="ShopProductDetail"
+                                                       asp-area=""
+                                                       asp-controller="ShopProduct"
+                                                       asp-route-productId="@product.ProductId">@product.ProductTitle</a>
+                                                </h5>
+                                                <a class="product-meta" asp-action="SellerDetail"
+                                                   asp-area=""
+                                                   asp-controller="ShopSeller"
+                                                   asp-route-sellerId="@product.SellerInfo.SellerId">@product.SellerInfo.SellerUsername</a>
+                                                <span class="product-price">157,000 تومان</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Product-Slider -->
+
+        </div>
+    </section>
+    <!-- End Product-Slider -->
+}
+
+
+
+

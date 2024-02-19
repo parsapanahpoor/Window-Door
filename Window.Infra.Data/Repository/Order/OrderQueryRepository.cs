@@ -63,7 +63,6 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                     p.Id == orderDetailId)
                              .Select(p => new ShopCartOrderDetailItems()
                              {
-                                 ProductId = p.ProductId,
                                  Products = _context.ShopProducts
                                                     .AsNoTracking()
                                                     .Where(s => !s.IsDelete &&
@@ -74,9 +73,10 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                                         ProductId = s.Id,
                                                         ProductTitle = s.ProductName,
                                                         ProductImage = s.ProductImage,
+                                                        ProductPrice = s.Price,
                                                         SellerInfo = _context.Users
                                                                              .AsNoTracking()
-                                                                             .Where(u => u.IsDelete &&
+                                                                             .Where(u => !u.IsDelete &&
                                                                                     u.Id == s.SellerUserId)
                                                                              .Select(u => new ShopCartOrderProductSellerInfo()
                                                                              {
