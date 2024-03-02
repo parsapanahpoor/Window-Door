@@ -8,5 +8,7 @@ public interface ILocationQueryRepository
 
     Task<List<ListOfUserLocation>> FillListOfUserLocation(ulong userId, CancellationToken cancellation);
 
+    Task<Domain.Entities.Location.Location> GetByIdAsync(CancellationToken cancellationToken, params object[] ids);
+
     #endregion
 }

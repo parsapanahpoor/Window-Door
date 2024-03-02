@@ -1,4 +1,4 @@
-﻿@model List<Window.Domain.Entities.Location.Location>
+﻿@model List<Window.Domain.ViewModels.Site.Shop.Location.ListOfUserLocation>
 @using Window.Application.StaticTools;
 @using Window.Application.Extensions;
 @using Window.Application.StticTools
@@ -12,46 +12,15 @@
     <div class="container main-container" style="transform: none;">
         <div class="row" style="transform: none;">
             <div class="cart-page-content col-xl-9 col-lg-8 col-12 px-0">
+
                 <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 px-res-1">
                     <h2>انتخاب آدرس تحویل سفارش</h2>
                 </div>
+
                 <section class="page-content dt-sl">
                     <div class="address-section">
                         <div class="checkout-contact dt-sn dt-sn--box border px-0 pt-0 pb-0">
-                            <div class="checkout-contact-content hidden">
-                                <ul class="checkout-contact-items">
-                                    <li class="checkout-contact-item">
-                                        گیرنده:
-                                        <span class="full-name">جلال بهرامی راد</span>
-                                        <a class="checkout-contact-btn-edit">اصلاح این آدرس</a>
-                                    </li>
-                                    <li class="checkout-contact-item">
-                                        <div class="checkout-contact-item checkout-contact-item-mobile">
-                                            شماره تماس:
-                                            <span class="mobile-phone">09xxxxxxxxx</span>
-                                        </div>
-                                        <div class="checkout-contact-item-message">
-                                            کد پستی:
-                                            <span class="post-code">۹۹۹۹۹۹۹۹۹۹</span>
-                                        </div>
-                                        <br>
-                                        استان
-                                        <span class="state">خراسان شمالی</span>
-                                        ، ‌شهر
-                                        <span class="city">بجنورد</span>
-                                        ،
-                                        <span class="address-part">خراسان شمالی-بجنورد</span>
-                                    </li>
-                                </ul>
-                                <a class="checkout-contact-location" id="btn-checkout-contact-location">
-                                    تغییر
-                                    آدرس
-                                    ارسال
-                                </a>
-                                <div class="checkout-contact-badge">
-                                    <i class="mdi mdi-check-bold"></i>
-                                </div>
-                            </div>
+
                             <div class="checkout-address dt-sn px-0 pt-0 pb-0 show" id="user-address-list-container">
                                 <div class="checkout-address-content">
                                     <div class="checkout-address-headline">
@@ -65,743 +34,71 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="checkout-address-row">
-                                        <div class="checkout-address-col">
-                                            <div class="checkout-address-box is-selected">
-                                                <h5 class="checkout-address-title">جلال بهرامی راد</h5>
-                                                <p class="checkout-address-text">
-                                                    <span>
-                                                        خراسان شمالی، بجنورد،خراسان شمالی-بجنورد-طالقانی
-                                                        غربی
-                                                    </span>
-                                                </p>
-                                                <ul class="checkout-address-list">
-                                                    <li>
-                                                        <ul class="checkout-address-contact-info">
-                                                            <li class="">کدپستی: <span>۹۹۹۹۹۹۹۹۹۹</span></li>
+
+                                    @if (Model != null && Model.Any())
+                                    {
+                                        foreach (var location in Model)
+                                        {
+                                            <div class="checkout-address-row">
+                                                <div class="checkout-address-col">
+                                                    <div class="checkout-address-box is-selected">
+                                                        <h5 class="checkout-address-title">
+                                                            @location.Username
+                                                        </h5>
+                                                        <p class="checkout-address-text">
+                                                            <span>
+                                                                @location.LocationAddress
+                                                            </span>
+                                                        </p>
+                                                        <ul class="checkout-address-list">
                                                             <li>
-                                                                شماره همراه: <span>09xxxxxxxxx</span>
+                                                                <ul class="checkout-address-contact-info">
+                                                                    <li class="">کدپستی: <span>@location.PostalCode</span></li>
+                                                                    <li>
+                                                                        شماره همراه: <span>@location.Mobile</span>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li>
+                                                                <ul>
+                                                                    <li>
+                                                                        <a class="checkout-address-btn-remove"
+                                                                           asp-action="DeleteLocation"
+                                                                           asp-area=""
+                                                                           asp-controller="Location"
+                                                                           asp-route-LocationId="@location.LocationId">حذف</a>
+                                                                    </li>
+                                                                </ul>
                                                             </li>
                                                         </ul>
-                                                    </li>
-                                                    <li>
-                                                        <ul>
-                                                            <li>
-                                                                <button class="checkout-address-btn-edit" data-toggle="modal" data-target="#modal-location-edit">ویرایش</button>
-                                                            </li>
-                                                            <li>
-                                                                <button class="checkout-address-btn-remove" data-toggle="modal" data-target="#remove-location">حذف</button>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                                <button class="checkout-address-btn-submit">
-                                                    سفارش به این آدرس
-                                                    ارسال می‌شود.
-                                                </button>
+                                                        <a class="checkout-address-btn-submit">
+                                                            سفارش به این آدرس
+                                                            ارسال می‌شود.
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="checkout-address-row">
-                                        <div class="checkout-address-col">
-                                            <div class="checkout-address-box">
-                                                <h5 class="checkout-address-title">جلال بهرامی راد</h5>
-                                                <p class="checkout-address-text">
-                                                    <span>خراسان شمالی، بجنورد،خراسان شمالی-بجنورد</span>
-                                                </p>
-                                                <ul class="checkout-address-list">
-                                                    <li>
-                                                        <ul class="checkout-address-contact-info">
-                                                            <li>
-                                                                کدپستی: <span>۹۹۹۹۹۹۹۹۹۹</span>
-                                                            </li>
-                                                            <li>
-                                                                شماره همراه: <span>09xxxxxxxxx</span>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                    <li>
-                                                        <ul>
-                                                            <li>
-                                                                <button class="checkout-address-btn-edit" data-toggle="modal" data-target="#modal-location-edit">ویرایش</button>
-                                                            </li>
-                                                            <li>
-                                                                <button class="checkout-address-btn-remove" data-toggle="modal" data-target="#remove-location">حذف</button>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                                <button class="checkout-address-btn-submit">
-                                                    ارسال سفارش به این
-                                                    آدرس
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        }
+                                    }
+
                                 </div>
-                                <button class="checkout-address-cancel" id="cancel-change-address-btn"></button>
                             </div>
+
                             <!-- Start Modal location new -->
-                            <div class="modal fade" id="modal-location" role="dialog" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
-                                <div class="modal-dialog modal-lg send-info modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalCenterTitle">
-                                                <i class="now-ui-icons location_pin"></i>
-                                                افزودن آدرس جدید
-                                            </h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">×</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="row">
-                                                <div class="col-lg-6 col-md-12">
-                                                    <div class="form-ui dt-sl">
-                                                        <form class="form-account" action="">
-                                                            <div class="row">
-                                                                <div class="col-md-6 col-sm-12 mb-2">
-                                                                    <div class="form-row-title">
-                                                                        <h4>
-                                                                            نام و نام خانوادگی
-                                                                        </h4>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <input class="input-ui pr-2 text-right" type="text" placeholder="نام خود را وارد نمایید">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6 col-sm-12 mb-2">
-                                                                    <div class="form-row-title">
-                                                                        <h4>
-                                                                            شماره موبایل
-                                                                        </h4>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <input class="input-ui pl-2 dir-ltr text-left" type="text" placeholder="09xxxxxxxxx">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6 col-sm-12 mb-2">
-                                                                    <div class="form-row-title">
-                                                                        <h4>
-                                                                            استان
-                                                                        </h4>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="custom-select-ui">
-                                                                            <select class="right" style="display: none;">
-                                                                                <option value="khrasan-north">
-                                                                                    خراسان شمالی
-                                                                                </option>
-                                                                                <option value="tehran">
-                                                                                    تهران
-                                                                                </option>
-                                                                                <option value="esfahan">
-                                                                                    اصفهان
-                                                                                </option>
-                                                                                <option value="shiraz">
-                                                                                    شیراز
-                                                                                </option>
-                                                                                <option value="tabriz">
-                                                                                    تبریز
-                                                                                </option>
-                                                                            </select><div class="nice-select right" tabindex="0">
-                                                                                <span class="current">
-                                                                                    خراسان شمالی
-                                                                                </span><ul class="list">
-                                                                                    <li data-value="khrasan-north" class="option selected">
-                                                                                        خراسان شمالی
-                                                                                    </li>
-                                                                                    <li data-value="tehran" class="option">
-                                                                                        تهران
-                                                                                    </li>
-                                                                                    <li data-value="esfahan" class="option">
-                                                                                        اصفهان
-                                                                                    </li>
-                                                                                    <li data-value="shiraz" class="option">
-                                                                                        شیراز
-                                                                                    </li>
-                                                                                    <li data-value="tabriz" class="option">
-                                                                                        تبریز
-                                                                                    </li>
-                                                                                </ul>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6 col-sm-12 mb-2">
-                                                                    <div class="form-row-title">
-                                                                        <h4>
-                                                                            شهر
-                                                                        </h4>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="custom-select-ui">
-                                                                            <select class="right" style="display: none;">
-                                                                                <option value="bojnourd">
-                                                                                    بجنورد
-                                                                                </option>
-                                                                                <option value="garme">
-                                                                                    گرمه
-                                                                                </option>
-                                                                                <option value="shirvan">
-                                                                                    شیروان
-                                                                                </option>
-                                                                                <option value="mane">
-                                                                                    مانه و سملقان
-                                                                                </option>
-                                                                                <option value="esfarayen">
-                                                                                    اسفراین
-                                                                                </option>
-                                                                            </select><div class="nice-select right" tabindex="0">
-                                                                                <span class="current">
-                                                                                    بجنورد
-                                                                                </span><ul class="list">
-                                                                                    <li data-value="bojnourd" class="option selected">
-                                                                                        بجنورد
-                                                                                    </li>
-                                                                                    <li data-value="garme" class="option">
-                                                                                        گرمه
-                                                                                    </li>
-                                                                                    <li data-value="shirvan" class="option">
-                                                                                        شیروان
-                                                                                    </li>
-                                                                                    <li data-value="mane" class="option">
-                                                                                        مانه و سملقان
-                                                                                    </li>
-                                                                                    <li data-value="esfarayen" class="option">
-                                                                                        اسفراین
-                                                                                    </li>
-                                                                                </ul>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-12 mb-2">
-                                                                    <div class="form-row-title">
-                                                                        <h4>
-                                                                            آدرس پستی
-                                                                        </h4>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <textarea class="input-ui pr-2 text-right" placeholder=" آدرس تحویل گیرنده را وارد نمایید"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-12 mb-2">
-                                                                    <div class="form-row-title">
-                                                                        <h4>
-                                                                            کد پستی
-                                                                        </h4>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <input class="input-ui pl-2 dir-ltr text-left placeholder-right" type="text" placeholder=" کد پستی را بدون خط تیره بنویسید">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-12 pr-4 pl-4">
-                                                                    <button type="button" class="btn btn-sm btn-primary btn-submit-form">
-                                                                        ثبت
-                                                                        و
-                                                                        ارسال به این آدرس
-                                                                    </button>
-                                                                    <button type="button" class="btn-link-border float-left mt-2">
-                                                                        انصراف
-                                                                        و بازگشت
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-12">
-                                                    <!-- Google Map Start -->
-                                                    <div class="goole-map">
-                                                        <div id="map" style="height: 440px; position: relative; overflow: hidden;"><div style="height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; background-color: rgb(229, 227, 223);"><div class="gm-err-container"><div class="gm-err-content"><div class="gm-err-icon"><img src="https://maps.gstatic.com/mapfiles/api-3/images/icon_error.png" alt="" draggable="false" style="user-select: none;"></div><div class="gm-err-title">Oops! Something went wrong.</div><div class="gm-err-message">This page didn't load Google Maps correctly. See the JavaScript console for technical details.</div></div></div></div></div>
-                                                    </div>
-                                                    <!-- Google Map End -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Modal location new -->
-                            <!-- Start Modal location edit -->
-                            <div class="modal fade" id="modal-location-edit" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-lg send-info modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalCenterTitle">
-                                                <i class="now-ui-icons location_pin"></i>
-                                                ویرایش آدرس
-                                            </h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">×</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="row">
-                                                <div class="col-lg-6 col-md-12">
-                                                    <div class="form-ui dt-sl">
-                                                        <form class="form-account" action="">
-                                                            <div class="row">
-                                                                <div class="col-md-6 col-sm-12 mb-2">
-                                                                    <div class="form-row-title">
-                                                                        <h4>
-                                                                            نام و نام خانوادگی
-                                                                        </h4>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <input class="input-ui pr-2 text-right" type="text" placeholder="نام خود را وارد نمایید">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6 col-sm-12 mb-2">
-                                                                    <div class="form-row-title">
-                                                                        <h4>
-                                                                            شماره موبایل
-                                                                        </h4>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <input class="input-ui pl-2 dir-ltr text-left" type="text" placeholder="09xxxxxxxxx">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6 col-sm-12 mb-2">
-                                                                    <div class="form-row-title">
-                                                                        <h4>
-                                                                            استان
-                                                                        </h4>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="custom-select-ui">
-                                                                            <select class="right" style="display: none;">
-                                                                                <option value="khrasan-north">
-                                                                                    خراسان شمالی
-                                                                                </option>
-                                                                                <option value="tehran">
-                                                                                    تهران
-                                                                                </option>
-                                                                                <option value="esfahan">
-                                                                                    اصفهان
-                                                                                </option>
-                                                                                <option value="shiraz">
-                                                                                    شیراز
-                                                                                </option>
-                                                                                <option value="tabriz">
-                                                                                    تبریز
-                                                                                </option>
-                                                                            </select><div class="nice-select right" tabindex="0">
-                                                                                <span class="current">
-                                                                                    خراسان شمالی
-                                                                                </span><ul class="list">
-                                                                                    <li data-value="khrasan-north" class="option selected">
-                                                                                        خراسان شمالی
-                                                                                    </li>
-                                                                                    <li data-value="tehran" class="option">
-                                                                                        تهران
-                                                                                    </li>
-                                                                                    <li data-value="esfahan" class="option">
-                                                                                        اصفهان
-                                                                                    </li>
-                                                                                    <li data-value="shiraz" class="option">
-                                                                                        شیراز
-                                                                                    </li>
-                                                                                    <li data-value="tabriz" class="option">
-                                                                                        تبریز
-                                                                                    </li>
-                                                                                </ul>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6 col-sm-12 mb-2">
-                                                                    <div class="form-row-title">
-                                                                        <h4>
-                                                                            شهر
-                                                                        </h4>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="custom-select-ui">
-                                                                            <select class="right" style="display: none;">
-                                                                                <option value="bojnourd">
-                                                                                    بجنورد
-                                                                                </option>
-                                                                                <option value="garme">
-                                                                                    گرمه
-                                                                                </option>
-                                                                                <option value="shirvan">
-                                                                                    شیروان
-                                                                                </option>
-                                                                                <option value="mane">
-                                                                                    مانه و سملقان
-                                                                                </option>
-                                                                                <option value="esfarayen">
-                                                                                    اسفراین
-                                                                                </option>
-                                                                            </select><div class="nice-select right" tabindex="0">
-                                                                                <span class="current">
-                                                                                    بجنورد
-                                                                                </span><ul class="list">
-                                                                                    <li data-value="bojnourd" class="option selected">
-                                                                                        بجنورد
-                                                                                    </li>
-                                                                                    <li data-value="garme" class="option">
-                                                                                        گرمه
-                                                                                    </li>
-                                                                                    <li data-value="shirvan" class="option">
-                                                                                        شیروان
-                                                                                    </li>
-                                                                                    <li data-value="mane" class="option">
-                                                                                        مانه و سملقان
-                                                                                    </li>
-                                                                                    <li data-value="esfarayen" class="option">
-                                                                                        اسفراین
-                                                                                    </li>
-                                                                                </ul>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-12 mb-2">
-                                                                    <div class="form-row-title">
-                                                                        <h4>
-                                                                            آدرس پستی
-                                                                        </h4>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <textarea class="input-ui pr-2 text-right" placeholder=" آدرس تحویل گیرنده را وارد نمایید"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-12 mb-2">
-                                                                    <div class="form-row-title">
-                                                                        <h4>
-                                                                            کد پستی
-                                                                        </h4>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <input class="input-ui pl-2 dir-ltr text-left placeholder-right" type="text" placeholder=" کد پستی را بدون خط تیره بنویسید">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-12 pr-4 pl-4">
-                                                                    <button type="button" class="btn btn-sm btn-primary btn-submit-form">
-                                                                        ثبت
-                                                                        و
-                                                                        ارسال به این آدرس
-                                                                    </button>
-                                                                    <button type="button" class="btn-link-border float-left mt-2">
-                                                                        انصراف
-                                                                        و بازگشت
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-12">
-                                                    <!-- Google Map Start -->
-                                                    <div class="goole-map">
-                                                        <div id="map-edit" style="height:440px"><div style="height: 100%; width: 100%;"><div class="gm-err-container"><div class="gm-err-content"><div class="gm-err-icon"><img src="https://maps.gstatic.com/mapfiles/api-3/images/icon_error.png" alt="" draggable="false" style="user-select: none;"></div><div class="gm-err-title">Oops! Something went wrong.</div><div class="gm-err-message">This page didn't load Google Maps correctly. See the JavaScript console for technical details.</div></div></div></div></div>
-                                                    </div>
-                                                    <!-- Google Map End -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Modal location edit -->
-                            <!-- Start Modal remove-location -->
-                            <div class="modal fade" id="remove-location" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title mb-3" id="exampleModalLabel">
-                                                آیا مطمئنید که
-                                                این آدرس حذف شود؟
-                                            </h5>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="remodal-general-alert-button remodal-general-alert-button--cancel" data-dismiss="modal">خیر</button>
-                                            <button type="button" class="remodal-general-alert-button remodal-general-alert-button--approve">بله</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Modal remove-location -->
+                            <partial name="_AddOrEditLocationModal" model="null">
+                                <!-- End Modal location new -->
+
                         </div>
                     </div>
-                    <form method="post" id="shipping-data-form" class="dt-sn dt-sn--box pt-3 pb-3">
-                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 px-res-1">
-                            <h2>انتخاب نحوه ارسال</h2>
-                        </div>
-                        <div class="checkout-shipment border-bottom pb-3 mb-4">
-                            <div class="custom-control custom-radio pl-0 pr-3">
-                                <input type="radio" class="custom-control-input" name="radio1" id="radio1" value="option1" checked="">
-                                <label for="radio1" class="custom-control-label">
-                                    عادی
-                                </label>
-                            </div>
-                            <div class="custom-control custom-radio  pl-0 pr-3">
-                                <input type="radio" class="custom-control-input" name="radio1" id="radio2" value="option2">
-                                <label for="radio2" class="custom-control-label">
-                                    سریع‌ (مرسوله‌ها در سریع‌ترین زمان ممکن ارسال می‌شوند)
-                                </label>
-                            </div>
-                        </div>
-                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 px-res-1">
-                            <h2>مرسوله ۱ از ۱</h2>
-                        </div>
-                        <div class="checkout-pack">
-                            <section class="products-compact">
-                                <!-- Start Product-Slider -->
-                                <div class="col-12">
-                                    <div class="products-compact-slider carousel-md owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
 
-
-
-
-
-
-
-                                        <div class="owl-stage-outer">
-                                            <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all; width: 1414px;">
-                                                <div class="owl-item active" style="width: 192px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <div class="product-card mb-3">
-                                                            <a class="product-thumb" href="shop-single.html">
-                                                                <img src="/DidiKala/assets/img/products/07.jpg" alt="Product Thumbnail">
-                                                            </a>
-                                                            <div class="product-card-body">
-                                                                <h5 class="product-title">
-                                                                    <a href="shop-single.html">مانتو زنانه</a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div><div class="owl-item active" style="width: 192px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <div class="product-card mb-3">
-                                                            <a class="product-thumb" href="shop-single.html">
-                                                                <img src="/DidiKala/assets/img/products/017.jpg" alt="Product Thumbnail">
-                                                            </a>
-                                                            <div class="product-card-body">
-                                                                <h5 class="product-title">
-                                                                    <a href="shop-single.html">کت مردانه</a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div><div class="owl-item active" style="width: 192px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <div class="product-card mb-3">
-                                                            <a class="product-thumb" href="shop-single.html">
-                                                                <img src="/DidiKala/assets/img/products/013.jpg" alt="Product Thumbnail">
-                                                            </a>
-                                                            <div class="product-card-body">
-                                                                <h5 class="product-title">
-                                                                    <a href="shop-single.html">
-                                                                        مانتو زنانه مدل هودی تیک
-                                                                        تین
-                                                                    </a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div><div class="owl-item active" style="width: 192px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <div class="product-card mb-3">
-                                                            <a class="product-thumb" href="shop-single.html">
-                                                                <img src="/DidiKala/assets/img/products/09.jpg" alt="Product Thumbnail">
-                                                            </a>
-                                                            <div class="product-card-body">
-                                                                <h5 class="product-title">
-                                                                    <a href="shop-single.html">مانتو زنانه</a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div><div class="owl-item active" style="width: 192px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <div class="product-card mb-3">
-                                                            <a class="product-thumb" href="shop-single.html">
-                                                                <img src="/DidiKala/assets/img/products/010.jpg" alt="Product Thumbnail">
-                                                            </a>
-                                                            <div class="product-card-body">
-                                                                <h5 class="product-title">
-                                                                    <a href="shop-single.html">مانتو زنانه</a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div><div class="owl-item" style="width: 192px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <div class="product-card mb-3">
-                                                            <a class="product-thumb" href="shop-single.html">
-                                                                <img src="/DidiKala/assets/img/products/011.jpg" alt="Product Thumbnail">
-                                                            </a>
-                                                            <div class="product-card-body">
-                                                                <h5 class="product-title">
-                                                                    <a href="shop-single.html">مانتو زنانه</a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div><div class="owl-item" style="width: 192px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <div class="product-card mb-3">
-                                                            <a class="product-thumb" href="shop-single.html">
-                                                                <img src="/DidiKala/assets/img/products/019.jpg" alt="Product Thumbnail">
-                                                            </a>
-                                                            <div class="product-card-body">
-                                                                <h5 class="product-title">
-                                                                    <a href="shop-single.html">تیشرت مردانه</a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div><div class="owl-nav"><button type="button" role="presentation" class="owl-prev disabled"><i class="mdi mdi mdi-chevron-right"></i></button><button type="button" role="presentation" class="owl-next"><i class="mdi mdi mdi-chevron-left"></i></button></div><div class="owl-dots"><button role="button" class="owl-dot active"><span></span></button><button role="button" class="owl-dot"><span></span></button></div><div class="owl-thumbs"></div>
-                                    </div>
-                                </div>
-                                <!-- End Product-Slider -->
-                            </section>
-                            <hr>
-                            <div class="row mx-0">
-                                <div class="col-12">
-                                    <div class="checkout-tab-times dt-sl">
-                                        <ul class="nav nav-tabs dt-sl" id="myTab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                    سه شنبه
-                                                    <span>26 شهریور</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">
-                                                    چهارشنبه
-                                                    <span>27 شهریور</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link disabled" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">
-                                                    پنج شنبه
-                                                    <span>28 شهریور</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="tab-content dt-sl" id="myTabContent">
-                                            <div class="tab-pane px-2 pt-2 fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                                <div class="custom-control custom-radio pl-0 pr-3">
-                                                    <input type="radio" class="custom-control-input" name="radio2" id="radio4" value="option1">
-                                                    <label for="radio4" class="custom-control-label">
-                                                        ساعت 11 تا 13
-                                                    </label>
-                                                </div>
-
-                                                <div class="custom-control custom-radio pl-0 pr-3">
-                                                    <input type="radio" class="custom-control-input" name="radio2" id="radio5" value="option2" checked="">
-                                                    <label for="radio5" class="custom-control-label">
-                                                        ساعت 13 تا 15
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane px-2 pt-2 fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                                <div class="custom-control custom-radio pl-0 pr-3">
-                                                    <input type="radio" class="custom-control-input" name="radio3" id="radio6" value="option1">
-                                                    <label for="radio6" class="custom-control-label">
-                                                        ساعت 11 تا 13
-                                                    </label>
-                                                </div>
-
-                                                <div class="custom-control custom-radio pl-0 pr-3">
-                                                    <input type="radio" class="custom-control-input" name="radio3" id="radio7" value="option2" checked="">
-                                                    <label for="radio7" class="custom-control-label">
-                                                        ساعت 13 تا 15
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane px-2 pt-2 fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="checkout-time-table checkout-time-table-time">
-                                    <div class="col-12">
-                                        <div class="radio-box custom-control custom-radio pl-0 pr-3">
-                                            <input type="radio" class="custom-control-input" name="post-pishtaz" id="1" value="1" checked="">
-                                            <label for="1" class="custom-control-label">
-                                                <img src="/DidiKala/assets/img/svg/d86ea8ec.svg" class="checkout-additional-options-checkbox-image">
-                                                <div class="content-box">
-                                                    <div class="checkout-time-table-title-bar checkout-time-table-title-bar-city">
-                                                        بازه تحویل سفارش: زمان تقریبی تحویل از
-                                                        <span>۱۳ خرداد</span>
-                                                        تا
-                                                        <span>۲۰ خرداد</span>
-                                                    </div>
-                                                    <ul class="checkout-time-table-subtitle-bar">
-                                                        <li>
-                                                            شیوه ارسال : پست پیشتاز با ظرفیت اختصاصی برای دیجی
-                                                            کالا
-                                                        </li>
-                                                        <li>
-                                                            هزینه ارسال:
-                                                            <span class="">رایگان</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="radio-box custom-control custom-radio pl-0 pr-3">
-                                            <input type="radio" class="custom-control-input" name="post-pishtaz" id="2" value="2">
-                                            <label for="2" class="custom-control-label">
-                                                <img src="/DidiKala/assets/img/svg/d86ea8ec.svg" class="checkout-additional-options-checkbox-image">
-                                                <div class="content-box">
-                                                    <div class="checkout-time-table-title-bar checkout-time-table-title-bar-city">
-                                                        بازه تحویل سفارش: زمان تقریبی تحویل از
-                                                        <span>۱۳ خرداد</span>
-                                                        تا
-                                                        <span>۲۰ خرداد</span>
-                                                    </div>
-                                                    <ul class="checkout-time-table-subtitle-bar">
-                                                        <li>
-                                                            شیوه ارسال : پست پیشتاز با ظرفیت اختصاصی برای دیجی
-                                                            کالا
-                                                        </li>
-                                                        <li>
-                                                            هزینه ارسال:
-                                                            <span class="">رایگان</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 px-res-1">
-                            <h2>صدور فاکتور</h2>
-                        </div>
-                        <div class="checkout-invoice">
-                            <div class="checkout-invoice-headline">
-                                <div class="custom-control custom-checkbox pl-0 pr-3">
-                                    <input type="checkbox" class="custom-control-input" checked="">
-                                    <label class="custom-control-label">درخواست ارسال فاکتور خرید</label>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="mt-5">
-                        <a href="#" class="float-right border-bottom-dt"><i class="mdi mdi-chevron-double-right"></i>بازگشت به سبد خرید</a>
-                        <a href="#" class="float-left border-bottom-dt">تایید و ادامه ثبت سفارش<i class="mdi mdi-chevron-double-left"></i></a>
-                    </div>
                 </section>
+
             </div>
+
             <div class="col-xl-3 col-lg-4 col-12 w-res-sidebar sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
 
 
-                <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none; top: 0px; left: 83px;">
+                <div class="theiaStickySidebar" style="position: static; transform: none;">
                     <div class="dt-sn dt-sn--box border mb-2">
                         <ul class="checkout-summary-summary">
                             <li>

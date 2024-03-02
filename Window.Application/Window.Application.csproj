@@ -31,9 +31,5 @@
 		<ProjectReference Include="..\Window.Domain\Window.Domain.csproj" />
 		<ProjectReference Include="..\Window.Infra.Data\Window.Infra.Data.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="CQRS\SiteSide\Location\Command\" />
-	</ItemGroup>
 	
 </Project>

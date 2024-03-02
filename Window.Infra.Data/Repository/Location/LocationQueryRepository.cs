@@ -27,6 +27,7 @@ public class LocationQueryRepository : QueryGenericRepository<Domain.Entities.Lo
                              .AsNoTracking()
                              .Where(p=> !p.IsDelete && 
                                     p.UserId == userId)
+                             .OrderByDescending(p=> p.CreateDate)
                              .Select(p=> new ListOfUserLocation()
                              {
                                  City = p.City,
