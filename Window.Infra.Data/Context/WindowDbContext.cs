@@ -168,6 +168,12 @@ public class WindowDbContext : DbContext
 
     #endregion
 
+    #region Location
+
+    public DbSet<Location> Locations { get; set; }
+
+    #endregion
+
     #region Product
 
     public DbSet<Product> Products { get; set; }
