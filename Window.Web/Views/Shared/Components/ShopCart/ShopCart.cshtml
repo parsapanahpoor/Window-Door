@@ -27,13 +27,12 @@
                         <span>مشاهده سبد خرید</span>
                     </a>
                 </div>
-                <ul class="header-basket-list do-nice-scroll">
+                <ul class="header-basket-list do-nice-scroll" style="overflow: hidden; outline: none; touch-action: none;" tabindex="1">
 
                     @if (Model.ProductItems != null && Model.ProductItems.Any())
                     {
                         foreach (var productItem in Model.ProductItems)
                         {
-
                             <li class="cart-item">
                                 <a asp-action="ShopProductDetail"
                                    asp-area=""
@@ -42,7 +41,7 @@
                                     <div class="header-basket-list-item-image">
                                         <img src="@FilePaths.ProductsPathThumb@productItem.Products.ProductImage" alt="">
                                     </div>
-                                    <div class="header-basket-list-item-content">
+                                    <div class="header-basket-list-item-content" style="padding-right: 50px;">
                                         <p class="header-basket-list-item-title">
                                             @productItem.Products.ProductTitle
                                         </p>
@@ -57,13 +56,6 @@
                                                     @productItem.Products.Color.ColorTitle
                                                 </span>
                                             </div>
-                                            <a asp-action="DeleteProductFromShopOrder"
-                                               asp-area=""
-                                               asp-controller="Order"
-                                               asp-route-ProductId="@productItem.Products.ProductId"
-                                                class="header-basket-list-item-remove">
-                                                <i class="far fa-trash-alt"></i>
-                                            </a>
                                         </div>
                                     </div>
                                 </a>

@@ -1,4 +1,5 @@
 ﻿using Window.Application.Common.IUnitOfWork;
+using Window.Application.CQRS.SiteSide.Location.Command;
 using Window.Domain.Entities.ShopOrder;
 using Window.Domain.Interfaces;
 using Window.Domain.Interfaces.Order;
@@ -47,6 +48,12 @@ public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopO
 
         #endregion
 
+        //Check That is exist any Waiting for payment order 
+        if (await _orderQueryRepository.IsExistAnyOrderInWaitingForPaymentStateByUserId(request.userId, cancellationToken))
+        {
+            return AddToShopOrderRes.WaitingForPaymentOrderExist;
+        }
+
         #region Is Exist Any Order
 
         var order = await _orderQueryRepository.IsExistAnyWaitingOrder(request.userId, cancellationToken);
@@ -59,7 +66,10 @@ public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopO
                 CreateDate = DateTime.Now,
                 IsDelete = false,
                 IsFinally = false,
-                UserId = request.userId
+                UserId = request.userId,
+                OrderState = Domain.Enums.Order.OrderState.WaitingForInformations,
+                LocationId = null , 
+                Price = null
             };
 
             await _orderCommandRepository.AddAsync(newOrder, cancellationToken);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Net.NetworkInformation;
 using Window.Data;
 using Window.Data.Context;
 using Window.Domain.Entities.ShopOrder;
@@ -7,11 +8,11 @@ using Window.Domain.Interfaces.Order;
 using Window.Domain.ViewModels.Site.Shop.Order;
 namespace Window.Infra.Data.Repository.Order;
 
-public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopOrder.Order> , IOrderQueryRepository
+public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopOrder.Order>, IOrderQueryRepository
 {
-	#region Ctor
+    #region Ctor
 
-	private readonly WindowDbContext _context;
+    private readonly WindowDbContext _context;
 
     public OrderQueryRepository(WindowDbContext context) : base(context)
     {
@@ -22,19 +23,31 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
 
     #region Site Side 
 
-    public async Task<Domain.Entities.ShopOrder.Order?> IsExistAnyWaitingOrder(ulong userId , 
+    public async Task<Domain.Entities.ShopOrder.Order?> IsExistAnyWaitingOrder(ulong userId,
                                                                               CancellationToken cancellationToken)
     {
         return await _context.Orders
                              .AsNoTracking()
-                             .Where(p=> !p.IsDelete && 
-                                    p.UserId == userId && 
-                                    !p.IsFinally)
+                             .Where(p => !p.IsDelete &&
+                                    p.UserId == userId &&
+                                    p.OrderState == Domain.Enums.Order.OrderState.WaitingForInformations &&
+                                   !p.IsFinally)
                              .FirstOrDefaultAsync();
     }
 
-    public async Task<OrderDetail?> Get_OrderDetail_ByOrderIdAndProductId(ulong orderId , 
-                                                                         ulong productId , 
+    public async Task<Domain.Entities.ShopOrder.Order?> IsExistAnyNotFinallyOrder(ulong userId,
+                                                                             CancellationToken cancellationToken)
+    {
+        return await _context.Orders
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.UserId == userId &&
+                                   !p.IsFinally)
+                             .FirstOrDefaultAsync();
+    }
+
+    public async Task<OrderDetail?> Get_OrderDetail_ByOrderIdAndProductId(ulong orderId,
+                                                                         ulong productId,
                                                                          CancellationToken cancellation)
     {
         return await _context.OrderDetails
@@ -45,17 +58,28 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                              .FirstOrDefaultAsync();
     }
 
-    public async Task<List<ulong>> GetOrderDetailIds_OrderDetails_ByOrderId(ulong orderId , CancellationToken cancellation)
+    public async Task<List<ulong>> GetProductIds_InOrderDetails_ByOrderId(ulong orderId, 
+                                                                          CancellationToken cancellation)
     {
         return await _context.OrderDetails
-                             .AsNoTracking()
-                             .Where(p=> !p.IsDelete && 
+                             .AsNoTracking() 
+                             .Where(p=> !p.IsDelete &&
                                     p.OrderId == orderId)
-                             .Select(p=> p.Id)
+                             .Select(p=> p.ProductId)
                              .ToListAsync();
     }
 
-    public async Task<ShopCartOrderDetailItems?> FillShopCartOrderDetailItems(ulong orderDetailId , CancellationToken cancellationToken)
+    public async Task<List<ulong>> GetOrderDetailIds_OrderDetails_ByOrderId(ulong orderId, CancellationToken cancellation)
+    {
+        return await _context.OrderDetails
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.OrderId == orderId)
+                             .Select(p => p.Id)
+                             .ToListAsync();
+    }
+
+    public async Task<ShopCartOrderDetailItems?> FillShopCartOrderDetailItems(ulong orderDetailId, CancellationToken cancellationToken)
     {
         return await _context.OrderDetails
                              .AsNoTracking()
@@ -99,6 +123,38 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                                     .FirstOrDefault()
                              })
                              .FirstOrDefaultAsync();
+    }
+
+    public async Task<Domain.Entities.ShopOrder.Order?> GetLastestWaitingForInformationOrderByUserId(ulong UserId,
+                                                                                                    CancellationToken cancellation)
+    {
+        return await _context.Orders
+                             .AsNoTracking()
+                             .FirstOrDefaultAsync(p => !p.IsDelete &&
+                                                  p.UserId == UserId &&
+                                                  p.OrderState == Domain.Enums.Order.OrderState.WaitingForInformations);
+    }
+
+    public async Task<bool> IsExistAnyOrderInWaitingForPaymentStateByUserId(ulong userId,
+                                                                            CancellationToken cancellationToken)
+    {
+        return await _context.Orders
+                             .AsNoTracking()
+                             .AnyAsync(p=> !p.IsDelete &&
+                                       p.UserId == userId &&
+                                       p.OrderState != Domain.Enums.Order.OrderState.WaitingForInformations && 
+                                      !p.IsFinally);
+    }
+
+    public async Task<List<OrderDetail>> GetOrderDetails_InOrderDetails_ByOrderId(ulong orderId,
+                                                                                  CancellationToken cancellationToken)
+    {
+        return await _context.OrderDetails
+                             .AsNoTracking()
+                             .Where(p=> !p.IsDelete &&
+                                    p.OrderId == orderId)
+                             .ToListAsync();
+
     }
 
     #endregion

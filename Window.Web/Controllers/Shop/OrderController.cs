@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Threading;
 using Window.Application.CQRS.SiteSide.ShopOrder.Command;
 using Window.Application.CQRS.SiteSide.ShopOrder.Query;
 using Window.Application.Extensions;
@@ -32,6 +33,10 @@ public class OrderController : SiteBaseController
                 TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
                 return RedirectToAction("ShopLanding", "Shop");
 
+            case AddToShopOrderRes.WaitingForPaymentOrderExist:
+                TempData[WarningMessage] = "شما یک فاکتور درانتظار پرداخت دارید . لطفا در ابتدا آن را بررسی بفرمایید";
+                return RedirectToAction(nameof(ShowInvoice));
+
             default:
                 break;
         }
@@ -45,6 +50,18 @@ public class OrderController : SiteBaseController
 
     public async Task<IActionResult> ShopCart(CancellationToken cancellationToken)
     {
+        //Check Is Exist Any Waiting For Payment Order
+        var res = await Mediator.Send(new IsExistAnyWaitingForPaymentOrderQuery()
+        {
+            UserId = User.GetUserId()
+        } , cancellationToken);
+
+        if (res)
+        {
+            TempData[WarningMessage] = "شما یک فاکتور درانتظار پرداخت دارید . لطفا در ابتدا آن را بررسی بفرمایید";
+            return RedirectToAction(nameof(ShowInvoice));
+        }
+
         var model = await Mediator.Send(new ShopCartQuery()
         {
             UserId = User.GetUserId(),
@@ -52,10 +69,7 @@ public class OrderController : SiteBaseController
         cancellationToken
         );
 
-        if (model == null || model.ProductItems == null)
-        {
-            return View("_EmptyShopCart");
-        }
+        if (model == null || model.ProductItems == null)return View("_EmptyShopCart");
 
         return View(model);
     }
@@ -67,6 +81,18 @@ public class OrderController : SiteBaseController
     public async Task<IActionResult> PlusProductInShopCart(PlusProductInShopCartQuery plus , 
                                                            CancellationToken cancellation = default)
     {
+        //Check Is Exist Any Waiting For Payment Order
+        var result = await Mediator.Send(new IsExistAnyWaitingForPaymentOrderQuery()
+        {
+            UserId = User.GetUserId()
+        }, cancellation);
+
+        if (result)
+        {
+            TempData[WarningMessage] = "شما یک فاکتور درانتظار پرداخت دارید . لطفا در ابتدا آن را بررسی بفرمایید";
+            return RedirectToAction(nameof(ShowInvoice));
+        }
+
         plus.UserId = User.GetUserId();
 
         var res = await Mediator.Send(plus , cancellation);
@@ -87,6 +113,18 @@ public class OrderController : SiteBaseController
     public async Task<IActionResult> MinusProductInShopCart(MinusProductInShopCartQuery minus,
                                                            CancellationToken cancellation = default)
     {
+        //Check Is Exist Any Waiting For Payment Order
+        var result = await Mediator.Send(new IsExistAnyWaitingForPaymentOrderQuery()
+        {
+            UserId = User.GetUserId()
+        }, cancellation);
+
+        if (result)
+        {
+            TempData[WarningMessage] = "شما یک فاکتور درانتظار پرداخت دارید . لطفا در ابتدا آن را بررسی بفرمایید";
+            return RedirectToAction(nameof(ShowInvoice));
+        }
+
         minus.UserId = User.GetUserId();
 
         var res = await Mediator.Send(minus, cancellation);
@@ -107,6 +145,18 @@ public class OrderController : SiteBaseController
     public async Task<IActionResult> DeleteProductFromShopOrder(DeleteProductFromShopCartCommand command , 
                                                                 CancellationToken cancellationToken)
     {
+        //Check Is Exist Any Waiting For Payment Order
+        var result = await Mediator.Send(new IsExistAnyWaitingForPaymentOrderQuery()
+        {
+            UserId = User.GetUserId()
+        }, cancellationToken);
+
+        if (result)
+        {
+            TempData[WarningMessage] = "شما یک فاکتور درانتظار پرداخت دارید . لطفا در ابتدا آن را بررسی بفرمایید";
+            return RedirectToAction(nameof(ShowInvoice));
+        }
+
         command.UserId = User.GetUserId();
 
         var res = await Mediator.Send(command, cancellationToken);
@@ -118,6 +168,15 @@ public class OrderController : SiteBaseController
 
         TempData[SuccessMessage] = "محصول مورد نظر از سبد خرید شما پاک شده است.";
         return RedirectToAction(nameof(ShopCart));
+    }
+
+    #endregion
+
+    #region Show Invoice
+
+    public async Task<IActionResult> ShowInvoice(CancellationToken cancellation = default)
+    {
+        return View();
     }
 
     #endregion

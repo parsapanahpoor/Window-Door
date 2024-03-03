@@ -162,107 +162,44 @@
         @*Lastest Shop Products*@
         @await Component.InvokeAsync("LastestShopProducts")
 
+        <div class="container main-container">
+
+            <!-- Picture -->
+            <div class="row mt-3 mb-5">
+                <div class="col-sm-6 col-12 mb-2">
+                    <div class="widget-banner">
+                        <a href="#">
+                            <img src="/DidiKala/assets/img/banner/medium-banner-1.jpg" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-12 mb-2">
+                    <div class="widget-banner">
+                        <a href="#">
+                            <img src="/DidiKala/assets/img/banner/medium-banner-2.jpg" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
         <!-- Lastest Sellers -->
         <partial name="_LastestSellers" model="@Model.LastestSellers">
 
-            <!-- End Product-Slider -->
-            <div class="container main-container">
-    
-                @if (Model.LastestBrands != null && Model.LastestBrands.Any())
-                {
-                    <!-- Start Feature-Product -->
-                    <section class="dt-sl dt-sn mb-5">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="section-title text-sm-title title-wide no-after-title-wide">
-                                    <h2>برندهای پیشنهادی ما</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
+            <!-- Popular Brands -->
+            <partial name="_PopularBrands" model="@Model.LastestBrands">
 
-                            @foreach (var brand in Model.LastestBrands)
-                            {
-                                <div class="col-lg-4 col-md-6 col-sm-12 col-12 pt-4">
-                                    <div class="card-horizontal-product border-bottom rounded-0">
-                                        <div class="card-horizontal-product-thumb">
-                                            <a href="#">
-                                                <img src="@FilePaths.BrandThumbimage@brand.Image" alt="">
-                                            </a>
-                                        </div>
-                                        <div class="card-horizontal-product-content">
-                                            <div class="card-horizontal-product-title">
-                                                <a href="#">
-                                                    <p>
-                                                        @brand.BrandTitle
-                                                    </p>
-                                                </a>
-                                            </div>
-                                            <div class="rating-stars">
-                                                <i class="mdi mdi-star active"></i>
-                                                <i class="mdi mdi-star active"></i>
-                                                <i class="mdi mdi-star active"></i>
-                                                <i class="mdi mdi-star active"></i>
-                                                <i class="mdi mdi-star active"></i>
-                                            </div>
-                                            <div class="card-horizontal-product-price">
-                                                <span>تعداد محصول در سایت : @brand.ProductCounts</span>
-                                            </div>
-                                            <div class="card-horizontal-product-buttons">
-                                                <a asp-action="FilterProducts"
-                                                   asp-area=""
-                                                   asp-controller="ShopProduct"
-                                                   asp-route-BrandId="@brand.BrandId" class="btn btn-outline-info">نمایش محصولات</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                               
+                <!-- Banner -->
+               @*  <div class="row mt-3 mb-5">
+                    <div class="col-12">
+                        <div class="widget-banner">
+                            <a href="#">
+                                <img src="/DidiKala/assets/img/banner/large-banner.jpg" alt="">
+                            </a>
                         </div>
-                    </section>
-                    <!-- End Feature-Product -->
-                }
-               
-                <!-- Start Brand-Slider -->
-                <section class="slider-section dt-sl mb-5">
-                    <div class="row">
-                        <!-- Start Product-Slider -->
-                        <div class="col-12">
-                            <div class="brand-slider carousel-lg owl-carousel owl-theme">
-                                <div class="item">
-                                    <img src="/DidiKala/assets/img/brand/1076.png" class="img-fluid" alt="">
-                                </div>
-                                <div class="item">
-                                    <img src="/DidiKala/assets/img/brand/1078.png" class="img-fluid" alt="">
-                                </div>
-                                <div class="item">
-                                    <img src="/DidiKala/assets/img/brand/1080.png" class="img-fluid" alt="">
-                                </div>
-                                <div class="item">
-                                    <img src="/DidiKala/assets/img/brand/2315.png" class="img-fluid" alt="">
-                                </div>
-                                <div class="item">
-                                    <img src="/DidiKala/assets/img/brand/1086.png" class="img-fluid" alt="">
-                                </div>
-                                <div class="item">
-                                    <img src="/DidiKala/assets/img/brand/5189.png" class="img-fluid" alt="">
-                                </div>
-                                <div class="item">
-                                    <img src="/DidiKala/assets/img/brand/1000006973.png" class="img-fluid" alt="">
-                                </div>
-                                <div class="item">
-                                    <img src="/DidiKala/assets/img/brand/1000014452.jpg" class="img-fluid" alt="">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Product-Slider -->
-
                     </div>
-                </section>
-                <!-- End Brand-Slider -->
-
-            </div>
+                </div> *@
 
 </main>
 <!-- End main-content -->

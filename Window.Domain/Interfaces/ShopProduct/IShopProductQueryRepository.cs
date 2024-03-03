@@ -11,8 +11,10 @@ namespace Window.Domain.Interfaces.ShopProduct;
 
 public interface IShopProductQueryRepository
 {
-
     #region Site Side 
+
+    Task<decimal> GetProductPrice_ByProductId(ulong productId,
+                                                       CancellationToken cancellationToken);
 
     //List Of Products
     Task<FilterShopProductDTO> FilterProducts(FilterShopProductDTO model, CancellationToken cancellation);

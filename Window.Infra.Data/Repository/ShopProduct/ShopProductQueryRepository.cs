@@ -31,6 +31,17 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
 
     #region Site Side 
 
+    public async Task<decimal> GetProductPrice_ByProductId(ulong productId , 
+                                                       CancellationToken cancellationToken)
+    {
+        return await _context.ShopProducts
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.Id == productId)
+                             .Select(p => p.Price)
+                             .FirstOrDefaultAsync();
+    }
+
     //List Of Products
     public async Task<FilterShopProductDTO> FilterProducts(FilterShopProductDTO model, CancellationToken cancellation)
     {

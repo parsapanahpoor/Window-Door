@@ -28,7 +28,7 @@ public class LocationController : SiteBaseController
 
     [HttpPost]
     public async Task<IActionResult> AddOrEditLocation(AddOrEditLocationDTO model,
-                                                       CancellationToken cancellation)
+                                                       CancellationToken cancellation = default)
     {
         #region Add Or Edit Location
 
@@ -82,7 +82,38 @@ public class LocationController : SiteBaseController
 
     #region Add LocationId To Order
 
+    [HttpGet]
+    public async Task<IActionResult> AddLocationIdToOrder(ulong locationId , 
+                                                          CancellationToken cancellationToken = default)
+    {
+        var res = await Mediator.Send(new AddLocationIdToOrderCommand()
+        {
+            LocationId = locationId,
+            UserId = User.GetUserId(),
+        },
+        cancellationToken);
 
+        switch (res)
+        {
+            case AddLocationIdToOrderResult.Success:
+                TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+                return RedirectToAction("ShowInvoice", "Order");
+
+            case AddLocationIdToOrderResult.OrderNotFound:
+                TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+                return RedirectToAction("ShopCart", "Order");
+
+            case AddLocationIdToOrderResult.WaitingForPaymentOrder:
+                TempData[WarningMessage] = "شما یک فاکتور درانتظار پرداخت دارید . لطفا در ابتدا آن را بررسی بفرمایید";
+                return RedirectToAction("ShowInvoice", "Order");
+
+            default:
+                break;
+        }
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+        return RedirectToAction("ShopCart", "Order");
+    }
 
     #endregion
 }

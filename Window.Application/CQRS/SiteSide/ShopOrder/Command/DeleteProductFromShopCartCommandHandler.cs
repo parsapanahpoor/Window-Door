@@ -20,6 +20,7 @@ public record DeleteProductFromShopCartCommandHandler : IRequestHandler<DeletePr
     }
 
     #endregion
+
     public async Task<bool> Handle(DeleteProductFromShopCartCommand request, CancellationToken cancellationToken)
     {
         #region Get Order By User Id
@@ -29,10 +30,28 @@ public record DeleteProductFromShopCartCommandHandler : IRequestHandler<DeletePr
 
         #endregion
 
+        #region Get Order Details ProductIds By Order Id 
+
+        var productIds = await _orderQueryRepository.GetProductIds_InOrderDetails_ByOrderId(order.Id , cancellationToken);
+        if (productIds == null || !productIds.Any()) return false;
+
+        #endregion
+
         #region Is Exist Order Detail bt orderid and product id 
 
         var orderDetail = await _orderQueryRepository.Get_OrderDetail_ByOrderIdAndProductId(order.Id, request.ProductId, cancellationToken);
         if (orderDetail == null || orderDetail.Count == 0) return false;
+
+        #endregion
+
+        #region Remove Order 
+
+        if (productIds.Count() == 1 && productIds.Contains(orderDetail.ProductId))
+        {
+            order.IsDelete = true;
+
+            _orderCommandRepository.Update(order);
+        }
 
         #endregion
 

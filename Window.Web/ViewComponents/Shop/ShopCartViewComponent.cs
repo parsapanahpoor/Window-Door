@@ -29,7 +29,7 @@ public class ShopCartViewComponent : ViewComponent
     {
         if (User.Identity.IsAuthenticated)
         {
-            var model = await Mediator.Send(new ShopCartQuery()
+            var model = await Mediator.Send(new ShopCartViewComponentQuery()
             {
                 UserId = User.GetUserId(),
             },cancellationToken);

@@ -31,6 +31,13 @@ public record MinusProductInShopCartQueryHandler : IRequestHandler<MinusProductI
 
         #endregion
 
+        #region Get Order Details ProductIds By Order Id 
+
+        var productIds = await _orderQueryRepository.GetProductIds_InOrderDetails_ByOrderId(order.Id, cancellationToken);
+        if (productIds == null || !productIds.Any()) return false;
+
+        #endregion
+
         #region Is Exist Order Detail bt orderid and product id 
 
         var orderDetail = await _orderQueryRepository.Get_OrderDetail_ByOrderIdAndProductId(order.Id, request.productId, cancellationToken);
@@ -48,6 +55,17 @@ public record MinusProductInShopCartQueryHandler : IRequestHandler<MinusProductI
         {
             orderDetail.Count--;
             orderDetail.IsDelete = true;
+
+            #region Remove Order 
+
+            if (productIds.Count() == 1 && productIds.Contains(orderDetail.ProductId))
+            {
+                order.IsDelete = true;
+
+                _orderCommandRepository.Update(order);
+            }
+
+            #endregion
         }
 
         _orderCommandRepository.UpdateOrderDetail(orderDetail);

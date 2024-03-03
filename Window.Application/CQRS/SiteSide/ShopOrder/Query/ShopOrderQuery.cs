@@ -10,5 +10,6 @@ public class ShopOrderQuery : IRequest<AddToShopOrderRes>
 public enum AddToShopOrderRes
 {
     Success,
-    Faild
+    Faild,
+    WaitingForPaymentOrderExist
 }

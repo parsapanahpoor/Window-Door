@@ -8,7 +8,6 @@ namespace Window.Application.StticTools
 {
     public static class FilePaths
     {
-
         #region Site
 
         public static string SiteFarsiName = "Windows";

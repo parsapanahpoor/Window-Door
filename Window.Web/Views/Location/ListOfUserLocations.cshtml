@@ -72,9 +72,12 @@
                                                                 </ul>
                                                             </li>
                                                         </ul>
-                                                        <a class="checkout-address-btn-submit">
-                                                            سفارش به این آدرس
-                                                            ارسال می‌شود.
+                                                        <a asp-action="AddLocationIdToOrder"
+                                                           asp-area=""
+                                                           asp-controller="Location"
+                                                           asp-route-locationId="@location.LocationId"
+                                                           class="checkout-address-btn-submit">
+                                                            انتخاب این آدرس برای ارسال سفارش .
                                                         </a>
                                                     </div>
                                                 </div>
