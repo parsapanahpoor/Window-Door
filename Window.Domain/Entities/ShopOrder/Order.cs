@@ -7,6 +7,10 @@ public sealed class Order : BaseEntity
 
     public ulong UserId { get; set; }
 
+    public ulong? LocationId { get; set; }
+
+    public ulong? Price { get; set; }
+
     public bool IsFinally { get; set; }
 
     #endregion

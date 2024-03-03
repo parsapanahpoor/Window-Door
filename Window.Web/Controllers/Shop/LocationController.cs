@@ -79,4 +79,10 @@ public class LocationController : SiteBaseController
     }
 
     #endregion
+
+    #region Add LocationId To Order
+
+
+
+    #endregion
 }
