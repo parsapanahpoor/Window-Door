@@ -45,5 +45,7 @@ public interface IOrderQueryRepository
                                      ulong orderId,
                                      CancellationToken cancellationToken);
 
+    Task<Entities.ShopOrder.Order?> GetLastest_NotFinally_Order(ulong userId);
+
     #endregion
 }

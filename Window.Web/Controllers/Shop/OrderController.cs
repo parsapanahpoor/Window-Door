@@ -6,6 +6,7 @@ using Window.Application.CQRS.SiteSide.ShopOrder.Command;
 using Window.Application.CQRS.SiteSide.ShopOrder.Query;
 using Window.Application.Extensions;
 using Window.Domain.Interfaces.Order;
+using Window.Web.ActionFilterAttributes;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace Window.Web.Controllers.Shop;
 
@@ -30,6 +31,7 @@ public class OrderController : SiteBaseController
 
     #region Add To Shop Cart
 
+    [ManageUserShopOrder]
     public async Task<IActionResult> AddToShopCart(ShopOrderQuery request ,
                                                    CancellationToken cancellationToken = default)
     {
@@ -61,16 +63,9 @@ public class OrderController : SiteBaseController
 
     #region Shop Cart 
 
+    [ManageUserShopOrder]
     public async Task<IActionResult> ShopCart(CancellationToken cancellationToken = default)
     {
-        //Check Is Exist Any Waiting For Payment Order
-        var res = await CheckIsExistAny_WaitingForPayment_Order(cancellationToken);
-        if (res)
-        {
-            TempData[WarningMessage] = "شما یک فاکتور درانتظار پرداخت دارید . لطفا در ابتدا آن را بررسی بفرمایید";
-            return RedirectToAction(nameof(ShowInvoice));
-        }
-
         var model = await Mediator.Send(new ShopCartQuery()
         {
             UserId = User.GetUserId(),
@@ -87,17 +82,10 @@ public class OrderController : SiteBaseController
 
     #region Plus Product In Shop Cart
 
+    [ManageUserShopOrder]
     public async Task<IActionResult> PlusProductInShopCart(PlusProductInShopCartQuery plus , 
                                                            CancellationToken cancellation = default)
     {
-        //Check Is Exist Any Waiting For Payment Order
-        var result = await CheckIsExistAny_WaitingForPayment_Order(cancellation);
-        if (result)
-        {
-            TempData[WarningMessage] = "شما یک فاکتور درانتظار پرداخت دارید . لطفا در ابتدا آن را بررسی بفرمایید";
-            return RedirectToAction(nameof(ShowInvoice));
-        }
-
         plus.UserId = User.GetUserId();
 
         var res = await Mediator.Send(plus , cancellation);
@@ -115,17 +103,10 @@ public class OrderController : SiteBaseController
 
     #region Minus Product In Shop Cart
 
+    [ManageUserShopOrder]
     public async Task<IActionResult> MinusProductInShopCart(MinusProductInShopCartQuery minus,
                                                            CancellationToken cancellation = default)
     {
-        //Check Is Exist Any Waiting For Payment Order
-        var result = await CheckIsExistAny_WaitingForPayment_Order(cancellation);
-        if (result)
-        {
-            TempData[WarningMessage] = "شما یک فاکتور درانتظار پرداخت دارید . لطفا در ابتدا آن را بررسی بفرمایید";
-            return RedirectToAction(nameof(ShowInvoice));
-        }
-
         minus.UserId = User.GetUserId();
 
         var res = await Mediator.Send(minus, cancellation);
@@ -143,17 +124,10 @@ public class OrderController : SiteBaseController
 
     #region Delete Product From Shop Order
 
+    [ManageUserShopOrder]
     public async Task<IActionResult> DeleteProductFromShopOrder(DeleteProductFromShopCartCommand command , 
                                                                 CancellationToken cancellationToken)
     {
-        //Check Is Exist Any Waiting For Payment Order
-        var result = await CheckIsExistAny_WaitingForPayment_Order(cancellationToken);
-        if (result)
-        {
-            TempData[WarningMessage] = "شما یک فاکتور درانتظار پرداخت دارید . لطفا در ابتدا آن را بررسی بفرمایید";
-            return RedirectToAction(nameof(ShowInvoice));
-        }
-
         command.UserId = User.GetUserId();
 
         var res = await Mediator.Send(command, cancellationToken);
@@ -193,8 +167,14 @@ public class OrderController : SiteBaseController
 
     #region Show Invoice
 
-    public async Task<IActionResult> ShowInvoice(CancellationToken cancellation = default)
+    public async Task<IActionResult> ShowInvoice(bool continueOrder = false,
+                                                 CancellationToken cancellation = default)
     {
+        if (continueOrder) 
+        {
+            TempData[WarningMessage] = "شما یک فاکتور درانتظار پرداخت دارید . لطفا در ابتدا آن را بررسی بفرمایید";
+        }
+
         var invoice = await Mediator.Send(new ShowInvoiceQuery()
         {
             UserId = User.GetUserId(),

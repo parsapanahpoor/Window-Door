@@ -233,5 +233,14 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                              .FirstOrDefaultAsync();
     }
 
+    public async Task<Domain.Entities.ShopOrder.Order?> GetLastest_NotFinally_Order(ulong userId)
+    {
+        return await _context.Orders
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    !p.IsFinally)
+                             .FirstOrDefaultAsync();
+    }
+
     #endregion
 }
