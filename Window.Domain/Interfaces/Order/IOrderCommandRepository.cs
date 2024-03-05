@@ -9,4 +9,8 @@ public interface IOrderCommandRepository
     void UpdateOrderDetail(Domain.Entities.ShopOrder.OrderDetail orderDetail);
 
     void Update(Entities.ShopOrder.Order order);
+
+    void DeleteRangeOrderDetails(IEnumerable<Domain.Entities.ShopOrder.OrderDetail> orderDetail);
+
+    void Delete(Entities.ShopOrder.Order order);
 }

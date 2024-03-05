@@ -58,14 +58,14 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                              .FirstOrDefaultAsync();
     }
 
-    public async Task<List<ulong>> GetProductIds_InOrderDetails_ByOrderId(ulong orderId, 
+    public async Task<List<ulong>> GetProductIds_InOrderDetails_ByOrderId(ulong orderId,
                                                                           CancellationToken cancellation)
     {
         return await _context.OrderDetails
-                             .AsNoTracking() 
-                             .Where(p=> !p.IsDelete &&
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
                                     p.OrderId == orderId)
-                             .Select(p=> p.ProductId)
+                             .Select(p => p.ProductId)
                              .ToListAsync();
     }
 
@@ -78,6 +78,16 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                              .Select(p => p.Id)
                              .ToListAsync();
     }
+
+    public async Task<List<OrderDetail>> GetOrderDetails_ByOrderId(ulong orderId, CancellationToken cancellation)
+    {
+        return await _context.OrderDetails
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.OrderId == orderId)
+                             .ToListAsync();
+    }
+
 
     public async Task<ShopCartOrderDetailItems?> FillShopCartOrderDetailItems(ulong orderDetailId, CancellationToken cancellationToken)
     {
@@ -135,14 +145,25 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                                   p.OrderState == Domain.Enums.Order.OrderState.WaitingForInformations);
     }
 
+    public async Task<Domain.Entities.ShopOrder.Order?> GetLastest_WaitingForPaymentOrder_ByUserId(ulong UserId,
+                                                                                                   CancellationToken cancellation)
+    {
+        return await _context.Orders
+                             .AsNoTracking()
+                             .FirstOrDefaultAsync(p => !p.IsDelete &&
+                                                  p.UserId == UserId &&
+                                                 !p.IsFinally &&
+                                                  p.OrderState == Domain.Enums.Order.OrderState.WaitingForPayment);
+    }
+
     public async Task<bool> IsExistAnyOrderInWaitingForPaymentStateByUserId(ulong userId,
                                                                             CancellationToken cancellationToken)
     {
         return await _context.Orders
                              .AsNoTracking()
-                             .AnyAsync(p=> !p.IsDelete &&
+                             .AnyAsync(p => !p.IsDelete &&
                                        p.UserId == userId &&
-                                       p.OrderState != Domain.Enums.Order.OrderState.WaitingForInformations && 
+                                       p.OrderState != Domain.Enums.Order.OrderState.WaitingForInformations &&
                                       !p.IsFinally);
     }
 
@@ -151,10 +172,64 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
     {
         return await _context.OrderDetails
                              .AsNoTracking()
-                             .Where(p=> !p.IsDelete &&
+                             .Where(p => !p.IsDelete &&
                                     p.OrderId == orderId)
                              .ToListAsync();
 
+    }
+
+    public async Task<InvoiceDTO?> FillInvoiceDTO(ulong userId,
+                                                  ulong orderId, 
+                                                  CancellationToken cancellationToken)
+    {
+        return await _context.Orders
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.Id == orderId)
+                             .Select(p => new InvoiceDTO()
+                             {
+                                 OrderId = orderId,
+                                 OrderDetails = _context.OrderDetails
+                                                        .AsNoTracking()
+                                                        .Where(s => !s.IsDelete &&
+                                                               s.OrderId == orderId)
+                                                        .Select(s => new OrderDetailForInvoice()
+                                                        {
+                                                            Count = s.Count,
+                                                            Product = _context.ShopProducts
+                                                                              .AsNoTracking()
+                                                                              .Where(o => !o.IsDelete &&
+                                                                                     o.Id == s.ProductId)
+                                                                              .Select(o => new ProductForInvoice()
+                                                                              {
+                                                                                  Price = o.Price,
+                                                                                  ProductId = o.ProductBrandId,
+                                                                                  ProductImage = o.ProductImage,
+                                                                                  ProductTitle = o.ProductName,
+                                                                                  SellerName = _context.Users
+                                                                                 .AsNoTracking()
+                                                                                 .Where(u => !u.IsDelete &&
+                                                                                        u.Id == o.SellerUserId)
+                                                                                 .Select(u => u.Username)
+                                                                                 .FirstOrDefault(),
+                                                                                  ColorName = _context.ShopColors
+                                                                                                      .AsNoTracking()
+                                                                                                      .Where(c => !c.IsDelete &&
+                                                                                                             c.Id == o.ProductColorId)
+                                                                                                      .Select(c => c.ColorTitle)
+                                                                                                      .FirstOrDefault(),
+                                                                              }).FirstOrDefault()
+
+                                                        }).ToList(),
+                                 Location = _context.Locations
+                                                    .AsNoTracking()
+                                                    .Where(l => !l.IsDelete &&
+                                                           l.UserId == userId &&
+                                                           l.Id == p.LocationId)
+                                                    .FirstOrDefault(),
+
+                             })
+                             .FirstOrDefaultAsync();
     }
 
     #endregion

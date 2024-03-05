@@ -27,6 +27,8 @@ public interface IOrderQueryRepository
 
     Task<List<ulong>> GetOrderDetailIds_OrderDetails_ByOrderId(ulong orderId, CancellationToken cancellation);
 
+    Task<List<OrderDetail>> GetOrderDetails_ByOrderId(ulong orderId, CancellationToken cancellation);
+
     Task<Domain.Entities.ShopOrder.Order?> GetLastestWaitingForInformationOrderByUserId(ulong UserId,
                                                                                         CancellationToken cancellation);
 
@@ -35,6 +37,13 @@ public interface IOrderQueryRepository
 
     Task<List<OrderDetail>> GetOrderDetails_InOrderDetails_ByOrderId(ulong orderId,
                                                                      CancellationToken cancellationToken);
+
+    Task<Entities.ShopOrder.Order?> GetLastest_WaitingForPaymentOrder_ByUserId(ulong UserId,
+                                                                                      CancellationToken cancellation);
+
+    Task<InvoiceDTO?> FillInvoiceDTO(ulong userId,
+                                     ulong orderId,
+                                     CancellationToken cancellationToken);
 
     #endregion
 }

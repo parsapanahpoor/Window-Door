@@ -26,4 +26,9 @@ public class OrderCommandRepository : CommandGenericRepository<Domain.Entities.S
     {
         _context.OrderDetails.Update(orderDetail);
     }
+
+    public void DeleteRangeOrderDetails(IEnumerable<Domain.Entities.ShopOrder.OrderDetail> orderDetail)
+    {
+        _context.OrderDetails.RemoveRange(orderDetail);
+    }
 }
