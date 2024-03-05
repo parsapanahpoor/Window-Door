@@ -49,7 +49,6 @@ public record AddLocationIdToOrderCommandHandler : IRequestHandler<AddLocationId
 
         //Update Oredr
         order.LocationId = request.LocationId;
-        order.OrderState = Domain.Enums.Order.OrderState.WaitingForPayment;
         order.Price = 0;
 
         var orderDetails = await _orderQueryRepository.GetOrderDetails_InOrderDetails_ByOrderId(order.Id, cancellationToken);

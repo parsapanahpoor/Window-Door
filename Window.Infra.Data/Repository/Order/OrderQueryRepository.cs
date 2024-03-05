@@ -30,7 +30,7 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                              .AsNoTracking()
                              .Where(p => !p.IsDelete &&
                                     p.UserId == userId &&
-                                    p.OrderState == Domain.Enums.Order.OrderState.WaitingForInformations &&
+                                   !p.LocationId.HasValue &&
                                    !p.IsFinally)
                              .FirstOrDefaultAsync();
     }
@@ -142,7 +142,7 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                              .AsNoTracking()
                              .FirstOrDefaultAsync(p => !p.IsDelete &&
                                                   p.UserId == UserId &&
-                                                  p.OrderState == Domain.Enums.Order.OrderState.WaitingForInformations);
+                                                 !p.LocationId.HasValue);
     }
 
     public async Task<Domain.Entities.ShopOrder.Order?> GetLastest_WaitingForPaymentOrder_ByUserId(ulong UserId,
@@ -153,7 +153,8 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                              .FirstOrDefaultAsync(p => !p.IsDelete &&
                                                   p.UserId == UserId &&
                                                  !p.IsFinally &&
-                                                  p.OrderState == Domain.Enums.Order.OrderState.WaitingForPayment);
+                                                  p.LocationId.HasValue &&
+                                                 !p.PaymentWay.HasValue);
     }
 
     public async Task<bool> IsExistAnyOrderInWaitingForPaymentStateByUserId(ulong userId,
@@ -163,7 +164,7 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                              .AsNoTracking()
                              .AnyAsync(p => !p.IsDelete &&
                                        p.UserId == userId &&
-                                       p.OrderState != Domain.Enums.Order.OrderState.WaitingForInformations &&
+                                       p.LocationId.HasValue &&
                                       !p.IsFinally);
     }
 

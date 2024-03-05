@@ -2,6 +2,11 @@
 
 public enum OrderState
 {
-    WaitingForInformations,
     WaitingForPayment
+}
+
+public enum OrderPaymentWay
+{
+    InstallmentPayment,
+    CashPayment
 }

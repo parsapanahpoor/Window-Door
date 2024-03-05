@@ -14,7 +14,7 @@ public sealed class Order : BaseEntity
 
     public bool IsFinally { get; set; }
 
-    public OrderState OrderState { get; set; }
+    public OrderPaymentWay? PaymentWay { get; set; }
 
     #endregion
 }

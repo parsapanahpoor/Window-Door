@@ -67,7 +67,6 @@ public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopO
                 IsDelete = false,
                 IsFinally = false,
                 UserId = request.userId,
-                OrderState = Domain.Enums.Order.OrderState.WaitingForInformations,
                 LocationId = null , 
                 Price = null
             };
