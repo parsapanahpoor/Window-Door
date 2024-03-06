@@ -167,6 +167,7 @@ public class OrderController : SiteBaseController
 
     #region Show Invoice
 
+    [ManageUserShopOrder]
     public async Task<IActionResult> ShowInvoice(bool continueOrder = false,
                                                  CancellationToken cancellation = default)
     {
