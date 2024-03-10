@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Data;
 using System.Net.NetworkInformation;
 using Window.Data;
 using Window.Data.Context;
 using Window.Domain.Entities.ShopOrder;
 using Window.Domain.Interfaces.Order;
+using Window.Domain.ViewModels.Seller.ShopOrder;
 using Window.Domain.ViewModels.Site.Shop.Order;
 namespace Window.Infra.Data.Repository.Order;
 
@@ -180,7 +182,7 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
     }
 
     public async Task<InvoiceDTO?> FillInvoiceDTO(ulong userId,
-                                                  ulong orderId, 
+                                                  ulong orderId,
                                                   CancellationToken cancellationToken)
     {
         return await _context.Orders
@@ -238,7 +240,42 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
         return await _context.Orders
                              .AsNoTracking()
                              .Where(p => !p.IsDelete &&
-                                    !p.IsFinally)
+                                    p.UserId == userId &&
+                                   !p.IsFinally)
+                             .FirstOrDefaultAsync();
+    }
+
+    public async Task<ManageShopOrderDetailDTO?> FillManageShopOrderDetailDTO(ulong userId,
+                                                                             CancellationToken cancellationToken)
+    {
+        return await _context.Orders
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.UserId == userId &&
+                                   !p.IsFinally &&
+                                    p.PaymentWay.HasValue &&
+                                    p.PaymentWay.Value != Domain.Enums.Order.OrderPaymentWay.InstallmentPayment)
+                             .Select(p=> new ManageShopOrderDetailDTO()
+                             {
+                                 Order = p,
+                                 OrderDetails = _context.OrderDetails
+                                                        .AsNoTracking()
+                                                        .Where(d=> !d.IsDelete &&
+                                                               d.OrderId == p.Id)
+                                                        .ToList(),
+                                 Location = _context.Locations
+                                                    .AsNoTracking()
+                                                    .Where(w=> !w.IsDelete && 
+                                                           w.Id == p.LocationId)
+                                                    .FirstOrDefault(),
+                                 OrderCheques = _context.orderCheques
+                                                        .AsNoTracking()
+                                                        .Where(c=> !c.IsDelete && 
+                                                               c.OrderId == p.Id)
+                                                        .ToList(),
+                                 CustomerChequeInformation = null,
+                                 SellerInformations = null
+                             })
                              .FirstOrDefaultAsync();
     }
 

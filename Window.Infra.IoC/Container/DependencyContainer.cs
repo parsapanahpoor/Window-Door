@@ -12,6 +12,7 @@ using Window.Domain.Interfaces;
 using Window.Domain.Interfaces.Location;
 using Window.Domain.Interfaces.Maket;
 using Window.Domain.Interfaces.Order;
+using Window.Domain.Interfaces.SellerChequeInfo;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.Interfaces.ShopProduct;
@@ -21,6 +22,7 @@ using Window.Infra.Data.Repository;
 using Window.Infra.Data.Repository.Location;
 using Window.Infra.Data.Repository.Maket;
 using Window.Infra.Data.Repository.Order;
+using Window.Infra.Data.Repository.SellerChequeInfo;
 using Window.Infra.Data.Repository.ShopCategory;
 using Window.Infra.Data.Repository.ShopColors;
 using Window.Infra.Data.Repository.ShopProduct;
@@ -61,6 +63,10 @@ namespace Window.IOC.Container
 
             services.AddScoped<ILocationCommandRepository, LocationCommandRepository>();
             services.AddScoped<ILocationQueryRepository, LocationQueryRepository>();
+
+            //Seller Cheque Info
+            services.AddScoped<ISellerChequeInfoCommandRepository, SellerChequeInfoCommandRepository>();
+            services.AddScoped<ISellerChequeInfoQueryRepository, SellerChequeInfoQueryRepository>();
 
             #endregion
 

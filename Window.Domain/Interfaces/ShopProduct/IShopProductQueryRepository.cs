@@ -46,5 +46,8 @@ public interface IShopProductQueryRepository
     Task<List<ShopProductSelectedCategories>?> GetListOf_ShopProductSelectedCategories_ByProductId(ulong productId,
                                                                                                    CancellationToken cancellation);
 
+    Task<ulong> GetSellerId_ByProductId(ulong productId,
+                                        CancellationToken cancellationToken);
+
     #endregion
 }

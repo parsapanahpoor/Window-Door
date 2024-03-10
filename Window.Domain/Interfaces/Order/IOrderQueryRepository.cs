@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Window.Domain.Entities.ShopOrder;
+using Window.Domain.ViewModels.Seller.ShopOrder;
 using Window.Domain.ViewModels.Site.Shop.Order;
 
 namespace Window.Domain.Interfaces.Order;
@@ -46,6 +47,9 @@ public interface IOrderQueryRepository
                                      CancellationToken cancellationToken);
 
     Task<Entities.ShopOrder.Order?> GetLastest_NotFinally_Order(ulong userId);
+
+    Task<ManageShopOrderDetailDTO?> FillManageShopOrderDetailDTO(ulong userId,
+                                                                 CancellationToken cancellationToken);
 
     #endregion
 }

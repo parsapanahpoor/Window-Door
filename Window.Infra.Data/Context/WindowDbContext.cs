@@ -126,6 +126,8 @@ public class WindowDbContext : DbContext
 
     public DbSet<SelersPersonalVideos> SelersPersonalVideos { get; set; }
 
+    public DbSet<SellerChequeInfo> SellerChequeInfos { get; set; }
+
     #endregion
 
     #region Article 
@@ -277,6 +279,8 @@ public class WindowDbContext : DbContext
     public DbSet<Order> Orders { get; set; }
 
     public DbSet<OrderDetail> OrderDetails { get; set; }
+
+    public DbSet<OrderCheque> orderCheques { get; set; }
 
     #endregion
 

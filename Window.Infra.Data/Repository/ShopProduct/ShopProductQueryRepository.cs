@@ -236,6 +236,17 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
 
     #region Seller Side 
 
+    public async Task<ulong> GetSellerId_ByProductId(ulong productId , 
+                                                     CancellationToken cancellationToken)
+    {
+        return await _context.ShopProducts
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.Id == productId)
+                             .Select(p => p.SellerUserId)
+                             .FirstOrDefaultAsync();
+    }
+
     public async Task<List<ProductTag>> GetListOfProductTagsByProductId(ulong productId, CancellationToken cancellation)
     {
         return await _context.ProductTags

@@ -1,4 +1,5 @@
 ﻿using Window.Domain.Entities.Location;
+using Window.Domain.Entities.Market;
 using Window.Domain.Entities.ShopOrder;
 
 namespace Window.Domain.ViewModels.Seller.ShopOrder;
@@ -7,15 +8,17 @@ public record ManageShopOrderDetailDTO
 {
     #region properties
 
-    public Domain.Entities.ShopOrder.Order Order { get; set; }
+    public Domain.Entities.ShopOrder.Order? Order { get; set; }
 
-    public SellerInformations SellerInformations { get; set; }
+    public SellerInformations? SellerInformations { get; set; }
 
-    public CustomerChequeInformation CustomerChequeInformation { get; set; }
+    public CustomerChequeInformation? CustomerChequeInformation { get; set; }
 
-    public Location Location { get; set; }
+    public Location? Location { get; set; }
 
-    public List<OrderDetail> OrdedrDetails { get; set; }
+    public List<OrderDetail>? OrderDetails { get; set; }
+
+    public List<OrderCheque>? OrderCheques { get; set; }
 
     #endregion
 }
@@ -28,9 +31,7 @@ public record SellerInformations
 
     public string SellerName { get; set; }
 
-    public int CountOfCheque { get; set; }
-
-    public int SellerMaximumDays { get; set; }
+    public SellerChequeInfo sellerChequeInfo { get; set; }
 
     #endregion
 }
