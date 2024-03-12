@@ -131,5 +131,15 @@ namespace Window.Application.StticTools
         public static readonly string DefaultProductsGalleryAvatar = "/content/images/no-image.png";
 
         #endregion
+
+        #region Cheque File
+
+        public static readonly string OrderChequePath = "/content/images/OrderCheque/main/";
+        public static readonly string OrderChequePathServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/OrderCheque/main/");
+
+        public static readonly string OrderChequePathThumb = "/content/images/OrderCheque/thumb/";
+        public static readonly string OrderChequePathThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/OrderCheque/thumb/");
+
+        #endregion
     }
 }

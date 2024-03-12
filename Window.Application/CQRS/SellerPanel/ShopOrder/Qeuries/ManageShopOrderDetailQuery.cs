@@ -2,4 +2,13 @@
 
 namespace Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries;
 
-public record ManageShopOrderDetailQuery(ulong userId) : IRequest<ManageShopOrderDetailDTO>;
+public record ManageShopOrderDetailQuery : IRequest<ManageShopOrderDetailDTO>
+{
+    #region properties
+
+    public ulong userId { get; set; }
+
+    public ulong? orderId { get; set; }
+
+    #endregion
+}

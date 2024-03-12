@@ -14,6 +14,11 @@ namespace Window.Application.Extensions
             return !string.IsNullOrEmpty(user.Avatar) ? FilePaths.UserAvatarPath + user.Avatar : FilePaths.DefaultUserAvatar;
         }
 
+        public static string GetUserAvatar(this string userAvatar)
+        {
+            return !string.IsNullOrEmpty(userAvatar) ? FilePaths.UserAvatarPath + userAvatar : FilePaths.DefaultUserAvatar;
+        }
+
         public static ulong GetUserId(this ClaimsPrincipal claimsPrincipal)
         {
             if (claimsPrincipal != null)

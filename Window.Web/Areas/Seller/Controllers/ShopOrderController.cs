@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries;
+using Window.Application.Extensions;
 namespace Window.Web.Areas.Seller.Controllers;
 
 public class ShopOrderController : SellerBaseController
@@ -11,13 +13,29 @@ public class ShopOrderController : SellerBaseController
 
     #region List OF User Orders 
 
+    
+
     #endregion
 
     #region Manage Shop Order
 
-    public async Task<IActionResult> ManageShopOrder(CancellationToken cancellationToken = default)
+    public async Task<IActionResult> ManageShopOrder(ulong? orderId , 
+                                                     CancellationToken cancellationToken = default)
     {
-        return View();
+        #region Initial Model 
+
+        var model = await Mediator.Send(new ManageShopOrderDetailQuery()
+        {
+            userId = User.GetUserId(),
+            orderId = orderId,
+        } , 
+        cancellationToken);
+
+        if(model == null) return NotFound();
+
+        #endregion
+
+        return View(model);
     }
 
     #endregion

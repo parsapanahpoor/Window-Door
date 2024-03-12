@@ -1,4 +1,9 @@
-﻿@{
+﻿@model Window.Domain.ViewModels.Seller.ShopOrder.ManageShopOrderDetailDTO
+@using Window.Application.Convertors
+@using Window.Application.StticTools
+@using Window.Application.Extensions
+
+@{
     ViewData["Title"] = "اطلاعات پرداخت چکی";
 }
 
@@ -18,51 +23,114 @@
     </li>
 }
 
-
 <div class="row">
     <div class="col-md-12">
         <div class="profile-container">
             <div class="profile-header row">
-                <div class="col-lg-2 col-md-4 col-sm-12 text-center">
-                    <img src="/admin/img/avatars/divyia.jpg" alt="" class="header-avatar">
-                </div>
-                <div class="col-lg-5 col-md-8 col-sm-12 profile-info">
-                    <div class="header-fullname">Kim Ryder</div>
-                    <a href="#" class="btn btn-palegreen btn-sm  btn-follow">
-                        <i class="fa fa-check"></i>
-                        Following
-                    </a>
-                    <div class="header-information">
-                        Kim is a software developer in Microsoft. She works in ASP.NET MVC Team and collaborates with other teams.
+
+                @if (Model.SellerInformations != null)
+                {
+                    <div class="col-lg-2 col-md-4 col-sm-12 text-center">
+                        @if (!string.IsNullOrEmpty(Model.SellerInformations.SellerUserAvatar))
+                        {
+                            <img src="@Model.SellerInformations.SellerUserAvatar.GetUserAvatar()" alt="" class="header-avatar">
+                        }
                     </div>
-                </div>
-                <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 profile-stats">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stats-col">
-                            <div class="stats-value pink">284</div>
-                            <div class="stats-title">FOLLOWING</div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stats-col">
-                            <div class="stats-value pink">803</div>
-                            <div class="stats-title">FOLLOWERS</div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stats-col">
-                            <div class="stats-value pink">1207</div>
-                            <div class="stats-title">POSTS</div>
-                        </div>
+                    <div class="col-lg-3 col-md-8 col-sm-12 profile-info">
+
+                        <div class="header-fullname">نام فروشنده :@Model.SellerInformations.SellerName </div>
+
+                        <a href="#" class="btn btn-palegreen btn-sm  btn-follow">
+                            <i class="fa fa-check"></i>
+                            Following
+                        </a>
+
+                        <hr />
+                        @if (Model.sellerChequeInfo != null)
+                        {
+                            <div class="header-information">
+                                <p>
+                                    تعداد چک هایی که فروشنده می پذیرد : @Model.sellerChequeInfo.CountOfCheque چک
+                                </p>
+                                <hr />
+                                <p>
+                                    حداکثر بازه ی زمانی قابل قبول فروشنده : @Model.sellerChequeInfo.SellerMaximumDays روز
+                                </p>
+                            </div>
+                        }
                     </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
-                            <i class="glyphicon glyphicon-map-marker"></i> Boston
+                }
+
+
+                <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12 profile-stats">
+                    @if (Model.OrderCheques != null && Model.OrderCheques.Any())
+                    {
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 stats-col">
+                                <div class="stats-value pink">@Model.OrderCheques.Count(p=> p.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)</div>
+                                <div class="stats-title">تعداد چک های تایید شده توسط پنجره یاب</div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 stats-col">
+                                <div class="stats-value pink">@Model.OrderCheques.Count(p => p.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Accept)</div>
+                                <div class="stats-title">تعداد چک های تایید شده توسط فروشنده</div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 stats-col">
+                                <div class="stats-value pink">@Model.OrderCheques.Count()</div>
+                                <div class="stats-title">تعداد کل چک های آپلود شده </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 stats-col">
+                                <div class="stats-value pink">@Model.Order.Price.Value.ToString("#,000")</div>
+                                <div class="stats-title">مبلغ سفارش به ریال</div>
+                            </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
-                            Rate: <strong>$250</strong>
+
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
+                                <i class="glyphicon glyphicon-map-marker"></i> Boston
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
+                                Rate: <strong>$250</strong>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
+                                Age: <strong>24</strong>
+                            </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
-                            Age: <strong>24</strong>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 stats-col">
+                                <div class="stats-value pink">چکی یافت نشده </div>
+                                <div class="stats-title">تعداد چک های تایید شده توسط پنجره یاب</div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 stats-col">
+                                <div class="stats-value pink">چکی یافت نشده</div>
+                                <div class="stats-title">تعداد چک های تایید شده توسط فروشنده</div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 stats-col">
+                                <div class="stats-value pink">چکی یافت نشده</div>
+                                <div class="stats-title">تعداد کل چک های آپلود شده </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 stats-col">
+                                <div class="stats-value pink">@Model.Order.Price.Value.ToString("#,000")</div>
+                                <div class="stats-title">مبلغ سفارش به ریال</div>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
+                                <i class="glyphicon glyphicon-map-marker"></i> Boston
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
+                                Rate: <strong>$250</strong>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
+                                Age: <strong>24</strong>
+                            </div>
+                        </div>
+                    }
                 </div>
+
             </div>
             <div class="profile-body">
                 <div class="col-lg-12">
@@ -70,7 +138,7 @@
                         <ul class="nav nav-tabs tabs-flat  nav-justified" id="myTab11">
                             <li class="active">
                                 <a data-toggle="tab" href="#overview">
-                                    Overview
+                                    اطلاعات چک های آپلودی
                                 </a>
                             </li>
                             <li class="tab-red">
@@ -90,291 +158,131 @@
                             </li>
                         </ul>
                         <div class="tab-content tabs-flat">
+
                             <div id="overview" class="tab-pane active">
                                 <div class="row profile-overview">
-                                    <div class="col-md-8">
-                                        <h6 class="row-title before-themeprimary no-margin-top">PROFILE VISITS</h6>
-                                        <div id="visit-chart" class="chart" style="padding: 0px; position: relative;"><canvas class="flot-base" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 785px; height: 220px;" width="981" height="275"></canvas><div class="flot-text" style="position: absolute; inset: 0px; font-size: smaller; color: rgb(84, 84, 84);"><div class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; inset: 0px; display: block;"><div style="position: absolute; max-width: 87px; top: 205px; left: 68px; text-align: center;" class="flot-tick-label tickLabel">4</div><div style="position: absolute; max-width: 87px; top: 205px; left: 177px; text-align: center;" class="flot-tick-label tickLabel">6</div><div style="position: absolute; max-width: 87px; top: 205px; left: 285px; text-align: center;" class="flot-tick-label tickLabel">8</div><div style="position: absolute; max-width: 87px; top: 205px; left: 391px; text-align: center;" class="flot-tick-label tickLabel">10</div><div style="position: absolute; max-width: 87px; top: 205px; left: 500px; text-align: center;" class="flot-tick-label tickLabel">12</div><div style="position: absolute; max-width: 87px; top: 205px; left: 608px; text-align: center;" class="flot-tick-label tickLabel">14</div><div style="position: absolute; max-width: 87px; top: 205px; left: 717px; text-align: center;" class="flot-tick-label tickLabel">16</div></div><div class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; inset: 0px; display: block;"><div style="position: absolute; top: 193px; left: 6px; text-align: right;" class="flot-tick-label tickLabel">0</div><div style="position: absolute; top: 154px; left: 6px; text-align: right;" class="flot-tick-label tickLabel">5</div><div style="position: absolute; top: 116px; left: 0px; text-align: right;" class="flot-tick-label tickLabel">10</div><div style="position: absolute; top: 77px; left: 0px; text-align: right;" class="flot-tick-label tickLabel">15</div><div style="position: absolute; top: 39px; left: 0px; text-align: right;" class="flot-tick-label tickLabel">20</div><div style="position: absolute; top: 1px; left: 0px; text-align: right;" class="flot-tick-label tickLabel">25</div></div></div><canvas class="flot-overlay" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 785px; height: 220px;" width="981" height="275"></canvas></div>
-                                        <h6 class="row-title before-orange">FOLLOWERS</h6>
-                                        <div class="row">
-                                            <div class="col-lg-4 col-sm-6 col-xs-12">
-                                                <div class="databox databox-graded">
-                                                    <div class="no-padding databox-right">
-                                                        <img src="/admin/img/avatars/Javi-Jimenez.jpg" style="width:65px; height:65px;">
-                                                    </div>
-                                                    <div class="padding-top-20 bg-whitesmoke databox-left">
-                                                        <div class="databox-stat orange radius-bordered">
-                                                            <i class="stat-icon glyphicon glyphicon-remove"></i>
-                                                        </div>
-                                                        <div class="databox-text darkgray">JAVI JIMENEZ</div>
-                                                        <div class="databox-text darkgray">Manager</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-sm-6 col-xs-12">
-                                                <div class="databox databox-graded">
-                                                    <div class="no-padding databox-right">
-                                                        <img src="/admin/img/avatars/adam-jansen.jpg" style="width:65px; height:65px;">
-                                                    </div>
-                                                    <div class="padding-top-20 bg-whitesmoke databox-left">
-                                                        <div class="databox-stat palegreen radius-bordered">
-                                                            <i class="stat-icon glyphicon glyphicon-plus"></i>
-                                                        </div>
-                                                        <div class="databox-text darkgray">LEE MUNROE</div>
-                                                        <div class="databox-text darkgray">Developer</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-sm-6 col-xs-12">
-                                                <div class="databox databox-graded">
-                                                    <div class="no-padding databox-right">
-                                                        <img src="/admin/img/avatars/Nicolai-Larson.jpg" style="width:65px; height:65px;">
-                                                    </div>
-                                                    <div class="padding-top-20 bg-whitesmoke databox-left">
-                                                        <div class="databox-stat palegreen radius-bordered">
-                                                            <i class="stat-icon glyphicon glyphicon-plus"></i>
-                                                        </div>
-                                                        <div class="databox-text darkgray">NICOLAI LARSON</div>
-                                                        <div class="databox-text darkgray">Manager</div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <h6 style="margin-right: 0px;" class="row-title before-themeprimary no-margin-top">
+                                        برای آپلود چک جدید روی گزینه روبرو کلیک کنید :
+                                        <a class="btn btn-primary"
+                                           asp-action="UploadOrderCheque"
+                                           asp-area="Seller"
+                                           asp-controller="OrderCheque"
+                                           asp-route-orderId="@Model.Order.Id">آپلود چک جدید</a>
+                                    </h6>
 
-                                        </div>
-                                        <h6 class="row-title before-palegreen">FOLLOWING</h6>
-                                        <div class="row">
-                                            <div class="col-lg-4 col-sm-6 col-xs-12">
-                                                <div class="databox databox-graded">
-                                                    <div class="no-padding databox-right">
-                                                        <img src="/admin/img/avatars/John-Smith.jpg" style="width:65px; height:65px;">
-                                                    </div>
-                                                    <div class="padding-top-20 bg-whitesmoke databox-left">
-                                                        <div class="databox-stat orange radius-bordered">
-                                                            <i class="stat-icon glyphicon glyphicon-remove"></i>
-                                                        </div>
-                                                        <div class="databox-text darkgray">JOHN SMITH</div>
-                                                        <div class="databox-text darkgray">Architect</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-sm-6 col-xs-12">
-                                                <div class="databox databox-graded">
-                                                    <div class="no-padding databox-right">
-                                                        <img src="/admin/img/avatars/Matt-Cheuvront.jpg" style="width:65px; height:65px;">
-                                                    </div>
-                                                    <div class="padding-top-20 bg-whitesmoke databox-left">
-                                                        <div class="databox-stat palegreen radius-bordered">
-                                                            <i class="stat-icon glyphicon glyphicon-plus"></i>
-                                                        </div>
-                                                        <div class="databox-text darkgray">MATT CHEUVRONT</div>
-                                                        <div class="databox-text darkgray">Developer</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-sm-6 col-xs-12">
-                                                <div class="databox databox-graded">
-                                                    <div class="no-padding databox-right">
-                                                        <img src="/admin/img/avatars/Stephanie-Walter.jpg" style="width:65px; height:65px;">
-                                                    </div>
-                                                    <div class="padding-top-20 bg-whitesmoke databox-left">
-                                                        <div class="databox-stat orange radius-bordered">
-                                                            <i class="stat-icon glyphicon glyphicon-remove"></i>
-                                                        </div>
-                                                        <div class="databox-text darkgray">KATE WALTER</div>
-                                                        <div class="databox-text darkgray">Developer</div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    @if (Model.OrderCheques != null && Model.OrderCheques.Any())
+                                    {
+                                        <ul class="timeline animated fadeInDown">
 
-                                        </div>
-                                        <h6 class="row-title before-yellow">YOU MAY ALSO KNOW</h6>
-                                        <div class="row">
-                                            <div class="col-lg-6 col-sm-6 col-xs-12">
-                                                <div class="databox databox-xlg databox-halved databox-shadowed databox-vertical no-margin-bottom">
-                                                    <div class="databox-top bg-white padding-10">
-                                                        <div class="col-lg-4 col-sm-4 col-xs-4">
-                                                            <img src="/admin/img/avatars/Sergey-Azovskiy.jpg" style="width:75px; height:75px;" class="image-circular bordered-3 bordered-palegreen">
-                                                        </div>
-                                                        <div class="col-lg-8 col-sm-8 col-xs-8 text-align-left padding-10">
-                                                            <span class="databox-header carbon no-margin">Martin James</span>
-                                                            <span class="databox-text lightcarbon no-margin"> Software Manager at Microsoft </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="databox-bottom bg-white no-padding">
-                                                        <div class="databox-row row-12">
-                                                            <div class="databox-row row-6 no-padding">
-                                                                <div class="databox-cell cell-4 no-padding text-align-center bordered-right bordered-platinum">
-                                                                    <span class="databox-text sonic-silver  no-margin">Posts</span>
-                                                                    <span class="databox-number lightcarbon no-margin">510</span>
-                                                                </div>
-                                                                <div class="databox-cell cell-4 no-padding text-align-center bordered-right bordered-platinum">
-                                                                    <span class="databox-text sonic-silver no-margin">Followers</span>
-                                                                    <span class="databox-number lightcarbon no-margin">908</span>
-                                                                </div>
-                                                                <div class="databox-cell cell-4 no-padding text-align-center">
-                                                                    <span class="databox-text sonic-silver no-margin">Following</span>
-                                                                    <span class="databox-number lightcarbon no-margin">286</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="databox-row row-6 padding-10">
-                                                                <button class="btn btn-palegreen btn-sm pull-left">FOLLOW</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-sm-6 col-xs-12">
-                                                <div class="databox databox-xlg databox-halved databox-shadowed databox-vertical no-margin-bottom">
-                                                    <div class="databox-top bg-white padding-10">
-                                                        <div class="col-lg-4 col-sm-4 col-xs-4">
-                                                            <img src="/admin/img/avatars/Osvaldus-Valutis.jpg" style="width:75px; height:75px;" class="image-circular bordered-3 bordered-palegreen">
-                                                        </div>
-                                                        <div class="col-lg-8 col-sm-8 col-xs-8 text-align-left padding-10">
-                                                            <span class="databox-header carbon no-margin">Osvaldus Valutis</span>
-                                                            <span class="databox-text lightcarbon no-margin"> Graphic Designer at Yahoo! </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="databox-bottom bg-white no-padding">
-                                                        <div class="databox-row row-12">
-                                                            <div class="databox-row row-6 no-padding">
-                                                                <div class="databox-cell cell-4 no-padding text-align-center bordered-right bordered-platinum">
-                                                                    <span class="databox-text sonic-silver  no-margin">Posts</span>
-                                                                    <span class="databox-number lightcarbon no-margin">102</span>
-                                                                </div>
-                                                                <div class="databox-cell cell-4 no-padding text-align-center bordered-right bordered-platinum">
-                                                                    <span class="databox-text sonic-silver no-margin">Followers</span>
-                                                                    <span class="databox-number lightcarbon no-margin">634</span>
-                                                                </div>
-                                                                <div class="databox-cell cell-4 no-padding text-align-center">
-                                                                    <span class="databox-text sonic-silver no-margin">Following</span>
-                                                                    <span class="databox-number lightcarbon no-margin">100</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="databox-row row-6 padding-10">
-                                                                <button class="btn btn-palegreen btn-sm pull-left">FOLLOW</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <form method="post" class="well padding-bottom-10" onsubmit="return false;">
-                                            <span class="input-icon icon-right">
-                                                <textarea rows="2" class="form-control" placeholder="Post a new message"></textarea>
-                                                <i class="fa fa-camera themeprimary"></i>
-                                            </span>
-                                            <div class="padding-top-10 text-align-right">
-                                                <a class="btn btn-sm btn-primary">
-                                                    Send
-                                                </a>
-                                            </div>
-                                        </form>
-                                        <div>
-                                            <div class="comment">
-                                                <img src="/admin/img/avatars/adam-jansen.jpg" alt="" class="comment-avatar">
-                                                <div class="comment-body">
-                                                    <div class="comment-text">
-                                                        <div class="comment-header">
-                                                            <a href="#" title="">Adam Jansen</a><span>about 2 minuts ago</span>
-                                                        </div>
-                                                        Story based around the idea of time lapse, animation to post soon!
-                                                    </div>
-                                                    <div class="comment-footer">
-                                                        <a href="#"><i class="fa fa-thumbs-o-up"></i></a>
-                                                        <a href="#"><i class="fa fa-thumbs-o-down"></i></a>
-                                                        <a href="#">Reply</a>
-                                                    </div>
-                                                </div>
+                                            @foreach (var cheque in Model.OrderCheques)
+                                            {
+                                                <li>
+                                                    <div class="timeline-datetime">
 
-                                                <div class="comment">
-                                                    <img src="/admin/img/avatars/John-Smith.jpg" alt="" class="comment-avatar">
-                                                    <div class="comment-body">
-                                                        <div class="comment-text">
-                                                            <div class="comment-header">
-                                                                <a href="#" title="">John Smith</a><span>about 1 hour ago</span>
-                                                            </div>
-                                                            Wow impressive!
-                                                        </div>
-                                                        <div class="comment-footer">
-                                                            <a href="#"><i class="fa fa-thumbs-o-up"></i></a>
-                                                            <a href="#"><i class="fa fa-thumbs-o-down"></i></a>
-                                                            <a href="#">Reply</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                            @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)
+                                                            {
+                                                                <p class="btn btn-palegreen btn-sm  btn-follow">
+                                                                    تایید شده توسط تیم پنجره یابن
+                                                                </p>
+                                                            }
+                                                            @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.WaitingForCheck)
+                                                            {
+                                                                <p class="btn btn-warning btn-sm  btn-follow">
+                                                                    در انتظار بررسی تیم پنجره یاب
+                                                                </p>
+                                                            }
+                                                            @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Reject)
+                                                            {
+                                                                <p class="btn btn-danger btn-sm  btn-follow">
+                                                                    رد شده توسط تیم پنجره ی یاب
+                                                                </p>
+                                                            }
 
-                                                <div class="comment">
-                                                    <img src="/admin/img/avatars/Matt-Cheuvront.jpg" alt="" class="comment-avatar">
-                                                    <div class="comment-body">
-                                                        <div class="comment-text">
-                                                            <div class="comment-header">
-                                                                <a href="#" title="">Matt Cheuvront</a><span>about 2 hours ago</span>
-                                                            </div>
-                                                            Wow, that is really nice.
-                                                        </div>
-                                                        <div class="comment-footer">
-                                                            <a href="#"><i class="fa fa-thumbs-o-up"></i></a>
-                                                            <a href="#"><i class="fa fa-thumbs-o-down"></i></a>
-                                                            <a href="#">Reply</a>
-                                                        </div>
-                                                    </div>
+                                                            <hr />
 
-                                                    <div class="comment">
-                                                        <img src="/admin/img/avatars/Stephanie-Walter.jpg" alt="" class="comment-avatar">
-                                                        <div class="comment-body">
-                                                            <div class="comment-text">
-                                                                <div class="comment-header">
-                                                                    <a href="#" title="">Stephanie Walter</a><span>3 hours ago</span>
-                                                                </div>
-                                                                Nice work, makes me think of The Money Pit.
+                                                            @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Accept)
+                                                            {
+                                                                <p class="btn btn-palegreen btn-sm  btn-follow">
+                                                                    تایید شده توسط فروشنده
+                                                                </p>
+                                                            }
+                                                            @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.WaitingForCheck)
+                                                            {
+                                                                <p class="btn btn-warning btn-sm  btn-follow">
+                                                                    در انتظار بررسی فروشنده
+                                                                </p>
+                                                            }
+                                                            @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Reject)
+                                                            {
+                                                                <p class="btn btn-danger btn-sm  btn-follow">
+                                                                    رد شده توسط فروشنده
+                                                                </p>
+                                                            }
+
+                                                    </div>
+                                                    <div class="timeline-badge blue">
+                                                        <i class="fa fa-tag darkpink"></i>
+                                                    </div>
+                                                    <div class="timeline-panel">
+                                                        <div class="timeline-header bordered-bottom bordered-blue">
+                                                            <p class="timeline-datetime">
+                                                                <small class="text-muted">
+                                                                  
+                                                                    @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)
+                                                                    {
+                                                                        <span class="timeline-date btn btn-palegreen">تایید شده توسط تیم پنجره یابن</span>
+                                                                    }
+                                                                    @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.WaitingForCheck)
+                                                                    {
+                                                                        <span class="timeline-date btn btn-warning">در انتظار بررسی تیم پنجره یاب</span>
+                                                                    }
+                                                                    @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Reject)
+                                                                    {
+                                                                        <span class="timeline-date btn btn-danger">رد شده توسط تیم پنجره ی یاب</span>
+                                                                    }
+
+                                                                    @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Accept)
+                                                                    {
+                                                                        <span class="timeline-date btn btn-palegreen" style="margin-top: 20px;">تایید شده توسط فروشنده</span>
+                                                                    }
+                                                                    @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.WaitingForCheck)
+                                                                    {
+                                                                        <span class="timeline-date btn btn-warning" style="margin-top: 20px;">در انتظار بررسی فروشنده</span>
+                                                                    }
+                                                                    @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Reject)
+                                                                    {
+                                                                        <span class="timeline-date btn btn-danger" style="margin-top: 20px;">رد شده توسط فروشنده</span>
+                                                                    }
+
+                                                                </small>
+                                                            </p>
+                                                        </div>
+                                                        <div class="timeline-body">
+                                                            <div class="tl-wide text-center" style="padding: 5px; margin-top:10px; margin-bottom: 10px;">
+
+                                                                <a href="@FilePaths.OrderChequePath/@cheque.ChequeImage" target="_blank">
+                                                                    <img src="@FilePaths.OrderChequePath/@cheque.ChequeImage" alt="" style="max-height: 158px;max-width: 100%;">
+                                                                </a>
+
                                                             </div>
-                                                            <div class="comment-footer">
-                                                                <a href="#"><i class="fa fa-thumbs-o-up"></i></a>
-                                                                <a href="#"><i class="fa fa-thumbs-o-down"></i></a>
-                                                                <a href="#">Reply</a>
-                                                            </div>
+
+                                                            <p>کدملی صاحب چک : @cheque.CustomerNationalId </p>
+                                                            <hr />
+                                                            <p>تاریخ : @cheque.ChequeDateTime.ToShamsi()</p>
+                                                            <hr />
+                                                            <p>مبلغ چک : @cheque.ChequePrice.ToString("#,000") ریال</p>
+
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="comment">
-                                                <img src="/admin/img/avatars/divyia.jpg" alt="" class="comment-avatar">
-                                                <div class="comment-body">
-                                                    <div class="comment-text">
-                                                        <div class="comment-header">
-                                                            <a href="#" title="">Kim Ryder</a><span>about 4 hours ago</span>
-                                                        </div>
-                                                        i'm in the middle of a timelapse animation myself! (Very different though.) Awesome stuff.
-                                                    </div>
-                                                    <div class="comment-footer">
-                                                        <a href="#"><i class="fa fa-thumbs-o-up"></i></a>
-                                                        <a href="#"><i class="fa fa-thumbs-o-down"></i></a>
-                                                        <a href="#">Reply</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="comment">
-                                                <img src="/admin/img/avatars/Nicolai-Larson.jpg" alt="" class="comment-avatar">
-                                                <div class="comment-body">
-                                                    <div class="comment-text">
-                                                        <div class="comment-header">
-                                                            <a href="#" title="">Nicolai Larson</a><span>10 hours ago</span>
-                                                        </div>
-                                                        the parallax is a little odd but O.o that house build is awesome!!
-                                                    </div>
-                                                    <div class="comment-footer">
-                                                        <a href="#"><i class="fa fa-thumbs-o-up"></i></a>
-                                                        <a href="#"><i class="fa fa-thumbs-o-down"></i></a>
-                                                        <a href="#">Reply</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                                </li>
+                                            }
+
+                                        </ul>
+                                    }
+
                                 </div>
                             </div>
+
                             <div id="timeline" class="tab-pane">
                                 <ul class="timeline animated fadeInDown">
                                     <li>

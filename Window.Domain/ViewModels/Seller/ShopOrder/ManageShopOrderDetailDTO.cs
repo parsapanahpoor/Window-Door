@@ -18,7 +18,9 @@ public record ManageShopOrderDetailDTO
 
     public List<OrderDetail>? OrderDetails { get; set; }
 
-    public List<OrderCheque>? OrderCheques { get; set; }
+    public List<Domain.Entities.ShopOrder.OrderCheque>? OrderCheques { get; set; }
+
+    public SellerChequeInfo? sellerChequeInfo { get; set; }
 
     #endregion
 }
@@ -31,7 +33,7 @@ public record SellerInformations
 
     public string SellerName { get; set; }
 
-    public SellerChequeInfo sellerChequeInfo { get; set; }
+    public string SellerUserAvatar { get; set; }
 
     #endregion
 }

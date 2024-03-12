@@ -42,6 +42,8 @@ public interface IOrderQueryRepository
     Task<Entities.ShopOrder.Order?> GetLastest_WaitingForPaymentOrder_ByUserId(ulong UserId,
                                                                                       CancellationToken cancellation);
 
+    Task<ulong> GetLastestProductId_InOrderDetail_ByOrderId(ulong orderId);
+
     Task<InvoiceDTO?> FillInvoiceDTO(ulong userId,
                                      ulong orderId,
                                      CancellationToken cancellationToken);
@@ -49,6 +51,10 @@ public interface IOrderQueryRepository
     Task<Entities.ShopOrder.Order?> GetLastest_NotFinally_Order(ulong userId);
 
     Task<ManageShopOrderDetailDTO?> FillManageShopOrderDetailDTO(ulong userId,
+                                                                 CancellationToken cancellationToken);
+
+    Task<ManageShopOrderDetailDTO?> FillManageShopOrderDetailDTO(ulong userId,
+                                                                 ulong orderId,
                                                                  CancellationToken cancellationToken);
 
     #endregion

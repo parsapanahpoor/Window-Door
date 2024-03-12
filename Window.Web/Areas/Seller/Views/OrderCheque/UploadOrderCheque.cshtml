@@ -1,0 +1,113 @@
+﻿@using Window.Application.StticTools;
+@using Window.Domain.ViewModels.Common
+@model Window.Domain.ViewModels.Seller.OrderCheque.UploadOrderChequeDTO;
+
+@{
+    ViewData["Title"] = "افزودن محصول جدید";
+}
+
+@section Styles
+{
+}
+
+@section Scripts
+{
+}
+
+@section Breadcrumb
+{
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
+}
+
+<form method="post" asp-action="UploadOrderCheque" asp-controller="OrderCheque" asp-area="Seller" enctype="multipart/form-data">
+    <input asp-for="OrderId" type="hidden" />
+
+    <div class="row">
+        <div class="col-lg-9 col-sm-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-green">
+                    <span class="widget-caption"> @ViewData["Title"] </span>
+                </div>
+                <div class="widget-body">
+                    <div>
+
+                        <div class="row">
+
+                            <div class="form-group col-md-12 col-sm-12">
+                                <label asp-for="CustomerNationalId">کدملی صاحب حساب</label>
+                                <input type="text" class="form-control" asp-for="CustomerNationalId">
+                                <span class="text-danger" asp-validation-for="CustomerNationalId"></span>
+                            </div>
+
+                            <div class="form-group col-md-12 col-sm-12">
+                                <label asp-for="ChequePrice">قیمت</label>
+                                <input type="text" class="form-control" NumericInput="1" asp-for="ChequePrice">
+                                <span class="text-danger" asp-validation-for="ChequePrice"></span>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="form-group col-md-12 col-sm-12">
+                                <label asp-for="ChequeDateTime">تاریخ چک</label>
+                                <input type="text" class="form-control" AdminDatePicker="1" asp-for="ChequeDateTime">
+                                <span class="text-danger" asp-validation-for="ChequeDateTime"></span>
+                            </div>
+
+                        </div>
+
+                        <hr class="margin-bottom-10 margin-top-10" />
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled btn-palegreen">
+                                    <i class="btn-label glyphicon glyphicon-ok"></i>ثبت
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-3 col-sm-12">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-green">
+                            <span class="widget-caption"> تصویر چک </span>
+                        </div>
+                        <div class="widget-body">
+                            <div class="row">
+
+                                <input type="file" class="display-none" name="ChequeImage" id="UserAvatar" ImageInput="1" accept=".jpg,.jpeg,.png" />
+
+                                <div class="col-md-12">
+                                    <label for="UserAvatar" class="file-input-style">
+                                        <i class="glyphicon glyphicon-upload"></i>
+                                        <span class="mr-8px"> لطفا تصویر چک را انتخاب کنید</span>
+                                    </label>
+                                </div>
+
+                                @{
+                                    var avatarUrl = FilePaths.DefaultProductsGalleryAvatar;
+                                }
+
+                                <div class="col-md-12 tc mt-10px">
+                                    <img src="@avatarUrl" class="image-style" ImageFile="1" />
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+

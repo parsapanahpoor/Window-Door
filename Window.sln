@@ -13,15 +13,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra.IoC", "Infra.IoC", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{69671B2A-13D6-450D-9722-EAE56683D5F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Window.Application", "Window.Application\Window.Application.csproj", "{3F639D4D-9F11-4733-A96A-29B1FAB71F3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Window.Application", "Window.Application\Window.Application.csproj", "{3F639D4D-9F11-4733-A96A-29B1FAB71F3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Window.Domain", "Window.Domain\Window.Domain.csproj", "{75114E9E-7989-4AE1-B61E-5499712DD28C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Window.Domain", "Window.Domain\Window.Domain.csproj", "{75114E9E-7989-4AE1-B61E-5499712DD28C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Window.Infra.Data", "Window.Infra.Data\Window.Infra.Data.csproj", "{011E7C13-FF07-410A-94D5-E5E4F87E1D9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Window.Infra.Data", "Window.Infra.Data\Window.Infra.Data.csproj", "{011E7C13-FF07-410A-94D5-E5E4F87E1D9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Window.Infra.IoC", "Window.Infra.IoC\Window.Infra.IoC.csproj", "{483E7FDF-3A4C-4F3D-8EED-B958E8D1F9C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Window.Infra.IoC", "Window.Infra.IoC\Window.Infra.IoC.csproj", "{483E7FDF-3A4C-4F3D-8EED-B958E8D1F9C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Window.Web", "Window.Web\Window.Web.csproj", "{1735F616-3B89-480F-8D72-B06406F51DAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Window.Web", "Window.Web\Window.Web.csproj", "{1735F616-3B89-480F-8D72-B06406F51DAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

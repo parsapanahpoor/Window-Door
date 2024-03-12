@@ -13,6 +13,7 @@ using Window.Domain.ViewModels.User;
 using Window.Domain.ViewModels.User.Account;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using Window.Domain.ViewModels.Seller.ShopOrder;
 
 namespace CRM.Data.Repository
 {
@@ -258,6 +259,26 @@ namespace CRM.Data.Repository
                                  {
                                      SellerUserId = userId,
                                      Username = p.Username
+                                 })
+                                 .FirstOrDefaultAsync();
+        }
+
+        #endregion
+
+        #region Seller Side
+
+        public async Task<SellerInformations?> Fill_SellerInformations(ulong sellerUserId , 
+                                                                      CancellationToken cancellation)
+        {
+            return await _context.Users
+                                 .AsNoTracking()
+                                 .Where(p => !p.IsDelete &&
+                                        p.Id == sellerUserId)
+                                 .Select(p => new SellerInformations()
+                                 {
+                                     SellerId = sellerUserId,
+                                     SellerName = p.Username,
+                                     SellerUserAvatar = p.Avatar
                                  })
                                  .FirstOrDefaultAsync();
         }

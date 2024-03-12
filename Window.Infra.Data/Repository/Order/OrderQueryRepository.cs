@@ -159,6 +159,15 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                                  !p.PaymentWay.HasValue);
     }
 
+    public async Task<ulong> GetLastestProductId_InOrderDetail_ByOrderId(ulong orderId)
+    {
+        return await _context.OrderDetails
+                             .AsNoTracking()
+                             .Where(p => p.OrderId == orderId)
+                             .Select(p => p.ProductId)
+                             .FirstOrDefaultAsync();
+    }
+
     public async Task<bool> IsExistAnyOrderInWaitingForPaymentStateByUserId(ulong userId,
                                                                             CancellationToken cancellationToken)
     {
@@ -254,7 +263,7 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                     p.UserId == userId &&
                                    !p.IsFinally &&
                                     p.PaymentWay.HasValue &&
-                                    p.PaymentWay.Value != Domain.Enums.Order.OrderPaymentWay.InstallmentPayment)
+                                    p.PaymentWay.Value == Domain.Enums.Order.OrderPaymentWay.InstallmentPayment)
                              .Select(p=> new ManageShopOrderDetailDTO()
                              {
                                  Order = p,
@@ -274,7 +283,45 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                                                c.OrderId == p.Id)
                                                         .ToList(),
                                  CustomerChequeInformation = null,
-                                 SellerInformations = null
+                                 SellerInformations = null,
+                                 sellerChequeInfo = null,
+                             })
+                             .FirstOrDefaultAsync();
+    }
+
+    public async Task<ManageShopOrderDetailDTO?> FillManageShopOrderDetailDTO(ulong userId,
+                                                                              ulong orderId ,
+                                                                              CancellationToken cancellationToken)
+    {
+        return await _context.Orders
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.UserId == userId &&
+                                    p.Id == orderId && 
+                                   !p.IsFinally &&
+                                    p.PaymentWay.HasValue &&
+                                    p.PaymentWay.Value == Domain.Enums.Order.OrderPaymentWay.InstallmentPayment)
+                             .Select(p => new ManageShopOrderDetailDTO()
+                             {
+                                 Order = p,
+                                 OrderDetails = _context.OrderDetails
+                                                        .AsNoTracking()
+                                                        .Where(d => !d.IsDelete &&
+                                                               d.OrderId == p.Id)
+                                                        .ToList(),
+                                 Location = _context.Locations
+                                                    .AsNoTracking()
+                                                    .Where(w => !w.IsDelete &&
+                                                           w.Id == p.LocationId)
+                                                    .FirstOrDefault(),
+                                 OrderCheques = _context.orderCheques
+                                                        .AsNoTracking()
+                                                        .Where(c => !c.IsDelete &&
+                                                               c.OrderId == p.Id)
+                                                        .ToList(),
+                                 CustomerChequeInformation = null,
+                                 SellerInformations = null,
+                                 sellerChequeInfo = null,
                              })
                              .FirstOrDefaultAsync();
     }
