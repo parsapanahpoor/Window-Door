@@ -1,4 +1,6 @@
-﻿namespace Window.Domain.Interfaces.OrderCheque;
+﻿using Window.Domain.ViewModels.Admin.OrderCheque;
+
+namespace Window.Domain.Interfaces.OrderCheque;
 
 public interface IOrderChequeQueryRepository
 {
@@ -10,6 +12,9 @@ public interface IOrderChequeQueryRepository
     Task<List<Domain.Entities.ShopOrder.OrderCheque>> Get_ListOfCustomerOrderCheques_ByOrderAndUserId(ulong userId,
                                                                                                       ulong orderId,
                                                                                                       CancellationToken cancellationToken);
+
+    Task<FilterOrderChequesDTO> FillFilterOrderChequesDTO(FilterOrderChequesDTO filter,
+                                                          CancellationToken cancellation);
 
     #endregion
 }

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Window.Presentation.Filter;
 using Window.Web.Areas.Admin.ActionFilterAttributes;
 
 namespace Window.Web.Areas.Admin.Controllers
@@ -7,6 +9,8 @@ namespace Window.Web.Areas.Admin.Controllers
     [Area("Admin")]
     [Authorize]
     [CheckUserHasPermission]
+    [CatchExceptionFilter]
+
     public class AdminBaseController : Controller
     {
         public static string SuccessMessage = "SuccessMessage";
@@ -18,5 +22,8 @@ namespace Window.Web.Areas.Admin.Controllers
         public static string SwalSuccess = "success";
         public static string SwalError = "error";
         public static string SwalInfo = "info";
+
+        private ISender? _mediator;
+        protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<ISender>();
     }
 }
