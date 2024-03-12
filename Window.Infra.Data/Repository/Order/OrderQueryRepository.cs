@@ -6,6 +6,7 @@ using Window.Data;
 using Window.Data.Context;
 using Window.Domain.Entities.ShopOrder;
 using Window.Domain.Interfaces.Order;
+using Window.Domain.ViewModels.Admin.OrderCheque;
 using Window.Domain.ViewModels.Seller.ShopOrder;
 using Window.Domain.ViewModels.Site.Shop.Order;
 namespace Window.Infra.Data.Repository.Order;
@@ -269,8 +270,25 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                  Order = p,
                                  OrderDetails = _context.OrderDetails
                                                         .AsNoTracking()
-                                                        .Where(d=> !d.IsDelete &&
+                                                        .Where(d => !d.IsDelete &&
                                                                d.OrderId == p.Id)
+                                                        .Select(d => new ManageShopOrderDetailAdminDTO()
+                                                        {
+                                                            CountOfChoice = d.Count,
+                                                            Product = _context.ShopProducts
+                                                                              .AsNoTracking()
+                                                                              .Where(pr => !pr.IsDelete &&
+                                                                                     pr.Id == d.ProductId)
+                                                                              .Select(pr => new ProductAdminSideDTO()
+                                                                              {
+                                                                                  ProductId = pr.Id,
+                                                                                  ProducPrice = pr.Price,
+                                                                                  ProductImage = pr.ProductImage,
+                                                                                  ProductTitle = pr.ProductName,
+                                                                                  ShortDescription = pr.ShortDescription
+                                                                              })
+                                                                              .FirstOrDefault(),
+                                                        })
                                                         .ToList(),
                                  Location = _context.Locations
                                                     .AsNoTracking()
@@ -285,6 +303,11 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                  CustomerChequeInformation = null,
                                  SellerInformations = null,
                                  sellerChequeInfo = null,
+                                 CustomerUserInformations = _context.Users
+                                                                    .AsNoTracking()
+                                                                    .Where(u => !u.IsDelete &&
+                                                                           u.Id == p.UserId)
+                                                                    .FirstOrDefault()
                              })
                              .FirstOrDefaultAsync();
     }
@@ -308,6 +331,23 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                                         .AsNoTracking()
                                                         .Where(d => !d.IsDelete &&
                                                                d.OrderId == p.Id)
+                                                        .Select(d => new ManageShopOrderDetailAdminDTO()
+                                                        {
+                                                            CountOfChoice = d.Count,
+                                                            Product = _context.ShopProducts
+                                                                              .AsNoTracking()
+                                                                              .Where(pr => !pr.IsDelete &&
+                                                                                     pr.Id == d.ProductId)
+                                                                              .Select(pr => new ProductAdminSideDTO()
+                                                                              {
+                                                                                  ProductId = pr.Id,
+                                                                                  ProducPrice = pr.Price,
+                                                                                  ProductImage = pr.ProductImage,
+                                                                                  ProductTitle = pr.ProductName,
+                                                                                  ShortDescription = pr.ShortDescription
+                                                                              })
+                                                                              .FirstOrDefault(),
+                                                        })
                                                         .ToList(),
                                  Location = _context.Locations
                                                     .AsNoTracking()
@@ -322,6 +362,69 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                  CustomerChequeInformation = null,
                                  SellerInformations = null,
                                  sellerChequeInfo = null,
+                                 CustomerUserInformations = _context.Users
+                                                                    .AsNoTracking()
+                                                                    .Where(u => !u.IsDelete &&
+                                                                           u.Id == p.UserId)
+                                                                    .FirstOrDefault()
+                             })
+                             .FirstOrDefaultAsync();
+    }
+
+    #endregion
+
+    #region Admin Side 
+
+    public async Task<ShowOrderChequeDetailAdminDTO?> FillShowOrderChequeDetailAdminDTO(ulong orderId,
+                                                                                        CancellationToken cancellationToken)
+    {
+        return await _context.Orders
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.Id == orderId)
+                             .Select(p => new ShowOrderChequeDetailAdminDTO()
+                             {
+                                 Order = p,
+                                 OrderDetails = _context.OrderDetails
+                                                        .AsNoTracking()
+                                                        .Where(d => !d.IsDelete &&
+                                                               d.OrderId == p.Id)
+                                                        .Select(d=> new ManageShopOrderDetailAdminDTO()
+                                                        {
+                                                            CountOfChoice = d.Count,
+                                                            Product = _context.ShopProducts
+                                                                              .AsNoTracking()
+                                                                              .Where(pr=> !pr.IsDelete &&
+                                                                                     pr.Id == d.ProductId)
+                                                                              .Select(pr=> new ProductAdminSideDTO()
+                                                                              {
+                                                                                  ProductId = pr.Id,
+                                                                                  ProducPrice = pr.Price,
+                                                                                  ProductImage = pr.ProductImage,
+                                                                                  ProductTitle = pr.ProductName,
+                                                                                  ShortDescription = pr.ShortDescription
+                                                                              })
+                                                                              .FirstOrDefault(),
+                                                        })
+                                                        .ToList(),
+                                 Location = _context.Locations
+                                                    .AsNoTracking()
+                                                    .Where(w => !w.IsDelete &&
+                                                           w.Id == p.LocationId)
+                                                    .FirstOrDefault(),
+                                 OrderCheques = _context.orderCheques
+                                                        .AsNoTracking()
+                                                        .Where(c => !c.IsDelete &&
+                                                               c.OrderId == p.Id)
+                                                        .ToList(),
+                                 CustomerChequeInformation = null,
+                                 SellerInformations = null,
+                                 sellerChequeInfo = null,
+                                 CustomerUserInformations = _context.Users
+                                                                    .AsNoTracking()
+                                                                    .Where(u=> !u.IsDelete && 
+                                                                           u.Id == p.UserId)
+                                                                    .FirstOrDefault()
                              })
                              .FirstOrDefaultAsync();
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Window.Domain.Entities.ShopOrder;
+using Window.Domain.ViewModels.Admin.OrderCheque;
 using Window.Domain.ViewModels.Seller.ShopOrder;
 using Window.Domain.ViewModels.Site.Shop.Order;
 
@@ -56,6 +57,9 @@ public interface IOrderQueryRepository
     Task<ManageShopOrderDetailDTO?> FillManageShopOrderDetailDTO(ulong userId,
                                                                  ulong orderId,
                                                                  CancellationToken cancellationToken);
+
+    Task<ShowOrderChequeDetailAdminDTO?> FillShowOrderChequeDetailAdminDTO(ulong orderId,
+                                                                           CancellationToken cancellationToken);
 
     #endregion
 }

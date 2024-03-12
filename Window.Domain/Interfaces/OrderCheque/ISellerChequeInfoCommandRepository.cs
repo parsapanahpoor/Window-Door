@@ -6,5 +6,7 @@ public interface IOrderChequeCommandRepository
 
     Task AddOrderCheque(Domain.Entities.ShopOrder.OrderCheque orderCheque, CancellationToken cancellationToken);
 
+    void Update_OrderCheque(Domain.Entities.ShopOrder.OrderCheque orderCheque);
+
     #endregion
 }

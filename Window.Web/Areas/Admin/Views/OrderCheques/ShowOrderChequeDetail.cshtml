@@ -1,4 +1,4 @@
-﻿@model Window.Domain.ViewModels.Seller.ShopOrder.ManageShopOrderDetailDTO
+﻿@model Window.Domain.ViewModels.Admin.OrderCheque.ShowOrderChequeDetailAdminDTO
 @using Window.Application.Convertors
 @using Window.Application.StticTools
 @using Window.Application.Extensions
@@ -31,19 +31,29 @@
                 @if (Model.SellerInformations != null)
                 {
                     <div class="col-lg-2 col-md-4 col-sm-12 text-center">
-                        @if (!string.IsNullOrEmpty(Model.SellerInformations.SellerUserAvatar))
+                        @if (!string.IsNullOrEmpty(Model.SellerInformations.Avatar))
                         {
-                            <img src="@Model.SellerInformations.SellerUserAvatar.GetUserAvatar()" alt="" class="header-avatar">
+                            <img src="@Model.SellerInformations.Avatar.GetUserAvatar()" alt="" class="header-avatar">
                         }
                     </div>
                     <div class="col-lg-3 col-md-8 col-sm-12 profile-info">
 
-                        <div class="header-fullname">نام فروشنده :@Model.SellerInformations.SellerName </div>
+                        <div class="header-fullname">نام فروشنده :@Model.SellerInformations.Username </div>
 
-                        <a href="#" class="btn btn-palegreen btn-sm  btn-follow">
-                            <i class="fa fa-check"></i>
-                            Following
-                        </a>
+                        @if (Model.Order != null && Model.Order.IsFinally)
+                        {
+                            <a href="#" class="btn btn-palegreen btn-sm  btn-follow">
+                                <i class="fa fa-check"></i>
+                                خرید نهایی شده است
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="#" class="btn btn-danger btn-sm  btn-follow">
+                                خرید نهایی نشده
+                            </a>
+                        }
+
 
                         <hr />
                         @if (Model.sellerChequeInfo != null)
@@ -67,7 +77,7 @@
                     {
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 stats-col">
-                                <div class="stats-value pink">@Model.OrderCheques.Count(p=> p.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)</div>
+                                <div class="stats-value pink">@Model.OrderCheques.Count(p => p.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)</div>
                                 <div class="stats-title">تعداد چک های تایید شده توسط پنجره یاب</div>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 stats-col">
@@ -85,14 +95,19 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
-                                <i class="glyphicon glyphicon-map-marker"></i> Boston
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 inlinestats-col">
+                                مجموع مبلغ چک های تایید شده ی ادمین: <strong>
+                                    @(Model.OrderCheques
+                                        .Where(p => p.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)
+                                        .Sum(p => p.ChequePrice).ToString("#,000")) ریال
+                                </strong>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
-                                Rate: <strong>$250</strong>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
-                                Age: <strong>24</strong>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 inlinestats-col">
+                                مجموع مبلغ چک های تایید شده ی فروشنده: <strong>
+                                    @(Model.OrderCheques
+                                        .Where(p => p.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Accept)
+                                        .Sum(p => p.ChequePrice).ToString("#,000")) ریال
+                                </strong>
                             </div>
                         </div>
                     }
@@ -118,14 +133,15 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
-                                <i class="glyphicon glyphicon-map-marker"></i> Boston
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 inlinestats-col">
+                                مجموع مبلغ چک های تایید شده ی ادمین: <strong>
+                                    0 ریال
+                                </strong>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
-                                Rate: <strong>$250</strong>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 inlinestats-col">
-                                Age: <strong>24</strong>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 inlinestats-col">
+                                مجموع مبلغ چک های تایید شده ی فروشنده: <strong>
+                                    0 ریال
+                                </strong>
                             </div>
                         </div>
                     }
@@ -151,18 +167,20 @@
                                     اطلاعات خریدار
                                 </a>
                             </li>
+                            <li class="tab-yellow">
+                                <a data-toggle="tab" href="#settings">
+                                    اطلاعات فروشنده
+                                </a>
+                            </li>
                         </ul>
                         <div class="tab-content tabs-flat">
 
                             <div id="overview" class="tab-pane active">
                                 <div class="row profile-overview">
                                     <h6 style="margin-right: 0px;" class="row-title before-themeprimary no-margin-top">
-                                        برای آپلود چک جدید روی گزینه روبرو کلیک کنید :
-                                        <a class="btn btn-primary"
-                                           asp-action="UploadOrderCheque"
-                                           asp-area="Seller"
-                                           asp-controller="OrderCheque"
-                                           asp-route-orderId="@Model.Order.Id">آپلود چک جدید</a>
+
+                                        چک های آپلودی
+
                                     </h6>
 
                                     @if (Model.OrderCheques != null && Model.OrderCheques.Any())
@@ -174,45 +192,45 @@
                                                 <li>
                                                     <div class="timeline-datetime">
 
-                                                            @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)
-                                                            {
-                                                                <p class="btn btn-palegreen btn-sm  btn-follow">
-                                                                    تایید شده توسط تیم پنجره یابن
-                                                                </p>
-                                                            }
-                                                            @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.WaitingForCheck)
-                                                            {
-                                                                <p class="btn btn-warning btn-sm  btn-follow">
-                                                                    در انتظار بررسی تیم پنجره یاب
-                                                                </p>
-                                                            }
-                                                            @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Reject)
-                                                            {
-                                                                <p class="btn btn-danger btn-sm  btn-follow">
-                                                                    رد شده توسط تیم پنجره ی یاب
-                                                                </p>
-                                                            }
+                                                        @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)
+                                                        {
+                                                            <p class="btn btn-palegreen btn-sm  btn-follow">
+                                                                تایید شده توسط تیم پنجره یابن
+                                                            </p>
+                                                        }
+                                                        @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.WaitingForCheck)
+                                                        {
+                                                            <p class="btn btn-warning btn-sm  btn-follow">
+                                                                در انتظار بررسی تیم پنجره یاب
+                                                            </p>
+                                                        }
+                                                        @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Reject)
+                                                        {
+                                                            <p class="btn btn-danger btn-sm  btn-follow">
+                                                                رد شده توسط تیم پنجره ی یاب
+                                                            </p>
+                                                        }
 
-                                                            <hr />
+                                                        <hr />
 
-                                                            @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Accept)
-                                                            {
-                                                                <p class="btn btn-palegreen btn-sm  btn-follow">
-                                                                    تایید شده توسط فروشنده
-                                                                </p>
-                                                            }
-                                                            @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.WaitingForCheck)
-                                                            {
-                                                                <p class="btn btn-warning btn-sm  btn-follow">
-                                                                    در انتظار بررسی فروشنده
-                                                                </p>
-                                                            }
-                                                            @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Reject)
-                                                            {
-                                                                <p class="btn btn-danger btn-sm  btn-follow">
-                                                                    رد شده توسط فروشنده
-                                                                </p>
-                                                            }
+                                                        @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Accept)
+                                                        {
+                                                            <p class="btn btn-palegreen btn-sm  btn-follow">
+                                                                تایید شده توسط فروشنده
+                                                            </p>
+                                                        }
+                                                        @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.WaitingForCheck)
+                                                        {
+                                                            <p class="btn btn-warning btn-sm  btn-follow">
+                                                                در انتظار بررسی فروشنده
+                                                            </p>
+                                                        }
+                                                        @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Reject)
+                                                        {
+                                                            <p class="btn btn-danger btn-sm  btn-follow">
+                                                                رد شده توسط فروشنده
+                                                            </p>
+                                                        }
 
                                                     </div>
                                                     <div class="timeline-badge blue">
@@ -222,7 +240,7 @@
                                                         <div class="timeline-header bordered-bottom bordered-blue">
                                                             <p class="timeline-datetime">
                                                                 <small class="text-muted">
-                                                                  
+
                                                                     @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)
                                                                     {
                                                                         <span class="timeline-date btn btn-palegreen">تایید شده توسط تیم پنجره یابن</span>
@@ -266,7 +284,14 @@
                                                             <p>تاریخ : @cheque.ChequeDateTime.ToShamsi()</p>
                                                             <hr />
                                                             <p>مبلغ چک : @cheque.ChequePrice.ToString("#,000") ریال</p>
-
+                                                            <hr />
+                                                            <a class="btn btn-primary"
+                                                               asp-action="ChequeDetail"
+                                                               asp-area="Admin"
+                                                               asp-controller="OrderCheques"
+                                                               asp-route-orderChequeId="@cheque.Id">
+                                                                بررسی و تغییر وضعیت چک
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -373,6 +398,36 @@
                                     }
 
                                 </div>
+                            </div>
+
+                            <div id="settings" class="tab-pane">
+                                <form role="form">
+                                    <div class="form-title">
+                                        اطلاعات فروشنده
+                                    </div>
+                                    @if (Model.SellerInformations != null)
+                                    {
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <span class="input-icon icon-right">
+                                                        <input type="text" readonly value="@Model.SellerInformations.Username" class="form-control" placeholder="Name">
+                                                        <i class="fa fa-user blue"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <span class="input-icon icon-right">
+                                                        <input type="text" class="form-control" readonly value="@Model.SellerInformations.Mobile" placeholder="Family">
+                                                        <i class="fa fa-user orange"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </form>
                             </div>
                         </div>
                     </div>

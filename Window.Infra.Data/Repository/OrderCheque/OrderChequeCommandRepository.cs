@@ -26,4 +26,9 @@ public class OrderChequeCommandRepository : CommandGenericRepository<Domain.Enti
     }
 
     #endregion
+
+    public void Update_OrderCheque(Domain.Entities.ShopOrder.OrderCheque orderCheque)
+    {
+        _context.orderCheques.Update(orderCheque);
+    }
 }

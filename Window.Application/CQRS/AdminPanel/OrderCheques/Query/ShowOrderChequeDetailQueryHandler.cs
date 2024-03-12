@@ -2,11 +2,12 @@
 using Window.Domain.Interfaces.Order;
 using Window.Domain.Interfaces.OrderCheque;
 using Window.Domain.Interfaces.ShopProduct;
+using Window.Domain.ViewModels.Admin.OrderCheque;
 using Window.Domain.ViewModels.Seller.ShopOrder;
 
-namespace Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries;
+namespace Window.Application.CQRS.AdminPanel.OrderCheques.Query;
 
-public record ManageShopOrderDetailQueryHandler : IRequestHandler<ManageShopOrderDetailQuery, ManageShopOrderDetailDTO>
+public record ShowOrderChequeDetailQueryHandler : IRequestHandler<ShowOrderChequeDetailQuery, ShowOrderChequeDetailAdminDTO>
 {
     #region Ctor
 
@@ -15,7 +16,7 @@ public record ManageShopOrderDetailQueryHandler : IRequestHandler<ManageShopOrde
     private readonly IOrderChequeQueryRepository _sellerChequeInfo;
     private readonly IUserRepository _userRepository;
 
-    public ManageShopOrderDetailQueryHandler(IOrderQueryRepository orderQueryRepository,
+    public ShowOrderChequeDetailQueryHandler(IOrderQueryRepository orderQueryRepository,
                                              IShopProductQueryRepository shopProductQueryRepository,
                                              IOrderChequeQueryRepository sellerChequeInfo,
                                              IUserRepository userRepository)
@@ -28,21 +29,11 @@ public record ManageShopOrderDetailQueryHandler : IRequestHandler<ManageShopOrde
 
     #endregion
 
-    public async Task<ManageShopOrderDetailDTO?> Handle(ManageShopOrderDetailQuery request, CancellationToken cancellationToken)
+    public async Task<ShowOrderChequeDetailAdminDTO?> Handle(ShowOrderChequeDetailQuery request, CancellationToken cancellationToken)
     {
         #region Fill Model 
 
-        ManageShopOrderDetailDTO? model = null;
-
-        if (request.orderId.HasValue)
-        {
-            model = await _orderQueryRepository.FillManageShopOrderDetailDTO(request.userId, request.orderId.Value , cancellationToken);
-        }
-        else
-        {
-            model = await _orderQueryRepository.FillManageShopOrderDetailDTO(request.userId, cancellationToken);
-        }
-
+        ShowOrderChequeDetailAdminDTO? model = await _orderQueryRepository.FillShowOrderChequeDetailAdminDTO(request.orderId, cancellationToken);
         if (model == null) return null;
 
         //Fill Customer Cheque Information
@@ -52,7 +43,7 @@ public record ManageShopOrderDetailQueryHandler : IRequestHandler<ManageShopOrde
                                                       .Select(p => p.ChequeDateTime)
                                                       .FirstOrDefault();
 
-            CustomerChequeInformation customerChequeInfo = new CustomerChequeInformation();
+            CustomerChequeInformationAdminSide customerChequeInfo = new CustomerChequeInformationAdminSide();
 
             //Cheque Days
             customerChequeInfo.ChequeDays = lastestChequeDate.DayOfYear - DateTime.Now.DayOfYear;
@@ -71,11 +62,10 @@ public record ManageShopOrderDetailQueryHandler : IRequestHandler<ManageShopOrde
                                                                                               .FirstOrDefault(),
                                                                                               cancellationToken);
 
-            model.SellerInformations = await _userRepository.Fill_SellerInformations(sellerIdOfProduct, cancellationToken);
+            model.SellerInformations = await _userRepository.GetUserById(sellerIdOfProduct);
 
             model.sellerChequeInfo = await _sellerChequeInfo.Get_SellerChequeInfo_BySellerUserId(sellerIdOfProduct,
                                                                                                  cancellationToken);
-
         }
 
         #endregion

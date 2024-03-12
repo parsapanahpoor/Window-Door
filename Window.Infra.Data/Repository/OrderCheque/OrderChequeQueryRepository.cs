@@ -4,6 +4,7 @@ using Window.Data;
 using Window.Data.Context;
 using Window.Domain.Interfaces.OrderCheque;
 using Window.Domain.ViewModels.Admin.OrderCheque;
+using Window.Infra.Data.Migrations;
 
 namespace Window.Infra.Data.Repository.OrderCheque;
 
@@ -20,7 +21,42 @@ public class OrderChequeQueryRepository : QueryGenericRepository<Domain.Entities
 
     #endregion
 
+    #region General Methods 
+
+    public async Task<Domain.Entities.ShopOrder.OrderCheque?> Get_OrderCheque_ByIdAsync(ulong chequeId , 
+                                                                                        CancellationToken cancellation)
+    {
+        return await _context.orderCheques
+                             .FirstOrDefaultAsync(p => !p.IsDelete &&
+                                                  p.Id == chequeId);
+    }
+
+    #endregion
+
     #region Admin 
+
+    public async Task<ChequeDetailDTO?> Fill_ChequeDetailDTO_ByOrderChequeId(ulong orderChequeId , 
+                                                                             CancellationToken cancellationToken)
+    {
+        return await _context.orderCheques
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.Id == orderChequeId)
+                             .Select(p => new ChequeDetailDTO()
+                             {
+                                 ChequeDateTime = p.ChequeDateTime,
+                                 ChequeId = orderChequeId,
+                                 ChequeImage = p.ChequeImage,
+                                 ChequePrice = p.ChequePrice,
+                                 CustomerNationalId = p.CustomerNationalId,
+                                 OrderChequeSellerState = p.OrderChequeSellerState,
+                                 SellerRejectDescription = p.SellerRejectDescription,
+                                 AdminRejectDescription = p.AdminRejectDescription,
+                                 OrderChequeAdminState = p.OrderChequeAdminState,
+                                 OrderId = p.OrderId
+                             })
+                             .FirstOrDefaultAsync();
+    }
 
     #endregion
 

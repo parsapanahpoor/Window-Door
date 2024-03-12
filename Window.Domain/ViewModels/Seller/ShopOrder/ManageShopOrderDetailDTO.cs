@@ -1,6 +1,7 @@
 ﻿using Window.Domain.Entities.Location;
 using Window.Domain.Entities.Market;
 using Window.Domain.Entities.ShopOrder;
+using Window.Domain.ViewModels.Admin.OrderCheque;
 
 namespace Window.Domain.ViewModels.Seller.ShopOrder;
 
@@ -16,11 +17,13 @@ public record ManageShopOrderDetailDTO
 
     public Location? Location { get; set; }
 
-    public List<OrderDetail>? OrderDetails { get; set; }
+    public List<ManageShopOrderDetailAdminDTO>? OrderDetails { get; set; }
 
     public List<Domain.Entities.ShopOrder.OrderCheque>? OrderCheques { get; set; }
 
     public SellerChequeInfo? sellerChequeInfo { get; set; }
+
+    public Entities.Account.User? CustomerUserInformations { get; set; }
 
     #endregion
 }

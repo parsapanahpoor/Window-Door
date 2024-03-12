@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,14 +9,14 @@ namespace Window.Domain.Enums.Order;
 
 public enum OrderChequeAdminState
 {
-    WaitingForCheck,
-    Reject,
-    Accept
+    [Display(Name = "درانتظار بررسی")] WaitingForCheck,
+    [Display(Name = "رد شده")] Reject,
+    [Display(Name = "تایید شده")] Accept
 }
 
 public enum OrderChequeSellerState
 {
-    WaitingForCheck,
-    Reject,
-    Accept
+    [Display(Name = "درانتظار بررسی")] WaitingForCheck,
+    [Display(Name = "رد شده")] Reject,
+    [Display(Name = "تایید شده")] Accept
 }

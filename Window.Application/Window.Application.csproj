@@ -33,7 +33,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="CQRS\AdminPanel\OrderCheques\Command\" />
 	  <Folder Include="CQRS\SellerPanel\OrderCheque\Query\" />
 	  <Folder Include="CQRS\SellerPanel\ShopOrder\Commands\" />
 	</ItemGroup>
