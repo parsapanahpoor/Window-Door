@@ -28,7 +28,8 @@
         <div class="profile-container">
             <div class="profile-header row">
 
-              
+                @if (Model.SellerInformations != null)
+                {
                     <div class="col-lg-2 col-md-4 col-sm-12 text-center">
                         @if (!string.IsNullOrEmpty(Model.SellerInformations.SellerUserAvatar))
                         {
@@ -67,6 +68,7 @@
                             </div>
                         }
                     </div>
+                }
 
 
                 <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12 profile-stats">
@@ -74,7 +76,7 @@
                     {
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 stats-col">
-                                <div class="stats-value pink">@Model.OrderCheques.Count(p=> p.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)</div>
+                                <div class="stats-value pink">@Model.OrderCheques.Count(p => p.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)</div>
                                 <div class="stats-title">تعداد چک های تایید شده توسط پنجره یاب</div>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 stats-col">
@@ -170,12 +172,9 @@
                             <div id="overview" class="tab-pane active">
                                 <div class="row profile-overview">
                                     <h6 style="margin-right: 0px;" class="row-title before-themeprimary no-margin-top">
-                                        برای آپلود چک جدید روی گزینه روبرو کلیک کنید :
-                                        <a class="btn btn-primary"
-                                           asp-action="UploadOrderCheque"
-                                           asp-area="Seller"
-                                           asp-controller="OrderCheque"
-                                           asp-route-orderId="@Model.Order.Id">آپلود چک جدید</a>
+
+                                        چک های آپلودی
+
                                     </h6>
 
                                     @if (Model.OrderCheques != null && Model.OrderCheques.Any())
@@ -187,45 +186,45 @@
                                                 <li>
                                                     <div class="timeline-datetime">
 
-                                                            @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)
-                                                            {
-                                                                <p class="btn btn-palegreen btn-sm  btn-follow">
-                                                                    تایید شده توسط تیم پنجره یابن
-                                                                </p>
-                                                            }
-                                                            @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.WaitingForCheck)
-                                                            {
-                                                                <p class="btn btn-warning btn-sm  btn-follow">
-                                                                    در انتظار بررسی تیم پنجره یاب
-                                                                </p>
-                                                            }
-                                                            @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Reject)
-                                                            {
-                                                                <p class="btn btn-danger btn-sm  btn-follow">
-                                                                    رد شده توسط تیم پنجره ی یاب
-                                                                </p>
-                                                            }
+                                                        @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)
+                                                        {
+                                                            <p class="btn btn-palegreen btn-sm  btn-follow">
+                                                                تایید شده توسط تیم پنجره یابن
+                                                            </p>
+                                                        }
+                                                        @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.WaitingForCheck)
+                                                        {
+                                                            <p class="btn btn-warning btn-sm  btn-follow">
+                                                                در انتظار بررسی تیم پنجره یاب
+                                                            </p>
+                                                        }
+                                                        @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Reject)
+                                                        {
+                                                            <p class="btn btn-danger btn-sm  btn-follow">
+                                                                رد شده توسط تیم پنجره ی یاب
+                                                            </p>
+                                                        }
 
-                                                            <hr />
+                                                        <hr />
 
-                                                            @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Accept)
-                                                            {
-                                                                <p class="btn btn-palegreen btn-sm  btn-follow">
-                                                                    تایید شده توسط فروشنده
-                                                                </p>
-                                                            }
-                                                            @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.WaitingForCheck)
-                                                            {
-                                                                <p class="btn btn-warning btn-sm  btn-follow">
-                                                                    در انتظار بررسی فروشنده
-                                                                </p>
-                                                            }
-                                                            @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Reject)
-                                                            {
-                                                                <p class="btn btn-danger btn-sm  btn-follow">
-                                                                    رد شده توسط فروشنده
-                                                                </p>
-                                                            }
+                                                        @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Accept)
+                                                        {
+                                                            <p class="btn btn-palegreen btn-sm  btn-follow">
+                                                                تایید شده توسط فروشنده
+                                                            </p>
+                                                        }
+                                                        @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.WaitingForCheck)
+                                                        {
+                                                            <p class="btn btn-warning btn-sm  btn-follow">
+                                                                در انتظار بررسی فروشنده
+                                                            </p>
+                                                        }
+                                                        @if (cheque.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Reject)
+                                                        {
+                                                            <p class="btn btn-danger btn-sm  btn-follow">
+                                                                رد شده توسط فروشنده
+                                                            </p>
+                                                        }
 
                                                     </div>
                                                     <div class="timeline-badge blue">
@@ -235,7 +234,7 @@
                                                         <div class="timeline-header bordered-bottom bordered-blue">
                                                             <p class="timeline-datetime">
                                                                 <small class="text-muted">
-                                                                  
+
                                                                     @if (cheque.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)
                                                                     {
                                                                         <span class="timeline-date btn btn-palegreen">تایید شده توسط تیم پنجره یابن</span>
@@ -279,7 +278,14 @@
                                                             <p>تاریخ : @cheque.ChequeDateTime.ToShamsi()</p>
                                                             <hr />
                                                             <p>مبلغ چک : @cheque.ChequePrice.ToString("#,000") ریال</p>
-
+                                                            <hr />
+                                                            <a class="btn btn-primary"
+                                                               asp-action="ChequeDetail"
+                                                               asp-area="Seller"
+                                                               asp-controller="ShopOrder"
+                                                               asp-route-orderChequeId="@cheque.Id">
+                                                                بررسی و تغییر وضعیت چک
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </li>

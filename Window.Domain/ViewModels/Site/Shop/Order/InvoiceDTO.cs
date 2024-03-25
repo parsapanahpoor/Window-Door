@@ -6,6 +6,8 @@ public record InvoiceDTO
 
     public ulong OrderId { get; set; }
 
+    public OrderSelectedPaymentWayBeforeState OrderSelectedPaymentWayBefore { get; set; }
+
     public List<OrderDetailForInvoice> OrderDetails { get; set; }
 
     public Entities.Location.Location? Location { get; set; }
@@ -37,4 +39,11 @@ public record ProductForInvoice
     public string? SellerName { get; set; }
 
     public string? ColorName { get; set; }
+}
+
+public enum OrderSelectedPaymentWayBeforeState
+{
+    Insallement,
+    OnlineCash,
+    No
 }

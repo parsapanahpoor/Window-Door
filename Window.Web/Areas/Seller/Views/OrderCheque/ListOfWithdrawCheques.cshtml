@@ -1,0 +1,251 @@
+﻿@using Window.Domain.ViewModels.User
+@using Window.Application.Convertors
+@using Window.Application.Extensions
+@using Window.Domain.ViewModels.Admin.OrderCheque
+@using Window.Domain.ViewModels.Seller.OrderCheque
+@model FilterReciveOrderChequesSellerSideDTO
+
+@{
+    ViewData["Title"] = Localizer["لیست چک های دریافتی شما"];
+}
+
+@section Scripts
+{
+}
+
+@section breadcrumb
+{
+
+    <li class="active">@ViewData["Title"]</li>
+}
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-12 col-xl-3 col-lg-3">
+
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-green">
+                    <span class="widget-caption"> @Localizer["فیلتر"]  </span>
+                </div>
+                <div class="widget-body">
+                    <div class="row">
+                        <div class="basic-form">
+                            <form asp-area="Seller" asp-controller="OrderCheque" asp-action="ListOfWithdrawCheques" method="get" id="filter-search">
+                                <input type="hidden" asp-for="Page" />
+
+                                <div class="form-row">
+
+                                    <div class="form-group col-md-12">
+                                        <label>@Localizer["نام کاربری خریدار"]</label>
+                                        <input type="text" asp-for="CustomerUsername" class="form-control" placeholder="@Localizer["نام کاربری خریدار"]">
+                                    </div>
+
+
+                                    <div class="form-group col-md-12">
+                                        <label asp-for="StartDate"> @Localizer["از تاریخ"] </label>
+                                        <input type="text" class="form-control" AdminDatePicker="1" asp-for="StartDate">
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label asp-for="EndDate"> @Localizer["تا تاریخ "] </label>
+                                        <input type="text" class="form-control" AdminDatePicker="2" asp-for="EndDate">
+                                    </div>
+
+                                </div>
+
+                                <hr />
+
+                                <div class="selectStateInFilterUsersListInAdmin">
+                                    <div class="form-group">
+                                        <label asp-for="OrderChequeAdminState">@Localizer["وضعیت بررسی ادمین"] </label>
+                                        <select asp-for="OrderChequeAdminState" class="form-control" asp-items="Html.GetEnumSelectList(typeof(OrderChequeAdminStateDTO))">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="selectStateInFilterUsersListInAdmin">
+                                    <div class="form-group">
+                                        <label asp-for="OrderChequeSellerState">@Localizer["وضعیت بررسی فروشنده"] </label>
+                                        <select asp-for="OrderChequeSellerState" class="form-control" asp-items="Html.GetEnumSelectList(typeof(OrderChequeSellerStateDTO))">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="selectStateInFilterUsersListInAdmin">
+                                    <div class="form-group">
+                                        <label asp-for="OrderFinallyState">@Localizer["وضعیت بسته ی خرید"] </label>
+                                        <select asp-for="OrderFinallyState" class="form-control" asp-items="Html.GetEnumSelectList(typeof(OrderFinallyStateDTO))">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <hr />
+
+                                <div class="submitFilterInAdmin">
+                                    <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
+                                        <i class="btn-label glyphicon glyphicon-filter"></i>@Localizer["فیلتر"]
+                                    </button>
+
+                                    @if (Context.Request.QueryString.HasValue)
+                                    {
+                                        <a asp-area="Seller" asp-controller="OrderCheque" asp-action="ListOfWithdrawCheques" class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                            <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
+                                        </a>
+                                    }
+                                </div>
+
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-12 col-lg-9">
+            <div class="well with-header with-footer table-responsive">
+                <div class="header bordered-azure">
+                    <div class="flex-style">
+                        <span>@Localizer["چک ها"] </span>
+                        <span>@Model.GetShownEntitiesPagesTitle()</span>
+                        -
+                        <span>تعداد کل : @Model.AllEntitiesCount</span>
+                    </div>
+                </div>
+
+                @if (Model != null)
+                {
+                    <table class="table table-hover table-bordered tc tableShowListInAdmin">
+
+                        <thead class="tc">
+                            <tr class="tc">
+                                <th>
+                                    کد پیگیری خرید
+                                </th>
+                                <th>
+                                    نام کاربری خریدار
+                                </th>
+                                <th>
+                                    قیمت خرید
+                                </th>
+                                <th>
+                                    وضعیت خرید
+                                </th>
+                                <th>
+                                    وضعیت نهایی
+                                </th>
+                                <th>
+                                    تاریخ چک
+                                </th>
+                                <th>
+                                    امکانات
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Entities)
+                            {
+                                <tr id="profile_@item.OrderId" remove-ajax-item="@item.OrderId">
+                                    <td>
+                                        @item.OrderId
+                                    </td>
+                                    <td>
+                                        @item.CustomerUsername
+                                    </td>
+                                    <td>
+                                        @item.ChequePrice.ToString("#,000") ریال
+                                    </td>
+
+                                    <td>
+
+                                        @if (item.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Accept)
+                                        {
+                                            <p class="label label-success">
+                                                تایید شده توسط پنجره یاب
+                                            </p>
+                                        }
+                                        @if (item.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.WaitingForCheck)
+                                        {
+                                            <p class="label label-warning">
+                                                درانتظار بررسی پنجره یاب
+                                            </p>
+                                        }
+                                        @if (item.OrderChequeAdminState == Window.Domain.Enums.Order.OrderChequeAdminState.Reject)
+                                        {
+                                            <p class="label label-danger">
+                                                رد شده توسط پنجره یاب
+                                            </p>
+                                        }
+
+                                        <hr />
+
+                                        @if (item.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Accept)
+                                        {
+                                            <p class="label label-success">
+                                                تایید شده توسط فروشنده
+                                            </p>
+                                        }
+                                        @if (item.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.WaitingForCheck)
+                                        {
+                                            <p class="label label-warning">
+                                                درانتظار بررسی فروشنده
+                                            </p>
+                                        }
+                                        @if (item.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Reject)
+                                        {
+                                            <p class="label label-danger">
+                                                رد شده توسط فروشنده
+                                            </p>
+                                        }
+
+                                    </td>
+
+                                    <td>
+                                        @if (item.OrderIsFinally)
+                                        {
+                                            <p class="label label-success">
+                                                نهایی شده
+                                            </p>
+                                        }
+                                        @if (!item.OrderIsFinally)
+                                        {
+                                            <p class="label label-danger">
+                                                نهایی نشده
+                                            </p>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @item.ChequeDateTime.ToShamsi()
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex justify-content-center ">
+
+                                            <a title="@Localizer["بررسی جزییات"]" asp-area="Seller" asp-controller="ShopOrder" asp-action="ManageShopOrder" asp-route-orderId="@item.OrderId" class="btn btn-info btn-circle shadow btn-xs sharp mr-1">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="footer tc">
+
+                        <partial name="_SellerPaging" model="@Model.GetCurrentPaging()" />
+
+                    </div>
+                }
+                else
+                {
+                    <partial name="_SellerNotFoundPartial" />
+                }
+            </div>
+        </div>
+    </div>
+</div>

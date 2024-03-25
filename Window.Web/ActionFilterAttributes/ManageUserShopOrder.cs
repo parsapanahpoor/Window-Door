@@ -23,11 +23,11 @@ public class ManageUserShopOrder : ActionFilterAttribute
                 {
                     if (order.PaymentWay.Value == Domain.Enums.Order.OrderPaymentWay.InstallmentPayment)
                     {
-                        context.HttpContext.Response.Redirect("/Seller/ShopOrder/ManageShopOrder");
+                        context.HttpContext.Response.Redirect("/Order/ShowInvoice");
                     }
                     else
                     {
-                        context.HttpContext.Response.Redirect("/OrderPayment/FaildOrderCashPayment");
+                        context.HttpContext.Response.Redirect("/Order/ShowInvoice");
                     }
                 }
                 else

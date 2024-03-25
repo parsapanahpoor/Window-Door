@@ -4,6 +4,7 @@ using Window.Data;
 using Window.Data.Context;
 using Window.Domain.Interfaces.OrderCheque;
 using Window.Domain.ViewModels.Admin.OrderCheque;
+using Window.Domain.ViewModels.Seller.OrderCheque;
 using Window.Infra.Data.Migrations;
 
 namespace Window.Infra.Data.Repository.OrderCheque;
@@ -214,6 +215,295 @@ public class OrderChequeQueryRepository : QueryGenericRepository<Domain.Entities
         await filter.Paging(query);
 
         return filter;
+    }
+
+    public async Task<FilterReciveOrderChequesSellerSideDTO> FillFilterReciveOrderChequesDTO(FilterReciveOrderChequesSellerSideDTO filter,
+                                                                                             CancellationToken cancellation)
+    {
+        var chques = _context.orderCheques
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.SellerUserId == filter.UserId)
+                             .OrderByDescending(p => p.CreateDate)
+                             .AsQueryable();
+
+        var order = from c in chques
+                    join o in _context.Orders
+                                      .AsNoTracking()
+                                      .Where(p => !p.IsDelete)
+                                      .AsQueryable()
+                    on c.OrderId equals o.Id
+                    select new OrderChequesDTO()
+                    {
+                        CustomerUsername = null,
+                        ChequeDateTime = c.ChequeDateTime,
+                        OrderId = o.Id,
+                        OrderIsFinally = o.IsFinally,
+                        ChequePrice = c.ChequePrice,
+                        CustomerUserId = c.CustomerUserId,
+                        OrderChequeAdminState = c.OrderChequeAdminState,
+                        OrderChequeSellerState = c.OrderChequeSellerState,
+                    };
+
+        var query = from o in order
+                    join u in _context.Users
+                                      .AsNoTracking()
+                                      .Where(p => !p.IsDelete)
+                                      .AsQueryable()
+                    on o.CustomerUserId equals u.Id
+                    select new OrderChequesDTO()
+                    {
+                        CustomerUsername = u.Username,
+                        ChequeDateTime = o.ChequeDateTime,
+                        OrderId = o.OrderId,
+                        OrderIsFinally = o.OrderIsFinally,
+                        ChequePrice = o.ChequePrice,
+                        CustomerUserId = o.CustomerUserId,
+                        OrderChequeAdminState = o.OrderChequeAdminState,
+                        OrderChequeSellerState = o.OrderChequeSellerState,
+                    };
+
+        #region Filter
+
+        if (!string.IsNullOrEmpty(filter.StartDate))
+        {
+            var spliteDate = filter.StartDate.Split('/');
+            int year = int.Parse(spliteDate[0]);
+            int month = int.Parse(spliteDate[1]);
+            int day = int.Parse(spliteDate[2]);
+            DateTime fromDate = new DateTime(year, month, day, new PersianCalendar());
+
+            query = query.Where(s => s.ChequeDateTime >= fromDate);
+        }
+
+        if (!string.IsNullOrEmpty(filter.EndDate))
+        {
+            var spliteDate = filter.EndDate.Split('/');
+            int year = int.Parse(spliteDate[0]);
+            int month = int.Parse(spliteDate[1]);
+            int day = int.Parse(spliteDate[2]);
+            DateTime toDate = new DateTime(year, month, day, new PersianCalendar());
+
+            query = query.Where(s => s.ChequeDateTime <= toDate);
+        }
+
+        switch (filter.OrderChequeAdminState)
+        {
+            case OrderChequeAdminStateDTO.All:
+                break;
+
+            case OrderChequeAdminStateDTO.Accept:
+                query = query.Where(p => p.OrderChequeAdminState == Domain.Enums.Order.OrderChequeAdminState.Accept);
+                break;
+
+            case OrderChequeAdminStateDTO.WaitingForCheck:
+                query = query.Where(p => p.OrderChequeAdminState == Domain.Enums.Order.OrderChequeAdminState.WaitingForCheck);
+                break;
+
+            case OrderChequeAdminStateDTO.Reject:
+                query = query.Where(p => p.OrderChequeAdminState == Domain.Enums.Order.OrderChequeAdminState.Reject);
+                break;
+        }
+
+        switch (filter.OrderChequeSellerState)
+        {
+            case OrderChequeSellerStateDTO.All:
+                break;
+
+            case OrderChequeSellerStateDTO.Accept:
+                query = query.Where(p => p.OrderChequeSellerState == Domain.Enums.Order.OrderChequeSellerState.Accept);
+                break;
+
+            case OrderChequeSellerStateDTO.WaitingForCheck:
+                query = query.Where(p => p.OrderChequeSellerState == Domain.Enums.Order.OrderChequeSellerState.WaitingForCheck);
+                break;
+
+            case OrderChequeSellerStateDTO.Reject:
+                query = query.Where(p => p.OrderChequeSellerState == Domain.Enums.Order.OrderChequeSellerState.Reject);
+                break;
+        }
+
+        switch (filter.OrderFinallyState)
+        {
+            case OrderFinallyStateDTO.All:
+                break;
+
+            case OrderFinallyStateDTO.Finally:
+                query = query.Where(p => p.OrderIsFinally);
+                break;
+
+            case OrderFinallyStateDTO.NotFinally:
+                query = query.Where(p => !p.OrderIsFinally);
+                break;
+        }
+
+        if (!string.IsNullOrEmpty(filter.CustomerUsername))
+        {
+            query = query.Where(p => p.CustomerUsername.Contains(filter.CustomerUsername));
+        }
+
+        #endregion
+
+        await filter.Paging(query);
+
+        return filter;
+    }
+
+    public async Task<FilterReciveOrderChequesSellerSideDTO> FillFilterDepositOrderChequesDTO(FilterReciveOrderChequesSellerSideDTO filter,
+                                                                                              CancellationToken cancellation)
+    {
+        var chques = _context.orderCheques
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.CustomerUserId == filter.UserId)
+                             .OrderByDescending(p => p.CreateDate)
+                             .AsQueryable();
+
+        var order = from c in chques
+                    join o in _context.Orders
+                                      .AsNoTracking()
+                                      .Where(p => !p.IsDelete)
+                                      .AsQueryable()
+                    on c.OrderId equals o.Id
+                    select new OrderChequesDTO()
+                    {
+                        CustomerUsername = null,
+                        ChequeDateTime = c.ChequeDateTime,
+                        OrderId = o.Id,
+                        OrderIsFinally = o.IsFinally,
+                        ChequePrice = c.ChequePrice,
+                        CustomerUserId = c.CustomerUserId,
+                        OrderChequeAdminState = c.OrderChequeAdminState,
+                        OrderChequeSellerState = c.OrderChequeSellerState,
+                    };
+
+        var query = from o in order
+                    join u in _context.Users
+                                      .AsNoTracking()
+                                      .Where(p => !p.IsDelete)
+                                      .AsQueryable()
+                    on o.CustomerUserId equals u.Id
+                    select new OrderChequesDTO()
+                    {
+                        CustomerUsername = u.Username,
+                        ChequeDateTime = o.ChequeDateTime,
+                        OrderId = o.OrderId,
+                        OrderIsFinally = o.OrderIsFinally,
+                        ChequePrice = o.ChequePrice,
+                        CustomerUserId = o.CustomerUserId,
+                        OrderChequeAdminState = o.OrderChequeAdminState,
+                        OrderChequeSellerState = o.OrderChequeSellerState,
+                    };
+
+        #region Filter
+
+        if (!string.IsNullOrEmpty(filter.StartDate))
+        {
+            var spliteDate = filter.StartDate.Split('/');
+            int year = int.Parse(spliteDate[0]);
+            int month = int.Parse(spliteDate[1]);
+            int day = int.Parse(spliteDate[2]);
+            DateTime fromDate = new DateTime(year, month, day, new PersianCalendar());
+
+            query = query.Where(s => s.ChequeDateTime >= fromDate);
+        }
+
+        if (!string.IsNullOrEmpty(filter.EndDate))
+        {
+            var spliteDate = filter.EndDate.Split('/');
+            int year = int.Parse(spliteDate[0]);
+            int month = int.Parse(spliteDate[1]);
+            int day = int.Parse(spliteDate[2]);
+            DateTime toDate = new DateTime(year, month, day, new PersianCalendar());
+
+            query = query.Where(s => s.ChequeDateTime <= toDate);
+        }
+
+        switch (filter.OrderChequeAdminState)
+        {
+            case OrderChequeAdminStateDTO.All:
+                break;
+
+            case OrderChequeAdminStateDTO.Accept:
+                query = query.Where(p => p.OrderChequeAdminState == Domain.Enums.Order.OrderChequeAdminState.Accept);
+                break;
+
+            case OrderChequeAdminStateDTO.WaitingForCheck:
+                query = query.Where(p => p.OrderChequeAdminState == Domain.Enums.Order.OrderChequeAdminState.WaitingForCheck);
+                break;
+
+            case OrderChequeAdminStateDTO.Reject:
+                query = query.Where(p => p.OrderChequeAdminState == Domain.Enums.Order.OrderChequeAdminState.Reject);
+                break;
+        }
+
+        switch (filter.OrderChequeSellerState)
+        {
+            case OrderChequeSellerStateDTO.All:
+                break;
+
+            case OrderChequeSellerStateDTO.Accept:
+                query = query.Where(p => p.OrderChequeSellerState == Domain.Enums.Order.OrderChequeSellerState.Accept);
+                break;
+
+            case OrderChequeSellerStateDTO.WaitingForCheck:
+                query = query.Where(p => p.OrderChequeSellerState == Domain.Enums.Order.OrderChequeSellerState.WaitingForCheck);
+                break;
+
+            case OrderChequeSellerStateDTO.Reject:
+                query = query.Where(p => p.OrderChequeSellerState == Domain.Enums.Order.OrderChequeSellerState.Reject);
+                break;
+        }
+
+        switch (filter.OrderFinallyState)
+        {
+            case OrderFinallyStateDTO.All:
+                break;
+
+            case OrderFinallyStateDTO.Finally:
+                query = query.Where(p => p.OrderIsFinally);
+                break;
+
+            case OrderFinallyStateDTO.NotFinally:
+                query = query.Where(p => !p.OrderIsFinally);
+                break;
+        }
+
+        if (!string.IsNullOrEmpty(filter.CustomerUsername))
+        {
+            query = query.Where(p => p.CustomerUsername.Contains(filter.CustomerUsername));
+        }
+
+        #endregion
+
+        await filter.Paging(query);
+
+        return filter;
+    }
+
+    public async Task<ChequeDetailSellerSideDTO?> Fill_SellerSideChequeDetailDTO_ByOrderChequeId(ulong orderChequeId,
+                                                                                       ulong sellerUserId ,
+                                                                                       CancellationToken cancellationToken)
+    {   
+        return await _context.orderCheques
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.SellerUserId == sellerUserId && 
+                                    p.Id == orderChequeId)
+                             .Select(p => new ChequeDetailSellerSideDTO()
+                             {
+                                 ChequeDateTime = p.ChequeDateTime,
+                                 ChequeId = orderChequeId,
+                                 ChequeImage = p.ChequeImage,
+                                 ChequePrice = p.ChequePrice,
+                                 CustomerNationalId = p.CustomerNationalId,
+                                 OrderChequeSellerState = p.OrderChequeSellerState,
+                                 SellerRejectDescription = p.SellerRejectDescription,
+                                 AdminRejectDescription = p.AdminRejectDescription,
+                                 OrderChequeAdminState = p.OrderChequeAdminState,
+                                 OrderId = p.OrderId,
+                             })
+                             .FirstOrDefaultAsync();
     }
 
     #endregion

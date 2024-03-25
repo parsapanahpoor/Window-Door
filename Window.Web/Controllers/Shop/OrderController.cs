@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Threading;
 using Window.Application.CQRS.SiteSide.ShopOrder.Command;
 using Window.Application.CQRS.SiteSide.ShopOrder.Query;
 using Window.Application.Extensions;
-using Window.Domain.Interfaces.Order;
 using Window.Web.ActionFilterAttributes;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace Window.Web.Controllers.Shop;
 
 [Authorize]
@@ -167,7 +163,6 @@ public class OrderController : SiteBaseController
 
     #region Show Invoice
 
-    [ManageUserShopOrder]
     public async Task<IActionResult> ShowInvoice(bool continueOrder = false,
                                                  CancellationToken cancellation = default)
     {

@@ -1,4 +1,5 @@
 ﻿using Window.Domain.ViewModels.Admin.OrderCheque;
+using Window.Domain.ViewModels.Seller.OrderCheque;
 
 namespace Window.Domain.Interfaces.OrderCheque;
 
@@ -29,6 +30,16 @@ public interface IOrderChequeQueryRepository
 
     Task<FilterOrderChequesDTO> FillFilterOrderChequesDTO(FilterOrderChequesDTO filter,
                                                           CancellationToken cancellation);
+
+    Task<FilterReciveOrderChequesSellerSideDTO> FillFilterReciveOrderChequesDTO(FilterReciveOrderChequesSellerSideDTO filter,
+                                                                                CancellationToken cancellation);
+
+    Task<FilterReciveOrderChequesSellerSideDTO> FillFilterDepositOrderChequesDTO(FilterReciveOrderChequesSellerSideDTO filter,
+                                                                                 CancellationToken cancellation);
+
+    Task<ChequeDetailSellerSideDTO?> Fill_SellerSideChequeDetailDTO_ByOrderChequeId(ulong orderChequeId,
+                                                                                    ulong sellerUserId,
+                                                                                    CancellationToken cancellationToken);
 
     #endregion
 }

@@ -29,6 +29,9 @@ public record SelectOrderPaymentWayCommandHandler : IRequestHandler<SelectOrderP
         var order = await _orderQueryRepository.GetLastest_WaitingForPaymentOrder_ByUserId(request.UserId,
                                                                                            cancellationToken);
         if (order == null) return SelectOrderPaymentWayResult.Faild;
+        if (order.PaymentWay.HasValue &&
+           order.PaymentWay.Value == Domain.Enums.Order.OrderPaymentWay.InstallmentPayment) return SelectOrderPaymentWayResult.ChoseInstallerInPass;
+                                                                                    
 
         //Update Order Payment Way
         order.PaymentWay = request.OrderPaymentWay;

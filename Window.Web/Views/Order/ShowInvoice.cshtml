@@ -16,61 +16,86 @@
 
 
                 <section class="page-content dt-sl">
-                    <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 px-res-1">
-                        <h2>انتخاب شیوه پرداخت</h2>
-                    </div>
-                    <form method="post"
-                          asp-action="SelectOrderPaymentWay"
-                          asp-area=""
-                          asp-controller="OrderPayment"
-                          id="shipping-data-form" class="dt-sn dt-sn--box pt-3 pb-3 mb-4">
 
-                        <div class="checkout-pack">
-                            <div class="row">
+                    @if (Model.OrderSelectedPaymentWayBefore == Window.Domain.ViewModels.Site.Shop.Order.OrderSelectedPaymentWayBeforeState.No)
+                    {
+                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 px-res-1">
+                            <h2>انتخاب شیوه پرداخت</h2>
+                        </div>
+                        <form method="post"
+                              asp-action="SelectOrderPaymentWay"
+                              asp-area=""
+                              asp-controller="OrderPayment"
+                              id="shipping-data-form" class="dt-sn dt-sn--box pt-3 pb-3 mb-4">
 
-                                <div class="checkout-time-table checkout-time-table-time">
-                                    <div class="col-12">
-                                        <div class="radio-box custom-control custom-radio pl-0 pr-3">
-                                            <input type="radio" class="custom-control-input" name="OrderPaymentWay" id="1" value="0">
-                                            <label for="1" class="custom-control-label">
-                                                <img src="/DidiKala/assets/img/svg/d86ea8ec.svg" class="checkout-additional-options-checkbox-image">
-                                                <div class="content-box">
-                                                    <div class="checkout-time-table-title-bar checkout-time-table-title-bar-city">
-                                                        خرید اقساط(خرید با چک)
+                            <div class="checkout-pack">
+                                <div class="row">
+
+                                    <div class="checkout-time-table checkout-time-table-time">
+                                        <div class="col-12">
+                                            <div class="radio-box custom-control custom-radio pl-0 pr-3">
+                                                <input type="radio" class="custom-control-input" name="OrderPaymentWay" id="1" value="0">
+                                                <label for="1" class="custom-control-label">
+                                                    <img src="/DidiKala/assets/img/svg/d86ea8ec.svg" class="checkout-additional-options-checkbox-image">
+                                                    <div class="content-box">
+                                                        <div class="checkout-time-table-title-bar checkout-time-table-title-bar-city">
+                                                            خرید اقساط(خرید با چک)
+                                                        </div>
+
                                                     </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="radio-box custom-control custom-radio pl-0 pr-3">
+                                                <input type="radio" class="custom-control-input" name="OrderPaymentWay" id="2" value="1">
+                                                <label for="2" class="custom-control-label">
+                                                    <img src="/DidiKala/assets/img/svg/d86ea8ec.svg" class="checkout-additional-options-checkbox-image">
+                                                    <div class="content-box">
+                                                        <div class="checkout-time-table-title-bar checkout-time-table-title-bar-city">
+                                                            خرید نقدی
+                                                        </div>
 
-                                                </div>
-                                            </label>
+                                                    </div>
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-12">
-                                        <div class="radio-box custom-control custom-radio pl-0 pr-3">
-                                            <input type="radio" class="custom-control-input" name="OrderPaymentWay" id="2" value="1">
-                                            <label for="2" class="custom-control-label">
-                                                <img src="/DidiKala/assets/img/svg/d86ea8ec.svg" class="checkout-additional-options-checkbox-image">
-                                                <div class="content-box">
-                                                    <div class="checkout-time-table-title-bar checkout-time-table-title-bar-city">
-                                                        خرید نقدی
-                                                    </div>
 
-                                                </div>
-                                            </label>
-                                        </div>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-end px-res-1">
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-12">
+                                    <button type="submit" class="btn-primary-cm btn-with-icon  w-100">
+                                        <i class="mdi mdi-credit-card-outline"></i>
+                                        پرداخت سفارش
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    }
+                    @if (Model.OrderSelectedPaymentWayBefore == Window.Domain.ViewModels.Site.Shop.Order.OrderSelectedPaymentWayBeforeState.Insallement)
+                    {
+
+                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 px-res-1">
+                            <h2>ادامه ی پرداخت چکی</h2>
+                        </div>
+                        <div class="dt-sn dt-sn--box pt-3 pb-3 mb-4">
+                                <div class="row justify-content-end px-res-1">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <a class="btn-primary-cm btn-with-icon  w-100"
+                                           asp-action="ManageShopOrder"
+                                           asp-area="Seller"
+                                           asp-controller="ShopOrder">
+                                            ادامه ی پرداخت چک ها
+                                        </a>
                                     </div>
                                 </div>
+                        </div>
 
-                            </div>
-                        </div>
-                  
-                    <div class="row justify-content-end px-res-1">
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-12">
-                            <button type="submit" class="btn-primary-cm btn-with-icon  w-100">
-                                <i class="mdi mdi-credit-card-outline"></i>
-                                پرداخت سفارش
-                            </button>
-                        </div>
-                        </div>
-                    </form>
+                    }
+
                 </section>
 
                 <section class="page-content dt-sl">

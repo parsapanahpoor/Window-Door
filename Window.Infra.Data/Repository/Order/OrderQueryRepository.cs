@@ -156,8 +156,7 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                              .FirstOrDefaultAsync(p => !p.IsDelete &&
                                                   p.UserId == UserId &&
                                                  !p.IsFinally &&
-                                                  p.LocationId.HasValue &&
-                                                 !p.PaymentWay.HasValue);
+                                                  p.LocationId.HasValue);
     }
 
     public async Task<ulong> GetLastestProductId_InOrderDetail_ByOrderId(ulong orderId)

@@ -1,13 +1,13 @@
 ﻿@using Window.Application.Convertors
 @using Window.Application.StticTools;
 @using Window.Domain.ViewModels.Common
-@using Window.Domain.ViewModels.Admin.OrderCheque
-@model AdminChequeDetailChangeStateDTO;
+@using Window.Domain.ViewModels.Seller.OrderCheque
+@model Window.Domain.ViewModels.Seller.OrderCheque.SellerChequeDetailChangeStateDTO;
 
 @{
     ViewData["Title"] = "بررسی چک";
 
-    ChequeDetailDTO chequeInfo = ViewBag.OrderCheque;
+    ChequeDetailSellerSideDTO chequeInfo = ViewBag.OrderCheque;
 }
 
 @section Styles
@@ -26,7 +26,7 @@
     </li>
 }
 
-<form method="post" asp-action="ChequeDetail" asp-controller="OrderCheques" asp-area="Admin" enctype="multipart/form-data">
+<form method="post" asp-action="ChequeDetail" asp-controller="ShopOrder" asp-area="Seller" enctype="multipart/form-data">
     <input asp-for="OrderChequeId" type="hidden" />
     <input asp-for="OrderId" type="hidden" />
 
@@ -59,18 +59,18 @@
                             </div>
 
                             <div class="form-group col-md-12 col-sm-12">
-                                <label>وضعیت توسط فروشنده</label>
+                                <label>وضعیت توسط تیم پنجره یاب</label>
                                 @if (chequeInfo.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Accept)
                                 {
-                                    <input type="text" class="form-control" readonly value="تایید شده توسط فروشنده">
+                                    <input type="text" class="form-control" readonly value="تایید شده توسط تیم پنجره یاب">
                                 }
                                 @if (chequeInfo.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.WaitingForCheck)
                                 {
-                                    <input type="text" class="form-control" readonly value="در انتظار بررسی فروشنده">
+                                    <input type="text" class="form-control" readonly value="در انتظار بررسی تیم پنجره یاب">
                                 }
                                 @if (chequeInfo.OrderChequeSellerState == Window.Domain.Enums.Order.OrderChequeSellerState.Reject)
                                 {
-                                    <input type="text" class="form-control" readonly value="رد شده توسط فروشنده">
+                                    <input type="text" class="form-control" readonly value="رد شده توسط تیم پنجره یاب">
                                 }
                             </div>
 
@@ -85,21 +85,21 @@
                             }
 
                         </div>
-                        
-                            <hr class="margin-bottom-10 margin-top-10" />
 
-                            <div class="form-group col-md-12 col-sm-12">
-                                <label>تعیین وضعیت چک</label>
-                                <select asp-for="OrderChequeAdminState" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.Order.OrderChequeAdminState))"></select>
-                                <span class="text-danger" asp-validation-for="OrderChequeAdminState"></span>
-                            </div>
+                        <hr class="margin-bottom-10 margin-top-10" />
+
+                        <div class="form-group col-md-12 col-sm-12">
+                            <label>تعیین وضعیت چک</label>
+                            <select asp-for="OrderChequeSellerState" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.Order.OrderChequeSellerState))"></select>
+                            <span class="text-danger" asp-validation-for="OrderChequeSellerState"></span>
+                        </div>
 
                         <div class="clearfix"></div>
 
                         <div class="form-group col-md-12 ">
                             <label>دلیل رد چک را برای بررسی خریدار و فروشنده یادداشت بفرمایید</label>
-                            <textarea asp-for="AdminRejectDescription" rows="10" class="form-control" placeholder="دلیل رد چک را برای بررسی خریدار و فروشنده یادداشت بفرمایید"></textarea>
-                            <span asp-validation-for="AdminRejectDescription" class="text-danger"></span>
+                            <textarea asp-for="SellerRejectDescription" rows="10" class="form-control" placeholder="دلیل رد چک را برای بررسی خریدار و فروشنده یادداشت بفرمایید"></textarea>
+                            <span asp-validation-for="SellerRejectDescription" class="text-danger"></span>
                         </div>
 
                         <div class="row">

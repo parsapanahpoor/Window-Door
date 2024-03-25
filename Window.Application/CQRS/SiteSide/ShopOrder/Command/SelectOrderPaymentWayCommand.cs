@@ -17,5 +17,6 @@ public enum SelectOrderPaymentWayResult
 {
     SuccessInstallerPayment,
     SuccessCashPayment,
-    Faild
+    Faild,
+    ChoseInstallerInPass,
 }

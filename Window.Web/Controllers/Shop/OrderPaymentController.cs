@@ -32,6 +32,10 @@ public class OrderPaymentController : SiteBaseController
                     TempData[SuccessMessage] = "درقدم بعدی شما باید اطلاعات چک های خود را ثبت کنید.";
                     return RedirectToAction("ManageShopOrder", "ShopOrder" , new { area = "Seller" });
 
+                case SelectOrderPaymentWayResult.ChoseInstallerInPass:
+                    TempData[WarningMessage] = "شما میتوانید در این بخش به ادامه ی تکمیل اطلاعات خرید خود بپردازید.";
+                    return RedirectToAction("ManageShopOrder", "ShopOrder", new { area = "Seller" });
+
                 case SelectOrderPaymentWayResult.SuccessCashPayment:
                     TempData[SuccessMessage] = "درخواست با موفقیت ثبت شده است.";
                     return RedirectToAction(nameof(CashPayment));

@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "مدیریت چک ها";
+}
+
+@section Styles
+{
+}
+
+@section Scripts
+{
+}
+
+@section Breadcrumb
+{
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
+}
+
+
+
+<div class="page-body">
+
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-header bg-warning">
+                <i class="widget-icon fa fa-arrow-left"></i>
+                <span class="widget-caption">راهنمایی</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="config">
+                        <i class="fa fa-cog"></i>
+                    </a>
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body">
+                    اگر قصد دارید چک هایی که برای شما از سمت مشتریانتان در ازای خرید از فروشگاه شما ارسال شده را مشاهده کنید بر روی گزینه ی سبز رنگ 
+                    بنام "چک های دریافتی به عنوان فروشنده" کلیک کنید . 
+                    اما اگر قصد دارید چک هایی که شما برای فروشنده های پنجره یاب به ازای خرید از آن ها ارسال کرده اید را مشاهده کنید 
+                    بر روی گزینه ی آبی رنگ بنام "چک های ارسالی شما به عنوان خریدار" کلیک کنید
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+
+    <div class="row text-center align-Item-center">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            <div class="row">
+
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12  buttons-preview text-center justify-content-center">
+                    <a asp-area="Seller"
+                       asp-controller="OrderCheque"
+                       asp-action="ListOfWithdrawCheques"
+                       class="btn btn-success  btn-circle btn-lg"><i class="glyphicon glyphicon-arrow-down"></i></a>
+                    <p class="text-center justify-content-center" style="font-size:12PX;"> چک های دریافتی شما به عنوان فروشنده </p>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12  buttons-preview">
+                    <a asp-area="Seller"
+                       asp-controller="OrderCheque"
+                       asp-action="ListOfDepositCheques"
+                       class="btn btn-primary  btn-circle btn-lg"><i class="glyphicon glyphicon-arrow-up"></i></a>
+                    <p class="text-center justify-content-center" style="font-size:12PX;"> چک های ارسالی شما به عنوان خریدار </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
