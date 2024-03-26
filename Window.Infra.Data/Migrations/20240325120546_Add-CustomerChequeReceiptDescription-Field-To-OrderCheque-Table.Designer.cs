@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Window.Data.Context;
 
@@ -11,9 +12,11 @@ using Window.Data.Context;
 namespace Window.Infra.Data.Migrations
 {
     [DbContext(typeof(WindowDbContext))]
-    partial class WindowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240325120546_Add-CustomerChequeReceiptDescription-Field-To-OrderCheque-Table")]
+    partial class AddCustomerChequeReceiptDescriptionFieldToOrderChequeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +55,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 1m,
-                            CreateDate = new DateTime(2024, 3, 25, 16, 51, 27, 690, DateTimeKind.Local).AddTicks(4168),
+                            CreateDate = new DateTime(2024, 3, 25, 15, 35, 45, 154, DateTimeKind.Local).AddTicks(9393),
                             IsDelete = false,
                             RoleUniqueName = "Admin",
                             Title = "Admin"
@@ -60,7 +63,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 2m,
-                            CreateDate = new DateTime(2024, 3, 25, 16, 51, 27, 690, DateTimeKind.Local).AddTicks(4212),
+                            CreateDate = new DateTime(2024, 3, 25, 15, 35, 45, 154, DateTimeKind.Local).AddTicks(9441),
                             IsDelete = false,
                             RoleUniqueName = "Support",
                             Title = "Support"
@@ -68,7 +71,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 3m,
-                            CreateDate = new DateTime(2024, 3, 25, 16, 51, 27, 690, DateTimeKind.Local).AddTicks(4234),
+                            CreateDate = new DateTime(2024, 3, 25, 15, 35, 45, 154, DateTimeKind.Local).AddTicks(9462),
                             IsDelete = false,
                             RoleUniqueName = "Seller",
                             Title = "Seller"
@@ -76,7 +79,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 4m,
-                            CreateDate = new DateTime(2024, 3, 25, 16, 51, 27, 690, DateTimeKind.Local).AddTicks(4252),
+                            CreateDate = new DateTime(2024, 3, 25, 15, 35, 45, 154, DateTimeKind.Local).AddTicks(9482),
                             IsDelete = false,
                             RoleUniqueName = "SellerMaster",
                             Title = "SellerMaster"
@@ -1574,7 +1577,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 1m,
-                            CreateDate = new DateTime(2024, 3, 25, 16, 51, 27, 690, DateTimeKind.Local).AddTicks(4282),
+                            CreateDate = new DateTime(2024, 3, 25, 15, 35, 45, 154, DateTimeKind.Local).AddTicks(9521),
                             IsDelete = false,
                             Name = "کشویی",
                             ProductType = 0
@@ -1582,7 +1585,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 2m,
-                            CreateDate = new DateTime(2024, 3, 25, 16, 51, 27, 690, DateTimeKind.Local).AddTicks(4302),
+                            CreateDate = new DateTime(2024, 3, 25, 15, 35, 45, 154, DateTimeKind.Local).AddTicks(9557),
                             IsDelete = false,
                             Name = "کتیبه",
                             ProductType = 0
@@ -1590,7 +1593,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 3m,
-                            CreateDate = new DateTime(2024, 3, 25, 16, 51, 27, 690, DateTimeKind.Local).AddTicks(4319),
+                            CreateDate = new DateTime(2024, 3, 25, 15, 35, 45, 154, DateTimeKind.Local).AddTicks(9587),
                             IsDelete = false,
                             Name = "کتیبه",
                             ProductType = 1
@@ -1598,7 +1601,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 4m,
-                            CreateDate = new DateTime(2024, 3, 25, 16, 51, 27, 690, DateTimeKind.Local).AddTicks(4365),
+                            CreateDate = new DateTime(2024, 3, 25, 15, 35, 45, 154, DateTimeKind.Local).AddTicks(9605),
                             IsDelete = false,
                             Name = "درب",
                             ProductType = 1
@@ -1606,7 +1609,7 @@ namespace Window.Infra.Data.Migrations
                         new
                         {
                             Id = 5m,
-                            CreateDate = new DateTime(2024, 3, 25, 16, 51, 27, 690, DateTimeKind.Local).AddTicks(4382),
+                            CreateDate = new DateTime(2024, 3, 25, 15, 35, 45, 154, DateTimeKind.Local).AddTicks(9625),
                             IsDelete = false,
                             Name = "لولایی",
                             ProductType = 1
@@ -2014,7 +2017,7 @@ namespace Window.Infra.Data.Migrations
                     b.Property<decimal>("ChequePrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("ChequeReceiptFileName")
+                    b.Property<string>("ChequeReceipt")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateDate")

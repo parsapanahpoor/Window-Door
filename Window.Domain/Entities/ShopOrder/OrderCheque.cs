@@ -29,7 +29,9 @@ public sealed class OrderCheque : BaseEntity
 
     public DateTime ChequeDateTime { get; set; }
 
-    public string? ChequeReceipt { get; set; }
+    public string? ChequeReceiptFileName { get; set; }
+
+    public string? CustomerChequeReceiptDescription { get; set; }
 
     #endregion
 }

@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Window.Application.CQRS.SellerPanel.ChequeReceipt.Command;
+using Window.Application.CQRS.SellerPanel.ChequeReceipt.Query;
 using Window.Application.CQRS.SellerPanel.OrderCheque.Command;
 using Window.Application.Extensions;
 using Window.Domain.Entities.ShopOrder;
+using Window.Domain.ViewModels.Seller.ChequeReceipt;
 using Window.Domain.ViewModels.Seller.OrderCheque;
 namespace Window.Web.Areas.Seller.Controllers;
 
@@ -117,6 +120,83 @@ public class OrderChequeController : SellerBaseController
 
         #endregion
 
+        return View(model);
+    }
+
+    #endregion
+
+    #region Upload Cheque Receipt
+
+    [HttpGet]
+    public async Task<IActionResult> UploadChequeReceipt(ulong chequeId , 
+                                                         ulong orderId,
+                                                         CancellationToken cancellation = default)
+    {
+        #region Model 
+
+        var res = await Mediator.Send(new ShowOrderChequeReceiptQuery()
+        {
+            CustomerUserId = User.GetUserId(),
+            OrderChequeId = chequeId
+        } , 
+        cancellation);
+
+        switch (res.EnumResult)
+        {
+            case ShowOrderChequeReceiptQueryResultEnum.Success:
+                break;
+
+            case ShowOrderChequeReceiptQueryResultEnum.SellerDosentAccept:
+                TempData[ErrorMessage] = "چک آپلود شده ی شما ابتدا باید توسط فروشنده ی مربوطه تایید گردد.";
+                return RedirectToAction("ManageShopOrder", "ShopOrder", new { area = "Seller", orderId = orderId });
+
+            case ShowOrderChequeReceiptQueryResultEnum.OrderChequeNotFound:
+                TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+                return RedirectToAction("ManageShopOrder", "ShopOrder", new { area = "Seller", orderId = orderId });
+
+            default:
+                break;
+        }
+
+        #endregion
+
+        return View(res.ChequeReceipt);
+    }
+
+    [HttpPost , ValidateAntiForgeryToken]
+    public async Task<IActionResult> UploadChequeReceipt(ShowOrderChequeReceiptDTO model,
+                                                         CancellationToken cancellation = default)
+    {
+        #region Update Cheque
+
+        var res = await Mediator.Send(new UploadChequeReceiptCommand()
+        {
+            ChequeReceipt = model,
+            CustomerUserId = User.GetUserId(),
+        } , 
+        cancellation);
+
+        switch (res)
+        {
+            case UploadChequeReceiptResult.Success:
+                TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+                return RedirectToAction("ManageShopOrder", "ShopOrder", new { area = "Seller", orderId = model.OrderId });
+
+            case UploadChequeReceiptResult.SellerDosentAccept:
+                TempData[ErrorMessage] = "چک آپلود شده ی شما ابتدا باید توسط فروشنده ی مربوطه تایید گردد.";
+                return RedirectToAction("ManageShopOrder", "ShopOrder", new { area = "Seller", orderId = model.OrderId });
+
+            case UploadChequeReceiptResult.OrderChequeNotfound:
+                TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+                return RedirectToAction("ManageShopOrder", "ShopOrder", new { area = "Seller", orderId = model.OrderId });
+
+            default:
+                break;
+        }
+
+        #endregion
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
         return View(model);
     }
 

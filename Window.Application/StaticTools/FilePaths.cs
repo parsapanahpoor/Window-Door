@@ -141,5 +141,15 @@ namespace Window.Application.StticTools
         public static readonly string OrderChequePathThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/OrderCheque/thumb/");
 
         #endregion
+
+        #region Cheque Receipt
+
+        public static readonly string ChequeReceiptPath = "/content/images/ChequeReceipt/main/";
+        public static readonly string ChequeReceiptPathServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/ChequeReceipt/main/");
+
+        public static readonly string ChequeReceiptPathThumb = "/content/images/ChequeReceipt/thumb/";
+        public static readonly string ChequeReceiptPathThumbServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/content/images/ChequeReceipt/thumb/");
+
+        #endregion
     }
 }

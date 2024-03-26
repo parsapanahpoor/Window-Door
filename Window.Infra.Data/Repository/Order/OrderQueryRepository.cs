@@ -318,7 +318,6 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
         return await _context.Orders
                              .AsNoTracking()
                              .Where(p => !p.IsDelete &&
-                                    p.UserId == userId &&
                                     p.Id == orderId && 
                                    !p.IsFinally &&
                                     p.PaymentWay.HasValue &&
