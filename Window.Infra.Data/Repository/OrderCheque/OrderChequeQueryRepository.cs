@@ -2,9 +2,11 @@
 using System.Globalization;
 using Window.Data;
 using Window.Data.Context;
+using Window.Domain.Entities.Market;
 using Window.Domain.Interfaces.OrderCheque;
 using Window.Domain.ViewModels.Admin.OrderCheque;
 using Window.Domain.ViewModels.Seller.OrderCheque;
+using Window.Domain.ViewModels.Seller.SellerChequeInfo;
 using Window.Infra.Data.Migrations;
 
 namespace Window.Infra.Data.Repository.OrderCheque;
@@ -63,8 +65,34 @@ public class OrderChequeQueryRepository : QueryGenericRepository<Domain.Entities
 
     #region Seller Side
 
+    public async Task<SellerChequeInfoSellerSideDTO?> Fill_SellerChequeInfoSellerSide_DTO(ulong sellerUserId,
+                                                                                          CancellationToken cancellationToken)
+    {
+        return await _context.SellerChequeInfos
+                             .AsNoTracking()
+                             .Where(p=> !p.IsDelete && 
+                                    p.SellerUserId == sellerUserId)
+                             .Select(p=> new SellerChequeInfoSellerSideDTO()
+                             {
+                                 CountOfCheque = p.CountOfCheque,
+                                 HasLimitation = p.HasLimitation,
+                                 SellerMaximumDays = p.SellerMaximumDays,
+                                 SellerUserId = p.SellerUserId
+                             })
+                             .FirstOrDefaultAsync();
+    }
+
     public async Task<Domain.Entities.Market.SellerChequeInfo?> Get_SellerChequeInfo_BySellerUserId(ulong sellerUserId,
                                                                                                    CancellationToken cancellationToken)
+    {
+        return await _context.SellerChequeInfos
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.SellerUserId == sellerUserId)
+                             .FirstOrDefaultAsync();
+    }
+
+    public async Task<Domain.Entities.Market.SellerChequeInfo?> Get_SellerChequeInfo_BySellerUserId_Sync(ulong sellerUserId)
     {
         return await _context.SellerChequeInfos
                              .AsNoTracking()

@@ -21,7 +21,7 @@ public record ManageShopOrderDetailDTO
 
     public List<Domain.Entities.ShopOrder.OrderCheque>? OrderCheques { get; set; }
 
-    public SellerChequeInfo? sellerChequeInfo { get; set; }
+    public Domain.Entities.Market.SellerChequeInfo? sellerChequeInfo { get; set; }
 
     public Entities.Account.User? CustomerUserInformations { get; set; }
 

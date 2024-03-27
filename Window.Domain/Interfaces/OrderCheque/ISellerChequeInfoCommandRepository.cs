@@ -8,5 +8,10 @@ public interface IOrderChequeCommandRepository
 
     void Update_OrderCheque(Domain.Entities.ShopOrder.OrderCheque orderCheque);
 
+    Task AddSellerChequeInfo(Domain.Entities.Market.SellerChequeInfo sellerChequeInfo,
+                             CancellationToken cancellationToken);
+
+    void Update_SellerChequeInfo(Domain.Entities.Market.SellerChequeInfo sellerChequeInfo);
+
     #endregion
 }

@@ -25,10 +25,21 @@ public class OrderChequeCommandRepository : CommandGenericRepository<Domain.Enti
         await _context.orderCheques.AddAsync(orderCheque);
     }
 
+    public async Task AddSellerChequeInfo(Domain.Entities.Market.SellerChequeInfo sellerChequeInfo, 
+                                          CancellationToken cancellationToken)
+    {
+        await _context.SellerChequeInfos.AddAsync(sellerChequeInfo);
+    }
+
     #endregion
 
     public void Update_OrderCheque(Domain.Entities.ShopOrder.OrderCheque orderCheque)
     {
         _context.orderCheques.Update(orderCheque);
+    }
+
+    public void Update_SellerChequeInfo(Domain.Entities.Market.SellerChequeInfo sellerChequeInfo)
+    {
+        _context.SellerChequeInfos.Update(sellerChequeInfo);
     }
 }

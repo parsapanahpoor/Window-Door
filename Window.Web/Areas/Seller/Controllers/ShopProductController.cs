@@ -13,11 +13,13 @@ using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
 using Window.Application.Services.Services;
 using Window.Domain.ViewModels.Seller.ShopProduct;
+using Window.Web.Areas.Seller.ActionFilterAttributes;
 using Window.Web.HttpManager;
 namespace Window.Web.Areas.Seller.Controllers;
 
 #endregion
 
+[CheckHasSellerAnyChequeInfo]
 public class ShopProductController : SellerBaseController
 {
     #region Ctor

@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Window.Application.CQRS.AdminPanel.OrderCheques.Command;
-using Window.Application.CQRS.AdminPanel.OrderCheques.Query;
 using Window.Application.CQRS.SellerPanel.OrderCheque.Command;
 using Window.Application.CQRS.SellerPanel.OrderCheque.Query;
 using Window.Application.CQRS.SellerPanel.ShopOrder.Commands;
 using Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries;
 using Window.Application.Extensions;
-using Window.Domain.ViewModels.Admin.OrderCheque;
 using Window.Domain.ViewModels.Seller.OrderCheque;
 using Window.Web.HttpManager;
 namespace Window.Web.Areas.Seller.Controllers;

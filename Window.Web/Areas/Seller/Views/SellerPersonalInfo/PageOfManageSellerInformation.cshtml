@@ -128,6 +128,31 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-lg-6 col-sm-6 col-xs-12">
+                <div class="databox databox-lg radius-bordered databox-shadowed databox-graded">
+                    <div class="bg-primary databox-right">
+                        <div class="databox-piechart">
+                            <div data-toggle="easypiechart" class="easyPieChart" data-barcolor="#fff" data-linecap="butt" data-percent="50" data-animate="500" data-linewidth="3" data-size="60" data-trackcolor="#aadc95" style="width: 60px; height: 60px; line-height: 60px;">
+                                <i class="glyphicon glyphicon-info-sign"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="databox-left">
+                        <span class="databox-number blue"> اطلاعات چک های دریافتی  </span>
+                        <div class="databox-text darkgray"> محدودیت هایی که میتوانید برای دریافت چک های خود بگذارید </div>
+                        <div class="databox-stat bg-info radius-bordered">
+                            <a style="color:white;" 
+                            asp-action="AddOrEditSellerChequeInfo" 
+                            asp-area="Seller"
+                               asp-controller="SellerChequeInfo"
+                               class="stat-text">ویرایش</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </div>

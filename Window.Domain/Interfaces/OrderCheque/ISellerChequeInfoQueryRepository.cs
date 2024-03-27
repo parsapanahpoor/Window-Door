@@ -1,5 +1,7 @@
-﻿using Window.Domain.ViewModels.Admin.OrderCheque;
+﻿using Window.Domain.Entities.Market;
+using Window.Domain.ViewModels.Admin.OrderCheque;
 using Window.Domain.ViewModels.Seller.OrderCheque;
+using Window.Domain.ViewModels.Seller.SellerChequeInfo;
 
 namespace Window.Domain.Interfaces.OrderCheque;
 
@@ -21,8 +23,13 @@ public interface IOrderChequeQueryRepository
 
     #region Seller Side
 
-    Task<Domain.Entities.Market.SellerChequeInfo?> Get_SellerChequeInfo_BySellerUserId(ulong sellerUserId,
+    Task<SellerChequeInfoSellerSideDTO?> Fill_SellerChequeInfoSellerSide_DTO(ulong sellerUserId,
+                                                                             CancellationToken cancellationToken);
+
+    Task<Domain.Entities.Market.SellerChequeInfo?> Get_SellerChequeInfo_BySellerUserId(ulong sellerUserId, 
                                                                                        CancellationToken cancellationToken);
+
+    Task<Domain.Entities.Market.SellerChequeInfo>? Get_SellerChequeInfo_BySellerUserId_Sync(ulong sellerUserId);
 
     Task<List<Domain.Entities.ShopOrder.OrderCheque>> Get_ListOfCustomerOrderCheques_ByOrderAndUserId(ulong userId,
                                                                                                       ulong orderId,
