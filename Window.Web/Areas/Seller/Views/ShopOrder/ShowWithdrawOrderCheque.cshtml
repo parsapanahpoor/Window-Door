@@ -13,7 +13,35 @@
 
 @section Scripts
 {
-
+    <script>
+        function DeleteAjax(removeElementId, url) {
+            Swal.fire({
+                title: 'هشدار ',
+                text: "آیا قصد نهایی سازی و تایید سفارش را دارید ؟ قبول به منزله تایید سفارش و شروع فرآیند آماده سازی می باشد!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'بله',
+                cancelButtonText: 'خیر',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.get(url).then(res => {
+                        if (removeElementId !== null &&
+                            removeElementId !== undefined &&
+                            removeElementId !== '' &&
+                            res.status === "Success") {
+                            window.location.replace("@FilePaths.SiteAddress/Seller?OrderFinalization=true");
+                        } else if (removeElementId !== null &&
+                            removeElementId !== undefined &&
+                            removeElementId !== '' &&
+                            res.status === "Danger") {
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 }
 
 @section Breadcrumb
@@ -166,6 +194,11 @@
                                     اطلاعات خریدار
                                 </a>
                             </li>
+                            <li class="tab-yellow">
+                                <a data-toggle="tab" href="#settings">
+                                    تایید و نهایی سازی سفارش
+                                </a>
+                            </li>
                         </ul>
                         <div class="tab-content tabs-flat">
 
@@ -281,8 +314,17 @@
                                                             <hr />
                                                             @if (!string.IsNullOrEmpty(cheque.ChequeReceiptFileName))
                                                             {
-                                                                <p>نمایش اطلاعات رسید : <a class="badge badge-primary">رسید چک</a></p>
-                                                            <hr /> 
+                                                                <p>
+                                                                    نمایش اطلاعات رسید :
+                                                                    <a class="badge badge-primary"
+                                                                       asp-action="ChequeDetail"
+                                                                       asp-area="Seller"
+                                                                       asp-controller="ShopOrder"
+                                                                       asp-route-orderChequeId="@cheque.Id">
+                                                                        رسید چک
+                                                                    </a>
+                                                                </p>
+                                                                <hr />
                                                             }
                                                             <a class="btn btn-primary"
                                                                asp-action="ChequeDetail"
@@ -398,6 +440,58 @@
 
                                 </div>
                             </div>
+
+                            @if (Model.Order.IsFinally)
+                            {
+                                <div id="settings" class="tab-pane ">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-sm-12 col-xs-12">
+                                            <div class="well with-header">
+
+                                                <div class="alert alert-success fade in">
+
+                                                    <i class="fa-fw fa fa-success"></i>
+                                                    <strong>
+                                                        سفارش مورد نظر تایید و نهایی شده است . شما می بایست هرچه سریع تر کالاهای خریداری شده را تهیه و تولید کنید 
+                                                        و نسبت به ارسال آن ها اقدام فرمایید 
+                                                    </strong>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="settings" class="tab-pane ">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-sm-12 col-xs-12">
+                                            <div class="well with-header">
+                                                <div class="alert alert-info fade in">
+
+                                                    <i class="fa-fw fa fa-info"></i>
+                                                    <strong>
+                                                        نهایی سازی ! در صورتی که اطلاعات چک های آپلود شده از سمت خریدار را
+                                                        تایید کرده اید میتوانید با کلیک بر روی گزینه ی زیر سفارش را نهایی کنید
+                                                    </strong>
+                                                </div>
+                                                <hr />
+                                                <div class="buttons-preview">
+                                                    <button onclick="DeleteAjax(@Model.Order.Id, '@Url.Action("OrderFinalization", "ShopOrder", new {area = "Seller", orderId = Model.Order.Id})')"
+                                                            class="btn btn-success tooltip-success" data-toggle="tooltip" data-placement="top" data-original-title="نهایی سازی">
+                                                        برای نهایی سازی کلیک کنید
+                                                    </button>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
                         </div>
                     </div>
                 </div>

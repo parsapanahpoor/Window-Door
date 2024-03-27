@@ -18,7 +18,7 @@ namespace Window.Web.Areas.Seller.Controllers
         private ISellerService _sellerService;
         private readonly IContractService _contractService;
 
-        public HomeController(IConfiguration configuration, IUserService userService, IProductService productService, ISellerService sellerService  
+        public HomeController(IConfiguration configuration, IUserService userService, IProductService productService, ISellerService sellerService
                                 , IContractService contractService)
         {
             _configuration = configuration;
@@ -32,7 +32,7 @@ namespace Window.Web.Areas.Seller.Controllers
 
         #region Index
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool OrderFinalization = false)
         {
             #region Check Is Exist Any Market By This User
 
@@ -40,7 +40,7 @@ namespace Window.Web.Areas.Seller.Controllers
             if (market == null)
             {
                 TempData[ErrorMessage] = "کاربر عزیز لطفا در ابتدا فروشگاه خود را ثبت کنید.";
-                return RedirectToAction("Index" , "Home" , new { area = "" });
+                return RedirectToAction("Index", "Home", new { area = "" });
             }
 
             #endregion
@@ -68,6 +68,15 @@ namespace Window.Web.Areas.Seller.Controllers
             if (string.IsNullOrEmpty(user.ShopName))
             {
                 ViewBag.ShopNameIsEmpty = true;
+            }
+
+            #endregion
+
+            #region Notification
+
+            if (OrderFinalization)
+            {
+                TempData[SwalSuccess] = "سفارش باموفقیت تایید شده است. لطفا هرچه سریع تر نسبت به آماده سازی اقلام خریداری شده اقدام فرمایید.";
             }
 
             #endregion

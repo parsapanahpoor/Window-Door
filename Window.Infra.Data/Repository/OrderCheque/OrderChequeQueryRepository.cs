@@ -502,6 +502,8 @@ public class OrderChequeQueryRepository : QueryGenericRepository<Domain.Entities
                                  AdminRejectDescription = p.AdminRejectDescription,
                                  OrderChequeAdminState = p.OrderChequeAdminState,
                                  OrderId = p.OrderId,
+                                 ChequeReceiptImage = p.ChequeReceiptFileName,
+                                 ChequeReceiptDescription = p.CustomerChequeReceiptDescription
                              })
                              .FirstOrDefaultAsync();
     }

@@ -3,10 +3,12 @@ using Window.Application.CQRS.AdminPanel.OrderCheques.Command;
 using Window.Application.CQRS.AdminPanel.OrderCheques.Query;
 using Window.Application.CQRS.SellerPanel.OrderCheque.Command;
 using Window.Application.CQRS.SellerPanel.OrderCheque.Query;
+using Window.Application.CQRS.SellerPanel.ShopOrder.Commands;
 using Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries;
 using Window.Application.Extensions;
 using Window.Domain.ViewModels.Admin.OrderCheque;
 using Window.Domain.ViewModels.Seller.OrderCheque;
+using Window.Web.HttpManager;
 namespace Window.Web.Areas.Seller.Controllers;
 
 public class ShopOrderController : SellerBaseController
@@ -19,13 +21,13 @@ public class ShopOrderController : SellerBaseController
 
     #region List OF User Orders 
 
-    
+
 
     #endregion
 
     #region Manage Shop Order
 
-    public async Task<IActionResult> ManageShopOrder(ulong? orderId , 
+    public async Task<IActionResult> ManageShopOrder(ulong? orderId,
                                                      CancellationToken cancellationToken = default)
     {
         #region Initial Model 
@@ -34,9 +36,9 @@ public class ShopOrderController : SellerBaseController
         {
             userId = User.GetUserId(),
             orderId = orderId,
-        } , 
+        },
         cancellationToken);
-        if(model == null) return NotFound();
+        if (model == null) return NotFound();
 
         if (model.SellerInformations.SellerId == User.GetUserId())
         {
@@ -125,6 +127,29 @@ public class ShopOrderController : SellerBaseController
             OrderChequeSellerState = orderChequeDetail.OrderChequeSellerState,
             OrderId = orderChequeDetail.OrderId
         });
+    }
+
+    #endregion
+
+    #region Order Finalization 
+
+    [HttpGet]
+    public async Task<IActionResult> OrderFinalization(ulong orderId,
+                                                       CancellationToken cancellation)
+    {
+        var res = await Mediator.Send(new OrderFinalizationSellerSideCommand()
+        {
+            OrderId = orderId,
+            SellerUserId = User.GetUserId()
+        },
+        cancellation);
+
+        if (res)
+        {
+            return ApiResponse.SetResponse(ApiResponseStatus.Success, null, "عملیات باموفقیت انجام شده است.");
+        }
+
+        return ApiResponse.SetResponse(ApiResponseStatus.Danger, null, "عملیات باشکست مواجه شده است.");
     }
 
     #endregion

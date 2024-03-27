@@ -12,6 +12,10 @@ public class ChequeDetailSellerSideDTO
 
     public string ChequeImage { get; set; }
 
+    public string? ChequeReceiptImage { get; set; }
+
+    public string? ChequeReceiptDescription { get; set; }
+
     public decimal ChequePrice { get; set; }
 
     public string CustomerNationalId { get; set; }

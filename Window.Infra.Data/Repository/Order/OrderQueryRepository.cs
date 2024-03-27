@@ -319,7 +319,6 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                              .AsNoTracking()
                              .Where(p => !p.IsDelete &&
                                     p.Id == orderId && 
-                                   !p.IsFinally &&
                                     p.PaymentWay.HasValue &&
                                     p.PaymentWay.Value == Domain.Enums.Order.OrderPaymentWay.InstallmentPayment)
                              .Select(p => new ManageShopOrderDetailDTO()
