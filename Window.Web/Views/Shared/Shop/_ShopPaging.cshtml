@@ -1,0 +1,29 @@
+﻿@model Window.Domain.ViewModels.Common.PagingViewModel
+
+<div class="row">
+    <div class="col-12">
+        <div class="pagination">
+                @if (Model.StartPage < Model.Page)
+                {
+                <a class="prev" onclick="FillPageId(@(Model.Page - 1))"><i class="mdi mdi-chevron-double-right"></i></a>
+                }
+                @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+                {
+                    if (Model.Page == i)
+                    {
+                    <a class="active-page">@i</a>
+                    }
+                    else
+                    {
+                        <a class="cursor-pointer " onclick="FillPageId(@i)">@i</a>
+                    }
+                }
+                @if (Model.EndPage > Model.Page)
+                {
+                <a class="next" onclick="FillPageId(@(Model.Page + 1))"><i class="mdi mdi-chevron-double-left"></i></a>
+                }
+        </div>
+    </div>
+</div>
+
+

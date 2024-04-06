@@ -16,6 +16,35 @@
     var colors = ViewData["Colors"] as List<ListOfColorsForFilterProductsDTO>;
 }
 
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            var nonLinearStepSlider = document.getElementById('slider-non-linear-step');
+            noUiSlider.create(nonLinearStepSlider, {
+                start: [0, 20000],
+                connect: true,
+                direction: 'rtl',
+                format: wNumb({
+                    decimals: 0,
+                    thousand: ','
+                }),
+                range: {
+                    'min': [0],
+                    '10%': [500, 500],
+                    '50%': [40000, 1000],
+                    'max': [100000]
+                }
+            });
+            var nonLinearStepSliderValueElement = document.getElementById('slider-non-linear-step-value');
+            nonLinearStepSlider.noUiSlider.on('update', function (values) {
+                nonLinearStepSliderValueElement.innerHTML = values.join(' - ');
+            });
+        });
+    </script>
+
+}
+
 <main class="main-content dt-sl mb-3" style="margin-top: 209.167px; transform: none;">
     <div class="container main-container" style="transform: none;">
         <div class="row" style="transform: none;">
@@ -30,9 +59,10 @@
                             <button class="btn-close-filter-sidebar"><i class="fal fa-times"></i></button>
                         </div>
                     </div><div class="dt-sn dt-sn--box mb-3">
-                        <form asp-action="FilterProducts" asp-area="" asp-controller="ShopProduct" method="get">
+                        <form id="filter-search" asp-action="FilterProducts" asp-area="" asp-controller="ShopProduct" method="get">
                             <input asp-for="ShopCategoryParentId" type="hidden" />
                             <input asp-for="ProductTitle" type="hidden" />
+                            <input type="hidden" asp-for="Page" />
 
                             <div class="col-12">
                                 <div class="section-title text-sm-title title-wide mb-1 no-after-title-wide">
@@ -187,18 +217,21 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 mb-4">
-                                <div class="section-title text-sm-title title-wide no-after-title-wide mb-1">
-                                    <h2>فیلتر براساس قیمت :</h2>
-                                </div>
-                                <div class="mt-2 mb-2">
-                                    <div id="slider-non-linear-step" class="noUi-target noUi-rtl noUi-horizontal"><div class="noUi-base"><div class="noUi-connects"><div class="noUi-connect" style="transform: translate(70.2532%) scale(0.297468, 1);"></div></div><div class="noUi-origin" style="transform: translate(0%); z-index: 5;"><div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="20000.0" aria-valuenow="0.0" aria-valuetext="0"><div class="noUi-touch-area"></div></div></div><div class="noUi-origin" style="transform: translate(-297.468%); z-index: 6;"><div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="100000.0" aria-valuenow="20000.0" aria-valuetext="20,000"><div class="noUi-touch-area"></div></div></div></div></div>
-                                </div>
-                                <div class="mt-2 mb-2 text-center pt-2">
-                                    <span>قیمت: </span>
-                                    <span class="example-val" id="slider-non-linear-step-value">0 - 20,000</span> تومان
-                                </div>
+                            @* <div class="col-12 mb-4">
+                            <div class="section-title text-sm-title title-wide no-after-title-wide mb-1">
+                            <h2>فیلتر براساس قیمت :</h2>
                             </div>
+                            <div class="mt-2 mb-2">
+                            <div id="slider-non-linear-step" class="noUi-target noUi-rtl noUi-horizontal">
+                            <div class="noUi-base">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="mt-2 mb-2 text-center pt-2">
+                            <span>قیمت: </span>
+                            <span class="example-val" id="slider-non-linear-step-value">0 - 20,000</span> تومان
+                            </div>
+                            </div> *@
                             <div class="col-12">
                                 <button class="btn btn-info btn-block" type="submit">
                                     فیلتر
@@ -207,7 +240,15 @@
                         </form>
                     </div>
 
-                    <div class="resize-sensor" style="position: absolute; inset: 0px; overflow: hidden; z-index: -1; visibility: hidden;"><div class="resize-sensor-expand" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0px; top: 0px; transition: all 0s ease 0s; width: 360px; height: 1385px;"></div></div><div class="resize-sensor-shrink" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div></div></div>
+                    <div class="resize-sensor" style="position: absolute; inset: 0px; overflow: hidden; z-index: -1; visibility: hidden;">
+                        <div class="resize-sensor-expand" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;">
+                            <div style="position: absolute; left: 0px; top: 0px; transition: all 0s ease 0s; width: 360px; height: 1385px;">
+                            </div>
+                        </div>
+                        <div class="resize-sensor-shrink" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;">
+                            <div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- End Sidebar -->
@@ -230,28 +271,28 @@
                                             <div class="product-card mb-2 mx-res-0">
 
                                                 @* <div class="promotion-badge">
-                                                    فروش ویژه
-                                                </div> *@
+                                        فروش ویژه
+                                        </div> *@
 
-                                             @*    <div class="product-head">
-                                                    <div class="rating-stars">
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                        <i class="mdi mdi-star active"></i>
-                                                    </div>
-                                                    <div class="discount">
-                                                        <span>20%</span>
-                                                    </div>
-                                                </div> *@
+                                                @*    <div class="product-head">
+                                        <div class="rating-stars">
+                                        <i class="mdi mdi-star active"></i>
+                                        <i class="mdi mdi-star active"></i>
+                                        <i class="mdi mdi-star active"></i>
+                                        <i class="mdi mdi-star active"></i>
+                                        <i class="mdi mdi-star active"></i>
+                                        </div>
+                                        <div class="discount">
+                                        <span>20%</span>
+                                        </div>
+                                        </div> *@
 
                                                 <a class="product-thumb"
                                                    asp-action="ShopProductDetail"
                                                    asp-area=""
                                                    asp-controller="ShopProduct"
                                                    asp-route-productId="@product.Id">
-                                                   <img src="@FilePaths.ProductsPathThumb/@product.ProductImage" alt="Product Thumbnail">
+                                                    <img src="@FilePaths.ProductsPathThumb/@product.ProductImage" alt="Product Thumbnail">
                                                 </a>
 
                                                 <div class="product-card-body">
@@ -276,20 +317,7 @@
 
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="pagination">
-                                            <a href="#" class="prev"><i class="mdi mdi-chevron-double-right"></i></a>
-                                            <a href="#">1</a>
-                                            <a href="#" class="active-page">2</a>
-                                            <a href="#">3</a>
-                                            <a href="#">4</a>
-                                            <a href="#">...</a>
-                                            <a href="#">7</a>
-                                            <a href="#" class="next"><i class="mdi mdi-chevron-double-left"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
+                                <partial name="/views/shared/shop/_ShopPaging.cshtml" model="@Model.GetCurrentPaging()" />
 
                             </div>
                         }
