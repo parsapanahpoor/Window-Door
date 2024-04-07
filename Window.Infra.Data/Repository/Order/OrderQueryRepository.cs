@@ -215,7 +215,7 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                                                               .Select(o => new ProductForInvoice()
                                                                               {
                                                                                   Price = o.Price,
-                                                                                  ProductId = o.ProductBrandId,
+                                                                                  ProductId = o.ProductBrandId.Value,
                                                                                   ProductImage = o.ProductImage,
                                                                                   ProductTitle = o.ProductName,
                                                                                   SellerName = _context.Users

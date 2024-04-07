@@ -18,6 +18,8 @@ public record ShopProductDetailDTO
 
     public decimal Price { get; set; }
 
+    public string? SaleScale { get; set; }
+
     public Seller Seller { get; set; }
 
     public ShopProductDetailColor Color { get; set; }

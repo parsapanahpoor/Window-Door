@@ -152,5 +152,25 @@ public class SiteSettingService : ISiteSettingService
         return true;
     }
 
+    public async Task<string?> Get_SaleScaleTitle_ById(ulong scaleId , 
+                                                      CancellationToken cancellation)
+    {
+        return await _context.SalesScales
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.Id == scaleId)
+                             .Select(p => p.ScaleTitle)
+                             .FirstOrDefaultAsync();
+    }
+
+    public async Task<List<string>> GetListOf_AdminsMobiles(CancellationToken cancellation)
+    {
+        return await _context.AdminMobiles
+                             .AsNoTracking()
+                             .Where(p=> !p.IsDelete)
+                             .Select(p=> p.AdminMobile)
+                             .ToListAsync();
+    }
+
     #endregion
 }

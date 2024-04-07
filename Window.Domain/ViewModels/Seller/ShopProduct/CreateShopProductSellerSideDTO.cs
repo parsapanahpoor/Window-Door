@@ -28,7 +28,7 @@ public class CreateShopProductSellerSideDTO
 
     public ulong SaleScaleId { get; set; }
 
-    public decimal Price { get; set; }
+    public string Price { get; set; }
 
     #endregion
 }

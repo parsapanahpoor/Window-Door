@@ -83,7 +83,7 @@ public class ShopProductService : IShopProductService
             SellerUserId = sellerId,
             LongDescription = model.Description,
             ShortDescription = model.ShortDescription,
-            Price = model.Price,
+            Price = decimal.Parse(model.Price),
             SaleScaleId = model.SaleScaleId,
         };
 
@@ -154,8 +154,9 @@ public class ShopProductService : IShopProductService
             Title = product.ProductName,
             ProductImage = product.ProductImage,
             Description = product.LongDescription,
-            Price = product.Price,
+            Price = product.Price.ToString(),
             ShortDescription = product.ShortDescription,
+            SaleScaleId = product.SaleScaleId,
         };
 
         #endregion
@@ -199,8 +200,8 @@ public class ShopProductService : IShopProductService
         oldProduct.ProductName = newProduct.Title.SanitizeText();
         oldProduct.ShortDescription = newProduct.ShortDescription.SanitizeText();
         oldProduct.LongDescription = newProduct.Description.SanitizeText();
-        oldProduct.Price = newProduct.Price;
-        oldProduct.ProductBrandId = newProduct.ShopBrandId;
+        oldProduct.Price = decimal.Parse(newProduct.Price);
+        oldProduct.SaleScaleId = newProduct.SaleScaleId;
         oldProduct.ProductColorId = newProduct.ShopColorId;
 
         #endregion

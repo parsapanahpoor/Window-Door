@@ -143,7 +143,7 @@ public class ShopProductController : SellerBaseController
 
         #region View Bags
 
-        ViewData["Brands"] = await _brandService.FillListOfBrandsForFilterProductsDTO(cancellation);
+        ViewData["SaleScales"] = await _siteSettingService.ListOfSalesScales();
 
         ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
 
@@ -187,7 +187,7 @@ public class ShopProductController : SellerBaseController
 
         #region View Bags
 
-        ViewData["Brands"] = await _brandService.FillListOfBrandsForFilterProductsDTO(cancellation);
+        ViewData["SaleScales"] = await _siteSettingService.ListOfSalesScales();
 
         ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
 

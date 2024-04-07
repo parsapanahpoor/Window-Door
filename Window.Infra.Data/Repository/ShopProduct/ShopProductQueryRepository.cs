@@ -47,7 +47,8 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
     {
         var query = _context.ShopProducts
             .Include(p => p.User)
-            .Where(s => !s.IsDelete)
+            .Where(s => !s.IsDelete && 
+                   s.ProductBrandId.HasValue)
             .OrderByDescending(s => s.CreateDate)
             .AsQueryable();
 
@@ -62,7 +63,7 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
         //Brand
         if (model.BrandId != null && model.BrandId.Any())
         {
-            query = query.Where(p => model.BrandId.Contains(p.ProductBrandId));
+            query = query.Where(p => p.ProductBrandId.HasValue &&  model.BrandId.Contains(p.ProductBrandId.Value));
         }
 
         //Title
@@ -155,7 +156,8 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
     {
         return await _context.ShopProducts
                              .AsNoTracking()
-                             .Where(p => !p.IsDelete)
+                             .Where(p => !p.IsDelete && 
+                                    p.ProductBrandId.HasValue)
                              .OrderByDescending(p => p.CreateDate)
                              .Select(p => new LastestShopProducts()
                              {
@@ -184,7 +186,8 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
 
         var products = await _context.ShopProducts
                              .AsNoTracking()
-                             .Where(p => !p.IsDelete)
+                             .Where(p => !p.IsDelete && 
+                                    p.ProductBrandId.HasValue)
                              .OrderByDescending(p => p.CreateDate)
                              .GroupBy(p => p.SellerUserId)
                              .ToListAsync();

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace Window.Domain.ViewModels.Seller.ShopProduct;
 
@@ -21,7 +22,7 @@ public record EditShopProductSellerSideDTO
     [Display(Name = "متن ")]
     public string? Description { get; set; }
 
-    public decimal Price { get; set; }
+    public string Price { get; set; }
 
     [Display(Name = "تگ  ")]
     [MaxLength(300, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
@@ -29,7 +30,7 @@ public record EditShopProductSellerSideDTO
 
     public ulong ShopColorId { get; set; }
 
-    public ulong ShopBrandId { get; set; }
+    public ulong SaleScaleId { get; set; }
 
     public string? ProductImage { get; set; }
 

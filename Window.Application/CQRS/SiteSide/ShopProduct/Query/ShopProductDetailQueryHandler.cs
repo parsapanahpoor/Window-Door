@@ -19,6 +19,7 @@ public record ShopProductDetailQueryHandler : IRequestHandler<ShopProductDetailQ
     private readonly IShopProductGalleryQueryRepository _shopProductGalleryQueryRepository;
     private readonly IBrandService _brandService;
     private readonly IShopProductFeatureQueryRepository _shopProductFeatureQueryRepository;
+    private readonly ISiteSettingService _siteSettingService;
     private readonly IUserRepository _userRepository;
 
     public ShopProductDetailQueryHandler(IShopColorsQueryRepository shopColorsQueryRepository , 
@@ -26,7 +27,8 @@ public record ShopProductDetailQueryHandler : IRequestHandler<ShopProductDetailQ
                                          IBrandService brandService ,
                                          IShopProductGalleryQueryRepository shopProductGalleryQueryRepository , 
                                          IShopProductFeatureQueryRepository shopProductFeatureQueryRepository,
-                                         IUserRepository userRepository)
+                                         IUserRepository userRepository ,
+                                         ISiteSettingService siteSettingService)
     {
         _shopColorsQueryRepository = shopColorsQueryRepository;
         _shopProductQueryRepository = shopProductQueryRepository;
@@ -34,6 +36,7 @@ public record ShopProductDetailQueryHandler : IRequestHandler<ShopProductDetailQ
         _shopProductGalleryQueryRepository = shopProductGalleryQueryRepository;
         _shopProductFeatureQueryRepository = shopProductFeatureQueryRepository;
         _userRepository = userRepository;
+        _siteSettingService = siteSettingService;
     }
 
     public async Task<ShopProductDetailDTO?> Handle(ShopProductDetailQuery request, CancellationToken cancellationToken)
@@ -49,7 +52,8 @@ public record ShopProductDetailQueryHandler : IRequestHandler<ShopProductDetailQ
 
         ShopProductDetailDTO model = new()
         {
-            Brand = await _brandService.FillShopProductDetailBrand(product.ProductBrandId, cancellationToken),
+            Brand = await _brandService.FillShopProductDetailBrand(product.ProductBrandId.Value, cancellationToken),
+            SaleScale = product.SaleScaleId != null ? await _siteSettingService.Get_SaleScaleTitle_ById(product.SaleScaleId , cancellationToken) : null ,
             Color = await _shopColorsQueryRepository.FillShopProductDetailColor(product.ProductColorId, cancellationToken),
             LongDescription = product.LongDescription,
             Price = product.Price,

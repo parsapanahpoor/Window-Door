@@ -29,5 +29,10 @@ public interface ISiteSettingService
     Task<bool> Delete_SaleScaleId(ulong saleScaleId,
                                                CancellationToken cancellationToken);
 
+    Task<string?> Get_SaleScaleTitle_ById(ulong scaleId,
+                                          CancellationToken cancellation);
+
+    Task<List<string>> GetListOf_AdminsMobiles(CancellationToken cancellation);
+
     #endregion
 }
