@@ -384,12 +384,30 @@
         </li>
 
         <li>
-            <a asp-controller="SiteSetting" asp-action="AddOrEditSiteSetting">
-                <i class="menu-icon glyphicon glyphicon-wrench"></i>
-                <span class="menu-text"> تنظیمات سایت  </span>
 
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-ticket"></i>
+                <span class="menu-text"> تنظیمات سایت </span>
                 <i class="menu-expand"></i>
             </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-controller="SiteSetting" asp-action="AddOrEditSiteSetting" asp-area="Admin">
+                        <span class="menu-text"> تنظیمات سایت </span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="ListOfScales" asp-controller="SiteSetting" asp-area="Admin">
+                        <span class="menu-text"> مقیاس های فروش </span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="ListOfMobiles" asp-controller="SiteSetting" asp-area="Admin">
+                        <span class="menu-text"> موبایل ادمین ها </span>
+                    </a>
+                </li>
+            </ul>
         </li>
 
     </ul>

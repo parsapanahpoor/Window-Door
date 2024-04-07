@@ -1,20 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Window.Domain.Entities.SiteSetting;
+﻿using Window.Domain.Entities.SiteSetting;
+namespace Window.Application.Services.Interfaces;
 
-namespace Window.Application.Services.Interfaces
+public interface ISiteSettingService
 {
-    public interface ISiteSettingService
-    {
-        #region Admin Side 
+    #region Admin Side 
 
-        Task<SiteSetting?> FillSiteSettingModel();
+    Task<SiteSetting?> FillSiteSettingModel();
 
-        Task<bool> AddOrUpdateSiteSetting(SiteSetting siteSetting);
+    Task<bool> AddOrUpdateSiteSetting(SiteSetting siteSetting);
 
-        #endregion
-    }
+    Task<List<AdminMobiles>> ListOfAdminMobiles();
+
+    Task Add_AdminMobiles(AdminMobiles adminMobiles);
+
+    Task<AdminMobiles?> Get_AdminMobile_ById(ulong adminMobileId,
+                                             CancellationToken cancellationToken);
+
+    Task<bool> Delete_AdminMobile(ulong adminMobileId,
+                                  CancellationToken cancellationToken);
+
+    Task<List<SalesScale>> ListOfSalesScales();
+
+    Task Add_SaleScale(SalesScale salesScale);
+
+    Task<SalesScale?> Get_SalesScale_ById(ulong saleScaleId,
+                                                       CancellationToken cancellationToken);
+
+    Task<bool> Delete_SaleScaleId(ulong saleScaleId,
+                                               CancellationToken cancellationToken);
+
+    #endregion
 }

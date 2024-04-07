@@ -218,6 +218,11 @@ public class WindowDbContext : DbContext
 
     public DbSet<SiteSetting> SiteSettings { get; set; }
 
+    public DbSet<SalesScale> SalesScales { get; set; }
+
+    public DbSet<AdminMobiles> AdminMobiles { get; set; }
+
+
     #endregion
 
     #region Inquiry
