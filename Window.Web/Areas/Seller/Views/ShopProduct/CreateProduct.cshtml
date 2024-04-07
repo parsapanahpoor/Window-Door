@@ -6,9 +6,9 @@
 @{
     ViewData["Title"] = "افزودن محصول جدید";
 
-    var brands = ViewData["Brands"] as List<ListOfBrandsForFilterProductsDTO>;
-
     var colors = ViewData["Colors"] as List<ListOfColorsForFilterProductsDTO>;
+
+    var saleScale = ViewData["SaleScales"] as List<Window.Domain.Entities.SiteSetting.SalesScale>;
 }
 
 @section Styles
@@ -102,22 +102,22 @@
                 <div class="col-lg-12">
                     <div class="widget">
                         <div class="widget-header bordered-bottom bordered-green">
-                            <span class="widget-caption"> برند محصول   </span>
+                            <span class="widget-caption"> مقیاس فروش محصول   </span>
                         </div>
                         <div class="widget-body">
                             <div class="form-group">
-                                <label> برندها </label>
-                                <select asp-for="ShopBrandId" class="form-control">
+                                <label> مقیاس های فروش </label>
+                                <select asp-for="SaleScaleId" class="form-control">
                                     <option value="">انتخاب کنید </option>
-                                    @if (brands != null && brands.Any())
+                                    @if (saleScale != null && saleScale.Any())
                                     {
-                                        foreach (var brand in brands)
+                                        foreach (var scale in saleScale)
                                         {
-                                            <option value="@brand.Id"> @brand.BrandTitle </option>
+                                            <option value="@scale.Id"> @scale.ScaleTitle </option>
                                         }
                                     }
                                 </select>
-                                <span class="text-danger" asp-validation-for="ShopBrandId"></span>
+                                <span class="text-danger" asp-validation-for="SaleScaleId"></span>
                             </div>
 
                         </div>

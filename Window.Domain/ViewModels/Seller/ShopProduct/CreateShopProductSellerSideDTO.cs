@@ -26,7 +26,7 @@ public class CreateShopProductSellerSideDTO
 
     public ulong ShopColorId { get; set; }
 
-    public ulong ShopBrandId { get; set; }
+    public ulong SaleScaleId { get; set; }
 
     public decimal Price { get; set; }
 

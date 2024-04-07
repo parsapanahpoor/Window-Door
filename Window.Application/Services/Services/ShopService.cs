@@ -78,13 +78,13 @@ public class ShopProductService : IShopProductService
         {
             CreateDate = DateTime.Now,
             IsDelete = false,
-            ProductBrandId = model.ShopBrandId,
             ProductColorId = model.ShopColorId,
             ProductName = model.Title,
             SellerUserId = sellerId,
             LongDescription = model.Description,
             ShortDescription = model.ShortDescription,
-            Price = model.Price
+            Price = model.Price,
+            SaleScaleId = model.SaleScaleId,
         };
 
         if (newsImage != null && newsImage.IsImage())
@@ -150,7 +150,6 @@ public class ShopProductService : IShopProductService
         EditShopProductSellerSideDTO model = new EditShopProductSellerSideDTO()
         {
             ShopProductId = product.Id,
-            ShopBrandId = product.ProductBrandId,
             ShopColorId = product.ProductColorId,
             Title = product.ProductName,
             ProductImage = product.ProductImage,

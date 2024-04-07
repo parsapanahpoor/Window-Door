@@ -28,17 +28,19 @@ public class ShopProductController : SellerBaseController
     private readonly IShopCategoryService _shopCategoryService;
     private readonly IShopColorService _shopColorService;
     private readonly IBrandService _brandService;
+    private readonly ISiteSettingService _siteSettingService;
 
     public ShopProductController(IShopProductService shopProductService,
                                  IShopCategoryService shopCategoryService,
                                  IShopColorService shopColorService,
-                                 IBrandService brandService)
+                                 IBrandService brandService,
+                                 ISiteSettingService siteSettingService)
     {
         _shopProductService = shopProductService;
         _shopCategoryService = shopCategoryService;
         _shopColorService = shopColorService;
         _brandService = brandService;
-
+        _siteSettingService = siteSettingService;
     }
 
     #endregion
@@ -61,9 +63,9 @@ public class ShopProductController : SellerBaseController
     {
         #region View Bags
 
-        ViewData["Brands"] = await _brandService.FillListOfBrandsForFilterProductsDTO(cancellation);
-
         ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
+
+        ViewData["SaleScales"] = await _siteSettingService.ListOfSalesScales();
 
         #endregion
 
@@ -79,9 +81,9 @@ public class ShopProductController : SellerBaseController
         {
             #region View Bags
 
-            ViewData["Brands"] = await _brandService.FillListOfBrandsForFilterProductsDTO(cancellation);
-
             ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
+
+            ViewData["SaleScales"] = await _siteSettingService.ListOfSalesScales();
 
             #endregion
 
@@ -120,9 +122,9 @@ public class ShopProductController : SellerBaseController
 
         #region View Bags
 
-        ViewData["Brands"] = await _brandService.FillListOfBrandsForFilterProductsDTO(cancellation);
-
         ViewData["Colors"] = await _shopColorService.FillListOfColorsForFilterProductsDTO(cancellation);
+
+        ViewData["SaleScales"] = await _siteSettingService.ListOfSalesScales();
 
         #endregion
 

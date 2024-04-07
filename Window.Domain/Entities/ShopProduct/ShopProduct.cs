@@ -12,7 +12,9 @@ public sealed class ShopProduct : BaseEntity
 
     public ulong ProductColorId { get; set; }
 
-    public ulong ProductBrandId { get; set; }
+    public ulong? ProductBrandId { get; set; }
+
+    public ulong SaleScaleId { get; set; }
 
     public string ProductImage { get; set; }
 
