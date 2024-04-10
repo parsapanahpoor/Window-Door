@@ -4,6 +4,7 @@ using Window.Application.Convertors;
 using Window.Application.CQRS.SellerPanel.OrderCheque.Command;
 using Window.Application.Services.Interfaces;
 using Window.Application.StticTools;
+using Window.Domain.Enums.Order;
 using Window.Domain.Interfaces;
 using Window.Domain.Interfaces.Order;
 using Window.Domain.Interfaces.ShopProduct;
@@ -55,6 +56,15 @@ public record SelectOrderPaymentWayCommandHandler : IRequestHandler<SelectOrderP
         //Find Seller User Id By Product Id 
         ulong sellerUserId = await _shopProductQueryRepository.GetSellerId_ByProductId(productId, cancellationToken);
         if (sellerUserId == 0) return SelectOrderPaymentWayResult.Faild;
+
+        //Is Exist More Than One Seller In Order That Will Pay By Installer 
+        if (request.OrderPaymentWay == OrderPaymentWay.InstallmentPayment)
+        {
+            if (await _orderQueryRepository.IsExist_MoreThanOneSeller_InOrderThatWillPayByInstaller(order.Id , cancellationToken))
+            {
+                return SelectOrderPaymentWayResult.MoreThanOneSellerForInstallerPaymentWay;
+            }
+        }
 
         //Update Order Payment Way
         order.PaymentWay = request.OrderPaymentWay;

@@ -19,4 +19,5 @@ public enum SelectOrderPaymentWayResult
     SuccessCashPayment,
     Faild,
     ChoseInstallerInPass,
+    MoreThanOneSellerForInstallerPaymentWay
 }

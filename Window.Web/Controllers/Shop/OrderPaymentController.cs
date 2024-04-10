@@ -44,6 +44,11 @@ public class OrderPaymentController : SiteBaseController
                     TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
                     return RedirectToAction("ShopLanding", "Shop");
 
+                case SelectOrderPaymentWayResult.MoreThanOneSellerForInstallerPaymentWay:
+                    TempData[WarningMessage] = "در روش پرداخت قسطی می بایست اقلام انتخابی شما تنها از یک فروشنده انتخاب شده باشد.";
+                    TempData[InfoMessage] = "شما میتوانید این سبدخرید را حذف کرده و مجددا اقدام کنید.";
+                    return RedirectToAction("ShowInvoice", "Order");
+
                 default:
                     break;
             }

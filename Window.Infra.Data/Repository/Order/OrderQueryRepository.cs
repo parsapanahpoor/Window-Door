@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Data;
+using System.Linq;
 using System.Net.NetworkInformation;
 using Window.Data;
 using Window.Data.Context;
@@ -264,7 +265,7 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                    !p.IsFinally &&
                                     p.PaymentWay.HasValue &&
                                     p.PaymentWay.Value == Domain.Enums.Order.OrderPaymentWay.InstallmentPayment)
-                             .Select(p=> new ManageShopOrderDetailDTO()
+                             .Select(p => new ManageShopOrderDetailDTO()
                              {
                                  Order = p,
                                  OrderDetails = _context.OrderDetails
@@ -291,12 +292,12 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                                         .ToList(),
                                  Location = _context.Locations
                                                     .AsNoTracking()
-                                                    .Where(w=> !w.IsDelete && 
+                                                    .Where(w => !w.IsDelete &&
                                                            w.Id == p.LocationId)
                                                     .FirstOrDefault(),
                                  OrderCheques = _context.orderCheques
                                                         .AsNoTracking()
-                                                        .Where(c=> !c.IsDelete && 
+                                                        .Where(c => !c.IsDelete &&
                                                                c.OrderId == p.Id)
                                                         .ToList(),
                                  CustomerChequeInformation = null,
@@ -312,13 +313,13 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
     }
 
     public async Task<ManageShopOrderDetailDTO?> FillManageShopOrderDetailDTO(ulong userId,
-                                                                              ulong orderId ,
+                                                                              ulong orderId,
                                                                               CancellationToken cancellationToken)
     {
         return await _context.Orders
                              .AsNoTracking()
                              .Where(p => !p.IsDelete &&
-                                    p.Id == orderId && 
+                                    p.Id == orderId &&
                                     p.PaymentWay.HasValue &&
                                     p.PaymentWay.Value == Domain.Enums.Order.OrderPaymentWay.InstallmentPayment)
                              .Select(p => new ManageShopOrderDetailDTO()
@@ -368,6 +369,59 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                              .FirstOrDefaultAsync();
     }
 
+    public async Task<bool> IsExist_MoreThanOneSeller_InOrderThatWillPayByInstaller(ulong orderId,
+                                                                                    CancellationToken cancellationToken)
+    {
+        var productIds = await _context.OrderDetails
+                                      .AsNoTracking()
+                                      .Where(p => !p.IsDelete &&
+                                             p.OrderId == orderId)
+                                      .Select(p => p.ProductId)
+                                      .ToListAsync();
+
+        var sellerIds = new List<ulong>();
+
+        if (productIds != null && productIds.Any())
+        {
+            foreach (var productId in productIds)
+            {
+                var sellerId = await _context.ShopProducts
+                                             .Where(p => !p.IsDelete &&
+                                                    p.Id == productId)
+                                             .Select(p => p.SellerUserId)
+                                             .FirstOrDefaultAsync();
+
+                if (sellerId != 0) sellerIds.Add(sellerId);
+            }
+        }
+
+        if (sellerIds != null && sellerIds.Any())
+        {
+            if (sellerIds.Count() == 1) return false;
+
+            HashSet<ulong> set = new HashSet<ulong>();
+            List<ulong> uniqueNumbers = new List<ulong>();
+
+            foreach (ulong sellerId in sellerIds)
+            {
+                if (set.Add(sellerId))
+                {
+                    // If the number is added to the set, it means it's unique
+                    uniqueNumbers.Add(sellerId);
+                }
+            }
+
+            if (uniqueNumbers.Count()>1)return true;
+        }
+        else
+        {
+            //This show that there is a problem 
+            return true;
+        }
+
+        return false;
+    }
+
     #endregion
 
     #region Admin Side 
@@ -386,14 +440,14 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                                         .AsNoTracking()
                                                         .Where(d => !d.IsDelete &&
                                                                d.OrderId == p.Id)
-                                                        .Select(d=> new ManageShopOrderDetailAdminDTO()
+                                                        .Select(d => new ManageShopOrderDetailAdminDTO()
                                                         {
                                                             CountOfChoice = d.Count,
                                                             Product = _context.ShopProducts
                                                                               .AsNoTracking()
-                                                                              .Where(pr=> !pr.IsDelete &&
+                                                                              .Where(pr => !pr.IsDelete &&
                                                                                      pr.Id == d.ProductId)
-                                                                              .Select(pr=> new ProductAdminSideDTO()
+                                                                              .Select(pr => new ProductAdminSideDTO()
                                                                               {
                                                                                   ProductId = pr.Id,
                                                                                   ProducPrice = pr.Price,
@@ -419,7 +473,7 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                  sellerChequeInfo = null,
                                  CustomerUserInformations = _context.Users
                                                                     .AsNoTracking()
-                                                                    .Where(u=> !u.IsDelete && 
+                                                                    .Where(u => !u.IsDelete &&
                                                                            u.Id == p.UserId)
                                                                     .FirstOrDefault()
                              })

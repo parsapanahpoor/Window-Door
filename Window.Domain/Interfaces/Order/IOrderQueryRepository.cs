@@ -58,6 +58,9 @@ public interface IOrderQueryRepository
                                                                  ulong orderId,
                                                                  CancellationToken cancellationToken);
 
+    Task<bool> IsExist_MoreThanOneSeller_InOrderThatWillPayByInstaller(ulong orderId,
+                                                                       CancellationToken cancellationToken);
+
     Task<ShowOrderChequeDetailAdminDTO?> FillShowOrderChequeDetailAdminDTO(ulong orderId,
                                                                            CancellationToken cancellationToken);
 

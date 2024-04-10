@@ -12,6 +12,13 @@
     </script>
 }
 
+@if (TempData["WarningMessage"] != null)
+{
+    <script>
+        ShowMessage("هشدار", "@TempData["WarningMessage"]", "warning");
+    </script>
+}
+
 @if (TempData["InfoMessage"] != null)
 {
     <script>
@@ -19,9 +26,3 @@
     </script>
 }
 
-@if (TempData["WarningMessage"] != null)
-{
-    <script>
-        ShowMessage("هشدار", "@TempData["WarningMessage"]", "warning");
-    </script>
-}
