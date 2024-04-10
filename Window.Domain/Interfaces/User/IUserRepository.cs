@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Window.Domain.Entities.Account;
+﻿using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Wallet;
-using Window.Domain.ViewModels.Admin.Wallet;
 using Window.Domain.ViewModels.Seller.ShopOrder;
 using Window.Domain.ViewModels.User;
 using Window.Domain.ViewModels.User.Account;
@@ -46,6 +40,12 @@ namespace Window.Domain.Interfaces
         List<User> GetAllUsers();
 
         Task<FilterUserViewModel> FilterUsersForSellerPanel(FilterUserViewModel filter, ulong masterId);
+
+        #endregion
+
+        #region General Methods 
+
+        Task<string?> Get_UserMobile_ByUserId(ulong userId, CancellationToken cancellation);
 
         #endregion
 

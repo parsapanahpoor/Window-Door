@@ -30,6 +30,20 @@ namespace CRM.Data.Repository
 
         #endregion
 
+        #region General Methods 
+
+        public async Task<string?> Get_UserMobile_ByUserId(ulong userId , CancellationToken cancellation)
+        {
+            return await _context.Users
+                                 .AsNoTracking()
+                                 .Where(p => !p.IsDelete &&
+                                        p.Id == userId)
+                                 .Select(p => p.Mobile)
+                                 .FirstOrDefaultAsync();
+        }
+
+        #endregion
+
         #region user
 
         //Create Wallet Without Calculate

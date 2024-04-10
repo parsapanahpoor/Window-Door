@@ -2,9 +2,13 @@
 using Microsoft.AspNetCore.Mvc.Formatters.Internal;
 using System.Globalization;
 using Window.Application.Common.IUnitOfWork;
+using Window.Application.Convertors;
 using Window.Application.Extensions;
 using Window.Application.Security;
+using Window.Application.Services.Interfaces;
 using Window.Application.StticTools;
+using Window.Domain.Entities.SiteSetting;
+using Window.Domain.Interfaces;
 using Window.Domain.Interfaces.Order;
 using Window.Domain.Interfaces.OrderCheque;
 using Window.Domain.Interfaces.ShopProduct;
@@ -15,6 +19,9 @@ public record UploadOrderChequeCommandHandler : IRequestHandler<UploadOrderChequ
 {
     #region Ctor
 
+    private static readonly HttpClient client = new HttpClient();
+    private readonly ISiteSettingService _siteSettingService;
+    private readonly IUserRepository _userRepository;
     private readonly IOrderChequeCommandRepository _orderChequeCommandRepository;
     private readonly IOrderChequeQueryRepository _orderChequeQueryRepository;
     private readonly IOrderQueryRepository _orderQueryRepository;
@@ -25,12 +32,16 @@ public record UploadOrderChequeCommandHandler : IRequestHandler<UploadOrderChequ
                                            IOrderChequeQueryRepository orderChequeQueryRepository,
                                            IOrderQueryRepository orderQueryRepository,
                                            IShopProductQueryRepository shopProductQueryRepository,
+                                           ISiteSettingService siteSettingService,
+                                           IUserRepository userRepository,
                                            IUnitOfWork unitOfWork)
     {
         _orderChequeCommandRepository = orderChequeCommandRepository;
         _orderChequeQueryRepository = orderChequeQueryRepository;
         _orderQueryRepository = orderQueryRepository;
         _shopProductQueryRepository = shopProductQueryRepository;
+        _siteSettingService = siteSettingService;
+        _userRepository = userRepository;
         _unitOfWork = unitOfWork;
     }
 
@@ -122,6 +133,33 @@ public record UploadOrderChequeCommandHandler : IRequestHandler<UploadOrderChequ
         //Add Order Cheque To Data Base
         await _orderChequeCommandRepository.AddOrderCheque(orderCheque , cancellationToken);
         await _unitOfWork.SaveChangesAsync();
+
+        #endregion
+
+        #region Send Alert SMS
+
+        //Send SMS To Admins
+        var adminsMobiles = await _siteSettingService.GetListOf_AdminsMobiles(cancellationToken);
+        if (adminsMobiles != null && adminsMobiles.Any())
+        {
+            string adminLink = $"{FilePaths.SiteAddress}/Admin/OrderCheques/ShowOrderChequeDetail?orderId={order.Id}";
+
+            foreach (var adminMobile in adminsMobiles)
+            {
+                var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={adminMobile}&token=={adminLink}&token2={DateTime.Now.ToShamsi()}&template=NewCheque-ForAdmin";
+                var results = client.GetStringAsync(result);
+            }
+        }
+
+        //Send SMS To Seller
+        var sellerMobile = await _userRepository.Get_UserMobile_ByUserId(sellerUserId , cancellationToken);
+        if (!string.IsNullOrEmpty(sellerMobile))
+        {
+            string sellerLink = $"{FilePaths.SiteAddress}/Seller/ShopOrder/ManageShopOrder?orderId={order.Id}";
+
+            var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={sellerMobile}&token=={sellerLink}&token2={DateTime.Now.ToShamsi()}&template=NewCheque-ForSeller";
+            var results = client.GetStringAsync(result);
+        }
 
         #endregion
 
