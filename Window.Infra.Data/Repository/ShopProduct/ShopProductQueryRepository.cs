@@ -9,6 +9,7 @@ using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopProduct;
 using Window.Domain.Interfaces.ShopProduct;
 using Window.Domain.ViewModels.Admin.ShopColor;
+using Window.Domain.ViewModels.Admin.ShopProduct;
 using Window.Domain.ViewModels.Seller.ShopProduct;
 using Window.Domain.ViewModels.Site.Shop.Landing;
 using Window.Domain.ViewModels.Site.Shop.SellerDetail;
@@ -25,6 +26,32 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
     public ShopProductQueryRepository(WindowDbContext context) : base(context)
     {
         _context = context;
+    }
+
+    #endregion
+
+    #region Admin Side 
+
+    public async Task<FilterShopProductsAdminSideDTO> FilterShopProductAdminSide(FilterShopProductsAdminSideDTO filter, CancellationToken cancellation)
+    {
+        var query = _context.ShopProducts
+                            .AsNoTracking()
+                            .Where(a => !a.IsDelete )
+                            .OrderBy(s => s.CreateDate)
+                            .AsQueryable();
+
+        #region Filter
+
+        if (!string.IsNullOrEmpty(filter.ProductTitle))
+        {
+            query = query.Where(s => EF.Functions.Like(s.ProductName, $"%{filter.ProductTitle}%"));
+        }
+
+        #endregion
+
+        await filter.Paging(query);
+
+        return filter;
     }
 
     #endregion

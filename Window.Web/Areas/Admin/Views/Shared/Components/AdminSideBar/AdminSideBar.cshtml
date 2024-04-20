@@ -59,9 +59,7 @@
             </ul>
         </li>
 
-
         @* Order Cheques *@
-
         <li>
             <a href="#" class="menu-dropdown">
                 <i class="menu-icon glyphicon glyphicon-th"></i>
@@ -73,6 +71,23 @@
                 <li>
                     <a asp-action="FilterOrderCheques" asp-controller="OrderCheques" asp-area="Admin">
                         <span class="menu-text"> لیست چک ها  </span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        @* Shop Products *@
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon glyphicon glyphicon-th"></i>
+                <span class="menu-text"> مدیریت محصولات  </span>
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-action="FilterShopProducts" asp-controller="ShopProducts" asp-area="Admin">
+                        <span class="menu-text"> لیست محصولات  </span>
                     </a>
                 </li>
             </ul>

@@ -1,0 +1,141 @@
+﻿@model Window.Domain.ViewModels.Admin.ShopProduct.FilterShopProductsAdminSideDTO
+@using Window.Application.StticTools
+
+@{
+    ViewData["Title"] = "فیلتر محصولات فروشگاه";
+}
+
+@section Styles
+{
+
+}
+
+@section Scripts
+{
+}
+
+@section breadcrumb
+{
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
+}
+
+<div class="row">
+    <div class="col-lg-3 col-sm-12">
+
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-green">
+
+                <span class="widget-caption"> فیلتر محصول  </span>
+
+            </div>
+            <div class="widget-body">
+                <div>
+                    <form asp-action="FilterShopProducts" asp-controller="ShopProducts" asp-area="Admin" id="filter-search" method="get">
+                        <input type="hidden" asp-for="Page" />
+
+                        <div class="form-group">
+                            <label asp-for="ProductTitle">عنوان محصول </label>
+                            <input type="text" class="form-control" asp-for="ProductTitle">
+                        </div>
+
+                        <hr />
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
+                                    <i class="btn-label glyphicon glyphicon-filter"></i>اعمال فیلتر
+                                </button>
+
+                                @if (Context.Request.QueryString.HasValue)
+                                {
+                                    <a asp-action="FilterShopProducts" asp-controller="ShopProducts" asp-area="Admin" class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                        <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-sm-12">
+        <div class="well with-header with-footer table-responsive">
+            <div class="header bordered-azure">
+                <div class="flex-style">
+
+                    <span> لیست محصولات فروشگاه </span>
+
+                    <span>@Model.GetShownEntitiesPagesTitle()</span>
+
+                </div>
+            </div>
+
+            @if (Model.Entities != null && Model.Entities.Any())
+            {
+                <table class="table table-hover table-bordered tc vm">
+                    <thead class="tc vm">
+                        <tr class="tc vm">
+                            <th class="tc vm">
+                                تصویر محصول
+                            </th>
+                            <th class="tc vm">
+                                عنوان
+                            </th>
+                            <th class="tc vm">
+                                امکانات
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="tc vm">
+                        @foreach (var product in Model.Entities)
+                        {
+                            <tr class="tc vm" remove-ajax-item="@product.Id">
+
+                                <td class="tc vm" style="max-width: 200px">
+                                    <img src="@FilePaths.ProductsPathThumb@product.ProductImage" style="height:100px;width:100px;" />
+                                </td>
+
+                                <td class="tc vm" style="max-width: 200px">
+                                    <p> @product.ProductName </p>
+                                </td>
+
+                                <td class="tc vm">
+
+                                    <a asp-action="EditProduct" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-warning btn-xs">ویرایش</a>
+
+                                    <a asp-action="EditProductCategory" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">دسته بندی </a>
+
+                                    <a asp-action="ProductGallery" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-success  btn-xs">گالری تصاویر </a>
+
+                                    <a asp-action="ProductFeature" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">ویژگی های محصول</a>
+
+                                    <a asp-action="ProductBrand" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-warning  btn-xs">برندها</a>
+
+                                    <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteShopProduct", "ShopProducts", new {area = "Admin", shopProductId = product.Id})')" class="badge badge-danger  btn-xs">حذف</button>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="footer tc">
+
+                    <partial name="_AdminPaging" model="@Model.GetCurrentPaging()" />
+
+                </div>
+            }
+            else
+            {
+                <partial name="_AdminNotFoundPartial" />
+            }
+        </div>
+    </div>
+</div>
+
+
+

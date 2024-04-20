@@ -2,6 +2,7 @@
 using Window.Domain.Entities.Brand;
 using Window.Domain.Entities.ShopCategories;
 using Window.Domain.Entities.ShopProduct;
+using Window.Domain.ViewModels.Admin.ShopProduct;
 using Window.Domain.ViewModels.Seller.ShopProduct;
 using Window.Domain.ViewModels.Site.Shop.Landing;
 using Window.Domain.ViewModels.Site.Shop.SellerDetail;
@@ -26,6 +27,12 @@ public interface IShopProductQueryRepository
     Task<List<LastestSellers>> ListOfLastestSellers(CancellationToken cancellation);
 
     Task<List<LastestBrands>> LastestMainBrands(CancellationToken cancellationToken);
+
+    #endregion
+
+    #region Admin Side 
+
+    Task<FilterShopProductsAdminSideDTO> FilterShopProductAdminSide(FilterShopProductsAdminSideDTO filter, CancellationToken cancellation);
 
     #endregion
 

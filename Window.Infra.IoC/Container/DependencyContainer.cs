@@ -43,6 +43,8 @@ namespace Window.IOC.Container
             services.AddScoped<ISellerPersonalVideoRepository, SellerPersonalVideoRepository>();
             services.AddScoped<IShopCategoryCommandRepository, ShopCategoryCommandRepository>();
             services.AddScoped<IShopCategoryQueryRepository, ShopCategoryQueryRepository>();
+
+            //Shop Products
             services.AddScoped<IShopProductCommandRepository, ShopProductCommandRepository>();
             services.AddScoped<IShopProductQueryRepository, ShopProductQueryRepository>();
 
