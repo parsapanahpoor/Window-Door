@@ -251,6 +251,10 @@ public class WindowDbContext : DbContext
 
     public DbSet<ProductTag> ProductTags { get; set; }
 
+    public DbSet<CustomersSuggestions> CustomersSuggestions{ get; set; }
+
+    public DbSet<IncredibleProducts> IncredibleProducts { get; set; }
+
     #endregion
 
     #region Shop Categories 
