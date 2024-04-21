@@ -63,7 +63,7 @@ public class ShopProductsController : AdminBaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditProduct(EditShopProductSellerSideDTO model,
+    public async Task<IActionResult> EditProduct(EditShopProductAdminSideDTO model,
                                                  IFormFile? NewsImage,
                                                  CancellationToken cancellation)
     {

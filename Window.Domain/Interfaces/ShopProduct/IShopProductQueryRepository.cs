@@ -22,6 +22,8 @@ public interface IShopProductQueryRepository
 
     Task<List<ShopCard>> FillShopCard(ulong sellerUserId, CancellationToken cancellation);
 
+    Task<List<LastestShopProducts>> Fill_LastestCustomersSuggestionsProducts(CancellationToken cancellation);
+
     Task<List<LastestShopProducts>> FillLastestShopProducts(CancellationToken cancellation);
 
     Task<List<LastestSellers>> ListOfLastestSellers(CancellationToken cancellation);
@@ -32,7 +34,19 @@ public interface IShopProductQueryRepository
 
     #region Admin Side 
 
+    Task<CustomersSuggestions?> Get_CustomerSuggestions_ByProductId(ulong productId,
+                                                                    CancellationToken cancellationToken);
+
     Task<FilterShopProductsAdminSideDTO> FilterShopProductAdminSide(FilterShopProductsAdminSideDTO filter, CancellationToken cancellation);
+
+    Task<IncredibleProducts?> Get_IncredibleProducts_ByProductId(ulong productId,
+                                                                             CancellationToken cancellationToken);
+
+    Task<bool> IsExistCurrentProduct_InIncrediblesProducts_ByProductId(ulong productId,
+                                                                       CancellationToken cancellationToken);
+
+    Task<bool> IsExistCurrentProduct_InCustomersSuggestions_ByProductId(ulong productId,
+                                                                        CancellationToken cancellationToken);
 
     #endregion
 

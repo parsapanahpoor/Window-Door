@@ -14,6 +14,7 @@ using Window.Domain.ViewModels.Seller.ShopProduct;
 using Window.Domain.ViewModels.Site.Shop.Landing;
 using Window.Domain.ViewModels.Site.Shop.SellerDetail;
 using Window.Domain.ViewModels.Site.Shop.ShopProduct;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Window.Infra.Data.Repository.ShopProduct;
 
@@ -32,11 +33,31 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
 
     #region Admin Side 
 
+    public async Task<CustomersSuggestions?> Get_CustomerSuggestions_ByProductId(ulong productId,
+                                                                                 CancellationToken cancellationToken)
+    {
+        return await _context.CustomersSuggestions
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.ShopProductId == productId)
+                             .FirstOrDefaultAsync();
+    }
+
+    public async Task<IncredibleProducts?> Get_IncredibleProducts_ByProductId(ulong productId,
+                                                                             CancellationToken cancellationToken)
+    {
+        return await _context.IncredibleProducts
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.ShopProductId == productId)
+                             .FirstOrDefaultAsync();
+    }
+
     public async Task<FilterShopProductsAdminSideDTO> FilterShopProductAdminSide(FilterShopProductsAdminSideDTO filter, CancellationToken cancellation)
     {
         var query = _context.ShopProducts
                             .AsNoTracking()
-                            .Where(a => !a.IsDelete )
+                            .Where(a => !a.IsDelete)
                             .OrderBy(s => s.CreateDate)
                             .AsQueryable();
 
@@ -47,6 +68,32 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
             query = query.Where(s => EF.Functions.Like(s.ProductName, $"%{filter.ProductTitle}%"));
         }
 
+        if (filter.IncredibleProducts)
+        {
+            var incredibleProducts = _context.IncredibleProducts
+                                             .AsNoTracking()
+                                             .Where(p => !p.IsDelete)
+                                             .AsQueryable();
+
+            query = from q in query
+                    join i in incredibleProducts
+                    on q.Id equals i.ShopProductId
+                    select q;
+        }
+
+        if (filter.SuggestionProducts)
+        {
+            var customersSuggestions = _context.CustomersSuggestions
+                                             .AsNoTracking()
+                                             .Where(p => !p.IsDelete)
+                                             .AsQueryable();
+
+            query = from q in query
+                    join c in customersSuggestions
+                    on q.Id equals c.ShopProductId
+                    select q;
+        }
+
         #endregion
 
         await filter.Paging(query);
@@ -54,11 +101,29 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
         return filter;
     }
 
+    public async Task<bool> IsExistCurrentProduct_InIncrediblesProducts_ByProductId(ulong productId,
+                                                                                    CancellationToken cancellationToken)
+    {
+        return await _context.IncredibleProducts
+                             .AsNoTracking()
+                             .AnyAsync(p => !p.IsDelete &&
+                                       p.ShopProductId == productId);
+    }
+
+    public async Task<bool> IsExistCurrentProduct_InCustomersSuggestions_ByProductId(ulong productId,
+                                                                                     CancellationToken cancellationToken)
+    {
+        return await _context.CustomersSuggestions
+                             .AsNoTracking()
+                             .AnyAsync(p => !p.IsDelete &&
+                                       p.ShopProductId == productId);
+    }
+
     #endregion
 
     #region Site Side 
 
-    public async Task<decimal> GetProductPrice_ByProductId(ulong productId , 
+    public async Task<decimal> GetProductPrice_ByProductId(ulong productId,
                                                        CancellationToken cancellationToken)
     {
         return await _context.ShopProducts
@@ -74,7 +139,7 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
     {
         var query = _context.ShopProducts
             .Include(p => p.User)
-            .Where(s => !s.IsDelete && 
+            .Where(s => !s.IsDelete &&
                    s.ProductBrandId.HasValue)
             .OrderByDescending(s => s.CreateDate)
             .AsQueryable();
@@ -90,7 +155,7 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
         //Brand
         if (model.BrandId != null && model.BrandId.Any())
         {
-            query = query.Where(p => p.ProductBrandId.HasValue &&  model.BrandId.Contains(p.ProductBrandId.Value));
+            query = query.Where(p => p.ProductBrandId.HasValue && model.BrandId.Contains(p.ProductBrandId.Value));
         }
 
         //Title
@@ -179,32 +244,87 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
                              .ToListAsync();
     }
 
-    public async Task<List<LastestShopProducts>> FillLastestShopProducts(CancellationToken cancellation)
+    public async Task<List<LastestShopProducts>> Fill_LastestCustomersSuggestionsProducts(CancellationToken cancellation)
     {
-        return await _context.ShopProducts
+        var customersSuggestions = _context.CustomersSuggestions
+                                         .AsNoTracking()
+                                         .Where(p => !p.IsDelete)
+                                         .AsQueryable();
+
+        var products = _context.ShopProducts
                              .AsNoTracking()
-                             .Where(p => !p.IsDelete && 
+                             .Where(p => !p.IsDelete &&
                                     p.ProductBrandId.HasValue)
                              .OrderByDescending(p => p.CreateDate)
-                             .Select(p => new LastestShopProducts()
-                             {
-                                 ProductPrice = p.Price,
-                                 ProductTitle = p.ProductName,
-                                 ProductId = p.Id,
-                                 ProductImage = p.ProductImage,
-                                 SellerInfo = _context.Users
-                                                      .AsNoTracking()
-                                                      .Where(s => !s.IsDelete &&
-                                                             s.Id == p.SellerUserId)
-                                                      .Select(s => new SellerInfo()
-                                                      {
-                                                          SellerId = s.Id,
-                                                          SellerUsername = s.Username
-                                                      })
-                                                      .FirstOrDefault()
-                             })
-                             .Take(10)
-                             .ToListAsync();
+                             .AsQueryable();
+
+        var returnModel = from p in products
+                          join c in customersSuggestions
+                          on p.Id equals c.ShopProductId
+                          select p;
+
+        return await returnModel
+                     .Select(p => new LastestShopProducts()
+                     {
+                         ProductPrice = p.Price,
+                         ProductTitle = p.ProductName,
+                         ProductId = p.Id,
+                         ProductImage = p.ProductImage,
+                         SellerInfo = _context.Users
+                                                   .AsNoTracking()
+                                                   .Where(s => !s.IsDelete &&
+                                                          s.Id == p.SellerUserId)
+                                                   .Select(s => new SellerInfo()
+                                                   {
+                                                       SellerId = s.Id,
+                                                       SellerUsername = s.Username
+                                                   })
+                                                   .FirstOrDefault()
+                     })
+            .Take(10)
+            .ToListAsync();
+    }
+
+
+    public async Task<List<LastestShopProducts>> FillLastestShopProducts(CancellationToken cancellation)
+    {
+        var incredibleProducts = _context.IncredibleProducts
+                                         .AsNoTracking()
+                                         .Where(p => !p.IsDelete)
+                                         .AsQueryable();
+
+        var products = _context.ShopProducts
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.ProductBrandId.HasValue)
+                             .OrderByDescending(p => p.CreateDate)
+                             .AsQueryable();
+
+        var returnModel = from p in products
+                          join i in incredibleProducts
+                          on p.Id equals i.ShopProductId
+                          select p;
+
+        return await returnModel
+                     .Select(p => new LastestShopProducts()
+                     {
+                         ProductPrice = p.Price,
+                         ProductTitle = p.ProductName,
+                         ProductId = p.Id,
+                         ProductImage = p.ProductImage,
+                         SellerInfo = _context.Users
+                                                   .AsNoTracking()
+                                                   .Where(s => !s.IsDelete &&
+                                                          s.Id == p.SellerUserId)
+                                                   .Select(s => new SellerInfo()
+                                                   {
+                                                       SellerId = s.Id,
+                                                       SellerUsername = s.Username
+                                                   })
+                                                   .FirstOrDefault()
+                     })
+            .Take(10)
+            .ToListAsync();
     }
 
     public async Task<List<LastestSellers>> ListOfLastestSellers(CancellationToken cancellation)
@@ -213,7 +333,7 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
 
         var products = await _context.ShopProducts
                              .AsNoTracking()
-                             .Where(p => !p.IsDelete && 
+                             .Where(p => !p.IsDelete &&
                                     p.ProductBrandId.HasValue)
                              .OrderByDescending(p => p.CreateDate)
                              .GroupBy(p => p.SellerUserId)
@@ -244,18 +364,18 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
     {
         return await _context.MainBrands
                                              .AsNoTracking()
-                                             .Where(p => !p.IsDelete && 
+                                             .Where(p => !p.IsDelete &&
                                                     p.ShowInSiteMenue)
                                              .OrderByDescending(p => p.Priority)
                                              .Take(12)
-                                             .Select(p=> new LastestBrands()
+                                             .Select(p => new LastestBrands()
                                              {
                                                  BrandId = p.Id,
                                                  BrandTitle = p.BrandName,
                                                  Image = p.BrandLogo,
                                                  ProductCounts = _context.ShopProducts
                                                                          .AsNoTracking()
-                                                                         .Where(s=> !s.IsDelete &&
+                                                                         .Where(s => !s.IsDelete &&
                                                                                 s.ProductBrandId == p.Id)
                                                                          .Count()
                                              })
@@ -266,7 +386,7 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
 
     #region Seller Side 
 
-    public async Task<ulong> GetSellerId_ByProductId(ulong productId , 
+    public async Task<ulong> GetSellerId_ByProductId(ulong productId,
                                                      CancellationToken cancellationToken)
     {
         return await _context.ShopProducts

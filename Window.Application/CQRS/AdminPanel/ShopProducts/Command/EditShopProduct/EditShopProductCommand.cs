@@ -8,7 +8,7 @@ public record EditShopProductCommand : IRequest<EditShopProductFromAdminPanelRes
 {
     #region properties
 
-    public EditShopProductSellerSideDTO model { get; set; }
+    public EditShopProductAdminSideDTO model { get; set; }
 
     public IFormFile ProductImage { get; set; }
 

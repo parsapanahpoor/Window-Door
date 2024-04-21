@@ -19,7 +19,7 @@ public class LastestShopProductsViewComponent : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync(CancellationToken cancellationToken = default)
     {
-        return View("LastestShopProducts", await _shopProductQueryRepository.FillLastestShopProducts(cancellationToken));
+        return View("LastestShopProducts", await _shopProductQueryRepository.Fill_LastestCustomersSuggestionsProducts(cancellationToken));
     }
 
 }

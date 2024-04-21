@@ -102,6 +102,52 @@ public record EditShopProductCommandHandler : IRequestHandler<EditShopProductCom
 
         #endregion
 
+        #region Incredible Products
+
+        var incredibleProducts = await _shopProductQueryRepository.Get_IncredibleProducts_ByProductId(oldProduct.Id , cancellationToken);
+
+        //Add to the incredible products
+        if (incredibleProducts == null && request.model.IsInIncridble)
+        {
+            await _shopProductCommandRepository.Add_IncredileProducts(new IncredibleProducts()
+            {
+                ShopProductId = oldProduct.Id
+            });
+        }
+
+        //Delete incredible products
+        if (incredibleProducts != null && !request.model.IsInIncridble)
+        {
+            incredibleProducts.IsDelete = true;
+
+            _shopProductCommandRepository.Update_IncredibleProducts(incredibleProducts);
+        }
+
+        #endregion
+
+        #region Customers Suggestions
+
+        var customersSuggestions = await _shopProductQueryRepository.Get_CustomerSuggestions_ByProductId(oldProduct.Id , cancellationToken);
+
+        //Add to the customer suggestions products
+        if (customersSuggestions == null && request.model.IsInCustomersSuggestions)
+        {
+            await _shopProductCommandRepository.Add_CustomerSuggestions(new CustomersSuggestions()
+            {
+                ShopProductId = oldProduct.Id
+            });
+        }
+
+        //Delete customer suggestions
+        if (customersSuggestions != null && !request.model.IsInCustomersSuggestions)
+        {
+            customersSuggestions.IsDelete = true;
+
+            _shopProductCommandRepository.Update_CustomerSuggestion(customersSuggestions);
+        }
+
+        #endregion
+
         await _unitOfWork.SaveChangesAsync();
 
         return EditShopProductFromAdminPanelResult.Success;

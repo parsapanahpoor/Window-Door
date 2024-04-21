@@ -34,6 +34,8 @@
                 <div>
                     <form asp-action="FilterShopProducts" asp-controller="ShopProducts" asp-area="Admin" id="filter-search" method="get">
                         <input type="hidden" asp-for="Page" />
+                        <input type="hidden" asp-for="IncredibleProducts" />
+                        <input type="hidden" asp-for="SuggestionProducts" />
 
                         <div class="form-group">
                             <label asp-for="ProductTitle">عنوان محصول </label>
@@ -50,9 +52,35 @@
 
                                 @if (Context.Request.QueryString.HasValue)
                                 {
-                                    <a asp-action="FilterShopProducts" asp-controller="ShopProducts" asp-area="Admin" class="btn btn-labeled w-100 btn-darkorange mr-10px">
-                                        <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
-                                    </a>
+                                    if (Model.IncredibleProducts)
+                                    {
+                                        <a asp-action="FilterShopProducts"
+                                           asp-controller="ShopProducts" 
+                                           asp-area="Admin"
+                                           asp-route-IncredibleProducts="true"
+                                           class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                            <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
+                                        </a>
+                                    }
+                                    if (Model.SuggestionProducts)
+                                    {
+                                        <a asp-action="FilterShopProducts" 
+                                           asp-controller="ShopProducts" 
+                                           asp-area="Admin"
+                                           asp-route-SuggestionProducts="true"
+                                           class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                            <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
+                                        </a>
+                                    }
+                                    if (!Model.SuggestionProducts && !Model.IncredibleProducts)
+                                    {
+                                        <a asp-action="FilterShopProducts"
+                                           asp-controller="ShopProducts" 
+                                           asp-area="Admin" 
+                                           class="btn btn-labeled w-100 btn-darkorange mr-10px">
+                                            <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
+                                        </a>
+                                    }
                                 }
                             </div>
                         </div>
@@ -107,15 +135,15 @@
 
                                     <a asp-action="EditProduct" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-warning btn-xs">ویرایش</a>
 
-                                    <a asp-action="EditProductCategory" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">دسته بندی </a>
+                                    @*<a asp-action="EditProductCategory" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">دسته بندی </a>
 
-                                    <a asp-action="ProductGallery" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-success  btn-xs">گالری تصاویر </a>
+                            <a asp-action="ProductGallery" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-success  btn-xs">گالری تصاویر </a>
 
-                                    <a asp-action="ProductFeature" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">ویژگی های محصول</a>
+                            <a asp-action="ProductFeature" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">ویژگی های محصول</a>
 
-                                    <a asp-action="ProductBrand" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-warning  btn-xs">برندها</a>
+                            <a asp-action="ProductBrand" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-warning  btn-xs">برندها</a>
 
-                                    <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteShopProduct", "ShopProducts", new {area = "Admin", shopProductId = product.Id})')" class="badge badge-danger  btn-xs">حذف</button>
+                            <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteShopProduct", "ShopProducts", new {area = "Admin", shopProductId = product.Id})')" class="badge badge-danger  btn-xs">حذف</button>*@
                                 </td>
 
                             </tr>

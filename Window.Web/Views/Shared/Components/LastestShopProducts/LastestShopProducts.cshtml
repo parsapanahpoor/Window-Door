@@ -51,7 +51,7 @@
                                                    asp-area=""
                                                    asp-controller="ShopSeller"
                                                    asp-route-sellerId="@product.SellerInfo.SellerId">@product.SellerInfo.SellerUsername</a>
-                                                <span class="product-price">157,000 تومان</span>
+                                                <span class="product-price">@product.ProductPrice.ToString("#,000") ریال</span>
                                             </div>
                                         </div>
                                     </div>

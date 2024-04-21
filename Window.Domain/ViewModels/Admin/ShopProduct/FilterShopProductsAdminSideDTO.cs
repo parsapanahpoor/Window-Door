@@ -20,5 +20,9 @@ public class FilterShopProductsAdminSideDTO : BasePaging<Entities.ShopProduct.Sh
 
     public ulong? ShopCategoryParentId { get; set; }
 
+    public bool IncredibleProducts { get; set; }
+
+    public bool SuggestionProducts { get; set; }
+
     #endregion
 }

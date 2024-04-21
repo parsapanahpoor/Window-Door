@@ -22,6 +22,21 @@ public class ShopProductCommandRepository : CommandGenericRepository<Domain.Enti
 
     #region General Methods 
 
+    public void Update_CustomerSuggestion(CustomersSuggestions customersSuggestions)
+    {
+        _context.CustomersSuggestions.Update(customersSuggestions);
+    }
+
+    public async Task Add_CustomerSuggestions(CustomersSuggestions customersSuggestions)
+    {
+        await _context.CustomersSuggestions.AddAsync(customersSuggestions);
+    }
+
+    public async Task Add_IncredileProducts(IncredibleProducts incredible)
+    {
+        await _context.IncredibleProducts.AddAsync(incredible);
+    }
+
     public void DeleteRange(IEnumerable<ProductTag> productTags)
     {
         _context.ProductTags.RemoveRange(productTags);
@@ -37,6 +52,10 @@ public class ShopProductCommandRepository : CommandGenericRepository<Domain.Enti
         await _context.ProductTags.AddAsync(tag);
     }
 
+    public void Update_IncredibleProducts(IncredibleProducts incredibleProducts)
+    {
+        _context.IncredibleProducts.Update(incredibleProducts);
+    }
 
     #endregion
 }

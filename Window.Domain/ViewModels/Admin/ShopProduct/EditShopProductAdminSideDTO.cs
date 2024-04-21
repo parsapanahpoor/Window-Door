@@ -33,6 +33,10 @@ public record EditShopProductAdminSideDTO
 
     public string? ProductImage { get; set; }
 
+    public bool IsInIncridble { get; set; }
+
+    public bool IsInCustomersSuggestions { get; set; }
+
     #endregion
 }
 
