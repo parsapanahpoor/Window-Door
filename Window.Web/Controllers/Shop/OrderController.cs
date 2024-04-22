@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries.ShowFactor;
 using Window.Application.CQRS.SiteSide.ShopOrder.Command;
 using Window.Application.CQRS.SiteSide.ShopOrder.Query;
 using Window.Application.Extensions;
@@ -180,6 +181,23 @@ public class OrderController : SiteBaseController
         if (invoice == null) return NotFound();
 
         return View(invoice);
+    }
+
+    #endregion
+
+    #region Show Factor 
+
+    public async Task<IActionResult> ShowFactor(ulong orderId,
+                                                CancellationToken cancellation)
+    {
+        var res = await Mediator.Send(new ShowFactorSellerSideQuery()
+        {
+            OrderId = orderId,
+        },
+        cancellation);
+        if (res == null) return NotFound();
+
+        return View(res);
     }
 
     #endregion

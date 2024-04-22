@@ -1,0 +1,427 @@
+﻿@using Window.Application.Convertors
+@model Window.Domain.ViewModels.Seller.ShopOrder.ShowOrderFactorDTO;
+
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#f7858d">
+    <meta name="msapplication-navbutton-color" content="#f7858d">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#f7858d">
+    <title>فاکتور </title>
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="/DidiKala/assets/css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="/DidiKala/assets/css/vendor/materialdesignicons.min.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/DidiKala/assets/css/vendor/bootstrap.min.css">
+    <!-- Plugins -->
+    <link rel="stylesheet" href="/DidiKala/assets/css/vendor/bootstrap-slider.min.css">
+    <link rel="stylesheet" href="/DidiKala/assets/css/vendor/owl.carousel.min.css">
+    <link rel="stylesheet" href="/DidiKala/assets/css/vendor/jquery.horizontalmenu.css">
+    <link rel="stylesheet" href="/DidiKala/assets/css/vendor/jquery-stack-menu.min.css">
+    <link rel="stylesheet" href="/DidiKala/assets/css/vendor/fancybox.min.css">
+    <link rel="stylesheet" href="/DidiKala/assets/css/vendor/nice-select.css">
+    <link rel="stylesheet" href="/DidiKala/assets/css/vendor/nouislider.min.css">
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="/DidiKala/assets/css/main.css">
+    <link rel="stylesheet" href="/DidiKala/assets/css/colors/default.css" id="colorswitch">
+
+</head>
+
+<body id="container_content">
+    <div class="wrapper shopping-page">
+        <!-- Start header-shopping -->
+        <header class="header-shopping dt-sl">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center pt-2">
+                        <div class="header-shopping-logo dt-sl mt-4">
+                            <a href="#">
+                                <img src="/favicon.ico" style="height: 70px;" alt="">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- End header-shopping -->
+        <main class="main-content dt-sl mt-4 mb-3">
+            <div class="container main-container">
+
+                <div class="row">
+                    <div class="cart-page-content col-12 px-0">
+                        <div class="checkout-alert dt-sn dt-sn--box mb-4">
+                            <div class="circle-box-icon successful">
+                                <i class="mdi mdi-check-bold"></i>
+                            </div>
+                            <div class="checkout-alert-title">
+                                <h4>
+                                    سفارش <span class="checkout-alert-highlighted checkout-alert-highlighted-success">@Model.OrdeId</span>
+                                    در سیستم ثبت شد.
+                                </h4>
+                            </div>
+                            <div class="checkout-alert-content">
+                                @if (Model.IsFinally)
+                                {
+                                    <p class="checkout-alert-content-success">
+                                        سفارش بزودی آماده ارسال خواهد شد.
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="checkout-alert-content-success">
+                                        سفارش شما نهایی نشده است و باید مراحل سفارش را تکمیل کنید.
+                                    </p>
+                                }
+
+                            </div>
+                        </div>
+                        <section class="checkout-details dt-sl dt-sn dt-sn--box mt-4 pt-4 pb-3 pr-3 pl-3 mb-5 px-res-1">
+                            <div class="checkout-details-title">
+                                <h4>
+                                    شماره پیگیری سفارش:
+                                    <span>
+                                        @Model.OrdeId
+                                    </span>
+                                </h4>
+                                <div class="row">
+                                    <div class="col-lg-9 col-md-8 col-sm-12">
+                                        <div class="checkout-details-title">
+                                            @if (Model.IsFinally)
+                                            {
+
+                                                <p>
+                                                    سفارش شما با موفقیت در سیستم ثبت شد و هم اکنون
+                                                    <span class="text-highlight text-highlight-success">درحال آماده سازی</span>
+                                                    است.
+                                                    جزئیات این سفارش را می‌توانید درپایین مشاهده کنید.
+                                                </p>
+                                            }
+                                            else
+                                            {
+                                                <p>
+                                                    سفارش شما
+                                                    <span class="text-highlight text-highlight-danger">نهایی نشده </span>
+                                                    است.
+                                                    لطفا جهت تکمیل مراحل سفارش هرچه زودتر اقدام فرمایید.
+                                                    جزئیات این سفارش را می‌توانید درپایین مشاهده کنید.
+                                                </p>
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4 col-sm-12">
+                                        <p class="btn-primary-cm bg-secondary btn-with-icon d-block text-center pr-0 btn_print">
+                                            <i class="mdi mdi-shopping"></i>
+                                            PDF دریافت
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12 px-res-0">
+                                        <div class="checkout-table">
+
+                                            @if (Model.CustomerInfo != null)
+                                            {
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <p>
+                                                            نام تحویل گیرنده = @Model.CustomerInfo.CustomerUsername
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <p>
+                                                            شماره تماس = @Model.CustomerInfo.CustoemrMobile
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            }
+
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <p>
+                                                        تعداد مرسوله = @Model.OrderDetails.Sum(p => p.Count)
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    @if (Model.Price.HasValue)
+                                                    {
+                                                        <p>
+                                                            مبلغ کل = @Model.Price.Value.ToString("#,000") ریال
+                                                        </p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p>
+                                                            مبلغ کل = محاسبه نشده است
+                                                        </p>
+                                                    }
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12">
+
+                                                    @if (Model.PaymentWay == Window.Domain.Enums.Order.OrderPaymentWay.InstallmentPayment)
+                                                    {
+                                                        <p>
+                                                            روش پرداخت = چکی
+                                                        </p>
+                                                    }
+                                                    @if (Model.PaymentWay == Window.Domain.Enums.Order.OrderPaymentWay.CashPayment)
+                                                    {
+                                                        <p>
+                                                            روش پرداخت = نقدی
+                                                        </p>
+                                                    }
+
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    @if (Model.IsFinally)
+                                                    {
+                                                        <p>
+                                                            وضعیت سفارش =                       
+                                                            <span class="text-highlight text-highlight-success">نهایی شده</span>
+                                                        </p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p>
+                                                            وضعیت سفارش =                                      
+                                                            <span class="text-highlight text-highlight-danger">نهایی نشده</span>
+                                                        </p>
+                                                    }
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <p>
+                                                        کدپستی = @Model.Location.PostalCode
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <p>
+                                                        تاریخ ثبت سفارش = @Model.CreateDate.ToShamsi()
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <p>
+                                                        استان :@Model.Location.State
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <p>
+                                                        شهر :@Model.Location.City
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <p>
+                                                        آدرس :@Model.Location.Address
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl px-res-1">
+                            <h2>جزئیات سفارش</h2>
+                        </div>
+
+                        <section style="margin-top:50px;" class="checkout-details dt-sl dt-sn dt-sn--box mb-4 pt-2 pb-3 pl-3 pr-3 ">
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="checkout-orders-table">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="id">
+                                                        <p class="text-secondary text-footer">
+                                                            نام محصول
+                                                        </p>
+                                                    </td>
+                                                    <td class="id">
+                                                        <p class="text-secondary text-footer">
+                                                            فروشنده 
+                                                        </p>
+                                                    </td>
+                                                    <td class="id">
+                                                        <p class="text-secondary text-footer">
+                                                            مبلغ
+                                                        </p>
+                                                    </td>
+                                                    <td class="id">
+                                                        <p class="text-secondary text-footer">
+                                                            برند
+                                                        </p>
+                                                    </td>
+                                                    <td class="id">
+                                                        <p class="text-secondary text-footer">
+                                                            رنگ 
+                                                        </p>
+                                                    </td>
+                                                    <td class="id">
+                                                        <p class="text-secondary text-footer">
+                                                            تعداد 
+                                                        </p>
+                                                    </td>
+                                                    <td class="id">
+                                                        <p class="text-secondary text-footer">
+                                                            کد
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                                @if (Model.OrderDetails != null && Model.OrderDetails.Any())
+                                                {
+                                                    foreach (var orderDetail in Model.OrderDetails)
+                                                    {
+                                                        <tr>
+                                                            <td class="id">
+                                                                <span>
+                                                                    @orderDetail.Product.ProductName
+                                                                </span>
+                                                            </td>
+
+                                                            <td class="id">
+                                                                <span>
+                                                                    @orderDetail.Product.SellerInfo.SellerUsername 
+                                                                </span>
+                                                            </td>
+                                                            <td class="id">
+                                                                <span>
+                                                                    @orderDetail.Product.Price.ToString("#,000") ریال
+                                                                </span>
+                                                            </td>
+                                                            <td class="id">
+                                                                <span>
+                                                                    @orderDetail.Product.ShopBrand.BrandName
+                                                                </span>
+                                                            </td>
+                                                            <td class="id">
+                                                                <span>
+                                                                    @orderDetail.Product.ShopColor.ColorTitle
+                                                                </span>
+                                                            </td>
+                                                            <td class="id">
+                                                                <span>
+                                                                  @orderDetail.Count  @orderDetail.Product.ScaleTitle
+                                                                </span>
+                                                            </td>
+                                                            <td class="id">
+                                                                <span>
+                                                                    @orderDetail.Product.ProductId
+                                                                </span>
+                                                            </td>
+                                                            
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </main>
+        <!-- Start mini-footer -->
+        <footer class="mini-footer dt-sl">
+            <div class="container main-container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 text-left">
+                        <i class="mdi mdi-phone-outline"></i>
+                        شماره تماس : <a href="#">
+                            021-36603788
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-sm-12 text-right">
+                        <i class="mdi mdi-email-outline"></i>
+                        آدرس ایمیل : <a href="#">Mottahed236@gmal.com</a>
+                    </div>
+                    <div class="col-12 text-center mt-2">
+                        <p class="text-secondary text-footer">
+                            آدرس
+                        </p>
+                    </div>
+                    <div class="col-12 text-center">
+                        <div class="copy-right-mini-footer">
+                            Copyright © 2023 اکسیر
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- End mini-footer -->
+    </div>
+    <!-- Core JS Files -->
+    <script src="/DidiKala/assets/js/vendor/jquery-3.4.1.min.js"></script>
+    <script src="/DidiKala/assets/js/vendor/popper.min.js"></script>
+    <script src="/DidiKala/assets/js/vendor/bootstrap.min.js"></script>
+    <!-- Plugins -->
+    <script src="/DidiKala/assets/js/vendor/bootstrap-slider.min.js"></script>
+    <script src="/DidiKala/assets/js/vendor/owl.carousel.min.js"></script>
+    <script src="/DidiKala/assets/js/vendor/owl.carousel2.thumbs.min.js"></script>
+    <script src="/DidiKala/assets/js/vendor/jquery.nicescroll.min.js"></script>
+    <script src="/DidiKala/assets/js/vendor/jquery.nice-select.min.js"></script>
+    <script src="/DidiKala/assets/js/vendor/nouislider.min.js"></script>
+    <script src="/DidiKala/assets/js/vendor/jquery.horizontalmenu.js"></script>
+    <script src="/DidiKala/assets/js/vendor/jquery-stack-menu.min.js"></script>
+    <script src="/DidiKala/assets/js/vendor/jquery.fancybox.min.js"></script>
+    <script src="/DidiKala/assets/js/vendor/countdown.min.js"></script>
+    <script src="/DidiKala/assets/js/vendor/wNumb.js"></script>
+    <script src="/DidiKala/assets/js/vendor/ResizeSensor.min.js"></script>
+    <script src="/DidiKala/assets/js/vendor/theia-sticky-sidebar.min.js"></script>
+    <!-- Main JS File -->
+    <script src="/DidiKala/assets/js/main.js"></script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function ($) {
+
+            console.log("hello");
+
+            $(document).on('click', '.btn_print', function (event) {
+                event.preventDefault();
+
+                console.log("hello");
+
+                //credit : https://ekoopmans.github.io/html2pdf.js
+
+                var element = document.getElementById('container_content');
+
+                //easy
+                html2pdf().from(element).save();
+
+            });
+        });
+
+    </script>
+</body>
+
+</html>

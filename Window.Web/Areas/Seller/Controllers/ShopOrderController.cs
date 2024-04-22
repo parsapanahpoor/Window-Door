@@ -3,8 +3,11 @@ using Window.Application.CQRS.SellerPanel.OrderCheque.Command;
 using Window.Application.CQRS.SellerPanel.OrderCheque.Query;
 using Window.Application.CQRS.SellerPanel.ShopOrder.Commands;
 using Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries;
+using Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries.FilterShopOrders;
+using Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries.ShowFactor;
 using Window.Application.Extensions;
 using Window.Domain.ViewModels.Seller.OrderCheque;
+using Window.Domain.ViewModels.Seller.ShopOrder;
 using Window.Web.HttpManager;
 namespace Window.Web.Areas.Seller.Controllers;
 
@@ -12,13 +15,26 @@ public class ShopOrderController : SellerBaseController
 {
     #region Manage Order Pages 
 
-
+    public IActionResult ManageOrderPage()
+    {
+        return View();
+    }
 
     #endregion
 
-    #region List OF User Orders 
+    #region List OF User Orders As Seller
 
+    public async Task<IActionResult> ListOFUserOrdersAsSeller(FilterShopOrdersSellerSideDTO filter , 
+                                                              CancellationToken cancellationToken)
+    {
+        filter.SellerUserId = User.GetUserId();
 
+        return View(await Mediator.Send(new FilterShopOrdersQuery()
+        {
+            Filter = filter,
+        } , 
+        cancellationToken)); ;
+    }
 
     #endregion
 

@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Data;
-using System.Linq;
-using System.Net.NetworkInformation;
 using Window.Data;
 using Window.Data.Context;
 using Window.Domain.Entities.ShopOrder;
 using Window.Domain.Interfaces.Order;
+using Window.Domain.ViewModels.Admin.Contract;
 using Window.Domain.ViewModels.Admin.OrderCheque;
 using Window.Domain.ViewModels.Seller.ShopOrder;
 using Window.Domain.ViewModels.Site.Shop.Order;
@@ -411,7 +409,7 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                 }
             }
 
-            if (uniqueNumbers.Count()>1)return true;
+            if (uniqueNumbers.Count() > 1) return true;
         }
         else
         {
@@ -476,6 +474,152 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                                                     .Where(u => !u.IsDelete &&
                                                                            u.Id == p.UserId)
                                                                     .FirstOrDefault()
+                             })
+                             .FirstOrDefaultAsync();
+    }
+
+    #endregion
+
+    #region Seller Side 
+
+    public async Task<FilterShopOrdersSellerSideDTO> Fill_FilterShopOrdersSeller(FilterShopOrdersSellerSideDTO filter,
+                                                                                 CancellationToken cancellationToken)
+    {
+        var orders = _context.Orders
+                             .Where(p => !p.IsDelete)
+                             .OrderByDescending(p => p.CreateDate)
+                             .AsQueryable();
+
+        var orderDetails = _context.OrderDetails
+                                 .Where(p => !p.IsDelete)
+                                 .OrderByDescending(p => p.CreateDate)
+                                 .AsQueryable();
+
+        var sellerProductsIds = _context.ShopProducts
+                                        .Where(p => !p.IsDelete &&
+                                               p.SellerUserId == filter.SellerUserId)
+                                        .Select(p => p.Id)
+                                        .AsQueryable();
+
+        orderDetails = from o in orderDetails
+                       join p in sellerProductsIds
+                       on o.ProductId equals p
+                       select o;
+
+        var query = from o in orders
+                    join orderDetail in orderDetails
+                    on o.Id equals orderDetail.OrderId
+                    select new ListOfShopOrdersSellerSideDTO()
+                    {
+                        CreateDate = o.CreateDate,
+                        IsFinally = o.IsFinally,
+                        PaymentWay = o.PaymentWay,
+                        OrderId = o.Id,
+                        CustomerUserInfo = _context.Users
+                                               .AsNoTracking()
+                                               .Where(p => !p.IsDelete &&
+                                                      p.Id == o.UserId)
+                                               .Select(p => new ListOfShopOrdersSellerSideDTO_CustomerUserInfo()
+                                               {
+                                                   CustomerUserId = p.Id,
+                                                   Mobile = p.Mobile,
+                                                   Username = p.Username
+                                               }).FirstOrDefault()
+
+                    };
+
+        if (!string.IsNullOrEmpty(filter.CustomerName))
+        {
+            query = query.Where(p => p.CustomerUserInfo.Username.Contains(filter.CustomerName));
+        }
+
+        await filter.Paging(query);
+
+        filter.Entities = filter.Entities.DistinctBy(p => p.OrderId).ToList();
+
+        return filter;
+    }
+
+    public async Task<ShowOrderFactorDTO?> ShowOrderFactorDTO_ByOrderId(ulong orderId , 
+                                                                        CancellationToken cancellationToken)
+    {
+        return await _context.Orders
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete &&
+                                    p.Id == orderId)
+                             .Select(p => new ShowOrderFactorDTO()
+                             {
+                                 OrdeId = orderId,
+                                 IsFinally = p.IsFinally,
+                                 PaymentWay = p.PaymentWay,
+                                 Price = p.Price,
+                                 CreateDate = p.CreateDate,
+                                 Location = _context.Locations
+                                                    .AsNoTracking()
+                                                    .Where(l => l.UserId == p.UserId)
+                                                    .FirstOrDefault(),
+                                 CustomerInfo = _context.Users
+                                                        .AsNoTracking()
+                                                        .Where(u => u.Id == p.UserId &&
+                                                               !u.IsDelete)
+                                                        .Select(u => new ShowOrderFactor_CustmoerInfoDTO()
+                                                        {
+                                                            CustoemrMobile = u.Mobile,
+                                                            CustomerUsername = u.Username , 
+                                                            SellerUserId = u.Id
+                                                        })
+                                                        .FirstOrDefault(),
+                                 OrderDetails = _context.OrderDetails
+                                                        .AsNoTracking()
+                                                        .Where(o => !o.IsDelete && 
+                                                               o.OrderId == p.Id)
+                                                        .Select(o => new ShowOrderFactor_OrderDetailDTO()
+                                                        {
+                                                            Count = o.Count,
+                                                            OrderDetailId = o.Id , 
+                                                            Product = _context.ShopProducts
+                                                                              .AsNoTracking()
+                                                                              .Where(pr=> !pr.IsDelete && 
+                                                                                     pr.Id == o.ProductId)
+                                                                              .Select(pr => new ShowOrderFactor_ProductDetailsDTO()
+                                                                              {
+                                                                                  Price = pr.Price,
+                                                                                  ProductId = pr.Id,
+                                                                                  ProductName = pr.ProductName,
+                                                                                  ScaleTitle = _context.SalesScales
+                                                                                                       .AsNoTracking() 
+                                                                                                       .Where(scale => !scale.IsDelete && 
+                                                                                                              scale.Id == pr.SaleScaleId)
+                                                                                                       .Select(scale => scale.ScaleTitle)
+                                                                                                       .FirstOrDefault(),
+
+                                                                                  ShopBrand = _context.MainBrands
+                                                                                                      .AsNoTracking()
+                                                                                                      .Where(brand => !brand.IsDelete && 
+                                                                                                             brand.Id == pr.ProductBrandId)
+                                                                                                      .FirstOrDefault(),
+
+                                                                                  ShopColor = _context.ShopColors
+                                                                                                      .AsNoTracking()
+                                                                                                      .Where(color => !color.IsDelete &&
+                                                                                                             color.Id == pr.ProductColorId)
+                                                                                                      .FirstOrDefault(),
+
+                                                                                  SellerInfo = _context.Users
+                                                                                                       .AsNoTracking()
+                                                                                                       .Where(user => !user.IsDelete && 
+                                                                                                              user.Id == pr.SellerUserId)
+                                                                                                       .Select(user => new ShowOrderFactor_ProductSellerInfoDTO()
+                                                                                                       {
+                                                                                                           SellerMobile = user.Mobile,
+                                                                                                           SellerUserId = user.Id,
+                                                                                                           SellerUsername = user.Username
+                                                                                                       })
+                                                                                                       .FirstOrDefault()
+                                                                              })
+                                                                              .FirstOrDefault()
+                                                        })
+                                                        .ToList()
                              })
                              .FirstOrDefaultAsync();
     }

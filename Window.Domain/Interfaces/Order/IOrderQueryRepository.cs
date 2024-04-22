@@ -65,4 +65,14 @@ public interface IOrderQueryRepository
                                                                            CancellationToken cancellationToken);
 
     #endregion
+
+    #region Seller Side 
+
+    Task<FilterShopOrdersSellerSideDTO> Fill_FilterShopOrdersSeller(FilterShopOrdersSellerSideDTO filter,
+                                                                    CancellationToken cancellationToken);
+
+    Task<ShowOrderFactorDTO?> ShowOrderFactorDTO_ByOrderId(ulong orderId,
+                                                           CancellationToken cancellationToken);
+
+    #endregion
 }

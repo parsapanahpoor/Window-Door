@@ -1,6 +1,7 @@
 ﻿#region Usings
 
 using Microsoft.AspNetCore.Mvc;
+using Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries.ShowFactor;
 using Window.Application.CQRS.SiteSide.ShopLanding;
 namespace Window.Web.Controllers;
 
