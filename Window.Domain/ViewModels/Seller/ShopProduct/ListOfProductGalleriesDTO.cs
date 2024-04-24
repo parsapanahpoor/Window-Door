@@ -10,5 +10,7 @@ public record ProductGalleriesDTO
 
     public string ImageName { get; set; }
 
+    public bool MainImage { get; set; }
+
     #endregion
 }

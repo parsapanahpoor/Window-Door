@@ -60,23 +60,6 @@ public record EditShopProductCommandHandler : IRequestHandler<EditShopProductCom
 
         #endregion
 
-        #region  Image
-
-        if (request.ProductImage != null)
-        {
-            var imageName = Guid.NewGuid() + Path.GetExtension(request.ProductImage.FileName);
-            request.ProductImage.AddImageToServer(imageName, FilePaths.ProductsPathServer, 400, 300, FilePaths.ProductsPathThumbServer);
-
-            if (!string.IsNullOrEmpty(oldProduct.ProductImage))
-            {
-                oldProduct.ProductImage.DeleteImage(FilePaths.ProductsPathServer, FilePaths.ProductsPathThumbServer);
-            }
-
-            oldProduct.ProductImage = imageName;
-        }
-
-        #endregion
-
         _shopProductCommandRepository.Update(oldProduct);
 
         #region Shop Tags

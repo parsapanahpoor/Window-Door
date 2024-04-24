@@ -18,6 +18,7 @@ public record CreateProductGalleryQueryHandler : IRequestHandler<CreateProductGa
     #region Ctor
 
     private readonly IShopProductGalleryCommandRepository _commandRepository;
+    private readonly IShopProductCommandRepository _shopProductCommandRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMarketQueryRepository _maketsQueryRepository;
     private readonly IShopProductQueryRepository _shopProductQueryRepository;
@@ -25,12 +26,14 @@ public record CreateProductGalleryQueryHandler : IRequestHandler<CreateProductGa
     public CreateProductGalleryQueryHandler(IShopProductGalleryCommandRepository commandRepository , 
                                             IUnitOfWork unitOfWork ,
                                             IMarketQueryRepository maketsQueryRepository ,
-                                            IShopProductQueryRepository shopProductQueryRepository)
+                                            IShopProductQueryRepository shopProductQueryRepository ,
+                                            IShopProductCommandRepository shopProductCommandRepository)
     {
         _commandRepository = commandRepository;
         _unitOfWork = unitOfWork;
         _maketsQueryRepository = maketsQueryRepository;
         _shopProductQueryRepository = shopProductQueryRepository;
+        _shopProductCommandRepository = shopProductCommandRepository;
     }
 
     #endregion
@@ -62,12 +65,20 @@ public record CreateProductGalleryQueryHandler : IRequestHandler<CreateProductGa
         if (request.image != null && request.image.IsImage())
         {
             var imageName = Guid.NewGuid() + Path.GetExtension(request.image.FileName);
-            request.image.AddImageToServer(imageName, FilePaths.ProductsGalleryPathServer, 400, 300, FilePaths.ProductsGalleryPathThumbServer);
+            request.image.AddImageToServer(imageName, FilePaths.ProductsPathServer, 400, 300, FilePaths.ProductsPathThumbServer);
             productGallery.ImageName = imageName;
-        }
 
-        await _commandRepository.AddAsync(productGallery , cancellationToken);
-        await _unitOfWork.SaveChangesAsync();
+            //Add Product Origin Image
+            if (originProduct.ProductImage == "default.png")
+            {
+                originProduct.ProductImage = productGallery.ImageName;
+
+                _shopProductCommandRepository.Update(originProduct);
+            }
+
+            await _commandRepository.AddAsync(productGallery, cancellationToken);
+            await _unitOfWork.SaveChangesAsync();
+        }
 
         #endregion
 

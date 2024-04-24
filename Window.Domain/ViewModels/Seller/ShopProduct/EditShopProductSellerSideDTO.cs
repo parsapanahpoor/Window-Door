@@ -32,8 +32,6 @@ public record EditShopProductSellerSideDTO
 
     public ulong SaleScaleId { get; set; }
 
-    public string? ProductImage { get; set; }
-
     #endregion
 }
 

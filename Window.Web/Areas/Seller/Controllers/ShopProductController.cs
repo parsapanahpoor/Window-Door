@@ -73,7 +73,7 @@ public class ShopProductController : SellerBaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateProduct(CreateShopProductSellerSideDTO model, IFormFile NewsImage, CancellationToken cancellation = default)
+    public async Task<IActionResult> CreateProduct(CreateShopProductSellerSideDTO model, CancellationToken cancellation = default)
     {
         #region Model State Validation 
 
@@ -95,7 +95,7 @@ public class ShopProductController : SellerBaseController
 
         #region Add Product To The Data Base
 
-        var res = await _shopProductService.AddShopProductToTheDataBase(User.GetUserId(), model, NewsImage, cancellation);
+        var res = await _shopProductService.AddShopProductToTheDataBase(User.GetUserId(), model, cancellation);
         switch (res)
         {
             case CreateShopProductFromSellerPanelResult.Success:
@@ -153,13 +153,13 @@ public class ShopProductController : SellerBaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditProduct(EditShopProductSellerSideDTO model, IFormFile? NewsImage, CancellationToken cancellation)
+    public async Task<IActionResult> EditProduct(EditShopProductSellerSideDTO model, CancellationToken cancellation)
     {
         #region Edit Product
 
         if (ModelState.IsValid)
         {
-            var res = await _shopProductService.EditShopProductSellerSide(model, User.GetUserId(), NewsImage, cancellation);
+            var res = await _shopProductService.EditShopProductSellerSide(model, User.GetUserId(), cancellation);
             switch (res)
             {
                 case EditShopProductFromSellerPanelResult.Success:

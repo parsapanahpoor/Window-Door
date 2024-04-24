@@ -20,6 +20,8 @@ public interface IShopProductGalleryQueryRepository
 
     #region Seller Side 
 
+    Task<bool> IsExist_AnyProductGallery_ByProductId(ulong productId, CancellationToken cancellationToken);
+
     Task<List<ProductGalleriesDTO>?> FillProductGalleriesDTO(ulong productId, CancellationToken token);
 
     #endregion

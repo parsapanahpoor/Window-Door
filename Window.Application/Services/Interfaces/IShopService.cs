@@ -12,14 +12,13 @@ public interface IShopProductService
 
     Task<CreateShopProductFromSellerPanelResult> AddShopProductToTheDataBase(ulong sellerId,
                                                                                   CreateShopProductSellerSideDTO model,
-                                                                                  IFormFile newsImage,
                                                                                   CancellationToken cancellation);
 
     Task<EditShopProductSellerSideDTO?> FillEditShopProductSellerSideDTO(ulong productId, ulong sellerId, CancellationToken token);
 
     Task<List<ulong>> GetShopProductSelectedCategories(ulong productId, CancellationToken token);
 
-    Task<EditShopProductFromSellerPanelResult> EditShopProductSellerSide(EditShopProductSellerSideDTO newProduct, ulong sellerId, IFormFile? newsImage, CancellationToken cancellation);
+    Task<EditShopProductFromSellerPanelResult> EditShopProductSellerSide(EditShopProductSellerSideDTO newProduct, ulong sellerId, CancellationToken cancellation);
 
     Task<bool> DeleteArticleAdminSide(ulong productId, ulong sellerId, CancellationToken cancellation);
 

@@ -36,7 +36,6 @@ public record EditShopProductQueryHandler : IRequestHandler<EditShopProductQuery
             ShopProductId = product.Id,
             ShopColorId = product.ProductColorId,
             Title = product.ProductName,
-            ProductImage = product.ProductImage,
             Description = product.LongDescription,
             Price = product.Price.ToString(),
             ShortDescription = product.ShortDescription,

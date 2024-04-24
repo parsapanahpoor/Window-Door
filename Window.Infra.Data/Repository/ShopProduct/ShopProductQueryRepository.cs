@@ -58,7 +58,7 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
         var query = _context.ShopProducts
                             .AsNoTracking()
                             .Where(a => !a.IsDelete)
-                            .OrderBy(s => s.CreateDate)
+                            .OrderByDescending(s => s.CreateDate)
                             .AsQueryable();
 
         #region Filter
@@ -253,8 +253,7 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
 
         var products = _context.ShopProducts
                              .AsNoTracking()
-                             .Where(p => !p.IsDelete &&
-                                    p.ProductBrandId.HasValue)
+                             .Where(p => !p.IsDelete )
                              .OrderByDescending(p => p.CreateDate)
                              .AsQueryable();
 
@@ -295,8 +294,7 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
 
         var products = _context.ShopProducts
                              .AsNoTracking()
-                             .Where(p => !p.IsDelete &&
-                                    p.ProductBrandId.HasValue)
+                             .Where(p => !p.IsDelete )
                              .OrderByDescending(p => p.CreateDate)
                              .AsQueryable();
 

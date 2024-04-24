@@ -1,5 +1,4 @@
-﻿
-using Window.Application.Common.IUnitOfWork;
+﻿using Window.Application.Common.IUnitOfWork;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
 using Window.Application.StticTools;
@@ -17,17 +16,20 @@ public record DeleteProductGalleryCommandHandler : IRequestHandler<DeleteProduct
     private readonly IShopProductGalleryCommandRepository _shopProductGalleryCommandRepository;
     private readonly IShopProductGalleryQueryRepository _shopProductGalleryQueryRepository;
     private readonly IShopProductQueryRepository _shopProductQueryRepository;
+    private readonly IShopProductCommandRepository _shopProductCommandRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public DeleteProductGalleryCommandHandler(IMarketQueryRepository marketQueryRepository,
                                               IShopProductGalleryCommandRepository shopProductGalleryCommandRepository,
                                               IShopProductGalleryQueryRepository shopProductGalleryQueryRepository,
-                                              IShopProductQueryRepository shopProductQueryRepository , 
+                                              IShopProductQueryRepository shopProductQueryRepository,
+                                              IShopProductCommandRepository shopProductCommandRepository,
                                               IUnitOfWork unitOfWork)
     {
         _marketQueryRepository = marketQueryRepository;
         _shopProductGalleryCommandRepository = shopProductGalleryCommandRepository;
         _shopProductGalleryQueryRepository = shopProductGalleryQueryRepository;
+        _shopProductCommandRepository = shopProductCommandRepository;
         _shopProductQueryRepository = shopProductQueryRepository;
         _unitOfWork = unitOfWork;
     }
@@ -64,7 +66,15 @@ public record DeleteProductGalleryCommandHandler : IRequestHandler<DeleteProduct
 
         if (!string.IsNullOrEmpty(productGallery.ImageName))
         {
-            productGallery.ImageName.DeleteImage(FilePaths.ProductsGalleryPathServer, FilePaths.ProductsGalleryPathThumbServer);
+            productGallery.ImageName.DeleteImage(FilePaths.ProductsPathServer, FilePaths.ProductsPathThumbServer);
+
+            #region Delete Main Image
+
+            originProduct.ProductImage = "default.png";
+
+            _shopProductCommandRepository.Update(originProduct);
+
+            #endregion
         }
 
         _shopProductGalleryCommandRepository.Update(productGallery);

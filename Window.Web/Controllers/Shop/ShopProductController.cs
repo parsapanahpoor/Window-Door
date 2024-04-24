@@ -46,7 +46,7 @@ public class ShopProductController : SiteBaseController
 
         #region View Data
 
-        if (filter.ShopCategoryParentId.HasValue )
+        if (filter.ShopCategoryParentId.HasValue)
         {
             ViewData["ListOfShopCategories"] = await _shopCategoryService.FillShopCategoriesForShowInFilterShopProduct(filter.ShopCategoryParentId.Value, cancellationToken);
             ViewData["SelectedParentCategoryMainTitle"] = await _shopCategoryService.GetShopCategoryTitle(filter.ShopCategoryParentId.Value, cancellationToken);
@@ -63,7 +63,7 @@ public class ShopProductController : SiteBaseController
 
         #endregion
 
-        return View(await Mediator.Send(query , cancellationToken));
+        return View(await Mediator.Send(query, cancellationToken));
     }
 
     #endregion
@@ -71,16 +71,24 @@ public class ShopProductController : SiteBaseController
     #region ShopProduct Detail
 
     [HttpGet]
-    public async Task<IActionResult> ShopProductDetail(ShopProductDetailQuery query , CancellationToken cancellationToken=default)
+    public async Task<IActionResult> ShopProductDetail(ShopProductDetailQuery query, CancellationToken cancellationToken = default)
     {
-        var model = await Mediator.Send(query , cancellationToken);
-        if (model == null)
+        try
         {
-            TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
-            return RedirectToAction("Index" , "Home");
-        }
+            var model = await Mediator.Send(query, cancellationToken);
+            if (model == null)
+            {
+                TempData[ErrorMessage] = "اطلاعات محصول توسط فروشنده بطور کامل وارد نشده است.";
+                return RedirectToAction("ShopLanding", "shop");
+            }
 
-        return View(model);
+            return View(model);
+        }
+        catch (Exception)
+        {
+            TempData[ErrorMessage] = "اطلاعات محصول توسط فروشنده بطور کامل وارد نشده است.";
+            return RedirectToAction("ShopLanding", "shop");
+        }
     }
 
     #endregion

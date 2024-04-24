@@ -241,8 +241,12 @@ namespace Window.Application.Services.Services
         {
             #region Get Market
 
-            var marketUser = await _context.MarketUser.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
-            if (marketUser == null) return null;
+            var marketUser = await _context.MarketUser
+                                           .AsNoTracking()
+                                           .FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
+
+            if (marketUser == null) 
+                                return null;
 
             var market = await GetMarketByMarketId(marketUser.MarketId);
             if (market == null) return null;
@@ -1291,7 +1295,9 @@ namespace Window.Application.Services.Services
 
         public async Task<Market?> GetMarketByMarketId(ulong marketId)
         {
-            return await _context.Market.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == marketId);
+            return await _context.Market
+                                 .AsNoTracking()
+                                 .FirstOrDefaultAsync(p => !p.IsDelete && p.Id == marketId);
         }
 
         public async Task<bool> ChangeMarketStateFromAdminPanel(ListOfPersonalInfoViewModel model, ulong marketId)

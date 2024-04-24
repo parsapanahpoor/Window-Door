@@ -10,7 +10,5 @@ public record EditShopProductCommand : IRequest<EditShopProductFromAdminPanelRes
 
     public EditShopProductAdminSideDTO model { get; set; }
 
-    public IFormFile ProductImage { get; set; }
-
     #endregion
 }

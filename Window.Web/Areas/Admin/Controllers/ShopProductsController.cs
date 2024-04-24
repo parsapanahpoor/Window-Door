@@ -64,7 +64,6 @@ public class ShopProductsController : AdminBaseController
 
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> EditProduct(EditShopProductAdminSideDTO model,
-                                                 IFormFile? NewsImage,
                                                  CancellationToken cancellation)
     {
         #region Edit Product
@@ -74,7 +73,6 @@ public class ShopProductsController : AdminBaseController
             var res = await Mediator.Send(new EditShopProductCommand()
             {
                 model = model,
-                ProductImage = NewsImage
             },
             cancellation);
 

@@ -62,7 +62,6 @@ public class ShopProductService : IShopProductService
 
     public async Task<CreateShopProductFromSellerPanelResult> AddShopProductToTheDataBase(ulong sellerId,
                                                                                   CreateShopProductSellerSideDTO model,
-                                                                                  IFormFile newsImage,
                                                                                   CancellationToken cancellation)
     {
         #region Get Market By UserId 
@@ -85,14 +84,8 @@ public class ShopProductService : IShopProductService
             ShortDescription = model.ShortDescription,
             Price = decimal.Parse(model.Price),
             SaleScaleId = model.SaleScaleId,
+            ProductImage = "default.png"
         };
-
-        if (newsImage != null && newsImage.IsImage())
-        {
-            var imageName = Guid.NewGuid() + Path.GetExtension(newsImage.FileName);
-            newsImage.AddImageToServer(imageName, FilePaths.ProductsPathServer, 400, 300, FilePaths.ProductsPathThumbServer);
-            product.ProductImage = imageName;
-        }
 
         #endregion
 
@@ -152,7 +145,6 @@ public class ShopProductService : IShopProductService
             ShopProductId = product.Id,
             ShopColorId = product.ProductColorId,
             Title = product.ProductName,
-            ProductImage = product.ProductImage,
             Description = product.LongDescription,
             Price = product.Price.ToString(),
             ShortDescription = product.ShortDescription,
@@ -171,7 +163,7 @@ public class ShopProductService : IShopProductService
         return model;
     }
 
-    public async Task<EditShopProductFromSellerPanelResult> EditShopProductSellerSide(EditShopProductSellerSideDTO newProduct, ulong sellerId, IFormFile? newsImage, CancellationToken cancellation)
+    public async Task<EditShopProductFromSellerPanelResult> EditShopProductSellerSide(EditShopProductSellerSideDTO newProduct, ulong sellerId, CancellationToken cancellation)
     {
         #region Get Market By UserId 
 
@@ -203,23 +195,6 @@ public class ShopProductService : IShopProductService
         oldProduct.Price = decimal.Parse(newProduct.Price);
         oldProduct.SaleScaleId = newProduct.SaleScaleId;
         oldProduct.ProductColorId = newProduct.ShopColorId;
-
-        #endregion
-
-        #region  Image
-
-        if (newsImage != null)
-        {
-            var imageName = Guid.NewGuid() + Path.GetExtension(newsImage.FileName);
-            newsImage.AddImageToServer(imageName, FilePaths.ProductsPathServer, 400, 300, FilePaths.ProductsPathThumbServer);
-
-            if (!string.IsNullOrEmpty(oldProduct.ProductImage))
-            {
-                oldProduct.ProductImage.DeleteImage(FilePaths.ProductsPathServer, FilePaths.ProductsPathThumbServer);
-            }
-
-            oldProduct.ProductImage = imageName;
-        }
 
         #endregion
 

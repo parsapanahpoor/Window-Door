@@ -16,7 +16,7 @@
 @section Scripts
 {
     <partial name="_JqueryValidation" />
-    
+
 }
 
 @section Breadcrumb
@@ -25,6 +25,37 @@
         <a href="javascript:void(0)"> @ViewData["Title"] </a>
     </li>
 }
+
+<div class="page-body">
+
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-header bg-warning">
+                <i class="widget-icon fa fa-arrow-left"></i>
+                <span class="widget-caption">راهنمایی</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="config">
+                        <i class="fa fa-cog"></i>
+                    </a>
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body">
+              درصورتی که محصول شما تصویر اصلی برای نمایش ندارد  , اولین تصویری که در این صفحه آپلود میکنید به عنوان تصویر اصلی محصول شما در نظر گرفته می شود .
+              توجه داشته باشید که آپلود تصویر زمان بر خواهد بود ! لطفا بعد از ثبت تصویر در همین صفحه منتظر بمانید تا تصویر بدرستی آپلود گردد.
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+
+</div>
 
 <form method="post" asp-action="ProductGallery" asp-controller="ShopProduct" asp-area="Seller" enctype="multipart/form-data">
     <input asp-for="ProductId" type="hidden" />
@@ -58,7 +89,7 @@
                                     <img src="@avatarUrl" class="image-style" ImageFile="1" />
                                 </div>
 
-                                <input class="col-md-12 btn btn-primary mt-4" type="submit" value="ثبت"/>
+                                <input class="col-md-12 btn btn-primary mt-4" type="submit" value="ثبت" />
 
                             </div>
                         </div>
@@ -85,7 +116,7 @@
                             <thead class="tc vm">
                                 <tr class="tc vm">
                                     <th class="tc vm">
-                                        # 
+                                        #
                                     </th>
                                     <th class="tc vm">
                                         تصویر
@@ -98,14 +129,21 @@
                             <tbody class="tc vm">
                                 @foreach (var gallery in gallerys)
                                 {
-                                    <tr class="tc vm" remove-ajax-item="@gallery.ProductGalleryId">
+                                    <tr class="tc vm" remove-ajax-item="@gallery.Id">
 
                                         <td class="tc vm" style="max-width: 200px">
-                                            @gallery.ProductGalleryId
+                                            @gallery.Id
+
+                                            @if (gallery.MainImage)
+                                            {
+                                                <hr />
+                                                <p class="badge badge-success"> تصویر اصلی </p>
+                                            }
+
                                         </td>
 
                                         <td class="tc vm" style="max-width: 200px">
-                                            <img src="@FilePaths.ProductsGalleryPathThumb@gallery.ImageName" style="height:100px;width:100px;" />
+                                            <img src="@FilePaths.ProductsPathThumb@gallery.ImageName" style="height:100px;width:100px;" />
                                         </td>
 
                                         <td class="tc vm">

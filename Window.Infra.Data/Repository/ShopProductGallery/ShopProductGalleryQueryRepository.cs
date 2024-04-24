@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Window.Data;
 using Window.Data.Context;
 using Window.Domain.Interfaces.ShopProductGallery;
@@ -26,6 +27,14 @@ public class ShopProductGalleryQueryRepository : QueryGenericRepository<Domain.E
     #endregion
 
     #region Seller Side 
+
+    public async Task<bool> IsExist_AnyProductGallery_ByProductId(ulong productId , CancellationToken cancellationToken)
+    {
+        return await _context.ShopProductGalleries
+                             .AsNoTracking()
+                             .AnyAsync(p => !p.IsDelete &&
+                                    p.ProductId == productId);
+    }
 
     public async Task<List<ProductGalleriesDTO>?> FillProductGalleriesDTO(ulong productId , CancellationToken token)
     {
