@@ -410,7 +410,7 @@ public class ShopProductQueryRepository : QueryGenericRepository<Domain.Entities
                             .AsNoTracking()
                             .Where(a => !a.IsDelete &&
                                    a.SellerUserId == filter.SellerUserId)
-                            .OrderBy(s => s.CreateDate)
+                            .OrderByDescending(s => s.CreateDate)
                             .AsQueryable();
 
         #region Filter

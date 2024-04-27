@@ -73,7 +73,8 @@ public class ShopProductController : SellerBaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateProduct(CreateShopProductSellerSideDTO model, CancellationToken cancellation = default)
+    public async Task<IActionResult> CreateProduct(CreateShopProductSellerSideDTO model,
+                                                   CancellationToken cancellation = default)
     {
         #region Model State Validation 
 
@@ -320,12 +321,13 @@ public class ShopProductController : SellerBaseController
     {
         command.userSellerId = User.GetUserId();
         var res = await Mediator.Send(command, token);
-        if (res)
+        if (res.Result == true)
         {
-            return JsonResponseStatus.Success();
+            TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+            return RedirectToAction(nameof(ProductGallery), new { area = "Seller", productId = res.ProductId });
         }
 
-        return JsonResponseStatus.Error();
+        return NotFound();
     }
 
     #endregion
@@ -431,7 +433,7 @@ public class ShopProductController : SellerBaseController
         {
             BrandId = Permissions.First(),
             ProductId = productId,
-            UserId = User.GetUserId() 
+            UserId = User.GetUserId()
         };
 
         #endregion
@@ -439,7 +441,7 @@ public class ShopProductController : SellerBaseController
         #region Update Product
 
         var res = await Mediator.Send(command, cancellationToken);
-        if (res) 
+        if (res)
         {
             TempData[SuccessMessage] = "برند انتخابی باموفقیت ثبت گردید.";
             return RedirectToAction(nameof(FilterShopProducts));

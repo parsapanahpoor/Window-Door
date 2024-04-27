@@ -11,6 +11,8 @@ using Window.Domain.Entities.ShopProduct;
 using Window.Domain.Interfaces.ShopCategory;
 using Window.Domain.Interfaces.ShopColors;
 using Window.Domain.Interfaces.ShopProduct;
+using Window.Domain.Interfaces.ShopProductFeature;
+using Window.Domain.Interfaces.ShopProductGallery;
 using Window.Domain.ViewModels.Seller.Product;
 using Window.Domain.ViewModels.Seller.ShopProduct;
 
@@ -28,6 +30,7 @@ public class ShopProductService : IShopProductService
     private readonly IShopColorsQueryRepository _shopColorsQueryRepository;
     private readonly IShopCategoryCommandRepository _shopCategoryCommand;
     private readonly IShopCategoryQueryRepository _shopCategoryQueryRepository;
+    private readonly IShopProductGalleryQueryRepository _shopProductGalleryQueryRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ISellerService _marketService;
 
@@ -38,8 +41,10 @@ public class ShopProductService : IShopProductService
                               IShopColorsCommandRepository shopColorsCommand,
                               IShopCategoryCommandRepository shopCategoryCommand,
                               IShopColorsQueryRepository shopColorsQueryRepository,
-                              IShopCategoryQueryRepository shopCategoryQueryRepository)
+                              IShopCategoryQueryRepository shopCategoryQueryRepository ,
+                              IShopProductGalleryQueryRepository shopProductGalleryQueryRepository)
     {
+        _shopProductGalleryQueryRepository = shopProductGalleryQueryRepository;
         _shopProductCommandRepository = shopProductCommandRepository;
         _shopProductQueryRepository = shopProductQueryRepository;
         _unitOfWork = unitOfWork;
@@ -80,7 +85,7 @@ public class ShopProductService : IShopProductService
             ProductColorId = model.ShopColorId,
             ProductName = model.Title,
             SellerUserId = sellerId,
-            LongDescription = model.Description,
+            LongDescription = string.IsNullOrEmpty(model.Description) ? model.ShortDescription : model.Description,
             ShortDescription = model.ShortDescription,
             Price = decimal.Parse(model.Price),
             SaleScaleId = model.SaleScaleId,
@@ -191,7 +196,7 @@ public class ShopProductService : IShopProductService
 
         oldProduct.ProductName = newProduct.Title.SanitizeText();
         oldProduct.ShortDescription = newProduct.ShortDescription.SanitizeText();
-        oldProduct.LongDescription = newProduct.Description.SanitizeText();
+        oldProduct.LongDescription = string.IsNullOrEmpty(newProduct.Description) ? newProduct.ShortDescription : newProduct.Description.SanitizeText();
         oldProduct.Price = decimal.Parse(newProduct.Price);
         oldProduct.SaleScaleId = newProduct.SaleScaleId;
         oldProduct.ProductColorId = newProduct.ShopColorId;
@@ -252,10 +257,20 @@ public class ShopProductService : IShopProductService
 
         #region Delete Product File 
 
-        if (!string.IsNullOrEmpty(oldProduct.ProductImage))
+        var productGalleries = await _shopProductGalleryQueryRepository.GetProductGalleriesImages(oldProduct.Id , cancellation);
+
+        if (productGalleries != null && productGalleries.Any())
         {
-            oldProduct.ProductImage.DeleteImage(FilePaths.ProductsPathServer, FilePaths.ProductsPathThumbServer);
+            foreach (var productGallery in productGalleries)
+            {
+                if (!string.IsNullOrEmpty(productGallery) && productGallery != "default.png")
+                {
+                    productGallery.DeleteImage(FilePaths.ProductsPathServer, FilePaths.ProductsPathThumbServer);
+                }
+            }
         }
+
+        oldProduct.ProductImage = "default.png";
 
         #endregion
 

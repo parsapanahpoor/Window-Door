@@ -11,15 +11,14 @@
 
 @section Styles
 {
+
 }
 
 @section Scripts
 {
-    <partial name="_JqueryValidation" />
-
 }
 
-@section Breadcrumb
+@section breadcrumb
 {
     <li>
         <a href="javascript:void(0)"> @ViewData["Title"] </a>
@@ -49,8 +48,8 @@
                 </div><!--Widget Buttons-->
             </div><!--Widget Header-->
             <div class="widget-body">
-              درصورتی که محصول شما تصویر اصلی برای نمایش ندارد  , اولین تصویری که در این صفحه آپلود میکنید به عنوان تصویر اصلی محصول شما در نظر گرفته می شود .
-              توجه داشته باشید که آپلود تصویر زمان بر خواهد بود ! لطفا بعد از ثبت تصویر در همین صفحه منتظر بمانید تا تصویر بدرستی آپلود گردد.
+                درصورتی که محصول شما تصویر اصلی برای نمایش ندارد  , اولین تصویری که در این صفحه آپلود میکنید به عنوان تصویر اصلی محصول شما در نظر گرفته می شود .
+                توجه داشته باشید که آپلود تصویر زمان بر خواهد بود ! لطفا بعد از ثبت تصویر در همین صفحه منتظر بمانید تا تصویر بدرستی آپلود گردد.
             </div><!--Widget Body-->
         </div><!--Widget-->
     </div>
@@ -148,7 +147,13 @@
 
                                         <td class="tc vm">
 
-                                            <button onclick="DeleteAjax(@gallery.Id, '@Url.Action("DeleteProductGallery", "ShopProduct", new {area = "Seller", galleryId = gallery.Id})')" class="badge badge-danger  btn-xs">حذف</button>
+                                            <a asp-action="DeleteProductGallery"
+                                               asp-area="Seller"
+                                               asp-controller="ShopProduct"
+                                               asp-route-galleryId="@gallery.Id"
+                                               class="badge badge-danger  btn-xs">
+                                                حذف
+                                            </a>
 
                                         </td>
 

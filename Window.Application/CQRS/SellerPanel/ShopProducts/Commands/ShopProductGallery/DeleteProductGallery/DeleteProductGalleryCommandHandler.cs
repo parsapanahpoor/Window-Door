@@ -8,7 +8,7 @@ using Window.Domain.Interfaces.ShopProductGallery;
 
 namespace Window.Application.CQRS.SellerPanel.ShopProducts.Commands.DeleteProductGallery;
 
-public record DeleteProductGalleryCommandHandler : IRequestHandler<DeleteProductGalleryCommand, bool>
+public record DeleteProductGalleryCommandHandler : IRequestHandler<DeleteProductGalleryCommand, DeleteProductGalleryCommand_Result>
 {
     #region Ctor
 
@@ -36,27 +36,43 @@ public record DeleteProductGalleryCommandHandler : IRequestHandler<DeleteProduct
 
     #endregion
 
-    public async Task<bool> Handle(DeleteProductGalleryCommand request, CancellationToken cancellationToken)
+    public async Task<DeleteProductGalleryCommand_Result> Handle(DeleteProductGalleryCommand request, CancellationToken cancellationToken)
     {
         #region Get Market By UserId 
 
         var market = await _marketQueryRepository.GetMarketByUserId(request.userSellerId, cancellationToken);
-        if (market == null) return false;
+        if (market == null) return new DeleteProductGalleryCommand_Result()
+        {
+            ProductId = 0,
+            Result = false
+        };
 
         #endregion
 
         #region Get Product Gallery
 
         var productGallery = await _shopProductGalleryQueryRepository.GetByIdAsync(cancellationToken, request.galleryId);
-        if (productGallery == null) return false;
+        if (productGallery == null) return new DeleteProductGalleryCommand_Result()
+        {
+            ProductId = 0,
+            Result = false
+        };
 
         #endregion
 
         #region Get Product By Id 
 
         var originProduct = await _shopProductQueryRepository.GetByIdAsync(cancellationToken, productGallery.ProductId);
-        if (originProduct == null) return false;
-        if (originProduct.SellerUserId != request.userSellerId) return false;
+        if (originProduct == null) return new DeleteProductGalleryCommand_Result()
+        {
+            ProductId = 0,
+            Result = false
+        };
+        if (originProduct.SellerUserId != request.userSellerId) return new DeleteProductGalleryCommand_Result()
+        {
+            ProductId = 0,
+            Result = false
+        };
 
         #endregion
 
@@ -82,6 +98,10 @@ public record DeleteProductGalleryCommandHandler : IRequestHandler<DeleteProduct
 
         #endregion
 
-        return true;
+        return new DeleteProductGalleryCommand_Result()
+        {
+            ProductId = originProduct.Id,
+            Result = true
+        };
     }
 }
