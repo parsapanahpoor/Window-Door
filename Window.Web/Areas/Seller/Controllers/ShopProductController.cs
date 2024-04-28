@@ -221,7 +221,7 @@ public class ShopProductController : SellerBaseController
     {
         ViewData["ProductId"] = productId;
 
-        return View(await _shopProductService.FillListOfSellerProductCategoriesDTO(User.GetUserId(), productId, cancellation));
+        return View(await _shopProductService.FillListOf_AdminProductCategoriesDTO( productId, cancellation));
     }
 
     [HttpPost, ValidateAntiForgeryToken]
@@ -242,7 +242,7 @@ public class ShopProductController : SellerBaseController
         ViewData["ProductId"] = productId;
 
         TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
-        return View(await _shopProductService.FillListOfSellerProductCategoriesDTO(User.GetUserId(), productId, cancellation));
+        return View(await _shopProductService.FillListOf_AdminProductCategoriesDTO(productId, cancellation));
     }
 
     #endregion
@@ -427,6 +427,12 @@ public class ShopProductController : SellerBaseController
                                                   List<ulong>? Permissions,
                                                   CancellationToken cancellationToken)
     {
+        if (Permissions == null || !Permissions.Any())
+        {
+            TempData[ErrorMessage] = "انتخاب برند اجباری است.";
+            return RedirectToAction(nameof(FilterShopProducts));
+        }
+
         #region Add Brand To The Product
 
         ProductBrandsCommand command = new ProductBrandsCommand()

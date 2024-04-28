@@ -12,6 +12,7 @@
 
 @section Scripts
 {
+    <partial name="_AdminSweetAlertLocalizer" />
 }
 
 @section breadcrumb
@@ -135,15 +136,16 @@
 
                                     <a asp-action="EditProduct" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-warning btn-xs">ویرایش</a>
 
-                                    @*<a asp-action="EditProductCategory" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">دسته بندی </a>
+                                    <a asp-action="EditProductCategory" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">دسته بندی </a>
 
-                            <a asp-action="ProductGallery" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-success  btn-xs">گالری تصاویر </a>
+                                    <a asp-action="ProductGallery" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-success  btn-xs">گالری تصاویر </a>
 
-                            <a asp-action="ProductFeature" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">ویژگی های محصول</a>
+                                    <a asp-action="ProductFeature" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-primary  btn-xs">ویژگی های محصول</a>
 
-                            <a asp-action="ProductBrand" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-warning  btn-xs">برندها</a>
+                                    <a asp-action="ProductBrand" asp-controller="ShopProducts" asp-area="Admin" asp-route-productId="@product.Id" class="badge badge-warning  btn-xs">برندها</a>
 
-                            <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteShopProduct", "ShopProducts", new {area = "Admin", shopProductId = product.Id})')" class="badge badge-danger  btn-xs">حذف</button>*@
+                                    <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteShopProduct", "ShopProducts", new {area = "Admin", shopProductId = product.Id})')" class="badge badge-danger  btn-xs">حذف</button>
+
                                 </td>
 
                             </tr>

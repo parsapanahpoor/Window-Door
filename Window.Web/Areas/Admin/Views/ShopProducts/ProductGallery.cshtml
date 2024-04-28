@@ -1,0 +1,175 @@
+﻿@using Window.Application.StticTools;
+@using Window.Domain.ViewModels.Common
+@using Window.Domain.ViewModels.Seller.ShopProduct;
+@model Window.Domain.ViewModels.Seller.ShopProduct.CreateShopProductGalleryDTO
+
+@{
+    ViewData["Title"] = "افزودن تصویر محصول";
+
+    var gallerys = ViewData["ListOfProductGalleries"] as List<ProductGalleriesDTO>;
+}
+
+@section Styles
+{
+
+}
+
+@section Scripts
+{
+}
+
+@section breadcrumb
+{
+    <li>
+        <a href="javascript:void(0)"> @ViewData["Title"] </a>
+    </li>
+}
+
+<div class="page-body">
+
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-header bg-warning">
+                <i class="widget-icon fa fa-arrow-left"></i>
+                <span class="widget-caption">راهنمایی</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="config">
+                        <i class="fa fa-cog"></i>
+                    </a>
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body">
+                درصورتی که محصول شما تصویر اصلی برای نمایش ندارد  , اولین تصویری که در این صفحه آپلود میکنید به عنوان تصویر اصلی محصول شما در نظر گرفته می شود .
+                توجه داشته باشید که آپلود تصویر زمان بر خواهد بود ! لطفا بعد از ثبت تصویر در همین صفحه منتظر بمانید تا تصویر بدرستی آپلود گردد.
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+
+</div>
+
+<form method="post" asp-action="ProductGallery" asp-controller="ShopProducts" asp-area="Admin" enctype="multipart/form-data">
+    <input asp-for="ProductId" type="hidden" />
+    <div class="row">
+
+        <div class="col-lg-3 col-sm-12">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-primary">
+                            <span class="widget-caption"> تصویر  </span>
+                        </div>
+                        <div class="widget-body">
+                            <div class="row">
+
+                                <input type="file" class="display-none" name="NewsImage" id="UserAvatar" ImageInput="1" accept=".jpg,.jpeg,.png" />
+
+                                <div class="col-md-12">
+                                    <label for="UserAvatar" class="file-input-style">
+                                        <i class="glyphicon glyphicon-upload"></i>
+                                        <span class="mr-8px"> لطفا یک تصویر را انتخاب کنید</span>
+                                    </label>
+                                </div>
+
+                                @{
+                                    var avatarUrl = FilePaths.DefaultProductAvatar;
+                                }
+
+                                <div class="col-md-12 tc mt-10px">
+                                    <img src="@avatarUrl" class="image-style" ImageFile="1" />
+                                </div>
+
+                                <input class="col-md-12 btn btn-primary mt-4" type="submit" value="ثبت" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-9 col-sm-12">
+            <div class="col-lg-12 col-sm-12">
+                <div class="well with-header with-footer table-responsive">
+                    <div class="header bordered-azure">
+                        <div class="flex-style">
+
+                            <span> لیست محصولات فروشگاه </span>
+
+                        </div>
+                    </div>
+
+                    @if (gallerys != null && gallerys.Any())
+                    {
+                        <table class="table table-hover table-bordered tc vm">
+                            <thead class="tc vm">
+                                <tr class="tc vm">
+                                    <th class="tc vm">
+                                        #
+                                    </th>
+                                    <th class="tc vm">
+                                        تصویر
+                                    </th>
+                                    <th class="tc vm">
+                                        امکانات
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="tc vm">
+                                @foreach (var gallery in gallerys)
+                                {
+                                    <tr class="tc vm" remove-ajax-item="@gallery.Id">
+
+                                        <td class="tc vm" style="max-width: 200px">
+                                            @gallery.Id
+
+                                            @if (gallery.MainImage)
+                                            {
+                                                <hr />
+                                                <p class="badge badge-success"> تصویر اصلی </p>
+                                            }
+
+                                        </td>
+
+                                        <td class="tc vm" style="max-width: 200px">
+                                            <img src="@FilePaths.ProductsPathThumb@gallery.ImageName" style="height:100px;width:100px;" />
+                                        </td>
+
+                                        <td class="tc vm">
+
+                                            <a asp-action="DeleteProductGallery"
+                                               asp-area="Admin"
+                                               asp-controller="ShopProducts"
+                                               asp-route-galleryId="@gallery.Id"
+                                               class="badge badge-danger  btn-xs">
+                                                حذف
+                                            </a>
+
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <partial name="_AdminNotFoundPartial" />
+                    }
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</form>

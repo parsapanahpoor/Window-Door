@@ -6,6 +6,17 @@ namespace Window.Application.Services.Interfaces;
 
 public interface IShopProductService
 {
+    #region Admin Side 
+
+    Task<List<ListOfSellerProductCategoriesDTO>?> FillListOf_AdminProductCategoriesDTO(ulong productId,
+                                                                                       CancellationToken cancellationToken);
+
+    Task<bool> UpdateProductSelectedCategrory_AdminSide(List<ulong>? categoryIds,
+                                                        ulong productId,
+                                                        CancellationToken cancellation);
+
+    #endregion
+
     #region Seller Side 
 
     Task<FilterShopProductSellerSideDTO> FilterShopProductSellerSide(FilterShopProductSellerSideDTO filter, CancellationToken cancellation);
@@ -17,6 +28,9 @@ public interface IShopProductService
     Task<EditShopProductSellerSideDTO?> FillEditShopProductSellerSideDTO(ulong productId, ulong sellerId, CancellationToken token);
 
     Task<List<ulong>> GetShopProductSelectedCategories(ulong productId, CancellationToken token);
+
+    Task<bool> DeleteProduct_AdminSide(ulong productId,
+                                       CancellationToken cancellation);
 
     Task<EditShopProductFromSellerPanelResult> EditShopProductSellerSide(EditShopProductSellerSideDTO newProduct, ulong sellerId, CancellationToken cancellation);
 

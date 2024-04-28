@@ -81,6 +81,9 @@
                     <thead class="tc vm">
                         <tr class="tc vm">
                             <th class="tc vm">
+                                #کدمحصول
+                            </th>
+                            <th class="tc vm">
                                 تصویر محصول
                             </th>
                             <th class="tc vm">
@@ -95,6 +98,10 @@
                         @foreach (var product in Model.Entities)
                         {
                             <tr class="tc vm" remove-ajax-item="@product.Id">
+
+                                <td class="tc vm" style="max-width: 200px">
+                                    <p> @product.Id </p>
+                                </td>
 
                                 <td class="tc vm" style="max-width: 200px">
                                     <img src="@FilePaths.ProductsPathThumb@product.ProductImage" style="height:100px;width:100px;" />

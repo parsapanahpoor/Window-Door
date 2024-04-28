@@ -190,14 +190,14 @@
                                                     @if (Model.IsFinally)
                                                     {
                                                         <p>
-                                                            وضعیت سفارش =                       
+                                                            وضعیت سفارش =
                                                             <span class="text-highlight text-highlight-success">نهایی شده</span>
                                                         </p>
                                                     }
                                                     else
                                                     {
                                                         <p>
-                                                            وضعیت سفارش =                                      
+                                                            وضعیت سفارش =
                                                             <span class="text-highlight text-highlight-danger">نهایی نشده</span>
                                                         </p>
                                                     }
@@ -259,12 +259,12 @@
                                                     </td>
                                                     <td class="id">
                                                         <p class="text-secondary text-footer">
-                                                            فروشنده 
+                                                            فروشنده
                                                         </p>
                                                     </td>
                                                     <td class="id">
                                                         <p class="text-secondary text-footer">
-                                                            مبلغ
+                                                            قیمت واحد
                                                         </p>
                                                     </td>
                                                     <td class="id">
@@ -274,17 +274,17 @@
                                                     </td>
                                                     <td class="id">
                                                         <p class="text-secondary text-footer">
-                                                            رنگ 
+                                                            رنگ
                                                         </p>
                                                     </td>
                                                     <td class="id">
                                                         <p class="text-secondary text-footer">
-                                                            تعداد 
+                                                            تعداد
                                                         </p>
                                                     </td>
                                                     <td class="id">
                                                         <p class="text-secondary text-footer">
-                                                            کد
+                                                            قیمت فی
                                                         </p>
                                                     </td>
                                                 </tr>
@@ -292,45 +292,58 @@
                                                 {
                                                     foreach (var orderDetail in Model.OrderDetails)
                                                     {
-                                                        <tr>
-                                                            <td class="id">
-                                                                <span>
-                                                                    @orderDetail.Product.ProductName
-                                                                </span>
-                                                            </td>
+                                                        if (orderDetail.Product != null)
+                                                        {
+                                                            <tr>
+                                                                <td class="id">
+                                                                    <span>
+                                                                       کد #@orderDetail.Product.ProductId -  @orderDetail.Product.ProductName
+                                                                    </span>
+                                                                </td>
 
-                                                            <td class="id">
-                                                                <span>
-                                                                    @orderDetail.Product.SellerInfo.SellerUsername 
-                                                                </span>
-                                                            </td>
-                                                            <td class="id">
-                                                                <span>
-                                                                    @orderDetail.Product.Price.ToString("#,000") ریال
-                                                                </span>
-                                                            </td>
-                                                            <td class="id">
-                                                                <span>
-                                                                    @orderDetail.Product.ShopBrand.BrandName
-                                                                </span>
-                                                            </td>
-                                                            <td class="id">
-                                                                <span>
-                                                                    @orderDetail.Product.ShopColor.ColorTitle
-                                                                </span>
-                                                            </td>
-                                                            <td class="id">
-                                                                <span>
-                                                                  @orderDetail.Count  @orderDetail.Product.ScaleTitle
-                                                                </span>
-                                                            </td>
-                                                            <td class="id">
-                                                                <span>
-                                                                    @orderDetail.Product.ProductId
-                                                                </span>
-                                                            </td>
-                                                            
-                                                        </tr>
+                                                                <td class="id">
+                                                                    @if (orderDetail.Product.SellerInfo != null)
+                                                                    {
+                                                                        <span>@orderDetail.Product.SellerInfo.SellerUsername</span>
+                                                                    }
+                                                                </td>
+
+                                                                <td class="id">
+                                                                    <span>
+                                                                        @orderDetail.Product.Price.ToString("#,000") ریال
+                                                                    </span>
+                                                                </td>
+
+                                                                <td class="id">
+                                                                    @if (orderDetail.Product.ShopBrand != null)
+                                                                    {
+                                                                        <span>@orderDetail.Product.ShopBrand.BrandName</span>
+                                                                    }
+                                                                </td>
+
+                                                                <td class="id">
+                                                                    @if (orderDetail.Product.ShopColor != null)
+                                                                    {
+                                                                        <span>
+                                                                            @orderDetail.Product.ShopColor.ColorTitle
+                                                                        </span>
+                                                                    }
+                                                                </td>
+
+                                                                <td class="id">
+                                                                    <span>
+                                                                        @orderDetail.Count  @orderDetail.Product.ScaleTitle
+                                                                    </span>
+                                                                </td>
+
+                                                                <td class="id">
+                                                                    <span>
+                                                                        @((orderDetail.Count * orderDetail.Product.Price).ToString("#,000")) ریال
+                                                                    </span>
+                                                                </td>
+
+                                                            </tr>
+                                                        }
                                                     }
                                                 }
                                             </tbody>

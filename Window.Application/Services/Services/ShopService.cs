@@ -58,6 +58,101 @@ public class ShopProductService : IShopProductService
 
     #endregion
 
+    #region Admin Side 
+
+    //Update Product Selected Categrory
+    public async Task<bool> UpdateProductSelectedCategrory_AdminSide(List<ulong>? categoryIds,
+                                                                     ulong productId,
+                                                                     CancellationToken cancellation)
+    {
+        #region Get Product By Id 
+
+        var oldProduct = await _shopProductQueryRepository.GetByIdAsync(cancellation, productId);
+        if (oldProduct == null) return false;
+
+        #endregion
+
+        #region Update Product Selected Categories
+
+        //remove all Product Selected Categories
+        var productSelectedCategories = await _shopProductQueryRepository.GetListOf_ShopProductSelectedCategories_ByProductId(productId, cancellation);
+        if (productSelectedCategories != null && productSelectedCategories.Any())
+            _shopProductCommandRepository.DeleteRangeProductSelectedCategories(productSelectedCategories);
+
+        //add Categories To The Seller Product
+        if (categoryIds != null && categoryIds.Any())
+        {
+            foreach (var categoryId in categoryIds)
+            {
+                var shopProductSelectedCategories = new ShopProductSelectedCategories
+                {
+                    ShopProductId = productId,
+                    ShopCategoryId = categoryId,
+                };
+
+                await _shopCategoryCommand.AddShopProductSelectedCategoriesAsync(shopProductSelectedCategories, cancellation);
+            }
+        }
+
+        #endregion
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<List<ListOfSellerProductCategoriesDTO>?> FillListOf_AdminProductCategoriesDTO(ulong productId,
+                                                                                                    CancellationToken cancellationToken)
+    {
+        #region Get Product By Id 
+
+        var oldProduct = await _shopProductQueryRepository.GetByIdAsync(cancellationToken, productId);
+        if (oldProduct == null) return null;
+
+        #endregion
+
+        #region Get Product Selected Categories
+
+        var productSelectedCategoryId = await _shopProductQueryRepository.GetShopProductSelectedCategories(productId, cancellationToken);
+
+        #endregion
+
+        #region Get List Of Categories
+
+        var categories = await _shopCategoryQueryRepository.GetListOfShopCategories(cancellationToken);
+        if (categories == null) return null;
+
+        #endregion
+
+        #region Fill Model 
+
+        var ListOfSellerProductCategories = new List<ListOfSellerProductCategoriesDTO>();
+
+        foreach (var category in categories)
+        {
+            var reutnItems = new ListOfSellerProductCategoriesDTO();
+
+            reutnItems.ShopCategory = category;
+
+            if (productSelectedCategoryId != null && productSelectedCategoryId.Any() && productSelectedCategoryId.Contains(category.Id))
+            {
+                reutnItems.IsSelectedBySellerProduct = true;
+            }
+            else
+            {
+                reutnItems.IsSelectedBySellerProduct = false;
+            }
+
+            ListOfSellerProductCategories.Add(reutnItems);
+        }
+
+        #endregion
+
+        return ListOfSellerProductCategories;
+    }
+
+    #endregion
+
     #region Seller Side 
 
     public async Task<FilterShopProductSellerSideDTO> FilterShopProductSellerSide(FilterShopProductSellerSideDTO filter, CancellationToken cancellation)
@@ -237,6 +332,55 @@ public class ShopProductService : IShopProductService
     {
         return await _shopProductQueryRepository.GetShopProductSelectedCategories(productId, token);
     }
+
+    public async Task<bool> DeleteProduct_AdminSide(ulong productId,
+                                                    CancellationToken cancellation)
+    {
+        #region Get Product By Id 
+
+        var oldProduct = await _shopProductQueryRepository.GetByIdAsync(cancellation, productId);
+        if (oldProduct == null) return false;
+
+        #endregion
+
+        #region Delete Product File 
+
+        var productGalleries = await _shopProductGalleryQueryRepository.GetProductGalleriesImages(oldProduct.Id, cancellation);
+
+        if (productGalleries != null && productGalleries.Any())
+        {
+            foreach (var productGallery in productGalleries)
+            {
+                if (!string.IsNullOrEmpty(productGallery) && productGallery != "default.png")
+                {
+                    productGallery.DeleteImage(FilePaths.ProductsPathServer, FilePaths.ProductsPathThumbServer);
+                }
+            }
+        }
+
+        oldProduct.ProductImage = "default.png";
+
+        #endregion
+
+        #region Update Article Field 
+
+        oldProduct.IsDelete = true;
+
+        #endregion
+
+        #region Shop Product Tags 
+
+        var productTags = await _shopProductQueryRepository.GetListOfProductTagsByProductId(oldProduct.Id, cancellation);
+        if (productTags != null && productTags.Any()) _shopProductCommandRepository.DeleteRange(productTags);
+
+        #endregion
+
+        _shopProductCommandRepository.Update(oldProduct);
+        await _unitOfWork.SaveChangesAsync();
+
+        return true;
+    }
+
 
     public async Task<bool> DeleteArticleAdminSide(ulong productId, ulong sellerId, CancellationToken cancellation)
     {
