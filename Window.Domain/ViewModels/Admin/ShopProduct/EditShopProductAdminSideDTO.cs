@@ -35,6 +35,8 @@ public record EditShopProductAdminSideDTO
 
     public bool IsInCustomersSuggestions { get; set; }
 
+    public int SaleRatio { get; set; }
+
     #endregion
 }
 

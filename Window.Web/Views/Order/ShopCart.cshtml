@@ -58,16 +58,22 @@
                                                                 <ul>
                                                                     <li>
                                                                         <span class="color" style="background-color: @productItem.Products.Color.ColorCode;"></span>
-                                                                        <span>@productItem.Products.Color.ColorTitle</span>
+                                                                        <span>
+                                                                            @productItem.Products.Color.ColorTitle</span>
                                                                     </li>
                                                                     <li>
                                                                         <i class="far fa-store-alt text-muted"></i>
                                                                         <span>نام فروشنده : @productItem.Products.SellerInfo.SellerUsername</span>
                                                                     </li>
-                                                                    <li>
-                                                                        <i class="far fa-clipboard-check text-primary"></i>
-                                                                        <span>موجود در انبار</span>
-                                                                    </li>
+                                                                    @if (!string.IsNullOrEmpty(productItem.Products.ProductSaleScale))
+                                                                    {
+                                                                        <li>
+                                                                            <i class="far fa-clipboard-check text-primary"></i>
+                                                                            <h6 style="margin-top: 10px;font-size: 0.9rem !important;color: red;">
+                                                                                هر واحد خرید از این محصول برابر است با یک
+                                                                                @productItem.Products.ProductSaleScale</h6>
+                                                                        </li>
+                                                                    }
                                                                 </ul>
                                                                 <div class="item-quantity--item-price">
                                                                     <div class="item-quantity">
@@ -94,7 +100,7 @@
                                                                            asp-area=""
                                                                            asp-controller="Order"
                                                                            asp-route-ProductId="@productItem.Products.ProductId"
-                                                                           class="item-remove-btn mr-3">
+                                                                           class="item-remove-btn mr-3" style="margin-top: 10px;">
                                                                             <i class="far fa-trash-alt"></i>
                                                                             حذف
                                                                         </a>

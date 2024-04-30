@@ -77,6 +77,7 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                              .AsNoTracking()
                              .Where(p => !p.IsDelete &&
                                     p.OrderId == orderId)
+                             .OrderByDescending(p => p.Id)
                              .Select(p => p.Id)
                              .ToListAsync();
     }
@@ -110,6 +111,11 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
                                                         ProductTitle = s.ProductName,
                                                         ProductImage = s.ProductImage,
                                                         ProductPrice = s.Price,
+                                                        ProductSaleScale = _context.SalesScales
+                                                                                   .AsNoTracking()
+                                                                                   .Where(scale => scale.Id == s.SaleScaleId)
+                                                                                   .Select(scale => scale.ScaleTitle)
+                                                                                   .FirstOrDefault(),
                                                         SellerInfo = _context.Users
                                                                              .AsNoTracking()
                                                                              .Where(u => !u.IsDelete &&

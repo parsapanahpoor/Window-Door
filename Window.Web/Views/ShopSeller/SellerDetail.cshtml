@@ -109,7 +109,12 @@
                                             </div>
                                         </div>
                                         <div class="card-body position-relative pb-3">
-                                            <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" href="real-estate-single-v1.html">@product.ShopProductName</a></h3>
+                                            <h3 class="h6 mb-2 fs-base">
+                                                <a class="nav-link stretched-link" asp-action="ShopProductDetail"
+                                                   asp-area=""
+                                                   asp-controller="ShopProduct"
+                                                   asp-route-productId="@product.ProductId">@product.ShopProductName</a>
+                                            </h3>
                                             <p class="mb-2 fs-sm text-muted">برند محصول : @product.BrandName</p>
                                             <p class="mb-2 fs-sm text-muted">رنگ محصول : @product.ColorName</p>
                                             <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>@product.Price.ToString("#,000") ریال </div>

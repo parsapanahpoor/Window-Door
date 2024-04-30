@@ -57,6 +57,7 @@ public record EditShopProductCommandHandler : IRequestHandler<EditShopProductCom
         oldProduct.Price = decimal.Parse(request.model.Price);
         oldProduct.SaleScaleId = request.model.SaleScaleId;
         oldProduct.ProductColorId = request.model.ShopColorId;
+        oldProduct.SalesRatio = request.model.SaleRatio;
 
         #endregion
 

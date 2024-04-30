@@ -40,6 +40,7 @@ public record EditShopProductQueryHandler : IRequestHandler<EditShopProductQuery
             Price = product.Price.ToString(),
             ShortDescription = product.ShortDescription,
             SaleScaleId = product.SaleScaleId,
+            SaleRatio = product.SalesRatio,
             IsInIncridble = await _shopProductQueryRepository.IsExistCurrentProduct_InIncrediblesProducts_ByProductId(product.Id , cancellationToken),
             IsInCustomersSuggestions = await _shopProductQueryRepository.IsExistCurrentProduct_InCustomersSuggestions_ByProductId(product.Id , cancellationToken),
         };

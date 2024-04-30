@@ -184,7 +184,8 @@ public class ShopProductService : IShopProductService
             ShortDescription = model.ShortDescription,
             Price = decimal.Parse(model.Price),
             SaleScaleId = model.SaleScaleId,
-            ProductImage = "default.png"
+            ProductImage = "default.png",
+            SalesRatio = model.SaleRatio
         };
 
         #endregion
@@ -248,7 +249,8 @@ public class ShopProductService : IShopProductService
             Description = product.LongDescription,
             Price = product.Price.ToString(),
             ShortDescription = product.ShortDescription,
-            SaleScaleId = product.SaleScaleId,
+            SaleScaleId = product.SaleScaleId, 
+            SaleRatio = product.SalesRatio 
         };
 
         #endregion
@@ -295,6 +297,7 @@ public class ShopProductService : IShopProductService
         oldProduct.Price = decimal.Parse(newProduct.Price);
         oldProduct.SaleScaleId = newProduct.SaleScaleId;
         oldProduct.ProductColorId = newProduct.ShopColorId;
+        oldProduct.SalesRatio = newProduct.SaleRatio;
 
         #endregion
 

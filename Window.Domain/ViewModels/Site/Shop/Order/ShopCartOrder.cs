@@ -47,6 +47,8 @@ public class Product
 
     public Color? Color { get; set; }
 
+    public string? ProductSaleScale { get; set; }
+
     public ShopCartOrderProductSellerInfo? SellerInfo { get; set; }
 
     #endregion
