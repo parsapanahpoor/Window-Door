@@ -1,8 +1,5 @@
-﻿
-using OfficeOpenXml.Style;
-using Window.Application.Common.IUnitOfWork;
+﻿using Window.Application.Common.IUnitOfWork;
 using Window.Application.Convertors;
-using Window.Application.CQRS.AdminPanel.OrderCheques.Command;
 using Window.Application.Services.Interfaces;
 using Window.Application.StticTools;
 using Window.Domain.Entities.ShopOrder;
@@ -66,7 +63,7 @@ internal class ChangeOrderChequeStateSellerCommandHandler : IRequestHandler<Chan
 
         var adminsMobiles = await _siteSettingService.GetListOf_AdminsMobiles(cancellationToken);
 
-        var customerMobile = await _userRepository.Get_UserMobile_ByUserId(cheque.CustomerUserId , cancellationToken);
+        var customerMobile = await _userRepository.Get_UserMobile_ByUserId(cheque.CustomerUserId, cancellationToken);
 
         if (request.OrderChequeSellerState == OrderChequeSellerState.Accept)
         {
@@ -85,10 +82,20 @@ internal class ChangeOrderChequeStateSellerCommandHandler : IRequestHandler<Chan
             //Send SMS For Customer
             if (!string.IsNullOrEmpty(customerMobile))
             {
-                string customerLink = $"{FilePaths.SiteAddress}/Seller/ShopOrder/ManageShopOrder?orderId={cheque.OrderId}";
+                if (string.IsNullOrEmpty(cheque.ChequeReceiptFileName))
+                {
+                    string customerLink = $"{FilePaths.SiteAddress}/Seller/ShopOrder/ManageShopOrder?orderId={cheque.OrderId}";
 
-                var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={customerMobile}&token=={customerLink}&token2={DateTime.Now.ToShamsi()}&template=Accept-FromSeller-ForCustomer";
-                var results = client.GetStringAsync(result);
+                    var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={customerMobile}&token=={customerLink}&token2={DateTime.Now.ToShamsi()}&template=Accept-FromSeller-ForCustomer";
+                    var results = client.GetStringAsync(result);
+                }
+                else
+                {
+                    string customerLink = $"{FilePaths.SiteAddress}/Seller/ShopOrder/ManageShopOrder?orderId={cheque.OrderId}";
+
+                    var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={customerMobile}&token=={customerLink}&token2={DateTime.Now.ToShamsi()}&template=Accept-ChequeReceipt-FromSeller-ForCustomer";
+                    var results = client.GetStringAsync(result);
+                }
             }
         }
         if (request.OrderChequeSellerState == OrderChequeSellerState.Reject)
@@ -108,10 +115,20 @@ internal class ChangeOrderChequeStateSellerCommandHandler : IRequestHandler<Chan
             //Send SMS For Customer
             if (!string.IsNullOrEmpty(customerMobile))
             {
-                string customerLink = $"{FilePaths.SiteAddress}/Seller/ShopOrder/ManageShopOrder?orderId={cheque.OrderId}";
+                if (string.IsNullOrEmpty(cheque.ChequeReceiptFileName))
+                {
+                    string customerLink = $"{FilePaths.SiteAddress}/Seller/ShopOrder/ManageShopOrder?orderId={cheque.OrderId}";
 
-                var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={customerMobile}&token=={customerLink}&token2={DateTime.Now.ToShamsi()}&template=Reject-FromSeller-ForCustomer";
-                var results = client.GetStringAsync(result);
+                    var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={customerMobile}&token=={customerLink}&token2={DateTime.Now.ToShamsi()}&template=Reject-FromSeller-ForCustomer";
+                    var results = client.GetStringAsync(result);
+                }
+                else
+                {
+                    string customerLink = $"{FilePaths.SiteAddress}/Seller/ShopOrder/ManageShopOrder?orderId={cheque.OrderId}";
+
+                    var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={customerMobile}&token=={customerLink}&token2={DateTime.Now.ToShamsi()}&template=Reject-ChequeReceipt-FromSeller-ForCustomer";
+                    var results = client.GetStringAsync(result);
+                }
             }
         }
 
