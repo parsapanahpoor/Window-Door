@@ -1,4 +1,5 @@
-﻿using Window.Domain.Entities.SiteSetting;
+﻿using Microsoft.EntityFrameworkCore;
+using Window.Domain.Entities.SiteSetting;
 namespace Window.Application.Services.Interfaces;
 
 public interface ISiteSettingService
@@ -33,6 +34,12 @@ public interface ISiteSettingService
                                           CancellationToken cancellation);
 
     Task<List<string>> GetListOf_AdminsMobiles(CancellationToken cancellation);
+
+    #endregion
+
+    #region Landing Componnets
+
+    Task<SiteSetting1?> Show_SiteSetting1();
 
     #endregion
 }

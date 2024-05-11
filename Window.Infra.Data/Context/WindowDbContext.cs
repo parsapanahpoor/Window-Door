@@ -222,6 +222,8 @@ public class WindowDbContext : DbContext
 
     public DbSet<AdminMobiles> AdminMobiles { get; set; }
 
+    public DbSet<SiteSetting1> SiteSetting1 { get; set; }
+
 
     #endregion
 

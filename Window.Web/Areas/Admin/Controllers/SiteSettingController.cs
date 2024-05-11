@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.ComponentModel.DataAnnotations;
+using Window.Application.CQRS.AdminPanel.SiteSetting.Query.SiteSetting1;
 using Window.Application.Security;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Entities.SiteSetting;
@@ -27,7 +29,7 @@ public class SiteSettingController : AdminBaseController
         return View(await _siteSettingService.FillSiteSettingModel());
     }
 
-    [HttpPost , ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> AddOrEditSiteSetting(SiteSetting siteSetting)
     {
         #region Model State Validations
@@ -75,10 +77,10 @@ public class SiteSettingController : AdminBaseController
         return View();
     }
 
-    [HttpPost , ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateAdminMobile(string mobile)
     {
-        if (ModelState.IsValid) 
+        if (ModelState.IsValid)
         {
             await _siteSettingService.Add_AdminMobiles(new AdminMobiles()
             {
@@ -160,6 +162,25 @@ public class SiteSettingController : AdminBaseController
 
         return JsonResponseStatus.Error();
     }
+
+    #endregion
+
+    #endregion
+
+    #region Landing page Settings 
+
+    #region Manage Page 
+
+    [HttpGet]
+    public async Task<IActionResult> ManagePage() => View();
+
+    #endregion
+
+    #region SiteSetting 1
+
+    [HttpGet]
+    public async Task<IActionResult> SiteSetting1(CancellationToken cancellationToken = default)
+    => View(await Mediator.Send(new SiteSetting1Query()));
 
     #endregion
 

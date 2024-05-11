@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
 using Window.Application.Services.Interfaces;
 using Window.Data.Context;
@@ -170,6 +171,15 @@ public class SiteSettingService : ISiteSettingService
                              .Where(p=> !p.IsDelete)
                              .Select(p=> p.AdminMobile)
                              .ToListAsync();
+    }
+
+    #endregion
+
+    #region Landing Componnets
+
+    public async Task<Domain.Entities.SiteSetting.SiteSetting1?> Show_SiteSetting1() 
+    {
+        return await _context.SiteSetting1.FirstOrDefaultAsync(p => !p.IsDelete);
     }
 
     #endregion
