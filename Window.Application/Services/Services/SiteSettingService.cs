@@ -22,6 +22,49 @@ public class SiteSettingService : ISiteSettingService
 
     #region Admin Side 
 
+    public async Task<FreeConsultant?> Get_FreeConsultant_ById(ulong consultatntId, CancellationToken cancellation)
+    {
+        return await _context.FreeConsultants
+                             .AsNoTracking()
+                             .FirstOrDefaultAsync(p => !p.IsDelete &&
+                                                  p.Id == consultatntId);
+    }
+
+    public async Task<List<FreeConsultant>?> ListOf_FreeConsultant()
+    {
+        return await _context.FreeConsultants
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete)
+                             .ToListAsync();
+    }
+
+    public void Update_FreeConsultant(FreeConsultant freeConsultant)
+    {
+        _context.FreeConsultants.Update(freeConsultant);
+    }
+
+    public async Task Add_FreeConsultant(FreeConsultant freeConsultant,
+                                         CancellationToken cancellationToken = default)
+    {
+        await _context.FreeConsultants.AddAsync(freeConsultant);
+    }
+
+    public async Task<ColorFullSiteSetting?> Get_ColorFullSiteSetting_ById(ulong colorId , CancellationToken cancellation)
+    {
+        return await _context.ColorFullSiteSetting
+                             .AsNoTracking()
+                             .FirstOrDefaultAsync(p=> !p.IsDelete && 
+                                                  p.Id == colorId);
+    }
+
+    public async Task<List<ColorFullSiteSetting>?> ListOf_ColorFullSiteSetting()
+    {
+        return await _context.ColorFullSiteSetting
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete)
+                             .ToListAsync();
+    }
+
     public async Task<SiteSetting?> FillSiteSettingModel()
     {
         #region Get Site Setting 
@@ -31,6 +74,17 @@ public class SiteSettingService : ISiteSettingService
         #endregion
 
         return siteSetting;
+    }
+
+    public void Update_ColorFullSiteSetting(ColorFullSiteSetting colorFullSiteSetting)
+    {
+        _context.ColorFullSiteSetting.Update(colorFullSiteSetting);
+    }
+
+    public async Task Add_ColorFullSiteSetting(ColorFullSiteSetting colorFullSiteSetting , 
+                                               CancellationToken cancellationToken = default)
+    {
+        await _context.ColorFullSiteSetting.AddAsync(colorFullSiteSetting);
     }
 
     public async Task<bool> AddOrUpdateSiteSetting(SiteSetting siteSetting)

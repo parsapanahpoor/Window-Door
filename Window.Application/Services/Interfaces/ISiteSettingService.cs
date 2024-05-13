@@ -6,6 +6,24 @@ public interface ISiteSettingService
 {
     #region Admin Side 
 
+    Task<FreeConsultant?> Get_FreeConsultant_ById(ulong consultatntId, CancellationToken cancellation);
+
+    Task<List<FreeConsultant>?> ListOf_FreeConsultant();
+
+    void Update_FreeConsultant(FreeConsultant freeConsultant);
+
+    Task Add_FreeConsultant(FreeConsultant freeConsultant,
+                            CancellationToken cancellationToken = default);
+
+    Task<ColorFullSiteSetting?> Get_ColorFullSiteSetting_ById(ulong colorId, CancellationToken cancellation);
+
+    void Update_ColorFullSiteSetting(ColorFullSiteSetting colorFullSiteSetting);
+
+    Task Add_ColorFullSiteSetting(ColorFullSiteSetting colorFullSiteSetting,
+                                  CancellationToken cancellationToken = default);
+
+    Task<List<ColorFullSiteSetting>?> ListOf_ColorFullSiteSetting();
+
     Task<SiteSetting?> FillSiteSettingModel();
 
     Task<bool> AddOrUpdateSiteSetting(SiteSetting siteSetting);

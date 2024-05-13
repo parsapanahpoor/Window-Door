@@ -1,5 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Window.Application.CQRS.AdminPanel.SiteSetting.Command.AddOrEditSiteSetting1;
+using Window.Application.CQRS.AdminPanel.SiteSetting.Command.CreateColorFullSetting;
+using Window.Application.CQRS.AdminPanel.SiteSetting.Command.CreateFreeConsultant;
+using Window.Application.CQRS.AdminPanel.SiteSetting.Command.DeleteFreeConsultant;
+using Window.Application.CQRS.AdminPanel.SiteSetting.Command.EditColorFullSetting;
+using Window.Application.CQRS.AdminPanel.SiteSetting.Command.EditFreeConsultant;
+using Window.Application.CQRS.AdminPanel.SiteSetting.Query.GetColorFull;
+using Window.Application.CQRS.AdminPanel.SiteSetting.Query.GetFreeConsultant;
+using Window.Application.CQRS.AdminPanel.SiteSetting.Query.ListOfColorFullSiteSettingQuery;
+using Window.Application.CQRS.AdminPanel.SiteSetting.Query.ListOfFreeConsultantSiteSettingQuery;
 using Window.Application.CQRS.AdminPanel.SiteSetting.Query.SiteSetting1;
 using Window.Application.Security;
 using Window.Application.Services.Interfaces;
@@ -198,6 +207,192 @@ public class SiteSettingController : AdminBaseController
         TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
         return View(request);
     }
+
+    #endregion
+
+    #region Color Full Site Setting
+
+    #region List Of ColorFull SiteSetting
+
+    [HttpGet]
+    public async Task<IActionResult> ListOfColorFullSiteSetting(CancellationToken cancellationToken = default)
+    {
+        return View(await Mediator.Send(new ListOfColorFullSiteSettingQuery()));
+    }
+
+    #endregion
+
+    #region Create Color Full Setting
+
+    [HttpGet]
+    public IActionResult CreateColorFullSetting() => View();
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateColorFullSetting(CreateColorFullSettingCommand command , 
+                                                            CancellationToken cancellation = default)
+    {
+        #region Create ColorFull Site Setting
+
+        var res = await Mediator.Send(command);
+        if (res)
+        {
+            TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+            return RedirectToAction(nameof(ManagePage));
+        }
+
+        #endregion
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+        return View(command);
+    }
+
+    #endregion
+
+    #region Edit Color Full Setting
+
+    [HttpGet]
+    public async Task<IActionResult> EditColorFullSetting(ulong colorId,
+                                                          CancellationToken cancellation = default)
+    {
+        return View(await Mediator.Send(new GetColorFullSettingQuery()
+        {
+            ColorFullSettingId = colorId,
+        }));
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditColorFullSetting(ColorFullSiteSetting command,
+                                                          CancellationToken cancellation = default)
+    {
+        #region Edit Color Full 
+
+        var res = await Mediator.Send(new EditColorFullSiteSettingCommand()
+        {
+            ColorFullSiteSetting = command,
+        });
+        if (res)
+        {
+            TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+            return RedirectToAction(nameof(ManagePage));
+        }
+
+        #endregion
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+        return View(command);
+    }
+
+
+    #endregion
+
+    #region Delete ColorFull SiteSetting
+
+    public async Task<IActionResult> DeleteColorFullSiteSetting(ulong colorId,
+                                                                CancellationToken cancellation)
+    {
+        var result = await Mediator.Send(new DeleteColorFullSettingCommand()
+        {
+            ColorFullId = colorId
+        });
+        if (result) return JsonResponseStatus.Success();
+
+        return JsonResponseStatus.Error();
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Free Consultant
+
+    #region List Of Free Consultant
+
+    [HttpGet]
+    public async Task<IActionResult> ListOfFreeConsultant(CancellationToken cancellationToken = default)
+    {
+        return View(await Mediator.Send(new ListOfFreeConsultantSiteSettingQuery()));
+    }
+
+    #endregion
+
+    #region Create Free Consultant
+
+    [HttpGet]
+    public IActionResult CreateFreeConsultant() => View();
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateFreeConsultant(CreateFreeConsultantCommand command,
+                                                          CancellationToken cancellation = default)
+    {
+        #region Create Free Consultant
+
+        var res = await Mediator.Send(command);
+        if (res)
+        {
+            TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+            return RedirectToAction(nameof(ManagePage));
+        }
+
+        #endregion
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+        return View(command);
+    }
+
+    #endregion
+
+    #region Edit Free Consultant
+
+    [HttpGet]
+    public async Task<IActionResult> EditFreeConsultant(ulong consultantId,
+                                                        CancellationToken cancellation = default)
+    {
+        return View(await Mediator.Send(new FreeConsultantSettingQuery()
+        {
+            FreeConsultantSettingId = consultantId,
+        }));
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditFreeConsultant(FreeConsultant command,
+                                                        CancellationToken cancellation = default)
+    {
+        #region Edit Color Full 
+
+        var res = await Mediator.Send(new EditFreeConsultantCommand()
+        {
+            FreeConsultant = command,
+        });
+        if (res)
+        {
+            TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+            return RedirectToAction(nameof(ManagePage));
+        }
+
+        #endregion
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+        return View(command);
+    }
+
+
+    #endregion
+
+    #region Delete Free Consultant
+
+    public async Task<IActionResult> DeleteFreeConsultant(ulong consultantId,
+                                                          CancellationToken cancellation)
+    {
+        var result = await Mediator.Send(new DeleteFreeConsultantCommand()
+        {
+            FreeConsultantId = consultantId
+        });
+        if (result) return JsonResponseStatus.Success();
+
+        return JsonResponseStatus.Error();
+    }
+
+    #endregion
 
     #endregion
 

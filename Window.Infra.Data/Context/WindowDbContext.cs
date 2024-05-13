@@ -214,6 +214,8 @@ public class WindowDbContext : DbContext
 
     #region Site Setting
 
+    public DbSet<FreeConsultant> FreeConsultants { get; set; }
+
     public DbSet<EmailSetting> EmailSettings { get; set; }
 
     public DbSet<SiteSetting> SiteSettings { get; set; }
