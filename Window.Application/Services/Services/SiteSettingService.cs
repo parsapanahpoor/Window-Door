@@ -182,5 +182,15 @@ public class SiteSettingService : ISiteSettingService
         return await _context.SiteSetting1.FirstOrDefaultAsync(p => !p.IsDelete);
     }
 
+    public async Task Add_SiteSetting1(SiteSetting1 siteSetting)
+    {
+        await _context.SiteSetting1.AddAsync(siteSetting);
+    }
+
+    public void Edit_SiteSetting(SiteSetting1 siteSetting)
+    {
+        _context.SiteSetting1.Update(siteSetting);
+    }
+
     #endregion
 }

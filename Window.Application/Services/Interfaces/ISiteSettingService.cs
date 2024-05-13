@@ -41,5 +41,9 @@ public interface ISiteSettingService
 
     Task<SiteSetting1?> Show_SiteSetting1();
 
+    Task Add_SiteSetting1(SiteSetting1 siteSetting);
+
+    void Edit_SiteSetting(SiteSetting1 siteSetting);
+
     #endregion
 }

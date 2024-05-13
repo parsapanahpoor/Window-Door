@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.ComponentModel.DataAnnotations;
+using Window.Application.CQRS.AdminPanel.SiteSetting.Command.AddOrEditSiteSetting1;
 using Window.Application.CQRS.AdminPanel.SiteSetting.Query.SiteSetting1;
 using Window.Application.Security;
 using Window.Application.Services.Interfaces;
@@ -181,6 +180,24 @@ public class SiteSettingController : AdminBaseController
     [HttpGet]
     public async Task<IActionResult> SiteSetting1(CancellationToken cancellationToken = default)
     => View(await Mediator.Send(new SiteSetting1Query()));
+
+    [HttpPost]
+    public async Task<IActionResult> SiteSetting1(AddOrEditSiteSetting1Query request , 
+                                                  CancellationToken cancellation = default)
+    {
+        if (ModelState.IsValid)
+        {
+            var res = await Mediator.Send(request, cancellation);
+            if (res)
+            {
+                TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
+                return RedirectToAction(nameof(ManagePage));
+            }
+        }
+
+        TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد.";
+        return View(request);
+    }
 
     #endregion
 

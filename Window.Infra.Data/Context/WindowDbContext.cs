@@ -224,6 +224,8 @@ public class WindowDbContext : DbContext
 
     public DbSet<SiteSetting1> SiteSetting1 { get; set; }
 
+    public DbSet<ColorFullSiteSetting> ColorFullSiteSetting { get; set; }
+
 
     #endregion
 
