@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Window.Domain.Entities.Article;
 using Window.Domain.Entities.Brand;
 using Window.Domain.Entities.Counseling;
+using Window.Domain.Entities.SiteSetting;
 using Window.Domain.Entities.TechnicalIssues;
 
 namespace Window.Domain.ViewModels.Site.Home
@@ -21,6 +22,18 @@ namespace Window.Domain.ViewModels.Site.Home
         public List<Entities.Article.Article> Articles { get; set; }
 
         public List<MainBrand> MainBrands { get; set; }
+
+        public SiteSetting1 SiteSetting1 { get; set; }
+
+        public List<ColorFullSiteSetting> ColorFullSiteSettings { get; set; }
+
+        public MohasebeyeOnlineGheymat MohasebeyeOnlineGheymat { get; set; }
+
+        public List<FreeConsultant> FreeConsultants { get; set; }
+
+        public TazminDarKharid TazminKharid { get; set; }
+
+        public List<LastestComponent> LastestComponents { get; set; }
 
         #endregion
     }

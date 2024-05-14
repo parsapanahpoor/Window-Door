@@ -22,6 +22,33 @@ public class SiteSettingService : ISiteSettingService
 
     #region Admin Side 
 
+    public async Task<LastestComponent?> Get_LastestComponent_ById(ulong lastestComponentId, CancellationToken cancellation)
+    {
+        return await _context.LastestComponents
+                             .AsNoTracking()
+                             .FirstOrDefaultAsync(p => !p.IsDelete &&
+                                                  p.Id == lastestComponentId);
+    }
+
+    public async Task<List<LastestComponent>?> ListOf_LastestComponent()
+    {
+        return await _context.LastestComponents
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete)
+                             .ToListAsync();
+    }
+
+    public void Update_LastestComponent(LastestComponent lastestComponent)
+    {
+        _context.LastestComponents.Update(lastestComponent);
+    }
+
+    public async Task Add_LastestComponent(LastestComponent lastestComponent,
+                                           CancellationToken cancellationToken = default)
+    {
+        await _context.LastestComponents.AddAsync(lastestComponent);
+    }
+
     public async Task<FreeConsultant?> Get_FreeConsultant_ById(ulong consultatntId, CancellationToken cancellation)
     {
         return await _context.FreeConsultants
@@ -231,7 +258,17 @@ public class SiteSettingService : ISiteSettingService
 
     #region Landing Componnets
 
-    public async Task<Domain.Entities.SiteSetting.SiteSetting1?> Show_SiteSetting1() 
+    public async Task<Domain.Entities.SiteSetting.MohasebeyeOnlineGheymat?> Show_MohasebeyeOnlineGheymat()
+    {
+        return await _context.mohasebeyeOnlineGheymat.FirstOrDefaultAsync(p => !p.IsDelete);
+    }
+
+    public async Task<Domain.Entities.SiteSetting.TazminDarKharid?> Show_TazminDarKharid()
+    {
+        return await _context.TazminDarKharid.FirstOrDefaultAsync(p => !p.IsDelete);
+    }
+
+    public async Task<SiteSetting1?> Show_SiteSetting1() 
     {
         return await _context.SiteSetting1.FirstOrDefaultAsync(p => !p.IsDelete);
     }
@@ -244,6 +281,26 @@ public class SiteSettingService : ISiteSettingService
     public void Edit_SiteSetting(SiteSetting1 siteSetting)
     {
         _context.SiteSetting1.Update(siteSetting);
+    }
+
+    public async Task Add_TazminDarKharid(TazminDarKharid tazmin)
+    {
+        await _context.TazminDarKharid.AddAsync(tazmin);
+    }
+
+    public void Edit_TazminDarKhrid(TazminDarKharid tazmin)
+    {
+        _context.TazminDarKharid.Update(tazmin);
+    }
+
+    public async Task Add_MohasebeyeGheymat(MohasebeyeOnlineGheymat mohasebeyeOnline)
+    {
+        await _context.mohasebeyeOnlineGheymat.AddAsync(mohasebeyeOnline);
+    }
+
+    public void Edit_MohasebeyeGheymat(MohasebeyeOnlineGheymat mohasebeyeOnline)
+    {
+        _context.mohasebeyeOnlineGheymat.Update(mohasebeyeOnline);
     }
 
     #endregion

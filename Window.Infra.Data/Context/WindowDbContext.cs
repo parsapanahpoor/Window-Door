@@ -216,6 +216,10 @@ public class WindowDbContext : DbContext
 
     public DbSet<FreeConsultant> FreeConsultants { get; set; }
 
+    public DbSet<MohasebeyeOnlineGheymat> mohasebeyeOnlineGheymat { get; set; }
+
+    public DbSet<TazminDarKharid> TazminDarKharid { get; set; }
+
     public DbSet<EmailSetting> EmailSettings { get; set; }
 
     public DbSet<SiteSetting> SiteSettings { get; set; }
@@ -227,6 +231,8 @@ public class WindowDbContext : DbContext
     public DbSet<SiteSetting1> SiteSetting1 { get; set; }
 
     public DbSet<ColorFullSiteSetting> ColorFullSiteSetting { get; set; }
+
+    public DbSet<LastestComponent> LastestComponents { get; set; }
 
 
     #endregion

@@ -6,7 +6,7 @@
     ViewData["Title"] = "خانه";
 }
 
-@section Styles{
+@section Styles {
 
 
 
@@ -31,96 +31,67 @@
     </div>
 </section>*@
 
+@if (Model.SiteSetting1 != null)
+{
+    <section class="container pt-5 my-5 pb-lg-4">
+        <div class="row pt-0 pt-md-2 pt-lg-0">
+            <div class="col-xl-7 col-lg-6 col-md-5 order-md-2 mb-4 mb-lg-3">
+                <img src="/DidiKala/assets/img/real-estate/hero-image.jpg" alt="Hero image">
+            </div>
+            <div class="col-xl-5 col-lg-6 col-md-7 order-md-1 pt-xl-5 pe-lg-0 mb-3 text-md-start text-center">
+                <h1 class="display-4 mt-lg-5 mb-md-4 mb-3 pt-md-4 pb-lg-2"> @Model.SiteSetting1.Title</h1>
+                <p class="position-relative lead ms-lg-n5 fs-5">
+                    @Model.SiteSetting1.Description
+                </p>
+            </div>
 
-<section class="container pt-5 my-5 pb-lg-4">
-    <div class="row pt-0 pt-md-2 pt-lg-0">
-        <div class="col-xl-7 col-lg-6 col-md-5 order-md-2 mb-4 mb-lg-3">
-            <img src="/DidiKala/assets/img/real-estate/hero-image.jpg" alt="Hero image">
         </div>
-        <div class="col-xl-5 col-lg-6 col-md-7 order-md-1 pt-xl-5 pe-lg-0 mb-3 text-md-start text-center">
-            <h1 class="display-4 mt-lg-5 mb-md-4 mb-3 pt-md-4 pb-lg-2">سامانه ی استعلام قیمت  <br> درب و پنجره دوجداره در ایران</h1>
-            <p class="position-relative lead ms-lg-n5 fs-5">
-                ارزان ترین و باکیفیت ترین درب و پنجره دوجداره را از فروشنده های منتخب ما بخواهید .
-            </p>
-        </div>
- 
-    </div>
-</section>
+    </section>
+}
 
-<!-- Links-->
-<section class="container mb-5 pb-lg-5">
-    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 justify-content-center">
+@if (Model.ColorFullSiteSettings != null && Model.ColorFullSiteSettings.Any())
+{
+    <!-- Links-->
+    <section class="container mb-5 pb-lg-5">
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 justify-content-center">
 
-        <!-- Feature item-->
-        <div class="col">
-            <div class="card border-0 shadow-sm card-hover h-100">
-                <div class="card-body icon-box">
-                    <div class="icon-box-media bg-faded-warning text-warning rounded-circle mb-3"><i class="fi-cash"></i></div>
-                    <h3 class="h5 card-title">قیمت منصفانه</h3>
-                    <p class="card-text fs-sm">
-                        پنجره یاب به منافع شما می اندیشد تیم ما با بازاریابی گسترده کمک تان میکند تا بهترین کیفیت را با مناسب ترین
-                        قیمت خریداری کنید
-                    </p>
+            @foreach (var color in Model.ColorFullSiteSettings)
+            {
+                <!-- Feature item-->
+                <div class="col">
+                    <div class="card border-0 shadow-sm card-hover h-100">
+                        <div class="card-body icon-box">
+                            <div class="@color.CircleClass"><i class="@color.TagClass"></i></div>
+                            <h3 class="h5 card-title">@color.Title</h3>
+                            <p class="card-text fs-sm">
+                                @color.Description
+                            </p>
+                        </div>
+                    </div>
                 </div>
+            }
+
+        </div>
+    </section>
+}
+
+@if (Model.MohasebeyeOnlineGheymat != null)
+{
+    <section class="container mb-5 pb-2 pb-lg-4">
+        <div class="row align-items-center">
+            <div class="col-md-5"><img class="d-block mx-md-0 mx-auto mb-md-0 mb-4 rotate-img" src="/FinderSample/img/real-estate/illustrations/calculator.svg" width="416" alt="Illustration"></div>
+            <div class="col-xxl-6 col-md-7 text-md-start text-center">
+                <h2 class="">محاسبه آنلاین و سریع هزینه درب و پنجره ی دلخواه شما</h2>
+                <p class="pb-3 fs-lg">
+                    @Model.MohasebeyeOnlineGheymat.Description
+                </p><a class="btn btn-lg btn-primary" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct"><i class="fi-calculator me-2"></i>استعلام رایگان</a>
             </div>
         </div>
-        <!-- Feature item-->
-        <div class="col">
-            <div class="card border-0 shadow-sm card-hover h-100">
-                <div class="card-body icon-box">
-                    <div class="icon-box-media bg-faded-primary text-primary rounded-circle mb-3"><i class="fi-heart"></i></div>
-                    <h3 class="h5 card-title">آسایش خاطر</h3>
-                    <p class="card-text fs-sm">
-                        فروشندگان ما غربالگری شده و توسط مشتریان عزیز اعتبار سنجی می شوند تا شما بتوانید به برترین فروشندگان
-                        دسترسی داشته باشید
-                    </p>
-                </div>
-            </div>
-        </div>
-        <!-- Feature item-->
-        <div class="col">
-            <div class="card border-0 shadow-sm card-hover h-100">
-                <div class="card-body icon-box">
-                    <div class="icon-box-media bg-faded-success text-success rounded-circle mb-3"><i class="fi-users"></i></div>
-                    <h3 class="h5 card-title">تیم با تجربه</h3>
-                    <p class="card-text fs-sm">
-                        اعضای تیم پنجره یاب با سابقه ایی درخشان و فعال در حوضه تخصصی خود و با ارائه طرح هایی نوین و بروز در
-                        صنعت ساختمان و صنایع وابسته ارتباطات را آسان تر اطلاعات را شفاف تر و دسترسی را راحت تر کرده است
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Feature item-->
-        <div class="col">
-            <div class="card border-0 shadow-sm card-hover h-100">
-                <div class="card-body icon-box">
-                    <div class="icon-box-media bg-faded-warning text-warning rounded-circle mb-3"><i class="fi-checkbox-checked-alt"></i></div>
-                    <h3 class="h5 card-title">ارائه راه حل ساده</h3>
-                    <p class="card-text fs-sm">
-                        ارائه قیمتی ارزان و رقابتی : شما با کلیک بروی استعلام رایگان به قیمت های پیشنهادی فروشندگان تاییده شده دسترسی
-                        خواهید داشت
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
+}
 
 
-<section class="container mb-5 pb-2 pb-lg-4">
-    <div class="row align-items-center">
-        <div class="col-md-5"><img class="d-block mx-md-0 mx-auto mb-md-0 mb-4 rotate-img" src="/FinderSample/img/real-estate/illustrations/calculator.svg" width="416" alt="Illustration"></div>
-        <div class="col-xxl-6 col-md-7 text-md-start text-center">
-            <h2 class="">محاسبه آنلاین و سریع هزینه درب و پنجره ی دلخواه شما</h2>
-            <p class="pb-3 fs-lg">
-                شما میتوانید با انتخاب درب و پنجره های مورد احتیاج خود با تعیین رنگ شیشه دوجداره ، هم در شهر خود و شهرهای مجاور و یا استانهای دیگر به مناسب ترین قیمت با برترین کیفیت دسترسی  پیدا کنید
-            </p><a class="btn btn-lg btn-primary" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct"><i class="fi-calculator me-2"></i>استعلام رایگان</a>
-        </div>
-    </div>
-</section>
-
-@if (Model.FreeConsultant != null)
+@if (Model.FreeConsultants != null && Model.FreeConsultants.Any())
 {
     <section class="position-relative bg-white rounded-xxl-4 mb-5 pb-1 py-md-3 zindex-5" style="margin-top: -30px;">
         <div class="container pt-5 mb-4 mb-md-5">
@@ -131,7 +102,7 @@
             </p>
             <!-- Features grid-->
             <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 justify-content-center">
-                @foreach (var consultant in Model.FreeConsultant)
+                @foreach (var consultant in Model.FreeConsultants)
                 {
                     <div class="col">
                         <div class="card border-0 shadow-sm card-hover h-100">
@@ -231,7 +202,7 @@
 
 <hr class="mt-n1 mb-5 d-md-none">
 
-@if (Model.TazminDarKharid != null)
+@if (Model.TazminKharid != null)
 {
 
     <section class="container mt-5 mb-5 pb-sm-3 pb-lg-4">
@@ -241,7 +212,7 @@
                     <h2 class="mb-md-4 ">
                         تضمین درخرید <br>
                     </h2>
-                    <p class="mb-4 pb-md-3 fs-lg">@Model.TazminDarKharid.Description </p>
+                    <p class="mb-4 pb-md-3 fs-lg">@Model.TazminKharid.Description </p>
                 </div>
                 <div class="col-4 d-md-block d-none align-self-end px-0" style="display: block !important;"><img class="mt-n5" src="/FinderSample/img/real-estate/about/01.png" width="406" alt="Cover image"></div>
             </div>
@@ -250,37 +221,25 @@
 
 }
 
-<section class="container mb-5 pb-lg-5">
-    <div class="row row-cols-md-3 row-cols-1 gy-3">
-        <!-- Calculate property cost-->
-        <div class="col">
-            <div class="card card-hover h-100 border-0 bg-faded-warning position-relative">
-                <div class="card-body pb-2">
-                    <h5 class="mb-2 pb-1 ">محاسبه ارزش درب و پنجره</h5>
-                    <p class="mb-0">پنجره یاب مرجع قیمت گذاری انواع درب و پنجره دوجداره آلومینیومی و upvc می باشد</p>
+@if (Model.LastestComponents != null && Model.LastestComponents.Any())
+{
+    <section class="container mb-5 pb-lg-5">
+        <div class="row row-cols-md-3 row-cols-1 gy-3">
+
+            @foreach (var lastestComponent in Model.LastestComponents)
+            {
+                <!-- Calculate property cost-->
+                <div class="col">
+                    <div class="card card-hover h-100 border-0 bg-faded-@lastestComponent.TagClass position-relative">
+                        <div class="card-body pb-2">
+                            <h5 class="mb-2 pb-1 ">@lastestComponent.Title</h5>
+                            <p class="mb-0"> @lastestComponent.Description</p>
+                        </div>
+                        <div class="card-footer py-1 border-0"><a class="stretched-link btn btn-link mb-3 px-0 text-warning" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct" data-bs-toggle="modal">توضیحات بیشتر</a></div>
+                    </div>
                 </div>
-                <div class="card-footer py-1 border-0"><a class="stretched-link btn btn-link mb-3 px-0 text-warning" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct" data-bs-toggle="modal">محاسبه</a></div>
-            </div>
+            }
+
         </div>
-        <!-- Help center link-->
-        <div class="col">
-            <div class="card card-hover h-100 border-0 bg-faded-accent position-relative">
-                <div class="card-body pb-2">
-                    <h5 class="mb-2 pb-1 ">دیدن از مرکز پشتیبانی</h5>
-                    <p class="mb-0">تیم پشتیبانی : در اینجا میتوانید سوالات متداول را پیدا کنید (با کلیک بروی این گزینه به پنجره سوالات متداول وصل شویم ) در حال حاضر به صفحه استعلام می رود</p>
-                </div>
-                <div class="card-footer py-1 border-0"><a class="stretched-link btn btn-link mb-3 px-0 text-accent" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct">بیشتر بخوانید</a></div>
-            </div>
-        </div>
-        <!-- How it works link-->
-        <div class="col">
-            <div class="card card-hover h-100 border-0 bg-faded-success position-relative">
-                <div class="card-body pb-2">
-                    <h5 class="mb-2 pb-1 ">آشنایی با نحوه فعالیت</h5>
-                    <p class="mb-0">شما با ثبت نام در ساید میتوانید با قیمت گذاری ، محصولات درب و پنجره خود را به مشتریان بفروشید ( بعد از کلیک بروی این قسمت به صفحه ثبت نام  برود )</p>
-                </div>
-                <div class="card-footer py-1 border-0"><a class="stretched-link btn btn-link mb-3 px-0 text-success" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct">شروع کنید</a></div>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
+}

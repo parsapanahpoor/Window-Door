@@ -100,6 +100,42 @@ namespace Window.Application.Services.Services
                                              .ToListAsync();
             #endregion
 
+            #region Site Setting1
+
+            model.SiteSetting1 = await _context.SiteSetting1.FirstOrDefaultAsync(p=> !p.IsDelete);
+
+            #endregion
+
+            #region Color Full 
+
+            model.ColorFullSiteSettings = await _context.ColorFullSiteSetting.Where(p => !p.IsDelete).ToListAsync();
+
+            #endregion
+
+            #region Mohasebeye Online
+
+            model.MohasebeyeOnlineGheymat = await _context.mohasebeyeOnlineGheymat.FirstOrDefaultAsync(p => !p.IsDelete);
+
+            #endregion
+
+            #region Free Consultant
+
+            model.FreeConsultants = await _context.FreeConsultants.Where(p => !p.IsDelete).ToListAsync();
+
+            #endregion
+
+            #region Tazmin Dar Kharid 
+
+            model.TazminKharid = await _context.TazminDarKharid.FirstOrDefaultAsync(p => !p.IsDelete);
+
+            #endregion
+
+            #region Lastest Component
+
+            model.LastestComponents = await _context.LastestComponents.Where(p => !p.IsDelete).ToListAsync();
+
+            #endregion
+
             return model;
         }
 

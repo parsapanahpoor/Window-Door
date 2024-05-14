@@ -6,6 +6,15 @@ public interface ISiteSettingService
 {
     #region Admin Side 
 
+    Task<LastestComponent?> Get_LastestComponent_ById(ulong lastestComponentId, CancellationToken cancellation);
+
+    Task<List<LastestComponent>?> ListOf_LastestComponent();
+
+    void Update_LastestComponent(LastestComponent lastestComponent);
+
+    Task Add_LastestComponent(LastestComponent lastestComponent,
+                              CancellationToken cancellationToken = default);
+
     Task<FreeConsultant?> Get_FreeConsultant_ById(ulong consultatntId, CancellationToken cancellation);
 
     Task<List<FreeConsultant>?> ListOf_FreeConsultant();
@@ -57,11 +66,23 @@ public interface ISiteSettingService
 
     #region Landing Componnets
 
+    Task<MohasebeyeOnlineGheymat?> Show_MohasebeyeOnlineGheymat();
+
+    Task<TazminDarKharid?> Show_TazminDarKharid();
+
     Task<SiteSetting1?> Show_SiteSetting1();
 
     Task Add_SiteSetting1(SiteSetting1 siteSetting);
 
     void Edit_SiteSetting(SiteSetting1 siteSetting);
+
+    Task Add_TazminDarKharid(TazminDarKharid tazmin);
+
+    void Edit_TazminDarKhrid(TazminDarKharid tazmin);
+
+    Task Add_MohasebeyeGheymat(MohasebeyeOnlineGheymat mohasebeyeOnline);
+
+    void Edit_MohasebeyeGheymat(MohasebeyeOnlineGheymat mohasebeyeOnline);
 
     #endregion
 }
