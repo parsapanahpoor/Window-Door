@@ -4,6 +4,7 @@ using Window.Application.CQRS.SellerPanel.OrderCheque.Query;
 using Window.Application.CQRS.SellerPanel.ShopOrder.Commands;
 using Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries;
 using Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries.FilterShopOrders;
+using Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries.FilterShopOrdersAsCustomer;
 using Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries.ShowFactor;
 using Window.Application.Extensions;
 using Window.Domain.ViewModels.Seller.OrderCheque;
@@ -33,6 +34,22 @@ public class ShopOrderController : SellerBaseController
         {
             Filter = filter,
         } , 
+        cancellationToken)); ;
+    }
+
+    #endregion
+
+    #region List OF User Orders As Customer
+
+    public async Task<IActionResult> ListOFUserOrdersAsCustomer(FilterShopOrdersSellerAsCustomerSideDTO filter,
+                                                                CancellationToken cancellationToken)
+    {
+        filter.CustomerId = User.GetUserId();
+
+        return View(await Mediator.Send(new FilterShopOrdersAsCustomerQuery()
+        {
+            Filter = filter,
+        },
         cancellationToken)); ;
     }
 

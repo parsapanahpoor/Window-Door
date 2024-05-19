@@ -488,6 +488,59 @@ public class OrderQueryRepository : QueryGenericRepository<Domain.Entities.ShopO
 
     #region Seller Side 
 
+    public async Task<FilterShopOrdersSellerAsCustomerSideDTO> Fill_FilterShopOrdersSellerAsCustomer(FilterShopOrdersSellerAsCustomerSideDTO filter,
+                                                                                                     CancellationToken cancellationToken)
+    {
+        var orders = _context.Orders
+                             .Where(p => !p.IsDelete && 
+                                    p.UserId == filter.CustomerId)
+                             .OrderByDescending(p => p.CreateDate)
+                             .AsQueryable();
+
+        var orderDetails = _context.OrderDetails
+                                 .Where(p => !p.IsDelete)
+                                 .OrderByDescending(p => p.CreateDate)
+                                 .AsQueryable();
+
+        var sellerProductsIds = _context.ShopProducts
+                                        .Where(p => !p.IsDelete)
+                                        .Select(p => p.Id)
+                                        .AsQueryable();
+
+        orderDetails = from o in orderDetails
+                       join p in sellerProductsIds
+                       on o.ProductId equals p
+                       select o;
+
+        var query = from o in orders
+                    join orderDetail in orderDetails
+                    on o.Id equals orderDetail.OrderId
+                    select new ListOfShopOrdersSellerSideDTO()
+                    {
+                        CreateDate = o.CreateDate,
+                        IsFinally = o.IsFinally,
+                        PaymentWay = o.PaymentWay,
+                        OrderId = o.Id,
+                        CustomerUserInfo = _context.Users
+                                               .AsNoTracking()
+                                               .Where(p => !p.IsDelete &&
+                                                      p.Id == o.UserId)
+                                               .Select(p => new ListOfShopOrdersSellerSideDTO_CustomerUserInfo()
+                                               {
+                                                   CustomerUserId = p.Id,
+                                                   Mobile = p.Mobile,
+                                                   Username = p.Username
+                                               }).FirstOrDefault()
+
+                    };
+
+        await filter.Paging(query);
+
+        filter.Entities = filter.Entities.DistinctBy(p => p.OrderId).ToList();
+
+        return filter;
+    }
+
     public async Task<FilterShopOrdersSellerSideDTO> Fill_FilterShopOrdersSeller(FilterShopOrdersSellerSideDTO filter,
                                                                                  CancellationToken cancellationToken)
     {

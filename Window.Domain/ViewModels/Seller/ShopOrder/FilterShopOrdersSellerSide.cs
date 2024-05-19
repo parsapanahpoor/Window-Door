@@ -14,6 +14,17 @@ public class FilterShopOrdersSellerSideDTO : BasePaging<ListOfShopOrdersSellerSi
     #endregion
 }
 
+public class FilterShopOrdersSellerAsCustomerSideDTO : BasePaging<ListOfShopOrdersSellerSideDTO>
+{
+    #region properties
+
+    public string SellerName { get; set; }
+
+    public ulong CustomerId { get; set; }
+
+    #endregion
+}
+
 public class ListOfShopOrdersSellerSideDTO
 {
     #region properties

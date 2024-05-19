@@ -82,19 +82,24 @@ internal class ChangeOrderChequeStateSellerCommandHandler : IRequestHandler<Chan
             //Send SMS For Customer
             if (!string.IsNullOrEmpty(customerMobile))
             {
+                string customerLink = $"{FilePaths.SiteAddress}/Seller/ShopOrder/ManageShopOrder?orderId={cheque.OrderId}";
+
                 if (string.IsNullOrEmpty(cheque.ChequeReceiptFileName))
                 {
-                    string customerLink = $"{FilePaths.SiteAddress}/Seller/ShopOrder/ManageShopOrder?orderId={cheque.OrderId}";
 
                     var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={customerMobile}&token=={customerLink}&token2={DateTime.Now.ToShamsi()}&template=Accept-FromSeller-ForCustomer";
-                    var results = client.GetStringAsync(result);
+                    var results = client.GetStringAsync(result);  
                 }
-                else
+                if (!string.IsNullOrEmpty(cheque.ChequeReceiptFileName))
                 {
-                    string customerLink = $"{FilePaths.SiteAddress}/Seller/ShopOrder/ManageShopOrder?orderId={cheque.OrderId}";
-
                     var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={customerMobile}&token=={customerLink}&token2={DateTime.Now.ToShamsi()}&template=Accept-ChequeReceipt-FromSeller-ForCustomer";
                     var results = client.GetStringAsync(result);
+                }
+
+                if (!string.IsNullOrEmpty(request.SellerRejectDescription))
+                {
+                    var description = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={customerMobile}&token={request.SellerRejectDescription}&token2={customerLink}&template=SellerDescription-FromSeller-ForCustomer";
+                    var sendDescription = client.GetStringAsync(description);
                 }
             }
         }
@@ -115,19 +120,23 @@ internal class ChangeOrderChequeStateSellerCommandHandler : IRequestHandler<Chan
             //Send SMS For Customer
             if (!string.IsNullOrEmpty(customerMobile))
             {
+                string customerLink = $"{FilePaths.SiteAddress}/Seller/ShopOrder/ManageShopOrder?orderId={cheque.OrderId}";
+
                 if (string.IsNullOrEmpty(cheque.ChequeReceiptFileName))
                 {
-                    string customerLink = $"{FilePaths.SiteAddress}/Seller/ShopOrder/ManageShopOrder?orderId={cheque.OrderId}";
-
                     var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={customerMobile}&token=={customerLink}&token2={DateTime.Now.ToShamsi()}&template=Reject-FromSeller-ForCustomer";
                     var results = client.GetStringAsync(result);
                 }
-                else
+                if (!string.IsNullOrEmpty(cheque.ChequeReceiptFileName))
                 {
-                    string customerLink = $"{FilePaths.SiteAddress}/Seller/ShopOrder/ManageShopOrder?orderId={cheque.OrderId}";
-
                     var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={customerMobile}&token=={customerLink}&token2={DateTime.Now.ToShamsi()}&template=Reject-ChequeReceipt-FromSeller-ForCustomer";
                     var results = client.GetStringAsync(result);
+                }
+
+                if (!string.IsNullOrEmpty(request.SellerRejectDescription))
+                {
+                    var description = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={customerMobile}&token={request.SellerRejectDescription}&token2={customerLink}&template=SellerDescription-FromSeller-ForCustomer";
+                    var sendDescription = client.GetStringAsync(description);
                 }
             }
         }

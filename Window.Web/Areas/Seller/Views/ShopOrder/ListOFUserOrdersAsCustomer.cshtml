@@ -1,0 +1,147 @@
+﻿@using Window.Domain.ViewModels.User
+@using Window.Application.Convertors
+@using Window.Application.Extensions
+@using Window.Domain.ViewModels.Admin.OrderCheque
+@using Window.Domain.ViewModels.Seller.ShopOrder
+@model FilterShopOrdersSellerAsCustomerSideDTO;
+
+@{
+    ViewData["Title"] = Localizer["لیست سفارشات شما"];
+}
+
+@section Scripts
+{
+}
+
+@section breadcrumb
+{
+
+    <li class="active">@ViewData["Title"]</li>
+}
+
+<div class="container-fluid">
+    <div class="row">
+
+        <form asp-area="Seller" asp-controller="ShopOrder" asp-action="ListOFUserOrdersAsSeller" method="get" id="filter-search">
+            <input type="hidden" asp-for="Page" />
+
+        </form>
+
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            <div class="well with-header with-footer table-responsive">
+                <div class="header bordered-azure">
+                    <div class="flex-style">
+                        <span>@Localizer["سفارشات"] </span>
+                        <span>@Model.GetShownEntitiesPagesTitle()</span>
+                        -
+                        <span>تعداد کل : @Model.AllEntitiesCount</span>
+                    </div>
+                </div>
+
+                @if (Model != null)
+                {
+                    <table class="table table-hover table-bordered tc tableShowListInAdmin">
+
+                        <thead class="tc">
+                            <tr class="tc">
+                                <th>
+                                    کد پیگری سفارش
+                                </th>
+                                <th>
+                                    نام کاربری خریدار
+                                </th>
+                                <th>
+                                    روش پرداخت
+                                </th>
+                                <th>
+                                    وضعیت نهایی
+                                </th>
+                                <th>
+                                    تاریخ
+                                </th>
+                                <th>
+                                    امکانات
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Entities)
+                            {
+                                <tr id="profile_@item.OrderId" remove-ajax-item="@item.OrderId">
+                                    <td>
+                                        @item.OrderId
+                                    </td>
+                                    <td>
+                                        @item.CustomerUserInfo.Username
+                                        <hr />
+                                        @item.CustomerUserInfo.Mobile
+                                    </td>
+                                    <td>
+                                        @if (item.PaymentWay == Window.Domain.Enums.Order.OrderPaymentWay.InstallmentPayment)
+                                        {
+                                            <p>پرداخت چکی</p>
+                                        }
+                                        @if (item.PaymentWay == Window.Domain.Enums.Order.OrderPaymentWay.CashPayment)
+                                        {
+                                            <p>پرداخت نقدی</p>
+                                        }
+                                    </td>
+
+                                    <td>
+
+                                        @if (item.IsFinally)
+                                        {
+                                            <p class="label label-success">
+                                                نهایی شده
+                                            </p>
+                                        }
+                                        @if (!item.IsFinally)
+                                        {
+                                            <p class="label label-danger">
+                                                نهایی نشده
+                                            </p>
+                                        }
+
+                                    </td>
+
+                                    <td>
+                                        @item.CreateDate.ToShamsi()
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex justify-content-center ">
+
+                                            <a title="@Localizer["نمایش فاکتور"]"
+                                               asp-area=""
+                                               asp-controller="Order"
+                                               asp-action="ShowFactor"
+                                               asp-route-orderId="@item.OrderId"
+                                               class="btn btn-warning btn-circle shadow btn-xs sharp mr-1">
+                                                <i class="glyphicon glyphicon-list-alt"></i>
+                                            </a>
+
+                                            <a title="@Localizer["بررسی جزییات"]" asp-area="Seller" asp-controller="ShopOrder" asp-action="ManageShopOrder" asp-route-orderId="@item.OrderId" class="btn btn-info btn-circle shadow btn-xs sharp mr-1">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="footer tc">
+
+                        <partial name="_SellerPaging" model="@Model.GetCurrentPaging()" />
+
+                    </div>
+                }
+                else
+                {
+                    <partial name="_SellerNotFoundPartial" />
+                }
+            </div>
+        </div>
+    </div>
+</div>

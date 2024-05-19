@@ -10,6 +10,9 @@ public interface IOrderQueryRepository
 {
     #region Site Side 
 
+    Task<FilterShopOrdersSellerAsCustomerSideDTO> Fill_FilterShopOrdersSellerAsCustomer(FilterShopOrdersSellerAsCustomerSideDTO filter,
+                                                                                        CancellationToken cancellationToken);
+
     Task<Domain.Entities.ShopOrder.Order?> IsExistAnyNotFinallyOrder(ulong userId,
                                                                              CancellationToken cancellationToken);
 
