@@ -47,8 +47,8 @@ namespace Window.Web.Areas.Seller.Controllers
 
             #region Check User Charge
 
-            var res = await _sellerService.CheckUserCharge(User.GetUserId());
-            if (res == false) return NotFound();
+            //var res = await _sellerService.CheckUserCharge(User.GetUserId());
+            //if (res == false) return NotFound();
 
             #endregion
 

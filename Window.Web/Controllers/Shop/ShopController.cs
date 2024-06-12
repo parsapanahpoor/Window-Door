@@ -1,12 +1,13 @@
 ﻿#region Usings
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Window.Application.CQRS.SellerPanel.ShopOrder.Qeuries.ShowFactor;
 using Window.Application.CQRS.SiteSide.ShopLanding;
 namespace Window.Web.Controllers;
 
 #endregion
 
+[Authorize]
 public class ShopController : SiteBaseController
 {
     #region Ctor
