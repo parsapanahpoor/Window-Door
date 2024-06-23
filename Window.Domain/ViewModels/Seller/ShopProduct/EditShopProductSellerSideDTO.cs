@@ -32,7 +32,7 @@ public record EditShopProductSellerSideDTO
 
     public ulong SaleScaleId { get; set; }
 
-    public int SaleRatio { get; set; }
+    public decimal SaleRatio { get; set; }
 
     #endregion
 }

@@ -16,7 +16,7 @@ public sealed class ShopProduct : BaseEntity
 
     public ulong SaleScaleId { get; set; }
 
-    public int SalesRatio { get; set; } = 1;
+    public decimal SalesRatio { get; set; } = 1;
 
     public string ProductImage { get; set; }
 

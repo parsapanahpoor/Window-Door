@@ -52,7 +52,7 @@ public record PlusProductInShopCartQueryHandler : IRequestHandler<PlusProductInS
 
         #region Update order detail 
 
-        orderDetail.Count = product.SalesRatio == 0 ? orderDetail.Count + 1 : orderDetail.Count + product.SalesRatio;
+        orderDetail.Count = (int)(product.SalesRatio == 0 ? orderDetail.Count + 1 : orderDetail.Count + product.SalesRatio);
 
         _orderCommandRepository.UpdateOrderDetail(orderDetail);
         await _unitOfWork.SaveChangesAsync();

@@ -59,7 +59,7 @@ public record MinusProductInShopCartQueryHandler : IRequestHandler<MinusProductI
 
         #region Update order detail 
 
-        orderDetail.Count = product.SalesRatio == 0 ? orderDetail.Count-- : orderDetail.Count - product.SalesRatio;
+        orderDetail.Count = (int)(product.SalesRatio == 0 ? orderDetail.Count-- : orderDetail.Count - product.SalesRatio);
         if (orderDetail.Count < 0 ) return false;
 
         if (orderDetail.Count == 0)

@@ -77,7 +77,7 @@ public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopO
             //Add Order Detail
             OrderDetail orderDetail = new()
             {
-                Count = product.SalesRatio == 0 ? 1 : product.SalesRatio,
+                Count = (int)(product.SalesRatio == 0 ? 1 : product.SalesRatio),
                 CreateDate = DateTime.Now,
                 IsDelete = false,
                 OrderId = newOrder.Id,
@@ -96,7 +96,7 @@ public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopO
                 //Add OrderDetail
                 OrderDetail newOrderDetail = new()
                 {
-                    Count = product.SalesRatio == 0 ? 1 : product.SalesRatio,
+                    Count = (int)(product.SalesRatio == 0 ? 1 : product.SalesRatio),
                     CreateDate = DateTime.Now,
                     IsDelete = false,
                     OrderId = order.Id,
@@ -108,7 +108,7 @@ public record ShopOrderQueryHandler : IRequestHandler<ShopOrderQuery, AddToShopO
             }
             else
             {
-                orderDetail.Count = product.SalesRatio == 0 ? orderDetail.Count++ : orderDetail.Count + product.SalesRatio;
+                orderDetail.Count = (int)(product.SalesRatio == 0 ? orderDetail.Count++ : orderDetail.Count + product.SalesRatio);
 
                 _orderCommandRepository.UpdateOrderDetail(orderDetail);
                 await _unitOfWork.SaveChangesAsync();
