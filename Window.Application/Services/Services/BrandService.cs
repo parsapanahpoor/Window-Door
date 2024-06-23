@@ -309,6 +309,24 @@ public class BrandService : IBrandService
                              .ToListAsync();
     }
 
+    public async Task<List<ShopProductsBrandDTO>?> FillShopProductsBrandDTO(string brandTitle , CancellationToken cancellation)
+    {
+        return await _context.BrandCategories
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete)
+                             .Select(p => new ShopProductsBrandDTO()
+                             {
+                                 BrandCategory = p,
+                                 MainBrands = _context.MainBrands
+                                                           .AsNoTracking()
+                                                           .Where(s => !s.IsDelete &&
+                                                                  s.BrandName.Contains(brandTitle) && 
+                                                                  s.BrandCategorId == p.Id)
+                                                           .ToList(),
+                             })
+                             .ToListAsync();
+    }
+
     #endregion
 
     #region Site Side

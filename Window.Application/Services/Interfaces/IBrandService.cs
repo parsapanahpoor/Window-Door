@@ -23,6 +23,8 @@ public interface IBrandService
 
     Task<List<ShopProductsBrandDTO>?> FillShopProductsBrandDTO(CancellationToken cancellation);
 
+    Task<List<ShopProductsBrandDTO>?> FillShopProductsBrandDTO(string brandTitle, CancellationToken cancellation);
+
     #endregion
 
     #region Genral Methods

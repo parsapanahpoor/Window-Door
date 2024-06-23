@@ -414,12 +414,18 @@ public class ShopProductController : SellerBaseController
 
     [HttpGet]
     public async Task<IActionResult> ProductBrand(ulong productId,
+                                                  string? brandTitle ,
                                                   CancellationToken cancellationToken)
     {
         ViewData["SelectedBrandId"] = await _brandService.GetShopProductSelectedBrandByProductId(productId, cancellationToken);
         ViewData["ProductId"] = productId;
+        ViewData["brandTitle"] = brandTitle;
 
-        return View(await _brandService.FillShopProductsBrandDTO(cancellationToken));
+        var model = string.IsNullOrEmpty(brandTitle) ?
+                    await _brandService.FillShopProductsBrandDTO(cancellationToken) :
+                    await _brandService.FillShopProductsBrandDTO(brandTitle , cancellationToken);
+
+        return View(model);
     }
 
     [HttpPost, ValidateAntiForgeryToken]

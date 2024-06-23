@@ -4,8 +4,8 @@
     ViewData["Title"] = " برند محصولات";
 
     var brandId = ViewData["SelectedBrandId"] as ulong?;
-
     var productId = ViewData["ProductId"] as ulong?;
+    var brandTitle = ViewData["brandTitle"] as string;
 }
 
 @section Scripts
@@ -19,6 +19,61 @@
         <a asp-action="FilterShopProducts" asp-controller="ShopProduct" asp-area="Seller"> لیست محصولات </a>
     </li>
 }
+
+
+<div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-green">
+                <span class="widget-caption"> برند محصولات </span>
+            </div>
+            <div class="widget-body">
+                <div>
+                    <form asp-action="ProductBrand" asp-controller="ShopProduct" asp-area="Seller" id="filter-search" method="get">
+                        <input name="productId" type="hidden" value="@productId" />
+
+                        <div class="form-group">
+                            <label > عنوان برند </label>
+                            <input type="text" class="form-control" name="brandTitle" value="@brandTitle">
+                        </div>
+
+                        <hr />
+
+                        <div class="row">
+                            <div class="col-md-12 flex-style">
+                                <button type="submit" class="btn btn-labeled w-100 btn-palegreen">
+                                    <i class="btn-label glyphicon glyphicon-filter"></i>فیلتر
+                                </button>
+
+                                @if (Context.Request.QueryString.HasValue)
+                                {
+                                    <a asp-action="ProductBrand"
+                                       asp-controller="ShopProduct" 
+                                       asp-area="Seller" 
+                                       asp-route-productId="@productId"
+                                       class="btn btn-labeled w-100 btn-darkorange">
+                                        <i class="btn-label glyphicon glyphicon-remove"></i>حذف فیلتر
+                                    </a>
+                                }
+
+                                <a asp-action="FilterShopProducts"
+                                   asp-controller="ShopProduct"
+                                   asp-area="Seller"
+                                   class="btn btn-labeled w-100 btn-warning">
+                                    <i class="btn-label glyphicon glyphicon-remove"></i>بازگشت به صفحه ی قبل
+                                </a>
+
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <form method="post" asp-action="ProductBrand" asp-controller="ShopProduct" asp-area="Seller">
     <input name="productId" type="hidden" value="@productId" />
@@ -48,39 +103,42 @@
 
                                     @foreach (var brandCategory in Model)
                                     {
-                                        var isPermissionSelected = (brandCategory.MainBrands != null && brandCategory.MainBrands.Any(p => p.Id == brandId)) ? true : false ;
+                                        if (brandCategory.MainBrands != null && brandCategory.MainBrands.Any())
+                                        {
+                                            var isPermissionSelected = (brandCategory.MainBrands != null && brandCategory.MainBrands.Any(p => p.Id == brandId)) || !string.IsNullOrEmpty(brandTitle) ? true : false;
 
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title">
-                                                    <a class="accordion-toggle @((isPermissionSelected) ? "" : "collapsed")" data-toggle="collapse" href="#permission-@brandCategory.BrandCategory.Id" aria-expanded="@((isPermissionSelected) ? "true" : "false")">
-                                                        @brandCategory.BrandCategory.CatgeoryTitle
-                                                    </a>
-                                                </h4>
-                                            </div>
-                                            <div id="permission-@brandCategory.BrandCategory.Id" class="panel-collapse collapse @((isPermissionSelected) ? "in" : "")" aria-expanded="@((isPermissionSelected) ? "true" : "false")" style="height: @((isPermissionSelected) ? "auto" : "0")">
-                                                <div class="panel-body" style="padding: 5px 15px 15px 15px !important">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a class="accordion-toggle @((isPermissionSelected) ? "" : "collapsed")" data-toggle="collapse" href="#permission-@brandCategory.BrandCategory.Id" aria-expanded="@((isPermissionSelected) ? "true" : "false")">
+                                                            @brandCategory.BrandCategory.CatgeoryTitle
+                                                        </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="permission-@brandCategory.BrandCategory.Id" class="panel-collapse collapse @((isPermissionSelected) ? "in" : "")" aria-expanded="@((isPermissionSelected) ? "true" : "false")" style="height: @((isPermissionSelected) ? "auto" : "0")">
+                                                    <div class="panel-body" style="padding: 5px 15px 15px 15px !important">
 
-                                                    @if (brandCategory.MainBrands != null && brandCategory.MainBrands.Any())
-                                                    {
-                                                        @foreach (var brand in brandCategory.MainBrands)
+                                                        @if (brandCategory.MainBrands != null && brandCategory.MainBrands.Any())
                                                         {
-                                                            bool isSecondCategorySelected = (brand.Id == brandId) ? true : false;
+                                                            @foreach (var brand in brandCategory.MainBrands)
+                                                            {
+                                                                bool isSecondCategorySelected = (brand.Id == brandId) ? true : false;
 
-                                                            <div class="form-group">
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        <input type="checkbox" value="@brand.Id" name="Permissions" data-id="@brand.Id" data-parentId="@brand.Id" @((isSecondCategorySelected) ? "checked" : "")>
-                                                                        <span class="text"> @brand.BrandName </span>
-                                                                    </label>
+                                                                <div class="form-group">
+                                                                    <div class="checkbox">
+                                                                        <label>
+                                                                            <input type="checkbox" value="@brand.Id" name="Permissions" data-id="@brand.Id" data-parentId="@brand.Id" @((isSecondCategorySelected) ? "checked" : "")>
+                                                                            <span class="text"> @brand.BrandName </span>
+                                                                        </label>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            }
                                                         }
-                                                    }
 
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        }                                   
                                     }
                                 </div>
                             }
