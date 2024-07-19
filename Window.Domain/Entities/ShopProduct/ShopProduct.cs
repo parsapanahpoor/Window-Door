@@ -28,6 +28,10 @@ public sealed class ShopProduct : BaseEntity
 
     public decimal Price { get; set; }
 
+    public int ProductInventory { get; set; }
+
+    public bool ShowProductInventory { get; set; }
+
     #endregion
 
     #region Navigation

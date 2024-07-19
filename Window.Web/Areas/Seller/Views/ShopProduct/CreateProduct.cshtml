@@ -86,6 +86,12 @@
                                 <button type="submit" class="btn btn-labeled btn-palegreen">
                                     <i class="btn-label glyphicon glyphicon-ok"></i>ثبت
                                 </button>
+                                <a asp-area="Seller"
+                                   asp-action="FilterShopProducts"
+                                   asp-controller="ShopProduct"
+                                   class="btn btn-labeled btn-warning">
+                                    <i class="btn-label glyphicon glyphicon-ok"></i>بازگشت
+                                </a>
                             </div>
                         </div>
 
@@ -127,7 +133,7 @@
                                 <div style="margin-top:20px;">
                                     <label asp-for="SaleRatio"> ضریب فروش محصول <span style="color:red;">(اجباری)</span></label>
                                     <input type="text" class="form-control" min="1" value="1" asp-for="SaleRatio">
-                                    <span class="text-danger" >ضریب فروش به معنی آن است که خریداران شما به ازای انتخاب و افزودن هر یک واحد از این محصول به تعداد ضریب انتخابی شما به سبد خریدش اضافه می گردد.</span>
+                                    <span class="text-danger">ضریب فروش به معنی آن است که خریداران شما به ازای انتخاب و افزودن هر یک واحد از این محصول به تعداد ضریب انتخابی شما به سبد خریدش اضافه می گردد.</span>
                                 </div>
 
                             </div>
