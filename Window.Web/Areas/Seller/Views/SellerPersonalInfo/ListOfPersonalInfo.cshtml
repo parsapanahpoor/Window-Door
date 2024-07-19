@@ -70,14 +70,17 @@
     </li>
 }
 
-<div class="row">
 
-    @if (!string.IsNullOrEmpty(Model.RejectedNote) && Model.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.Rejected)
-    {
+
+<div class="col-lg-12 col-sm-12">
+
+    <div class="row">
+
         <div class="col-lg-12 col-sm-12 col-xs-12">
             <div class="widget">
-                <div class="widget-header bg-red">
-                    <span class="widget-caption">پیام پشتیبانی </span>
+                <div class="widget-header bg-warning">
+                    <i class="widget-icon fa fa-arrow-left"></i>
+                    <span class="widget-caption">راهنمایی</span>
                     <div class="widget-buttons">
                         <a href="#" data-toggle="config">
                             <i class="fa fa-cog"></i>
@@ -91,17 +94,42 @@
                         <a href="#" data-toggle="dispose">
                             <i class="fa fa-times"></i>
                         </a>
-                    </div>
-                </div>
-                <div class="widget-body bg-red">
-                    <p> @Model.RejectedNote </p>
+                    </div><!--Widget Buttons-->
+                </div><!--Widget Header-->
+                <div class="widget-body">
+                    لطفا توجه فرمایید اعداد وارد شده حتما می بایست با اعداد لاتین و انگلیسی وارد گردد. درصورت وارد کردن اعداد فارسی اطلاعات وارد شده قابل قبول نیست .
                 </div>
             </div>
         </div>
-    }
-</div>
 
-<div class="col-lg-12 col-sm-12">
+        @if (!string.IsNullOrEmpty(Model.RejectedNote) && Model.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.Rejected)
+        {
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <div class="widget">
+                    <div class="widget-header bg-red">
+                        <span class="widget-caption">پیام پشتیبانی </span>
+                        <div class="widget-buttons">
+                            <a href="#" data-toggle="config">
+                                <i class="fa fa-cog"></i>
+                            </a>
+                            <a href="#" data-toggle="maximize">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                            <a href="#" data-toggle="collapse">
+                                <i class="fa fa-minus"></i>
+                            </a>
+                            <a href="#" data-toggle="dispose">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="widget-body bg-red">
+                        <p> @Model.RejectedNote </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 
     <div class="row">
         <div class="col-lg-12 col-sm-12">

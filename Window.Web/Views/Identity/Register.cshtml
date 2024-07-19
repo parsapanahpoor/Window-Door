@@ -162,11 +162,11 @@
                         </div>
                         <form class="needs-validation" novalidate method="post" asp-antiforgery="true">
                             <div class="mb-4">
-                                <label class="form-label" asp-for="Mobile" for="signup-name">موبایل</label>
+                                <label class="form-label" asp-for="Mobile" for="signup-name">موبایل  <span class='fs-sm text-muted'>باحروف انگلیسی وارد گردد</span></label>
                                 <input class="form-control" asp-for="Mobile" type="text" id="signup-name" placeholder="موبایل خود را وارد کنید" required>
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="signup-password">رمز عبور <span class='fs-sm text-muted'>حداقل 4 کاراکتر</span></label>
+                                <label class="form-label" for="signup-password">رمز عبور <span class='fs-sm text-muted'> حداقل 4 کاراکتر و باحروف انگلیسی وارد گردد</span></label>
                                 <div class="password-toggle">
                                     <input class="form-control" type="password" asp-for="Password" id="signup-password" minlength="4" required>
                                     <label class="password-toggle-btn" aria-label="Show/hide password">
@@ -175,7 +175,7 @@
                                 </div>
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="signup-password-confirm">تایید رمز عبور</label>
+                                <label class="form-label" for="signup-password-confirm">تایید رمز عبور <span class='fs-sm text-muted'> حداقل 4 کاراکتر و باحروف انگلیسی وارد گردد</span></label>
                                 <div class="password-toggle">
                                     <input class="form-control" asp-for="RePassword" type="password" id="signup-password-confirm" minlength="4" required>
                                     <label class="password-toggle-btn" aria-label="Show/hide password">
