@@ -62,7 +62,9 @@ public record ShopProductDetailQueryHandler : IRequestHandler<ShopProductDetailQ
             ProductName = product.ProductName,
             ShortDescription = product.ShortDescription,
             Seller = await _userRepository.FillSeller(product.SellerUserId , cancellationToken),
-            ShopProductFeatures = await _shopProductFeatureQueryRepository.GetListOfProductFeaturesByProductId(product.Id , cancellationToken)
+            ShopProductFeatures = await _shopProductFeatureQueryRepository.GetListOfProductFeaturesByProductId(product.Id , cancellationToken),
+            ProductInventory = product.ProductInventory,
+            ShowProductInventory = product.ShowProductInventory,
         };
 
         var productImages = new List<string>();

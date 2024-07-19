@@ -32,6 +32,10 @@ public class CreateShopProductSellerSideDTO
 
     public decimal SaleRatio { get; set; }
 
+    public int ProductInventory { get; set; }
+
+    public bool ShowProductInventory { get; set; }
+
     #endregion
 }
 

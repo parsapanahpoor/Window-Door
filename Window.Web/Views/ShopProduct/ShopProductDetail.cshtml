@@ -163,10 +163,13 @@
 
                             <div class="col-lg-6">
 
-                                <div class="product-guaranteed">
-                                    <i class="fas fa-badge-check"></i>
-                                    <p>بیش از ۴۳۰ نفر از خریداران این محصول را پیشنهاد داده‌اند</p>
-                                </div>
+                                @if (Model.ShowProductInventory)
+                                {
+                                    <div class="product-guaranteed">
+                                        <i class="fas fa-badge-check"></i>
+                                        <p>موجودی محصول : @Model.ProductInventory</p>
+                                    </div>
+                                }
 
                                 <!-- Seller Informations -->
                                 <div class="product-summary">

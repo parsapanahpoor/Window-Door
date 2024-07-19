@@ -30,6 +30,10 @@ public record ShopProductDetailDTO
 
     public List<ShopProductFeature>? ShopProductFeatures { get; set; }
 
+    public int ProductInventory { get; set; }
+
+    public bool ShowProductInventory { get; set; }
+
     #endregion
 }
 
