@@ -1,0 +1,67 @@
+﻿@using Window.Application.Convertors
+@using Window.Application.StticTools
+@model List<Window.Domain.ViewModels.Site.Shop.Landing.LastestSellers>
+
+@if (Model != null && Model.Any())
+{
+    <section class="slider-section mb-5 amazing-section" style="background: #304ffe">
+        <div class="container main-container">
+            <div class="row mb-3">
+                <!-- Start Product-Slider -->
+                <div class="col-12">
+                    <div class="product-carousel carousel-lg owl-carousel owl-theme">
+                        <div class="item">
+                            <div class="amazing-product text-center pt-5">
+                                <a href="#">
+                                    <img src="/DidiKala/assets/img/theme/amazing-1.png" alt="">
+                                </a>
+                                <a href="#" class="view-all-amazing-btn">
+                                    مشاهده همه
+                                </a>
+                            </div>
+                        </div>
+
+                        @foreach (var seller in Model)
+                        {
+                            <div class="item">
+                                <div class="product-card mb-3">
+                                    <div class="product-head">
+                                        <div class="rating-stars">
+                                            <i class="mdi mdi-star active"></i>
+                                            <i class="mdi mdi-star active"></i>
+                                            <i class="mdi mdi-star active"></i>
+                                            <i class="mdi mdi-star active"></i>
+                                            <i class="mdi mdi-star active"></i>
+                                        </div>
+                                    </div>
+                                    <a class="product-thumb" asp-action="SellerDetail"
+                                       asp-area=""
+                                       asp-controller="ShopSeller"
+                                       asp-route-sellerId="@seller.UserSellerId">
+                                        <img src="@FilePaths.UserAvatarPathThumb/@seller.UserAvatar" alt="Product Thumbnail">
+                                    </a>
+                                    <div class="product-card-body">
+                                        <h5 class="product-title">
+                                            <a asp-action="SellerDetail"
+                                               asp-area=""
+                                               asp-controller="ShopSeller"
+                                               asp-route-sellerId="@seller.UserSellerId">@seller.Username</a>
+                                        </h5>
+                                        <a class="product-meta" asp-action="SellerDetail"
+                                           asp-area=""
+                                           asp-controller="ShopSeller"
+                                           asp-route-sellerId="@seller.UserSellerId">تاریخ عضویت : @seller.CreateDate.ToShamsi()</a>
+                                        <span class="product-price">تعداد محصولات : @seller.ProductCount</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <!-- End Product-Slider -->
+
+            </div>
+        </div>
+    </section>
+}

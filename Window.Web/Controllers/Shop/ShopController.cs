@@ -18,6 +18,7 @@ public class ShopController : SiteBaseController
 
     #region Shop Landing
 
+    [AllowAnonymous]
     public async Task<IActionResult> ShopLanding(CancellationToken cancellation = default)
     {
         var model = await Mediator.Send(new ShopLandingQuery() , cancellation);

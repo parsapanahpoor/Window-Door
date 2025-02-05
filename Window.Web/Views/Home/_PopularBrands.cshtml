@@ -1,0 +1,63 @@
+﻿@model List<Window.Domain.ViewModels.Site.Shop.Landing.LastestBrands>
+@using Window.Application.Convertors
+@using Window.Application.StticTools
+
+<div class="container main-container">
+
+    @if (Model != null && Model.Any())
+    {
+        <!-- Start Feature-Product -->
+        <section class="dt-sl dt-sn mb-5">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-title text-sm-title title-wide no-after-title-wide">
+                        <h2>برندهای پیشنهادی ما</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+
+                @foreach (var brand in Model)
+                {
+                    <div class="col-lg-4 col-md-6 col-sm-12 col-12 pt-4">
+                        <div class="card-horizontal-product border-bottom rounded-0">
+                            <div class="card-horizontal-product-thumb">
+                                <a href="#">
+                                    <img src="@FilePaths.BrandThumbimage@brand.Image" alt="">
+                                </a>
+                            </div>
+                            <div class="card-horizontal-product-content">
+                                <div class="card-horizontal-product-title">
+                                    <a href="#">
+                                        <p>
+                                            @brand.BrandTitle
+                                        </p>
+                                    </a>
+                                </div>
+                                <div class="rating-stars">
+                                    <i class="mdi mdi-star active"></i>
+                                    <i class="mdi mdi-star active"></i>
+                                    <i class="mdi mdi-star active"></i>
+                                    <i class="mdi mdi-star active"></i>
+                                    <i class="mdi mdi-star active"></i>
+                                </div>
+                                <div class="card-horizontal-product-price">
+                                    <span>تعداد محصول در سایت : @brand.ProductCounts</span>
+                                </div>
+                                <div class="card-horizontal-product-buttons">
+                                    <a asp-action="FilterProducts"
+                                       asp-area=""
+                                       asp-controller="ShopProduct"
+                                       asp-route-BrandId="@brand.BrandId" class="btn btn-outline-info">نمایش محصولات</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </section>
+        <!-- End Feature-Product -->
+    }
+
+</div>

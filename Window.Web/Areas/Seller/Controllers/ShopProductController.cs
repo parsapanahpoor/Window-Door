@@ -1,5 +1,6 @@
 ﻿#region Using
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Window.Application.CQRS.SellerPanel.ShopProducts.Commands.CreateShopProductGallery;

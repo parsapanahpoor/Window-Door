@@ -1,0 +1,245 @@
+﻿@using Window.Application.Convertors;
+@using Window.Application.StticTools;
+@model Window.Domain.ViewModels.Site.Home.IndexViewModel
+
+@{
+    ViewData["Title"] = "خانه";
+}
+
+@section Styles {
+
+
+
+}
+
+<!-- Hero-->
+@*<section class="container-fluid my-5 pt-5 pb-lg-4 px-xxl-4">
+    <div class="jarallax card align-items-center justify-content-center border-0 p-md-5 p-4 bg-secondary overflow-hidden mt-n3" style="min-height: 65vh; background-image: url(/FinderSample/img/real-estate/blog/02.jpg);" data-jarallax data-speed="0.5">
+        <span class="img-overlay opacity-40"></span>
+        <div class="content-overlay" style="max-width: 856px;">
+            <h1 class="display-5 mb-5 pb-md-3 px-md-3 text-white text-center">راه آسان برای پیدا کردن درب و پنجره</h1>
+            <form class="form-group d-block d-md-flex position-relative rounded-md-pill me-lg-n5" style="width: 100%;">
+
+                <div class="d-sm-flex" style="width: 100%;">
+
+                    <a class="btn btn-primary btn-lg rounded-pill w-100 w-md-auto me-sm-3" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct">
+                        برای پیدا کردن درب و پنجره ی مورد نظر خود کلیک کنید
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>*@
+
+@if (Model.SiteSetting1 != null)
+{
+    <section class="container pt-5 my-5 pb-lg-4">
+        <div class="row pt-0 pt-md-2 pt-lg-0">
+            <div class="col-xl-7 col-lg-6 col-md-5 order-md-2 mb-4 mb-lg-3">
+                <img src="/DidiKala/assets/img/real-estate/hero-image.jpg" alt="Hero image">
+            </div>
+            <div class="col-xl-5 col-lg-6 col-md-7 order-md-1 pt-xl-5 pe-lg-0 mb-3 text-md-start text-center">
+                <h1 class="display-4 mt-lg-5 mb-md-4 mb-3 pt-md-4 pb-lg-2"> @Model.SiteSetting1.Title</h1>
+                <p class="position-relative lead ms-lg-n5 fs-5">
+                    @Model.SiteSetting1.Description
+                </p>
+            </div>
+
+        </div>
+    </section>
+}
+
+@if (Model.ColorFullSiteSettings != null && Model.ColorFullSiteSettings.Any())
+{
+    <!-- Links-->
+    <section class="container mb-5 pb-lg-5">
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 justify-content-center">
+
+            @foreach (var color in Model.ColorFullSiteSettings)
+            {
+                <!-- Feature item-->
+                <div class="col">
+                    <div class="card border-0 shadow-sm card-hover h-100">
+                        <div class="card-body icon-box">
+                            <div class="@color.CircleClass"><i class="@color.TagClass"></i></div>
+                            <h3 class="h5 card-title">@color.Title</h3>
+                            <p class="card-text fs-sm">
+                                @color.Description
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </section>
+}
+
+@if (Model.MohasebeyeOnlineGheymat != null)
+{
+    <section class="container mb-5 pb-2 pb-lg-4">
+        <div class="row align-items-center">
+            <div class="col-md-5"><img class="d-block mx-md-0 mx-auto mb-md-0 mb-4 rotate-img" src="/FinderSample/img/real-estate/illustrations/calculator.svg" width="416" alt="Illustration"></div>
+            <div class="col-xxl-6 col-md-7 text-md-start text-center">
+                <h2 class="">محاسبه آنلاین و سریع هزینه درب و پنجره ی دلخواه شما</h2>
+                <p class="pb-3 fs-lg">
+                    @Model.MohasebeyeOnlineGheymat.Description
+                </p><a class="btn btn-lg btn-primary" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct"><i class="fi-calculator me-2"></i>استعلام رایگان</a>
+            </div>
+        </div>
+    </section>
+}
+
+
+@if (Model.FreeConsultants != null && Model.FreeConsultants.Any())
+{
+    <section class="position-relative bg-white rounded-xxl-4 mb-5 pb-1 py-md-3 zindex-5" style="margin-top: -30px;">
+        <div class="container pt-5 mb-4 mb-md-5">
+            <h2 class="text-center ">مشاوره ی رایگان</h2>
+            <p class="mb-4 pb-2 mx-auto fs-lg text-center" style="max-width: 616px;">
+                افزایش آگاهی شما در دستور کار ما قرار دارد .
+
+            </p>
+            <!-- Features grid-->
+            <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 justify-content-center">
+                @foreach (var consultant in Model.FreeConsultants)
+                {
+                    <div class="col">
+                        <div class="card border-0 shadow-sm card-hover h-100">
+                            <div class="card-body icon-box">
+                                <div class="icon-box-media bg-faded-warning text-warning rounded-circle mb-3"><i class="fi-checkbox-checked-alt"></i></div>
+                                <h3 class="h5 card-title">@consultant.Title</h3>
+                                <p class="card-text fs-sm">@consultant.Description</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </section>
+}
+
+<section class="container mb-5 pb-lg-5 pb-md-4">
+    <div class="card py-lg-5 py-4 border-0 bg-secondary">
+        <div class="card-body p-4 text-center">
+            <h2 class="">فروشندگان معتبر</h2>
+            <p class="mx-auto mb-md-5 mb-4 pb-lg-3" style="max-width: 53.125rem;">ما جامع ترین دایرکتوری فروشندگان درب و پنجره را داریم تا به شما در رفع تمام نیازهای املاکتان کمک کنیم. .</p>
+            <!-- Agent ava's-->
+            <div class="d-flex align-items-center justify-content-center flex-wrap mb-md-5 mb-4 pb-lg-3 ps-3 pt-4">
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/39.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/40.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/41.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/42.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/43.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/44.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/45.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/46.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/47.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/48.jpg" width="110" alt="Avatar"></div>
+                <div class="border border-5 border-white rounded-circle bg-white ms-n3 mt-n4"><img class="rounded-circle" src="/FinderSample/img/avatars/49.jpg" width="110" alt="Avatar"></div>
+            </div><a class="btn btn-lg btn-primary w-sm-auto w-100" style="width: auto !important;" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct">یافتن درب و پنجره ی <i class="fi-chevron-right ms-2"></i></a>
+        </div>
+    </div>
+</section>
+
+@if (Model.MainBrands != null && Model.MainBrands.Any())
+{
+    <section class="container mb-5 pb-2">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h2 class="h3 mb-0 ">برندهای پیشنهادی ما</h2><a class="btn btn-link fw-normal ms-md-3 pb-0 px-0" href="#">مشاهده همه <i class="fi-arrow-long-left ms-2"></i></a>
+        </div>
+
+        <div class="tns-carousel-wrapper tns-controls-outside-xxl tns-nav-outside tns-nav-outside-flush mx-n2" dir="ltr">
+            <div class="tns-outer" id="tns3-ow">
+                <div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="tns3"><i class="fi-chevron-right"></i></button><button type="button" data-controls="next" tabindex="-1" aria-controls="tns3"><i class="fi-chevron-left"></i></button></div><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">9 to 12</span>  of 5</div><div id="tns3-mw" class="tns-ovh">
+                    <div class="tns-inner" id="tns3-iw">
+                        <div class="tns-carousel-inner row gx-4 mx-0 py-md-4 py-3  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" data-carousel-options="{&quot;items&quot;: 4, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;500&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:3},&quot;992&quot;:{&quot;items&quot;:4}}}" id="tns3" style="transition-duration: 0s; transform: translate3d(-38.0952%, 0px, 0px);">
+                            @foreach (var brand in Model.MainBrands)
+                            {
+                                <!-- Item-->
+                                <div class="col tns-item tns-slide-active" id="tns3-item0">
+                                    <a class="card shadow-sm card-hover border-0" href="@brand.BrandSite">
+                                        <div class="card-img-top card-img-hover">
+                                            <span class="img-overlay opacity-65"></span><img src="@FilePaths.BrandThumbimage@brand.BrandLogo" alt="New York">
+                                            <div class="content-overlay start-0 top-0 d-flex align-items-center justify-content-center w-100 h-100 p-3">
+                                                <div class="w-100 p-1">
+                                                    <div class="mb-2">
+                                                        <h4 class="mb-2 fs-xs fw-normal text-light"><i class="fi-wallet mt-n1 me-2 fs-sm align-middle"></i>درب و پنجره برای فروش</h4>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="progress progress-light w-100">
+                                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            </div><span class="text-light fs-sm ps-1 ms-2">893</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="pt-1">
+                                                        <h4 class="mb-2 fs-xs fw-normal text-light"><i class="fi-home mt-n1 me-2 fs-sm align-middle"></i>درب و پنجره برای اجاره</h4>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="progress progress-light w-100">
+                                                                <div class="progress-bar bg-success" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            </div><span class="text-light fs-sm ps-1 ms-2">3756</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <h3 class="mb-0 fs-base text-nav">@brand.BrandName</h3>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+}
+
+<hr class="mt-n1 mb-5 d-md-none">
+
+@if (Model.TazminKharid != null)
+{
+
+    <section class="container mt-5 mb-5 pb-sm-3 pb-lg-4">
+        <div class="bg-secondary rounded-3">
+            <div class="col-md-11 col-12 offset-md-1 p-md-0 p-2 d-flex align-items-center justify-content-between">
+                <div class="me-md-5 py-md-5 px-md-0 p-4" style="max-width: 526px;">
+                    <h2 class="mb-md-4 ">
+                        تضمین درخرید <br>
+                    </h2>
+                    <p class="mb-4 pb-md-3 fs-lg">@Model.TazminKharid.Description </p>
+                </div>
+                <div class="col-4 d-md-block d-none align-self-end px-0" style="display: block !important;"><img class="mt-n5" src="/FinderSample/img/real-estate/about/01.png" width="406" alt="Cover image"></div>
+            </div>
+        </div>
+    </section>
+
+}
+
+@if (Model.LastestComponents != null && Model.LastestComponents.Any())
+{
+    <section class="container mb-5 pb-lg-5">
+        <div class="row row-cols-md-3 row-cols-1 gy-3">
+
+            @foreach (var lastestComponent in Model.LastestComponents)
+            {
+                <!-- Calculate property cost-->
+                <div class="col">
+                    <div class="card card-hover h-100 border-0 bg-faded-@lastestComponent.TagClass position-relative">
+                        <div class="card-body pb-2">
+                            <h5 class="mb-2 pb-1 ">@lastestComponent.Title</h5>
+                            <p class="mb-0"> @lastestComponent.Description</p>
+                        </div>
+                        <div class="card-footer py-1 border-0"><a class="stretched-link btn btn-link mb-3 px-0 text-warning" asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct" data-bs-toggle="modal">توضیحات بیشتر</a></div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </section>
+}

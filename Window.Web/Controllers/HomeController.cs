@@ -7,6 +7,7 @@ using Window.Web.HttpManager;
 using System.Text.Json;
 using Window.Application.Extensions;
 using Window.Domain.Enums.SellerType;
+using Window.Application.CQRS.SiteSide.ShopLanding;
 
 namespace Window.Web.Controllers
 {
@@ -37,7 +38,14 @@ namespace Window.Web.Controllers
 
         #region Index 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CancellationToken cancellation)
+        {
+            var model = await Mediator.Send(new ShopLandingQuery(), cancellation);
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> OldIndex()
         {
             return View(await _adminDashboardService.FillHomeIndexViewModel());
         }
