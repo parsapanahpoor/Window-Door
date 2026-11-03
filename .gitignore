@@ -362,3 +362,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Keep source models in the Log folder
+!Window.Domain/ViewModels/Admin/Log/
+!Window.Domain/ViewModels/Admin/Log/*.cs
