@@ -38,3 +38,14 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - HomeController.Index now sends ShopLandingQuery; the prior service-based home page is OldIndex.
 - Documentation and the check script are the only new changes prepared by this session for Git publication.
 - Full cloud solution build at 2e842cb passed: `dotnet build Window.sln --no-restore -m:2`, exit code 0. Existing compiler/package warnings remain; database/HTTP validation was not run.
+
+## Windows development workspace — 2026-11-04
+- Active checkout: `C:\Users\Parsapanahpoor\Documents\ChatGPT\Panjerehyab`; original Desktop source is preserved.
+- Root cause of the historical compile errors: `.gitignore` rule `[Ll]og/` excluded `Window.Domain/ViewModels/Admin/Log`. The three original local models plus exact ignore exceptions were committed and pushed as 2e842cb. A fresh GitHub clone failed with 15 errors before that fix and built with zero errors after it.
+- Pulled the original SDD documentation commit 73e8e16, preserving its workflow and baseline spec.
+- Windows Setup and Release Verify passed using SDK 10.0.401 (0 errors; 1560 warnings in the clean build). EF Core tool 8.0.0 restored. No business tests ran.
+- Added shared SDK selection (minimum 8.0.427, stable newer majors allowed), Windows command wrapper, editor settings, User Secrets support, and CI configuration. CI execution is tracked separately from local checks.
+- Local SQL Server instance MSSQLSERVER2022 is running; read-only catalog inspection found no user databases. Development backup or initialization and representative HTTP checks remain outstanding.
+- Next: supply isolated development data, validate database-backed and authorization behavior against baseline AC-4, then address the first feature with meaningful regression coverage. Do not mark the baseline fully ready yet.
+- Owner confirmed a development backup exists and will provide its path. Do not initialize an empty database in its place; restore the supplied backup to a separate development database after inspecting it.
+- Final Verify after SDD/SDK-policy integration passed with 0 errors (1559 warnings); the no-connection Run check exited 1 as intended. Documentation links and PowerShell/JSON syntax checks passed. Diagnostic logs remain ignored under artifacts/.

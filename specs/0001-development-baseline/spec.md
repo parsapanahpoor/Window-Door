@@ -20,6 +20,8 @@ Document actual architecture, establish AGENTS.md and a spec workflow, preserve 
 - [x] Add architecture, memory, agent guidance, spec template and development instructions.
 - [x] Recover missing view-model contracts from authoritative source (upstream 2e842cb).
 - [ ] Verify complete build, configure development database, validate HTTP behavior.
+- [x] Verify complete Windows Release build in the active development checkout.
+- [x] Add Windows development commands, SDK selection, editor settings and clean-checkout CI configuration.
 - [ ] Publish environment through the product UI.
 
 AC-1/AC-2 are documentation deliverables. AC-4 remains blocked; do not mark the environment fully ready. Windows commands have not been executed by the cloud agent. No automated business tests have been run.
@@ -31,3 +33,11 @@ AC-1/AC-2 are documentation deliverables. AC-4 remains blocked; do not mark the 
 - AC-5: updated start_skill saved successfully in draft; user-interface publication pending.
 
 After reconciling upstream 2e842cb, the full cloud solution build passed (exit 0). AC-4 remains incomplete because isolated database and HTTP checks have not run.
+
+## Windows workspace integration — 2026-11-04
+- Imported the original SDD documents from master commit 73e8e16 into the active Windows checkout.
+- `scripts/dev.ps1 Setup` restored packages and the pinned EF Core tool successfully.
+- `scripts/dev.ps1 Verify` passed a full Release build with SDK 10.0.401: 0 errors, 1560 warnings on the first clean run. No automated business tests exist or ran.
+- SQL Server is running; its user-database catalog was empty. Runtime/database acceptance remains outstanding, so this spec stays Blocked.
+- User Secrets support, editor tasks, shared formatting conventions, and a GitHub Actions build workflow were added. No deployment or cloud environment publication was performed by the Windows agent.
+- Final integrated Verify passed (0 errors). The Run wrapper correctly returned exit 1 without explicit development connection configuration. Owner will supply a development-backup path; database/HTTP checks wait for that input.

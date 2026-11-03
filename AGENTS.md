@@ -16,6 +16,7 @@ Read docs/README.md, docs/architecture.md, docs/development.md and docs/project-
 
 ## Commands
 Cloud SDK activation and Windows setup: docs/development.md.
+Windows: `pwsh -NoProfile -File scripts/dev.ps1 Setup`, then `pwsh -NoProfile -File scripts/dev.ps1 Verify`.
 `dotnet restore Window.sln --disable-parallel`
 `dotnet build Window.sln --no-restore -m:2`
 There is currently no dedicated automated test project. Report that explicitly.

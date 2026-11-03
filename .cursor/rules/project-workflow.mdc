@@ -1,0 +1,14 @@
+---
+description: Repository-wide development workflow for Panjerehyab
+alwaysApply: true
+---
+
+- Read docs/development.md and relevant specs before changing behavior.
+- Follow AGENTS.md and the imported specifications; docs/project-memory.md records durable evidence.
+- For features, connect the spec's acceptance criteria to implementation and validation.
+- Follow the existing Domain, Infra.Data, Application, Infra.IoC, and Web boundaries.
+- Use scripts/dev.ps1 Verify before delivery. Report build and behavioral test results separately.
+- Existing warnings are baseline debt; do not hide them or mass-format unrelated code.
+- Keep the Admin/Log source files tracked; the ignore exception is intentional.
+- Use development-specific database and integration settings. Do not put secrets in Git.
+- Do not apply database migrations or call live payment/SMS services as part of build verification.

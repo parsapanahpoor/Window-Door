@@ -365,3 +365,14 @@ FodyWeavers.xsd
 # Keep source models in the Log folder
 !Window.Domain/ViewModels/Admin/Log/
 !Window.Domain/ViewModels/Admin/Log/*.cs
+
+# Local development artifacts and credentials
+/artifacts/
+/work/
+.env
+.env.*
+!.env.example
+**/appsettings.Local.json
+**/appsettings.*.local.json
+**/secrets.json
+/Window.Web/wwwroot/Auth/*.xml

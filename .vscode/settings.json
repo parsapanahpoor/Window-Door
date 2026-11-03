@@ -1,0 +1,6 @@
+{
+  "dotnet.defaultSolution": "Window.sln",
+  "files.exclude": { "**/bin": true, "**/obj": true },
+  "search.exclude": { "**/bin": true, "**/obj": true, "**/node_modules": true, "artifacts": true },
+  "files.insertFinalNewline": true
+}
