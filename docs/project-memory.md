@@ -49,3 +49,11 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - Next: supply isolated development data, validate database-backed and authorization behavior against baseline AC-4, then address the first feature with meaningful regression coverage. Do not mark the baseline fully ready yet.
 - Owner confirmed a development backup exists and will provide its path. Do not initialize an empty database in its place; restore the supplied backup to a separate development database after inspecting it.
 - Final Verify after SDD/SDK-policy integration passed with 0 errors (1559 warnings); the no-connection Run check exited 1 as intended. Documentation links and PowerShell/JSON syntax checks passed. Diagnostic logs remain ignored under artifacts/.
+
+## Database restore and HTTP validation — 2026-11-04
+- Setup commit 7c24484 was pushed to master. GitHub Actions build run 41731555773 passed from a clean checkout (https://github.com/parsapanahpoor/Window-Door/actions/runs/41731555773).
+- Owner supplied the original project's Publish folder. Restored its June 2023 ZIP backup to SQL Server 2022 as Panjerehyab_Dev_20230610, without overwriting any database. RESTORE VERIFYONLY and DBCC CHECKDB passed; backup checksums were absent.
+- The preserved restore has 47 user tables / 73 migrations and initially caused a missing ShopProducts error with current code.
+- Created a second working restore, Panjerehyab_Dev, and applied the reviewed 56 pending migrations there. It has 75 user tables / 129 migrations and passed CHECKDB. The preserved restore remains at 73 migrations. Details: docs/database.md.
+- Stored the working connection in local User Secrets. Home now returns HTTP 200 with expected storefront HTML; anonymous cart access returns HTTP 302 to Login with ReturnUrl. No authenticated, SMS, payment or production operations were tested.
+- Added a reusable loopback-only smoke script. Remaining validation: authenticated development-user behavior and feature-specific business tests. Cloud environment UI publication was not performed by this Windows session.

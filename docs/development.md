@@ -32,10 +32,10 @@ Use an isolated development SQL Server database. The current configuration uses 
 
 `Setup` restores NuGet packages and the repository-local EF Core 8.0.0 tool. `Verify` confirms that the three recovered Log view models are tracked, checks diff whitespace, and restores/builds Release. It propagates failure and does not claim test coverage. Existing warnings remain visible. `Build -Configuration Debug` is available for interactive development.
 
-The Windows SQL Server instance `localhost\MSSQLSERVER2022` is running; a read-only catalog check on 2026-11-04 returned no user databases. Do not assume a usable application database exists. No migration or seed operation has been run as part of setup.
+The Windows SQL Server instance `localhost\MSSQLSERVER2022` is running. After the initial empty-catalog check, the owner's June 2023 backup was restored and a separate working copy upgraded on 2026-11-04; see [database setup](database.md). `Panjerehyab_Dev` is the configured working database; `Panjerehyab_Dev_20230610` preserves the original restored schema.
 
 ### Development secrets and startup
-The Web project has a UserSecretsId. Configure a development database before starting; this example names a database that must first be created/restored and validated:
+The Web project has a UserSecretsId. On this machine the connection below is already stored locally. Other machines must restore/configure their own isolated development database first:
 
 ```powershell
 dotnet user-secrets set 'ConnectionStrings:WindowConnection' 'Server=localhost\MSSQLSERVER2022;Database=Panjerehyab_Dev;Trusted_Connection=True;TrustServerCertificate=True' --project Window.Web
@@ -62,7 +62,7 @@ The frontend assets already exist under wwwroot. Nested vendor package.json file
 References: [SDK selection](https://learn.microsoft.com/en-us/dotnet/core/tools/global-json), [development User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0).
 
 ## Startup gate
-The original cloud baseline (96a4bca) lacked three view-model types. Upstream commit 2e842cb now tracks those files and has been incorporated into this checkout. The owner also reports a successful Windows-local build. See project-memory.md for the current cloud build result; database and HTTP behavior still require validation. After a successful build and development database configuration:
+The original cloud baseline (96a4bca) lacked three view-model types; 2e842cb restored them. Local Release build and GitHub Actions now pass. The migrated Windows database serves the expected storefront HTML; an unauthenticated cart request redirects to login. Authenticated business behavior remains unvalidated. After a successful build and development database configuration:
 ```bash
 cd Window.Web
 ASPNETCORE_ENVIRONMENT=Development dotnet run --no-build --no-launch-profile --urls http://127.0.0.1:5075
@@ -70,7 +70,9 @@ ASPNETCORE_ENVIRONMENT=Development dotnet run --no-build --no-launch-profile --u
 PowerShell: set `$env:ASPNETCORE_ENVIRONMENT='Development'` before the same dotnet command (without the Bash prefix).
 Validate a representative database-backed page and expected HTML, not merely an open port. Check both authorized and unauthorized behavior. Use local HTTP requests; do not publish loopback preview links. Do not invoke live SMS/payment operations.
 
-Review migrations before applying them to an isolated database; no database migration or seeding has been validated in this environment. No dedicated automated test project currently exists.
+Review migrations before applying them to an isolated database. The 56 migrations after the supplied backup were applied only to the separate working database and checked with DBCC CHECKDB. No additional sample data was invented. No dedicated automated test project currently exists.
+
+With the local application running, use `pwsh -NoProfile -File scripts/smoke-local.ps1` to check storefront HTML and the anonymous cart redirect. This is a limited HTTP smoke test, not authenticated or business-flow coverage.
 
 ## Publication
 Saving an environment draft does not publish it. Review/save and Publish are user-interface operations. Git publication and environment publication are separate actions; report each independently. Keep docs and scripts in Git so they can be shared with the Windows checkout.

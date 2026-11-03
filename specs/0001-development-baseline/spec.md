@@ -1,6 +1,6 @@
 # 0001 — Reproducible development baseline
 
-Status: Blocked (runtime/database validation outstanding)
+Status: Implementing (Windows build/database/public HTTP checks passed; authenticated checks and cloud environment publication pending)
 
 ## Problem
 The project needs persistent agent context and a small, repeatable spec-first development process. The cloud SDK is installed. The initial checkout lacked source contracts; upstream commit 2e842cb restores the three missing view-model files. Runtime and database readiness still need validation.
@@ -19,7 +19,8 @@ Document actual architecture, establish AGENTS.md and a spec workflow, preserve 
 - [x] Inspect project dependencies, composition root and representative service/CQRS flows.
 - [x] Add architecture, memory, agent guidance, spec template and development instructions.
 - [x] Recover missing view-model contracts from authoritative source (upstream 2e842cb).
-- [ ] Verify complete build, configure development database, validate HTTP behavior.
+- [x] Verify complete build, configure development database, validate representative public HTTP behavior.
+- [ ] Validate an authenticated development-user flow.
 - [x] Verify complete Windows Release build in the active development checkout.
 - [x] Add Windows development commands, SDK selection, editor settings and clean-checkout CI configuration.
 - [ ] Publish environment through the product UI.
@@ -41,3 +42,8 @@ After reconciling upstream 2e842cb, the full cloud solution build passed (exit 0
 - SQL Server is running; its user-database catalog was empty. Runtime/database acceptance remains outstanding, so this spec stays Blocked.
 - User Secrets support, editor tasks, shared formatting conventions, and a GitHub Actions build workflow were added. No deployment or cloud environment publication was performed by the Windows agent.
 - Final integrated Verify passed (0 errors). The Run wrapper correctly returned exit 1 without explicit development connection configuration. Owner will supply a development-backup path; database/HTTP checks wait for that input.
+
+## Database and HTTP follow-up — 2026-11-04
+The owner supplied the Publish folder. The 2023 backup was verified/restored to a preserved baseline and a separate working database; only the working copy received the 56 pending migrations. Both databases passed DBCC CHECKDB. See docs/database.md for exact names and schema versions.
+
+AC-4's build and representative database-backed page checks passed locally: storefront HTTP 200 with expected HTML; anonymous cart HTTP 302 to Login. `scripts/smoke-local.ps1` makes these checks repeatable. Authenticated business flows remain unrun; the baseline is not marked fully Verified. GitHub Actions run 41731555773 also passed. AC-5's cloud UI publication remains outside the completed Windows work.
