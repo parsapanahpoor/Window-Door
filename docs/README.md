@@ -8,5 +8,6 @@ This is an evidence-based initial map of the repository, not a complete audit of
 - [First spec: reproducible development baseline](../specs/0001-development-baseline/spec.md)
 - [Spec template](../specs/templates/spec.md)
 - [Local database restore and validation](database.md)
+- [Shared hosting and remote SQL connections](hosting.md)
 
 Keep accepted behavior in specs, implementation structure here, operational commands in development.md, and cross-session status in project-memory.md. Link to code rather than duplicating it.

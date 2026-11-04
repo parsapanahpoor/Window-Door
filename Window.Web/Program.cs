@@ -105,7 +105,7 @@ builder.Services.AddDbContext<WindowDbContext>(options =>
 #region Data Protection
 
 builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo(Directory.GetCurrentDirectory() + "\\wwwroot\\Auth\\"))
+    .PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "App_Data", "Auth")))
     .SetApplicationName("Window")
     .SetDefaultKeyLifetime(TimeSpan.FromDays(30));
 
@@ -223,8 +223,6 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 #region MiddleWares
 
 var app = builder.Build();
-
-app.UseDeveloperExceptionPage();
 
 if (!app.Environment.IsDevelopment())
 {

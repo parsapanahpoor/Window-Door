@@ -3,7 +3,8 @@ param(
     [ValidateSet('Doctor', 'Setup', 'Build', 'Verify', 'Run')]
     [string]$Action = 'Doctor',
     [ValidateSet('Debug', 'Release')]
-    [string]$Configuration = 'Release'
+    [string]$Configuration = 'Release',
+    [switch]$UseRemoteDatabase
 )
 
 $ErrorActionPreference = 'Stop'
@@ -65,7 +66,14 @@ try {
             }
             $previousAspnetEnvironment = $env:ASPNETCORE_ENVIRONMENT
             $previousDotnetEnvironment = $env:DOTNET_ENVIRONMENT
+            $previousConnection = $env:ConnectionStrings__WindowConnection
             try {
+                if ($UseRemoteDatabase) {
+                    $remoteSecret = @($secretOutput | Where-Object { "$_" -match '^ConnectionStrings:WindowRemote\s*=\s*\S' })
+                    if ($remoteSecret.Count -ne 1) { throw 'Configure ConnectionStrings:WindowRemote in User Secrets first.' }
+                    $env:ConnectionStrings__WindowConnection = ([string]$remoteSecret[0] -replace '^ConnectionStrings:WindowRemote\s*=\s*', '')
+                    Write-Host 'Using the online database. Changes made through the local app affect hosted data.'
+                }
                 $env:ASPNETCORE_ENVIRONMENT = 'Development'
                 $env:DOTNET_ENVIRONMENT = 'Development'
                 Invoke-DotNet -Arguments @('run', '--project', $webProject, '-c', 'Debug', '--no-launch-profile', '--', '--urls', 'http://127.0.0.1:5075')
@@ -73,6 +81,7 @@ try {
             finally {
                 $env:ASPNETCORE_ENVIRONMENT = $previousAspnetEnvironment
                 $env:DOTNET_ENVIRONMENT = $previousDotnetEnvironment
+                $env:ConnectionStrings__WindowConnection = $previousConnection
             }
         }
     }

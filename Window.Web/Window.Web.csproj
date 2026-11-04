@@ -85,4 +85,7 @@
 	  <Folder Include="wwwroot\Landing\" />
 	</ItemGroup>
 	
+  <ItemGroup>
+    <Content Update="wwwroot\Auth\**\*;App_Data\Auth\**\*" CopyToPublishDirectory="Never" />
+  </ItemGroup>
 </Project>

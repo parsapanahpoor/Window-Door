@@ -376,3 +376,4 @@ FodyWeavers.xsd
 **/appsettings.*.local.json
 **/secrets.json
 /Window.Web/wwwroot/Auth/*.xml
+/Window.Web/App_Data/Auth/

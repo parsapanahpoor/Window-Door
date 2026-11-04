@@ -57,3 +57,17 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - Created a second working restore, Panjerehyab_Dev, and applied the reviewed 56 pending migrations there. It has 75 user tables / 129 migrations and passed CHECKDB. The preserved restore remains at 73 migrations. Details: docs/database.md.
 - Stored the working connection in local User Secrets. Home now returns HTTP 200 with expected storefront HTML; anonymous cart access returns HTTP 302 to Login with ReturnUrl. No authenticated, SMS, payment or production operations were tested.
 - Added a reusable loopback-only smoke script. Remaining validation: authenticated development-user behavior and feature-specific business tests. Cloud environment UI publication was not performed by this Windows session.
+
+## Shared Windows hosting preparation — 2026-11-04
+- Verified the domain resolves to the assigned hosting server. The Plesk account offers SQL Server 2022 and has sufficient disk allocation for the Release package. The domain currently lacks a trusted public certificate; do not confuse the trusted panel certificate with the domain certificate.
+- Prepared a verified copy-only SQL Server 2022 backup of the migrated development database. Keep backup files outside the web root and Git. Confirm the destination database version before restoring.
+- Production publication excludes the old data protection key files and places newly generated keys in `App_Data/Auth` outside `wwwroot`. The prepared package uses deployment-specific database configuration and passed the local Production-mode storefront and anonymous cart checks. Hosting IIS runtime compatibility and live HTTP behavior still need verification.
+
+## Live publication — 2026-11-04
+- Owner explicitly approved SSL issuance and database/account provisioning and requested online publication plus local access to remote SQL. A subsequent continue instruction followed the Let's Encrypt terms prompt.
+- Let's Encrypt covers panjerehyab.com and www.panjerehyab.com; ordinary TLS validation passed for both.
+- Restored the migrated development backup to the hosted SQL Server 2022 database panjere4_window. Plesk reports 75 tables; remote SQL reports 129 migrations. The scoped application login is mapped correctly. Legacy backup principals remain orphaned and are not used by the site.
+- Published the prepared release into httpdocs and set its IIS database connection. Archived the previous default site privately. Live HTTPS storefront/anonymous-cart/assets/configuration-path checks passed; rendered storefront was inspected.
+- Remote SQL endpoint is win2016-770ir.hostnegar.com,1431. Its SQL certificate is self-signed/untrusted, so encrypted SQL profiles explicitly use TrustServerCertificate=True. HTTPS certificate validation is unaffected.
+- Saved WindowRemote in local User Secrets and added Run -UseRemoteDatabase. Verified the normal local app against remote SQL. Added PANJEREHYAB_REMOTE to local SQL Server, mapping only the owner's Windows login; a four-part query returned 129 migrations.
+- Generated password is retained in local User Secrets, IIS settings and a user-bound encrypted recovery file, never in Git. See docs/hosting.md for operational use and validation limits.
