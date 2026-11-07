@@ -1,6 +1,6 @@
 # 0003 — Account screens and SMS sign-in
 
-Status: Verified in the isolated development environment
+Status: Deployed to Plesk; live SMS delivery pending owner verification
 
 ## Requirements and scope
 
@@ -25,4 +25,4 @@ Add the dedicated challenge table and an indexed normalized mobile lookup. Flag 
 
 ## Verification
 
-The SQL and loopback HTTP checks passed using a disposable local database and an offline SMS sender. They exercised the additive migration, existing legacy phone data, exclusion of historical duplicate groups and verification after eligibility changes, normal and administrator SMS login, blocked and deleted accounts, code expiry and replay, concurrent sends and verification, resend and guess limits, account creation, password setup after SMS registration, CSRF, safe redirects, and rendered forms and SVG assets. The existing password recovery regression checks also passed. Shared deployment and live delivery for the new login flow are pending.
+The SQL and loopback HTTP checks passed using a disposable local database and an offline SMS sender. They exercised the additive migration, existing legacy phone data, exclusion of historical duplicate groups and verification after eligibility changes, normal and administrator SMS login, blocked and deleted accounts, code expiry and replay, concurrent sends and verification, resend and guess limits, account creation, password setup after SMS registration, CSRF, safe redirects, and rendered forms and SVG assets. The existing password recovery regression checks also passed. The hosted migration and deployment completed; the public pages and assets passed anonymous HTTP checks. Live SMS delivery for the new login flow remains for owner verification.

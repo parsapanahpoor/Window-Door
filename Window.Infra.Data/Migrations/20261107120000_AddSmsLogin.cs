@@ -14,6 +14,7 @@ public sealed class AddSmsLogin : Migration
     {
         migrationBuilder.AddColumn<string>(
             name: MobileLoginKey.Name,
+            schema: "dbo",
             table: "Users",
             type: "nvarchar(32)",
             maxLength: 32,
@@ -23,6 +24,7 @@ public sealed class AddSmsLogin : Migration
 
         migrationBuilder.AddColumn<bool>(
             name: MobileLoginKey.Excluded,
+            schema: "dbo",
             table: "Users",
             type: "bit",
             nullable: false,
@@ -44,10 +46,12 @@ public sealed class AddSmsLogin : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_Users_MobileLoginKey_SmsLoginExcluded",
+            schema: "dbo",
             table: "Users",
             columns: new[] { MobileLoginKey.Name, MobileLoginKey.Excluded });
         migrationBuilder.CreateIndex(
             name: "IX_Users_MobileLoginKey",
+            schema: "dbo",
             table: "Users",
             column: MobileLoginKey.Name,
             unique: true,
@@ -55,6 +59,7 @@ public sealed class AddSmsLogin : Migration
 
         migrationBuilder.CreateTable(
             name: "SmsLoginChallenges",
+            schema: "dbo",
             columns: table => new
             {
                 Mobile = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
@@ -72,10 +77,10 @@ public sealed class AddSmsLogin : Migration
 
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.DropTable(name: "SmsLoginChallenges");
-        migrationBuilder.DropIndex(name: "IX_Users_MobileLoginKey", table: "Users");
-        migrationBuilder.DropIndex(name: "IX_Users_MobileLoginKey_SmsLoginExcluded", table: "Users");
-        migrationBuilder.DropColumn(name: MobileLoginKey.Excluded, table: "Users");
-        migrationBuilder.DropColumn(name: MobileLoginKey.Name, table: "Users");
+        migrationBuilder.DropTable(name: "SmsLoginChallenges", schema: "dbo");
+        migrationBuilder.DropIndex(name: "IX_Users_MobileLoginKey", table: "Users", schema: "dbo");
+        migrationBuilder.DropIndex(name: "IX_Users_MobileLoginKey_SmsLoginExcluded", table: "Users", schema: "dbo");
+        migrationBuilder.DropColumn(name: MobileLoginKey.Excluded, table: "Users", schema: "dbo");
+        migrationBuilder.DropColumn(name: MobileLoginKey.Name, table: "Users", schema: "dbo");
     }
 }

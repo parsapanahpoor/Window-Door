@@ -73,6 +73,11 @@ try
             MigrationId nvarchar(150) NOT NULL PRIMARY KEY,
             ProductVersion nvarchar(32) NOT NULL
         );
+        EXEC(N'CREATE SCHEMA [fixture_deploy] AUTHORIZATION [dbo];');
+        CREATE USER [fixture_deploy] WITHOUT LOGIN WITH DEFAULT_SCHEMA = [fixture_deploy];
+        GRANT CREATE TABLE TO [fixture_deploy];
+        GRANT ALTER ON SCHEMA::dbo TO [fixture_deploy];
+        GRANT SELECT, INSERT, UPDATE ON SCHEMA::dbo TO [fixture_deploy];
         """);
     var script = fixture.GetService<IMigrator>().GenerateScript(
         "20240719102109_Add_ProductInventory_field",
@@ -83,11 +88,20 @@ try
     await fixture.Database.OpenConnectionAsync();
     try
     {
+        await fixture.Database.ExecuteSqlRawAsync("""
+            EXECUTE AS USER = N'fixture_deploy';
+            IF SCHEMA_NAME() <> N'fixture_deploy' THROW 51000, 'Expected a non-dbo default schema.', 1;
+            """);
         for (var run = 0; run < 2; run++)
         {
             foreach (var batch in batches.Where(b => !string.IsNullOrWhiteSpace(b)))
                 await fixture.Database.ExecuteSqlRawAsync(batch);
         }
+        await fixture.Database.ExecuteSqlRawAsync("""
+            IF OBJECT_ID(N'dbo.SmsLoginChallenges',N'U') IS NULL
+                THROW 51001, 'SMS challenge table must be created in dbo.', 1;
+            REVERT;
+            """);
     }
     finally
     {

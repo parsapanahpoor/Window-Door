@@ -31,7 +31,7 @@ SELECT COUNT(*) AS AppliedMigrations
 FROM [PANJEREHYAB_REMOTE].[panjere4_window].[dbo].[__EFMigrationsHistory];
 ```
 
-Expected current result: 129. SSMS can also connect directly to the remote endpoint using the SQL application account. The saved password can be obtained from the project's local User Secrets when needed; do not paste it into repository files or issue discussions.
+Expected current result: 130. SSMS can also connect directly to the remote endpoint using the SQL application account. The saved password can be obtained from the project's local User Secrets when needed; do not paste it into repository files or issue discussions.
 
 ## Publication verification — 2026-11-04
 
@@ -48,3 +48,10 @@ Data protection keys are generated per deployment under `App_Data/Auth`. Legacy 
 ## Password recovery SMS
 
 Set the Kavenegar API key through the deployed IIS environment variable named **kavenegar__recoveryApiKey** before installing the recovery release. Keep the SQL environment variable and existing private application data in place. Confirm an active **Advanced** or higher Kavenegar subscription, an approved **Register** template, and that provider policy allows the host's actual outbound IP. HTTP or API status 416 indicates a source IP mismatch. The production IP and delivery require separate operational verification.
+
+## SMS sign-in publication — 2026-11-07
+
+- Application build `fa06070` is live. The IIS configuration and existing private application data were retained. The four updated assemblies and their symbols were installed under `httpdocs`, and the new assets under `httpdocs/wwwroot/account`.
+- Plesk exported `panjere4_window-before-sms-login-20261107.zip` to the private subscription root. The previous binaries and symbols are under `sms-login-rollback-20261107`, also outside the document root. To roll back the application, take IIS briefly offline, restore those eight files, and remove the offline marker. Leave the additive SQL schema in place during an application rollback.
+- Migration `20261107120000_AddSmsLogin` is registered in the hosted database. The challenge table is in `dbo` and the application account can read, insert, and update it. Six accounts share three normalized phone numbers and are excluded from SMS sign-in until their ownership is resolved. No credentials were changed.
+- Anonymous GETs for login, registration, SMS sign-in and password recovery returned HTTP 200 with the new layout and antiforgery fields. All four new assets returned HTTP 200. An anonymous request to the code page redirected to the SMS sign-in form. No production SMS or login attempt was sent during verification.
