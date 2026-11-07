@@ -1,0 +1,23 @@
+@model Window.Domain.ViewModels.User.Authentication.SmsLoginRequest
+@{
+    ViewData["Title"] = "ورود با کد پیامکی";
+    Layout = "Identity/_AccountLayout";
+    var returnUrl = ViewData["ReturnUrl"] as string;
+}
+<div class="account-heading">
+    <p class="account-kicker">حساب کاربری</p>
+    <h1 id="account-title">ورود به پنجره‌یاب</h1>
+</div>
+<nav class="account-methods" aria-label="روش ورود">
+    <a asp-action="Login" asp-route-returnUrl="@returnUrl">رمز عبور</a>
+    <a asp-action="SmsLogin" asp-route-returnUrl="@returnUrl" aria-current="page">کد پیامکی</a>
+</nav>
+<p class="account-description">کد شش‌رقمی را به شمارهٔ موبایلت می‌فرستیم.</p>
+<form asp-action="SmsLogin" asp-route-returnUrl="@returnUrl" method="post" class="account-form">
+    <div asp-validation-summary="All" class="account-errors" role="alert"></div>
+    <div class="account-field">
+        <label asp-for="Mobile">شماره موبایل</label>
+        <input asp-for="Mobile" type="tel" dir="ltr" autocomplete="tel" placeholder="09123456789" required />
+    </div>
+    <button class="account-submit" type="submit">دریافت کد ورود</button>
+</form>

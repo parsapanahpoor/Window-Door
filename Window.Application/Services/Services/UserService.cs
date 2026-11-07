@@ -15,6 +15,7 @@ using Window.Application.Generators;
 using Window.Application.StticTools;
 using Window.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using Window.Domain.ViewModels.Common;
 using Window.Domain.Entities.Market;
 using Window.Application.Services.Interfaces;
@@ -60,23 +61,29 @@ namespace Window.Application.Services
             #region Get User By Mobile
 
             var user = await GetUserByEmail(mobile);
-            if (user == null) return ResetPasswordResult.NotFound;
+            if (user is null || user.IsDelete || user.IsBan)
+                return ResetPasswordResult.NotFound;
 
-            if (user.MobileActivationCode != pass.ActiveCode) return ResetPasswordResult.WrongActiveCode;
-
-            #endregion
-
-            #region Update User Info
-
-            user.Password = PasswordHelper.EncodePasswordMd5(pass.Password.SanitizeText());
-            user.IsMobileConfirm = true;
-
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            var code = MobileNumber.ToAsciiDigits(pass.ActiveCode);
+            if (code.Length is < 5 or > 6 || !code.All(char.IsAsciiDigit))
+                return ResetPasswordResult.WrongActiveCode;
 
             #endregion
 
-            return ResetPasswordResult.Success;
+            var issuedAfter = DateTime.Now.AddMinutes(-2);
+            var password = PasswordHelper.EncodePasswordMd5(pass.Password.SanitizeText());
+            var inactiveCode = Guid.NewGuid().ToString("N");
+
+            var changed = await _context.Users
+                .Where(u => u.Id == user.Id && !u.IsDelete && !u.IsBan
+                    && u.MobileActivationCode == code && u.ExpireMobileSMSDateTime > issuedAfter)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(u => u.Password, password)
+                    .SetProperty(u => u.IsMobileConfirm, true)
+                    .SetProperty(u => u.MobileActivationCode, inactiveCode)
+                    .SetProperty(u => u.ExpireMobileSMSDateTime, (DateTime?)null));
+
+            return changed == 1 ? ResetPasswordResult.Success : ResetPasswordResult.WrongActiveCode;
         }
 
         public async Task<List<SelectListViewModel>> GetSelectRolesList()
@@ -91,7 +98,7 @@ namespace Window.Application.Services
         public async Task<RegisterUserResponse> RegisterUserAsync(RegisterUserViewModel model)
         {
 
-            if (await _userRepository.IsMobileExist(model.Mobile.Trim().ToLower()))
+            if (await _context.Users.AnyAsync(u => EF.Property<string>(u, MobileLoginKey.Name) == model.Mobile))
             {
                 return RegisterUserResponse.MobileExist;
             }
@@ -108,21 +115,18 @@ namespace Window.Application.Services
                 ExpireMobileSMSDateTime = DateTime.Now
             };
 
-            if (await _context.AllBulkSMSs.AnyAsync(p => !p.IsDelete && p.Mobile == user.Mobile))
+            var campaign = await _context.AllBulkSMSs.FirstOrDefaultAsync(p => !p.IsDelete && p.Mobile == user.Mobile);
+            if (campaign is not null)
+                campaign.IsUserRegistered = true;
+
+            try
             {
-                var allBulkSMS = await _context.AllBulkSMSs
-                                               .FirstOrDefaultAsync(p => !p.IsDelete && p.Mobile == user.Mobile);
-
-                if (allBulkSMS != null)
-                {
-                    allBulkSMS.IsUserRegistered = true;
-
-                    _context.AllBulkSMSs.Update(allBulkSMS);
-                    await _context.SaveChangesAsync();
-                }
+                await _userRepository.CreateUser(user);
             }
-
-            await _userRepository.CreateUser(user);
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 2601 or 2627 })
+            {
+                return RegisterUserResponse.MobileExist;
+            }
 
             #region Send Verification Code SMS
 

@@ -1,0 +1,24 @@
+@model Window.Domain.ViewModels.User.Authentication.SmsLoginCodeViewModel
+@{
+    ViewData["Title"] = "تأیید کد ورود";
+    ViewData["AccountArt"] = "door";
+    Layout = "Identity/_AccountLayout";
+}
+<div class="account-heading">
+    <p class="account-kicker">ورود پیامکی</p>
+    <h1 id="account-title">کد ورود را وارد کن</h1>
+    <p>کد شش‌رقمی مربوط به شمارهٔ <bdi dir="ltr">@Model.MobileHint</bdi> را وارد کن.</p>
+</div>
+<form asp-action="SmsLoginCode" method="post" class="account-form">
+    <div asp-validation-summary="All" class="account-errors" role="alert"></div>
+    <div class="account-field">
+        <label for="Code">کد ورود</label>
+        <input id="Code" name="Code" class="account-code" dir="ltr" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" minlength="6" required />
+    </div>
+    <button class="account-submit" type="submit">تأیید و ورود</button>
+</form>
+<form asp-action="ResendSmsLoginCode" method="post" class="account-resend" data-resend-seconds="@Model.SecondsUntilResend">
+    <button type="submit" class="account-link">ارسال مجدد کد</button>
+    <span data-resend-label hidden>ارسال مجدد تا <bdi data-resend-time></bdi></span>
+</form>
+<p class="account-footer"><a asp-action="SmsLogin" asp-route-returnUrl="@Model.ReturnUrl">تغییر شماره موبایل</a> <span aria-hidden="true">·</span> <a asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">ورود با رمز عبور</a></p>

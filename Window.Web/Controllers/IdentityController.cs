@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Window.Application.Interfaces;
+using Window.Domain.Entities.Account;
 using Window.Domain.ViewModels.Account;
 using Window.Domain.ViewModels.Site.Account;
 using Window.Domain.ViewModels.User.Authentication;
@@ -11,7 +12,7 @@ using Window.Web.HttpManager;
 
 namespace Window.Web.Controllers
 {
-    public class IdentityController : Controller
+    public partial class IdentityController : Controller
     {
         #region Constructor
 
@@ -45,6 +46,14 @@ namespace Window.Web.Controllers
                 return View(model);
             }
 
+            var mobile = MobileNumber.Normalize(model.Mobile);
+            if (mobile is null)
+            {
+                ModelState.AddModelError(nameof(model.Mobile), "شمارهٔ موبایل ایران را به‌درستی وارد کن.");
+                return View(model);
+            }
+
+            model.Mobile = mobile;
             var result = await _userService.RegisterUserAsync(model);
 
             if (result == RegisterUserResponse.Success)
@@ -160,6 +169,7 @@ namespace Window.Web.Controllers
         [RedirectIfLoggedInActionFilter]
         public IActionResult Login(string? returnUrl = "/")
         {
+            ViewData["ReturnUrl"] = LocalReturnUrl(returnUrl);
             return View();
         }
 
@@ -168,6 +178,7 @@ namespace Window.Web.Controllers
         [RedirectIfLoggedInActionFilter]
         public async Task<IActionResult> Login(LoginUserViewModel model, string? returnUrl = "/")
         {
+            ViewData["ReturnUrl"] = LocalReturnUrl(returnUrl);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -198,7 +209,21 @@ namespace Window.Web.Controllers
             }
 
             var user = await _userService.GetUserByEmail(model.Mobile);
+            if (user is null || user.IsBan || user.IsDelete)
+            {
+                ModelState.AddModelError(string.Empty, "ورود به این حساب امکان‌پذیر نیست.");
+                return View(model);
+            }
 
+            return await SignInUserAsync(user, model.RememberMe, returnUrl);
+        }
+
+        private string LocalReturnUrl(string? returnUrl) =>
+            Url.IsLocalUrl(returnUrl) ? returnUrl! : "/";
+
+        private async Task<IActionResult> SignInUserAsync(
+            User user, bool rememberMe, string? returnUrl, string? authenticationMethod = null)
+        {
             var claims = new List<Claim>
             {
                 new (ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -206,14 +231,13 @@ namespace Window.Web.Controllers
                 new (ClaimTypes.Name, user.Username),
             };
 
-            var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(claimIdentity);
+            if (authenticationMethod is not null)
+                claims.Add(new Claim(ClaimTypes.AuthenticationMethod, authenticationMethod));
 
-            var authProps = new AuthenticationProperties();
-            authProps.IsPersistent = model.RememberMe;
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProps);
-            return Redirect(Url.IsLocalUrl(returnUrl) ? returnUrl : "/");
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(identity), new AuthenticationProperties { IsPersistent = rememberMe });
+            return LocalRedirect(LocalReturnUrl(returnUrl));
         }
 
         #endregion
@@ -290,6 +314,8 @@ namespace Window.Web.Controllers
             ViewBag.Mobile = mobile;
 
             var user = await _userService.GetUserByEmail(mobile);
+            if (user is null)
+                return NotFound();
 
             #endregion
 
@@ -311,23 +337,8 @@ namespace Window.Web.Controllers
                 }
             }
 
-            #region Resend Timer
-
-            var SiteSettingSMSTimer = 2;
-
-            if (SiteSettingSMSTimer == null)
-            {
-                ModelState.AddModelError("Mobile", _localizer["لطفا با پشتیبان تماس بگیرید ."]);
-                return RedirectToAction(nameof(Login));
-            }
-
-            DateTime expireMinut = user.ExpireMobileSMSDateTime.Value.AddMinutes(SiteSettingSMSTimer);
-
-            var TimerMinut = expireMinut - DateTime.Now;
-
-            ViewBag.Time = TimerMinut.TotalMinutes * 60;
-
-            #endregion
+            var expiresAt = user.ExpireMobileSMSDateTime?.AddMinutes(2) ?? DateTime.Now;
+            ViewBag.Time = Math.Max(0, (expiresAt - DateTime.Now).TotalSeconds);
 
             return View(reset);
         }

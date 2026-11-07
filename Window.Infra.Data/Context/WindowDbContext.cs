@@ -1,4 +1,4 @@
-﻿#region Usings
+#region Usings
 
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
@@ -61,6 +61,7 @@ public class WindowDbContext : DbContext
     #region Account 
 
     public DbSet<User> Users { get; set; }
+    public DbSet<SmsLoginChallenge> SmsLoginChallenges { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
@@ -313,6 +314,11 @@ public class WindowDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        var users = modelBuilder.Entity<User>();
+        users.Property<string>(MobileLoginKey.Name).HasMaxLength(32).IsRequired()
+            .HasComputedColumnSql(MobileLoginKey.ComputedSql, stored: true);
+        users.HasIndex(MobileLoginKey.Name).IsUnique();
+
         #region Role Seed Data
 
         modelBuilder.Entity<Role>().HasData(new Role

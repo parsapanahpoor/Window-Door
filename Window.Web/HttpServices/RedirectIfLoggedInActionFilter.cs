@@ -11,10 +11,7 @@ namespace Window.Web.HttpManager
 
             if (context.HttpContext.User.Identity.IsAuthenticated)
             {
-                if (context.Controller is Controller controller)
-                {
-                    context.HttpContext.Response.Redirect("/");
-                }
+                context.Result = new RedirectResult("/");
             }
         }
     }

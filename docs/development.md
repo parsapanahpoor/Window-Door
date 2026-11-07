@@ -80,3 +80,7 @@ Saving an environment draft does not publish it. Review/save and Publish are use
 ### Offline password recovery checks
 
 Run **dotnet run --project tests/PasswordRecoveryChecks -c Release**. The check uses fake persistence and Kavenegar responses, and sends loopback HTTP requests to a temporary host to validate the retry form and anti-forgery protection.
+
+### SMS sign-in integration checks
+
+Run **dotnet run --project tests/SmsLoginChecks -c Release** from the repository root. It creates and removes a uniquely named disposable database on the local SQL Server 2022 instance. The runner also supports **(localdb)\MSSQLLocalDB** as its sole argument. It verifies the migration and uses loopback HTTP with an offline SMS sender. The hosted database, SMS key and payment integrations are not needed.

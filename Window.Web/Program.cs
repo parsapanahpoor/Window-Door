@@ -1,6 +1,11 @@
 using Window.Application.Services.Implementation;
 using Window.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+using System.Threading.RateLimiting;
+using Window.Application.Services;
+using Window.Web.Controllers;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -128,6 +133,19 @@ builder.Services.AddAuthentication(options =>
         options.LoginPath = "/Login";
         options.LogoutPath = "/Logout";
         options.ExpireTimeSpan = TimeSpan.FromDays(30);
+        options.Events.OnValidatePrincipal = async context =>
+        {
+            if (context.Principal?.FindFirst(ClaimTypes.AuthenticationMethod)?.Value != SmsLoginService.AuthenticationMethod)
+                return;
+
+            if (ulong.TryParse(context.Principal.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId) &&
+                await context.HttpContext.RequestServices.GetRequiredService<SmsLoginService>()
+                    .CanUseSessionAsync(userId, context.HttpContext.RequestAborted))
+                return;
+
+            context.RejectPrincipal();
+            await context.HttpContext.SignOutAsync();
+        };
     });
 
 #endregion
@@ -142,6 +160,23 @@ builder.Services.AddSingleton<HtmlEncoder>(
 #region Register Services
 
 DependencyContainer.ConfigureDependencies(builder.Services);
+builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddScoped<SmsLoginService>();
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.OnRejected = async (context, cancellationToken) =>
+        await context.HttpContext.Response.WriteAsync("تعداد درخواست‌ها زیاد است. چند دقیقه بعد دوباره تلاش کن.", cancellationToken);
+    options.AddPolicy(IdentityController.SmsLoginRateLimit, context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            context.Connection.RemoteIpAddress?.MapToIPv6().ToString() ?? "unknown",
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 20,
+                Window = TimeSpan.FromMinutes(10),
+                QueueLimit = 0
+            }));
+});
 builder.Services.AddHttpClient<ISMSService, SMSService>(client =>
 {
     client.BaseAddress = new Uri("https://api.kavenegar.com/v1/");
@@ -274,6 +309,7 @@ app.UseForwardedHeaders();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseRateLimiter();
 app.UseCors("ApiCORS");
 
 app.UseAuthentication();

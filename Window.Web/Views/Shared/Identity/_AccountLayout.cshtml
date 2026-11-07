@@ -1,0 +1,34 @@
+@{
+    var art = ViewData["AccountArt"] as string ?? "window";
+}
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3f5ef" />
+    <title>@ViewData["Title"] | پنجره‌یاب</title>
+    <link rel="stylesheet" href="~/account/account.css" asp-append-version="true" />
+    <script src="~/account/account.js" asp-append-version="true" defer></script>
+</head>
+<body>
+    <header class="account-header">
+        <a class="account-brand" href="/" aria-label="پنجره‌یاب، صفحهٔ اصلی">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <rect width="32" height="32" rx="9" fill="#155a4b" />
+                <path d="M8 24V9h16v15H8Zm8-15v15m-8-8h16" stroke="#fff" stroke-width="1.6" />
+            </svg>
+            <span>پنجره‌یاب</span>
+        </a>
+        <a class="account-home" href="/">صفحهٔ اصلی <span aria-hidden="true">←</span></a>
+    </header>
+    <main class="account-card">
+        <section class="account-content" aria-labelledby="account-title">
+            @RenderBody()
+        </section>
+        <aside class="account-art" aria-hidden="true">
+            <img src="~/account/@(art).svg" width="480" height="480" alt="" />
+        </aside>
+    </main>
+</body>
+</html>

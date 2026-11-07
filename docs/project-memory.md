@@ -81,3 +81,10 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - The owner activated the seven-day Advanced trial and authorized configuring the existing key in IIS. Release 855b49a was deployed to Plesk after retaining the previous assemblies and web.config in private storage. The public recovery form returned HTTP 200 after restart. Hosting egress and live SMS delivery still need confirmation.
 - The first owner-run live attempt failed. Kavenegar logged a Register lookup POST from hosting egress IP 158.58.187.131 with status 416 while the Advanced trial was active. The provider IP policy still blocks live delivery.
 - Kavenegar support directed the owner to the separate web-service IP allowlist. Added and verified 158.58.187.131 in that list with owner approval. A fresh owner-run recovery request is needed to verify acceptance and delivery.
+
+## Account screens and SMS sign-in — 2026-11-07
+
+- Owner confirmed successful live password recovery after the hosting egress address was added to Kavenegar's web-service allowlist.
+- Replaced the account forms with a shared responsive RTL layout and window and door illustrations. Removed placeholder social and terms links.
+- Implemented the SMS sign-in flow for all roles as requested. A mobile number is claimed after verification. SMS-only accounts have no password accepted by the password verifier. Recovery can set one.
+- The additive SQL migration and SMS and recovery integration checks passed locally using an isolated SQL Server database, loopback HTTP and a fake provider. Shared SQL migration and deployment remain pending.
