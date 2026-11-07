@@ -60,8 +60,8 @@ public sealed class SmsLoginService(
         if (!await TrySaveAsync(cancellationToken))
             return new(null, false);
 
-        var account = await FindAccountAsync(mobile, cancellationToken);
-        if (account is { IsDelete: true } or { IsBan: true })
+        var (account, excluded) = await FindAccountAsync(mobile, cancellationToken);
+        if (excluded || account is { IsDelete: true } or { IsBan: true })
             return new(challenge.ChallengeId, false);
 
         string code;
@@ -93,7 +93,7 @@ public sealed class SmsLoginService(
         if (code.Length != 6 || !code.All(char.IsAsciiDigit))
             return null;
 
-        await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken);
+        await using var transaction = await db.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable, cancellationToken);
         var now = timeProvider.GetUtcNow();
         var pending = db.SmsLoginChallenges.Where(c => c.Mobile == mobile && c.ChallengeId == id
             && c.ProtectedCode != null && c.ExpiresAt > now && c.FailedAttempts < MaxFailedAttempts);
@@ -109,8 +109,8 @@ public sealed class SmsLoginService(
             return null;
         }
 
-        var user = await FindAccountAsync(mobile, cancellationToken);
-        if (user is { IsDelete: true } or { IsBan: true })
+        var (user, excluded) = await FindAccountAsync(mobile, cancellationToken);
+        if (excluded || user is { IsDelete: true } or { IsBan: true })
             return null;
         if (user is null)
         {
@@ -149,8 +149,19 @@ public sealed class SmsLoginService(
     public Task<bool> CanUseSessionAsync(ulong userId, CancellationToken cancellationToken) =>
         db.Users.AnyAsync(u => u.Id == userId && !u.IsDelete && !u.IsBan, cancellationToken);
 
-    private Task<User?> FindAccountAsync(string mobile, CancellationToken cancellationToken) =>
-        db.Users.SingleOrDefaultAsync(u => EF.Property<string>(u, MobileLoginKey.Name) == mobile, cancellationToken);
+    private async Task<(User? Account, bool Excluded)> FindAccountAsync(string mobile, CancellationToken cancellationToken)
+    {
+        var matches = await db.Users
+            .Where(u => EF.Property<string>(u, MobileLoginKey.Name) == mobile)
+            .Select(u => new { Account = u, Excluded = EF.Property<bool>(u, MobileLoginKey.Excluded) })
+            .Take(2)
+            .ToListAsync(cancellationToken);
+
+        if (matches.Count > 1 || matches.Count == 1 && matches[0].Excluded)
+            return (null, true);
+
+        return (matches.SingleOrDefault()?.Account, false);
+    }
 
     private static DateTimeOffset RetryAt(SmsLoginChallenge challenge)
     {

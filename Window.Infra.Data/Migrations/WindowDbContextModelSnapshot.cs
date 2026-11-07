@@ -200,7 +200,16 @@ namespace Window.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex(MobileLoginKey.Name).IsUnique();
+                    b.Property<bool>(MobileLoginKey.Excluded)
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.HasIndex(MobileLoginKey.Name, MobileLoginKey.Excluded);
+
+                    b.HasIndex(MobileLoginKey.Name)
+                        .IsUnique()
+                        .HasFilter(MobileLoginKey.EligibleFilter);
 
                     b.ToTable("Users");
                 });

@@ -317,7 +317,9 @@ public class WindowDbContext : DbContext
         var users = modelBuilder.Entity<User>();
         users.Property<string>(MobileLoginKey.Name).HasMaxLength(32).IsRequired()
             .HasComputedColumnSql(MobileLoginKey.ComputedSql, stored: true);
-        users.HasIndex(MobileLoginKey.Name).IsUnique();
+        users.Property<bool>(MobileLoginKey.Excluded).HasDefaultValue(false);
+        users.HasIndex(MobileLoginKey.Name, MobileLoginKey.Excluded);
+        users.HasIndex(MobileLoginKey.Name).IsUnique().HasFilter(MobileLoginKey.EligibleFilter);
 
         #region Role Seed Data
 

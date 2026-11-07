@@ -3,6 +3,8 @@ namespace Window.Data.Context;
 public static class MobileLoginKey
 {
     public const string Name = "MobileLoginKey";
+    public const string Excluded = "SmsLoginExcluded";
+    public const string EligibleFilter = "[SmsLoginExcluded] = 0";
 
     // Keep this expression fixed for migration 20261107120000. It mirrors MobileNumber.Normalize.
     private const string Compact = "TRANSLATE(REPLACE(REPLACE(REPLACE(REPLACE([Mobile], N' ', N''), N'-', N''), N'(', N''), N')', N''), N'۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', N'01234567890123456789')";

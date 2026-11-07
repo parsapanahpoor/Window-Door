@@ -23,3 +23,7 @@ Use the same cookie claims and authorized account identity after proof. The owne
 Run the additive migration before switching IIS binaries. Review normalized duplicates and database compatibility against a copy. In case of application rollback, retain the additive schema so the previous binaries can continue to run. The short-lived browser session uses the existing in-process session store. An interrupted browser session can start the flow again after the cooldown.
 
 The approved Register template and the existing Kavenegar host allowlist are required. Test with an isolated SQL database and a fake provider.
+
+## Historical duplicate mobiles
+
+The hosted preflight found historical accounts sharing the same normalized number. Preserve their credentials and require manual ownership resolution before enabling SMS for those accounts. The migration flags all matching accounts; the unique index covers only unflagged rows. The service treats both multiple matches and a flagged single match as ineligible for SMS and rechecks within the verification transaction.

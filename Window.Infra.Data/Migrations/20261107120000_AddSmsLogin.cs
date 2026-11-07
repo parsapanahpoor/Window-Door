@@ -21,11 +21,37 @@ public sealed class AddSmsLogin : Migration
             computedColumnSql: MobileLoginKey.ComputedSql,
             stored: true);
 
+        migrationBuilder.AddColumn<bool>(
+            name: MobileLoginKey.Excluded,
+            table: "Users",
+            type: "bit",
+            nullable: false,
+            defaultValue: false);
+
+        // Keep all existing accounts; do not pick an owner for a shared number.
+        migrationBuilder.Sql("""
+            EXEC(N'
+                WITH duplicates AS (
+                    SELECT [Id], COUNT_BIG(*) OVER (PARTITION BY [MobileLoginKey]) AS [Matches]
+                    FROM [dbo].[Users]
+                )
+                UPDATE u SET [SmsLoginExcluded] = 1
+                FROM [dbo].[Users] AS u
+                JOIN duplicates AS d ON d.[Id] = u.[Id]
+                WHERE d.[Matches] > 1;
+            ');
+            """);
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Users_MobileLoginKey_SmsLoginExcluded",
+            table: "Users",
+            columns: new[] { MobileLoginKey.Name, MobileLoginKey.Excluded });
         migrationBuilder.CreateIndex(
             name: "IX_Users_MobileLoginKey",
             table: "Users",
             column: MobileLoginKey.Name,
-            unique: true);
+            unique: true,
+            filter: MobileLoginKey.EligibleFilter);
 
         migrationBuilder.CreateTable(
             name: "SmsLoginChallenges",
@@ -48,6 +74,8 @@ public sealed class AddSmsLogin : Migration
     {
         migrationBuilder.DropTable(name: "SmsLoginChallenges");
         migrationBuilder.DropIndex(name: "IX_Users_MobileLoginKey", table: "Users");
+        migrationBuilder.DropIndex(name: "IX_Users_MobileLoginKey_SmsLoginExcluded", table: "Users");
+        migrationBuilder.DropColumn(name: MobileLoginKey.Excluded, table: "Users");
         migrationBuilder.DropColumn(name: MobileLoginKey.Name, table: "Users");
     }
 }

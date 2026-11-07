@@ -40,6 +40,9 @@ try
     const string blockedPhone = "09100000012";
     const string unverifiedPhone = "09100000013";
     const string deletedPhone = "09100000014";
+    const string disputedPhone = "09100000015";
+    const string disputedAlias = "+۹۸ ۹۱۰-۰۰۰-۰۰۱۵";
+    const string newlyDisputedPhone = "09100000016";
     var admin = CreateUser("+۹۸ ۹۱۰-۰۰۰-۰۰۱۱", legacyPassword, confirmed: true);
     admin.IsAdmin = true;
     var blocked = CreateUser(blockedPhone, legacyPassword, confirmed: true);
@@ -47,18 +50,49 @@ try
     var deleted = CreateUser(deletedPhone, legacyPassword, confirmed: true);
     deleted.IsDelete = true;
     fixture.Users.AddRange(admin, blocked, deleted, CreateUser(unverifiedPhone, legacyPassword, confirmed: false));
+    fixture.Users.AddRange(CreateUser(disputedPhone, legacyPassword, true), CreateUser("09100000018", legacyPassword, true));
     await fixture.SaveChangesAsync();
 
     await fixture.Database.ExecuteSqlRawAsync("""
         DROP TABLE dbo.SmsLoginChallenges;
         DROP INDEX IX_Users_MobileLoginKey ON dbo.Users;
+        DROP INDEX IX_Users_MobileLoginKey_SmsLoginExcluded ON dbo.Users;
         ALTER TABLE dbo.Users DROP COLUMN MobileLoginKey;
+        DECLARE @constraint sysname = (
+            SELECT dc.name FROM sys.default_constraints AS dc
+            JOIN sys.columns AS c ON dc.parent_object_id = c.object_id AND dc.parent_column_id = c.column_id
+            WHERE dc.parent_object_id = OBJECT_ID(N'dbo.Users') AND c.name = N'SmsLoginExcluded'
+        );
+        EXEC(N'ALTER TABLE dbo.Users DROP CONSTRAINT ' + @constraint);
+        ALTER TABLE dbo.Users DROP COLUMN SmsLoginExcluded;
+
+        UPDATE dbo.Users SET Mobile = N'+۹۸ ۹۱۰-۰۰۰-۰۰۱۵' WHERE Mobile = N'09100000018';
         """);
-    var migrations = fixture.GetService<IMigrationsAssembly>();
-    var migration = migrations.CreateMigration(migrations.Migrations["20261107120000_AddSmsLogin"], fixture.Database.ProviderName!);
-    var generator = fixture.GetService<IMigrationsSqlGenerator>();
-    foreach (var command in generator.Generate(migration.UpOperations, fixture.Model))
-        await fixture.Database.ExecuteSqlRawAsync(command.CommandText);
+    await fixture.Database.ExecuteSqlRawAsync("""
+        CREATE TABLE dbo.__EFMigrationsHistory (
+            MigrationId nvarchar(150) NOT NULL PRIMARY KEY,
+            ProductVersion nvarchar(32) NOT NULL
+        );
+        """);
+    var script = fixture.GetService<IMigrator>().GenerateScript(
+        "20240719102109_Add_ProductInventory_field",
+        "20261107120000_AddSmsLogin",
+        MigrationsSqlGenerationOptions.Idempotent);
+    var batches = System.Text.RegularExpressions.Regex.Split(script, @"^GO\s*$",
+        System.Text.RegularExpressions.RegexOptions.Multiline | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+    await fixture.Database.OpenConnectionAsync();
+    try
+    {
+        for (var run = 0; run < 2; run++)
+        {
+            foreach (var batch in batches.Where(b => !string.IsNullOrWhiteSpace(b)))
+                await fixture.Database.ExecuteSqlRawAsync(batch);
+        }
+    }
+    finally
+    {
+        await fixture.Database.CloseConnectionAsync();
+    }
 
     Check(MobileNumber.Normalize("+۹۸ (۹۱۰) ۰۰۰-۰۰۱۱") == adminPhone, "Normalize Persian international phone");
     Check(MobileNumber.Normalize("٠٩١٠٠٠٠٠٠١١") == adminPhone, "Normalize Arabic phone digits");
@@ -76,6 +110,27 @@ try
         {
         }
     }
+
+    Check(await fixture.Users.AsNoTracking().CountAsync(u =>
+        EF.Property<string>(u, MobileLoginKey.Name) == disputedPhone &&
+        EF.Property<bool>(u, MobileLoginKey.Excluded) && u.Password == legacyPassword) == 2,
+        "Migration preserves and excludes both historical accounts sharing a mobile");
+    Check(!((await Send(disputedPhone)).Sent) && sender.Count(disputedPhone) == 0,
+        "Do not send a code or provision an account for a disputed mobile");
+    await fixture.Users.Where(u => u.Mobile == disputedAlias)
+        .ExecuteUpdateAsync(s => s.SetProperty(u => u.Mobile, "09100000017"));
+    clock.Advance(TimeSpan.FromMinutes(2));
+    Check(!((await Send(disputedPhone)).Sent) && sender.Count(disputedPhone) == 0,
+        "A lone account flagged for resolution remains excluded");
+
+    var oldChallenge = await Send(newlyDisputedPhone);
+    Check(oldChallenge.Sent, "Start a challenge before a dispute");
+    var incoming = CreateUser(newlyDisputedPhone, legacyPassword, true);
+    fixture.Users.Add(incoming);
+    fixture.Entry(incoming).Property(MobileLoginKey.Excluded).CurrentValue = true;
+    await fixture.SaveChangesAsync();
+    Check(await Verify(newlyDisputedPhone, oldChallenge, sender.Code(newlyDisputedPhone)) is null,
+        "Recheck account eligibility when consuming a code");
 
     var adminChallenge = await Send(adminPhone);
     Check(adminChallenge.Sent && sender.Code(adminPhone).Length == 6, "Send six digits to normalized legacy account");
@@ -169,7 +224,7 @@ try
     }
 
     await HttpChecks.RunAsync(options, sender, clock);
-    Console.WriteLine("PASS: SQL migration, legacy normalization, admin and ordinary SMS sign-in, replay, concurrency, cooldown, failures and HTTP flow.");
+    Console.WriteLine("PASS: SQL migration, legacy normalization, disputed mobiles, admin and ordinary SMS sign-in, replay, concurrency, cooldown, failures and HTTP flow.");
 }
 finally
 {
