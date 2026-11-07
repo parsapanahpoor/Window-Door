@@ -1,6 +1,6 @@
 # 0002 — Password recovery SMS
 
-Status: Verified (offline acceptance checks; production rollout pending)
+Status: Deployed (offline acceptance checks passed; live SMS delivery pending)
 
 ## Problem and evidence
 
@@ -27,3 +27,5 @@ First recovery request and retries from the reset form. Keep the existing Regist
 ## Verification evidence
 
 Release Verify passed. Run dotnet run --project tests/PasswordRecoveryChecks -c Release to exercise AC-1 through AC-4 with a fake provider and persistence, including the rendered retry form and anti-forgery validation over loopback HTTP. No real SMS or database is used.
+
+On 2026-11-07, release 855b49a was activated on the IIS host after the account showed an active Advanced trial. The public ForgotPassword GET returned HTTP 200 with the recovery form and anti-forgery field. This smoke check did not submit the form or verify carrier delivery.
