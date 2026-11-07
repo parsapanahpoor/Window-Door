@@ -1,10 +1,10 @@
 # 0002 — Password recovery SMS
 
-Status: Deployed (offline acceptance checks passed; live SMS delivery pending)
+Status: Deployed (live SMS blocked by Kavenegar source IP policy)
 
 ## Problem and evidence
 
-The recovery service persists an OTP before starting an unobserved Kavenegar request and always reports success. The reset view sends retries to the account-activation page. A read-only Kavenegar account request from the workstation returned 416 (source IP mismatch). The authenticated console confirms Register is approved, the account-wide IP restriction is off, and the Standard subscription is expired. VerifyLookup requires an active Advanced or higher subscription. The hosting egress IP and production provider acceptance still need verification.
+The recovery service persists an OTP before starting an unobserved Kavenegar request and always reports success. The reset view sends retries to the account-activation page. A read-only Kavenegar account request from the workstation returned 416 (source IP mismatch). The authenticated console confirms Register is approved, the account-wide IP restriction is off, and the Standard subscription is expired. VerifyLookup requires an active Advanced or higher subscription. At that point the hosting egress IP and production provider acceptance had not been verified.
 
 ## Scope
 
@@ -29,3 +29,5 @@ First recovery request and retries from the reset form. Keep the existing Regist
 Release Verify passed. Run dotnet run --project tests/PasswordRecoveryChecks -c Release to exercise AC-1 through AC-4 with a fake provider and persistence, including the rendered retry form and anti-forgery validation over loopback HTTP. No real SMS or database is used.
 
 On 2026-11-07, release 855b49a was activated on the IIS host after the account showed an active Advanced trial. The public ForgotPassword GET returned HTTP 200 with the recovery form and anti-forgery field. This smoke check did not submit the form or verify carrier delivery.
+
+The owner reported a failed live recovery attempt. The authenticated Kavenegar call log recorded a Register lookup POST from hosting egress IP 158.58.187.131 with status 416 (source IP mismatch). The Advanced trial was active. Allowing that egress IP in Kavenegar is pending.
