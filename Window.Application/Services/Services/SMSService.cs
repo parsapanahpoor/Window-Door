@@ -23,7 +23,7 @@ namespace Window.Application.Services.Implementation
 
         public async Task<SendResult?> SendLookupSMS(string receptor, string token, string? token2, string? token3, string template)
         {
-            var apiKey = _configuration["kavenegar:apikey"];
+            var apiKey = _configuration["kavenegar:recoveryApiKey"];
             if (string.IsNullOrWhiteSpace(apiKey))
             {
                 _logger.LogWarning("Kavenegar lookup API key is missing.");

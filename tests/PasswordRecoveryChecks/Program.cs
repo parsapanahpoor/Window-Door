@@ -37,6 +37,7 @@ await using var database = new RecoveryDatabase();
 using var transport = new RecoveryTransport();
 using var http = new HttpClient(transport) { BaseAddress = new Uri("https://example.invalid/v1/") };
 var settings = new ConfigurationBuilder().AddInMemoryCollection().Build();
+settings["kavenegar:apikey"] = "legacy-offline-test-key";
 var sms = new SMSService(http, settings, NullLogger<SMSService>.Instance);
 var service = new UserService(settings, repository, null!, database, null!, null!, sms);
 var localizer = new StringLocalizer<IdentityController>(
@@ -56,8 +57,10 @@ async Task CheckFailure()
 await CheckFailure();
 Check(transport.Calls == 0, "Missing configuration must not call the provider.");
 
-settings["kavenegar:apikey"] = "offline-test-key";
+settings["kavenegar:recoveryApiKey"] = "offline-test-key";
 transport.Reply = () => Response(416, """{"return":{"status":416},"entries":[]}""");
+await CheckFailure();
+transport.Reply = () => Response(426, """{"return":{"status":426},"entries":[]}""");
 await CheckFailure();
 transport.Reply = () => Response(200, """{"return":{"status":424},"entries":[]}""");
 await CheckFailure();

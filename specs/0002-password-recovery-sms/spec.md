@@ -4,7 +4,7 @@ Status: Verified (offline acceptance checks; production rollout pending)
 
 ## Problem and evidence
 
-The recovery service persists an OTP before starting an unobserved Kavenegar request and always reports success. The reset view sends retries to the account-activation page. A read-only Kavenegar account request from the workstation returned 416 (source IP mismatch). The hosting egress IP and production provider acceptance still need verification.
+The recovery service persists an OTP before starting an unobserved Kavenegar request and always reports success. The reset view sends retries to the account-activation page. A read-only Kavenegar account request from the workstation returned 416 (source IP mismatch). The authenticated console confirms Register is approved, the account-wide IP restriction is off, and the Standard subscription is expired. VerifyLookup requires an active Advanced or higher subscription. The hosting egress IP and production provider acceptance still need verification.
 
 ## Scope
 
@@ -19,10 +19,10 @@ First recovery request and retries from the reset form. Keep the existing Regist
 
 ## Design and tasks
 
-1. Reuse ISMSService and the recovery controller's failure branch. Bind the key from deployment configuration and call the documented VerifyLookup endpoint over HTTPS with a bounded timeout.
+1. Reuse ISMSService and the recovery controller's failure branch. Bind the recovery-only key from deployment configuration (kavenegar:recoveryApiKey) and call the documented VerifyLookup endpoint over HTTPS with a bounded timeout.
 2. Interpret provider acceptance before saving. The latest saved accepted request replaces its predecessor. A database write failure propagates instead of reporting success. SMS submission and the database write cannot be atomic.
 3. Post retries through the recovery form handler. Exercise success and failure with a fake provider and isolated persistence.
-4. Record rollout prerequisites. Production requires the configured key, an approved Register template, and an allowed hosting egress IP. No migration is needed.
+4. Record rollout prerequisites. Production requires the configured key, an active Advanced or higher subscription, the approved Register template, and an allowed hosting egress IP if required by provider policy. No migration is needed.
 
 ## Verification evidence
 

@@ -47,4 +47,4 @@ Data protection keys are generated per deployment under `App_Data/Auth`. Legacy 
 
 ## Password recovery SMS
 
-Set the Kavenegar API key through the deployed IIS environment variable named **kavenegar__apikey** before installing the recovery release. Keep the SQL environment variable and existing private application data in place. Confirm that the **Register** template is approved and that the host's actual outbound IP is allowed in Kavenegar. HTTP or API status 416 indicates a source IP mismatch. The production IP and delivery require separate operational verification.
+Set the Kavenegar API key through the deployed IIS environment variable named **kavenegar__recoveryApiKey** before installing the recovery release. Keep the SQL environment variable and existing private application data in place. Confirm an active **Advanced** or higher Kavenegar subscription, an approved **Register** template, and that provider policy allows the host's actual outbound IP. HTTP or API status 416 indicates a source IP mismatch. The production IP and delivery require separate operational verification.
