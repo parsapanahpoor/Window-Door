@@ -29,6 +29,10 @@ public sealed class SmsLoginService(
         if (MobileNumber.Normalize(mobile) != mobile)
             return new(null, false);
 
+        var (account, excluded) = await FindAccountAsync(mobile, cancellationToken);
+        if (excluded || account is { IsDelete: true } or { IsBan: true })
+            return new(null, false, RequiresPassword: true);
+
         var now = timeProvider.GetUtcNow();
         var challenge = await db.SmsLoginChallenges.FindAsync([mobile], cancellationToken);
         if (previous.HasValue && challenge?.ChallengeId != previous.Value)
@@ -60,9 +64,6 @@ public sealed class SmsLoginService(
         if (!await TrySaveAsync(cancellationToken))
             return new(null, false);
 
-        var (account, excluded) = await FindAccountAsync(mobile, cancellationToken);
-        if (excluded || account is { IsDelete: true } or { IsBan: true })
-            return new(challenge.ChallengeId, false);
 
         string code;
         do
@@ -88,10 +89,10 @@ public sealed class SmsLoginService(
         return challenge is null ? 0 : Math.Max(0, (int)Math.Ceiling((RetryAt(challenge) - timeProvider.GetUtcNow()).TotalSeconds));
     }
 
-    public async Task<User?> VerifyAsync(string mobile, Guid id, string code, CancellationToken cancellationToken)
+    public async Task<SmsLoginVerificationResult> VerifyAsync(string mobile, Guid id, string code, CancellationToken cancellationToken)
     {
         if (code.Length != 6 || !code.All(char.IsAsciiDigit))
-            return null;
+            return default;
 
         await using var transaction = await db.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable, cancellationToken);
         var now = timeProvider.GetUtcNow();
@@ -100,18 +101,18 @@ public sealed class SmsLoginService(
 
         // Charge a guess and lock the challenge before comparing the secret.
         if (await pending.ExecuteUpdateAsync(s => s.SetProperty(c => c.FailedAttempts, c => c.FailedAttempts + 1), cancellationToken) == 0)
-            return null;
+            return default;
 
         var challenge = await db.SmsLoginChallenges.SingleAsync(c => c.Mobile == mobile, cancellationToken);
         if (challenge.ExpiresAt <= timeProvider.GetUtcNow() || !CodeMatches(challenge.ProtectedCode!, code))
         {
             await transaction.CommitAsync(CancellationToken.None);
-            return null;
+            return default;
         }
 
         var (user, excluded) = await FindAccountAsync(mobile, cancellationToken);
         if (excluded || user is { IsDelete: true } or { IsBan: true })
-            return null;
+            return new(null, RequiresPassword: true);
         if (user is null)
         {
             user = new User
@@ -140,10 +141,10 @@ public sealed class SmsLoginService(
         challenge.FailedAttempts = 0;
 
         if (!await TrySaveAsync(cancellationToken))
-            return null;
+            return default;
 
         await transaction.CommitAsync(cancellationToken);
-        return user;
+        return new(user);
     }
 
     public Task<bool> CanUseSessionAsync(ulong userId, CancellationToken cancellationToken) =>
@@ -203,4 +204,6 @@ public sealed class SmsLoginService(
 
 }
 
-public sealed record SmsLoginSendResult(Guid? ChallengeId, bool Sent);
+public sealed record SmsLoginSendResult(Guid? ChallengeId, bool Sent, bool RequiresPassword = false);
+
+public readonly record struct SmsLoginVerificationResult(User? Account, bool RequiresPassword = false);

@@ -21,4 +21,4 @@
     <button type="submit" class="account-link">ارسال مجدد کد</button>
     <span data-resend-label hidden>ارسال مجدد تا <bdi data-resend-time></bdi></span>
 </form>
-<p class="account-footer"><a asp-action="SmsLogin" asp-route-returnUrl="@Model.ReturnUrl">تغییر شماره موبایل</a> <span aria-hidden="true">·</span> <a asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">ورود با رمز عبور</a></p>
+<p class="account-footer"><a asp-action="SmsLogin" asp-route-returnUrl="@Model.ReturnUrl">تغییر شماره موبایل</a> <span aria-hidden="true">·</span> <a asp-action="PasswordLogin" asp-route-returnUrl="@Model.ReturnUrl">ورود با کلمهٔ عبور</a></p>

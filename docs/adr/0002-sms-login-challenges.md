@@ -27,3 +27,7 @@ The approved Register template and the existing Kavenegar host allowlist are req
 ## Historical duplicate mobiles
 
 The hosted preflight found historical accounts sharing the same normalized number. Preserve their credentials and require manual ownership resolution before enabling SMS for those accounts. The migration flags all matching accounts; the unique index covers only unflagged rows. The service treats both multiple matches and a flagged single match as ineligible for SMS and rechecks within the verification transaction.
+
+## Default SMS sign-in and password fallback
+
+The canonical sign-in URL renders the SMS form. Keep a separate password route and redirect there for ineligible numbers, with a one-time instruction and the original safe return URL. Select the password account with a single credential lookup and reject multiple matches. Mobile-code recovery and activation require an unambiguous, unflagged mobile owner.

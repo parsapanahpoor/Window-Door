@@ -9,8 +9,8 @@
     <h1 id="account-title">ورود به پنجره‌یاب</h1>
 </div>
 <nav class="account-methods" aria-label="روش ورود">
-    <a asp-action="Login" asp-route-returnUrl="@returnUrl">رمز عبور</a>
-    <a asp-action="SmsLogin" asp-route-returnUrl="@returnUrl" aria-current="page">کد پیامکی</a>
+    <a asp-action="Login" asp-route-returnUrl="@returnUrl" aria-current="page">ورود با کد پیامکی</a>
+    <a asp-action="PasswordLogin" asp-route-returnUrl="@returnUrl">ورود با کلمهٔ عبور</a>
 </nav>
 <p class="account-description">کد شش‌رقمی را به شمارهٔ موبایلت می‌فرستیم.</p>
 <form asp-action="SmsLogin" asp-route-returnUrl="@returnUrl" method="post" class="account-form">

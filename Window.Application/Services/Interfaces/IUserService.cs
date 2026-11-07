@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,7 +29,7 @@ namespace Window.Application.Interfaces
 
         Task<RegisterUserResponse> RegisterUserAsync(RegisterUserViewModel model);
 
-        Task<LoginUserResponse> LoginUserAsync(LoginUserViewModel model);
+        Task<(LoginUserResponse Status, User? Account)> LoginUserAsync(LoginUserViewModel model, CancellationToken cancellationToken);
 
         Task<List<SelectListViewModel>> GetSelectRolesList();
 
@@ -47,7 +47,7 @@ namespace Window.Application.Interfaces
 
         Task ResendActivationCodeSMS(string Mobile);
 
-        Task<bool> IsExistUserByMobile(string mobile);
+        Task<User?> GetMobileCodeAccountAsync(string mobile);
 
         Task<User?> GetUserByEmailActivationCode(string emailActivationCode);
 

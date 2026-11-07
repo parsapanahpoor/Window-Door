@@ -171,7 +171,7 @@ public class RecoveryRepository : DispatchProxy
 
     protected override object? Invoke(MethodInfo? targetMethod, object?[]? args)
     {
-        if (targetMethod?.Name == nameof(IUserRepository.GetUserByEmail)) return Task.FromResult(User);
+        if (targetMethod?.Name == nameof(IUserRepository.GetUniqueMobileCodeAccountAsync)) return Task.FromResult(User);
         throw new NotSupportedException(targetMethod?.Name);
     }
 }

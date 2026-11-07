@@ -143,7 +143,9 @@ try
     fixture.Users.Add(incoming);
     fixture.Entry(incoming).Property(MobileLoginKey.Excluded).CurrentValue = true;
     await fixture.SaveChangesAsync();
-    Check(await Verify(newlyDisputedPhone, oldChallenge, sender.Code(newlyDisputedPhone)) is null,
+    var rejectedVerification = await InContext(s => s.VerifyAsync(
+        newlyDisputedPhone, oldChallenge.ChallengeId!.Value, sender.Code(newlyDisputedPhone), default));
+    Check(rejectedVerification is { Account: null, RequiresPassword: true },
         "Recheck account eligibility when consuming a code");
 
     var adminChallenge = await Send(adminPhone);
@@ -170,7 +172,7 @@ try
     var fresh = sends.Single(s => s.Sent);
     Check(!await fixture.Users.AsNoTracking().AnyAsync(u => u.Mobile == freshPhone), "Do not create account before proof");
     var freshCode = sender.Code(freshPhone);
-    Check(await InContext(s => s.VerifyAsync(freshPhone, Guid.NewGuid(), freshCode, default)) is null, "Reject another browser challenge");
+    Check((await InContext(s => s.VerifyAsync(freshPhone, Guid.NewGuid(), freshCode, default))).Account is null, "Reject another browser challenge");
     var verifications = await Task.WhenAll(Verify(freshPhone, fresh, freshCode), Verify(freshPhone, fresh, freshCode));
     Check(verifications.Count(u => u is not null) == 1, "Consume a code once under parallel verification");
     Check(verifications.Single(u => u is not null) is { IsMobileConfirm: true, IsAdmin: false, Password: "!sms-only" } &&
@@ -249,7 +251,7 @@ Task<SmsLoginSendResult> Send(string mobile, Guid? previous = null) =>
     InContext(s => s.SendAsync(mobile, previous, default));
 
 Task<User?> Verify(string mobile, SmsLoginSendResult challenge, string code) =>
-    InContext(s => s.VerifyAsync(mobile, challenge.ChallengeId!.Value, code, default));
+    InContext(async s => (await s.VerifyAsync(mobile, challenge.ChallengeId!.Value, code, default)).Account);
 
 async Task<T> InContext<T>(Func<SmsLoginService, Task<T>> action)
 {
@@ -293,6 +295,9 @@ sealed class OfflineSms : ISMSService
 
     public Task<SendResult?> SendLookupSMS(string receptor, string token, string? token2, string? token3, string template)
     {
+        if (template == "Wellcoming")
+            return Task.FromResult<SendResult?>(new SendResult { Messageid = 1, Status = 1 });
+
         if (template != "Register" || token.Length != 6 || !token.All(char.IsAsciiDigit))
             throw new InvalidOperationException("Unexpected provider payload.");
 

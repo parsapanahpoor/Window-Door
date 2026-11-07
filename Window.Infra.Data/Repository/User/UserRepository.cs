@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -109,6 +109,17 @@ namespace CRM.Data.Repository
         public async Task<User?> GetUserByEmail(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Mobile == email);
+        }
+
+        public async Task<User?> GetUniqueMobileCodeAccountAsync(string normalizedMobile)
+        {
+            var matches = await _context.Users
+                .Where(u => EF.Property<string>(u, MobileLoginKey.Name) == normalizedMobile)
+                .Select(u => new { User = u, Excluded = EF.Property<bool>(u, MobileLoginKey.Excluded) })
+                .Take(2)
+                .ToListAsync();
+
+            return matches.Count == 1 && !matches[0].Excluded ? matches[0].User : null;
         }
 
         public async Task<FilterUserViewModel> FilterUsers(FilterUserViewModel filter)

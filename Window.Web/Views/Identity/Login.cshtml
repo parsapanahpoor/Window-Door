@@ -1,6 +1,6 @@
 @model Window.Domain.ViewModels.User.Authentication.LoginUserViewModel
 @{
-    ViewData["Title"] = "ورود";
+    ViewData["Title"] = "ورود با کلمهٔ عبور";
     Layout = "Identity/_AccountLayout";
     var returnUrl = ViewData["ReturnUrl"] as string;
 }
@@ -9,10 +9,10 @@
     <h1 id="account-title">ورود به پنجره‌یاب</h1>
 </div>
 <nav class="account-methods" aria-label="روش ورود">
-    <a asp-action="Login" asp-route-returnUrl="@returnUrl" aria-current="page">رمز عبور</a>
-    <a asp-action="SmsLogin" asp-route-returnUrl="@returnUrl">کد پیامکی</a>
+    <a asp-action="Login" asp-route-returnUrl="@returnUrl">ورود با کد پیامکی</a>
+    <a asp-action="PasswordLogin" asp-route-returnUrl="@returnUrl" aria-current="page">ورود با کلمهٔ عبور</a>
 </nav>
-<form asp-action="Login" asp-route-returnUrl="@returnUrl" method="post" class="account-form">
+<form asp-action="PasswordLogin" asp-route-returnUrl="@returnUrl" method="post" class="account-form">
     <div asp-validation-summary="All" class="account-errors" role="alert"></div>
     <div class="account-field">
         <label asp-for="Mobile">شماره موبایل</label>
@@ -20,7 +20,7 @@
     </div>
     <div class="account-field">
         <div class="account-field-top">
-            <label asp-for="Password">رمز عبور</label>
+            <label asp-for="Password">کلمهٔ عبور</label>
             <a asp-action="ForgotPassword">رمز را فراموش کرده‌ام</a>
         </div>
         <div class="account-password">

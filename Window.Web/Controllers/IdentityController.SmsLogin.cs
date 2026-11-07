@@ -13,15 +13,18 @@ public partial class IdentityController
     public const string SmsLoginRateLimit = "sms-login";
     private const string SmsLoginSessionKey = "Window.SmsLogin";
     private const string SmsLoginErrorKey = "SmsLoginError";
+    private const string PasswordFallbackKey = "PasswordFallback";
     private const string SendError = "در حال حاضر امکان ارسال کد نیست. بعد از پایان زمان انتظار دوباره تلاش کن.";
 
     [HttpGet("login/sms")]
     [RedirectIfLoggedInActionFilter]
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
-    public IActionResult SmsLogin(string? returnUrl = null)
+    public IActionResult SmsLogin(string? returnUrl = null) => ShowSmsLogin(returnUrl);
+
+    private IActionResult ShowSmsLogin(string? returnUrl)
     {
         ViewData["ReturnUrl"] = LocalReturnUrl(returnUrl);
-        return View();
+        return View(nameof(SmsLogin));
     }
 
     [HttpPost("login/sms")]
@@ -46,6 +49,8 @@ public partial class IdentityController
         var existing = ReadSmsLoginFlow();
         var previous = existing?.Mobile == mobile ? existing.ChallengeId : (Guid?)null;
         var result = await service.SendAsync(mobile, previous, cancellationToken);
+        if (result.RequiresPassword)
+            return UsePasswordInstead(returnUrl);
         if (result.ChallengeId is not Guid id)
         {
             ModelState.AddModelError(string.Empty, SendError);
@@ -88,8 +93,11 @@ public partial class IdentityController
 
         if (ModelState.IsValid)
         {
-            var user = await service.VerifyAsync(flow.Mobile, flow.ChallengeId, MobileNumber.ToAsciiDigits(input.Code), cancellationToken);
-            if (user is not null)
+            var result = await service.VerifyAsync(flow.Mobile, flow.ChallengeId, MobileNumber.ToAsciiDigits(input.Code), cancellationToken);
+            if (result.RequiresPassword)
+                return UsePasswordInstead(flow.ReturnUrl);
+
+            if (result.Account is { } user)
             {
                 HttpContext.Session.Remove(SmsLoginSessionKey);
                 return await SignInUserAsync(user, false, flow.ReturnUrl, SmsLoginService.AuthenticationMethod);
@@ -112,12 +120,22 @@ public partial class IdentityController
             return RedirectToAction(nameof(SmsLogin));
 
         var result = await service.SendAsync(flow.Mobile, flow.ChallengeId, cancellationToken);
+        if (result.RequiresPassword)
+            return UsePasswordInstead(flow.ReturnUrl);
         if (result.ChallengeId is Guid id && id != flow.ChallengeId)
             WriteSmsLoginFlow(flow with { ChallengeId = id });
         if (!result.Sent)
             TempData[SmsLoginErrorKey] = SendError;
 
         return RedirectToAction(nameof(SmsLoginCode));
+    }
+
+    private IActionResult UsePasswordInstead(string? returnUrl)
+    {
+        HttpContext.Session.Remove(SmsLoginSessionKey);
+        TempData.Remove(SmsLoginErrorKey);
+        TempData[PasswordFallbackKey] = "ورود پیامکی با این شمارهٔ موبایل امکان‌پذیر نیست. اگر حساب فعال داری، با کلمهٔ عبور وارد شو.";
+        return RedirectToAction(nameof(PasswordLogin), new { returnUrl = LocalReturnUrl(returnUrl) });
     }
 
     private async Task<SmsLoginCodeViewModel> CreateCodeViewAsync(

@@ -60,7 +60,7 @@ namespace Window.Application.Services
         {
             #region Get User By Mobile
 
-            var user = await GetUserByEmail(mobile);
+            var user = await GetMobileCodeAccountAsync(mobile);
             if (user is null || user.IsDelete || user.IsBan)
                 return ResetPasswordResult.NotFound;
 
@@ -73,9 +73,13 @@ namespace Window.Application.Services
             var issuedAfter = DateTime.Now.AddMinutes(-2);
             var password = PasswordHelper.EncodePasswordMd5(pass.Password.SanitizeText());
             var inactiveCode = Guid.NewGuid().ToString("N");
+            var normalized = MobileNumber.Normalize(mobile);
 
             var changed = await _context.Users
                 .Where(u => u.Id == user.Id && !u.IsDelete && !u.IsBan
+                    && EF.Property<string>(u, MobileLoginKey.Name) == normalized
+                    && !EF.Property<bool>(u, MobileLoginKey.Excluded)
+                    && !_context.Users.Any(other => other.Id != u.Id && EF.Property<string>(other, MobileLoginKey.Name) == normalized)
                     && u.MobileActivationCode == code && u.ExpireMobileSMSDateTime > issuedAfter)
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(u => u.Password, password)
@@ -148,38 +152,37 @@ namespace Window.Application.Services
                 s.EmailActivationCode == emailActivationCode.SanitizeText());
         }
 
-        public async Task<LoginUserResponse> LoginUserAsync(LoginUserViewModel model)
+        public async Task<(LoginUserResponse Status, User? Account)> LoginUserAsync(
+            LoginUserViewModel model, CancellationToken cancellationToken)
         {
-            if (!await _userRepository.IsMobileExist(model.Mobile.Trim().ToLower()))
+            var mobile = model.Mobile.Trim();
+            var normalized = MobileNumber.Normalize(mobile);
+            var password = PasswordHelper.EncodePasswordMd5(model.Password);
+            var candidates = _context.Users.AsNoTracking().Where(u => normalized == null
+                ? u.Mobile == mobile
+                : EF.Property<string>(u, MobileLoginKey.Name) == normalized);
+            var matches = await candidates.Where(u => u.Password == password)
+                .Select(u => new { Account = u, Excluded = EF.Property<bool>(u, MobileLoginKey.Excluded) })
+                .Take(2)
+                .ToListAsync(cancellationToken);
+
+            if (matches.Count != 1)
+                return (LoginUserResponse.InvalidCredentials, null);
+
+            var account = matches[0].Account;
+            if (account.IsBan || account.IsDelete)
+                return (LoginUserResponse.Unavailable, null);
+
+            if (!account.IsMobileConfirm)
             {
-                return LoginUserResponse.EmailNotFound;
+                if (matches[0].Excluded || await candidates.AnyAsync(u => u.Id != account.Id, cancellationToken))
+                    return (LoginUserResponse.Unavailable, null);
+
+                return (LoginUserResponse.UserNotActive, account);
             }
 
-            if (!await _userRepository.IsUserActive(model.Mobile.Trim().ToLower()))
-            {
-                return LoginUserResponse.UserNotActive;
-            }
-
-            if (!await _userRepository.IsPasswordValid(model.Mobile.Trim().ToLower(),
-                    PasswordHelper.EncodePasswordMd5(model.Password)))
-            {
-                return LoginUserResponse.WrongPassword;
-            }
-
-            #region Send Verification Code SMS
-
-            string date = $"{DateTime.Now.ToShamsi()}";
-
-            var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={model.Mobile}&token={DateTime.Now.ToShamsi()}&template=Wellcoming";
-            var results = client.GetStringAsync(result);
-
-            //var message = Window.Application.StaticTools.Messages.SendActivationRegisterSms(user.MobileActivationCode);
-
-            //await _smsservice.SendSimpleSMS(user.Mobile, message);
-
-            #endregion
-
-            return LoginUserResponse.Success;
+            _ = _smsservice.SendLookupSMS(normalized ?? account.Mobile, DateTime.Now.ToShamsi(), null, null, "Wellcoming");
+            return (LoginUserResponse.Success, account);
         }
 
         //Check That Is User Admin Or Not 
@@ -263,13 +266,9 @@ namespace Window.Application.Services
         {
             #region Get User By Mobile
 
-            if (!await IsExistUserByMobile(activeMobileByActivationCodeViewModel.Mobile.SanitizeText()))
-            {
+            var user = await GetMobileCodeAccountAsync(activeMobileByActivationCodeViewModel.Mobile);
+            if (user is null || user.IsDelete || user.IsBan)
                 return ActiveMobileByActivationCodeResult.AccountNotFound;
-            }
-
-            var user = await GetUserByEmail(activeMobileByActivationCodeViewModel.Mobile.SanitizeText());
-            if (user == null) return ActiveMobileByActivationCodeResult.AccountNotFound;
 
             #endregion
 
@@ -296,7 +295,10 @@ namespace Window.Application.Services
 
         public async Task ResendActivationCodeSMS(string Mobile)
         {
-            var user = await _userRepository.GetUserByEmail(Mobile);
+            var user = await GetMobileCodeAccountAsync(Mobile);
+            if (user is null || user.IsDelete || user.IsBan)
+                return;
+
             user.MobileActivationCode = new Random().Next(10000, 999999).ToString();
             user.ExpireMobileSMSDateTime = DateTime.Now;
 
@@ -315,14 +317,14 @@ namespace Window.Application.Services
             #endregion
         }
 
-        public async Task<bool> IsExistUserByMobile(string mobile)
-        {
-            return await _context.Users.AnyAsync(p => p.Mobile == mobile && !p.IsDelete);
-        }
+        public Task<User?> GetMobileCodeAccountAsync(string mobile) =>
+            MobileNumber.Normalize(mobile) is { } normalized
+                ? _userRepository.GetUniqueMobileCodeAccountAsync(normalized)
+                : Task.FromResult<User?>(null);
 
         public async Task<ForgotPasswordResult> RecoverUserPassword(ForgetPasswordViewModel forgot)
         {
-            var user = await GetUserByEmail(forgot.Mobile);
+            var user = await GetMobileCodeAccountAsync(forgot.Mobile);
             if (user == null || user.IsDelete)
             {
                 return ForgotPasswordResult.NotFound;
@@ -334,7 +336,7 @@ namespace Window.Application.Services
             }
 
             var code = System.Security.Cryptography.RandomNumberGenerator.GetInt32(10000, 999999).ToString();
-            var message = await _smsservice.SendLookupSMS(user.Mobile, code, null, null, "Register");
+            var message = await _smsservice.SendLookupSMS(MobileNumber.Normalize(user.Mobile)!, code, null, null, "Register");
             if (message == null)
             {
                 return ForgotPasswordResult.VerificationSmsFaildFromParsGreen;

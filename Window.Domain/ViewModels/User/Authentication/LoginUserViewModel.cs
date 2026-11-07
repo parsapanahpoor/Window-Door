@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Window.Domain.ViewModels.User.Authentication;
@@ -23,5 +23,5 @@ public class LoginUserViewModel
 
 public enum LoginUserResponse
 {
-    Success, UserNotActive, WrongPassword, EmailNotFound
+    Success, UserNotActive, InvalidCredentials, Unavailable
 }

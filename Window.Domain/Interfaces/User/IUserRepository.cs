@@ -1,4 +1,4 @@
-﻿using Window.Domain.Entities.Account;
+using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Wallet;
 using Window.Domain.ViewModels.Seller.ShopOrder;
 using Window.Domain.ViewModels.User;
@@ -34,6 +34,8 @@ namespace Window.Domain.Interfaces
         Task<User?> GetUserById(ulong userId);
 
         Task<User?> GetUserByEmail(string email);
+
+        Task<User?> GetUniqueMobileCodeAccountAsync(string normalizedMobile);
 
         Task<FilterUserViewModel> FilterUsers(FilterUserViewModel filter);
 

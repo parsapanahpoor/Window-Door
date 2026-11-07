@@ -4,7 +4,7 @@ Status: Deployed to Plesk; live SMS delivery pending owner verification
 
 ## Requirements and scope
 
-- Give sign-in, registration and both recovery steps one responsive, Persian right-to-left design with window and door illustrations. Remove placeholder social buttons, links and copy. Preserve the existing password sign-in, registration and recovery routes.
+- Give sign-in, registration and both recovery steps one responsive, Persian right-to-left design with window and door illustrations. Remove placeholder social buttons, links and copy. Keep password sign-in available alongside SMS, and preserve registration and recovery.
 - Add SMS sign-in with a six-digit code. Start the same verification flow for registered and new mobile numbers. A new account is created after successful verification of mobile ownership. The pending challenge represents registration before verification.
 - Preserve the required password column. Store a marker outside the legacy password hash format for SMS-only accounts. A verified password recovery can set a real password.
 
@@ -15,7 +15,9 @@ Status: Deployed to Plesk; live SMS delivery pending owner verification
 3. A valid, unused code authenticates the eligible existing user or provisions one verified account with no usable password. An unverified account's previously chosen password is invalidated when claimed by the phone owner. An existing verified password is preserved. All active account roles, including administrators and sellers, can use the same flow as requested by the owner. Blocked and deleted accounts receive no SMS login cookie.
 4. Codes expire after two minutes, bind to a browser challenge, and are consumed atomically. The server enforces resend cooldown, sending and guess limits, and rejects replay. A resend preserves failed-attempt counts within the current rate window.
 5. If historical records share a normalized mobile, preserve every account and password. Disable SMS login and automatic registration for that number until account ownership is resolved. Reject both sending and verification without choosing a matching account.
-6. POST actions require antiforgery validation. The normal cookie claims and local return URL rules apply. Test with an isolated database and a fake SMS sender.
+6. The default sign-in page and anonymous sign-in links open the SMS form. Both methods display their full Persian names. A number ineligible for SMS is sent to the password form with a clear, one-time message and the original safe return destination. Malformed inputs and temporary SMS failures can be retried in the SMS flow.
+7. Password sign-in authenticates the single account matched by its mobile and password together. Reject credentials that match more than one account and do not send an activation or recovery code for a shared or excluded number. Reject an already issued recovery code if the number is now shared.
+8. POST actions require antiforgery validation. The normal cookie claims and local return URL rules apply. Test with an isolated database and a fake SMS sender.
 
 ## Design
 
@@ -23,6 +25,10 @@ Use a dedicated SQL Server challenge per canonical mobile. Persist an encrypted 
 
 Add the dedicated challenge table and an indexed normalized mobile lookup. Flag every account in a pre-existing duplicate group for manual resolution. A filtered unique index on unflagged accounts preserves the write safeguard. Sign-in checks all matches and flags again before creating a session; manual registration also checks all matches. The migration updates only the new flag for these accounts. Review the migration against the isolated SQL Server database before any shared deployment. Reuse the approved Register template and existing server-side SMS integration. The owner confirmed live recovery delivery after the previous host allowlist change.
 
+Keep GET /login as the primary SMS entry and /login/sms as an alias. Serve the explicit password form at /login/password and accept legacy password submissions at POST /login. Use TempData for the fallback message and clear the previous SMS browser flow. No database migration is needed.
+
 ## Verification
 
 The SQL and loopback HTTP checks passed using a disposable local database and an offline SMS sender. They exercised the additive migration, existing legacy phone data, exclusion of historical duplicate groups and verification after eligibility changes, normal and administrator SMS login, blocked and deleted accounts, code expiry and replay, concurrent sends and verification, resend and guess limits, account creation, password setup after SMS registration, CSRF, safe redirects, and rendered forms and SVG assets. The existing password recovery regression checks also passed. The hosted migration and deployment completed; the public pages and assets passed anonymous HTTP checks. Live SMS delivery for the new login flow remains for owner verification.
+
+The default-login revision passed the same isolated SQL and loopback HTTP checks. It verifies the selected SMS entry, full method labels, fallback with a one-time message and local return URL, rejection of recovery and activation for a shared number, sign-in into the exact password-matched account, and rejection of shared credentials. The offline password-recovery suite also passed.

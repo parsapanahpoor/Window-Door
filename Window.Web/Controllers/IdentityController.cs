@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -96,7 +96,8 @@ namespace Window.Web.Controllers
 
             #region Is Exist User 
 
-            if (await _userService.IsExistUserByMobile(Mobile) == false)
+            var user = await _userService.GetMobileCodeAccountAsync(Mobile);
+            if (user is null || user.IsDelete || user.IsBan)
             {
                 return NotFound();
             }
@@ -112,18 +113,13 @@ namespace Window.Web.Controllers
 
             #endregion
 
-            #region Get User By User ID
-
-            var user = await _userService.GetUserByEmail(Mobile);
-
-            #endregion
 
             #region Time Counter Initilize
 
 
             var SiteSettingSMSTimer = 2;
 
-            DateTime expireMinut = user.ExpireMobileSMSDateTime.Value.AddMinutes(SiteSettingSMSTimer);
+            DateTime expireMinut = user.ExpireMobileSMSDateTime?.AddMinutes(SiteSettingSMSTimer) ?? DateTime.Now;
 
             var TimerMinut = expireMinut - DateTime.Now;
 
@@ -167,55 +163,45 @@ namespace Window.Web.Controllers
 
         [HttpGet("login")]
         [RedirectIfLoggedInActionFilter]
-        public IActionResult Login(string? returnUrl = "/")
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public IActionResult Login(string? returnUrl = null) => ShowSmsLogin(returnUrl);
+
+        [HttpGet("login/password")]
+        [RedirectIfLoggedInActionFilter]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public IActionResult PasswordLogin(string? returnUrl = null)
         {
             ViewData["ReturnUrl"] = LocalReturnUrl(returnUrl);
-            return View();
+            if (TempData[PasswordFallbackKey] is string message)
+                ModelState.AddModelError(string.Empty, message);
+
+            return View("Login");
         }
 
-        [HttpPost("login")]
+        [HttpPost("login/password")]
+        [HttpPost("login", Order = 1)]
         [ValidateAntiForgeryToken]
         [RedirectIfLoggedInActionFilter]
-        public async Task<IActionResult> Login(LoginUserViewModel model, string? returnUrl = "/")
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public async Task<IActionResult> PasswordLogin(
+            LoginUserViewModel model, string? returnUrl, CancellationToken cancellationToken)
         {
             ViewData["ReturnUrl"] = LocalReturnUrl(returnUrl);
             if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+                return View("Login", model);
 
-            var canUserLogin = await _userService.LoginUserAsync(model);
+            var (status, account) = await _userService.LoginUserAsync(model, cancellationToken);
+            if (status == LoginUserResponse.Success && account is not null)
+                return await SignInUserAsync(account, model.RememberMe, returnUrl);
 
-            if (canUserLogin != LoginUserResponse.Success)
-            {
-                switch (canUserLogin)
-                {
-                    case LoginUserResponse.EmailNotFound:
-                        ModelState.AddModelError("Email", _localizer["موبایل وارد شده صحیح نمی باشد."]);
-                        break;
-                    case LoginUserResponse.UserNotActive:
-                        ModelState.AddModelError("Error", _localizer["Your Account Is Not Active"]);
-                        return RedirectToAction("ActiveUserByMobileActivationCode", new { Mobile = model.Mobile, Resend = true });
+            if (status == LoginUserResponse.UserNotActive && account is not null)
+                return RedirectToAction(nameof(ActiveUserByMobileActivationCode), new { Mobile = account.Mobile, Resend = true });
 
-                    case LoginUserResponse.WrongPassword:
-                        ModelState.AddModelError("Password", _localizer["Wrong Password"]);
-                        break;
-                    default:
-                        ModelState.AddModelError("Error", _localizer["An error occurred in the login process"]);
-                        break;
-                }
+            ModelState.AddModelError(string.Empty, status == LoginUserResponse.Unavailable
+                ? "ورود به این حساب امکان‌پذیر نیست."
+                : "شمارهٔ موبایل یا کلمهٔ عبور درست نیست.");
 
-                return View(model);
-            }
-
-            var user = await _userService.GetUserByEmail(model.Mobile);
-            if (user is null || user.IsBan || user.IsDelete)
-            {
-                ModelState.AddModelError(string.Empty, "ورود به این حساب امکان‌پذیر نیست.");
-                return View(model);
-            }
-
-            return await SignInUserAsync(user, model.RememberMe, returnUrl);
+            return View("Login", model);
         }
 
         private string LocalReturnUrl(string? returnUrl) =>
@@ -292,7 +278,7 @@ namespace Window.Web.Controllers
         {
             #region Send Model To View
 
-            var user = await _userService.GetUserByEmail(mobile);
+            var user = await _userService.GetMobileCodeAccountAsync(mobile);
 
             if (user == null) return NotFound();
 
@@ -313,7 +299,7 @@ namespace Window.Web.Controllers
 
             ViewBag.Mobile = mobile;
 
-            var user = await _userService.GetUserByEmail(mobile);
+            var user = await _userService.GetMobileCodeAccountAsync(mobile);
             if (user is null)
                 return NotFound();
 
