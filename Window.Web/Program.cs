@@ -1,3 +1,5 @@
+using Window.Application.Services.Implementation;
+using Window.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Localization;
@@ -140,6 +142,13 @@ builder.Services.AddSingleton<HtmlEncoder>(
 #region Register Services
 
 DependencyContainer.ConfigureDependencies(builder.Services);
+builder.Services.AddHttpClient<ISMSService, SMSService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.kavenegar.com/v1/");
+    client.Timeout = TimeSpan.FromSeconds(15);
+})
+.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false })
+.RemoveAllLoggers();
 
 #endregion
 

@@ -25,3 +25,6 @@ jobs:
       - name: Verify source and build Release
         shell: pwsh
         run: ./scripts/dev.ps1 Verify
+
+      - name: Check password recovery with an offline provider
+        run: dotnet run --project tests/PasswordRecoveryChecks -c Release

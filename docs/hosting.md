@@ -44,3 +44,7 @@ Expected current result: 129. SSMS can also connect directly to the remote endpo
 - Existing authenticated business workflows, payments and SMS delivery still require feature-specific validation. No live SMS/payment transaction was sent during deployment.
 
 Data protection keys are generated per deployment under `App_Data/Auth`. Legacy keys from `wwwroot/Auth` are excluded from publication. Existing old login cookies are not migrated with those keys.
+
+## Password recovery SMS
+
+Set the Kavenegar API key through the deployed IIS environment variable named **kavenegar__apikey** before installing the recovery release. Keep the SQL environment variable and existing private application data in place. Confirm that the **Register** template is approved and that the host's actual outbound IP is allowed in Kavenegar. HTTP or API status 416 indicates a source IP mismatch. The production IP and delivery require separate operational verification.

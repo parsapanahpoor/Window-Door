@@ -1,4 +1,4 @@
-﻿using Window.Application.Extensions;
+using Window.Application.Extensions;
 using Window.Application.Interfaces;
 using Window.Application.Security;
 using Window.Domain.Entities.Account;
@@ -318,45 +318,27 @@ namespace Window.Application.Services
 
         public async Task<ForgotPasswordResult> RecoverUserPassword(ForgetPasswordViewModel forgot)
         {
-            #region Get User By Mobile
-
             var user = await GetUserByEmail(forgot.Mobile);
-            if (user == null) return ForgotPasswordResult.NotFound;
+            if (user == null || user.IsDelete)
+            {
+                return ForgotPasswordResult.NotFound;
+            }
 
-            if (user != null && user.IsBan)
+            if (user.IsBan)
             {
                 return ForgotPasswordResult.UserIsBlocked;
             }
 
-            #endregion
-
-            #region Update User Info
-
-            user.MobileActivationCode = new Random().Next(10000, 999999).ToString();
-            user.ExpireMobileSMSDateTime = DateTime.Now;
-
-            _context.Users.Update(user);
-
-            var smsViewModel = new SendVerificationSmsViewModel()
+            var code = System.Security.Cryptography.RandomNumberGenerator.GetInt32(10000, 999999).ToString();
+            var message = await _smsservice.SendLookupSMS(user.Mobile, code, null, null, "Register");
+            if (message == null)
             {
-                Receptor = user.Mobile,
-                Token = user.MobileActivationCode
-            };
+                return ForgotPasswordResult.VerificationSmsFaildFromParsGreen;
+            }
 
+            user.MobileActivationCode = code;
+            user.ExpireMobileSMSDateTime = DateTime.Now;
             await _context.SaveChangesAsync();
-
-            #endregion
-
-            #region Send Verification Code SMS
-
-            var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={user.Mobile}&token={user.MobileActivationCode}&template=Register";
-            var results = client.GetStringAsync(result);
-
-            //var message = Messages.SendActivationRegisterSms(user.MobileActivationCode);
-
-            //await _smsservice.SendSimpleSMS(user.Mobile, message);
-
-            #endregion
 
             return ForgotPasswordResult.Success;
         }

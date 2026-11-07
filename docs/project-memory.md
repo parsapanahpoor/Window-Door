@@ -71,3 +71,10 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - Remote SQL endpoint is win2016-770ir.hostnegar.com,1431. Its SQL certificate is self-signed/untrusted, so encrypted SQL profiles explicitly use TrustServerCertificate=True. HTTPS certificate validation is unaffected.
 - Saved WindowRemote in local User Secrets and added Run -UseRemoteDatabase. Verified the normal local app against remote SQL. Added PANJEREHYAB_REMOTE to local SQL Server, mapping only the owner's Windows login; a four-part query returned 129 migrations.
 - Generated password is retained in local User Secrets, IIS settings and a user-bound encrypted recovery file, never in Git. See docs/hosting.md for operational use and validation limits.
+
+## Password recovery SMS — 2026-11-07
+
+- The previous recovery flow ignored provider failures. The reset form also routed retries to account activation.
+- Recovery now waits for a Kavenegar acceptance over HTTPS and only then persists the issued code. The reset form posts retries to the same protected recovery action.
+- Release Verify and the offline recovery regression check passed. The latter covers provider rejection, malformed responses, transport errors, missing configuration, ineligible accounts, and the rendered retry form.
+- A prior read-only workstation API request returned 416. Hosting egress, the account's Register template, IIS key configuration, and live delivery remain unverified. The release needs a deployment-specific key.

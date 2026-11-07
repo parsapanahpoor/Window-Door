@@ -57,7 +57,7 @@ dotnet ef migrations script --idempotent --project Window.Infra.Data --startup-p
 The frontend assets already exist under wwwroot. Nested vendor package.json files do not imply a required root npm install.
 
 ### Continuous integration
-`.github/workflows/build.yml` runs Verify on Windows for master pushes and pull requests, with read-only repository permission. It builds from a clean checkout, so locally ignored source cannot silently satisfy compilation. It does not deploy, migrate a database, or run business tests. Read the workflow run status separately from local verification.
+`.github/workflows/build.yml` runs Verify on Windows for master pushes and pull requests, with read-only repository permission. It builds from a clean checkout, so locally ignored source cannot silently satisfy compilation. It also runs the offline password-recovery checks and does not deploy or migrate a database. Read the workflow run status separately from local verification.
 
 References: [SDK selection](https://learn.microsoft.com/en-us/dotnet/core/tools/global-json), [development User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0).
 
@@ -70,9 +70,13 @@ ASPNETCORE_ENVIRONMENT=Development dotnet run --no-build --no-launch-profile --u
 PowerShell: set `$env:ASPNETCORE_ENVIRONMENT='Development'` before the same dotnet command (without the Bash prefix).
 Validate a representative database-backed page and expected HTML, not merely an open port. Check both authorized and unauthorized behavior. Use local HTTP requests; do not publish loopback preview links. Do not invoke live SMS/payment operations.
 
-Review migrations before applying them to an isolated database. The 56 migrations after the supplied backup were applied only to the separate working database and checked with DBCC CHECKDB. No additional sample data was invented. No dedicated automated test project currently exists.
+Review migrations before applying them to an isolated database. The 56 migrations after the supplied backup were applied only to the separate working database and checked with DBCC CHECKDB. No additional sample data was invented. Password recovery has a standalone offline regression check.
 
 With the local application running, use `pwsh -NoProfile -File scripts/smoke-local.ps1` to check storefront HTML and the anonymous cart redirect. This is a limited HTTP smoke test, not authenticated or business-flow coverage.
 
 ## Publication
 Saving an environment draft does not publish it. Review/save and Publish are user-interface operations. Git publication and environment publication are separate actions; report each independently. Keep docs and scripts in Git so they can be shared with the Windows checkout.
+
+### Offline password recovery checks
+
+Run **dotnet run --project tests/PasswordRecoveryChecks -c Release**. The check uses fake persistence and Kavenegar responses, and sends loopback HTTP requests to a temporary host to validate the retry form and anti-forgery protection.

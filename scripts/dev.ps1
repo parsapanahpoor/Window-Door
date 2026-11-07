@@ -54,7 +54,7 @@ try {
             if ($LASTEXITCODE -ne 0) { throw 'Whitespace errors in staged changes.' }
             Invoke-DotNet -Arguments @('restore', 'Window.sln')
             Invoke-DotNet -Arguments @('build', 'Window.sln', '-c', $Configuration, '--no-restore', '--nologo')
-            Write-Host 'Build verification passed. No automated test project currently exists; this is not an application acceptance test.'
+            Write-Host 'Build verification passed. Run the feature checks separately to validate application behavior.'
         }
         'Run' {
             # Require an explicit development database override instead of the checked-in default.

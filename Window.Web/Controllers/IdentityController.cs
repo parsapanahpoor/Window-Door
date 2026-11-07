@@ -264,7 +264,7 @@ namespace Window.Web.Controllers
         #region Reset Password
 
         [HttpGet("reset-pass/{mobile}")]
-        public async Task<IActionResult> ResetPassword(string mobile, bool resend)
+        public async Task<IActionResult> ResetPassword(string mobile)
         {
             #region Send Model To View
 
@@ -272,18 +272,8 @@ namespace Window.Web.Controllers
 
             if (user == null) return NotFound();
 
-            if (resend)
-            {
-                await _userService.ResendActivationCodeSMS(mobile);
-            }
-
-            var SiteSettingSMSTimer = 2;
-
-            DateTime expireMinut = user.ExpireMobileSMSDateTime.Value.AddMinutes(SiteSettingSMSTimer);
-
-            var TimerMinut = expireMinut - DateTime.Now;
-
-            ViewBag.Time = TimerMinut.TotalMinutes * 60;
+            var expiresAt = user.ExpireMobileSMSDateTime?.AddMinutes(2) ?? DateTime.Now;
+            ViewBag.Time = Math.Max(0, (expiresAt - DateTime.Now).TotalSeconds);
 
             ViewBag.Mobile = mobile;
 

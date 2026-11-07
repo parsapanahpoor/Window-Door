@@ -90,7 +90,6 @@ namespace Window.IOC.Container
             services.AddScoped<IInquiryService, InquryService>();
             services.AddScoped<IViewRenderService, ViewRenderService>();
             services.AddScoped<IEmailSender, EmailSender>();
-            services.AddScoped<ISMSService, SMSService>();
             services.AddScoped<ISiteSettingService, SiteSettingService>();
             services.AddScoped<IAdminDashboardService, AdminDashboardService>();
             services.AddScoped<ITechnicalIssues, TechnicalIssuesService>();
