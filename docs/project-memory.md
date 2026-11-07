@@ -91,3 +91,10 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - Hosted preflight found six historical accounts sharing three normalized mobile numbers. Preserve all accounts and credentials; the migration flags those accounts and SMS sign-in fails closed for their numbers until ownership is resolved. Local tests cover duplicates, eligibility changes after issuance, and the exact idempotent SQL.
 - Plesk exported a private database backup and retained the eight previous binaries and symbols. Migration 20261107120000_AddSmsLogin is registered on the hosted database (130 total); the challenge table is in dbo with verified application permissions. The live app is build fa06070.
 - Login, registration, SMS sign-in, password recovery, and the new static assets returned HTTP 200 after installation. The anonymous SMS code route redirected as designed. The new live SMS delivery flow remains for owner verification.
+
+## Default SMS sign-in and password fallback — 2026-11-07
+
+- Release 85c324e made the SMS form the default at /login, kept /login/sms as an alias, and served password sign-in at /login/password. Ineligible numbers go directly to the password form with a one-time notice and a local return destination.
+- Password sign-in uses the account selected by the supplied credentials and rejects multiple matches. Recovery and activation reject shared or excluded mobile numbers.
+- Isolated SQL and loopback HTTP checks with a fake SMS provider passed, including exact account selection, duplicate fallback, and rejection of shared credentials and a previously issued recovery code. Offline password recovery checks passed.
+- Installed the Release assemblies in Plesk. The previous eight files are in the private default-sms-rollback-20261107 directory. No migration was needed. All public login forms, registration and recovery returned HTTP 200; no live SMS or sign-in was performed during verification.
