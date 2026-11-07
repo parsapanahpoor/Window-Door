@@ -1,6 +1,6 @@
 # 0002 — Password recovery SMS
 
-Status: Deployed (live SMS blocked by Kavenegar source IP policy)
+Status: Deployed (host IP allowed; live SMS delivery pending)
 
 ## Problem and evidence
 
@@ -31,3 +31,5 @@ Release Verify passed. Run dotnet run --project tests/PasswordRecoveryChecks -c 
 On 2026-11-07, release 855b49a was activated on the IIS host after the account showed an active Advanced trial. The public ForgotPassword GET returned HTTP 200 with the recovery form and anti-forgery field. This smoke check did not submit the form or verify carrier delivery.
 
 The owner reported a failed live recovery attempt. The authenticated Kavenegar call log recorded a Register lookup POST from hosting egress IP 158.58.187.131 with status 416 (source IP mismatch). The Advanced trial was active. Allowing that egress IP in Kavenegar is pending.
+
+Kavenegar support identified the separate web-service IP allowlist. The owner-authorized host IP 158.58.187.131 was added to the existing enabled API allowlist, and the new row was verified. The panel-login allowlist switch was off and was not modified. An owner-run live recovery retest remains pending.
