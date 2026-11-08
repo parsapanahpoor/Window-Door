@@ -40,9 +40,13 @@
                             @if (panel.Notices.Count == 0)
                             {
                                 <header class="seller-dashboard-hero">
-                                    <span class="seller-dashboard-eyebrow">@Text["Seller panel"]</span>
-                                    <h1>@ViewData["Title"]</h1>
-                                    <p>@Text["Store activity and quick access"]</p>
+                                    <div class="seller-dashboard-hero-copy">
+                                        <span class="seller-dashboard-eyebrow">@Text["Seller panel"]</span>
+                                        <h1>@ViewData["Title"]</h1>
+                                        <p>@Text["Store activity and quick access"]</p>
+                                    </div>
+                                    <img class="seller-dashboard-hero-art" src="~/images/seller-dashboard-window.svg"
+                                         asp-append-version="true" width="320" height="230" alt="" />
                                 </header>
                             }
                             else
@@ -82,6 +86,7 @@
         </div>
     </div>
     <partial name="_SellerFooterReferences" />
+    <script src="~/js/seller-navigation.js" asp-append-version="true" defer></script>
     <partial name="_SweetAlertLocalizer" />
     <partial name="_Modals" />
     @RenderSection("Scripts", false)

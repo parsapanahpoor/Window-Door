@@ -180,12 +180,30 @@ await navigation.GetByRole(AriaRole.Link, new() { Name = "داشبورد", Exact
 await Assertions.Expect(page.Locator(".seller-dashboard h1")).ToBeVisibleAsync();
 
 var more = navigation.GetByRole(AriaRole.Button, new() { Name = "بیشتر" });
+var moreItems = navigation.Locator("#seller-more-items");
+await Assertions.Expect(moreItems).ToBeHiddenAsync();
+var collapsedNav = await navigation.BoundingBoxAsync();
 await more.FocusAsync();
 await page.Keyboard.PressAsync("Enter");
 await Assertions.Expect(more).ToHaveAttributeAsync("aria-expanded", "true");
 await Assertions.Expect(navigation.GetByRole(AriaRole.Link, new() { Name = "محصولات فروشگاه", Exact = true })).ToBeVisibleAsync();
-var moreBox = await navigation.Locator(".seller-more-menu").BoundingBoxAsync();
-Require(moreBox is { X: >= 0 } && moreBox.X + moreBox.Width <= 320, "more menu fits narrow viewport");
+var moreBox = await moreItems.BoundingBoxAsync();
+var expandedNav = await navigation.BoundingBoxAsync();
+Require(moreBox is { X: >= 0 } && moreBox.X + moreBox.Width <= 320 && expandedNav != null
+    && collapsedNav != null && expandedNav.Height > collapsedNav.Height
+    && moreBox.Y >= expandedNav.Y && moreBox.Y + moreBox.Height <= expandedNav.Y + expandedNav.Height,
+    "additional links expand the fixed navigation in place at 320px");
+await Assertions.Expect(moreItems).ToHaveCSSAsync("position", "static");
+var dashboardShortcuts = page.Locator(".seller-shortcuts a");
+await Assertions.Expect(moreItems.GetByRole(AriaRole.Link)).ToHaveCountAsync(await dashboardShortcuts.CountAsync() - 2);
+await page.EvaluateAsync("document.scrollingElement.scrollTop = document.scrollingElement.scrollHeight");
+var lastShortcut = await dashboardShortcuts.Last.BoundingBoxAsync();
+Require(lastShortcut != null && lastShortcut.Y + lastShortcut.Height < expandedNav!.Y,
+    "expanded navigation leaves enough room to reach the last dashboard shortcut");
+await page.Keyboard.PressAsync("Escape");
+await Assertions.Expect(moreItems).ToBeHiddenAsync();
+await Assertions.Expect(more).ToBeFocusedAsync();
+await more.TapAsync();
 await navigation.GetByRole(AriaRole.Link, new() { Name = "افزودن کارمند", Exact = true }).TapAsync();
 await Assertions.Expect(page).ToHaveURLAsync(new Uri(baseUrl, "/Seller/User/AddNewUser").AbsoluteUri);
 var formResponse = await page.ReloadAsync();
@@ -267,6 +285,20 @@ await Assertions.Expect(notices).ToHaveCountAsync(1);
 await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-Fixture"] = "clear" });
 await page.GotoAsync(new Uri(baseUrl, "/Seller").AbsoluteUri);
 await Assertions.Expect(page.Locator(".seller-dashboard-hero")).ToBeVisibleAsync();
+var heroArt = page.Locator(".seller-dashboard-hero-art");
+await Assertions.Expect(heroArt).ToBeVisibleAsync();
+Require(await heroArt.EvaluateAsync<bool>("image => image.complete && image.naturalWidth > 0 && new URL(image.src).pathname.endsWith('/seller-dashboard-window.svg')"),
+    "dashboard welcome card loads its window illustration");
+await page.SetViewportSizeAsync(1024, 720);
+var content = page.Locator("main");
+var contentBefore = await content.BoundingBoxAsync();
+await more.ClickAsync();
+await Assertions.Expect(moreItems).ToBeVisibleAsync();
+var contentAfter = await content.BoundingBoxAsync();
+Require(contentBefore != null && contentAfter != null && contentAfter.Y > contentBefore.Y,
+    "expanded desktop navigation makes space above page content");
+await more.ClickAsync();
+await page.SetViewportSizeAsync(320, 720);
 await Assertions.Expect(notices).ToHaveCountAsync(0);
 await bell.ClickAsync();
 await Assertions.Expect(bellMenu).ToHaveTextAsync("فعلاً اعلانی برای نمایش وجود ندارد.");

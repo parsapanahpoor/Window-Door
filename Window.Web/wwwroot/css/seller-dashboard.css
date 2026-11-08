@@ -24,11 +24,24 @@
 
 .seller-dashboard-hero {
     display: grid;
-    gap: 6px;
-    padding: clamp(18px, 4vw, 38px);
-    border-radius: 20px;
-    background: linear-gradient(120deg, #73385d, #974f50);
+    grid-template-columns: minmax(0, 1fr) minmax(84px, 34%);
+    align-items: center;
+    gap: clamp(8px, 2vw, 24px);
+    padding: clamp(16px, 4vw, 36px);
+    border-radius: 22px;
+    background: radial-gradient(ellipse at 24% 80%, #c73656 0%, transparent 65%),
+        linear-gradient(120deg, #9b2f5a, #672343);
     color: #fff;
+    box-shadow: 0 8px 22px #9b2f5a34;
+}
+
+.seller-dashboard-hero-copy { display: grid; gap: 6px; }
+.seller-dashboard-hero-art {
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    justify-self: center;
 }
 
 .seller-dashboard-hero h1 {
@@ -38,7 +51,15 @@
     line-height: 1.45;
 }
 
-.seller-dashboard-eyebrow { color: var(--seller-amber); }
+.seller-dashboard-eyebrow {
+    justify-self: start;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: #57203d;
+    color: var(--seller-amber);
+    font-size: 12px;
+    font-weight: 700;
+}
 
 .seller-metrics,
 .seller-shortcuts {
