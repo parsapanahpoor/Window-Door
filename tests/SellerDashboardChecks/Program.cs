@@ -259,7 +259,7 @@ await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-
 await page.GotoAsync(new Uri(baseUrl, "/__seller-flash").AbsoluteUri);
 var notices = page.Locator(".seller-notices .seller-notice");
 var bell = page.Locator("#seller-notifications-button");
-await Assertions.Expect(page.Locator(".seller-notices + .seller-dashboard-hero .seller-dashboard-hero-art")).ToBeVisibleAsync();
+await Assertions.Expect(page.Locator(".seller-dashboard-hero")).ToHaveCountAsync(0);
 await Assertions.Expect(page.Locator(".page-header.position-relative")).ToHaveCountAsync(0);
 Require(await page.Locator("main > .seller-dashboard > :first-child").GetAttributeAsync("class") == "seller-notices",
     "notices are the first dashboard content");

@@ -37,15 +37,22 @@
                         }
                         @if (isDashboard)
                         {
-                            <header class="seller-dashboard-hero">
-                                <div class="seller-dashboard-hero-copy">
-                                    <span class="seller-dashboard-eyebrow">@Text["Seller panel"]</span>
-                                    <h1>@ViewData["Title"]</h1>
-                                    <p>@Text["Store activity and quick access"]</p>
-                                </div>
-                                <img class="seller-dashboard-hero-art" src="~/images/seller-dashboard-window.svg"
-                                     asp-append-version="true" width="320" height="230" alt="" />
-                            </header>
+                            @if (panel.Notices.Count == 0)
+                            {
+                                <header class="seller-dashboard-hero">
+                                    <div class="seller-dashboard-hero-copy">
+                                        <span class="seller-dashboard-eyebrow">@Text["Seller panel"]</span>
+                                        <h1>@ViewData["Title"]</h1>
+                                        <p>@Text["Store activity and quick access"]</p>
+                                    </div>
+                                    <img class="seller-dashboard-hero-art" src="~/images/seller-dashboard-window.svg"
+                                         asp-append-version="true" width="320" height="230" alt="" />
+                                </header>
+                            }
+                            else
+                            {
+                                <h1 class="sr-only">@ViewData["Title"]</h1>
+                            }
                             IgnoreSection("breadcrumb");
                         }
                         else

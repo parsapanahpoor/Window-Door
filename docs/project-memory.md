@@ -111,5 +111,5 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 
 ## Seller notices and full navigation
 
-- Seller layout now renders existing account notices and one-request operation feedback at the top. The bell shows the same ordered notices. The dashboard welcome card, metrics and shortcuts appear below any notices.
+- Seller layout now renders existing account notices and one-request operation feedback at the top. The bell shows the same ordered notices. The dashboard welcome card is conditional; metrics and shortcuts remain available.
 - The navigation shares seller role visibility rules with dashboard shortcuts. The old page header is removed. Local Playwright checks passed with loopback fixtures, including the successful order command notification and refresh behavior. See specs/0006-seller-alerts-navigation/spec.md.
