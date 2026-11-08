@@ -11,6 +11,7 @@ using Window.Application.Interfaces;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Market;
+using Window.Domain.ViewModels.User.Ticket;
 using Window.Web.Culture;
 using SellerHome = Window.Web.Areas.Seller.Controllers.HomeController;
 
@@ -51,6 +52,9 @@ builder.Services.AddSingleton(FixtureService.Create<IContractService>(name => na
     ? Task.FromResult(78)
     : throw new NotSupportedException(name)));
 builder.Services.AddSingleton(FixtureService.Create<IProductService>(name => throw new NotSupportedException(name)));
+builder.Services.AddSingleton(FixtureService.Create<ITicketService>(name => name == nameof(ITicketService.FilterSiteTicket)
+    ? Task.FromResult(new FilterSiteTicketViewModel { Entities = [] })
+    : throw new NotSupportedException(name)));
 
 await using var app = builder.Build();
 app.UseRequestLocalization();
@@ -111,7 +115,7 @@ foreach (var width in new[] { 320, 390, 767, 768, 1024, 1440 })
     var box = await card.BoundingBoxAsync();
     Require(box is { Height: >= 44, Width: >= 44 }, $"touch target at {width}px");
 
-    var nav = page.Locator(".seller-mobile-nav");
+    var nav = page.Locator(".seller-navigation");
     if (width < 768)
     {
         await Assertions.Expect(nav).ToBeVisibleAsync();
@@ -125,10 +129,63 @@ foreach (var width in new[] { 320, 390, 767, 768, 1024, 1440 })
     }
     else
     {
-        await Assertions.Expect(nav).ToBeHiddenAsync();
-        await Assertions.Expect(page.Locator(".navbar-account .login-area")).ToBeVisibleAsync();
+        await Assertions.Expect(nav).ToBeVisibleAsync();
+        await Assertions.Expect(nav).ToHaveCSSAsync("position", "static");
+        await Assertions.Expect(page.Locator(".seller-account-name")).ToBeVisibleAsync();
     }
 }
+
+await page.SetViewportSizeAsync(320, 720);
+await page.EvaluateAsync("document.scrollingElement.scrollTop = 0");
+var navigation = page.GetByRole(AriaRole.Navigation, new() { Name = "ناوبری پنل فروشنده" });
+await Assertions.Expect(navigation.GetByRole(AriaRole.Link)).ToHaveCountAsync(3);
+await navigation.GetByRole(AriaRole.Link, new() { Name = "سفارش‌ها", Exact = true }).TapAsync();
+await Assertions.Expect(page).ToHaveURLAsync(new Uri(baseUrl, "/Seller/ShopOrder/ManageOrderPage").AbsoluteUri);
+await Assertions.Expect(navigation.GetByRole(AriaRole.Link, new() { Name = "سفارش‌ها" })).ToHaveAttributeAsync("aria-current", "page");
+await Assertions.Expect(navigation).ToHaveCSSAsync("position", "fixed");
+await navigation.GetByRole(AriaRole.Link, new() { Name = "پشتیبانی", Exact = true }).TapAsync();
+await Assertions.Expect(page).ToHaveURLAsync(new Uri(baseUrl, "/Seller/Ticket/FilterTickets").AbsoluteUri);
+await Assertions.Expect(navigation.GetByRole(AriaRole.Link, new() { Name = "پشتیبانی" })).ToHaveAttributeAsync("aria-current", "page");
+var ticketResponse = await page.GotoAsync(new Uri(baseUrl, "/Seller/Ticket/CreateTicket").AbsoluteUri);
+Require(ticketResponse?.Status == 200, "create ticket route");
+await Assertions.Expect(navigation.GetByRole(AriaRole.Link, new() { Name = "پشتیبانی" })).ToHaveAttributeAsync("aria-current", "true");
+await navigation.GetByRole(AriaRole.Link, new() { Name = "داشبورد", Exact = true }).TapAsync();
+await Assertions.Expect(page.Locator(".seller-dashboard h1")).ToBeVisibleAsync();
+
+var formResponse = await page.GotoAsync(new Uri(baseUrl, "/Seller/User/AddNewUser").AbsoluteUri);
+Require(formResponse?.Status == 200, "employee form response");
+await Assertions.Expect(navigation.GetByRole(AriaRole.Link)).ToHaveCountAsync(3);
+await Assertions.Expect(navigation.Locator("[aria-current]")).ToHaveCountAsync(0);
+await Assertions.Expect(navigation).ToHaveCSSAsync("position", "fixed");
+Require(await page.EvaluateAsync<bool>("document.documentElement.scrollWidth <= window.innerWidth"), "employee form fits narrow viewport");
+Require(await page.EvaluateAsync<bool>("async () => (await Promise.all([400, 500, 700].map(w => document.fonts.load(w + ' 16px SellerVazir', 'پنجره')))).every(faces => faces.length > 0)"),
+    "local Vazir files load in all weights");
+Require(await page.Locator("#Username").EvaluateAsync<bool>("field => getComputedStyle(field).fontFamily.startsWith('SellerVazir')"), "form field uses Vazir");
+Require(await navigation.Locator(".fa").First.EvaluateAsync<bool>("icon => getComputedStyle(icon).fontFamily.includes('FontAwesome')"), "navigation retains icon font");
+await page.EvaluateAsync("document.scrollingElement.scrollTop = document.scrollingElement.scrollHeight");
+var footerEdge = await navigation.BoundingBoxAsync();
+var lastField = await page.Locator("label[for=NewAvatar]").BoundingBoxAsync();
+Require(footerEdge != null && lastField != null && lastField.Y + lastField.Height <= footerEdge.Y,
+    "mobile navigation does not cover employee form");
+await page.EvaluateAsync("document.scrollingElement.scrollTop = 0");
+
+var account = page.GetByRole(AriaRole.Button, new() { Name = "حساب فروشنده" });
+await Assertions.Expect(account.Locator(".seller-avatar")).ToBeVisibleAsync();
+Require(await account.Locator(".seller-avatar").EvaluateAsync<bool>("avatar => avatar.complete && avatar.naturalWidth > 0"), "profile image loaded");
+await account.FocusAsync();
+await page.Keyboard.PressAsync("Enter");
+await Assertions.Expect(account).ToHaveAttributeAsync("aria-expanded", "true");
+await Assertions.Expect(page.Locator(".seller-account a[href='/Seller/Account/EditProfile']")).ToBeVisibleAsync();
+await Assertions.Expect(page.Locator(".seller-account a[href='/Logout']")).ToBeVisibleAsync();
+await page.Keyboard.PressAsync("Escape");
+await Assertions.Expect(account).ToHaveAttributeAsync("aria-expanded", "false");
+
+var language = page.GetByRole(AriaRole.Button, new() { Name = "زبان پنل" });
+await language.ClickAsync();
+await Assertions.Expect(page.Locator(".seller-language a[lang='fa-IR']")).ToHaveAttributeAsync("aria-current", "true");
+var english = page.Locator(".seller-language a[lang='en-US']");
+await Assertions.Expect(english).ToBeVisibleAsync();
+Require((await english.GetAttributeAsync("href"))?.Contains("culture=en-US") == true, "English preference action is available");
 
 await page.GotoAsync(new Uri(baseUrl, "/Seller?culture=en-US").AbsoluteUri);
 await Assertions.Expect(page.Locator("html")).ToHaveAttributeAsync("dir", "ltr");
@@ -143,7 +200,7 @@ foreach (var fixture in new[] { "employee", "pending" })
         await Assertions.Expect(page.GetByText("عدم دسترسی", new() { Exact = true })).ToBeVisibleAsync();
 }
 
-Console.WriteLine("PASS: Persian default and overrides, seller authentication and role variants, dashboard content and responsive layout (320–1440px).");
+Console.WriteLine("PASS: Persian default and overrides, seller authentication and role variants, dashboard layout (320–1440px), shared navigation, local fonts and accessible menus.");
 
 static void Require(bool condition, string description)
 {

@@ -3,39 +3,32 @@
     var isDashboard = ViewData["SellerDashboard"] is true;
 }
 <!DOCTYPE html>
-<!--
-BeyondAdmin - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.6
-Version: 1.6.0
-Purchase: https://wrapbootstrap.com/theme/beyondadmin-adminapp-angularjs-mvc-WB06R48S4
--->
 <html lang="@culture.CultureKey" dir="@culture.Direction">
-<!-- Head -->
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"]</title>
-    <meta name="description" content="Dashboard" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0@(isDashboard ? ", viewport-fit=cover" : "")" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <partial name="_SellerHeaderReferences" />
+    <link rel="stylesheet" href="~/css/seller-shell.css" asp-append-version="true" />
     @RenderSection("Styles", false)
 </head>
-<body class="@(isDashboard ? "seller-dashboard-shell" : null)">
+<body class="seller-shell @(isDashboard ? "seller-dashboard-shell" : null)">
     @await Component.InvokeAsync("SellerNavbar")
+    <partial name="_SellerNavigation" />
     <div class="main-container container-fluid">
         <div class="page-container">
-            <div class="page-content" style="margin-right: 0px;">
+            <div class="page-content seller-page-content">
                 <div class="page-breadcrumbs">
                     <ul class="breadcrumb">
                         <li>
-                            <i class="fa fa-home"></i>
+                            <i class="fa fa-home" aria-hidden="true"></i>
                             <a asp-area="Seller" asp-controller="Home" asp-action="Index">@SharedLocalizer["Home"]</a>
                         </li>
                         @RenderSection("breadcrumb", true)
                     </ul>
                 </div>
                 <partial name="_SellerPageHeader" />
-                <div class="page-body">
+                <div class="page-body seller-page-body">
                     @RenderBody()
                 </div>
             </div>

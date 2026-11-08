@@ -1,0 +1,251 @@
+@font-face {
+    font-family: SellerVazir;
+    src: url("/AdminContent/css/fonts/vazir/Vazir.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: SellerVazir;
+    src: url("/AdminContent/css/fonts/vazir/Vazir-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: SellerVazir;
+    src: url("/AdminContent/css/fonts/vazir/Vazir-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: swap;
+}
+
+body.seller-shell {
+    --seller-font: SellerVazir, Tahoma, sans-serif;
+    --seller-ink: #352534;
+    --seller-muted: #685465;
+    --seller-accent: #773a60;
+    --seller-accent-dark: #5e284a;
+    --seller-accent-soft: #f8eaf1;
+    --seller-background: #faf4ee;
+    --seller-border: #e9dacf;
+    --seller-surface: #fffdfb;
+    --seller-amber: #ffd69b;
+    color: var(--seller-ink);
+    background: var(--seller-background);
+    font-family: var(--seller-font);
+}
+
+.seller-shell :is(button, input, select, textarea, label, .form-control, .btn, .dropdown-menu,
+    .breadcrumb, .widget-caption, .pagination, .modal-title),
+.seller-shell :is(h1, h2, h3, h4, h5, h6),
+.seller-shell .page-header .header-title h1,
+.seller-shell .databox :is(.databox-header, .databox-number) {
+    font-family: var(--seller-font);
+}
+
+.seller-shell :is(.main-container, .seller-page-content) { background: var(--seller-background); }
+.seller-shell .seller-page-content { margin-inline: 0; }
+.seller-shell .seller-page-body {
+    display: flow-root;
+    background: transparent;
+}
+
+.seller-shell .page-breadcrumbs,
+.seller-shell .page-header,
+.seller-shell .widget-header:not([class*="bg-"]),
+.seller-shell .widget-body:not([class*="bg-"]) {
+    background: var(--seller-surface);
+}
+
+.seller-shell .btn-primary {
+    border-color: var(--seller-accent);
+    background: var(--seller-accent);
+    color: #fff;
+}
+
+.seller-shell .btn-primary:is(:hover, :focus) {
+    border-color: var(--seller-accent-dark);
+    background: var(--seller-accent-dark);
+}
+
+.seller-shell :is(a, button):focus-visible {
+    outline: 2px solid var(--seller-accent);
+    outline-offset: 3px;
+}
+
+.seller-topbar {
+    position: relative;
+    z-index: 1030;
+    padding: env(safe-area-inset-top, 0px) max(12px, env(safe-area-inset-right, 0px))
+        0 max(12px, env(safe-area-inset-left, 0px));
+    background: linear-gradient(115deg, #48233d, #763b5c);
+    color: #fff9f3;
+}
+
+.seller-topbar-inner,
+.seller-navigation-inner {
+    max-width: 1240px;
+    margin-inline: auto;
+}
+
+.seller-topbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 68px;
+}
+
+.seller-brand,
+.seller-topbar-actions,
+.seller-topbar-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.seller-brand,
+.seller-brand:is(:hover, :focus) {
+    color: inherit;
+    text-decoration: none;
+    line-height: 1.45;
+}
+
+.seller-brand strong,
+.seller-brand small { display: block; }
+.seller-brand strong { font-size: clamp(14px, 2vw, 17px); }
+.seller-brand small { color: var(--seller-amber); font-size: 11px; }
+
+.seller-brand-mark {
+    display: grid;
+    place-items: center;
+    flex: 0 0 36px;
+    height: 36px;
+    border-radius: 11px;
+    background: var(--seller-amber);
+    color: #4b2941;
+    font-size: 17px;
+}
+
+.seller-topbar-button {
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 4px 8px;
+    border: 1px solid #ffffff47;
+    border-radius: 12px;
+    background: #ffffff1a;
+    color: inherit;
+}
+
+.seller-topbar-button:is(:hover, [aria-expanded="true"]) { background: #ffffff36; }
+.seller-topbar :is(a, button):focus-visible { outline-color: var(--seller-amber); }
+
+.seller-avatar {
+    width: 34px;
+    height: 34px;
+    border: 2px solid var(--seller-amber);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.seller-account-name {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.seller-topbar .seller-header-menu {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    min-width: 160px;
+    max-width: min(240px, 75vw);
+    margin-block-start: 6px;
+    border: 1px solid var(--seller-border);
+    border-radius: 12px !important;
+    background: var(--seller-surface);
+    text-align: start;
+    box-shadow: 0 8px 22px #35253429;
+}
+
+.seller-menu-identity {
+    padding: 8px 14px;
+    color: var(--seller-muted);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.seller-topbar .seller-header-menu > li > a {
+    padding: 9px 14px;
+    color: var(--seller-ink);
+}
+
+.seller-topbar .seller-header-menu > li > a:is(:hover, :focus, [aria-current]) {
+    background: var(--seller-accent-soft);
+    color: var(--seller-accent-dark);
+}
+
+.seller-navigation {
+    padding-inline: 12px;
+    border-bottom: 1px solid var(--seller-border);
+    background: var(--seller-surface);
+}
+
+.seller-navigation-inner { display: flex; gap: 6px; }
+
+.seller-navigation a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 44px;
+    padding: 4px 14px;
+    border-radius: 10px;
+    color: var(--seller-muted);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.seller-navigation a:is(:hover, :focus, [aria-current]) {
+    background: var(--seller-accent-soft);
+    color: var(--seller-accent-dark);
+}
+
+@media (min-width: 768px) {
+    .seller-navigation-inner { padding-block: 6px; }
+}
+
+@media (max-width: 767px) {
+    .seller-account-name { display: none; }
+
+    .seller-shell .seller-page-body {
+        padding-bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .seller-navigation {
+        position: fixed;
+        z-index: 1020;
+        inset: auto 0 0;
+        padding: 4px max(8px, env(safe-area-inset-right, 0px))
+            calc(4px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px));
+        border-top: 1px solid var(--seller-border);
+        border-bottom: 0;
+        box-shadow: 0 -4px 18px #35253415;
+    }
+
+    .seller-navigation-inner {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .seller-navigation a {
+        flex-direction: column;
+        gap: 3px;
+        min-height: 52px;
+        padding-inline: 4px;
+        font-size: 12px;
+    }
+
+    .seller-navigation i { font-size: 16px; }
+}

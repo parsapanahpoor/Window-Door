@@ -30,4 +30,7 @@
   <data name="Glass pricing" xml:space="preserve"><value>قیمت‌گذاری شیشه</value></data>
   <data name="Store products" xml:space="preserve"><value>محصولات فروشگاه</value></data>
   <data name="Add store product" xml:space="preserve"><value>افزودن محصول فروشگاه</value></data>
+  <data name="Panjerehyab" xml:space="preserve"><value>پنجره‌یاب</value></data>
+  <data name="Language" xml:space="preserve"><value>زبان پنل</value></data>
+  <data name="Seller account" xml:space="preserve"><value>حساب فروشنده</value></data>
 </root>
