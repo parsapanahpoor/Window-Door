@@ -2,9 +2,11 @@ using System.Globalization;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
 using Window.Application.Interfaces;
@@ -42,9 +44,13 @@ builder.Services.AddScoped(provider =>
         _ => throw new NotSupportedException(name)
     });
 });
-builder.Services.AddSingleton(FixtureService.Create<IUserService>(name => name == nameof(IUserService.GetUserById)
-    ? Task.FromResult(new User { Id = 1, Mobile = "09120000000", ShopName = "" })
-    : throw new NotSupportedException(name)));
+builder.Services.AddScoped(provider =>
+{
+    var fixture = provider.GetRequiredService<IHttpContextAccessor>().HttpContext!.Request.Headers["X-Seller-Fixture"].ToString();
+    return FixtureService.Create<IUserService>(name => name == nameof(IUserService.GetUserById)
+        ? Task.FromResult(new User { Id = 1, Mobile = "09120000000", ShopName = fixture == "clear" ? "فروشگاه آزمایشی" : "" })
+        : throw new NotSupportedException(name));
+});
 builder.Services.AddSingleton(FixtureService.Create<IPermissionService>(name => name == nameof(IPermissionService.IsUserSeller)
     ? Task.FromResult(true)
     : throw new NotSupportedException(name)));
@@ -54,6 +60,10 @@ builder.Services.AddSingleton(FixtureService.Create<IContractService>(name => na
 builder.Services.AddSingleton(FixtureService.Create<IProductService>(name => throw new NotSupportedException(name)));
 builder.Services.AddSingleton(FixtureService.Create<ITicketService>(name => name == nameof(ITicketService.FilterSiteTicket)
     ? Task.FromResult(new FilterSiteTicketViewModel { Entities = [] })
+    : throw new NotSupportedException(name)));
+
+builder.Services.AddSingleton(FixtureService.Create<ISender>(name => name == nameof(ISender.Send)
+    ? Task.FromResult(true)
     : throw new NotSupportedException(name)));
 
 await using var app = builder.Build();
@@ -66,6 +76,15 @@ app.MapControllerRoute("area", "{area:exists}/{controller=Home}/{action=Index}/{
 app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
 app.MapGet("/__culture", () => string.Join("|", CultureInfo.CurrentCulture.Name, CultureInfo.CurrentUICulture.Name,
     CultureInfo.CurrentCulture.DateTimeFormat.Calendar.GetType().Name, 1.5m.ToString("0.0")));
+app.MapGet("/__seller-flash", (HttpContext context, ITempDataDictionaryFactory factory) =>
+{
+    var messages = factory.GetTempData(context);
+    messages["success"] = "Fixture success";
+    messages["InfoMessage"] = "Fixture information";
+    messages["ErrorMessage"] = "Fixture <b>error</b>";
+    messages.Save();
+    return Results.Redirect("/Seller");
+}).RequireAuthorization();
 await app.StartAsync();
 
 var baseUrl = new Uri(app.Urls.Single());
@@ -99,7 +118,7 @@ await Assertions.Expect(page.Locator("html")).ToHaveAttributeAsync("lang", "fa-I
 await Assertions.Expect(page.Locator("html")).ToHaveAttributeAsync("dir", "rtl");
 await Assertions.Expect(page.Locator(".seller-dashboard h1")).ToHaveTextAsync("داشبورد فروشنده");
 Require((await page.Locator(".seller-metric dd").AllTextContentsAsync()).SequenceEqual(["12", "34", "56", "78"]), "dashboard counts");
-await Assertions.Expect(page.Locator(".seller-dashboard-notice a")).ToHaveAttributeAsync("href", "/Seller/Account/EditProfile");
+await Assertions.Expect(page.Locator(".seller-notice a")).ToHaveAttributeAsync("href", "/Seller/Account/EditProfile");
 await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopProduct/CreateProduct']")).ToBeVisibleAsync();
 await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopOrder/ManageOrderPage']")).ToBeVisibleAsync();
 await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/User/AddNewUser']")).ToBeVisibleAsync();
@@ -123,7 +142,7 @@ foreach (var width in new[] { 320, 390, 767, 768, 1024, 1440 })
         await Assertions.Expect(nav.Locator("[aria-current=page]")).ToHaveCountAsync(1);
         await page.EvaluateAsync("document.scrollingElement.scrollTop = document.scrollingElement.scrollHeight");
         var navBox = await nav.BoundingBoxAsync();
-        var noticeBox = await page.Locator(".seller-dashboard-notice").BoundingBoxAsync();
+        var noticeBox = await page.Locator(".seller-shortcut").Last.BoundingBoxAsync();
         Require(navBox != null && noticeBox != null && noticeBox.Y + noticeBox.Height < navBox.Y,
             $"last dashboard content remains above navigation at {width}px (notice y={noticeBox?.Y}, height={noticeBox?.Height}, nav y={navBox?.Y})");
     }
@@ -152,10 +171,20 @@ await Assertions.Expect(navigation.GetByRole(AriaRole.Link, new() { Name = "پش
 await navigation.GetByRole(AriaRole.Link, new() { Name = "داشبورد", Exact = true }).TapAsync();
 await Assertions.Expect(page.Locator(".seller-dashboard h1")).ToBeVisibleAsync();
 
-var formResponse = await page.GotoAsync(new Uri(baseUrl, "/Seller/User/AddNewUser").AbsoluteUri);
+var more = navigation.GetByRole(AriaRole.Button, new() { Name = "بیشتر" });
+await more.FocusAsync();
+await page.Keyboard.PressAsync("Enter");
+await Assertions.Expect(more).ToHaveAttributeAsync("aria-expanded", "true");
+await Assertions.Expect(navigation.GetByRole(AriaRole.Link, new() { Name = "محصولات فروشگاه", Exact = true })).ToBeVisibleAsync();
+var moreBox = await navigation.Locator(".seller-more-menu").BoundingBoxAsync();
+Require(moreBox is { X: >= 0 } && moreBox.X + moreBox.Width <= 320, "more menu fits narrow viewport");
+await navigation.GetByRole(AriaRole.Link, new() { Name = "افزودن کارمند", Exact = true }).TapAsync();
+await Assertions.Expect(page).ToHaveURLAsync(new Uri(baseUrl, "/Seller/User/AddNewUser").AbsoluteUri);
+var formResponse = await page.ReloadAsync();
+await Assertions.Expect(more).ToHaveAttributeAsync("data-section-active", "true");
 Require(formResponse?.Status == 200, "employee form response");
 await Assertions.Expect(navigation.GetByRole(AriaRole.Link)).ToHaveCountAsync(3);
-await Assertions.Expect(navigation.Locator("[aria-current]")).ToHaveCountAsync(0);
+await Assertions.Expect(navigation.Locator(".seller-navigation-inner > a[aria-current]")).ToHaveCountAsync(0);
 await Assertions.Expect(navigation).ToHaveCSSAsync("position", "fixed");
 Require(await page.EvaluateAsync<bool>("document.documentElement.scrollWidth <= window.innerWidth"), "employee form fits narrow viewport");
 Require(await page.EvaluateAsync<bool>("async () => (await Promise.all([400, 500, 700].map(w => document.fonts.load(w + ' 16px SellerVazir', 'پنجره')))).every(faces => faces.length > 0)"),
@@ -197,10 +226,54 @@ foreach (var fixture in new[] { "employee", "pending" })
     await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopProduct/CreateProduct']")).ToHaveCountAsync(0);
     await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/Ticket/FilterTickets']")).ToBeVisibleAsync();
     if (fixture == "pending")
-        await Assertions.Expect(page.GetByText("عدم دسترسی", new() { Exact = true })).ToBeVisibleAsync();
+        await Assertions.Expect(page.GetByText("اطلاعات فروشگاه را تکمیل کنید", new() { Exact = true }).Last).ToBeVisibleAsync();
 }
 
-Console.WriteLine("PASS: Persian default and overrides, seller authentication and role variants, dashboard layout (320–1440px), shared navigation, local fonts and accessible menus.");
+await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-Fixture"] = "master" });
+await page.GotoAsync(new Uri(baseUrl, "/__seller-flash").AbsoluteUri);
+var notices = page.Locator(".seller-notices .seller-notice");
+var bell = page.Locator("#seller-notifications-button");
+await Assertions.Expect(page.Locator(".seller-dashboard-hero")).ToHaveCountAsync(0);
+await Assertions.Expect(page.Locator(".page-header.position-relative")).ToHaveCountAsync(0);
+Require(await page.Locator("main > .seller-dashboard > :first-child").GetAttributeAsync("class") == "seller-notices",
+    "notices are the first dashboard content");
+Require((await notices.EvaluateAllAsync<string[]>("cards => cards.map(card => card.dataset.level)"))
+    .SequenceEqual(["error", "warning", "info", "success"]), "notices sorted by severity");
+await Assertions.Expect(notices.First.Locator("p")).ToHaveTextAsync("Fixture <b>error</b>");
+await Assertions.Expect(notices.First.Locator("p b")).ToHaveCountAsync(0);
+Require((await notices.EvaluateAllAsync<string[]>("cards => cards.map(card => getComputedStyle(card).backgroundColor)"))
+    .Distinct().Count() == 4, "severity colors are distinct");
+await Assertions.Expect(bell.Locator(".seller-notification-count")).ToHaveTextAsync("4");
+await bell.FocusAsync();
+await page.Keyboard.PressAsync("Enter");
+await Assertions.Expect(bell).ToHaveAttributeAsync("aria-expanded", "true");
+var bellMenu = page.Locator(".seller-notification-list");
+await Assertions.Expect(bellMenu.GetByRole(AriaRole.Link)).ToHaveCountAsync(4);
+var bellBox = await bellMenu.BoundingBoxAsync();
+Require(bellBox is { X: >= 0 } && bellBox.X + bellBox.Width <= 320, "notification menu fits narrow viewport");
+await bellMenu.GetByRole(AriaRole.Link).First.TapAsync();
+Require(new Uri(page.Url).Fragment == "#seller-notice-0", "notification menu links to the matching card");
+await page.ReloadAsync();
+await Assertions.Expect(notices).ToHaveCountAsync(1);
+
+await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-Fixture"] = "clear" });
+await page.GotoAsync(new Uri(baseUrl, "/Seller").AbsoluteUri);
+await Assertions.Expect(page.Locator(".seller-dashboard-hero")).ToBeVisibleAsync();
+await Assertions.Expect(notices).ToHaveCountAsync(0);
+await bell.ClickAsync();
+await Assertions.Expect(bellMenu).ToHaveTextAsync("فعلاً اعلانی برای نمایش وجود ندارد.");
+
+await page.GotoAsync(new Uri(baseUrl, "/Seller?OrderFinalization=true").AbsoluteUri);
+await Assertions.Expect(notices).ToHaveCountAsync(0);
+Require(await page.EvaluateAsync<bool>("async () => (await fetch('/Seller/ShopOrder/OrderFinalization?orderId=1')).ok"),
+    "order confirmation endpoint responds with fixture success");
+await page.GotoAsync(new Uri(baseUrl, "/Seller").AbsoluteUri);
+await Assertions.Expect(notices).ToHaveCountAsync(1);
+await Assertions.Expect(notices.Locator("p")).ToContainTextAsync("سفارش با موفقیت تأیید شد");
+await page.ReloadAsync();
+await Assertions.Expect(notices).ToHaveCountAsync(0);
+
+Console.WriteLine("PASS: Persian default and overrides, seller authentication and role variants, dashboard layout (320–1440px), shared navigation, local fonts, accessible menus and prioritized seller notices.");
 
 static void Require(bool condition, string description)
 {

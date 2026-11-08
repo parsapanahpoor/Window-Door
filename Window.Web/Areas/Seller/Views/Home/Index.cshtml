@@ -1,54 +1,32 @@
 @inject IStringLocalizer<SellerDashboardText> DashboardText
 
 @{
-    ViewData["Title"] = DashboardText["Seller dashboard"];
-    ViewData["SellerDashboard"] = true;
+ViewData["Title"] = DashboardText["Seller dashboard"];
+ViewData["SellerDashboard"] = true;
 }
-
-@section breadcrumb { }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/seller-dashboard.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/seller-dashboard.css" asp-append-version="true" />
 }
 
-<main class="seller-dashboard">
-    <header class="seller-dashboard-hero">
-        <span class="seller-dashboard-eyebrow">@DashboardText["Seller panel"]</span>
-        <h1>@ViewData["Title"]</h1>
-        <p>@DashboardText["Store activity and quick access"]</p>
-    </header>
-
-    <section aria-labelledby="seller-overview-title">
-        <h2 id="seller-overview-title">@DashboardText["Activity overview"]</h2>
-        <dl class="seller-metrics">
-            <div class="seller-metric">
-                <dt><i class="fa fa-eye" aria-hidden="true"></i> @DashboardText["Today’s visits"]</dt>
-                <dd>@(ViewBag.CountOfTodayUserInInquiry ?? 0)</dd>
-            </div>
-            <div class="seller-metric">
-                <dt><i class="fa fa-calendar-o" aria-hidden="true"></i> @DashboardText["This month’s visits"]</dt>
-                <dd>@(ViewBag.CountOfMonthUserInInquiry ?? 0)</dd>
-            </div>
-            <div class="seller-metric">
-                <dt><i class="fa fa-bar-chart" aria-hidden="true"></i> @DashboardText["This year’s visits"]</dt>
-                <dd>@(ViewBag.CountOfYearUserInInquiry ?? 0)</dd>
-            </div>
-            <div class="seller-metric">
-                <dt><i class="fa fa-file-text-o" aria-hidden="true"></i> @DashboardText["Pending contract requests"]</dt>
-                <dd>@(ViewBag.CountOfSellerWaitingRequest ?? 0)</dd>
-            </div>
-        </dl>
-    </section>
-
-    @await Component.InvokeAsync("SellerSideBar")
-    @await Component.InvokeAsync("SellersInfos")
-
-    @if (ViewBag.ShopNameIsEmpty == true)
-    {
-        <aside class="seller-dashboard-notice" aria-labelledby="seller-shop-name-title">
-            <h2 id="seller-shop-name-title">@DashboardText["Add your store name"]</h2>
-            <p>@DashboardText["Enter your store name in your profile so customers can see it."]</p>
-            <a asp-area="Seller" asp-controller="Account" asp-action="EditProfile">@DashboardText["Edit profile"]</a>
-        </aside>
-    }
-</main>
+<section aria-labelledby="seller-overview-title">
+    <h2 id="seller-overview-title">@DashboardText["Activity overview"]</h2>
+    <dl class="seller-metrics">
+        <div class="seller-metric">
+            <dt><i class="fa fa-eye" aria-hidden="true"></i> @DashboardText["Today’s visits"]</dt>
+            <dd>@(ViewBag.CountOfTodayUserInInquiry ?? 0)</dd>
+        </div>
+        <div class="seller-metric">
+            <dt><i class="fa fa-calendar-o" aria-hidden="true"></i> @DashboardText["This month’s visits"]</dt>
+            <dd>@(ViewBag.CountOfMonthUserInInquiry ?? 0)</dd>
+        </div>
+        <div class="seller-metric">
+            <dt><i class="fa fa-bar-chart" aria-hidden="true"></i> @DashboardText["This year’s visits"]</dt>
+            <dd>@(ViewBag.CountOfYearUserInInquiry ?? 0)</dd>
+        </div>
+        <div class="seller-metric">
+            <dt><i class="fa fa-file-text-o" aria-hidden="true"></i> @DashboardText["Pending contract requests"]</dt>
+            <dd>@(ViewBag.CountOfSellerWaitingRequest ?? 0)</dd>
+        </div>
+    </dl>
+</section>

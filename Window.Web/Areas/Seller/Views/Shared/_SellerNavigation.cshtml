@@ -1,30 +1,41 @@
+@model SellerPanel
 @inject IStringLocalizer<SellerDashboardText> Text
-
 @{
     var controller = ViewContext.RouteData.Values["controller"] as string;
     var action = ViewContext.RouteData.Values["action"] as string;
-    var dashboard = string.Equals(controller, "Home", StringComparison.OrdinalIgnoreCase)
-        && string.Equals(action, "Index", StringComparison.OrdinalIgnoreCase);
-    var orders = string.Equals(controller, "ShopOrder", StringComparison.OrdinalIgnoreCase)
-        || string.Equals(controller, "OrderCheque", StringComparison.OrdinalIgnoreCase);
-    var support = string.Equals(controller, "Ticket", StringComparison.OrdinalIgnoreCase);
-    var orderPage = string.Equals(controller, "ShopOrder", StringComparison.OrdinalIgnoreCase)
-        && string.Equals(action, "ManageOrderPage", StringComparison.OrdinalIgnoreCase);
-    var supportPage = support && string.Equals(action, "FilterTickets", StringComparison.OrdinalIgnoreCase);
+    bool IsController(string name) => string.Equals(controller, name, StringComparison.OrdinalIgnoreCase);
+    bool IsExact(SellerLink link) => IsController(link.Controller)
+        && string.Equals(action, link.Action, StringComparison.OrdinalIgnoreCase);
+    bool InSection(SellerLink link) => link.Controller != "Home"
+        && (IsController(link.Controller) || (link.Controller == "ShopOrder" && IsController("OrderCheque")));
+    var moreActive = Model.ExtraLinks.Any(InSection) && !SellerPanel.PrimaryLinks.Any(InSection);
 }
 
 <nav class="seller-navigation" aria-label="@Text["Seller navigation"]">
     <div class="seller-navigation-inner">
-        <a asp-area="Seller" asp-controller="Home" asp-action="Index" aria-current="@(dashboard ? "page" : null)">
-            <i class="fa fa-th-large" aria-hidden="true"></i><span>@Text["Dashboard"]</span>
-        </a>
-        <a asp-area="Seller" asp-controller="ShopOrder" asp-action="ManageOrderPage"
-           aria-current="@(orderPage ? "page" : orders ? "true" : null)">
-            <i class="fa fa-shopping-cart" aria-hidden="true"></i><span>@Text["Orders"]</span>
-        </a>
-        <a asp-area="Seller" asp-controller="Ticket" asp-action="FilterTickets"
-           aria-current="@(supportPage ? "page" : support ? "true" : null)">
-            <i class="fa fa-ticket" aria-hidden="true"></i><span>@Text["Support"]</span>
-        </a>
+        @foreach (var link in SellerPanel.PrimaryLinks)
+        {
+            <a asp-area="Seller" asp-controller="@link.Controller" asp-action="@link.Action"
+               aria-current="@(IsExact(link) ? "page" : InSection(link) ? "true" : null)">
+                <i class="fa @link.Icon" aria-hidden="true"></i><span>@Text[link.Label]</span>
+            </a>
+        }
+        <div class="dropdown seller-more">
+            <button class="dropdown-toggle" type="button" id="seller-more-button" data-toggle="dropdown"
+                    aria-expanded="false" data-section-active="@(moreActive ? "true" : null)">
+                <i class="fa fa-ellipsis-h" aria-hidden="true"></i><span>@Text["More"]</span>
+            </button>
+            <ul class="dropdown-menu seller-more-menu" aria-labelledby="seller-more-button">
+                @foreach (var link in Model.ExtraLinks)
+                {
+                    <li>
+                        <a asp-area="Seller" asp-controller="@link.Controller" asp-action="@link.Action"
+                           aria-current="@(IsExact(link) ? "page" : null)">
+                            <i class="fa @link.Icon" aria-hidden="true"></i><span>@Text[link.Label]</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
     </div>
 </nav>

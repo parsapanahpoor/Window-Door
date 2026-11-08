@@ -108,3 +108,8 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 
 - The shared seller layout now renders the primary navigation on every seller page. Its three links are fixed at the bottom on mobile and appear below the header on desktop. The layout loads local Vazir assets and uses a warm palette. The new profile and language controls use the existing account and localization routes.
 - Extended the isolated browser runner with navigation through real seller routes, font and avatar loading, form clearance and keyboard controls. See specs/0005-seller-shell/spec.md.
+
+## Seller notices and full navigation
+
+- Seller layout now renders existing account notices and one-request operation feedback at the top. The bell shows the same ordered notices. The dashboard welcome card is conditional; metrics and shortcuts remain available.
+- The navigation shares seller role visibility rules with dashboard shortcuts. The old page header is removed. Local Playwright checks passed with loopback fixtures, including the successful order command notification and refresh behavior. See specs/0006-seller-alerts-navigation/spec.md.

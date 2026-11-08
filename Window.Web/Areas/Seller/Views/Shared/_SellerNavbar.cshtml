@@ -1,13 +1,13 @@
 @using Window.Application.Extensions
-@model Window.Domain.Entities.Account.User
+@model SellerPanel
 @inject IStringLocalizer<SellerDashboardText> Text
 
 @{
     var culture = ApplicationCultures.GetCurrentCulture();
-    var displayName = Model.GetFullName()?.Trim();
+    var displayName = Model.User.GetFullName()?.Trim();
     if (string.IsNullOrWhiteSpace(displayName))
     {
-        displayName = Model.Mobile;
+        displayName = Model.User.Mobile;
     }
 }
 
@@ -26,6 +26,32 @@
         </a>
 
         <div class="seller-topbar-actions">
+            <div class="dropdown seller-notification-menu">
+                <button class="seller-topbar-button dropdown-toggle" type="button" id="seller-notifications-button"
+                        data-toggle="dropdown" aria-expanded="false"
+                        aria-label="@Text["Notifications, {0} current", Model.Notices.Count]">
+                    <i class="fa fa-bell-o" aria-hidden="true"></i>
+                    @if (Model.Notices.Count > 0)
+                    {
+                        <span class="seller-notification-count" aria-hidden="true">@Model.Notices.Count</span>
+                    }
+                </button>
+                <ul class="dropdown-menu seller-header-menu seller-notification-list" aria-labelledby="seller-notifications-button">
+                    @if (Model.Notices.Count == 0)
+                    {
+                        <li class="seller-menu-identity">@Text["No current notifications"]</li>
+                    }
+                    @for (var index = 0; index < Model.Notices.Count; index++)
+                    {
+                        var notice = Model.Notices[index];
+                        <li>
+                            <a href="#seller-notice-@index" data-level="@notice.Level.ToString().ToLowerInvariant()">
+                                <i class="fa @notice.Icon" aria-hidden="true"></i><span>@Text[notice.Title]</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
             <div class="dropdown seller-language">
                 <button class="seller-topbar-button dropdown-toggle" type="button" id="seller-language-button"
                         data-toggle="dropdown" aria-expanded="false" aria-label="@Text["Language"]">
@@ -47,7 +73,7 @@
             <div class="dropdown seller-account">
                 <button class="seller-topbar-button seller-account-button dropdown-toggle" type="button" id="seller-account-button"
                         data-toggle="dropdown" aria-expanded="false" aria-label="@Text["Seller account"]">
-                    <img class="seller-avatar" src="@Model.GetUserAvatar()" alt="" />
+                    <img class="seller-avatar" src="@Model.User.GetUserAvatar()" alt="" />
                     <bdi class="seller-account-name">@displayName</bdi>
                     <i class="fa fa-angle-down" aria-hidden="true"></i>
                 </button>

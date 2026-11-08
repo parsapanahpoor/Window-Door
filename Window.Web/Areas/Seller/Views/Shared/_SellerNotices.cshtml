@@ -1,0 +1,26 @@
+@model IReadOnlyList<SellerNotice>
+@inject IStringLocalizer<SellerDashboardText> Text
+
+<section class="seller-notices" aria-labelledby="seller-notices-title">
+    <h2 id="seller-notices-title">@Text["Current notifications"]</h2>
+    @for (var index = 0; index < Model.Count; index++)
+    {
+        var notice = Model[index];
+        var level = notice.Level.ToString();
+        <article class="seller-notice" data-level="@level.ToLowerInvariant()" id="seller-notice-@index" tabindex="-1">
+            <i class="fa @notice.Icon seller-notice-icon" aria-hidden="true"></i>
+            <div>
+                @if (notice.TranslateMessage)
+                {
+                    <span class="seller-notice-level">@Text[level]</span>
+                }
+                <h3>@Text[notice.Title]</h3>
+                <p>@(notice.TranslateMessage ? Text[notice.Message].Value : notice.Message)</p>
+                @if (notice.Action is { } link)
+                {
+                    <a asp-area="Seller" asp-controller="@link.Controller" asp-action="@link.Action">@Text[link.Label]</a>
+                }
+            </div>
+        </article>
+    }
+</section>

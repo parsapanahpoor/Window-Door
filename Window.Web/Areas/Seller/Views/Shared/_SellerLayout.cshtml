@@ -1,6 +1,17 @@
+@using Window.Application.Extensions
+@using Window.Application.Interfaces
+@using Window.Application.Services.Interfaces
+@inject IUserService Users
+@inject ISellerService Sellers
+@inject IStringLocalizer<SellerDashboardText> Text
 @{
     var culture = ApplicationCultures.GetCurrentCulture();
     var isDashboard = ViewData["SellerDashboard"] is true;
+    var sellerId = User.GetUserId();
+    var seller = await Users.GetUserById(sellerId);
+    var state = await Sellers.GetSellersInfosState(sellerId);
+    var isMaster = await Sellers.IsSellerMaster(sellerId);
+    var panel = SellerPanel.Create(seller, state, isMaster, TempData);
 }
 <!DOCTYPE html>
 <html lang="@culture.CultureKey" dir="@culture.Direction">
@@ -13,29 +24,64 @@
     @RenderSection("Styles", false)
 </head>
 <body class="seller-shell @(isDashboard ? "seller-dashboard-shell" : null)">
-    @await Component.InvokeAsync("SellerNavbar")
-    <partial name="_SellerNavigation" />
+    <partial name="_SellerNavbar" model="panel" />
+    <partial name="_SellerNavigation" model="panel" />
     <div class="main-container container-fluid">
         <div class="page-container">
             <div class="page-content seller-page-content">
-                <div class="page-breadcrumbs">
-                    <ul class="breadcrumb">
-                        <li>
-                            <i class="fa fa-home" aria-hidden="true"></i>
-                            <a asp-area="Seller" asp-controller="Home" asp-action="Index">@SharedLocalizer["Home"]</a>
-                        </li>
-                        @RenderSection("breadcrumb", true)
-                    </ul>
-                </div>
-                <partial name="_SellerPageHeader" />
-                <div class="page-body seller-page-body">
-                    @RenderBody()
-                </div>
+                <main class="page-body seller-page-body">
+                    <div class="@(isDashboard ? "seller-dashboard" : null)">
+                        @if (panel.Notices.Count > 0)
+                        {
+                            <partial name="_SellerNotices" model="panel.Notices" />
+                        }
+                        @if (isDashboard)
+                        {
+                            @if (panel.Notices.Count == 0)
+                            {
+                                <header class="seller-dashboard-hero">
+                                    <span class="seller-dashboard-eyebrow">@Text["Seller panel"]</span>
+                                    <h1>@ViewData["Title"]</h1>
+                                    <p>@Text["Store activity and quick access"]</p>
+                                </header>
+                            }
+                            else
+                            {
+                                <h1 class="sr-only">@ViewData["Title"]</h1>
+                            }
+                            IgnoreSection("breadcrumb");
+                        }
+                        else
+                        {
+                            <h1 class="seller-page-title">@ViewData["Title"]</h1>
+                            <ol class="breadcrumb seller-breadcrumb">
+                                <li><a asp-area="Seller" asp-controller="Home" asp-action="Index">@Text["Dashboard"]</a></li>
+                                @RenderSection("breadcrumb", false)
+                            </ol>
+                        }
+
+                        @RenderBody()
+
+                        @if (isDashboard)
+                        {
+                            <section aria-labelledby="seller-shortcuts-title">
+                                <h2 id="seller-shortcuts-title">@Text["Quick access"]</h2>
+                                <div class="seller-shortcuts">
+                                    @foreach (var link in SellerPanel.PrimaryLinks.Skip(1).Concat(panel.ExtraLinks))
+                                    {
+                                        <a class="seller-shortcut" asp-area="Seller" asp-controller="@link.Controller" asp-action="@link.Action">
+                                            <i class="fa @link.Icon" aria-hidden="true"></i><span>@Text[link.Label]</span>
+                                        </a>
+                                    }
+                                </div>
+                            </section>
+                        }
+                    </div>
+                </main>
             </div>
         </div>
     </div>
     <partial name="_SellerFooterReferences" />
-    <partial name="_Notification" />
     <partial name="_SweetAlertLocalizer" />
     <partial name="_Modals" />
     @RenderSection("Scripts", false)

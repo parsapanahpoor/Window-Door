@@ -33,4 +33,22 @@
   <data name="Panjerehyab" xml:space="preserve"><value>پنجره‌یاب</value></data>
   <data name="Language" xml:space="preserve"><value>زبان پنل</value></data>
   <data name="Seller account" xml:space="preserve"><value>حساب فروشنده</value></data>
+  <data name="Notifications, {0} current" xml:space="preserve"><value>اعلان‌ها، {0} مورد فعلی</value></data>
+  <data name="No current notifications" xml:space="preserve"><value>فعلاً اعلانی برای نمایش وجود ندارد.</value></data>
+  <data name="Current notifications" xml:space="preserve"><value>اعلان‌های پنل</value></data>
+  <data name="More" xml:space="preserve"><value>بیشتر</value></data>
+  <data name="Error" xml:space="preserve"><value>خطا</value></data>
+  <data name="Warning" xml:space="preserve"><value>هشدار</value></data>
+  <data name="Info" xml:space="preserve"><value>اطلاع‌رسانی</value></data>
+  <data name="Success" xml:space="preserve"><value>موفق</value></data>
+  <data name="Complete store information" xml:space="preserve"><value>اطلاعات فروشگاه را تکمیل کنید</value></data>
+  <data name="Complete your store information to activate seller tools." xml:space="preserve"><value>برای فعال شدن ابزارهای فروشندگی، اطلاعات فروشگاه را تکمیل کنید.</value></data>
+  <data name="Store information under review" xml:space="preserve"><value>اطلاعات فروشگاه در حال بررسی است</value></data>
+  <data name="Support is reviewing your submitted information." xml:space="preserve"><value>پشتیبانی در حال بررسی اطلاعات ارسال‌شده است.</value></data>
+  <data name="Seller fee pending" xml:space="preserve"><value>تعرفهٔ فروشندگی در انتظار پرداخت است</value></data>
+  <data name="Pay the seller fee to activate your account." xml:space="preserve"><value>برای فعال شدن حساب فروشندگی، تعرفه را پرداخت کنید.</value></data>
+  <data name="Store information needs correction" xml:space="preserve"><value>اطلاعات فروشگاه نیاز به اصلاح دارد</value></data>
+  <data name="Support could not approve your information. Review your store details." xml:space="preserve"><value>پشتیبانی اطلاعات ارسال‌شده را تأیید نکرد. مشخصات فروشگاه را بررسی و اصلاح کنید.</value></data>
+  <data name="Seller balance expired" xml:space="preserve"><value>اعتبار حساب فروشندگی به پایان رسیده است</value></data>
+  <data name="Recharge your account to resume using seller tools." xml:space="preserve"><value>برای ادامهٔ استفاده از ابزارهای فروشندگی، حساب خود را دوباره شارژ کنید.</value></data>
 </root>

@@ -1,4 +1,4 @@
-﻿using Window.Application.Interfaces;
+using Window.Application.Interfaces;
 using Window.Domain.ViewModels.User;
 using Window.Web.HttpManager;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +32,7 @@ namespace Window.Web.Areas.Seller.Controllers
 
         #region Index
 
-        public async Task<IActionResult> Index(bool OrderFinalization = false)
+        public async Task<IActionResult> Index()
         {
             #region Check Is Exist Any Market By This User
 
@@ -58,26 +58,6 @@ namespace Window.Web.Areas.Seller.Controllers
             ViewBag.CountOfMonthUserInInquiry = await _sellerService.CountOfMonthUserInInquiry(User.GetUserId());
             ViewBag.CountOfYearUserInInquiry = await _sellerService.CountOfYearUserInInquiry(User.GetUserId());
             ViewBag.CountOfSellerWaitingRequest = await _contractService.CountOfUserWaitingContractRequest(User.GetUserId());
-
-            #endregion
-
-            #region Empty Shop Name 
-
-            var user = await _userService.GetUserById(User.GetUserId());
-
-            if (string.IsNullOrEmpty(user.ShopName))
-            {
-                ViewBag.ShopNameIsEmpty = true;
-            }
-
-            #endregion
-
-            #region Notification
-
-            if (OrderFinalization)
-            {
-                TempData[SwalSuccess] = "سفارش باموفقیت تایید شده است. لطفا هرچه سریع تر نسبت به آماده سازی اقلام خریداری شده اقدام فرمایید.";
-            }
 
             #endregion
 
