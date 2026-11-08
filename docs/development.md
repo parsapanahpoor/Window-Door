@@ -57,7 +57,7 @@ dotnet ef migrations script --idempotent --project Window.Infra.Data --startup-p
 The frontend assets already exist under wwwroot. Nested vendor package.json files do not imply a required root npm install.
 
 ### Continuous integration
-`.github/workflows/build.yml` runs Verify on Windows for master pushes and pull requests, with read-only repository permission. It builds from a clean checkout, so locally ignored source cannot silently satisfy compilation. It also runs the offline password-recovery checks and does not deploy or migrate a database. Read the workflow run status separately from local verification.
+`.github/workflows/build.yml` runs Verify on Windows for pushes to master and develop and for pull requests, with read-only repository permission. It builds from a clean checkout, so locally ignored source cannot silently satisfy compilation. It also runs the offline password-recovery checks and does not deploy or migrate a database. Read the workflow run status separately from local verification.
 
 References: [SDK selection](https://learn.microsoft.com/en-us/dotnet/core/tools/global-json), [development User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0).
 

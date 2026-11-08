@@ -2,7 +2,7 @@
 
 ## Confirmed context
 - Owner wants incremental Spec-Driven Development with an agent; primary conversation language is Persian.
-- Product name/path: Panjerehyab; repository: parsapanahpoor/Window-Door, master.
+- Product name/path: Panjerehyab; repository: parsapanahpoor/Window-Door. See [Git Flow](git-flow.md) for integration on develop and production releases from master.
 - Baseline examined: 96a4bca3b3e1816062e9bd53e965f8c972b0958c.
 - Five .NET 8 projects; mixed legacy services and MediatR CQRS; SQL Server persistence.
 - Previous onboarding installed SDK 8.0.427, restored NuGet dependencies, and built Domain + Infra.Data. Full solution had 15 CS0234/CS0246 errors.
