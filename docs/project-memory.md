@@ -98,3 +98,8 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - Password sign-in uses the account selected by the supplied credentials and rejects multiple matches. Recovery and activation reject shared or excluded mobile numbers.
 - Isolated SQL and loopback HTTP checks with a fake SMS provider passed, including exact account selection, duplicate fallback, and rejection of shared credentials and a previously issued recovery code. Offline password recovery checks passed.
 - Installed the Release assemblies in Plesk. The previous eight files are in the private default-sms-rollback-20261107 directory. No migration was needed. All public login forms, registration and recovery returned HTTP 200; no live SMS or sign-in was performed during verification.
+
+## Seller dashboard first pass
+
+- Default request culture is Persian; explicit English query and cookie preferences remain supported. Seller Home now uses a dashboard-only responsive stylesheet, touch shortcuts and mobile bottom navigation.
+- Implemented in the Visual Studio checkout on codex/feature/seller-panel-ui. Local Release verification and isolated browser checks passed at widths from 320 to 1440 pixels. See specs/0004-seller-dashboard/spec.md for evidence.

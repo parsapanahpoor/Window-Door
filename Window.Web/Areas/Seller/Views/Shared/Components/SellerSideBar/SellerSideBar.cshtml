@@ -1,130 +1,52 @@
-﻿
-<div class="page-body">
+@inject IStringLocalizer<SellerDashboardText> DashboardText
 
-    <div class="row text-center align-Item-center">
-        <div class="col-lg-6 col-sm-6 col-xs-12">
-            <div class="row">
-
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview text-center justify-content-center">
-                    <a asp-area="Seller" asp-controller="Home" asp-action="Index" class="btn btn-success  btn-circle btn-lg"><i class="glyphicon glyphicon-th"></i></a>
-                    <p class="text-center justify-content-center" style="font-size:12PX;"> داشبورد </p>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview">
-                    <a asp-area="Seller" asp-controller="Ticket" asp-action="FilterTickets" class="btn btn-info  btn-circle btn-lg"><i class="fa fa-ticket"></i></a>
-                    <p class="text-center justify-content-center" style="font-size:12PX;"> تیکت پشتیبانی </p>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview  text-center justify-content-center">
-                    <a asp-area="Seller" asp-controller="Account" asp-action="EditProfile" class="btn btn-warning  btn-circle btn-lg"><i class="fa fa-user"></i></a>
-                    <p class="text-center justify-content-center" style="font-size:12PX;">ویرایش اطلاعات کاربری </p>
-                </div>
-            </div>
-        </div>
-
-        @if (ViewBag.SellersInfosState == "ActiveSellerAccount")
+<section aria-labelledby="seller-shortcuts-title">
+    <h2 id="seller-shortcuts-title">@DashboardText["Quick access"]</h2>
+    <div class="seller-shortcuts">
+        <a class="seller-shortcut" asp-area="Seller" asp-controller="Ticket" asp-action="FilterTickets">
+            <i class="fa fa-ticket" aria-hidden="true"></i><span>@DashboardText["Support tickets"]</span>
+        </a>
+        <a class="seller-shortcut" asp-area="Seller" asp-controller="Account" asp-action="EditProfile">
+            <i class="fa fa-user" aria-hidden="true"></i><span>@DashboardText["Edit profile"]</span>
+        </a>
+        <a class="seller-shortcut" asp-area="Seller" asp-controller="ShopOrder" asp-action="ManageOrderPage">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i><span>@DashboardText["Manage orders"]</span>
+        </a>
+        <a class="seller-shortcut" asp-area="Seller" asp-controller="OrderCheque" asp-action="ManageOrderChequesPages">
+            <i class="fa fa-credit-card" aria-hidden="true"></i><span>@DashboardText["Manage cheques"]</span>
+        </a>
+        @if (ViewBag.SellerMastert == true)
         {
-            @if (ViewBag.SellerMastert == true)
+            <a class="seller-shortcut" asp-area="Seller" asp-controller="User" asp-action="Index">
+                <i class="fa fa-users" aria-hidden="true"></i><span>@DashboardText["Employees"]</span>
+            </a>
+            <a class="seller-shortcut" asp-area="Seller" asp-controller="Account" asp-action="EditProfile">
+                <i class="fa fa-user-plus" aria-hidden="true"></i><span>@DashboardText["Add employee"]</span>
+            </a>
+            <a class="seller-shortcut" asp-area="Seller" asp-controller="SellerPersonalInfo" asp-action="PageOfManageSellerInformation">
+                <i class="fa fa-cog" aria-hidden="true"></i><span>@DashboardText["Store information"]</span>
+            </a>
+            @if (ViewBag.SellersInfosState == "ActiveSellerAccount")
             {
-                <div class="col-lg-6 col-sm-6 col-xs-12">
-                    <div class="row">
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview text-center justify-content-center">
-                            <a asp-area="Seller" asp-controller="Contarct" asp-action="ListOfContracts" class="btn btn-success  btn-circle btn-lg"><i class="fa fa-wrench"></i></a>
-                            <p class="text-center justify-content-center" style="font-size:12PX;"> درخواست های قرارداد </p>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview">
-                            <a asp-area="Seller" asp-controller="User" asp-action="Index" class="btn btn-warning  btn-circle btn-lg"><i class="fa fa-users"></i></a>
-                            <p class="text-center justify-content-center" style="font-size:12PX;"> لیست کارمندان </p>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview  text-center justify-content-center">
-                            <a asp-area="Seller" asp-controller="Account" asp-action="EditProfile" class="btn btn-warning  btn-circle btn-lg"><i class="fa fa-users"></i></a>
-                            <p class="text-center justify-content-center" style="font-size:12PX;">افزودن کارمند جدید </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 col-sm-6 col-xs-12">
-                    <div class="row">
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview text-center justify-content-center">
-                            <a asp-area="Seller" asp-controller="Product" asp-action="FilterProducts" class="btn btn-primary  btn-circle btn-lg"><i class="fa fa-building-o"></i></a>
-                            <p class="text-center justify-content-center" style="font-size:12PX;"> لیست محصولات </p>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview">
-                            <a asp-area="Seller" asp-controller="Product" asp-action="CreateProduct" class="btn btn-primary  btn-circle btn-lg"><i class="fa fa-building-o"></i></a>
-                            <p class="text-center justify-content-center" style="font-size:12PX;"> افزودن محصول </p>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview  text-center justify-content-center">
-                            <a asp-area="Seller" asp-controller="Product" asp-action="CreateGlassPricing" class="btn btn-primary  btn-circle btn-lg"><i class="fa fa-building-o"></i></a>
-                            <p class="text-center justify-content-center" style="font-size:12PX;">قیمت گذاری شیشه </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 col-sm-6 col-xs-12">
-                    <div class="row">
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview text-center justify-content-center">
-                            <a asp-area="Seller" asp-controller="SellerPersonalInfo" asp-action="PageOfManageSellerInformation" class="btn btn-info  btn-circle btn-lg"><i class="menu-icon fa fa-gears "></i></a>
-                            <p class="text-center justify-content-center" style="font-size:12PX;"> مدیریت اطلاعات فروشگاه </p>
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview text-center justify-content-center">
-                            <a asp-area="Seller" asp-controller="ShopProduct" asp-action="FilterShopProducts" class="btn btn-info  btn-circle btn-lg"><i class="menu-icon fa fa-gears "></i></a>
-                            <p class="text-center justify-content-center" style="font-size:12PX;"> لیست محصولات شما </p>
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview text-center justify-content-center">
-                            <a asp-area="Seller" asp-controller="ShopProduct" asp-action="CreateProduct" class="btn btn-info  btn-circle btn-lg"><i class="menu-icon fa fa-gears "></i></a>
-                            <p class="text-center justify-content-center" style="font-size:12PX;"> افزودن محصول جدید </p>
-                        </div>
-
-                    </div>
-                </div>
+                <a class="seller-shortcut" asp-area="Seller" asp-controller="Contarct" asp-action="ListOfContracts">
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i><span>@DashboardText["Contract requests"]</span>
+                </a>
+                <a class="seller-shortcut" asp-area="Seller" asp-controller="Product" asp-action="FilterProducts">
+                    <i class="fa fa-list-ul" aria-hidden="true"></i><span>@DashboardText["Inquiry products"]</span>
+                </a>
+                <a class="seller-shortcut" asp-area="Seller" asp-controller="Product" asp-action="CreateProduct">
+                    <i class="fa fa-plus" aria-hidden="true"></i><span>@DashboardText["Add inquiry product"]</span>
+                </a>
+                <a class="seller-shortcut" asp-area="Seller" asp-controller="Product" asp-action="CreateGlassPricing">
+                    <i class="fa fa-th-large" aria-hidden="true"></i><span>@DashboardText["Glass pricing"]</span>
+                </a>
+                <a class="seller-shortcut" asp-area="Seller" asp-controller="ShopProduct" asp-action="FilterShopProducts">
+                    <i class="fa fa-cubes" aria-hidden="true"></i><span>@DashboardText["Store products"]</span>
+                </a>
+                <a class="seller-shortcut" asp-area="Seller" asp-controller="ShopProduct" asp-action="CreateProduct">
+                    <i class="fa fa-plus-square" aria-hidden="true"></i><span>@DashboardText["Add store product"]</span>
+                </a>
             }
         }
-
-        else
-        {
-
-
-            @if (ViewBag.SellerMastert == true)
-            {
-                <div class="col-lg-6 col-sm-6 col-xs-12">
-                    <div class="row">
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview">
-                            <a asp-area="Seller" asp-controller="User" asp-action="Index" class="btn btn-info  btn-circle btn-lg"><i class="fa fa-user"></i></a>
-                            <p class="text-center justify-content-center" style="font-size:12PX;"> لیست کارمندان </p>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview  text-center justify-content-center">
-                            <a asp-area="Seller" asp-controller="Account" asp-action="EditProfile" class="btn btn-primary  btn-circle btn-lg"><i class="fa fa-user"></i></a>
-                            <p class="text-center justify-content-center" style="font-size:12PX;">افزودن کارمند جدید </p>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4  buttons-preview text-center justify-content-center">
-                            <a asp-area="Seller" asp-controller="SellerPersonalInfo" asp-action="PageOfManageSellerInformation" class="btn btn-success  btn-circle btn-lg"><i class="menu-icon fa fa-user"></i></a>
-                            <p class="text-center justify-content-center" style="font-size:12PX;"> مدیریت اطلاعات فروشگاه </p>
-                        </div>
-                    </div>
-                </div>
-            }
-        }
-
-        <div class="col-lg-12 col-sm-12 col-xs-12">
-            <div class="row">
-
-                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-4  buttons-preview">
-                    <a asp-area="Seller" asp-controller="OrderCheque" asp-action="ManageOrderChequesPages" class="btn btn-warning  btn-circle btn-lg"><i class="glyphicon glyphicon-edit"></i></a>
-                    <p class="text-center justify-content-center" style="font-size:12PX;"> مدیریت چک ها </p>
-                </div>
-
-                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-4  buttons-preview">
-                    <a asp-area="Seller" asp-controller="ShopOrder" asp-action="ManageOrderPage" class="btn btn-warning  btn-circle btn-lg"><i class="glyphicon glyphicon-shopping-cart"></i></a>
-                    <p class="text-center justify-content-center" style="font-size:12PX;"> مدیریت سفارشات </p>
-                </div>
-
-            </div>
-        </div>
-
     </div>
-
-</div>
+</section>

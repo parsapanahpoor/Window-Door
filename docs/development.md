@@ -84,3 +84,15 @@ Run **dotnet run --project tests/PasswordRecoveryChecks -c Release**. The check 
 ### SMS sign-in integration checks
 
 Run **dotnet run --project tests/SmsLoginChecks -c Release** from the repository root. It creates and removes a uniquely named disposable database on the local SQL Server 2022 instance. The runner also supports **(localdb)\MSSQLLocalDB** as its sole argument. It verifies the migration and uses loopback HTTP with an offline SMS sender. The hosted database, SMS key and payment integrations are not needed.
+
+### Seller dashboard browser checks
+
+From the repository root, build the runner and install the test browser once:
+
+```powershell
+dotnet build tests/SellerDashboardChecks -c Release
+pwsh -File tests/SellerDashboardChecks/bin/Release/net8.0/playwright.ps1 install chromium --only-shell
+dotnet run --no-build --project tests/SellerDashboardChecks -c Release
+```
+
+Set `SELLER_CHECK_BROWSER_CHANNEL=msedge` for an existing Edge installation. The runner serves the real seller controller and Razor views on loopback with in-memory service fixtures. It checks Persian and language overrides, anonymous access, seller roles and touch layout. It runs in GitHub Actions and does not use a database or send SMS.

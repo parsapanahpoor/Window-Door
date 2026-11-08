@@ -1,100 +1,66 @@
-﻿
+@inject IStringLocalizer<SellerDashboardText> DashboardText
+
 @{
-    ViewData["Title"] = Localizer["Index"];
+    ViewData["Title"] = DashboardText["Seller dashboard"];
+    ViewData["SellerDashboard"] = true;
 }
 
-@section breadcrumb
-{
-    
+@section breadcrumb { }
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/seller-dashboard.css" asp-append-version="true" />
 }
 
-@section Scripts
-{
-    <partial name="_SweetAlertLocalizer"/>
-}
+<main class="seller-dashboard">
+    <header class="seller-dashboard-hero">
+        <span class="seller-dashboard-eyebrow">@DashboardText["Seller panel"]</span>
+        <h1>@ViewData["Title"]</h1>
+        <p>@DashboardText["Store activity and quick access"]</p>
+    </header>
 
-
-    <div class="row">
-
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="databox bg-white radius-bordered">
-                <div class="bg-success databox-right">
-                </div>
-                <div class="databox-left">
-                    <span class="databox-number sucees">@((ViewBag.CountOfTodayUserInInquiry != null) ? ViewBag.CountOfTodayUserInInquiry : 0)</span>
-                <div class="databox-text darkgray">تعداد بازدید از حساب شما درامروز</div>
-
+    <section aria-labelledby="seller-overview-title">
+        <h2 id="seller-overview-title">@DashboardText["Activity overview"]</h2>
+        <dl class="seller-metrics">
+            <div class="seller-metric">
+                <dt><i class="fa fa-eye" aria-hidden="true"></i> @DashboardText["Today’s visits"]</dt>
+                <dd>@(ViewBag.CountOfTodayUserInInquiry ?? 0)</dd>
             </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <div class="databox bg-white radius-bordered">
-            <div class="bg-primary databox-right">
+            <div class="seller-metric">
+                <dt><i class="fa fa-calendar-o" aria-hidden="true"></i> @DashboardText["This month’s visits"]</dt>
+                <dd>@(ViewBag.CountOfMonthUserInInquiry ?? 0)</dd>
             </div>
-            <div class="databox-left">
-                <span class="databox-number primary">@((ViewBag.CountOfMonthUserInInquiry != null) ? ViewBag.CountOfMonthUserInInquiry : 0)</span>
-                <div class="databox-text darkgray">تعداد بازدید از حساب شما دراین ماه</div>
-
+            <div class="seller-metric">
+                <dt><i class="fa fa-bar-chart" aria-hidden="true"></i> @DashboardText["This year’s visits"]</dt>
+                <dd>@(ViewBag.CountOfYearUserInInquiry ?? 0)</dd>
             </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <div class="databox bg-white radius-bordered">
-            <div class="bg-danger databox-right">
+            <div class="seller-metric">
+                <dt><i class="fa fa-file-text-o" aria-hidden="true"></i> @DashboardText["Pending contract requests"]</dt>
+                <dd>@(ViewBag.CountOfSellerWaitingRequest ?? 0)</dd>
             </div>
-            <div class="databox-left">
-                <span class="databox-number danger">@((ViewBag.CountOfYearUserInInquiry != null) ? ViewBag.CountOfYearUserInInquiry : 0)</span>
-                <div class="databox-text darkgray">تعداد بازدید از حساب شما دراین سال</div>
+        </dl>
+    </section>
 
-            </div>
-        </div>
-    </div>
+    @await Component.InvokeAsync("SellerSideBar")
+    @await Component.InvokeAsync("SellersInfos")
 
-    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <div class="databox bg-white radius-bordered">
-            <div class="bg-danger databox-right">
-            </div>
-            <div class="databox-left">
-                <span class="databox-number danger">@((ViewBag.CountOfSellerWaitingRequest != null) ? ViewBag.CountOfSellerWaitingRequest : 0)</span>
-                <div class="databox-text darkgray">درخواست های قرارداد درانتظار برسی شما</div>
+    @if (ViewBag.ShopNameIsEmpty == true)
+    {
+        <aside class="seller-dashboard-notice" aria-labelledby="seller-shop-name-title">
+            <h2 id="seller-shop-name-title">@DashboardText["Add your store name"]</h2>
+            <p>@DashboardText["Enter your store name in your profile so customers can see it."]</p>
+            <a asp-area="Seller" asp-controller="Account" asp-action="EditProfile">@DashboardText["Edit profile"]</a>
+        </aside>
+    }
+</main>
 
-            </div>
-        </div>
-    </div>
-
-</div>
-
-@await Component.InvokeAsync("SellersInfos")
-
-@if (ViewBag.ShopNameIsEmpty != null && ViewBag.ShopNameIsEmpty == true)
-{
-    <div class="col-lg-12 col-sm-12 col-xs-12">
-        <div class="widget">
-            <div class="widget-header bg-warning">
-                <span class="widget-caption">عدم نمایش نام فروشگاه </span>
-                <div class="widget-buttons">
-                    <a href="#" data-toggle="config">
-                        <i class="fa fa-cog"></i>
-                    </a>
-                    <a href="#" data-toggle="maximize">
-                        <i class="fa fa-expand"></i>
-                    </a>
-                    <a href="#" data-toggle="collapse">
-                        <i class="fa fa-minus"></i>
-                    </a>
-                    <a href="#" data-toggle="dispose">
-                        <i class="fa fa-times"></i>
-                    </a>
-                </div><!--Widget Buttons-->
-            </div><!--Widget Header-->
-            <div class="widget-body bg-warning">
-                <p> لطفا از قسمت اطلاعات کاربری وارد بخش ویرایش اطلاعات کاربری شوید و برای نمایش نام فروشگاه خود این پارامتر را وراد نمایید </p>
-            </div><!--Widget Body-->
-        </div><!--Widget-->
-    </div>
-}
-
-@await Component.InvokeAsync("SellerSideBar")
-
+<nav class="seller-mobile-nav" aria-label="@DashboardText["Seller navigation"]">
+    <a asp-area="Seller" asp-controller="Home" asp-action="Index" aria-current="page">
+        <i class="fa fa-th-large" aria-hidden="true"></i><span>@DashboardText["Dashboard"]</span>
+    </a>
+    <a asp-area="Seller" asp-controller="ShopOrder" asp-action="ManageOrderPage">
+        <i class="fa fa-shopping-cart" aria-hidden="true"></i><span>@DashboardText["Orders"]</span>
+    </a>
+    <a asp-area="Seller" asp-controller="Ticket" asp-action="FilterTickets">
+        <i class="fa fa-ticket" aria-hidden="true"></i><span>@DashboardText["Support"]</span>
+    </a>
+</nav>

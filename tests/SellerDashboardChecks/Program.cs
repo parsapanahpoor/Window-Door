@@ -1,0 +1,178 @@
+using System.Globalization;
+using System.Reflection;
+using System.Security.Claims;
+using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
+using Microsoft.Playwright;
+using Window.Application.Interfaces;
+using Window.Application.Services.Interfaces;
+using Window.Domain.Entities.Account;
+using Window.Domain.Entities.Market;
+using Window.Web.Culture;
+using SellerHome = Window.Web.Areas.Seller.Controllers.HomeController;
+
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    ApplicationName = typeof(SellerHome).Assembly.GetName().Name,
+    ContentRootPath = Path.GetFullPath("../../../../../Window.Web", AppContext.BaseDirectory)
+});
+builder.WebHost.UseUrls("http://127.0.0.1:0");
+builder.Logging.AddFilter("Microsoft", LogLevel.Warning);
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.Configure<RequestLocalizationOptions>(ApplicationRequestLocalization.Configure);
+builder.Services.AddControllersWithViews().AddViewLocalization();
+builder.Services.AddDataProtection().UseEphemeralDataProtectionProvider();
+builder.Services.AddAuthentication("Fixture").AddScheme<AuthenticationSchemeOptions, FixtureAuthentication>("Fixture", _ => { });
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped(provider =>
+{
+    var fixture = provider.GetRequiredService<IHttpContextAccessor>().HttpContext!.Request.Headers["X-Seller-Fixture"].ToString();
+    return FixtureService.Create<ISellerService>(name => name switch
+    {
+        nameof(ISellerService.GetMarketByUserId) => Task.FromResult<Market?>(new Market { Id = 1 }),
+        nameof(ISellerService.GetSellersInfosState) => Task.FromResult(fixture == "pending" ? "NewUser" : "ActiveSellerAccount"),
+        nameof(ISellerService.IsSellerMaster) => Task.FromResult(fixture != "employee"),
+        nameof(ISellerService.CountOfTodayUserInInquiry) => Task.FromResult(12),
+        nameof(ISellerService.CountOfMonthUserInInquiry) => Task.FromResult(34),
+        nameof(ISellerService.CountOfYearUserInInquiry) => Task.FromResult(56),
+        _ => throw new NotSupportedException(name)
+    });
+});
+builder.Services.AddSingleton(FixtureService.Create<IUserService>(name => name == nameof(IUserService.GetUserById)
+    ? Task.FromResult(new User { Id = 1, Mobile = "09120000000", ShopName = "" })
+    : throw new NotSupportedException(name)));
+builder.Services.AddSingleton(FixtureService.Create<IPermissionService>(name => name == nameof(IPermissionService.IsUserSeller)
+    ? Task.FromResult(true)
+    : throw new NotSupportedException(name)));
+builder.Services.AddSingleton(FixtureService.Create<IContractService>(name => name == nameof(IContractService.CountOfUserWaitingContractRequest)
+    ? Task.FromResult(78)
+    : throw new NotSupportedException(name)));
+builder.Services.AddSingleton(FixtureService.Create<IProductService>(name => throw new NotSupportedException(name)));
+
+await using var app = builder.Build();
+app.UseRequestLocalization();
+app.UseStaticFiles();
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllerRoute("area", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+app.MapGet("/__culture", () => string.Join("|", CultureInfo.CurrentCulture.Name, CultureInfo.CurrentUICulture.Name,
+    CultureInfo.CurrentCulture.DateTimeFormat.Calendar.GetType().Name, 1.5m.ToString("0.0")));
+await app.StartAsync();
+
+var baseUrl = new Uri(app.Urls.Single());
+using var client = new HttpClient { BaseAddress = baseUrl };
+client.DefaultRequestHeaders.AcceptLanguage.ParseAdd("en-US,en;q=0.9");
+Require(await client.GetStringAsync("/__culture") == "fa-IR|fa-IR|GregorianCalendar|1.5", "Persian default and compatible numeric formatting");
+Require(await client.GetStringAsync("/__culture?culture=de-DE") == "fa-IR|fa-IR|GregorianCalendar|1.5", "unsupported culture fallback");
+Require(await client.GetStringAsync("/__culture?culture=en-US") == "en-US|en-US|GregorianCalendar|1.5", "explicit query preference");
+using var cookieRequest = new HttpRequestMessage(HttpMethod.Get, "/__culture");
+cookieRequest.Headers.Add("Cookie", ".AspNetCore.Culture=c=en-US|uic=en-US");
+using var cookieResponse = await client.SendAsync(cookieRequest);
+Require((await cookieResponse.Content.ReadAsStringAsync()).StartsWith("en-US|en-US|"), "explicit cookie preference");
+Require((await client.GetAsync("/Seller")).StatusCode == System.Net.HttpStatusCode.Unauthorized, "anonymous seller route challenge");
+
+using var playwright = await Playwright.CreateAsync();
+await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+{
+    Channel = Environment.GetEnvironmentVariable("SELLER_CHECK_BROWSER_CHANNEL")
+});
+await using var context = await browser.NewContextAsync(new BrowserNewContextOptions
+{
+    Locale = "en-US",
+    HasTouch = true,
+    ExtraHTTPHeaders = new Dictionary<string, string> { ["X-Seller-Fixture"] = "master" }
+});
+await context.RouteAsync("**/*", route => new Uri(route.Request.Url).Host == baseUrl.Host ? route.ContinueAsync() : route.AbortAsync());
+var page = await context.NewPageAsync();
+var response = await page.GotoAsync(new Uri(baseUrl, "/Seller").AbsoluteUri);
+Require(response?.Status == 200, "authenticated dashboard response");
+await Assertions.Expect(page.Locator("html")).ToHaveAttributeAsync("lang", "fa-IR");
+await Assertions.Expect(page.Locator("html")).ToHaveAttributeAsync("dir", "rtl");
+await Assertions.Expect(page.Locator(".seller-dashboard h1")).ToHaveTextAsync("داشبورد فروشنده");
+Require((await page.Locator(".seller-metric dd").AllTextContentsAsync()).SequenceEqual(["12", "34", "56", "78"]), "dashboard counts");
+await Assertions.Expect(page.Locator(".seller-dashboard-notice a")).ToHaveAttributeAsync("href", "/Seller/Account/EditProfile");
+await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopProduct/CreateProduct']")).ToBeVisibleAsync();
+await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopOrder/ManageOrderPage']")).ToBeVisibleAsync();
+
+foreach (var width in new[] { 320, 390, 767, 768, 1024, 1440 })
+{
+    await page.SetViewportSizeAsync(width, 720);
+    Require(await page.EvaluateAsync<bool>("document.documentElement.scrollWidth <= window.innerWidth"), $"no horizontal overflow at {width}px");
+    var grid = page.Locator(".seller-shortcuts");
+    var columns = await grid.EvaluateAsync<int>("element => getComputedStyle(element).gridTemplateColumns.split(' ').length");
+    Require(columns == (width < 768 ? 2 : 4), $"responsive shortcut columns at {width}px");
+    var card = grid.Locator("a").First;
+    var box = await card.BoundingBoxAsync();
+    Require(box is { Height: >= 44, Width: >= 44 }, $"touch target at {width}px");
+
+    var nav = page.Locator(".seller-mobile-nav");
+    if (width < 768)
+    {
+        await Assertions.Expect(nav).ToBeVisibleAsync();
+        await Assertions.Expect(nav).ToHaveCSSAsync("position", "fixed");
+        await Assertions.Expect(nav.Locator("[aria-current=page]")).ToHaveCountAsync(1);
+        await page.EvaluateAsync("document.scrollingElement.scrollTop = document.scrollingElement.scrollHeight");
+        var navBox = await nav.BoundingBoxAsync();
+        var noticeBox = await page.Locator(".seller-dashboard-notice").BoundingBoxAsync();
+        Require(navBox != null && noticeBox != null && noticeBox.Y + noticeBox.Height < navBox.Y,
+            $"last dashboard content remains above navigation at {width}px (notice y={noticeBox?.Y}, height={noticeBox?.Height}, nav y={navBox?.Y})");
+    }
+    else
+    {
+        await Assertions.Expect(nav).ToBeHiddenAsync();
+        await Assertions.Expect(page.Locator(".navbar-account .login-area")).ToBeVisibleAsync();
+    }
+}
+
+await page.GotoAsync(new Uri(baseUrl, "/Seller?culture=en-US").AbsoluteUri);
+await Assertions.Expect(page.Locator("html")).ToHaveAttributeAsync("dir", "ltr");
+await Assertions.Expect(page.Locator(".seller-dashboard h1")).ToHaveTextAsync("Seller dashboard");
+foreach (var fixture in new[] { "employee", "pending" })
+{
+    await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-Fixture"] = fixture });
+    await page.GotoAsync(new Uri(baseUrl, "/Seller").AbsoluteUri);
+    await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopProduct/CreateProduct']")).ToHaveCountAsync(0);
+    await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/Ticket/FilterTickets']")).ToBeVisibleAsync();
+    if (fixture == "pending")
+        await Assertions.Expect(page.GetByText("عدم دسترسی", new() { Exact = true })).ToBeVisibleAsync();
+}
+
+Console.WriteLine("PASS: Persian default and overrides, seller authentication and role variants, dashboard content and responsive layout (320–1440px).");
+
+static void Require(bool condition, string description)
+{
+    if (!condition) throw new InvalidOperationException("Failed: " + description);
+}
+
+public class FixtureService : DispatchProxy
+{
+    private Func<string, object> _respond = null!;
+
+    public static T Create<T>(Func<string, object> respond) where T : class
+    {
+        var proxy = Create<T, FixtureService>();
+        ((FixtureService)(object)proxy)._respond = respond;
+        return proxy;
+    }
+
+    protected override object Invoke(MethodInfo? targetMethod, object?[]? args) => _respond(targetMethod!.Name);
+}
+
+public class FixtureAuthentication(
+    IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder)
+    : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
+{
+    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+    {
+        if (!Request.Headers.ContainsKey("X-Seller-Fixture"))
+            return Task.FromResult(AuthenticateResult.NoResult());
+
+        var principal = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, "1")], Scheme.Name));
+        return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(principal, Scheme.Name)));
+    }
+}

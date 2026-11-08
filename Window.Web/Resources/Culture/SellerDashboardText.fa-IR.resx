@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Seller dashboard" xml:space="preserve"><value>داشبورد فروشنده</value></data>
+  <data name="Seller panel" xml:space="preserve"><value>پنل فروشنده</value></data>
+  <data name="Store activity and quick access" xml:space="preserve"><value>فعالیت فروشگاه و دسترسی سریع به ابزارها</value></data>
+  <data name="Activity overview" xml:space="preserve"><value>خلاصهٔ فعالیت</value></data>
+  <data name="Today’s visits" xml:space="preserve"><value>بازدید امروز</value></data>
+  <data name="This month’s visits" xml:space="preserve"><value>بازدید این ماه</value></data>
+  <data name="This year’s visits" xml:space="preserve"><value>بازدید امسال</value></data>
+  <data name="Pending contract requests" xml:space="preserve"><value>درخواست‌های قرارداد در انتظار بررسی</value></data>
+  <data name="Add your store name" xml:space="preserve"><value>نام فروشگاه را وارد کنید</value></data>
+  <data name="Enter your store name in your profile so customers can see it." xml:space="preserve"><value>نام فروشگاه را در اطلاعات کاربری وارد کنید تا برای مشتریان نمایش داده شود.</value></data>
+  <data name="Edit profile" xml:space="preserve"><value>ویرایش اطلاعات کاربری</value></data>
+  <data name="Seller navigation" xml:space="preserve"><value>ناوبری پنل فروشنده</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>داشبورد</value></data>
+  <data name="Orders" xml:space="preserve"><value>سفارش‌ها</value></data>
+  <data name="Support" xml:space="preserve"><value>پشتیبانی</value></data>
+  <data name="Quick access" xml:space="preserve"><value>دسترسی سریع</value></data>
+  <data name="Support tickets" xml:space="preserve"><value>تیکت‌های پشتیبانی</value></data>
+  <data name="Manage orders" xml:space="preserve"><value>مدیریت سفارش‌ها</value></data>
+  <data name="Manage cheques" xml:space="preserve"><value>مدیریت چک‌ها</value></data>
+  <data name="Employees" xml:space="preserve"><value>فهرست کارمندان</value></data>
+  <data name="Add employee" xml:space="preserve"><value>افزودن کارمند</value></data>
+  <data name="Store information" xml:space="preserve"><value>مدیریت اطلاعات فروشگاه</value></data>
+  <data name="Contract requests" xml:space="preserve"><value>درخواست‌های قرارداد</value></data>
+  <data name="Inquiry products" xml:space="preserve"><value>محصولات استعلام</value></data>
+  <data name="Add inquiry product" xml:space="preserve"><value>افزودن محصول استعلام</value></data>
+  <data name="Glass pricing" xml:space="preserve"><value>قیمت‌گذاری شیشه</value></data>
+  <data name="Store products" xml:space="preserve"><value>محصولات فروشگاه</value></data>
+  <data name="Add store product" xml:space="preserve"><value>افزودن محصول فروشگاه</value></data>
+</root>

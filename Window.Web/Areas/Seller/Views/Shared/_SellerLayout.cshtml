@@ -1,22 +1,26 @@
-﻿<!DOCTYPE html>
+@{
+    var culture = ApplicationCultures.GetCurrentCulture();
+    var isDashboard = ViewData["SellerDashboard"] is true;
+}
+<!DOCTYPE html>
 <!--
 BeyondAdmin - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.6
 Version: 1.6.0
 Purchase: https://wrapbootstrap.com/theme/beyondadmin-adminapp-angularjs-mvc-WB06R48S4
 -->
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="@culture.CultureKey" dir="@culture.Direction">
 <!-- Head -->
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"]</title>
     <meta name="description" content="Dashboard" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0@(isDashboard ? ", viewport-fit=cover" : "")" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <partial name="_SellerHeaderReferences" />
     @RenderSection("Styles", false)
 </head>
-<body>
+<body class="@(isDashboard ? "seller-dashboard-shell" : null)">
     @await Component.InvokeAsync("SellerNavbar")
     <div class="main-container container-fluid">
         <div class="page-container">

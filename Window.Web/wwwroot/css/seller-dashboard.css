@@ -1,0 +1,180 @@
+.seller-dashboard-shell {
+    --seller-ink: #1d3044;
+    --seller-muted: #465e75;
+    --seller-accent: #08677a;
+    --seller-border: #d9e4eb;
+    background: #f1f6f9;
+}
+
+.seller-dashboard-shell .page-body {
+    background: transparent;
+    padding: 20px clamp(16px, 3vw, 44px) 32px;
+}
+
+.seller-dashboard-shell .page-header .header-title { display: none; }
+
+.seller-dashboard {
+    display: grid;
+    gap: 24px;
+    max-width: 1180px;
+    margin-inline: auto;
+    color: var(--seller-ink);
+}
+
+.seller-dashboard h1,
+.seller-dashboard h2,
+.seller-dashboard p { margin: 0; }
+.seller-dashboard h2 {
+    margin-block-end: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.seller-dashboard-hero {
+    display: grid;
+    gap: 6px;
+    padding: clamp(18px, 4vw, 38px);
+    border-radius: 20px;
+    background: linear-gradient(120deg, #174a68, #076d78);
+    color: #fff;
+}
+
+.seller-dashboard-hero h1 {
+    color: inherit;
+    font-size: clamp(23px, 4vw, 36px);
+    font-weight: 700;
+    line-height: 1.45;
+}
+
+.seller-dashboard-eyebrow { color: #d5f3f5; }
+
+.seller-metrics,
+.seller-shortcuts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0;
+}
+
+.seller-metric,
+.seller-shortcut,
+.seller-dashboard-notice {
+    padding: 12px;
+    border: 1px solid var(--seller-border);
+    border-radius: 16px;
+    background: #fff;
+}
+
+.seller-metric dt {
+    color: var(--seller-muted);
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 1.65;
+}
+
+.seller-metric dt i { color: var(--seller-accent); }
+.seller-metric dd {
+    margin: 4px 0 0;
+    font-size: clamp(20px, 4vw, 27px);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.seller-shortcut {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 68px;
+    color: var(--seller-ink);
+    font-size: 13px;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+}
+
+.seller-shortcut i {
+    display: grid;
+    place-items: center;
+    flex: 0 0 32px;
+    height: 32px;
+    border-radius: 11px;
+    background: #e8f4f6;
+    color: var(--seller-accent);
+    font-size: 16px;
+}
+
+.seller-shortcut:hover,
+.seller-shortcut:focus,
+.seller-mobile-nav a:hover,
+.seller-mobile-nav a:focus {
+    background: #edf7fa;
+    color: var(--seller-accent);
+    text-decoration: none;
+}
+
+.seller-dashboard-shell a:focus-visible {
+    outline: 2px solid #0b6486;
+    outline-offset: 2px;
+}
+
+.seller-dashboard-notice { border-inline-start: 4px solid #bd7b20; }
+.seller-dashboard-notice p { margin-block-end: 6px; }
+.seller-dashboard-notice a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--seller-accent);
+}
+
+.seller-mobile-nav { display: none; }
+
+@media (min-width: 768px) {
+    .seller-metrics,
+    .seller-shortcuts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (max-width: 767px) {
+    .seller-dashboard-shell .page-breadcrumbs,
+    .seller-dashboard-shell .page-header { display: none; }
+
+    .seller-dashboard-shell .page-body {
+        padding-block: 14px calc(80px + env(safe-area-inset-bottom, 0px));
+        padding-left: max(12px, env(safe-area-inset-left, 0px));
+        padding-right: max(12px, env(safe-area-inset-right, 0px));
+    }
+
+    .seller-dashboard-shell .navbar {
+        padding-top: env(safe-area-inset-top, 0px);
+    }
+
+    .seller-mobile-nav {
+        position: fixed;
+        z-index: 1020;
+        inset: auto 0 0;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        padding: 4px max(8px, env(safe-area-inset-right, 0px))
+            calc(4px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px));
+        border-top: 1px solid var(--seller-border);
+        background: #fff;
+        box-shadow: 0 -4px 18px #1d304415;
+    }
+
+    .seller-mobile-nav a {
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        gap: 4px;
+        min-height: 52px;
+        border-radius: 12px;
+        color: var(--seller-muted);
+        font-size: 12px;
+    }
+
+    .seller-mobile-nav i { font-size: 17px; }
+    .seller-mobile-nav a[aria-current="page"] {
+        background: #e8f4f6;
+        color: var(--seller-accent);
+        font-weight: 700;
+    }
+}
