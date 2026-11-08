@@ -98,6 +98,7 @@ Require((await page.Locator(".seller-metric dd").AllTextContentsAsync()).Sequenc
 await Assertions.Expect(page.Locator(".seller-dashboard-notice a")).ToHaveAttributeAsync("href", "/Seller/Account/EditProfile");
 await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopProduct/CreateProduct']")).ToBeVisibleAsync();
 await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopOrder/ManageOrderPage']")).ToBeVisibleAsync();
+await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/User/AddNewUser']")).ToBeVisibleAsync();
 
 foreach (var width in new[] { 320, 390, 767, 768, 1024, 1440 })
 {

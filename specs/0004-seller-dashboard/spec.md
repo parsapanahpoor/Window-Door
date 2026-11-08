@@ -8,7 +8,7 @@ First-time visits currently use English request localization. The seller dashboa
 
 - AC-1: A request without an explicit language uses fa-IR for culture and resources throughout MVC, including a browser with English preferences. Explicit supported query and cookie selections still work; unsupported preferences fall back to Persian. Existing Gregorian and decimal formatting stays compatible.
 - AC-2: The seller dashboard fits 320px mobile through desktop widths without sideways scrolling. The mobile view has tappable full shortcut cards, fixed bottom navigation, and space for device insets. Desktop shows a wider grid and retains the seller account and shortcuts.
-- AC-3: Dashboard counts, account alerts and existing shortcut destinations and role conditions are preserved. Anonymous requests still require sign-in. Other seller pages retain the existing layout.
+- AC-3: Dashboard counts, account alerts and existing shortcut capabilities and role conditions are preserved. Add employee opens the existing employee form. Anonymous requests still require sign-in. Other seller pages retain the existing layout.
 
 ## Design and tasks
 
