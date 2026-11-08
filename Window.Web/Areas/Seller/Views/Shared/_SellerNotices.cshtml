@@ -8,8 +8,7 @@
         var notice = Model[index];
         var level = notice.Level.ToString();
         <article class="seller-notice" data-level="@level.ToLowerInvariant()" id="seller-notice-@index" tabindex="-1">
-            <i class="fa @notice.Icon seller-notice-icon" aria-hidden="true"></i>
-            <div>
+            <div class="seller-notice-copy">
                 @if (notice.TranslateMessage)
                 {
                     <span class="seller-notice-level">@Text[level]</span>
@@ -20,6 +19,17 @@
                 {
                     <a asp-area="Seller" asp-controller="@link.Controller" asp-action="@link.Action">@Text[link.Label]</a>
                 }
+            </div>
+            <div class="seller-notice-art" aria-hidden="true">
+                <svg viewBox="0 0 120 104" fill="none" focusable="false">
+                    <path d="M20 78C8 65 10 39 23 23c15-18 48-23 68-9 17 12 25 42 12 60-16 23-62 27-83 4Z" fill="currentColor" opacity=".16" />
+                    <path d="M33 80V45a27 27 0 1 1 54 0v35H33Z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="2" />
+                    <path d="M33 66h54M48 66v14m24-14v14M28 81h64" stroke="currentColor" stroke-opacity=".78" stroke-width="2" stroke-linecap="round" />
+                    <path d="M21 28v14m-7-7h14m73 8v12m-6-6h12M91 15v10m-5-5h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <circle cx="21" cy="72" r="2" fill="currentColor" />
+                    <circle cx="98" cy="75" r="2" fill="currentColor" />
+                </svg>
+                <i class="fa @notice.Icon seller-notice-icon"></i>
             </div>
         </article>
     }
