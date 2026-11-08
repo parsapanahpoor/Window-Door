@@ -115,14 +115,11 @@ body.seller-shell {
 .seller-brand small { color: var(--seller-amber); font-size: 11px; }
 
 .seller-brand-mark {
-    display: grid;
-    place-items: center;
-    flex: 0 0 36px;
-    height: 36px;
+    display: block;
+    flex-shrink: 0;
+    width: clamp(42px, 6vw, 48px);
+    height: auto;
     border-radius: 11px;
-    background: var(--seller-amber);
-    color: #4b2941;
-    font-size: 17px;
 }
 
 .seller-topbar-button {

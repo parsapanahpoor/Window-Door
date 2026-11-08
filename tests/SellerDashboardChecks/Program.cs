@@ -114,6 +114,11 @@ await context.RouteAsync("**/*", route => new Uri(route.Request.Url).Host == bas
 var page = await context.NewPageAsync();
 var response = await page.GotoAsync(new Uri(baseUrl, "/Seller").AbsoluteUri);
 Require(response?.Status == 200, "authenticated dashboard response");
+var brand = page.Locator(".seller-brand");
+var brandLogo = brand.Locator("img");
+await Assertions.Expect(brand).ToHaveAttributeAsync("href", "/Seller");
+Require(await brandLogo.EvaluateAsync<bool>("logo => logo.complete && logo.naturalWidth === 144 && new URL(logo.src).pathname === '/Site/Manifest/logo144.png'"),
+    "seller header loads the original Panjerehyab logo");
 await Assertions.Expect(page.Locator("html")).ToHaveAttributeAsync("lang", "fa-IR");
 await Assertions.Expect(page.Locator("html")).ToHaveAttributeAsync("dir", "rtl");
 await Assertions.Expect(page.Locator(".seller-dashboard h1")).ToHaveTextAsync("داشبورد فروشنده");
@@ -126,6 +131,9 @@ await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/User/Add
 foreach (var width in new[] { 320, 390, 767, 768, 1024, 1440 })
 {
     await page.SetViewportSizeAsync(width, 720);
+    var logoBox = await brandLogo.BoundingBoxAsync();
+    Require(logoBox is { X: >= 0 } && logoBox.X + logoBox.Width <= width
+        && Math.Abs(logoBox.Width - logoBox.Height) < 1, $"seller logo fits without distortion at {width}px");
     Require(await page.EvaluateAsync<bool>("document.documentElement.scrollWidth <= window.innerWidth"), $"no horizontal overflow at {width}px");
     var grid = page.Locator(".seller-shortcuts");
     var columns = await grid.EvaluateAsync<int>("element => getComputedStyle(element).gridTemplateColumns.split(' ').length");
