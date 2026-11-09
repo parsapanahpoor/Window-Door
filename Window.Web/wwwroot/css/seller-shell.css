@@ -1,26 +1,32 @@
 @font-face {
-    font-family: SellerVazir;
-    src: url("/AdminContent/css/fonts/vazir/Vazir.woff2") format("woff2");
+    font-family: SellerShabnam;
+    src: url("/DidiKala/assets/fonts/shabnam/Shabnam.woff2") format("woff2");
     font-weight: 400;
     font-display: swap;
 }
 
 @font-face {
-    font-family: SellerVazir;
-    src: url("/AdminContent/css/fonts/vazir/Vazir-Medium.woff2") format("woff2");
+    font-family: SellerShabnam;
+    src: url("/DidiKala/assets/fonts/shabnam/Shabnam-Medium.woff2") format("woff2");
     font-weight: 500;
     font-display: swap;
 }
 
 @font-face {
-    font-family: SellerVazir;
-    src: url("/AdminContent/css/fonts/vazir/Vazir-Bold.woff2") format("woff2");
+    font-family: SellerShabnam;
+    src: url("/DidiKala/assets/fonts/shabnam/Shabnam-Bold.woff2") format("woff2");
     font-weight: 700;
     font-display: swap;
 }
 
 body.seller-shell {
-    --seller-font: SellerVazir, Tahoma, sans-serif;
+    --seller-font: SellerShabnam, Tahoma, sans-serif;
+    --seller-text-meta: 12px;
+    --seller-text-small: 13px;
+    --seller-text-body: 15px;
+    --seller-text-card: clamp(16px, 1.8vw, 19px);
+    --seller-text-section: clamp(18px, 2vw, 22px);
+    --seller-text-title: clamp(24px, 3vw, 30px);
     --seller-ink: #192a44;
     --seller-muted: #4e5e75;
     --seller-accent: #254572;
@@ -39,6 +45,8 @@ body.seller-shell {
         radial-gradient(ellipse at 92% 36%, #ffdb8d38 0%, transparent 49%),
         linear-gradient(155deg, #fffdf7c4, #fff2d8a0 72%, #fffaf180);
     font-family: var(--seller-font);
+    font-size: var(--seller-text-body);
+    line-height: 1.65;
 }
 
 .seller-shell :is(button, input, select, textarea, label, .form-control, .btn, .dropdown-menu,
@@ -46,6 +54,22 @@ body.seller-shell {
 .seller-shell :is(h1, h2, h3, h4, h5, h6),
 .seller-shell .databox :is(.databox-header, .databox-number) {
     font-family: var(--seller-font);
+}
+
+.seller-shell .seller-page-body :is(.form-control, label, .btn) {
+    font-size: var(--seller-text-body);
+}
+
+.seller-shell .seller-page-body :is(.widget-header .widget-caption, .modal-title) {
+    font-size: var(--seller-text-card);
+    font-weight: 700;
+}
+
+.seller-shell .seller-page-body :is(label, th, .btn) { font-weight: 500; }
+
+/* The legacy RTL theme sets every heading to 300 !important. */
+.seller-shell :is(.seller-page-title, .modal-title, .seller-notice h3, .seller-dashboard h2, .seller-dashboard-hero h1) {
+    font-weight: 700 !important;
 }
 
 .seller-shell :is(.main-container, .seller-page-content) { background: transparent; }
@@ -119,8 +143,8 @@ body.seller-shell {
 
 .seller-brand strong,
 .seller-brand small { display: block; }
-.seller-brand strong { font-size: clamp(14px, 2vw, 17px); }
-.seller-brand small { color: var(--seller-amber); font-size: 11px; }
+.seller-brand strong { font-size: var(--seller-text-card); font-weight: 700; }
+.seller-brand small { color: var(--seller-amber); font-size: var(--seller-text-meta); }
 
 .seller-brand-mark {
     display: block;
@@ -154,6 +178,8 @@ body.seller-shell {
 
 .seller-account-name {
     max-width: 160px;
+    font-size: var(--seller-text-small);
+    font-weight: 500;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -169,6 +195,7 @@ body.seller-shell {
     border-radius: 12px !important;
     background: var(--seller-surface);
     text-align: start;
+    font-size: var(--seller-text-small);
     box-shadow: 0 8px 22px var(--seller-shadow);
 }
 
@@ -182,6 +209,7 @@ body.seller-shell {
 .seller-topbar .seller-header-menu > li > a {
     padding: 9px 14px;
     color: var(--seller-ink);
+    font-size: inherit;
 }
 
 .seller-topbar .seller-header-menu > li > a:is(:hover, :focus, [aria-current]) {
@@ -208,6 +236,7 @@ body.seller-shell {
     border-radius: 10px;
     color: var(--seller-muted);
     text-decoration: none;
+    font-size: var(--seller-text-small);
     font-weight: 500;
 }
 
@@ -216,6 +245,10 @@ body.seller-shell {
     background: var(--seller-accent-soft);
     color: var(--seller-accent-dark);
 }
+
+.seller-navigation-inner > a[aria-current],
+.seller-more > button[data-section-active],
+.seller-more-items a[aria-current] { font-weight: 700; }
 
 @media (min-width: 768px) {
     .seller-navigation-inner { padding-block: 6px; }
@@ -251,7 +284,7 @@ body.seller-shell {
         gap: 3px;
         min-height: 52px;
         padding-inline: 4px;
-        font-size: 12px;
+        font-size: var(--seller-text-meta);
     }
 
     .seller-navigation i { font-size: 16px; }
@@ -260,14 +293,15 @@ body.seller-shell {
 .seller-shell .seller-page-title {
     margin: 0 0 6px;
     color: var(--seller-ink);
-    font-size: clamp(20px, 3vw, 27px);
-    font-weight: 700;
+    font-size: var(--seller-text-title);
+    line-height: 1.4;
 }
 
 .seller-shell .seller-breadcrumb {
     margin-block-end: 16px;
     padding-inline: 0;
     background: transparent;
+    font-size: var(--seller-text-small);
     white-space: normal;
 }
 
@@ -355,12 +389,12 @@ body.seller-shell {
     border-radius: 999px;
     background: #20152666;
     color: var(--notice-illustration);
-    font-size: 12px;
-    font-weight: 700;
+    font-size: var(--seller-text-meta);
+    font-weight: 500;
 }
 
-.seller-notice h3 { color: inherit; font-size: clamp(17px, 2.5vw, 23px); font-weight: 700; line-height: 1.5; }
-.seller-notice p { margin-block-start: 5px; color: #fff6f0; line-height: 1.8; }
+.seller-notice h3 { color: inherit; font-size: var(--seller-text-section); line-height: 1.5; }
+.seller-notice p { margin-block-start: 5px; color: #fff6f0; font-size: var(--seller-text-body); line-height: 1.7; }
 
 .seller-notice a {
     display: inline-flex;
@@ -371,6 +405,7 @@ body.seller-shell {
     border-radius: 11px;
     background: #fff8ec;
     color: var(--notice-ink);
+    font-size: var(--seller-text-small);
     font-weight: 700;
     text-decoration: none;
 }
@@ -444,6 +479,8 @@ body.seller-shell {
     background: var(--seller-accent-soft);
     color: var(--seller-ink);
     text-decoration: none;
+    font-size: var(--seller-text-small);
+    font-weight: 500;
     overflow-wrap: anywhere;
 }
 
@@ -468,7 +505,6 @@ body.seller-shell {
         max-height: min(48dvh, 360px);
         overflow-y: auto;
         overscroll-behavior: contain;
-        font-size: 12px;
     }
 }
 
@@ -492,7 +528,7 @@ body.seller-shell {
 .seller-store-progress progress::-webkit-progress-bar { background: #68451a30; }
 .seller-store-progress progress::-webkit-progress-value { background: linear-gradient(90deg, #9c4f13, #bc741c); }
 .seller-store-progress progress::-moz-progress-bar { background: linear-gradient(90deg, #9c4f13, #bc741c); }
-.seller-store-progress small { color: #623d1c; }
+.seller-store-progress small { color: #623d1c; font-size: var(--seller-text-small); }
 
 .seller-shortcut-label { display: grid; min-width: 0; gap: 4px; }
 .seller-store-badge {
@@ -504,8 +540,8 @@ body.seller-shell {
     border-radius: 99px;
     background: #ffefca;
     color: #623d1c;
-    font-size: 11px;
-    font-weight: 700;
+    font-size: var(--seller-text-meta);
+    font-weight: 500;
 }
 
 .seller-store-badge[data-status="verified"], .seller-store-status-icon[data-status="verified"] { background: #d5f3e1; color: #0b5d44; }
@@ -556,8 +592,8 @@ body.seller-shell {
 }
 
 .seller-store-status-label {
-    font-size: 11px;
-    font-weight: 700;
+    font-size: var(--seller-text-meta);
+    font-weight: 500;
     line-height: 1.35;
     white-space: nowrap;
 }
@@ -579,8 +615,6 @@ body.seller-shell {
         border-radius: 6px;
         font-size: 12px;
     }
-
-    .seller-store-status-label { font-size: 10px; }
 }
 
 @media (max-width: 389px) {

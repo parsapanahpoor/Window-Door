@@ -165,6 +165,19 @@ foreach (var width in new[] { 320, 390, 767, 768, 1024, 1440 })
     Require(logoBox is { X: >= 0 } && logoBox.X + logoBox.Width <= width
         && Math.Abs(logoBox.Width - logoBox.Height) < 1, $"seller logo fits without distortion at {width}px");
     Require(await page.EvaluateAsync<bool>("document.documentElement.scrollWidth <= window.innerWidth"), $"no horizontal overflow at {width}px");
+    Require(await page.EvaluateAsync<bool>("""
+        () => {
+            const style = selector => getComputedStyle(document.querySelector(selector));
+            const size = selector => parseFloat(style(selector).fontSize);
+            const weight = selector => Number(style(selector).fontWeight);
+            return size('.seller-dashboard h2') > size('.seller-store-card-copy strong')
+                && size('.seller-store-card-copy strong') > size('.seller-store-card-copy small')
+                && weight('.seller-store-card-copy strong') > weight('.seller-store-card-copy small')
+                && size('.seller-metric dd') > size('.seller-metric dt')
+                && weight('.seller-metric dd') > weight('.seller-metric dt')
+                && weight('.seller-navigation-inner > a[aria-current]') > weight('.seller-navigation-inner > a:not([aria-current])');
+        }
+        """), $"seller dashboard typography hierarchy at {width}px");
     var grid = page.Locator(".seller-shortcuts");
     var columns = await grid.EvaluateAsync<int>("element => getComputedStyle(element).gridTemplateColumns.split(' ').length");
     Require(columns == (width < 768 ? 2 : 4), $"responsive shortcut columns at {width}px");
@@ -243,9 +256,12 @@ await Assertions.Expect(navigation.GetByRole(AriaRole.Link)).ToHaveCountAsync(3)
 await Assertions.Expect(navigation.Locator(".seller-navigation-inner > a[aria-current]")).ToHaveCountAsync(0);
 await Assertions.Expect(navigation).ToHaveCSSAsync("position", "fixed");
 Require(await page.EvaluateAsync<bool>("document.documentElement.scrollWidth <= window.innerWidth"), "employee form fits narrow viewport");
-Require(await page.EvaluateAsync<bool>("async () => (await Promise.all([400, 500, 700].map(w => document.fonts.load(w + ' 16px SellerVazir', 'پنجره')))).every(faces => faces.length > 0)"),
-    "local Vazir files load in all weights");
-Require(await page.Locator("#Username").EvaluateAsync<bool>("field => getComputedStyle(field).fontFamily.startsWith('SellerVazir')"), "form field uses Vazir");
+Require(await page.EvaluateAsync<bool>("async () => (await Promise.all([400, 500, 700].map(w => document.fonts.load(w + ' 16px SellerShabnam', 'پنجره')))).every(faces => faces.length > 0)"),
+    "local Shabnam files load in all weights");
+Require(await page.Locator("#Username").EvaluateAsync<bool>("field => getComputedStyle(field).fontFamily.startsWith('SellerShabnam')"), "form field uses Shabnam");
+await Assertions.Expect(page.Locator("#Username")).ToHaveCSSAsync("font-size", "15px");
+await Assertions.Expect(page.Locator("label[for=Username]")).ToHaveCSSAsync("font-weight", "500");
+await Assertions.Expect(page.Locator(".seller-page-title")).ToHaveCSSAsync("font-weight", "700");
 Require(await navigation.Locator(".fa").First.EvaluateAsync<bool>("icon => getComputedStyle(icon).fontFamily.includes('FontAwesome')"), "navigation retains icon font");
 await page.EvaluateAsync("document.scrollingElement.scrollTop = document.scrollingElement.scrollHeight");
 var footerEdge = await navigation.BoundingBoxAsync();
@@ -340,6 +356,8 @@ Require((await notices.EvaluateAllAsync<string[]>("cards => cards.map(card => ca
     .SequenceEqual(["error", "warning", "info", "success"]), "notices sorted by severity");
 await Assertions.Expect(notices.First.Locator("p")).ToHaveTextAsync("Fixture <b>error</b>");
 await Assertions.Expect(notices.First.Locator("p b")).ToHaveCountAsync(0);
+await Assertions.Expect(notices.First.Locator("h3")).ToHaveCSSAsync("font-weight", "700");
+await Assertions.Expect(notices.First.Locator("p")).ToHaveCSSAsync("font-size", "15px");
 Require((await notices.EvaluateAllAsync<string[]>("cards => cards.map(card => getComputedStyle(card).backgroundColor)"))
     .Distinct().Count() == 4, "severity colors are distinct");
 await Assertions.Expect(bell.Locator(".seller-notification-count")).ToHaveTextAsync("4");
@@ -358,6 +376,13 @@ await Assertions.Expect(notices).ToHaveCountAsync(1);
 await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-Fixture"] = "clear" });
 await page.GotoAsync(new Uri(baseUrl, "/Seller").AbsoluteUri);
 await Assertions.Expect(page.Locator(".seller-dashboard-hero")).ToBeVisibleAsync();
+Require(await page.EvaluateAsync<bool>("""
+    () => {
+        const title = getComputedStyle(document.querySelector('.seller-dashboard-hero h1'));
+        const section = getComputedStyle(document.querySelector('.seller-dashboard h2'));
+        return parseFloat(title.fontSize) > parseFloat(section.fontSize) && title.fontWeight === '700';
+    }
+    """), "welcome heading leads the dashboard typography");
 var heroArt = page.Locator(".seller-dashboard-hero-art");
 await Assertions.Expect(heroArt).ToBeVisibleAsync();
 Require(await heroArt.EvaluateAsync<bool>("image => image.complete && image.naturalWidth > 0 && new URL(image.src).pathname.endsWith('/seller-dashboard-window.svg')"),

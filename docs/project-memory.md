@@ -106,7 +106,7 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 
 ## Shared seller shell
 
-- The shared seller layout now renders the primary navigation on every seller page. Its three links are fixed at the bottom on mobile and appear below the header on desktop. The layout loads local Vazir assets and uses a warm palette. The new profile and language controls use the existing account and localization routes.
+- The shared seller layout now renders the primary navigation on every seller page. Its three links are fixed at the bottom on mobile and appear below the header on desktop. The layout loads local Shabnam in regular, medium and bold and uses a warm palette. Seller-specific typography separates headings, values, actions and metadata. The isolated browser runner verified the hierarchy and narrow layout. The new profile and language controls use the existing account and localization routes.
 - Extended the isolated browser runner with navigation through real seller routes, font and avatar loading, form clearance and keyboard controls. See specs/0005-seller-shell/spec.md.
 
 ## Seller notices and full navigation
