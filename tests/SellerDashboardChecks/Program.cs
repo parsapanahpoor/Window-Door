@@ -146,6 +146,19 @@ await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopOrde
 await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/User/AddNewUser']")).ToBeVisibleAsync();
 await Assertions.Expect(page.Locator(".seller-shortcuts a").First).ToHaveClassAsync("seller-shortcut seller-store-shortcut");
 await Assertions.Expect(page.Locator(".seller-shortcuts .seller-store-badge")).ToHaveTextAsync("تأیید شده");
+Require(await page.Locator(".seller-metric").EvaluateAllAsync<bool>("""
+    async cards => {
+        const backgrounds = cards.map(card => getComputedStyle(card).backgroundImage);
+        const illustrations = backgrounds.map(background => background.match(/url\("([^"]+)"\)/)?.[1]);
+        if (new Set(backgrounds).size !== 4 || illustrations.some(url => !url)) return false;
+        await Promise.all([...new Set(illustrations)].map(async url => {
+            const image = new Image();
+            image.src = url;
+            await image.decode();
+        }));
+        return new Set(illustrations).size >= 2;
+    }
+    """), "activity cards have distinct tinted backgrounds and load their illustrations");
 var headerStoreStatus = page.Locator("#seller-store-status-button");
 await Assertions.Expect(headerStoreStatus).ToHaveAttributeAsync("aria-label", new System.Text.RegularExpressions.Regex("تأیید شده"));
 await Assertions.Expect(page.Locator(".seller-store-progress")).ToHaveCountAsync(0);

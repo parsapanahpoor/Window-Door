@@ -73,7 +73,6 @@
     margin: 0;
 }
 
-.seller-metric,
 .seller-shortcut {
     padding: 12px;
     border: 1px solid #ead5b7;
@@ -82,14 +81,56 @@
     box-shadow: inset 0 1px 0 #fff9;
 }
 
+.seller-metric {
+    --metric-art: url("../images/seller-dashboard-window.svg");
+    --metric-shade: #233b75;
+    --metric-tint: #394c99d9;
+    --metric-art-side: left;
+    --metric-gradient-side: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 112px;
+    padding: 14px;
+    border-radius: 16px;
+    background-color: var(--metric-shade);
+    background-image: linear-gradient(to var(--metric-gradient-side), var(--metric-tint), var(--metric-shade) 76%), var(--metric-art);
+    background-position: center, var(--metric-art-side) top;
+    background-repeat: no-repeat;
+    background-size: cover, clamp(112px, 75%, 184px) auto;
+    color: #fff8f1;
+    box-shadow: inset 0 1px 0 #ffffff30;
+}
+
+.seller-metric:dir(ltr) {
+    --metric-art-side: right;
+    --metric-gradient-side: left;
+}
+
+.seller-metric-month {
+    --metric-shade: #563052;
+    --metric-tint: #8b4972e8;
+}
+
+.seller-metric-year {
+    --metric-shade: #1d4a36;
+    --metric-tint: #2e6844e8;
+    background-position: center, var(--metric-art-side) bottom;
+}
+
+.seller-metric-contracts {
+    --metric-art: url("../images/seller-storefront.svg");
+    --metric-shade: #67361f;
+    --metric-tint: #984c28e8;
+}
+
 .seller-metric dt {
-    color: var(--seller-muted);
     font-size: var(--seller-text-small);
     font-weight: 400;
     line-height: 1.65;
 }
 
-.seller-metric dt i { color: var(--seller-accent); }
+.seller-metric dt i { color: #ffdaae; }
 .seller-metric dd {
     margin: 4px 0 0;
     font-size: clamp(22px, 3vw, 30px);
