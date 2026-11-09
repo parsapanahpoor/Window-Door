@@ -78,9 +78,11 @@ body.seller-shell {
     z-index: 1030;
     padding: env(safe-area-inset-top, 0px) max(12px, env(safe-area-inset-right, 0px))
         0 max(12px, env(safe-area-inset-left, 0px));
-    background: linear-gradient(110deg, #101e37 6%, #1e375c 62%, #345782);
+    background: linear-gradient(var(--seller-topbar-gradient-angle, 110deg), #101e37 6%, #1e375c 62%, #345782);
     color: #fff9f3;
 }
+
+.seller-topbar:dir(rtl) { --seller-topbar-gradient-angle: 250deg; }
 
 .seller-topbar-inner,
 .seller-navigation-inner {

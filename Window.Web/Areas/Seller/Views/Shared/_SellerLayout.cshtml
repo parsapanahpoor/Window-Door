@@ -76,14 +76,27 @@
                                     {
                                         <a class="seller-shortcut @(link.IsStoreManagement ? "seller-store-shortcut" : null)"
                                            asp-area="Seller" asp-controller="@link.Controller" asp-action="@link.Action">
-                                            <i class="fa @link.Icon" aria-hidden="true"></i>
-                                            <span class="seller-shortcut-label">
-                                                <span>@Text[link.Label]</span>
-                                                @if (link.IsStoreManagement && panel.StoreStatus is { } storeStatus)
-                                                {
-                                                    <partial name="_SellerStoreBadge" model="storeStatus" />
-                                                }
-                                            </span>
+                                            @if (link.IsStoreManagement)
+                                            {
+                                                <span class="seller-store-card-copy">
+                                                    <strong>@Text[link.Label]</strong>
+                                                    <small>@Text["Store profile, links and work samples"]</small>
+                                                    <span class="seller-store-card-meta">
+                                                        @if (panel.StoreStatus is { } storeStatus)
+                                                        {
+                                                            <partial name="_SellerStoreBadge" model="storeStatus" />
+                                                        }
+                                                        <i class="fa fa-angle-left seller-store-card-arrow" aria-hidden="true"></i>
+                                                    </span>
+                                                </span>
+                                                <img class="seller-store-card-art" src="~/images/seller-storefront.svg" asp-append-version="true"
+                                                     width="200" height="144" alt="" />
+                                            }
+                                            else
+                                            {
+                                                <i class="fa @link.Icon" aria-hidden="true"></i>
+                                                <span class="seller-shortcut-label">@Text[link.Label]</span>
+                                            }
                                         </a>
                                     }
                                 </div>
