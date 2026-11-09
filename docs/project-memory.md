@@ -113,3 +113,8 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 
 - Seller layout now renders existing account notices and one-request operation feedback at the top. The bell shows the same ordered notices. The dashboard welcome card is conditional; metrics and shortcuts remain available.
 - The navigation shares seller role visibility rules with dashboard shortcuts. The old page header is removed. Local Playwright checks passed with loopback fixtures, including the successful order command notification and refresh behavior. See specs/0006-seller-alerts-navigation/spec.md.
+
+## Seller store profile progress
+
+- The seller dashboard uses the associated store's saved profile, link and work sample to show owner-only completion progress. It places the store management shortcut first and uses the market state for its independent approval badge. See specs/0007-seller-store-progress/spec.md.
+- The isolated seller browser runner passed the percentage, next-step, approval and owner visibility checks. No migration is required.

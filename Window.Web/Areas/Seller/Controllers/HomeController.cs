@@ -36,7 +36,8 @@ namespace Window.Web.Areas.Seller.Controllers
         {
             #region Check Is Exist Any Market By This User
 
-            var market = await _sellerService.GetMarketByUserId(User.GetUserId());
+            var userId = User.GetUserId();
+            var market = await _sellerService.GetMarketByUserId(userId);
             if (market == null)
             {
                 TempData[ErrorMessage] = "کاربر عزیز لطفا در ابتدا فروشگاه خود را ثبت کنید.";
@@ -44,6 +45,9 @@ namespace Window.Web.Areas.Seller.Controllers
             }
 
             #endregion
+
+            if (market.UserId == userId)
+                ViewData["StoreProfileProgress"] = await _sellerService.GetStoreProfileProgressAsync(userId, market.Id);
 
             #region Check User Charge
 

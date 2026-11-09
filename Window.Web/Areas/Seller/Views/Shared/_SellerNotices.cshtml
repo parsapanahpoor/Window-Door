@@ -14,6 +14,14 @@
                 }
                 <h3>@Text[notice.Title]</h3>
                 <p>@(notice.TranslateMessage ? Text[notice.Message].Value : notice.Message)</p>
+                @if (notice.Progress is { } progress)
+                {
+                    <div class="seller-store-progress">
+                        <strong>@Text["{0}% complete", progress.Percent]</strong>
+                        <progress value="@progress.Percent" max="100" aria-label="@Text["Finish your store profile"]"></progress>
+                        <small>@Text["{0} of {1} steps saved", progress.CompletedSteps, Window.Domain.ViewModels.Seller.PersonalInfo.StoreProfileProgress.TotalSteps]</small>
+                    </div>
+                }
                 @if (notice.Action is { } link)
                 {
                     <a asp-area="Seller" asp-controller="@link.Controller" asp-action="@link.Action">@Text[link.Label]</a>

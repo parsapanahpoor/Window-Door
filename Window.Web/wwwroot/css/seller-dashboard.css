@@ -135,3 +135,15 @@
         padding-right: max(12px, env(safe-area-inset-right, 0px));
     }
 }
+
+.seller-shortcuts .seller-store-shortcut {
+    grid-column: span 2;
+    min-height: 78px;
+    border-color: #ab4e73;
+    background: linear-gradient(125deg, #fbe0e6, #fff5dd);
+    color: #57203d;
+    font-weight: 700;
+}
+
+.seller-shortcuts .seller-store-shortcut:is(:hover, :focus) { background: #ffd9e4; }
+.seller-store-shortcut > i { background: #82365a; color: #fff7ec; }

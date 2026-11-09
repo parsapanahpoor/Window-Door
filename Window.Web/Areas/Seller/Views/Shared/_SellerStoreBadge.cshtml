@@ -1,0 +1,8 @@
+@model Window.Domain.ViewModels.Seller.PersonalInfo.StoreProfileProgress
+@inject IStringLocalizer<SellerDashboardText> Text
+@{
+    var badge = SellerPanel.ApprovalBadge(Model);
+}
+<span class="seller-store-badge" data-status="@badge.Style">
+    <i class="fa @badge.Icon" aria-hidden="true"></i> @Text[badge.Label]
+</span>

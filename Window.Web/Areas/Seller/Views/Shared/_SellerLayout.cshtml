@@ -1,3 +1,4 @@
+@using Window.Domain.ViewModels.Seller.PersonalInfo
 @using Window.Application.Extensions
 @using Window.Application.Interfaces
 @using Window.Application.Services.Interfaces
@@ -11,7 +12,7 @@
     var seller = await Users.GetUserById(sellerId);
     var state = await Sellers.GetSellersInfosState(sellerId);
     var isMaster = await Sellers.IsSellerMaster(sellerId);
-    var panel = SellerPanel.Create(seller, state, isMaster, TempData);
+    var panel = SellerPanel.Create(seller, state, isMaster, TempData, ViewData["StoreProfileProgress"] as StoreProfileProgress);
 }
 <!DOCTYPE html>
 <html lang="@culture.CultureKey" dir="@culture.Direction">
@@ -71,10 +72,18 @@
                             <section aria-labelledby="seller-shortcuts-title">
                                 <h2 id="seller-shortcuts-title">@Text["Quick access"]</h2>
                                 <div class="seller-shortcuts">
-                                    @foreach (var link in SellerPanel.PrimaryLinks.Skip(1).Concat(panel.ExtraLinks))
+                                    @foreach (var link in SellerPanel.PrimaryLinks.Skip(1).Concat(panel.ExtraLinks).OrderByDescending(link => link.IsStoreManagement))
                                     {
-                                        <a class="seller-shortcut" asp-area="Seller" asp-controller="@link.Controller" asp-action="@link.Action">
-                                            <i class="fa @link.Icon" aria-hidden="true"></i><span>@Text[link.Label]</span>
+                                        <a class="seller-shortcut @(link.IsStoreManagement ? "seller-store-shortcut" : null)"
+                                           asp-area="Seller" asp-controller="@link.Controller" asp-action="@link.Action">
+                                            <i class="fa @link.Icon" aria-hidden="true"></i>
+                                            <span class="seller-shortcut-label">
+                                                <span>@Text[link.Label]</span>
+                                                @if (link.IsStoreManagement && panel.StoreProgress is { } progress)
+                                                {
+                                                    <partial name="_SellerStoreBadge" model="progress" />
+                                                }
+                                            </span>
                                         </a>
                                     }
                                 </div>

@@ -462,3 +462,50 @@ body.seller-shell {
         font-size: 12px;
     }
 }
+
+.seller-store-progress {
+    display: grid;
+    gap: 5px;
+    margin-block-start: 12px;
+}
+
+.seller-store-progress progress {
+    width: 100%;
+    height: 12px;
+    appearance: none;
+    overflow: hidden;
+    border: 0;
+    border-radius: 99px;
+    background: #301c27;
+    color: #ffd48b;
+}
+
+.seller-store-progress progress::-webkit-progress-bar { background: #301c27; }
+.seller-store-progress progress::-webkit-progress-value { background: #ffd48b; }
+.seller-store-progress progress::-moz-progress-bar { background: #ffd48b; }
+.seller-store-progress small { color: #fff6f0; }
+
+.seller-shortcut-label { display: grid; min-width: 0; gap: 4px; }
+.seller-store-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    gap: 4px;
+    padding: 2px 7px;
+    border-radius: 99px;
+    background: #fff0cd;
+    color: #753c10;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.seller-store-badge[data-status="verified"] { background: #d5f3e1; color: #0b5d44; }
+.seller-store-badge[data-status="correction"] { background: #ffe0e7; color: #832343; }
+.seller-shell .seller-store-badge i {
+    display: inline;
+    flex: none;
+    height: auto;
+    background: transparent;
+    color: inherit;
+    font-size: inherit;
+}

@@ -14,6 +14,7 @@ using Window.Application.Services.Interfaces;
 using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Market;
 using Window.Domain.ViewModels.User.Ticket;
+using Window.Domain.ViewModels.Seller.PersonalInfo;
 using Window.Web.Culture;
 using SellerHome = Window.Web.Areas.Seller.Controllers.HomeController;
 
@@ -35,7 +36,17 @@ builder.Services.AddScoped(provider =>
     var fixture = provider.GetRequiredService<IHttpContextAccessor>().HttpContext!.Request.Headers["X-Seller-Fixture"].ToString();
     return FixtureService.Create<ISellerService>(name => name switch
     {
-        nameof(ISellerService.GetMarketByUserId) => Task.FromResult<Market?>(new Market { Id = 1 }),
+        nameof(ISellerService.GetMarketByUserId) => Task.FromResult<Market?>(new Market { Id = 1, UserId = fixture == "employee" ? 2UL : 1UL }),
+        nameof(ISellerService.GetStoreProfileProgressAsync) => Task.FromResult<StoreProfileProgress?>(fixture switch
+        {
+            "pending" => new(false, false, false, MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller),
+            "setup-links" => new(true, false, false, MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller),
+            "setup-sample" => new(true, true, false, MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller),
+            "review" => new(true, true, true, MarketPersonalsInfoState.WaitingForConfirmPersonalInformations),
+            "rejected" => new(true, true, true, MarketPersonalsInfoState.Rejected),
+            "employee" => throw new InvalidOperationException("Employee dashboard queried owner-only progress"),
+            _ => new(true, true, true, MarketPersonalsInfoState.ActiveMarketAccount)
+        }),
         nameof(ISellerService.GetSellersInfosState) => Task.FromResult(fixture == "pending" ? "NewUser" : "ActiveSellerAccount"),
         nameof(ISellerService.IsSellerMaster) => Task.FromResult(fixture != "employee"),
         nameof(ISellerService.CountOfTodayUserInInquiry) => Task.FromResult(12),
@@ -127,6 +138,9 @@ await Assertions.Expect(page.Locator(".seller-notice a")).ToHaveAttributeAsync("
 await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopProduct/CreateProduct']")).ToBeVisibleAsync();
 await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopOrder/ManageOrderPage']")).ToBeVisibleAsync();
 await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/User/AddNewUser']")).ToBeVisibleAsync();
+await Assertions.Expect(page.Locator(".seller-shortcuts a").First).ToHaveClassAsync("seller-shortcut seller-store-shortcut");
+await Assertions.Expect(page.Locator(".seller-shortcuts .seller-store-badge")).ToHaveTextAsync("تأیید شده");
+await Assertions.Expect(page.Locator(".seller-store-progress")).ToHaveCountAsync(0);
 
 foreach (var width in new[] { 320, 390, 767, 768, 1024, 1440 })
 {
@@ -252,7 +266,35 @@ foreach (var fixture in new[] { "employee", "pending" })
     await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopProduct/CreateProduct']")).ToHaveCountAsync(0);
     await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/Ticket/FilterTickets']")).ToBeVisibleAsync();
     if (fixture == "pending")
-        await Assertions.Expect(page.GetByText("اطلاعات فروشگاه را تکمیل کنید", new() { Exact = true }).Last).ToBeVisibleAsync();
+        await Assertions.Expect(page.Locator(".seller-store-progress progress")).ToHaveAttributeAsync("value", "0");
+    else
+    {
+        await Assertions.Expect(page.Locator(".seller-store-progress")).ToHaveCountAsync(0);
+        await Assertions.Expect(page.Locator(".seller-store-shortcut")).ToHaveCountAsync(0);
+    }
+}
+
+foreach (var (fixture, percent, nextAction) in new[]
+{
+    ("pending", "0", "AddPersonalInfo"),
+    ("setup-links", "33", "AddSellerPersonalLinks"),
+    ("setup-sample", "67", "AddSellerWorkSampleTitle")
+})
+{
+    await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-Fixture"] = fixture });
+    await page.GotoAsync(new Uri(baseUrl, "/Seller").AbsoluteUri);
+    var progressCard = page.Locator(".seller-notice").Filter(new() { Has = page.Locator("progress") });
+    await Assertions.Expect(progressCard.Locator("progress")).ToHaveAttributeAsync("value", percent);
+    await Assertions.Expect(progressCard.Locator("a")).ToHaveAttributeAsync("href", "/Seller/SellerPersonalInfo/" + nextAction);
+    await Assertions.Expect(page.Locator(".seller-shortcuts .seller-store-badge")).ToHaveTextAsync("نیاز به تکمیل");
+}
+
+foreach (var (fixture, badge) in new[] { ("review", "در انتظار بررسی"), ("rejected", "نیاز به اصلاح") })
+{
+    await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-Fixture"] = fixture });
+    await page.GotoAsync(new Uri(baseUrl, "/Seller").AbsoluteUri);
+    await Assertions.Expect(page.Locator(".seller-store-progress")).ToHaveCountAsync(0);
+    await Assertions.Expect(page.Locator(".seller-shortcuts .seller-store-badge")).ToHaveTextAsync(badge);
 }
 
 await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-Fixture"] = "master" });

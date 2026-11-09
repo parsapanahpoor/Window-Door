@@ -33,7 +33,14 @@
             <li>
                 <a asp-area="Seller" asp-controller="@link.Controller" asp-action="@link.Action"
                    aria-current="@(IsExact(link) ? "page" : null)">
-                    <i class="fa @link.Icon" aria-hidden="true"></i><span>@Text[link.Label]</span>
+                    <i class="fa @link.Icon" aria-hidden="true"></i>
+                    <span class="seller-shortcut-label">
+                        <span>@Text[link.Label]</span>
+                        @if (link.IsStoreManagement && Model.StoreProgress is { } progress)
+                        {
+                            <partial name="_SellerStoreBadge" model="progress" />
+                        }
+                    </span>
                 </a>
             </li>
         }

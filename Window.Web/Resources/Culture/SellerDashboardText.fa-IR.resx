@@ -51,4 +51,16 @@
   <data name="Support could not approve your information. Review your store details." xml:space="preserve"><value>پشتیبانی اطلاعات ارسال‌شده را تأیید نکرد. مشخصات فروشگاه را بررسی و اصلاح کنید.</value></data>
   <data name="Seller balance expired" xml:space="preserve"><value>اعتبار حساب فروشندگی به پایان رسیده است</value></data>
   <data name="Recharge your account to resume using seller tools." xml:space="preserve"><value>برای ادامهٔ استفاده از ابزارهای فروشندگی، حساب خود را دوباره شارژ کنید.</value></data>
+  <data name="Finish your store profile" xml:space="preserve"><value>اطلاعات فروشگاه را تکمیل کنید</value></data>
+  <data name="Complete the remaining steps to finish your store profile." xml:space="preserve"><value>برای تکمیل پروندهٔ فروشگاه، مراحل باقی‌مانده را انجام دهید.</value></data>
+  <data name="Continue store setup" xml:space="preserve"><value>ادامهٔ تکمیل اطلاعات</value></data>
+  <data name="{0}% complete" xml:space="preserve"><value>{0}٪ تکمیل شده</value></data>
+  <data name="{0} of {1} steps saved" xml:space="preserve"><value>{0} از {1} مرحله ثبت شده</value></data>
+  <data name="Store under review" xml:space="preserve"><value>در انتظار بررسی</value></data>
+  <data name="Store needs correction" xml:space="preserve"><value>نیاز به اصلاح</value></data>
+  <data name="Store verified" xml:space="preserve"><value>تأیید شده</value></data>
+  <data name="Store fee pending badge" xml:space="preserve"><value>در انتظار پرداخت</value></data>
+  <data name="Store account inactive" xml:space="preserve"><value>حساب غیرفعال</value></data>
+  <data name="Store not yet verified" xml:space="preserve"><value>هنوز تأیید نشده</value></data>
+  <data name="Store profile incomplete" xml:space="preserve"><value>نیاز به تکمیل</value></data>
 </root>
