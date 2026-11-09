@@ -1,8 +1,7 @@
 @model IReadOnlyList<SellerNotice>
 @inject IStringLocalizer<SellerDashboardText> Text
 
-<section class="seller-notices" aria-labelledby="seller-notices-title">
-    <h2 id="seller-notices-title">@Text["Current notifications"]</h2>
+<section class="seller-notices" aria-label="@Text["Current notifications"]">
     @for (var index = 0; index < Model.Count; index++)
     {
         var notice = Model[index];
