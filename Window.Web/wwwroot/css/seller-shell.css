@@ -26,14 +26,18 @@ body.seller-shell {
     --seller-accent: #254572;
     --seller-accent-dark: #142742;
     --seller-accent-soft: #eaf0f7;
-    --seller-background: #f7f3eb;
+    --seller-background: #fff8ea;
+    --seller-glass-surface: #fffdf9c9;
     --seller-border: #dfdacd;
     --seller-surface: #fffdf9;
     --seller-amber: #ffd88d;
     --seller-saffron: #f6bb52;
     --seller-shadow: #14274229;
     color: var(--seller-ink);
-    background: var(--seller-background);
+    background-color: var(--seller-background);
+    background-image: radial-gradient(ellipse at 12% 14%, #efb94d36 0%, transparent 56%),
+        radial-gradient(ellipse at 92% 36%, #ffdb8d38 0%, transparent 49%),
+        linear-gradient(155deg, #fffdf7c4, #fff2d8a0 72%, #fffaf180);
     font-family: var(--seller-font);
 }
 
@@ -44,7 +48,7 @@ body.seller-shell {
     font-family: var(--seller-font);
 }
 
-.seller-shell :is(.main-container, .seller-page-content) { background: var(--seller-background); }
+.seller-shell :is(.main-container, .seller-page-content) { background: transparent; }
 .seller-shell .seller-page-content { margin-inline: 0; }
 .seller-shell .seller-page-body {
     display: flow-root;
