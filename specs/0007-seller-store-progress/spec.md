@@ -8,7 +8,7 @@ Status: Verified with isolated browser fixtures
 
 The progress query reads the existing records and does not require a migration. The dashboard uses the same notice styles and navigation rules.
 
-- AC-4. The shared seller header shows owners the store approval status and links to store management. On compact screens an icon opens the status menu. The dashboard badge and header use the same labels and status icons.
+- AC-4. The shared seller header shows owners the store approval status and links to store management. A short status label is visible next to the icon on wide screens and below it on compact screens. The menu and dashboard badge show the full status.
 
 ## Evidence
 

@@ -25,7 +25,7 @@ public sealed record SellerNotice(SellerNoticeLevel Level, string Title, string 
     };
 }
 
-public sealed record SellerStoreStatus(string Label, string Style, string Icon);
+public sealed record SellerStoreStatus(string Label, string ShortLabel, string Style, string Icon);
 
 public sealed record SellerPanel(User User, IReadOnlyList<SellerNotice> Notices, IReadOnlyList<SellerLink> ExtraLinks, SellerStoreStatus? StoreStatus)
 {
@@ -38,14 +38,14 @@ public sealed record SellerPanel(User User, IReadOnlyList<SellerNotice> Notices,
 
     private static SellerStoreStatus ApprovalBadge(MarketPersonalsInfoState? state, bool hasCompleteProfile) => state switch
     {
-        MarketPersonalsInfoState.WaitingForConfirmPersonalInformations => new("Store under review", "review", "fa-clock-o"),
-        MarketPersonalsInfoState.Rejected => new("Store needs correction", "correction", "fa-exclamation-circle"),
+        MarketPersonalsInfoState.WaitingForConfirmPersonalInformations => new("Store under review", "Store status short review", "review", "fa-clock-o"),
+        MarketPersonalsInfoState.Rejected => new("Store needs correction", "Store status short correction", "correction", "fa-exclamation-circle"),
         MarketPersonalsInfoState.ActiveMarketAccount or MarketPersonalsInfoState.AcceptedPersonalInformation
-            => new("Store verified", "verified", "fa-check-circle"),
-        MarketPersonalsInfoState.WaitingForPyedFromSeller => new("Store fee pending badge", "review", "fa-clock-o"),
-        MarketPersonalsInfoState.DisAcctiveMarketAccount => new("Store account inactive", "review", "fa-pause-circle"),
-        _ when hasCompleteProfile => new("Store not yet verified", "review", "fa-clock-o"),
-        _ => new("Store profile incomplete", "correction", "fa-circle-o")
+            => new("Store verified", "Store status short verified", "verified", "fa-check-circle"),
+        MarketPersonalsInfoState.WaitingForPyedFromSeller => new("Store fee pending badge", "Store status short payment", "review", "fa-clock-o"),
+        MarketPersonalsInfoState.DisAcctiveMarketAccount => new("Store account inactive", "Store status short inactive", "review", "fa-pause-circle"),
+        _ when hasCompleteProfile => new("Store not yet verified", "Store status short unverified", "review", "fa-clock-o"),
+        _ => new("Store profile incomplete", "Store status short incomplete", "correction", "fa-circle-o")
     };
 
     public static SellerPanel Create(User user, string? state, bool isMaster, ITempDataDictionary tempData,

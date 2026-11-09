@@ -529,15 +529,33 @@ body.seller-shell {
     color: #60335e;
 }
 
-.seller-store-status-label { display: none; }
+.seller-store-status-label {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.35;
+    white-space: nowrap;
+}
 
 .seller-store-status-menu .seller-menu-identity {
     display: grid;
     gap: 6px;
 }
 
-@media (min-width: 1024px) {
-    .seller-store-status-label { display: inline; }
+@media (max-width: 1023px) {
+    .seller-store-status-button {
+        flex-direction: column;
+        gap: 2px;
+        padding-inline: 5px;
+    }
+
+    .seller-store-status-button .seller-store-status-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        font-size: 12px;
+    }
+
+    .seller-store-status-label { font-size: 10px; }
 }
 
 @media (max-width: 389px) {

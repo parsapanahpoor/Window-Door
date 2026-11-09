@@ -65,4 +65,11 @@
   <data name="Store profile incomplete" xml:space="preserve"><value>نیاز به تکمیل</value></data>
   <data name="Store approval status" xml:space="preserve"><value>وضعیت تأیید فروشگاه</value></data>
   <data name="Store approval status: {0}" xml:space="preserve"><value>وضعیت تأیید فروشگاه: {0}</value></data>
+  <data name="Store status short review" xml:space="preserve"><value>بررسی</value></data>
+  <data name="Store status short correction" xml:space="preserve"><value>اصلاح</value></data>
+  <data name="Store status short verified" xml:space="preserve"><value>تأیید</value></data>
+  <data name="Store status short payment" xml:space="preserve"><value>پرداخت</value></data>
+  <data name="Store status short inactive" xml:space="preserve"><value>غیرفعال</value></data>
+  <data name="Store status short unverified" xml:space="preserve"><value>تأیید نشده</value></data>
+  <data name="Store status short incomplete" xml:space="preserve"><value>ناقص</value></data>
 </root>

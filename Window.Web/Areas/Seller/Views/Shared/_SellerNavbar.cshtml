@@ -29,13 +29,13 @@
             @if (Model.StoreStatus is { } status)
             {
                 <div class="dropdown seller-store-status">
-                    <button class="seller-topbar-button dropdown-toggle" type="button" id="seller-store-status-button"
+                    <button class="seller-topbar-button seller-store-status-button dropdown-toggle" type="button" id="seller-store-status-button"
                             data-toggle="dropdown" aria-expanded="false" aria-controls="seller-store-status-menu"
                             aria-label="@Text["Store approval status: {0}", Text[status.Label].Value]">
                         <span class="seller-store-status-icon" data-status="@status.Style" aria-hidden="true">
                             <i class="fa @status.Icon"></i>
                         </span>
-                        <span class="seller-store-status-label">@Text[status.Label]</span>
+                        <span class="seller-store-status-label">@Text[status.ShortLabel]</span>
                     </button>
                     <ul class="dropdown-menu seller-header-menu seller-store-status-menu" id="seller-store-status-menu"
                         aria-labelledby="seller-store-status-button">

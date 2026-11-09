@@ -153,6 +153,8 @@ await Assertions.Expect(page.Locator(".seller-store-progress")).ToHaveCountAsync
 foreach (var width in new[] { 320, 390, 767, 768, 1024, 1440 })
 {
     await page.SetViewportSizeAsync(width, 720);
+    await Assertions.Expect(headerStoreStatus.Locator(".seller-store-status-label")).ToBeVisibleAsync();
+    await Assertions.Expect(headerStoreStatus.Locator(".seller-store-status-label")).ToHaveTextAsync("تأیید");
     var logoBox = await brandLogo.BoundingBoxAsync();
     Require(logoBox is { X: >= 0 } && logoBox.X + logoBox.Width <= width
         && Math.Abs(logoBox.Width - logoBox.Height) < 1, $"seller logo fits without distortion at {width}px");
@@ -298,7 +300,7 @@ foreach (var (fixture, percent, nextAction) in new[]
     await Assertions.Expect(page.Locator(".seller-shortcuts .seller-store-badge")).ToHaveTextAsync("نیاز به تکمیل");
 }
 
-foreach (var (fixture, badge) in new[] { ("review", "در انتظار بررسی"), ("rejected", "نیاز به اصلاح") })
+foreach (var (fixture, badge, shortLabel) in new[] { ("review", "در انتظار بررسی", "بررسی"), ("rejected", "نیاز به اصلاح", "اصلاح") })
 {
     await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-Fixture"] = fixture });
     await page.GotoAsync(new Uri(baseUrl, "/Seller").AbsoluteUri);
@@ -308,6 +310,8 @@ foreach (var (fixture, badge) in new[] { ("review", "در انتظار بررس�
 
     await page.GotoAsync(new Uri(baseUrl, "/Seller/ShopOrder/ManageOrderPage").AbsoluteUri);
     await Assertions.Expect(headerStoreStatus).ToHaveAttributeAsync("aria-label", new System.Text.RegularExpressions.Regex(badge));
+    await Assertions.Expect(headerStoreStatus.Locator(".seller-store-status-label")).ToBeVisibleAsync();
+    await Assertions.Expect(headerStoreStatus.Locator(".seller-store-status-label")).ToHaveTextAsync(shortLabel);
     await headerStoreStatus.FocusAsync();
     await page.Keyboard.PressAsync("Enter");
     var storeStatusMenu = page.Locator("#seller-store-status-menu");
