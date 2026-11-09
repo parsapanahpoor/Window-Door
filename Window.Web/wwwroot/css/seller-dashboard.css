@@ -83,8 +83,8 @@
 
 .seller-metric {
     --metric-art: url("../images/seller-dashboard-window.svg");
-    --metric-shade: #233b75;
-    --metric-tint: #394c99d9;
+    --metric-shade: #523709;
+    --metric-tint: #886018f2;
     --metric-art-side: left;
     --metric-gradient-side: right;
     display: flex;
@@ -108,20 +108,20 @@
 }
 
 .seller-metric-month {
-    --metric-shade: #563052;
-    --metric-tint: #8b4972e8;
+    --metric-shade: #55243d;
+    --metric-tint: #8e4364ef;
 }
 
 .seller-metric-year {
-    --metric-shade: #1d4a36;
-    --metric-tint: #2e6844e8;
+    --metric-shade: #39401b;
+    --metric-tint: #606729ef;
     background-position: center, var(--metric-art-side) bottom;
 }
 
 .seller-metric-contracts {
     --metric-art: url("../images/seller-storefront.svg");
-    --metric-shade: #67361f;
-    --metric-tint: #984c28e8;
+    --metric-shade: #62271e;
+    --metric-tint: #a44331ed;
 }
 
 .seller-metric dt {
