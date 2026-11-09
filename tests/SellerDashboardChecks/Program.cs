@@ -360,6 +360,24 @@ await Assertions.Expect(notices.First.Locator("h3")).ToHaveCSSAsync("font-weight
 await Assertions.Expect(notices.First.Locator("p")).ToHaveCSSAsync("font-size", "15px");
 Require((await notices.EvaluateAllAsync<string[]>("cards => cards.map(card => getComputedStyle(card).backgroundColor)"))
     .Distinct().Count() == 4, "severity colors are distinct");
+Require(await notices.EvaluateAllAsync<bool>("""
+    cards => {
+        const luminance = rgb => rgb.match(/\d+/g).map(channel => Number(channel) / 255)
+            .map(channel => channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4)
+            .reduce((value, channel, index) => value + channel * [0.2126, 0.7152, 0.0722][index], 0);
+        const gradients = cards.map(card => getComputedStyle(card).backgroundImage);
+        return new Set(gradients).size === cards.length && cards.every((card, index) => {
+            const stops = gradients[index].match(/rgb\([^)]+\)/g);
+            if (!stops?.length) return false;
+            const text = luminance(getComputedStyle(card.querySelector('p')).color);
+            const backgrounds = [getComputedStyle(card).backgroundColor, ...stops];
+            return backgrounds.every(color => {
+                const surface = luminance(color);
+                return (Math.max(text, surface) + 0.05) / (Math.min(text, surface) + 0.05) >= 4.5;
+            });
+        });
+    }
+    """), "each severity has a distinct gradient and readable body copy at its lightest stop");
 await Assertions.Expect(bell.Locator(".seller-notification-count")).ToHaveTextAsync("4");
 await bell.FocusAsync();
 await page.Keyboard.PressAsync("Enter");

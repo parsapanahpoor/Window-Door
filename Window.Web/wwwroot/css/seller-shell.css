@@ -33,7 +33,7 @@ body.seller-shell {
     --seller-accent-dark: #142742;
     --seller-accent-soft: #eaf0f7;
     --seller-background: #fff8ea;
-    --seller-glass-surface: #fffdf9c9;
+    --seller-glass-surface: #fff9edb8;
     --seller-border: #dfdacd;
     --seller-surface: #fffdf9;
     --seller-amber: #ffd88d;
@@ -316,35 +316,35 @@ body.seller-shell {
 .seller-notice h3, .seller-notice p { margin: 0; }
 
 .seller-shell [data-level="error"] {
-    --notice-ink: #98203f;
-    --notice-surface: #ffe0e1;
-    --notice-card-dark: #632043;
-    --notice-card-glow: #b82e57;
-    --notice-illustration: #ffb6ad;
+    --notice-ink: #8c1938;
+    --notice-surface: #ffded8;
+    --notice-card-dark: #6f1c38;
+    --notice-card-glow: #b93153;
+    --notice-illustration: #ffcbc0;
 }
 
 .seller-shell [data-level="warning"] {
     --notice-ink: #803500;
-    --notice-surface: #ffdfa5;
-    --notice-card-dark: #692b28;
-    --notice-card-glow: #aa4519;
-    --notice-illustration: #ffd48b;
+    --notice-surface: #ffe1ac;
+    --notice-card-dark: #773518;
+    --notice-card-glow: #b44917;
+    --notice-illustration: #ffe0a1;
 }
 
 .seller-shell [data-level="info"] {
-    --notice-ink: #234674;
-    --notice-surface: #e7effa;
-    --notice-card-dark: #182d50;
-    --notice-card-glow: #3d6394;
-    --notice-illustration: #d6e8ff;
+    --notice-ink: #283c7b;
+    --notice-surface: #e8eaff;
+    --notice-card-dark: #252c65;
+    --notice-card-glow: #495bb0;
+    --notice-illustration: #e3e6ff;
 }
 
 .seller-shell [data-level="success"] {
     --notice-ink: #0b5d44;
-    --notice-surface: #c9f2dc;
-    --notice-card-dark: #164539;
-    --notice-card-glow: #087452;
-    --notice-illustration: #c4f2c7;
+    --notice-surface: #d8f4d8;
+    --notice-card-dark: #18482e;
+    --notice-card-glow: #277447;
+    --notice-illustration: #ddf4b7;
 }
 
 .seller-notice {
@@ -355,7 +355,7 @@ body.seller-shell {
     padding: clamp(16px, 3vw, 30px);
     border-radius: 22px;
     background-color: var(--notice-card-dark);
-    background-image: radial-gradient(ellipse at 22% 92%, var(--notice-card-glow), transparent 72%);
+    background-image: radial-gradient(ellipse at 22% 92%, var(--notice-card-glow), transparent 76%);
     box-shadow: 0 8px 22px var(--seller-shadow);
     color: #fff;
     scroll-margin-block: 16px 90px;
@@ -363,7 +363,7 @@ body.seller-shell {
 }
 
 .seller-notice:dir(ltr) {
-    background-image: radial-gradient(ellipse at 78% 92%, var(--notice-card-glow), transparent 72%);
+    background-image: radial-gradient(ellipse at 78% 92%, var(--notice-card-glow), transparent 76%);
 }
 
 .seller-notice:target { outline: 2px solid var(--notice-ink); outline-offset: 3px; }
@@ -559,22 +559,22 @@ body.seller-shell {
     --notice-ink: #68401e;
     --notice-surface: #fff2ce;
     --notice-illustration: #995315;
-    border: 1px solid #e0b76c;
-    border-inline-start: 4px solid #a96116;
-    background: linear-gradient(125deg, #fff8e7, #ffe9ba);
+    border: 1px solid #e5b365;
+    border-inline-start: 4px solid #aa5611;
+    background: linear-gradient(125deg, #fff9e9, #ffdf93);
     color: #422a16;
 }
 
 .seller-shell .seller-store-notice :is(p, .seller-notice-icon) { color: var(--notice-ink); }
 
 .seller-store-notice .seller-notice-level {
-    background: #ffdf9b;
+    background: #ffdb8c;
     color: #623d1c;
 }
 
 .seller-store-notice a {
     border: 1px solid #a9631a55;
-    background: linear-gradient(140deg, #ffe39d, var(--seller-saffron));
+    background: linear-gradient(140deg, #ffdb8b, #f4ac36);
     color: #32210f;
 }
 

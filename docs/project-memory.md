@@ -123,3 +123,4 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 ## Navy Dawn palette
 
 - The owner selected the Navy Dawn palette for the seller panel. The shared header and dashboard hero use navy and blue gradients, with saffron on setup actions and the progress card. The isolated browser runner passed.
+- Dashboard cards use warmer highlights within the existing navy, berry and copper, saffron and alert severity palettes. The isolated browser runner passed the gradient and alert text contrast checks.

@@ -21,6 +21,12 @@
     line-height: 1.5;
 }
 
+.seller-dashboard-hero,
+.seller-store-shortcut { --seller-card-art-x: 12%; }
+
+.seller-dashboard-hero:dir(ltr),
+.seller-store-shortcut:dir(ltr) { --seller-card-art-x: 88%; }
+
 .seller-dashboard-hero {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(84px, 34%);
@@ -28,8 +34,8 @@
     gap: clamp(8px, 2vw, 24px);
     padding: clamp(16px, 4vw, 36px);
     border-radius: 22px;
-    background: radial-gradient(ellipse at 10% 92%, #426a91 0%, transparent 58%),
-        linear-gradient(125deg, #152740, var(--seller-accent));
+    background: radial-gradient(ellipse at var(--seller-card-art-x) 12%, #b9896559, transparent 62%),
+        linear-gradient(125deg, #344c86, #192345);
     color: #fff;
     box-shadow: 0 8px 22px var(--seller-shadow);
 }
@@ -70,9 +76,9 @@
 .seller-metric,
 .seller-shortcut {
     padding: 12px;
-    border: 1px solid var(--seller-border);
+    border: 1px solid #ead5b7;
     border-radius: 16px;
-    background: var(--seller-glass-surface);
+    background: linear-gradient(145deg, #fffdf875, #ffe4b444), var(--seller-glass-surface);
     box-shadow: inset 0 1px 0 #fff9;
 }
 
@@ -117,7 +123,7 @@
 
 .seller-shortcut:hover,
 .seller-shortcut:focus {
-    background: var(--seller-accent-soft);
+    background: #ffedcf;
     color: var(--seller-accent);
     text-decoration: none;
 }
@@ -145,10 +151,10 @@
     gap: clamp(8px, 2vw, 18px);
     min-height: 114px;
     padding: clamp(12px, 2vw, 20px);
-    border: 1px solid #8c657c;
+    border: 1px solid #a26171;
     border-radius: 18px;
-    background: radial-gradient(ellipse at 14% 90%, #8a4564, transparent 65%),
-        linear-gradient(125deg, #3b263f, #703a56);
+    background: radial-gradient(ellipse at var(--seller-card-art-x) 12%, #a4513b, transparent 68%),
+        linear-gradient(125deg, #90465e, #492239);
     color: #fff7ed;
     box-shadow: 0 6px 16px var(--seller-shadow);
 }
@@ -160,7 +166,7 @@
 
 .seller-store-card-copy { display: grid; min-width: 0; gap: 4px; }
 .seller-store-card-copy strong { font-size: var(--seller-text-card); font-weight: 700; line-height: 1.45; }
-.seller-store-card-copy small { color: #f5e7f0; font-size: var(--seller-text-small); font-weight: 400; }
+.seller-store-card-copy small { color: #ffe8e4; font-size: var(--seller-text-small); font-weight: 400; }
 .seller-store-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-block-start: 4px; }
 
 .seller-store-card-meta .seller-store-card-arrow {
