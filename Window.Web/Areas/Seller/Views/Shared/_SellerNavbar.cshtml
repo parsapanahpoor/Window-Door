@@ -17,7 +17,7 @@
 
 <header class="seller-topbar">
     <div class="seller-topbar-inner">
-        <a class="seller-brand" asp-area="Seller" asp-controller="Home" asp-action="Index">
+        <a class="seller-brand" aria-label="@Text["Seller panel"]" asp-area="Seller" asp-controller="Home" asp-action="Index">
             <img class="seller-brand-mark" src="~/Site/Manifest/logo144.png" asp-append-version="true" width="48" height="48" alt="" />
             <span>
                 <strong>@Text["Seller panel"]</strong>
@@ -26,6 +26,27 @@
         </a>
 
         <div class="seller-topbar-actions">
+            @if (Model.StoreStatus is { } status)
+            {
+                <div class="dropdown seller-store-status">
+                    <button class="seller-topbar-button dropdown-toggle" type="button" id="seller-store-status-button"
+                            data-toggle="dropdown" aria-expanded="false" aria-controls="seller-store-status-menu"
+                            aria-label="@Text["Store approval status: {0}", Text[status.Label].Value]">
+                        <span class="seller-store-status-icon" data-status="@status.Style" aria-hidden="true">
+                            <i class="fa @status.Icon"></i>
+                        </span>
+                        <span class="seller-store-status-label">@Text[status.Label]</span>
+                    </button>
+                    <ul class="dropdown-menu seller-header-menu seller-store-status-menu" id="seller-store-status-menu"
+                        aria-labelledby="seller-store-status-button">
+                        <li class="seller-menu-identity">
+                            <span>@Text["Store approval status"]</span>
+                            <partial name="_SellerStoreBadge" model="status" />
+                        </li>
+                        <li><a asp-area="Seller" asp-controller="SellerPersonalInfo" asp-action="PageOfManageSellerInformation">@Text["Store information"]</a></li>
+                    </ul>
+                </div>
+            }
             <div class="dropdown seller-notification-menu">
                 <button class="seller-topbar-button dropdown-toggle" type="button" id="seller-notifications-button"
                         data-toggle="dropdown" aria-expanded="false"

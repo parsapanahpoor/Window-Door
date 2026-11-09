@@ -25,7 +25,9 @@ public sealed record SellerNotice(SellerNoticeLevel Level, string Title, string 
     };
 }
 
-public sealed record SellerPanel(User User, IReadOnlyList<SellerNotice> Notices, IReadOnlyList<SellerLink> ExtraLinks, StoreProfileProgress? StoreProgress)
+public sealed record SellerStoreStatus(string Label, string Style, string Icon);
+
+public sealed record SellerPanel(User User, IReadOnlyList<SellerNotice> Notices, IReadOnlyList<SellerLink> ExtraLinks, SellerStoreStatus? StoreStatus)
 {
     public static IReadOnlyList<SellerLink> PrimaryLinks { get; } =
     [
@@ -34,16 +36,16 @@ public sealed record SellerPanel(User User, IReadOnlyList<SellerNotice> Notices,
         new("Ticket", "FilterTickets", "Support", "fa-ticket")
     ];
 
-    public static (string Label, string Style, string Icon) ApprovalBadge(StoreProfileProgress progress) => progress.State switch
+    private static SellerStoreStatus ApprovalBadge(MarketPersonalsInfoState? state, bool hasCompleteProfile) => state switch
     {
-        MarketPersonalsInfoState.WaitingForConfirmPersonalInformations => ("Store under review", "review", "fa-clock-o"),
-        MarketPersonalsInfoState.Rejected => ("Store needs correction", "correction", "fa-exclamation-circle"),
+        MarketPersonalsInfoState.WaitingForConfirmPersonalInformations => new("Store under review", "review", "fa-clock-o"),
+        MarketPersonalsInfoState.Rejected => new("Store needs correction", "correction", "fa-exclamation-circle"),
         MarketPersonalsInfoState.ActiveMarketAccount or MarketPersonalsInfoState.AcceptedPersonalInformation
-            => ("Store verified", "verified", "fa-check-circle"),
-        MarketPersonalsInfoState.WaitingForPyedFromSeller => ("Store fee pending badge", "review", "fa-clock-o"),
-        MarketPersonalsInfoState.DisAcctiveMarketAccount => ("Store account inactive", "review", "fa-pause-circle"),
-        _ when progress.CompletedSteps == StoreProfileProgress.TotalSteps => ("Store not yet verified", "review", "fa-clock-o"),
-        _ => ("Store profile incomplete", "correction", "fa-circle-o")
+            => new("Store verified", "verified", "fa-check-circle"),
+        MarketPersonalsInfoState.WaitingForPyedFromSeller => new("Store fee pending badge", "review", "fa-clock-o"),
+        MarketPersonalsInfoState.DisAcctiveMarketAccount => new("Store account inactive", "review", "fa-pause-circle"),
+        _ when hasCompleteProfile => new("Store not yet verified", "review", "fa-clock-o"),
+        _ => new("Store profile incomplete", "correction", "fa-circle-o")
     };
 
     public static SellerPanel Create(User user, string? state, bool isMaster, ITempDataDictionary tempData,
@@ -120,6 +122,20 @@ public sealed record SellerPanel(User User, IReadOnlyList<SellerNotice> Notices,
             }
         }
 
-        return new(user, notices.OrderBy(notice => notice.Level).ToArray(), links, isMaster ? storeProgress : null);
+        var approvalState = storeProgress?.State ?? (state switch
+        {
+            "WatingForConfirmInformations" => MarketPersonalsInfoState.WaitingForConfirmPersonalInformations,
+            "Rejected" => MarketPersonalsInfoState.Rejected,
+            "ActiveSellerAccount" => MarketPersonalsInfoState.ActiveMarketAccount,
+            "AcceptedPersonalInformation" => MarketPersonalsInfoState.AcceptedPersonalInformation,
+            "WaitingForPyedFromSeller" => MarketPersonalsInfoState.WaitingForPyedFromSeller,
+            "DisAcctiveSellerAccount" => MarketPersonalsInfoState.DisAcctiveMarketAccount,
+            _ => (MarketPersonalsInfoState?)null
+        });
+        var storeStatus = isMaster
+            ? ApprovalBadge(approvalState, storeProgress?.CompletedSteps == StoreProfileProgress.TotalSteps)
+            : null;
+
+        return new(user, notices.OrderBy(notice => notice.Level).ToArray(), links, storeStatus);
     }
 }

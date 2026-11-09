@@ -6,7 +6,7 @@
     {
         var notice = Model[index];
         var level = notice.Level.ToString();
-        <article class="seller-notice" data-level="@level.ToLowerInvariant()" id="seller-notice-@index" tabindex="-1">
+        <article class="seller-notice @(notice.Progress != null ? "seller-store-notice" : null)" data-level="@level.ToLowerInvariant()" id="seller-notice-@index" tabindex="-1">
             <div class="seller-notice-copy">
                 @if (notice.TranslateMessage)
                 {

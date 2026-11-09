@@ -36,9 +36,9 @@
                     <i class="fa @link.Icon" aria-hidden="true"></i>
                     <span class="seller-shortcut-label">
                         <span>@Text[link.Label]</span>
-                        @if (link.IsStoreManagement && Model.StoreProgress is { } progress)
+                        @if (link.IsStoreManagement && Model.StoreStatus is { } storeStatus)
                         {
-                            <partial name="_SellerStoreBadge" model="progress" />
+                            <partial name="_SellerStoreBadge" model="storeStatus" />
                         }
                     </span>
                 </a>

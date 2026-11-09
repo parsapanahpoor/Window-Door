@@ -47,7 +47,13 @@ builder.Services.AddScoped(provider =>
             "employee" => throw new InvalidOperationException("Employee dashboard queried owner-only progress"),
             _ => new(true, true, true, MarketPersonalsInfoState.ActiveMarketAccount)
         }),
-        nameof(ISellerService.GetSellersInfosState) => Task.FromResult(fixture == "pending" ? "NewUser" : "ActiveSellerAccount"),
+        nameof(ISellerService.GetSellersInfosState) => Task.FromResult(fixture switch
+        {
+            "pending" or "setup-links" or "setup-sample" => "NewUser",
+            "review" => "WatingForConfirmInformations",
+            "rejected" => "Rejected",
+            _ => "ActiveSellerAccount"
+        }),
         nameof(ISellerService.IsSellerMaster) => Task.FromResult(fixture != "employee"),
         nameof(ISellerService.CountOfTodayUserInInquiry) => Task.FromResult(12),
         nameof(ISellerService.CountOfMonthUserInInquiry) => Task.FromResult(34),
@@ -140,6 +146,8 @@ await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopOrde
 await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/User/AddNewUser']")).ToBeVisibleAsync();
 await Assertions.Expect(page.Locator(".seller-shortcuts a").First).ToHaveClassAsync("seller-shortcut seller-store-shortcut");
 await Assertions.Expect(page.Locator(".seller-shortcuts .seller-store-badge")).ToHaveTextAsync("تأیید شده");
+var headerStoreStatus = page.Locator("#seller-store-status-button");
+await Assertions.Expect(headerStoreStatus).ToHaveAttributeAsync("aria-label", new System.Text.RegularExpressions.Regex("تأیید شده"));
 await Assertions.Expect(page.Locator(".seller-store-progress")).ToHaveCountAsync(0);
 
 foreach (var width in new[] { 320, 390, 767, 768, 1024, 1440 })
@@ -271,6 +279,7 @@ foreach (var fixture in new[] { "employee", "pending" })
     {
         await Assertions.Expect(page.Locator(".seller-store-progress")).ToHaveCountAsync(0);
         await Assertions.Expect(page.Locator(".seller-store-shortcut")).ToHaveCountAsync(0);
+        await Assertions.Expect(headerStoreStatus).ToHaveCountAsync(0);
     }
 }
 
@@ -295,6 +304,18 @@ foreach (var (fixture, badge) in new[] { ("review", "در انتظار بررس�
     await page.GotoAsync(new Uri(baseUrl, "/Seller").AbsoluteUri);
     await Assertions.Expect(page.Locator(".seller-store-progress")).ToHaveCountAsync(0);
     await Assertions.Expect(page.Locator(".seller-shortcuts .seller-store-badge")).ToHaveTextAsync(badge);
+    await Assertions.Expect(headerStoreStatus).ToHaveAttributeAsync("aria-label", new System.Text.RegularExpressions.Regex(badge));
+
+    await page.GotoAsync(new Uri(baseUrl, "/Seller/ShopOrder/ManageOrderPage").AbsoluteUri);
+    await Assertions.Expect(headerStoreStatus).ToHaveAttributeAsync("aria-label", new System.Text.RegularExpressions.Regex(badge));
+    await headerStoreStatus.FocusAsync();
+    await page.Keyboard.PressAsync("Enter");
+    var storeStatusMenu = page.Locator("#seller-store-status-menu");
+    await Assertions.Expect(storeStatusMenu).ToBeVisibleAsync();
+    await Assertions.Expect(storeStatusMenu.Locator(".seller-store-badge")).ToHaveTextAsync(badge);
+    await Assertions.Expect(storeStatusMenu.Locator("a")).ToHaveAttributeAsync("href", "/Seller/SellerPersonalInfo/PageOfManageSellerInformation");
+    var menuBox = await storeStatusMenu.BoundingBoxAsync();
+    Require(menuBox is { X: >= 0 } && menuBox.X + menuBox.Width <= 320, "store approval menu fits on narrow screens");
 }
 
 await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-Fixture"] = "master" });

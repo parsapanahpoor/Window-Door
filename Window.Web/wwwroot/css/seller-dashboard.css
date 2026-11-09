@@ -139,11 +139,11 @@
 .seller-shortcuts .seller-store-shortcut {
     grid-column: span 2;
     min-height: 78px;
-    border-color: #ab4e73;
-    background: linear-gradient(125deg, #fbe0e6, #fff5dd);
+    border-color: #ad739c;
+    background: linear-gradient(125deg, #f6e3f2, #fff5ef);
     color: #57203d;
     font-weight: 700;
 }
 
-.seller-shortcuts .seller-store-shortcut:is(:hover, :focus) { background: #ffd9e4; }
-.seller-store-shortcut > i { background: #82365a; color: #fff7ec; }
+.seller-shortcuts .seller-store-shortcut:is(:hover, :focus) { background: #f3dcee; }
+.seller-store-shortcut > i { background: #773b68; color: #fff7ec; }

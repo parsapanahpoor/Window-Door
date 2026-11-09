@@ -63,4 +63,6 @@
   <data name="Store account inactive" xml:space="preserve"><value>حساب غیرفعال</value></data>
   <data name="Store not yet verified" xml:space="preserve"><value>هنوز تأیید نشده</value></data>
   <data name="Store profile incomplete" xml:space="preserve"><value>نیاز به تکمیل</value></data>
+  <data name="Store approval status" xml:space="preserve"><value>وضعیت تأیید فروشگاه</value></data>
+  <data name="Store approval status: {0}" xml:space="preserve"><value>وضعیت تأیید فروشگاه: {0}</value></data>
 </root>
