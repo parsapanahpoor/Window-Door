@@ -144,30 +144,30 @@
     gap: clamp(8px, 2vw, 18px);
     min-height: 114px;
     padding: clamp(12px, 2vw, 20px);
-    border: 1px solid #36567e;
+    border: 1px solid #8c657c;
     border-radius: 18px;
-    background: radial-gradient(ellipse at 14% 90%, #3c6087, transparent 65%),
-        linear-gradient(125deg, #172b48, #254572);
-    color: #fff9ef;
+    background: radial-gradient(ellipse at 14% 90%, #8a4564, transparent 65%),
+        linear-gradient(125deg, #3b263f, #703a56);
+    color: #fff7ed;
     box-shadow: 0 6px 16px var(--seller-shadow);
 }
 
 .seller-shortcuts .seller-store-shortcut:is(:hover, :focus) {
-    border-color: var(--seller-saffron);
-    color: #fff9ef;
+    border-color: #ffcf9c;
+    color: #fff7ed;
 }
 
 .seller-store-card-copy { display: grid; min-width: 0; gap: 4px; }
 .seller-store-card-copy strong { font-size: clamp(15px, 2vw, 18px); line-height: 1.45; }
-.seller-store-card-copy small { color: #e7edf5; font-size: 12px; }
+.seller-store-card-copy small { color: #f5e7f0; font-size: 12px; }
 .seller-store-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-block-start: 4px; }
 
 .seller-store-card-meta .seller-store-card-arrow {
     flex: 0 0 22px;
     height: 22px;
     border-radius: 7px;
-    background: #ffd88d25;
-    color: var(--seller-amber);
+    background: #ffcf9c25;
+    color: #ffcf9c;
 }
 
 .seller-store-card-arrow:dir(ltr) { transform: scaleX(-1); }
