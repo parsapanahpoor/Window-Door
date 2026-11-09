@@ -569,8 +569,7 @@ body.seller-shell {
 
 @media (max-width: 1023px) {
     .seller-store-status-button {
-        flex-direction: column;
-        gap: 2px;
+        gap: 4px;
         padding-inline: 5px;
     }
 

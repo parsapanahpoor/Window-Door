@@ -118,6 +118,7 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 
 - The seller dashboard uses the associated store's saved profile, link and work sample to show owner-only completion progress. It places the store management shortcut first and uses the market state for its independent approval badge. See specs/0007-seller-store-progress/spec.md.
 - The isolated seller browser runner passed the percentage, next-step, approval and owner visibility checks. No migration is required.
+- The short approval label stays beside its icon in the shared header. The isolated browser runner checks their alignment from 320 to 1440 pixels.
 
 ## Navy Dawn palette
 

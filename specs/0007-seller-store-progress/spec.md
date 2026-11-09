@@ -8,10 +8,11 @@ Status: Verified with isolated browser fixtures
 
 The progress query reads the existing records and does not require a migration. The dashboard uses the same notice styles and navigation rules.
 
-- AC-4. The shared seller header shows owners the store approval status and links to store management. A short status label is visible next to the icon on wide screens and below it on compact screens. The menu and dashboard badge show the full status.
+- AC-4. The shared seller header shows owners the store approval status and links to store management. A short status label is visible beside the icon at all supported viewport widths. The menu and dashboard badge show the full status.
 
 ## Evidence
 
 The seller browser runner passed with incomplete profiles at 0%, 33% and 67%, including the link to the next step. It verified that completed profiles hide the progress notice while pending review, approved and rejected states render distinct labels. The employee fixture fails if its dashboard calls the owner-only progress method. Browser checks used a loopback host and isolated service fixtures.
 
 The browser also verified the status control on the dashboard and orders page, keyboard access, the management link and menu fit at 320px.
+The isolated SellerDashboardChecks browser runner verified that the Persian header label sits beside the icon at viewport widths of 320, 390, 767, 768, 1024 and 1440 pixels.

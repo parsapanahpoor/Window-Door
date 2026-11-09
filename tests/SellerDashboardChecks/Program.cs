@@ -155,6 +155,12 @@ foreach (var width in new[] { 320, 390, 767, 768, 1024, 1440 })
     await page.SetViewportSizeAsync(width, 720);
     await Assertions.Expect(headerStoreStatus.Locator(".seller-store-status-label")).ToBeVisibleAsync();
     await Assertions.Expect(headerStoreStatus.Locator(".seller-store-status-label")).ToHaveTextAsync("تأیید");
+    var statusIcon = await headerStoreStatus.Locator(".seller-store-status-icon").BoundingBoxAsync();
+    var statusLabel = await headerStoreStatus.Locator(".seller-store-status-label").BoundingBoxAsync();
+    Require(statusIcon is not null && statusLabel is not null
+        && statusLabel.X + statusLabel.Width <= statusIcon.X
+        && Math.Abs(statusIcon.Y + statusIcon.Height / 2 - statusLabel.Y - statusLabel.Height / 2) < 1,
+        $"Persian store status label sits beside the icon at {width}px");
     var logoBox = await brandLogo.BoundingBoxAsync();
     Require(logoBox is { X: >= 0 } && logoBox.X + logoBox.Width <= width
         && Math.Abs(logoBox.Width - logoBox.Height) < 1, $"seller logo fits without distortion at {width}px");
