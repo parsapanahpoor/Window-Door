@@ -29,10 +29,10 @@
     gap: clamp(8px, 2vw, 24px);
     padding: clamp(16px, 4vw, 36px);
     border-radius: 22px;
-    background: radial-gradient(ellipse at 24% 80%, #c73656 0%, transparent 65%),
-        linear-gradient(120deg, #9b2f5a, #672343);
+    background: radial-gradient(ellipse at 10% 92%, #426a91 0%, transparent 58%),
+        linear-gradient(125deg, #152740, var(--seller-accent));
     color: #fff;
-    box-shadow: 0 8px 22px #9b2f5a34;
+    box-shadow: 0 8px 22px var(--seller-shadow);
 }
 
 .seller-dashboard-hero-copy { display: grid; gap: 6px; }
@@ -55,7 +55,7 @@
     justify-self: start;
     padding: 3px 9px;
     border-radius: 999px;
-    background: #57203d;
+    background: var(--seller-accent-dark);
     color: var(--seller-amber);
     font-size: 12px;
     font-weight: 700;
@@ -139,11 +139,11 @@
 .seller-shortcuts .seller-store-shortcut {
     grid-column: span 2;
     min-height: 78px;
-    border-color: #ad739c;
-    background: linear-gradient(125deg, #f6e3f2, #fff5ef);
-    color: #57203d;
+    border-color: #c8a360;
+    background: linear-gradient(125deg, var(--seller-accent-soft), #fff4d9);
+    color: var(--seller-accent-dark);
     font-weight: 700;
 }
 
-.seller-shortcuts .seller-store-shortcut:is(:hover, :focus) { background: #f3dcee; }
-.seller-store-shortcut > i { background: #773b68; color: #fff7ec; }
+.seller-shortcuts .seller-store-shortcut:is(:hover, :focus) { background: #f8ebc8; }
+.seller-store-shortcut > i { background: var(--seller-accent); color: #fff7ec; }

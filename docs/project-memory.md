@@ -118,3 +118,7 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 
 - The seller dashboard uses the associated store's saved profile, link and work sample to show owner-only completion progress. It places the store management shortcut first and uses the market state for its independent approval badge. See specs/0007-seller-store-progress/spec.md.
 - The isolated seller browser runner passed the percentage, next-step, approval and owner visibility checks. No migration is required.
+
+## Navy Dawn palette
+
+- The owner selected the Navy Dawn palette for the seller panel. The shared header and dashboard hero use navy and blue gradients, with saffron on setup actions and the progress card. The isolated browser runner passed.

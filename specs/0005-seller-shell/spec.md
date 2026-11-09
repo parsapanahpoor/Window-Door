@@ -19,3 +19,5 @@ Use the existing seller layout and navbar component. Load seller-only CSS after 
 - AC-1: Playwright passed mobile navigation taps through Dashboard, Orders and Support, verified the selected ticket section on the create route and no selected tab on the employee form, and measured clearance above the fixed bar. The desktop bar remained visible below the header.
 - AC-2: The browser loaded all three local Vazir weights, confirmed the form uses Vazir, and verified that navigation keeps its Font Awesome glyph font.
 - AC-3: The avatar loaded, the account menu opened and closed with keyboard controls, and profile, logout and language links stayed available. Existing culture, authorization, role and 320–1440px dashboard checks passed.
+
+The selected Navy Dawn palette uses a navy-to-blue header gradient, an ivory page surface and saffron for store setup actions. Browser verification checked the rendered header and store progress gradients and the 320–1440px seller layout.
