@@ -87,6 +87,8 @@
     --metric-tint: #886018f2;
     --metric-art-side: left;
     --metric-gradient-side: right;
+    position: relative;
+    isolation: isolate;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -100,6 +102,18 @@
     background-size: cover, clamp(112px, 75%, 184px) auto;
     color: #fff8f1;
     box-shadow: inset 0 1px 0 #ffffff30;
+}
+
+.seller-metric::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset-block-start: 8px;
+    inset-inline-end: 9px;
+    width: clamp(32px, 13%, 48px);
+    aspect-ratio: 1;
+    background: url("../images/seller-metric-sparkles.svg") center / contain no-repeat;
+    pointer-events: none;
 }
 
 .seller-metric:dir(ltr) {
