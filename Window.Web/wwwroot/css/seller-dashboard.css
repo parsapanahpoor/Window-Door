@@ -110,7 +110,7 @@
     z-index: -1;
     inset-block-start: 8px;
     inset-inline-end: 9px;
-    width: clamp(32px, 13%, 48px);
+    width: clamp(44px, 22%, 64px);
     aspect-ratio: 1;
     background: url("../images/seller-metric-sparkles.svg") center / contain no-repeat;
     pointer-events: none;
