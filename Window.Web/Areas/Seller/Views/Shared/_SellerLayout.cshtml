@@ -1,44 +1,116 @@
-﻿<!DOCTYPE html>
-<!--
-BeyondAdmin - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.6
-Version: 1.6.0
-Purchase: https://wrapbootstrap.com/theme/beyondadmin-adminapp-angularjs-mvc-WB06R48S4
--->
-<html xmlns="http://www.w3.org/1999/xhtml">
-<!-- Head -->
+@using Window.Domain.ViewModels.Seller.PersonalInfo
+@using Window.Application.Extensions
+@using Window.Application.Interfaces
+@using Window.Application.Services.Interfaces
+@inject IUserService Users
+@inject ISellerService Sellers
+@inject IStringLocalizer<SellerDashboardText> Text
+@{
+    var culture = ApplicationCultures.GetCurrentCulture();
+    var isDashboard = ViewData["SellerDashboard"] is true;
+    var sellerId = User.GetUserId();
+    var seller = await Users.GetUserById(sellerId);
+    var state = ViewData.TryGetValue("SellerAccountState", out var dashboardState)
+        ? dashboardState as string
+        : await Sellers.GetSellersInfosState(sellerId);
+    var isMaster = await Sellers.IsSellerMaster(sellerId);
+    var panel = SellerPanel.Create(seller, state, isMaster, TempData, ViewData["StoreProfileProgress"] as StoreProfileProgress);
+}
+<!DOCTYPE html>
+<html lang="@culture.CultureKey" dir="@culture.Direction">
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"]</title>
-    <meta name="description" content="Dashboard" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <partial name="_SellerHeaderReferences" />
+    <link rel="stylesheet" href="~/css/seller-shell.css" asp-append-version="true" />
     @RenderSection("Styles", false)
 </head>
-<body>
-    @await Component.InvokeAsync("SellerNavbar")
+<body class="seller-shell @(isDashboard ? "seller-dashboard-shell" : null)">
+    <partial name="_SellerNavbar" model="panel" />
+    <partial name="_SellerNavigation" model="panel" />
     <div class="main-container container-fluid">
         <div class="page-container">
-            <div class="page-content" style="margin-right: 0px;">
-                <div class="page-breadcrumbs">
-                    <ul class="breadcrumb">
-                        <li>
-                            <i class="fa fa-home"></i>
-                            <a asp-area="Seller" asp-controller="Home" asp-action="Index">@SharedLocalizer["Home"]</a>
-                        </li>
-                        @RenderSection("breadcrumb", true)
-                    </ul>
-                </div>
-                <partial name="_SellerPageHeader" />
-                <div class="page-body">
-                    @RenderBody()
-                </div>
+            <div class="page-content seller-page-content">
+                <main class="page-body seller-page-body">
+                    <div class="@(isDashboard ? "seller-dashboard" : null)">
+                        @if (panel.Notices.Count > 0)
+                        {
+                            <partial name="_SellerNotices" model="panel.Notices" />
+                        }
+                        @if (isDashboard)
+                        {
+                            @if (panel.Notices.Count == 0)
+                            {
+                                <header class="seller-dashboard-hero">
+                                    <div class="seller-dashboard-hero-copy">
+                                        <span class="seller-dashboard-eyebrow">@Text["Seller panel"]</span>
+                                        <h1>@ViewData["Title"]</h1>
+                                        <p>@Text["Store activity and quick access"]</p>
+                                    </div>
+                                    <img class="seller-dashboard-hero-art" src="~/images/seller-dashboard-window.svg"
+                                         asp-append-version="true" width="320" height="230" alt="" />
+                                </header>
+                            }
+                            else
+                            {
+                                <h1 class="sr-only">@ViewData["Title"]</h1>
+                            }
+                            IgnoreSection("breadcrumb");
+                        }
+                        else
+                        {
+                            <h1 class="seller-page-title">@ViewData["Title"]</h1>
+                            <ol class="breadcrumb seller-breadcrumb">
+                                <li><a asp-area="Seller" asp-controller="Home" asp-action="Index">@Text["Dashboard"]</a></li>
+                                @RenderSection("breadcrumb", false)
+                            </ol>
+                        }
+
+                        @RenderBody()
+
+                        @if (isDashboard)
+                        {
+                            <section aria-labelledby="seller-shortcuts-title">
+                                <h2 id="seller-shortcuts-title">@Text["Quick access"]</h2>
+                                <div class="seller-shortcuts">
+                                    @foreach (var link in SellerPanel.PrimaryLinks.Skip(1).Concat(panel.ExtraLinks).OrderByDescending(link => link.IsStoreManagement))
+                                    {
+                                        <a class="seller-shortcut @(link.IsStoreManagement ? "seller-store-shortcut" : null)"
+                                           asp-area="Seller" asp-controller="@link.Controller" asp-action="@link.Action">
+                                            @if (link.IsStoreManagement)
+                                            {
+                                                <span class="seller-store-card-copy">
+                                                    <strong>@Text[link.Label]</strong>
+                                                    <small>@Text["Store profile, links and work samples"]</small>
+                                                    <span class="seller-store-card-meta">
+                                                        @if (panel.StoreStatus is { } storeStatus)
+                                                        {
+                                                            <partial name="_SellerStoreBadge" model="storeStatus" />
+                                                        }
+                                                        <i class="fa fa-angle-left seller-store-card-arrow" aria-hidden="true"></i>
+                                                    </span>
+                                                </span>
+                                                <img class="seller-store-card-art" src="~/images/seller-storefront.svg" asp-append-version="true"
+                                                     width="200" height="144" alt="" />
+                                            }
+                                            else
+                                            {
+                                                <i class="fa @link.Icon" aria-hidden="true"></i>
+                                                <span class="seller-shortcut-label">@Text[link.Label]</span>
+                                            }
+                                        </a>
+                                    }
+                                </div>
+                            </section>
+                        }
+                    </div>
+                </main>
             </div>
         </div>
     </div>
     <partial name="_SellerFooterReferences" />
-    <partial name="_Notification" />
+    <script src="~/js/seller-navigation.js" asp-append-version="true" defer></script>
     <partial name="_SweetAlertLocalizer" />
     <partial name="_Modals" />
     @RenderSection("Scripts", false)

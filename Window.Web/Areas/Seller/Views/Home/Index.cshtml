@@ -1,100 +1,35 @@
-﻿
+@inject IStringLocalizer<SellerDashboardText> DashboardText
+
 @{
-    ViewData["Title"] = Localizer["Index"];
+ViewData["Title"] = DashboardText["Seller dashboard"];
+ViewData["SellerDashboard"] = true;
 }
 
-@section breadcrumb
+@section Styles {
+<link rel="stylesheet" href="~/css/seller-dashboard.css" asp-append-version="true" />
+}
+
+@if (ViewData["SellerAccountState"] as string == "ActiveSellerAccount")
 {
-    
+    <section aria-labelledby="seller-overview-title">
+        <h2 id="seller-overview-title">@DashboardText["Activity overview"]</h2>
+        <dl class="seller-metrics">
+            <div class="seller-metric">
+                <dt><i class="fa fa-eye" aria-hidden="true"></i> @DashboardText["Today’s visits"]</dt>
+                <dd>@(ViewBag.CountOfTodayUserInInquiry ?? 0)</dd>
+            </div>
+            <div class="seller-metric seller-metric-month">
+                <dt><i class="fa fa-calendar-o" aria-hidden="true"></i> @DashboardText["This month’s visits"]</dt>
+                <dd>@(ViewBag.CountOfMonthUserInInquiry ?? 0)</dd>
+            </div>
+            <div class="seller-metric seller-metric-year">
+                <dt><i class="fa fa-bar-chart" aria-hidden="true"></i> @DashboardText["This year’s visits"]</dt>
+                <dd>@(ViewBag.CountOfYearUserInInquiry ?? 0)</dd>
+            </div>
+            <div class="seller-metric seller-metric-contracts">
+                <dt><i class="fa fa-file-text-o" aria-hidden="true"></i> @DashboardText["Pending contract requests"]</dt>
+                <dd>@(ViewBag.CountOfSellerWaitingRequest ?? 0)</dd>
+            </div>
+        </dl>
+    </section>
 }
-
-@section Scripts
-{
-    <partial name="_SweetAlertLocalizer"/>
-}
-
-
-    <div class="row">
-
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="databox bg-white radius-bordered">
-                <div class="bg-success databox-right">
-                </div>
-                <div class="databox-left">
-                    <span class="databox-number sucees">@((ViewBag.CountOfTodayUserInInquiry != null) ? ViewBag.CountOfTodayUserInInquiry : 0)</span>
-                <div class="databox-text darkgray">تعداد بازدید از حساب شما درامروز</div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <div class="databox bg-white radius-bordered">
-            <div class="bg-primary databox-right">
-            </div>
-            <div class="databox-left">
-                <span class="databox-number primary">@((ViewBag.CountOfMonthUserInInquiry != null) ? ViewBag.CountOfMonthUserInInquiry : 0)</span>
-                <div class="databox-text darkgray">تعداد بازدید از حساب شما دراین ماه</div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <div class="databox bg-white radius-bordered">
-            <div class="bg-danger databox-right">
-            </div>
-            <div class="databox-left">
-                <span class="databox-number danger">@((ViewBag.CountOfYearUserInInquiry != null) ? ViewBag.CountOfYearUserInInquiry : 0)</span>
-                <div class="databox-text darkgray">تعداد بازدید از حساب شما دراین سال</div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <div class="databox bg-white radius-bordered">
-            <div class="bg-danger databox-right">
-            </div>
-            <div class="databox-left">
-                <span class="databox-number danger">@((ViewBag.CountOfSellerWaitingRequest != null) ? ViewBag.CountOfSellerWaitingRequest : 0)</span>
-                <div class="databox-text darkgray">درخواست های قرارداد درانتظار برسی شما</div>
-
-            </div>
-        </div>
-    </div>
-
-</div>
-
-@await Component.InvokeAsync("SellersInfos")
-
-@if (ViewBag.ShopNameIsEmpty != null && ViewBag.ShopNameIsEmpty == true)
-{
-    <div class="col-lg-12 col-sm-12 col-xs-12">
-        <div class="widget">
-            <div class="widget-header bg-warning">
-                <span class="widget-caption">عدم نمایش نام فروشگاه </span>
-                <div class="widget-buttons">
-                    <a href="#" data-toggle="config">
-                        <i class="fa fa-cog"></i>
-                    </a>
-                    <a href="#" data-toggle="maximize">
-                        <i class="fa fa-expand"></i>
-                    </a>
-                    <a href="#" data-toggle="collapse">
-                        <i class="fa fa-minus"></i>
-                    </a>
-                    <a href="#" data-toggle="dispose">
-                        <i class="fa fa-times"></i>
-                    </a>
-                </div><!--Widget Buttons-->
-            </div><!--Widget Header-->
-            <div class="widget-body bg-warning">
-                <p> لطفا از قسمت اطلاعات کاربری وارد بخش ویرایش اطلاعات کاربری شوید و برای نمایش نام فروشگاه خود این پارامتر را وراد نمایید </p>
-            </div><!--Widget Body-->
-        </div><!--Widget-->
-    </div>
-}
-
-@await Component.InvokeAsync("SellerSideBar")
-

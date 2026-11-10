@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Seller dashboard" xml:space="preserve"><value>داشبورد فروشنده</value></data>
+  <data name="Seller panel" xml:space="preserve"><value>پنل فروشنده</value></data>
+  <data name="Store activity and quick access" xml:space="preserve"><value>فعالیت فروشگاه و دسترسی سریع به ابزارها</value></data>
+  <data name="Activity overview" xml:space="preserve"><value>خلاصهٔ فعالیت</value></data>
+  <data name="Today’s visits" xml:space="preserve"><value>بازدید امروز</value></data>
+  <data name="This month’s visits" xml:space="preserve"><value>بازدید این ماه</value></data>
+  <data name="This year’s visits" xml:space="preserve"><value>بازدید امسال</value></data>
+  <data name="Pending contract requests" xml:space="preserve"><value>قراردادهای در انتظار بررسی</value></data>
+  <data name="Add your store name" xml:space="preserve"><value>نام فروشگاه را وارد کنید</value></data>
+  <data name="Enter your store name in your profile so customers can see it." xml:space="preserve"><value>نام فروشگاه را در اطلاعات کاربری وارد کنید تا برای مشتریان نمایش داده شود.</value></data>
+  <data name="Edit profile" xml:space="preserve"><value>ویرایش اطلاعات کاربری</value></data>
+  <data name="Seller navigation" xml:space="preserve"><value>ناوبری پنل فروشنده</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>داشبورد</value></data>
+  <data name="Orders" xml:space="preserve"><value>سفارش‌ها</value></data>
+  <data name="Support" xml:space="preserve"><value>پشتیبانی</value></data>
+  <data name="Quick access" xml:space="preserve"><value>دسترسی سریع</value></data>
+  <data name="Support tickets" xml:space="preserve"><value>تیکت‌های پشتیبانی</value></data>
+  <data name="Manage orders" xml:space="preserve"><value>مدیریت سفارش‌ها</value></data>
+  <data name="Manage cheques" xml:space="preserve"><value>مدیریت چک‌ها</value></data>
+  <data name="Employees" xml:space="preserve"><value>فهرست کارمندان</value></data>
+  <data name="Add employee" xml:space="preserve"><value>افزودن کارمند</value></data>
+  <data name="Store information" xml:space="preserve"><value>مدیریت اطلاعات فروشگاه</value></data>
+  <data name="Contract requests" xml:space="preserve"><value>درخواست‌های قرارداد</value></data>
+  <data name="Inquiry products" xml:space="preserve"><value>محصولات استعلام</value></data>
+  <data name="Add inquiry product" xml:space="preserve"><value>افزودن محصول استعلام</value></data>
+  <data name="Glass pricing" xml:space="preserve"><value>قیمت‌گذاری شیشه</value></data>
+  <data name="Store products" xml:space="preserve"><value>محصولات فروشگاه</value></data>
+  <data name="Add store product" xml:space="preserve"><value>افزودن محصول فروشگاه</value></data>
+  <data name="Panjerehyab" xml:space="preserve"><value>پنجره‌یاب</value></data>
+  <data name="Language" xml:space="preserve"><value>زبان پنل</value></data>
+  <data name="Seller account" xml:space="preserve"><value>حساب فروشنده</value></data>
+  <data name="Notifications, {0} current" xml:space="preserve"><value>اعلان‌ها، {0} مورد فعلی</value></data>
+  <data name="No current notifications" xml:space="preserve"><value>فعلاً اعلانی برای نمایش وجود ندارد.</value></data>
+  <data name="Current notifications" xml:space="preserve"><value>اعلان‌های پنل</value></data>
+  <data name="More" xml:space="preserve"><value>بیشتر</value></data>
+  <data name="Error" xml:space="preserve"><value>خطا</value></data>
+  <data name="Warning" xml:space="preserve"><value>هشدار</value></data>
+  <data name="Info" xml:space="preserve"><value>اطلاع‌رسانی</value></data>
+  <data name="Success" xml:space="preserve"><value>موفق</value></data>
+  <data name="Complete store information" xml:space="preserve"><value>اطلاعات فروشگاه را تکمیل کنید</value></data>
+  <data name="Complete your store information to activate seller tools." xml:space="preserve"><value>برای فعال شدن ابزارهای فروشندگی، اطلاعات فروشگاه را تکمیل کنید.</value></data>
+  <data name="Store information under review" xml:space="preserve"><value>اطلاعات فروشگاه در حال بررسی است</value></data>
+  <data name="Support is reviewing your submitted information." xml:space="preserve"><value>پشتیبانی در حال بررسی اطلاعات ارسال‌شده است.</value></data>
+  <data name="Seller fee pending" xml:space="preserve"><value>تعرفهٔ فروشندگی در انتظار پرداخت است</value></data>
+  <data name="Pay the seller fee to activate your account." xml:space="preserve"><value>برای فعال شدن حساب فروشندگی، تعرفه را پرداخت کنید.</value></data>
+  <data name="Store information needs correction" xml:space="preserve"><value>اطلاعات فروشگاه نیاز به اصلاح دارد</value></data>
+  <data name="Support could not approve your information. Review your store details." xml:space="preserve"><value>پشتیبانی اطلاعات ارسال‌شده را تأیید نکرد. مشخصات فروشگاه را بررسی و اصلاح کنید.</value></data>
+  <data name="Seller balance expired" xml:space="preserve"><value>اعتبار حساب فروشندگی به پایان رسیده است</value></data>
+  <data name="Recharge your account to resume using seller tools." xml:space="preserve"><value>برای ادامهٔ استفاده از ابزارهای فروشندگی، حساب خود را دوباره شارژ کنید.</value></data>
+  <data name="Finish your store profile" xml:space="preserve"><value>اطلاعات فروشگاه را تکمیل کنید</value></data>
+  <data name="Complete the remaining steps to finish your store profile." xml:space="preserve"><value>برای تکمیل پروندهٔ فروشگاه، مراحل باقی‌مانده را انجام دهید.</value></data>
+  <data name="Continue store setup" xml:space="preserve"><value>ادامهٔ تکمیل اطلاعات</value></data>
+  <data name="{0}% complete" xml:space="preserve"><value>{0}٪ تکمیل شده</value></data>
+  <data name="{0} of {1} steps saved" xml:space="preserve"><value>{0} از {1} مرحله ثبت شده</value></data>
+  <data name="Store under review" xml:space="preserve"><value>در انتظار بررسی</value></data>
+  <data name="Store needs correction" xml:space="preserve"><value>نیاز به اصلاح</value></data>
+  <data name="Store verified" xml:space="preserve"><value>تأیید شده</value></data>
+  <data name="Store fee pending badge" xml:space="preserve"><value>در انتظار پرداخت</value></data>
+  <data name="Store account inactive" xml:space="preserve"><value>حساب غیرفعال</value></data>
+  <data name="Store not yet verified" xml:space="preserve"><value>هنوز تأیید نشده</value></data>
+  <data name="Store profile incomplete" xml:space="preserve"><value>نیاز به تکمیل</value></data>
+  <data name="Store approval status" xml:space="preserve"><value>وضعیت تأیید فروشگاه</value></data>
+  <data name="Store approval status: {0}" xml:space="preserve"><value>وضعیت تأیید فروشگاه: {0}</value></data>
+  <data name="Store status short review" xml:space="preserve"><value>بررسی</value></data>
+  <data name="Store status short correction" xml:space="preserve"><value>اصلاح</value></data>
+  <data name="Store status short verified" xml:space="preserve"><value>تأیید</value></data>
+  <data name="Store status short payment" xml:space="preserve"><value>پرداخت</value></data>
+  <data name="Store status short inactive" xml:space="preserve"><value>غیرفعال</value></data>
+  <data name="Store status short unverified" xml:space="preserve"><value>تأیید نشده</value></data>
+  <data name="Store status short incomplete" xml:space="preserve"><value>ناقص</value></data>
+  <data name="Store profile, links and work samples" xml:space="preserve"><value>مشخصات، لینک‌ها و نمونه‌کارها</value></data>
+</root>

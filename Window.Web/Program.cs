@@ -7,12 +7,11 @@ using System.Threading.RateLimiting;
 using Window.Application.Services;
 using Window.Web.Controllers;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Localization;
+using Window.Web.Culture;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Globalization;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
@@ -28,31 +27,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 #region Localizer
 
-builder.Services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
-
-builder.Services.Configure<RequestLocalizationOptions>(
-    opts =>
-    {
-        CultureInfo faIR = CultureInfo.CreateSpecificCulture("fa-IR");
-        faIR.DateTimeFormat.Calendar = new GregorianCalendar();
-        faIR.NumberFormat.CurrencyDecimalSeparator = ".";
-        faIR.NumberFormat.NumberDecimalSeparator = ".";
-        faIR.NumberFormat.PercentDecimalSeparator = ".";
-        faIR.NumberFormat.NumberGroupSeparator = ",";
-        faIR.NumberFormat.CurrencyGroupSeparator = ",";
-        faIR.NumberFormat.NegativeSign = "-";
-
-        var supportedCultures = new List<CultureInfo>
-        {
-             new CultureInfo("en-US"),
-             new CultureInfo("en"),
-             faIR
-        };
-
-        opts.DefaultRequestCulture = new RequestCulture("en-US");
-        opts.SupportedCultures = supportedCultures;
-        opts.SupportedUICultures = supportedCultures;
-    });
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.Configure<RequestLocalizationOptions>(ApplicationRequestLocalization.Configure);
 
 #endregion
 
@@ -187,42 +163,7 @@ builder.Services.AddHttpClient<ISMSService, SMSService>(client =>
 
 #endregion
 
-#region Localizer
 
-builder.Services.AddLocalization(
-    opts =>
-    {
-        opts.ResourcesPath = "Resources";
-    }
-);
-
-builder.Services.Configure<RequestLocalizationOptions>(
-    opts =>
-    {
-
-
-        CultureInfo faIR = CultureInfo.CreateSpecificCulture("fa-IR");
-        faIR.DateTimeFormat.Calendar = new GregorianCalendar();
-        faIR.NumberFormat.CurrencyDecimalSeparator = ".";
-        faIR.NumberFormat.NumberDecimalSeparator = ".";
-        faIR.NumberFormat.PercentDecimalSeparator = ".";
-        faIR.NumberFormat.NumberGroupSeparator = ",";
-        faIR.NumberFormat.CurrencyGroupSeparator = ",";
-        faIR.NumberFormat.NegativeSign = "-";
-
-        var supportedCultures = new List<CultureInfo>
-        {
-             new CultureInfo("en-US"),
-             new CultureInfo("en"),
-             faIR,
-        };
-
-        opts.DefaultRequestCulture = new RequestCulture("en-US");
-        opts.SupportedCultures = supportedCultures;
-        opts.SupportedUICultures = supportedCultures;
-    });
-
-#endregion
 
 #region API Configuration
 
@@ -274,34 +215,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-#region Localizer
-
-CultureInfo faIR = CultureInfo.CreateSpecificCulture("fa-IR");
-faIR.DateTimeFormat.Calendar = new GregorianCalendar();
-faIR.NumberFormat.CurrencyDecimalSeparator = ".";
-faIR.NumberFormat.NumberDecimalSeparator = ".";
-faIR.NumberFormat.NumberGroupSeparator = ",";
-faIR.NumberFormat.CurrencyGroupSeparator = ",";
-faIR.NumberFormat.PercentDecimalSeparator = ".";
-faIR.NumberFormat.NegativeSign = "-";
-
-var supportedCultures = new List<CultureInfo>() { faIR, new CultureInfo("en-US") };
-
-var options = new RequestLocalizationOptions()
-{
-    DefaultRequestCulture = new RequestCulture("en-US"),
-    SupportedCultures = supportedCultures,
-    SupportedUICultures = supportedCultures,
-    RequestCultureProviders = new List<IRequestCultureProvider>()
-                {
-                    new QueryStringRequestCultureProvider(),
-                    new CookieRequestCultureProvider()
-                }
-};
-
-app.UseRequestLocalization(options);
-
-#endregion
+app.UseRequestLocalization();
 
 SiteCurrentContext.Configure(app.Services.GetRequiredService<IHttpContextAccessor>());
 

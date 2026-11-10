@@ -1,0 +1,6 @@
+@model SellerStoreStatus
+@inject IStringLocalizer<SellerDashboardText> Text
+
+<span class="seller-store-badge" data-status="@Model.Style">
+    <i class="fa @Model.Icon" aria-hidden="true"></i> @Text[Model.Label]
+</span>

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -26,6 +26,8 @@ namespace Window.Application.Services.Interfaces
         Task<bool> ChargeAccount(ulong marketId, ulong userId);
 
         Task<Market?> GetMarketByUserId(ulong userId);
+
+        Task<StoreProfileProgress?> GetStoreProfileProgressAsync(ulong userId, ulong marketId);
 
         Task<int?> GetMarketAccountChargeTariff(ulong userId);
 

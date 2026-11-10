@@ -1,0 +1,115 @@
+@using Window.Application.Extensions
+@model SellerPanel
+@inject IStringLocalizer<SellerDashboardText> Text
+
+@{
+    var culture = ApplicationCultures.GetCurrentCulture();
+    var displayName = Model.User.GetFullName()?.Trim();
+    if (string.IsNullOrWhiteSpace(displayName))
+    {
+        displayName = Model.User.Mobile;
+    }
+}
+
+<div class="loading-container" aria-hidden="true">
+    <div class="loader"></div>
+</div>
+
+<header class="seller-topbar">
+    <div class="seller-topbar-inner">
+        <a class="seller-brand" aria-label="@Text["Seller panel"]" asp-area="Seller" asp-controller="Home" asp-action="Index">
+            <img class="seller-brand-mark" src="~/Site/Manifest/logo144.png" asp-append-version="true" width="48" height="48" alt="" />
+            <span>
+                <strong>@Text["Seller panel"]</strong>
+                <small>@Text["Panjerehyab"]</small>
+            </span>
+        </a>
+
+        <div class="seller-topbar-actions">
+            @if (Model.StoreStatus is { } status)
+            {
+                <div class="dropdown seller-store-status">
+                    <button class="seller-topbar-button seller-store-status-button dropdown-toggle" type="button" id="seller-store-status-button"
+                            data-toggle="dropdown" aria-expanded="false" aria-controls="seller-store-status-menu"
+                            aria-label="@Text["Store approval status: {0}", Text[status.Label].Value]">
+                        <span class="seller-store-status-icon" data-status="@status.Style" aria-hidden="true">
+                            <i class="fa @status.Icon"></i>
+                        </span>
+                        <span class="seller-store-status-label">@Text[status.ShortLabel]</span>
+                    </button>
+                    <ul class="dropdown-menu seller-header-menu seller-store-status-menu" id="seller-store-status-menu"
+                        aria-labelledby="seller-store-status-button">
+                        <li class="seller-menu-identity">
+                            <span>@Text["Store approval status"]</span>
+                            <partial name="_SellerStoreBadge" model="status" />
+                        </li>
+                        <li><a asp-area="Seller" asp-controller="SellerPersonalInfo" asp-action="PageOfManageSellerInformation">@Text["Store information"]</a></li>
+                    </ul>
+                </div>
+            }
+            <div class="dropdown seller-notification-menu">
+                <button class="seller-topbar-button dropdown-toggle" type="button" id="seller-notifications-button"
+                        data-toggle="dropdown" aria-expanded="false"
+                        aria-label="@Text["Notifications, {0} current", Model.Notices.Count]">
+                    <i class="fa fa-bell-o" aria-hidden="true"></i>
+                    @if (Model.Notices.Count > 0)
+                    {
+                        <span class="seller-notification-count" aria-hidden="true">@Model.Notices.Count</span>
+                    }
+                </button>
+                <ul class="dropdown-menu seller-header-menu seller-notification-list" aria-labelledby="seller-notifications-button">
+                    @if (Model.Notices.Count == 0)
+                    {
+                        <li class="seller-menu-identity">@Text["No current notifications"]</li>
+                    }
+                    @for (var index = 0; index < Model.Notices.Count; index++)
+                    {
+                        var notice = Model.Notices[index];
+                        <li>
+                            <a href="#seller-notice-@index" data-level="@notice.Level.ToString().ToLowerInvariant()">
+                                <i class="fa @notice.Icon" aria-hidden="true"></i><span>@Text[notice.Title]</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="dropdown seller-language">
+                <button class="seller-topbar-button dropdown-toggle" type="button" id="seller-language-button"
+                        data-toggle="dropdown" aria-expanded="false" aria-label="@Text["Language"]">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                </button>
+                <ul class="dropdown-menu seller-header-menu" aria-labelledby="seller-language-button">
+                    @foreach (var language in ApplicationCultures.CultureItems)
+                    {
+                        <li>
+                            <a asp-area="" asp-controller="Home" asp-action="ChangeLanguage" asp-route-culture="@language.CultureKey"
+                               lang="@language.CultureKey" aria-current="@(culture.CultureKey == language.CultureKey ? "true" : null)">
+                                @language.Title
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+            <div class="dropdown seller-account">
+                <button class="seller-topbar-button seller-account-button dropdown-toggle" type="button" id="seller-account-button"
+                        data-toggle="dropdown" aria-expanded="false" aria-label="@Text["Seller account"]">
+                    <img class="seller-avatar" src="@Model.User.GetUserAvatar()" alt="" />
+                    <bdi class="seller-account-name">@displayName</bdi>
+                    <i class="fa fa-angle-down" aria-hidden="true"></i>
+                </button>
+                <ul class="dropdown-menu seller-header-menu" aria-labelledby="seller-account-button">
+                    <li class="seller-menu-identity"><bdi>@displayName</bdi></li>
+                    <li>
+                        <a asp-area="Seller" asp-controller="Account" asp-action="EditProfile">
+                            <i class="fa fa-user" aria-hidden="true"></i> @Text["Edit profile"]
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Logout"><i class="fa fa-sign-out" aria-hidden="true"></i> @SharedHtmlLocalizer["LogOut"]</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

@@ -2,7 +2,7 @@
 
 ## Confirmed context
 - Owner wants incremental Spec-Driven Development with an agent; primary conversation language is Persian.
-- Product name/path: Panjerehyab; repository: parsapanahpoor/Window-Door, master.
+- Product name/path: Panjerehyab; repository: parsapanahpoor/Window-Door. See [Git Flow](git-flow.md) for integration on develop and production releases from master.
 - Baseline examined: 96a4bca3b3e1816062e9bd53e965f8c972b0958c.
 - Five .NET 8 projects; mixed legacy services and MediatR CQRS; SQL Server persistence.
 - Previous onboarding installed SDK 8.0.427, restored NuGet dependencies, and built Domain + Infra.Data. Full solution had 15 CS0234/CS0246 errors.
@@ -98,3 +98,31 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - Password sign-in uses the account selected by the supplied credentials and rejects multiple matches. Recovery and activation reject shared or excluded mobile numbers.
 - Isolated SQL and loopback HTTP checks with a fake SMS provider passed, including exact account selection, duplicate fallback, and rejection of shared credentials and a previously issued recovery code. Offline password recovery checks passed.
 - Installed the Release assemblies in Plesk. The previous eight files are in the private default-sms-rollback-20261107 directory. No migration was needed. All public login forms, registration and recovery returned HTTP 200; no live SMS or sign-in was performed during verification.
+
+## Seller dashboard first pass
+
+- Default request culture is Persian; explicit English query and cookie preferences remain supported. Seller Home now uses a dashboard-only responsive stylesheet, touch shortcuts and mobile bottom navigation.
+- Implemented in the Visual Studio checkout on codex/feature/seller-panel-ui. Local Release verification and isolated browser checks passed at widths from 320 to 1440 pixels. See specs/0004-seller-dashboard/spec.md for evidence.
+
+## Shared seller shell
+
+- The shared seller layout now renders the primary navigation on every seller page. Its three links are fixed at the bottom on mobile and appear below the header on desktop. The layout loads local Shabnam in regular, medium and bold and uses a warm palette. Seller-specific typography separates headings, values, actions and metadata. The isolated browser runner verified the hierarchy and narrow layout. The new profile and language controls use the existing account and localization routes.
+- Extended the isolated browser runner with navigation through real seller routes, font and avatar loading, form clearance and keyboard controls. See specs/0005-seller-shell/spec.md.
+
+## Seller notices and full navigation
+
+- Seller layout now renders existing account notices and one-request operation feedback at the top. The bell shows the same ordered notices. The dashboard welcome card is conditional; metrics and shortcuts remain available.
+- The navigation shares seller role visibility rules with dashboard shortcuts. The old page header is removed. Local Playwright checks passed with loopback fixtures, including the successful order command notification and refresh behavior. See specs/0006-seller-alerts-navigation/spec.md.
+
+## Seller store profile progress
+
+- The seller dashboard uses the associated store's saved profile, link and work sample to show owner-only completion progress. It places the store management shortcut first and uses the market state for its independent approval badge. See specs/0007-seller-store-progress/spec.md.
+- The isolated seller browser runner passed the percentage, next-step, approval and owner visibility checks. No migration is required.
+- The short approval label stays beside its icon in the shared header. The isolated browser runner checks their alignment from 320 to 1440 pixels.
+
+## Navy Dawn palette
+
+- The owner selected the Navy Dawn palette for the seller panel. The shared header and dashboard hero use navy and blue gradients, with saffron on setup actions and the progress card. The isolated browser runner passed.
+- Dashboard cards use warmer highlights within the existing navy, berry and copper, saffron and alert severity palettes. The isolated browser runner passed the gradient and alert text contrast checks.
+- The activity overview uses four tinted illustration cards with local window and storefront SVGs. Isolated browser checks verified image loading, metric values, and responsive layout.
+- The seller dashboard loads activity metrics only for active panels. Dashboard and More navigation show employee management only to active store owners. Isolated browser checks passed.
