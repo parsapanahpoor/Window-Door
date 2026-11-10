@@ -1,0 +1,48 @@
+@model SellerPanel
+@inject IStringLocalizer<SellerDashboardText> Text
+@{
+    var controller = ViewContext.RouteData.Values["controller"] as string;
+    var action = ViewContext.RouteData.Values["action"] as string;
+    bool IsController(string name) => string.Equals(controller, name, StringComparison.OrdinalIgnoreCase);
+    bool IsExact(SellerLink link) => IsController(link.Controller)
+        && string.Equals(action, link.Action, StringComparison.OrdinalIgnoreCase);
+    bool InSection(SellerLink link) => link.Controller != "Home"
+        && (IsController(link.Controller) || (link.Controller == "ShopOrder" && IsController("OrderCheque")));
+    var moreActive = Model.ExtraLinks.Any(InSection) && !SellerPanel.PrimaryLinks.Any(InSection);
+}
+
+<nav class="seller-navigation" aria-label="@Text["Seller navigation"]">
+    <div class="seller-navigation-inner">
+        @foreach (var link in SellerPanel.PrimaryLinks)
+        {
+            <a asp-area="Seller" asp-controller="@link.Controller" asp-action="@link.Action"
+               aria-current="@(IsExact(link) ? "page" : InSection(link) ? "true" : null)">
+                <i class="fa @link.Icon" aria-hidden="true"></i><span>@Text[link.Label]</span>
+            </a>
+        }
+        <div class="seller-more">
+            <button type="button" id="seller-more-button" aria-controls="seller-more-items"
+                    aria-expanded="false" data-section-active="@(moreActive ? "true" : null)">
+                <i class="fa fa-ellipsis-h" aria-hidden="true"></i><span>@Text["More"]</span>
+            </button>
+        </div>
+    </div>
+    <ul class="seller-more-items" id="seller-more-items" hidden>
+        @foreach (var link in Model.ExtraLinks)
+        {
+            <li>
+                <a asp-area="Seller" asp-controller="@link.Controller" asp-action="@link.Action"
+                   aria-current="@(IsExact(link) ? "page" : null)">
+                    <i class="fa @link.Icon" aria-hidden="true"></i>
+                    <span class="seller-shortcut-label">
+                        <span>@Text[link.Label]</span>
+                        @if (link.IsStoreManagement && Model.StoreStatus is { } storeStatus)
+                        {
+                            <partial name="_SellerStoreBadge" model="storeStatus" />
+                        }
+                    </span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>

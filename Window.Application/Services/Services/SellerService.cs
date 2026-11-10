@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -235,6 +235,21 @@ namespace Window.Application.Services.Services
             #endregion
 
             return true;
+        }
+
+        public Task<StoreProfileProgress?> GetStoreProfileProgressAsync(ulong userId, ulong marketId)
+        {
+            return _context.Market.AsNoTracking()
+                .Where(market => market.Id == marketId && market.UserId == userId && !market.IsDelete)
+                .Select(market => new StoreProfileProgress(
+                    _context.MarketPersonalInfo.Any(info => info.MarketId == market.Id && info.UserId == userId && !info.IsDelete),
+                    _context.MarketLinks.Any(link => link.MarketId == market.Id && link.UserId == userId && !link.IsDelete
+                        && link.LinkTitle != null && link.LinkTitle.Trim() != "" && link.LinkValue != null && link.LinkValue.Trim() != ""),
+                    _context.MarketWorkSamle.Any(sample => sample.MarketId == market.Id && sample.UserId == userId && !sample.IsDelete
+                        && sample.WorkSampleTitle != null && sample.WorkSampleTitle.Trim() != ""
+                        && sample.WorkSampleImage != null && sample.WorkSampleImage.Trim() != ""),
+                    market.MarketPersonalsInfoState))
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Market?> GetMarketByUserId(ulong userId)

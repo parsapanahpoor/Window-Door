@@ -1,4 +1,4 @@
-﻿using Window.Application.Interfaces;
+using Window.Application.Interfaces;
 using Window.Domain.ViewModels.User;
 using Window.Web.HttpManager;
 using Microsoft.AspNetCore.Mvc;
@@ -32,11 +32,12 @@ namespace Window.Web.Areas.Seller.Controllers
 
         #region Index
 
-        public async Task<IActionResult> Index(bool OrderFinalization = false)
+        public async Task<IActionResult> Index()
         {
             #region Check Is Exist Any Market By This User
 
-            var market = await _sellerService.GetMarketByUserId(User.GetUserId());
+            var userId = User.GetUserId();
+            var market = await _sellerService.GetMarketByUserId(userId);
             if (market == null)
             {
                 TempData[ErrorMessage] = "کاربر عزیز لطفا در ابتدا فروشگاه خود را ثبت کنید.";
@@ -45,6 +46,9 @@ namespace Window.Web.Areas.Seller.Controllers
 
             #endregion
 
+            if (market.UserId == userId)
+                ViewData["StoreProfileProgress"] = await _sellerService.GetStoreProfileProgressAsync(userId, market.Id);
+
             #region Check User Charge
 
             //var res = await _sellerService.CheckUserCharge(User.GetUserId());
@@ -52,34 +56,15 @@ namespace Window.Web.Areas.Seller.Controllers
 
             #endregion
 
-            #region Inquiry OF Seller Logs
-
-            ViewBag.CountOfTodayUserInInquiry = await _sellerService.CountOfTodayUserInInquiry(User.GetUserId());
-            ViewBag.CountOfMonthUserInInquiry = await _sellerService.CountOfMonthUserInInquiry(User.GetUserId());
-            ViewBag.CountOfYearUserInInquiry = await _sellerService.CountOfYearUserInInquiry(User.GetUserId());
-            ViewBag.CountOfSellerWaitingRequest = await _contractService.CountOfUserWaitingContractRequest(User.GetUserId());
-
-            #endregion
-
-            #region Empty Shop Name 
-
-            var user = await _userService.GetUserById(User.GetUserId());
-
-            if (string.IsNullOrEmpty(user.ShopName))
+            var sellerState = await _sellerService.GetSellersInfosState(userId);
+            ViewData["SellerAccountState"] = sellerState;
+            if (sellerState == "ActiveSellerAccount")
             {
-                ViewBag.ShopNameIsEmpty = true;
+                ViewBag.CountOfTodayUserInInquiry = await _sellerService.CountOfTodayUserInInquiry(userId);
+                ViewBag.CountOfMonthUserInInquiry = await _sellerService.CountOfMonthUserInInquiry(userId);
+                ViewBag.CountOfYearUserInInquiry = await _sellerService.CountOfYearUserInInquiry(userId);
+                ViewBag.CountOfSellerWaitingRequest = await _contractService.CountOfUserWaitingContractRequest(userId);
             }
-
-            #endregion
-
-            #region Notification
-
-            if (OrderFinalization)
-            {
-                TempData[SwalSuccess] = "سفارش باموفقیت تایید شده است. لطفا هرچه سریع تر نسبت به آماده سازی اقلام خریداری شده اقدام فرمایید.";
-            }
-
-            #endregion
 
             return View();
         }

@@ -1,4 +1,4 @@
-﻿@model Window.Domain.ViewModels.Seller.ShopOrder.ManageShopOrderDetailDTO
+@model Window.Domain.ViewModels.Seller.ShopOrder.ManageShopOrderDetailDTO
 @using Window.Application.Convertors
 @using Window.Application.StticTools
 @using Window.Application.Extensions
@@ -31,7 +31,7 @@
                             removeElementId !== undefined &&
                             removeElementId !== '' &&
                             res.status === "Success") {
-                            window.location.replace("@FilePaths.SiteAddress/Seller?OrderFinalization=true");
+                            window.location.replace("@Url.Action("Index", "Home", new { area = "Seller" })");
                         } else if (removeElementId !== null &&
                             removeElementId !== undefined &&
                             removeElementId !== '' &&

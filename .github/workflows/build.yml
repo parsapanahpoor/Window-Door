@@ -28,3 +28,13 @@ jobs:
 
       - name: Check password recovery with an offline provider
         run: dotnet run --project tests/PasswordRecoveryChecks -c Release
+
+      - name: Build seller dashboard checks and install Chromium
+        shell: pwsh
+        run: |
+          dotnet build tests/SellerDashboardChecks -c Release
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          pwsh -File tests/SellerDashboardChecks/bin/Release/net8.0/playwright.ps1 install chromium --only-shell
+
+      - name: Check seller dashboard and language in a browser
+        run: dotnet run --no-build --project tests/SellerDashboardChecks -c Release

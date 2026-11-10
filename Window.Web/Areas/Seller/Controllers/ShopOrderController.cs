@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Window.Application.CQRS.SellerPanel.OrderCheque.Command;
 using Window.Application.CQRS.SellerPanel.OrderCheque.Query;
 using Window.Application.CQRS.SellerPanel.ShopOrder.Commands;
@@ -176,6 +176,7 @@ public class ShopOrderController : SellerBaseController
 
         if (res)
         {
+            TempData[SwalSuccess] = "سفارش با موفقیت تأیید شد. آماده‌سازی اقلام سفارش را آغاز کنید.";
             return ApiResponse.SetResponse(ApiResponseStatus.Success, null, "عملیات باموفقیت انجام شده است.");
         }
 

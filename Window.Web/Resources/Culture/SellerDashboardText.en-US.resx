@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Store status short review" xml:space="preserve"><value>Review</value></data>
+  <data name="Store status short correction" xml:space="preserve"><value>Fix</value></data>
+  <data name="Store status short verified" xml:space="preserve"><value>Verified</value></data>
+  <data name="Store status short payment" xml:space="preserve"><value>Payment</value></data>
+  <data name="Store status short inactive" xml:space="preserve"><value>Inactive</value></data>
+  <data name="Store status short unverified" xml:space="preserve"><value>Unverified</value></data>
+  <data name="Store status short incomplete" xml:space="preserve"><value>Incomplete</value></data>
+</root>
