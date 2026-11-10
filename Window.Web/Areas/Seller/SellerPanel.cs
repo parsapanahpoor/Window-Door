@@ -104,14 +104,12 @@ public sealed record SellerPanel(User User, IReadOnlyList<SellerNotice> Notices,
         var links = new List<SellerLink> { new("OrderCheque", "ManageOrderChequesPages", "Manage cheques", "fa-credit-card"), profile };
         if (isMaster)
         {
-            links.AddRange([
-                new("User", "Index", "Employees", "fa-users"),
-                new("User", "AddNewUser", "Add employee", "fa-user-plus"),
-                store
-            ]);
+            links.Add(store);
             if (state == "ActiveSellerAccount")
             {
                 links.AddRange([
+                    new("User", "Index", "Employees", "fa-users"),
+                    new("User", "AddNewUser", "Add employee", "fa-user-plus"),
                     new("Contarct", "ListOfContracts", "Contract requests", "fa-file-text-o"),
                     new("Product", "FilterProducts", "Inquiry products", "fa-list-ul"),
                     new("Product", "CreateProduct", "Add inquiry product", "fa-plus"),

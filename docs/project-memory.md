@@ -125,3 +125,4 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - The owner selected the Navy Dawn palette for the seller panel. The shared header and dashboard hero use navy and blue gradients, with saffron on setup actions and the progress card. The isolated browser runner passed.
 - Dashboard cards use warmer highlights within the existing navy, berry and copper, saffron and alert severity palettes. The isolated browser runner passed the gradient and alert text contrast checks.
 - The activity overview uses four tinted illustration cards with local window and storefront SVGs. Isolated browser checks verified image loading, metric values, and responsive layout.
+- The seller dashboard loads activity metrics only for active panels. Dashboard and More navigation show employee management only to active store owners. Isolated browser checks passed.

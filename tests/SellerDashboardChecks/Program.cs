@@ -310,13 +310,18 @@ foreach (var fixture in new[] { "employee", "pending" })
     await page.GotoAsync(new Uri(baseUrl, "/Seller").AbsoluteUri);
     await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/ShopProduct/CreateProduct']")).ToHaveCountAsync(0);
     await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/Ticket/FilterTickets']")).ToBeVisibleAsync();
+    await Assertions.Expect(page.Locator(".seller-shortcuts a[href='/Seller/User'], .seller-shortcuts a[href='/Seller/User/AddNewUser'], #seller-more-items a[href='/Seller/User'], #seller-more-items a[href='/Seller/User/AddNewUser']")).ToHaveCountAsync(0);
     if (fixture == "pending")
+    {
+        await Assertions.Expect(page.Locator("#seller-overview-title")).ToHaveCountAsync(0);
         await Assertions.Expect(page.Locator(".seller-store-progress progress")).ToHaveAttributeAsync("value", "0");
+    }
     else
     {
         await Assertions.Expect(page.Locator(".seller-store-progress")).ToHaveCountAsync(0);
         await Assertions.Expect(page.Locator(".seller-store-shortcut")).ToHaveCountAsync(0);
         await Assertions.Expect(headerStoreStatus).ToHaveCountAsync(0);
+        await Assertions.Expect(page.Locator(".seller-metric")).ToHaveCountAsync(4);
     }
 }
 

@@ -9,24 +9,27 @@ ViewData["SellerDashboard"] = true;
 <link rel="stylesheet" href="~/css/seller-dashboard.css" asp-append-version="true" />
 }
 
-<section aria-labelledby="seller-overview-title">
-    <h2 id="seller-overview-title">@DashboardText["Activity overview"]</h2>
-    <dl class="seller-metrics">
-        <div class="seller-metric">
-            <dt><i class="fa fa-eye" aria-hidden="true"></i> @DashboardText["Today’s visits"]</dt>
-            <dd>@(ViewBag.CountOfTodayUserInInquiry ?? 0)</dd>
-        </div>
-        <div class="seller-metric seller-metric-month">
-            <dt><i class="fa fa-calendar-o" aria-hidden="true"></i> @DashboardText["This month’s visits"]</dt>
-            <dd>@(ViewBag.CountOfMonthUserInInquiry ?? 0)</dd>
-        </div>
-        <div class="seller-metric seller-metric-year">
-            <dt><i class="fa fa-bar-chart" aria-hidden="true"></i> @DashboardText["This year’s visits"]</dt>
-            <dd>@(ViewBag.CountOfYearUserInInquiry ?? 0)</dd>
-        </div>
-        <div class="seller-metric seller-metric-contracts">
-            <dt><i class="fa fa-file-text-o" aria-hidden="true"></i> @DashboardText["Pending contract requests"]</dt>
-            <dd>@(ViewBag.CountOfSellerWaitingRequest ?? 0)</dd>
-        </div>
-    </dl>
-</section>
+@if (ViewData["SellerAccountState"] as string == "ActiveSellerAccount")
+{
+    <section aria-labelledby="seller-overview-title">
+        <h2 id="seller-overview-title">@DashboardText["Activity overview"]</h2>
+        <dl class="seller-metrics">
+            <div class="seller-metric">
+                <dt><i class="fa fa-eye" aria-hidden="true"></i> @DashboardText["Today’s visits"]</dt>
+                <dd>@(ViewBag.CountOfTodayUserInInquiry ?? 0)</dd>
+            </div>
+            <div class="seller-metric seller-metric-month">
+                <dt><i class="fa fa-calendar-o" aria-hidden="true"></i> @DashboardText["This month’s visits"]</dt>
+                <dd>@(ViewBag.CountOfMonthUserInInquiry ?? 0)</dd>
+            </div>
+            <div class="seller-metric seller-metric-year">
+                <dt><i class="fa fa-bar-chart" aria-hidden="true"></i> @DashboardText["This year’s visits"]</dt>
+                <dd>@(ViewBag.CountOfYearUserInInquiry ?? 0)</dd>
+            </div>
+            <div class="seller-metric seller-metric-contracts">
+                <dt><i class="fa fa-file-text-o" aria-hidden="true"></i> @DashboardText["Pending contract requests"]</dt>
+                <dd>@(ViewBag.CountOfSellerWaitingRequest ?? 0)</dd>
+            </div>
+        </dl>
+    </section>
+}

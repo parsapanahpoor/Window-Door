@@ -10,7 +10,9 @@
     var isDashboard = ViewData["SellerDashboard"] is true;
     var sellerId = User.GetUserId();
     var seller = await Users.GetUserById(sellerId);
-    var state = await Sellers.GetSellersInfosState(sellerId);
+    var state = ViewData.TryGetValue("SellerAccountState", out var dashboardState)
+        ? dashboardState as string
+        : await Sellers.GetSellersInfosState(sellerId);
     var isMaster = await Sellers.IsSellerMaster(sellerId);
     var panel = SellerPanel.Create(seller, state, isMaster, TempData, ViewData["StoreProfileProgress"] as StoreProfileProgress);
 }

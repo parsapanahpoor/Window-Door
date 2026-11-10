@@ -12,6 +12,8 @@ First-time visits currently use English request localization. The seller dashboa
 
 - AC-4: The four activity cards render distinct tinted backgrounds with window or storefront illustrations. Labels and counts stay readable in the mobile and desktop grids.
 
+- AC-5: The activity summary appears only for active seller panels. The employee list and add employee shortcuts appear in both dashboard and More navigation only for active store owners.
+
 ## Design and tasks
 
 Use one shared request-localization configuration. Scope dashboard styling to Index, reuse the existing seller components, font and icon assets, and keep the TWA wrapper and seller contracts intact. Exercise real Razor, MVC and browser layout with isolated service fixtures. No schema changes.
@@ -23,3 +25,4 @@ Use one shared request-localization configuration. Scope dashboard styling to In
 - AC-3: The real controller and Razor views passed with service fixtures for active managers, employees and pending sellers. The runner checked authentication, counts, notices, role-gated shortcuts and URLs. Physical Android TWA and deployment are separate verification steps.
 - Release verification passed. Existing compiler and NuGet audit warnings remain.
 - AC-4: The isolated browser runner verified four distinct layered backgrounds, decoded both illustrations, and passed the responsive dashboard checks.
+- AC-5: Browser checks verified that pending sellers have no activity summary or employee links and active employees retain metrics without employee-management links.

@@ -56,14 +56,15 @@ namespace Window.Web.Areas.Seller.Controllers
 
             #endregion
 
-            #region Inquiry OF Seller Logs
-
-            ViewBag.CountOfTodayUserInInquiry = await _sellerService.CountOfTodayUserInInquiry(User.GetUserId());
-            ViewBag.CountOfMonthUserInInquiry = await _sellerService.CountOfMonthUserInInquiry(User.GetUserId());
-            ViewBag.CountOfYearUserInInquiry = await _sellerService.CountOfYearUserInInquiry(User.GetUserId());
-            ViewBag.CountOfSellerWaitingRequest = await _contractService.CountOfUserWaitingContractRequest(User.GetUserId());
-
-            #endregion
+            var sellerState = await _sellerService.GetSellersInfosState(userId);
+            ViewData["SellerAccountState"] = sellerState;
+            if (sellerState == "ActiveSellerAccount")
+            {
+                ViewBag.CountOfTodayUserInInquiry = await _sellerService.CountOfTodayUserInInquiry(userId);
+                ViewBag.CountOfMonthUserInInquiry = await _sellerService.CountOfMonthUserInInquiry(userId);
+                ViewBag.CountOfYearUserInInquiry = await _sellerService.CountOfYearUserInInquiry(userId);
+                ViewBag.CountOfSellerWaitingRequest = await _contractService.CountOfUserWaitingContractRequest(userId);
+            }
 
             return View();
         }
