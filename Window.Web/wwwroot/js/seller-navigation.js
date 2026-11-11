@@ -1,4 +1,16 @@
 (() => {
+    const operationNotices = document.querySelector(".seller-operation-notices");
+    if (operationNotices) window.setTimeout(() => operationNotices.remove(), 5000);
+
+    const backButton = document.querySelector("[data-seller-back]");
+    backButton?.addEventListener("click", () => {
+        if (window.history.length > 1) {
+            window.history.back();
+            return;
+        }
+        window.location.assign(backButton.dataset.fallbackUrl);
+    });
+
     const button = document.getElementById("seller-more-button");
     const items = document.getElementById("seller-more-items");
     if (!button || !items) return;

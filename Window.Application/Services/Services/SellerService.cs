@@ -404,6 +404,7 @@ namespace Window.Application.Services.Services
 
             //If Seller State Is WatingForConfirm Informations
             if (await _context.Market.AnyAsync(p => p.UserId == market.UserId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.WaitingForConfirmPersonalInformations)) return "WatingForConfirmInformations";
+            if (market.MarketPersonalsInfoState == MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller) return "WaitingForCompleteInfoFromSeller";
 
             //If Seller State Is Waiting For Payed Money From Seller
             if (await _context.Market.AnyAsync(p => p.UserId == market.UserId && !p.IsDelete && p.MarketPersonalsInfoState == Domain.Entities.Market.MarketPersonalsInfoState.WaitingForPyedFromSeller)) return "WaitingForPyedFromSeller";
@@ -565,29 +566,17 @@ namespace Window.Application.Services.Services
 
         public async Task UpdateSellerStateAfterEditPersonalInfo(ulong userId)
         {
-            #region Update Market Info 
-
             var market = await GetMarket(userId);
+            if (market == null) return;
 
             market.MarketPersonalsInfoState = MarketPersonalsInfoState.WaitingForConfirmPersonalInformations;
+            var sellerInfo = await _context.MarketPersonalInfo
+                .FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete);
+            if (sellerInfo != null)
+                sellerInfo.MarketPersonalsInfoState = MarketPersonalsInfoState.WaitingForConfirmPersonalInformations;
 
-            _context.Market.Update(market);
             await _context.SaveChangesAsync();
-
-            #endregion
-
-            #region Edit Method
-
-            var sellerInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete);
-
-            sellerInfo.MarketPersonalsInfoState = MarketPersonalsInfoState.WaitingForConfirmPersonalInformations;
-
-            _context.MarketPersonalInfo.Update(sellerInfo);
-            await _context.SaveChangesAsync();
-
-            #endregion
         }
-
         public async Task<List<AddSellerLinksViewModel>> GetSellerLinksForShowInAddSellerLinksPage(ulong userId)
         {
             return await _context.MarketLinks.Where(p => !p.IsDelete && p.UserId == userId)
@@ -875,7 +864,7 @@ namespace Window.Application.Services.Services
             var user = await _context.Users.FirstOrDefaultAsync(p => p.Id == userId && !p.IsDelete);
             if (user == null) return null;
 
-            var sellerPersonalInfo = await _context.MarketPersonalInfo
+            var sellerPersonalInfo = await _context.MarketPersonalInfo.AsNoTracking()
                 .Include(p => p.Market)
                 .FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete && p.MarketPersonalsInfoState != MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller);
             if (sellerPersonalInfo == null) return null;
@@ -903,9 +892,9 @@ namespace Window.Application.Services.Services
                 RejectedNote = sellerPersonalInfo.RejectDescription,
                 MarketPersonalsInfoState = sellerPersonalInfo.Market.MarketPersonalsInfoState,
                 SellerType = sellerPersonalInfo.SellerType,
-                CountryId = sellerPersonalInfo.CountryId.Value,
-                StateId = sellerPersonalInfo.StateId.Value,
-                CityId = sellerPersonalInfo.CityId.Value,
+                CountryId = sellerPersonalInfo.CountryId ?? 0,
+                StateId = sellerPersonalInfo.StateId ?? 0,
+                CityId = sellerPersonalInfo.CityId ?? 0,
                 ActivationTariff = await _context.Market.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.ActivationTariff).FirstOrDefaultAsync(),
                 SelersPersonalVideos = await _context.SelersPersonalVideos.AsNoTracking().FirstOrDefaultAsync(p=> !p.IsDelete && p.UserId == userId)
             };
@@ -1146,10 +1135,19 @@ namespace Window.Application.Services.Services
 
             #region Get Personal Info 
 
-            var sellerPersonalInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete);
+            var sellerPersonalInfo = await _context.MarketPersonalInfo.Include(p => p.Market).FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDelete && !p.Market.IsDelete && p.Market.UserId == userId);
             if (sellerPersonalInfo == null) return UpdateSellerPersonalInfoResul.NotFound;
 
             #endregion
+
+            var replacements = new (IFormFile? File, string? Previous, Action<string> SetName)[]
+            {
+                (info.ImageCompanyLogo, sellerPersonalInfo.CompanyLogo, name => sellerPersonalInfo.CompanyLogo = name),
+                (info.ImageOfBusinessLicense, sellerPersonalInfo.PhotoOfBusinessLicense, name => sellerPersonalInfo.PhotoOfBusinessLicense = name),
+                (info.ImageOfNationalCode, sellerPersonalInfo.PhotoOfNationalCode, name => sellerPersonalInfo.PhotoOfNationalCode = name)
+            };
+            if (replacements.Any(image => image.File != null && !image.File.IsImage()))
+                return UpdateSellerPersonalInfoResul.ImagesNotFound;
 
             #region Fill Entities
 
@@ -1167,143 +1165,80 @@ namespace Window.Application.Services.Services
 
             #endregion
 
-            #region Add Images
+            sellerPersonalInfo.Market.MarketPersonalsInfoState = MarketPersonalsInfoState.WaitingForConfirmPersonalInformations;
 
-            if (info.ImageCompanyLogo != null && info.ImageCompanyLogo.IsImage())
+            var newImages = new List<string>();
+            try
             {
-                if (!string.IsNullOrEmpty(sellerPersonalInfo.CompanyLogo))
+                foreach (var replacement in replacements)
                 {
-                    sellerPersonalInfo.CompanyLogo.DeleteImage(FilePaths.SellerInfoPathServer, FilePaths.SellerInfoPathThumbServer);
-                }
+                    if (replacement.File == null) continue;
 
-                var companylogo = Guid.NewGuid() + Path.GetExtension(info.ImageCompanyLogo.FileName);
-                info.ImageCompanyLogo.AddImageToServer(companylogo, FilePaths.SellerInfoPathServer, 400, 300, FilePaths.SellerInfoPathThumbServer);
-                sellerPersonalInfo.CompanyLogo = companylogo;
+                    var name = Guid.NewGuid() + Path.GetExtension(replacement.File.FileName).ToLowerInvariant();
+                    newImages.Add(name);
+                    replacement.File.AddImageToServer(name, FilePaths.SellerInfoPathServer, 400, 300, FilePaths.SellerInfoPathThumbServer);
+                    replacement.SetName(name);
+                }
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception error) when (error is IOException or UnauthorizedAccessException or DbUpdateException or SixLabors.ImageSharp.ImageFormatException)
+            {
+                foreach (var name in newImages) TryRemoveProfileImage(name);
+                return UpdateSellerPersonalInfoResul.Faild;
             }
 
-            if (info.ImageOfBusinessLicense != null && info.ImageOfBusinessLicense.IsImage())
-            {
-                if (!string.IsNullOrEmpty(sellerPersonalInfo.PhotoOfBusinessLicense))
-                {
-                    sellerPersonalInfo.PhotoOfBusinessLicense.DeleteImage(FilePaths.SellerInfoPathServer, FilePaths.SellerInfoPathThumbServer);
-                }
-
-                var PhotoOfBusinessLicense = Guid.NewGuid() + Path.GetExtension(info.ImageOfBusinessLicense.FileName);
-                info.ImageOfBusinessLicense.AddImageToServer(PhotoOfBusinessLicense, FilePaths.SellerInfoPathServer, 400, 300, FilePaths.SellerInfoPathThumbServer);
-                sellerPersonalInfo.PhotoOfBusinessLicense = PhotoOfBusinessLicense;
-            }
-
-            if (info.ImageOfNationalCode != null && info.ImageOfNationalCode.IsImage())
-            {
-                if (!string.IsNullOrEmpty(sellerPersonalInfo.PhotoOfNationalCode))
-                {
-                    sellerPersonalInfo.PhotoOfNationalCode.DeleteImage(FilePaths.SellerInfoPathServer, FilePaths.SellerInfoPathThumbServer);
-                }
-
-                var imageName = Guid.NewGuid() + Path.GetExtension(info.ImageOfNationalCode.FileName);
-                info.ImageOfNationalCode.AddImageToServer(imageName, FilePaths.SellerInfoPathServer, 400, 300, FilePaths.SellerInfoPathThumbServer);
-                sellerPersonalInfo.PhotoOfNationalCode = imageName;
-            }
+            foreach (var replacement in replacements)
+                if (replacement.File != null) TryRemoveProfileImage(replacement.Previous);
 
             #endregion
-
-            _context.MarketPersonalInfo.Update(sellerPersonalInfo);
-            await _context.SaveChangesAsync();
-
-            #endregion
-
             return UpdateSellerPersonalInfoResul.Success;
+        }
+
+        private static void TryRemoveProfileImage(string? name)
+        {
+            try
+            {
+                name?.DeleteImage(FilePaths.SellerInfoPathServer, FilePaths.SellerInfoPathThumbServer);
+            }
+            catch (Exception error) when (error is IOException or UnauthorizedAccessException)
+            {
+                System.Diagnostics.Trace.TraceWarning("Seller profile image cleanup failed: {0}", error.Message);
+            }
         }
 
         public async Task<bool> CheckUserCharge(ulong UserId)
         {
-            #region Get Market By User Id 
-
-            var market = await _context.MarketUser.Include(p => p.Market).Where(p => !p.IsDelete && p.UserId == UserId).Select(p => p.Market).FirstOrDefaultAsync();
+            var market = await _context.MarketUser
+                .Include(p => p.Market)
+                .Where(p => !p.IsDelete && p.UserId == UserId)
+                .Select(p => p.Market)
+                .FirstOrDefaultAsync();
             if (market == null) return false;
 
-            #endregion
-
-            #region Check User Charge 
-
-            if (market.MarketPersonalsInfoState == MarketPersonalsInfoState.ActiveMarketAccount)
+            if (market.MarketPersonalsInfoState is MarketPersonalsInfoState.ActiveMarketAccount
+                or MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller)
             {
-                var marketChargeInfo = await _context.MarketChargeInfo.FirstOrDefaultAsync(p => !p.IsDelete && p.CurrentAccountCharge && p.MarketId == market.Id);
-                if (marketChargeInfo.EndDate < DateTime.Now)
+                var latestCharge = await _context.MarketChargeInfo
+                    .Where(p => !p.IsDelete && p.MarketId == market.Id)
+                    .OrderByDescending(p => p.EndDate)
+                    .FirstOrDefaultAsync();
+
+                if (latestCharge != null && latestCharge.EndDate < DateTime.Now)
                 {
-                    #region Update Market Charge Info
+                    latestCharge.CurrentAccountCharge = false;
+                    market.MarketPersonalsInfoState = MarketPersonalsInfoState.DisAcctiveMarketAccount;
 
-                    marketChargeInfo.CurrentAccountCharge = false;
+                    var sellerInfo = await _context.MarketPersonalInfo
+                        .FirstOrDefaultAsync(p => !p.IsDelete && p.MarketId == market.Id && p.UserId == UserId);
+                    if (sellerInfo != null)
+                        sellerInfo.MarketPersonalsInfoState = MarketPersonalsInfoState.DisAcctiveMarketAccount;
 
-                    _context.MarketChargeInfo.Update(marketChargeInfo);
                     await _context.SaveChangesAsync();
-
-                    #endregion
-
-                    if (DateTime.Now.Month - marketChargeInfo.EndDate.Month >= 3)
-                    {
-                        //Delete Market Info 
-                        //var marketInfo = await _context.MarketPersonalInfo.FirstOrDefaultAsync(p => p.MarketId == market.Id);
-                        //if (marketInfo != null)
-                        //{
-                        //    marketInfo.IsDelete = true;
-                        //    _context.MarketPersonalInfo.Update(marketInfo);
-                        //    await _context.SaveChangesAsync();
-                        //}
-
-                        //Delete Personal Sample
-                        //var marketWorkSamples = await _context.MarketWorkSamle.Where(p => !p.IsDelete && p.MarketId == market.Id).ToListAsync();
-                        //if (marketWorkSamples != null)
-                        //{
-                        //    foreach (var item in marketWorkSamples)
-                        //    {
-                        //        item.IsDelete = true;
-                        //        _context.MarketWorkSamle.Update(item);
-                        //        await _context.SaveChangesAsync();
-                        //    }
-                        //}
-
-                        //Delete Links 
-                        //var marketLinks = await _context.MarketLinks.Where(p => !p.IsDelete && p.MarketId == market.Id).ToListAsync();
-                        //if (marketLinks != null)
-                        //{
-                        //    foreach (var item in marketLinks)
-                        //    {
-                        //        item.IsDelete = true;
-                        //        _context.MarketLinks.Update(item);
-                        //        await _context.SaveChangesAsync();
-                        //    }
-                        //}
-
-                        #region Update Market Info 
-
-                        market.MarketPersonalsInfoState = MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller;
-
-                        _context.Market.Update(market);
-                        await _context.SaveChangesAsync();
-
-                        #endregion
-                    }
-
-                    else
-                    {
-                        #region Update Market Info 
-
-                        market.MarketPersonalsInfoState = MarketPersonalsInfoState.DisAcctiveMarketAccount;
-
-                        _context.Market.Update(market);
-                        await _context.SaveChangesAsync();
-
-                        #endregion
-                    }
                 }
             }
 
-            #endregion
-
             return true;
         }
-
         #endregion
 
         #region Admin Side

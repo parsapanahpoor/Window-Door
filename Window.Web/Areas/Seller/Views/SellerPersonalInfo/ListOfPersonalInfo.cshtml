@@ -1,471 +1,266 @@
-﻿@using Window.Application.StticTools
-@using Window.Domain.Enums
-@using Window.Application.StaticTools
+@using Window.Application.StticTools
+@using Window.Domain.Entities.Market
 @using Window.Domain.ViewModels.Common
 @model Window.Domain.ViewModels.Seller.PersonalInfo.ListOfPersonalInfoViewModel
-@inject IViewLocalizer Localizer
-@inject IHtmlLocalizer<SharedLocalizer> SharedHtmlLocalizer
 
 @{
-    ViewData["Title"] = "لیست اطلاعات شخصی ";
-    var countries = ViewData["Countries"] != null ? ViewData["Countries"] as List<SelectListViewModel> : null;
-    var states = ViewData["States"] != null ? ViewData["States"] as List<SelectListViewModel> : null;
-    var cities = ViewData["Cities"] != null ? ViewData["Cities"] as List<SelectListViewModel> : null;
+    ViewData["Title"] = "اطلاعات شخصی فروشگاه";
 }
 
-@section Scripts
-    {
-    <script src="/lib/Custom/SellerPersonalInfo.js"></script>
+@section Styles {
+    <link rel="stylesheet" href="~/css/seller-profile.css" asp-append-version="true" />
+}
+
+@section Breadcrumb {
+    <li aria-current="page">@ViewData["Title"]</li>
+}
+
+@section Scripts {
+    <script src="~/lib/Custom/SellerPersonalInfo.js" asp-append-version="true"></script>
+    <script src="~/js/seller-profile.js" asp-append-version="true"></script>
     <partial name="_JqueryValidation" />
-
-    <script>
-
-        $("#CountryId").change(function () {
-            if ($("#CountryId :selected").val() !== '') {
-                $('#CityId option:not(:first)').remove();
-                $('#StateId option:not(:first)').remove();
-                $.get("/Home/LoadCities", { stateId: $("#CountryId :selected").val() }).then(res => {
-                    if (res.data !== null) {
-                        $.each(res.data, function () {
-                            $("#StateId").append(
-                                '<option value=' + this.id + '>' + this.title + '</option>'
-                            );
-                        });
-                    }
-                });
-            } else {
-                $('#StateId option:not(:first)').remove();
-                $('#CityId option:not(:first)').remove();
-            }
-        });
-
-        $("#StateId").change(function () {
-            if ($("#StateId :selected").val() !== '') {
-                $('#CityId option:not(:first)').remove();
-                $.get("/Home/LoadCities", { stateId: $("#StateId :selected").val() }).then(res => {
-                    if (res.data !== null) {
-                        $.each(res.data, function () {
-                            $("#CityId").append(
-                                '<option value=' + this.id + '>' + this.title + '</option>'
-                            );
-                        });
-                    }
-                });
-            } else {
-                $('#CityId option:not(:first)').remove();
-            }
-        });
-
-    </script>
-
 }
 
-@section Breadcrumb
+<div class="seller-profile">
+    @if (Model.MarketPersonalsInfoState == MarketPersonalsInfoState.Rejected && !string.IsNullOrWhiteSpace(Model.RejectedNote))
     {
-    <li>
-        <a asp-action="Index" asp-controller="Home" asp-area="Seller"> داشبورد </a>
-    </li>
-    <li>
-        <a href="javascript:void(0)"> @ViewData["Title"] </a>
-    </li>
-}
+        <section class="seller-profile-card seller-profile-feedback">
+            <h2>پیام پشتیبانی</h2>
+            <p>@Model.RejectedNote</p>
+        </section>
+    }
 
-
-
-<div class="col-lg-12 col-sm-12">
-
-    <div class="row">
-
-        <div class="col-lg-12 col-sm-12 col-xs-12">
-            <div class="widget">
-                <div class="widget-header bg-warning">
-                    <i class="widget-icon fa fa-arrow-left"></i>
-                    <span class="widget-caption">راهنمایی</span>
-                    <div class="widget-buttons">
-                        <a href="#" data-toggle="config">
-                            <i class="fa fa-cog"></i>
-                        </a>
-                        <a href="#" data-toggle="maximize">
-                            <i class="fa fa-expand"></i>
-                        </a>
-                        <a href="#" data-toggle="collapse">
-                            <i class="fa fa-minus"></i>
-                        </a>
-                        <a href="#" data-toggle="dispose">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div><!--Widget Buttons-->
-                </div><!--Widget Header-->
-                <div class="widget-body">
-                    لطفا توجه فرمایید اعداد وارد شده حتما می بایست با اعداد لاتین و انگلیسی وارد گردد. درصورت وارد کردن اعداد فارسی اطلاعات وارد شده قابل قبول نیست .
-                </div>
+    <form asp-action="UpdateSellerPersonlInfo" method="post" enctype="multipart/form-data" class="seller-profile-card">
+        <h2>مشخصات فروشگاه</h2>
+        <p>اطلاعات ثبت‌شده را می‌توانید ویرایش کنید. برای حفظ تصاویر قبلی، فایل جدیدی انتخاب نکنید.</p>
+        <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+        <div class="seller-profile-fields">
+            <div>
+                <label asp-for="NationalCode"></label>
+                <input asp-for="NationalCode" class="form-control" type="text" inputmode="numeric" dir="ltr" />
+                <span asp-validation-for="NationalCode" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="SellerType">نوع فروشنده</label>
+                <select asp-for="SellerType" class="form-control" asp-items="Html.GetEnumSelectList<Window.Domain.Enums.SellerType.SellerType>()"></select>
+                <span asp-validation-for="SellerType" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="CompanyName"></label>
+                <input asp-for="CompanyName" class="form-control" />
+                <span asp-validation-for="CompanyName" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="PeriodTimesOfWork"></label>
+                <input asp-for="PeriodTimesOfWork" class="form-control" />
+                <span asp-validation-for="PeriodTimesOfWork" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="CountryId"></label>
+                <select asp-for="CountryId" class="form-control" asp-items="@(new SelectList((IEnumerable<SelectListViewModel>)ViewData["Countries"], "Id", "Title"))">
+                    <option value="">انتخاب کنید</option>
+                </select>
+                <span asp-validation-for="CountryId" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="StateId"></label>
+                <select asp-for="StateId" class="form-control" asp-items="@(new SelectList((IEnumerable<SelectListViewModel>)ViewData["States"], "Id", "Title"))">
+                    <option value="">انتخاب کنید</option>
+                </select>
+                <span asp-validation-for="StateId" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="CityId"></label>
+                <select asp-for="CityId" class="form-control" asp-items="@(new SelectList((IEnumerable<SelectListViewModel>)ViewData["Cities"], "Id", "Title"))">
+                    <option value="">انتخاب کنید</option>
+                </select>
+                <span asp-validation-for="CityId" class="text-danger"></span>
+            </div>
+            <div class="seller-profile-wide">
+                <label asp-for="Resume"></label>
+                <textarea asp-for="Resume" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Resume" class="text-danger"></span>
+            </div>
+            <div class="seller-profile-wide">
+                <label asp-for="WorkAddress"></label>
+                <textarea asp-for="WorkAddress" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="WorkAddress" class="text-danger"></span>
             </div>
         </div>
-
-        @if (!string.IsNullOrEmpty(Model.RejectedNote) && Model.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.Rejected)
-        {
-            <div class="col-lg-12 col-sm-12 col-xs-12">
-                <div class="widget">
-                    <div class="widget-header bg-red">
-                        <span class="widget-caption">پیام پشتیبانی </span>
-                        <div class="widget-buttons">
-                            <a href="#" data-toggle="config">
-                                <i class="fa fa-cog"></i>
-                            </a>
-                            <a href="#" data-toggle="maximize">
-                                <i class="fa fa-expand"></i>
-                            </a>
-                            <a href="#" data-toggle="collapse">
-                                <i class="fa fa-minus"></i>
-                            </a>
-                            <a href="#" data-toggle="dispose">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="widget-body bg-red">
-                        <p> @Model.RejectedNote </p>
-                    </div>
+        <p id="seller-location-status" role="status"></p>
+        <h2>تصاویر و مدارک</h2>
+        <div class="seller-profile-documents">
+            <div class="seller-document">
+                <label asp-for="ImageOfNationalCode" class="seller-document-title">
+                    <i class="fa fa-id-card-o" aria-hidden="true"></i> عکس کارت ملی
+                </label>
+                <div class="seller-document-preview">
+                    <img src="@(string.IsNullOrEmpty(Model.PhotoOfNationalCode) ? null : FilePaths.SellerInfoPath + Model.PhotoOfNationalCode)"
+                         alt="عکس کارت ملی" ImageFile="1" />
+                    <span class="seller-document-empty"><i class="fa fa-id-card-o" aria-hidden="true"></i> پیش‌نمایش تصویر</span>
                 </div>
+                <div class="seller-document-picker">
+                    <i class="fa fa-upload" aria-hidden="true"></i>
+                    <span aria-hidden="true">انتخاب تصویر</span>
+                    <input asp-for="ImageOfNationalCode" type="file" accept=".jpg,.jpeg,.png" ImageInput="1"
+                           aria-describedby="ImageOfNationalCode-hint" />
+                </div>
+                <small id="ImageOfNationalCode-hint" class="seller-document-hint" aria-live="polite">JPG یا PNG</small>
+                <span asp-validation-for="ImageOfNationalCode" class="text-danger"></span>
+            </div>
+            <div class="seller-document">
+                <label asp-for="ImageOfBusinessLicense" class="seller-document-title">
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i> عکس جواز کسب
+                </label>
+                <div class="seller-document-preview">
+                    <img src="@(string.IsNullOrEmpty(Model.PhotoOfBusinessLicense) ? null : FilePaths.SellerInfoPath + Model.PhotoOfBusinessLicense)"
+                         alt="عکس جواز کسب" ImageFile="2" />
+                    <span class="seller-document-empty"><i class="fa fa-file-text-o" aria-hidden="true"></i> پیش‌نمایش تصویر</span>
+                </div>
+                <div class="seller-document-picker">
+                    <i class="fa fa-upload" aria-hidden="true"></i>
+                    <span aria-hidden="true">انتخاب تصویر</span>
+                    <input asp-for="ImageOfBusinessLicense" type="file" accept=".jpg,.jpeg,.png" ImageInput="2"
+                           aria-describedby="ImageOfBusinessLicense-hint" />
+                </div>
+                <small id="ImageOfBusinessLicense-hint" class="seller-document-hint" aria-live="polite">JPG یا PNG</small>
+                <span asp-validation-for="ImageOfBusinessLicense" class="text-danger"></span>
+            </div>
+            <div class="seller-document">
+                <label asp-for="ImageCompanyLogo" class="seller-document-title">
+                    <i class="fa fa-picture-o" aria-hidden="true"></i> لوگوی شرکت
+                </label>
+                <div class="seller-document-preview">
+                    <img src="@(string.IsNullOrEmpty(Model.CompanyLogo) ? null : FilePaths.SellerInfoPath + Model.CompanyLogo)"
+                         alt="لوگوی شرکت" ImageFile="3" />
+                    <span class="seller-document-empty"><i class="fa fa-picture-o" aria-hidden="true"></i> پیش‌نمایش تصویر</span>
+                </div>
+                <div class="seller-document-picker">
+                    <i class="fa fa-upload" aria-hidden="true"></i>
+                    <span aria-hidden="true">انتخاب تصویر</span>
+                    <input asp-for="ImageCompanyLogo" type="file" accept=".jpg,.jpeg,.png" ImageInput="3"
+                           aria-describedby="ImageCompanyLogo-hint" />
+                </div>
+                <small id="ImageCompanyLogo-hint" class="seller-document-hint" aria-live="polite">JPG یا PNG</small>
+                <span asp-validation-for="ImageCompanyLogo" class="text-danger"></span>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary seller-profile-save">ذخیرهٔ تغییرات</button>
+    </form>
+
+
+    <section class="seller-profile-card seller-related-card" aria-labelledby="seller-work-samples-title">
+        <header class="seller-related-header">
+            <div class="seller-related-heading-copy">
+                <span class="seller-related-icon" aria-hidden="true"><i class="fa fa-briefcase"></i></span>
+                <div>
+                    <h2 id="seller-work-samples-title">نمونه‌کارها</h2>
+                    <p>نمونه‌کارهای ثبت‌شدهٔ فروشگاه را مدیریت کنید.</p>
+                </div>
+            </div>
+            <button type="button" onclick="LoadAddPersonalWorkSampleModalBody()" class="seller-related-add">
+                <i class="fa fa-plus" aria-hidden="true"></i><span>افزودن نمونه‌کار</span>
+            </button>
+        </header>
+
+        @if (Model.MarketWorkSamples != null && Model.MarketWorkSamples.Any())
+        {
+            <div class="seller-table-viewport">
+                <table class="seller-related-table seller-work-sample-table">
+                    <caption class="sr-only">نمونه‌کارهای ثبت‌شدهٔ فروشگاه</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">تصویر نمونه‌کار</th>
+                            <th scope="col">عنوان نمونه‌کار</th>
+                            <th scope="col">مدیریت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var link in Model.MarketWorkSamples)
+                        {
+                            <tr class="seller-work-sample-row" id="sample_@link.Id" remove-ajax-item="sample_@link.Id">
+                                <td class="seller-sample-image-cell" data-label="تصویر نمونه‌کار">
+                                    @if (!string.IsNullOrWhiteSpace(link.WorkSampleImage))
+                                    {
+                                        <img src="/content/images/SellerInfo/thumb/@link.WorkSampleImage" alt="@link.WorkSampleTitle" loading="lazy" />
+                                    }
+                                    else
+                                    {
+                                        <span class="seller-sample-placeholder" aria-label="تصویری ثبت نشده"><i class="fa fa-picture-o" aria-hidden="true"></i></span>
+                                    }
+                                </td>
+                                <td class="seller-sample-title-cell" data-label="عنوان نمونه‌کار"><strong>@link.WorkSampleTitle</strong></td>
+                                <td class="seller-related-actions-cell" data-label="مدیریت">
+                                    <button type="button" aria-label="حذف نمونه‌کار @link.WorkSampleTitle" title="حذف نمونه‌کار"
+                                            onclick="DeleteAjax('sample_@link.Id', '@Url.Action("DeleteWorkSample", "SellerPersonalInfo", new {area = "Seller", id = link.Id})')"
+                                            class="seller-table-action seller-table-delete"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         }
-    </div>
+        else
+        {
+            <div class="seller-table-empty">
+                <span class="seller-related-icon" aria-hidden="true"><i class="fa fa-picture-o"></i></span>
+                <strong>هنوز نمونه‌کاری ثبت نشده است</strong>
+                <p>با افزودن نمونه‌کار، تجربه و کیفیت کارتان را به مشتریان نشان دهید.</p>
+            </div>
+        }
+    </section>
 
-    <div class="row">
-        <div class="col-lg-12 col-sm-12">
-            <div class="row">
-
-                <form method="post" asp-action="UpdateSellerPersonlInfo" asp-controller="SellerPersonalInfo" asp-area="Seller" enctype="multipart/form-data">
-
-                    <input type="hidden" asp-for="PhotoOfBusinessLicense" />
-                    <input type="hidden" asp-for="PhotoOfNationalCode" />
-                    <input type="hidden" asp-for="CompanyLogo" />
-
-                    <div class="col-lg-12">
-                        <div class="widget">
-                            <div class="widget-header bordered-bottom bordered-green">
-                                <span class="widget-caption"> اطلاعات شخصی  </span>
-                            </div>
-                            <div class="widget-body">
-                                <div class="row">
-
-                                    <div class="form-group col-md-3 col-sm-12">
-                                        <label asp-for="NationalCode"></label>
-                                        <input type="text" class="form-control" asp-for="NationalCode">
-                                        <span class="text-danger" asp-validation-for="NationalCode"></span>
-                                    </div>
-
-                                    <div class="form-group col-md-3 col-sm-12">
-                                        <label asp-for="SellerType">نوع فروشنده</label>
-                                        <select asp-for="SellerType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(Window.Domain.Enums.SellerType.SellerType))"></select>
-                                        <span class="text-danger" asp-validation-for="SellerType"></span>
-                                    </div>
-
-                                    <div class="form-group col-md-3 col-sm-12">
-                                        <label asp-for="CompanyName"></label>
-                                        <input type="text" class="form-control" asp-for="CompanyName">
-                                        <span class="text-danger" asp-validation-for="CompanyName"></span>
-                                    </div>
-
-                                    <div class="form-group col-md-3 col-sm-12">
-                                        <label asp-for="PeriodTimesOfWork"></label>
-                                        <input type="text" class="form-control" asp-for="PeriodTimesOfWork">
-                                        <span class="text-danger" asp-validation-for="PeriodTimesOfWork"></span>
-                                    </div>
-
-                                    <div class="form-group col-md-4 col-sm-12">
-                                        <label asp-for="CountryId"></label>
-                                        <select class="form-control" asp-for="CountryId">
-                                            <option value=""> لطفا یک کشور را انتخاب کنید </option>
-                                            @if (countries != null && countries.Any())
-                                            {
-                                                foreach (var country in countries)
-                                                {
-                                                    if (Model != null && Model.CountryId == country.Id)
-                                                    {
-                                                        <option value="@country.Id" selected="selected"> @country.Title </option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@country.Id"> @country.Title </option>
-                                                    }
-                                                }
-                                            }
-                                        </select>
-                                        <span class="text-danger" asp-validation-for="CountryId"></span>
-                                    </div>
-
-                                    <div class="form-group col-md-4 col-sm-12">
-                                        <label asp-for="StateId"></label>
-                                        <select class="form-control" asp-for="StateId">
-                                            <option value=""> لطفا یک استان را انتخاب کنید </option>
-                                            @if (states != null && states.Any())
-                                            {
-                                                foreach (var state in states)
-                                                {
-                                                    if (Model != null && Model.StateId == state.Id)
-                                                    {
-                                                        <option value="@state.Id" selected="selected"> @state.Title </option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@state.Id"> @state.Title </option>
-                                                    }
-                                                }
-                                            }
-                                        </select>
-                                        <span class="text-danger" asp-validation-for="StateId"></span>
-                                    </div>
-
-                                    <div class="form-group col-md-4 col-sm-12">
-                                        <label asp-for="CityId"></label>
-                                        <select asp-for="CityId" class="form-control">
-                                            <option value=""> لطفا یک شهر را انتخاب کنید </option>
-                                            @if (cities != null && cities.Any())
-                                            {
-                                                foreach (var city in cities)
-                                                {
-                                                    if (Model != null && Model.CityId == city.Id)
-                                                    {
-                                                        <option value="@city.Id" selected="selected"> @city.Title </option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@city.Id"> @city.Title </option>
-                                                    }
-                                                }
-                                            }
-                                        </select>
-                                        <span class="text-danger" asp-validation-for="CityId"></span>
-                                    </div>
-
-                                    <div class="form-group col-md-12 col-sm-12">
-                                        <label asp-for="Resume"></label>
-                                        <textarea type="text" rows="7" class="form-control" asp-for="Resume"></textarea>
-                                        <span class="text-danger" asp-validation-for="Resume"></span>
-                                    </div>
-
-                                    <div class="form-group col-md-12 col-sm-12">
-                                        <label asp-for="WorkAddress"></label>
-                                        <textarea type="text" rows="7" class="form-control" asp-for="WorkAddress"></textarea>
-                                        <span class="text-danger" asp-validation-for="WorkAddress"></span>
-                                    </div>
-
-                                    <div class="form-group col-md-12 col-sm-12">
-
-                                        <div class="col-lg-4 col-sm-12">
-                                            <div class="widget">
-                                                <div class="widget-header bordered-bottom bordered-green">
-                                                    <span class="widget-caption"> عکس کارت ملی</span>
-                                                </div>
-                                                <div class="widget-body">
-                                                    <div class="row">
-                                                        <input type="file" class="display-none " asp-for="ImageOfNationalCode" ImageInput="2" id="UserAvatar2" accept=".jpg,.jpeg,.png" />
-
-                                                        <div class="col-md-12">
-                                                            <label for="UserAvatar2" class="file-input-style">
-                                                                <i class="glyphicon glyphicon-upload"></i>
-                                                                <span class="mr-8px"> لطفا عکس کارت ملی را بارگذاری کنید .</span>
-                                                            </label>
-                                                        </div>
-
-                                                        <div class="col-md-12 tc mt-10px">
-                                                            <img src="@(string.IsNullOrEmpty(Model.PhotoOfNationalCode) ? FilePaths.DefaultUserAvatar : FilePaths.SellerInfoPath + Model.PhotoOfNationalCode)" class="image-style" ImageFile="2" />
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-4 col-sm-12">
-                                            <div class="widget">
-                                                <div class="widget-header bordered-bottom bordered-green">
-                                                    <span class="widget-caption"> عکس جواز کسب</span>
-                                                </div>
-                                                <div class="widget-body">
-                                                    <div class="row">
-                                                        <input type="file" class="display-none " asp-for="ImageOfBusinessLicense" id="UserAvatar1" ImageInput="1" accept=".jpg,.jpeg,.png" />
-
-                                                        <div class="col-md-12">
-                                                            <label for="UserAvatar1" class="file-input-style">
-                                                                <i class="glyphicon glyphicon-upload"></i>
-                                                                <span class="mr-8px"> لطفا عکس جواز کسب را بارگذاری کنید .</span>
-                                                            </label>
-                                                        </div>
-
-                                                        <div class="col-md-12 tc mt-10px">
-                                                            <img src="@(string.IsNullOrEmpty(Model.PhotoOfBusinessLicense) ? FilePaths.DefaultUserAvatar : FilePaths.SellerInfoPath + Model.PhotoOfBusinessLicense)" class="image-style" ImageFile="1" />
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-4 col-sm-12">
-                                            <div class="widget">
-                                                <div class="widget-header bordered-bottom bordered-green">
-                                                    <span class="widget-caption"> لوگوی شرکت</span>
-                                                </div>
-                                                <div class="widget-body">
-                                                    <div class="row">
-                                                        <input type="file" class="display-none " asp-for="ImageCompanyLogo" id="UserAvatar3" ImageInput="3" accept=".jpg,.jpeg,.png" />
-
-                                                        <div class="col-md-12">
-                                                            <label for="UserAvatar3" class="file-input-style">
-                                                                <i class="glyphicon glyphicon-upload"></i>
-                                                                <span class="mr-8px"> لطفا لوگوی شرکت را بارگذاری کنید .</span>
-                                                            </label>
-                                                        </div>
-
-                                                        <div class="col-md-12 tc mt-10px">
-                                                            <img src="@(string.IsNullOrEmpty(Model.CompanyLogo) ? FilePaths.DefaultUserAvatar : FilePaths.SellerInfoPath + Model.CompanyLogo)" class="image-style" ImageFile="3" />
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <hr class="margin-bottom-10 margin-top-10" />
-
-                                    <div class="col-md-12 flex-style">
-                                        <button type="submit" class="btn btn-labeled btn-warning">
-                                            <i class="btn-label glyphicon glyphicon-ok"></i>ویرایش
-                                        </button>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </form>
-
-                <div class="col-lg-12 col-sm-12">
-                    <div class="well with-header with-footer table-responsive">
-                        <div class="header bordered-azure">
-                            <div class="flex-style">
-                                <div class="widget-buttons">
-                                    <div class="row" style="margin-right: 10px;">
-
-                                        <a id="ShowUserCommentInAdminPanel" class="badge badge-success" asp-action="AddWorkSample" asp-controller="SellerPersonalInfo" asp-area="Seller">افزودن لیست نمونه کار</a>
-
-                                    </div>
-                                </div>
-                            </div>
-                           
-                        </div>
-
-                        @if (Model.MarketWorkSamples != null && Model.MarketWorkSamples.Any())
-                        {
-                            <table class="table table-hover table-bordered tc vm ">
-                                <thead class="tc vm">
-                                    <tr class="tc vm">
-                                        <th class="tc vm">
-                                            تصویر نمونه کار
-                                        </th>
-                                        <th class="tc vm">
-                                            عنوان نمونه کار
-                                        </th>
-                                        <th class="tc vm">
-                                            امکانات
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="tc vm">
-                                    @foreach (var link in Model.MarketWorkSamples)
-                                    {
-                                        <tr class="tc vm" id="profile_@link.Id" remove-ajax-item="@link.Id">
-                                            <td class="vm">
-                                                <img src="/content/images/sellerInfo/thumb/@link.WorkSampleImage" class="avatar-style" />
-                                            </td>
-                                            <td id="CommentDetail" class="tc vm">
-                                                <p>@link.WorkSampleTitle</p>
-                                            </td>
-
-                                            <td class="tc vm">
-                                                <button onclick="DeleteAjax(@link.Id, '@Url.Action("DeleteWorkSample", "SellerPersonalInfo", new {area = "Seller", id = link.Id})')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        }
-                        else
-                        {
-                            <partial name="_SellerNotFoundPartial" />
-                        }
-                        @*
-                        <a onclick="LoadAddPersonalWorkSampleModalBody()" class="btn btn-labeled btn-success">
-                        <i class="btn-label glyphicon glyphicon-ok"></i>ثبت نمونه کار جدید
-                        </a>*@
-
-                    </div>
-                </div>
-
-      
-            <div class="col-lg-12 col-sm-12">
-                <div class="well with-header with-footer table-responsive">
-                    <div class="header bordered-azure">
-                        <div class="flex-style">
-                            <span>لیست لینک های ارتباطی</span>
-                        </div>
-                    </div>
-
-                    @if (Model.MarketLinks != null && Model.MarketLinks.Any())
-                    {
-                        <table class="table table-hover table-bordered tc vm ">
-                            <thead class="tc vm">
-                                <tr class="tc vm">
-                                    <th class="tc vm">
-                                        عنوان لینک
-                                    </th>
-                                    <th class="tc vm">
-                                        آدرس لینک
-                                    </th>
-                                    <th class="tc vm">
-                                        امکانات
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="tc vm">
-                                @foreach (var sellerLinks in Model.MarketLinks)
-                                {
-                                    <tr class="tc vm" id="profile_@sellerLinks.Id" remove-ajax-item="@sellerLinks.Id">
-                                        <td class="vm">
-                                            <p>@sellerLinks.LinkTitle</p>
-                                        </td>
-                                        <td id="CommentDetail" class="tc vm">
-                                            <p>@sellerLinks.LinkValue</p>
-                                        </td>
-
-                                        <td class="tc vm">
-                                            <button onclick="DeleteAjax(@sellerLinks.Id, '@Url.Action("DeleteSellersLinks", "SellerPersonalInfo", new {area = "Seller", id = sellerLinks.Id})')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                    else
-                    {
-                        <partial name="_SellerNotFoundPartial" />
-                    }
-
-                    
-                    <a onclick="LoadAddPersonalLinkModalBody()" class="btn btn-labeled btn-success">
-                    <i class="btn-label glyphicon glyphicon-ok"></i>ثبت لینک ارتباطی جدید
-                    </a>
-
+    <section class="seller-profile-card seller-related-card" aria-labelledby="seller-links-title">
+        <header class="seller-related-header">
+            <div class="seller-related-heading-copy">
+                <span class="seller-related-icon seller-links-icon" aria-hidden="true"><i class="fa fa-link"></i></span>
+                <div>
+                    <h2 id="seller-links-title">لینک‌های ارتباطی</h2>
+                    <p>راه‌های ارتباط و حضور آنلاین فروشگاه را مدیریت کنید.</p>
                 </div>
             </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
+            <button type="button" onclick="LoadAddPersonalLinkModalBody()" class="seller-related-add">
+                <i class="fa fa-plus" aria-hidden="true"></i><span>ثبت لینک جدید</span>
+            </button>
+        </header>
 
+        @if (Model.MarketLinks != null && Model.MarketLinks.Any())
+        {
+            <div class="seller-table-viewport">
+                <table class="seller-related-table seller-link-table">
+                    <caption class="sr-only">لینک‌های ارتباطی فروشگاه</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">عنوان لینک</th>
+                            <th scope="col">آدرس لینک</th>
+                            <th scope="col">مدیریت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sellerLinks in Model.MarketLinks)
+                        {
+                            <tr class="seller-link-row" id="link_@sellerLinks.Id" remove-ajax-item="link_@sellerLinks.Id">
+                                <td class="seller-link-title-cell" data-label="عنوان لینک"><strong>@sellerLinks.LinkTitle</strong></td>
+                                <td class="seller-link-value-cell" data-label="آدرس لینک"><bdi dir="ltr">@sellerLinks.LinkValue</bdi></td>
+                                <td class="seller-related-actions-cell" data-label="مدیریت">
+                                    <button type="button" aria-label="حذف لینک @sellerLinks.LinkTitle" title="حذف لینک"
+                                            onclick="DeleteAjax('link_@sellerLinks.Id', '@Url.Action("DeleteSellersLinks", "SellerPersonalInfo", new {area = "Seller", id = sellerLinks.Id})')"
+                                            class="seller-table-action seller-table-delete"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="seller-table-empty">
+                <span class="seller-related-icon seller-links-icon" aria-hidden="true"><i class="fa fa-link"></i></span>
+                <strong>هنوز لینک ارتباطی ثبت نشده است</strong>
+                <p>راه‌های ارتباطی خود را اضافه کنید تا مشتریان راحت‌تر با شما در تماس باشند.</p>
+            </div>
+        }
+    </section>
+    </div>
