@@ -27,7 +27,7 @@ public sealed record SellerNotice(SellerNoticeLevel Level, string Title, string 
 
 public sealed record SellerStoreStatus(string Label, string ShortLabel, string Style, string Icon);
 
-public sealed record SellerPanel(User User, IReadOnlyList<SellerNotice> Notices, IReadOnlyList<SellerLink> ExtraLinks, SellerStoreStatus? StoreStatus)
+public sealed record SellerPanel(User User, IReadOnlyList<SellerNotice> Notices, IReadOnlyList<SellerLink> ExtraLinks, SellerStoreStatus? StoreStatus, IReadOnlyList<SellerNotice> OperationNotices)
 {
     public static IReadOnlyList<SellerLink> PrimaryLinks { get; } =
     [
@@ -39,11 +39,14 @@ public sealed record SellerPanel(User User, IReadOnlyList<SellerNotice> Notices,
     private static SellerStoreStatus ApprovalBadge(MarketPersonalsInfoState? state, bool hasCompleteProfile) => state switch
     {
         MarketPersonalsInfoState.WaitingForConfirmPersonalInformations => new("Store under review", "Store status short review", "review", "fa-clock-o"),
+        MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller => new("Store profile incomplete", "Store status short incomplete", "correction", "fa-circle-o"),
         MarketPersonalsInfoState.Rejected => new("Store needs correction", "Store status short correction", "correction", "fa-exclamation-circle"),
-        MarketPersonalsInfoState.ActiveMarketAccount or MarketPersonalsInfoState.AcceptedPersonalInformation
+        MarketPersonalsInfoState.ActiveMarketAccount
+            => new("Store active", "Store status short active", "active", "fa-check-circle"),
+        MarketPersonalsInfoState.AcceptedPersonalInformation
             => new("Store verified", "Store status short verified", "verified", "fa-check-circle"),
         MarketPersonalsInfoState.WaitingForPyedFromSeller => new("Store fee pending badge", "Store status short payment", "review", "fa-clock-o"),
-        MarketPersonalsInfoState.DisAcctiveMarketAccount => new("Store account inactive", "Store status short inactive", "review", "fa-pause-circle"),
+        MarketPersonalsInfoState.DisAcctiveMarketAccount => new("Store account inactive", "Store status short inactive", "inactive", "fa-pause-circle"),
         _ when hasCompleteProfile => new("Store not yet verified", "Store status short unverified", "review", "fa-clock-o"),
         _ => new("Store profile incomplete", "Store status short incomplete", "correction", "fa-circle-o")
     };
@@ -91,12 +94,13 @@ public sealed record SellerPanel(User User, IReadOnlyList<SellerNotice> Notices,
             (SellerBaseController.InfoMessage, SellerNoticeLevel.Info), (SellerBaseController.SwalInfo, SellerNoticeLevel.Info),
             (SellerBaseController.SuccessMessage, SellerNoticeLevel.Success), (SellerBaseController.SwalSuccess, SellerNoticeLevel.Success)
         ];
+        var operationNotices = new List<SellerNotice>();
         var flashMessages = new HashSet<(SellerNoticeLevel, string)>();
         foreach (var (key, level) in flashKeys)
         {
             if (tempData.TryGetValue(key, out var value) && value is string message && !string.IsNullOrWhiteSpace(message)
                 && flashMessages.Add((level, message)))
-                notices.Add(new(level, level.ToString(), message, TranslateMessage: false));
+                operationNotices.Add(new(level, level.ToString(), message, TranslateMessage: false));
 
             tempData.Remove(key);
         }
@@ -123,6 +127,7 @@ public sealed record SellerPanel(User User, IReadOnlyList<SellerNotice> Notices,
         var approvalState = storeProgress?.State ?? (state switch
         {
             "WatingForConfirmInformations" => MarketPersonalsInfoState.WaitingForConfirmPersonalInformations,
+            "WaitingForCompleteInfoFromSeller" => MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller,
             "Rejected" => MarketPersonalsInfoState.Rejected,
             "ActiveSellerAccount" => MarketPersonalsInfoState.ActiveMarketAccount,
             "AcceptedPersonalInformation" => MarketPersonalsInfoState.AcceptedPersonalInformation,
@@ -134,6 +139,6 @@ public sealed record SellerPanel(User User, IReadOnlyList<SellerNotice> Notices,
             ? ApprovalBadge(approvalState, storeProgress?.CompletedSteps == StoreProfileProgress.TotalSteps)
             : null;
 
-        return new(user, notices.OrderBy(notice => notice.Level).ToArray(), links, storeStatus);
+        return new(user, notices.OrderBy(notice => notice.Level).ToArray(), links, storeStatus, operationNotices);
     }
 }

@@ -59,6 +59,7 @@
   <data name="Store under review" xml:space="preserve"><value>در انتظار بررسی</value></data>
   <data name="Store needs correction" xml:space="preserve"><value>نیاز به اصلاح</value></data>
   <data name="Store verified" xml:space="preserve"><value>تأیید شده</value></data>
+  <data name="Store active" xml:space="preserve"><value>فعال</value></data>
   <data name="Store fee pending badge" xml:space="preserve"><value>در انتظار پرداخت</value></data>
   <data name="Store account inactive" xml:space="preserve"><value>حساب غیرفعال</value></data>
   <data name="Store not yet verified" xml:space="preserve"><value>هنوز تأیید نشده</value></data>
@@ -68,6 +69,7 @@
   <data name="Store status short review" xml:space="preserve"><value>بررسی</value></data>
   <data name="Store status short correction" xml:space="preserve"><value>اصلاح</value></data>
   <data name="Store status short verified" xml:space="preserve"><value>تأیید</value></data>
+  <data name="Store status short active" xml:space="preserve"><value>فعال</value></data>
   <data name="Store status short payment" xml:space="preserve"><value>پرداخت</value></data>
   <data name="Store status short inactive" xml:space="preserve"><value>غیرفعال</value></data>
   <data name="Store status short unverified" xml:space="preserve"><value>تأیید نشده</value></data>

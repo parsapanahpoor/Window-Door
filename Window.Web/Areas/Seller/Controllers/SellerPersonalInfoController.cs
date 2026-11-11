@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
 using Window.Application.Extensions;
 using Window.Application.Generators;
 using Window.Application.Interfaces;
+using Window.Application.Security;
 using Window.Application.Services.Interfaces;
 using Window.Application.StticTools;
 using Window.Domain.DTOs.ZarinPal;
@@ -328,17 +329,21 @@ public class SellerPersonalInfoController : SellerBaseController
 
     public async Task<IActionResult> ListOfPersonalInfo()
     {
-        var model = await _sellerService.FillListOfPersonalInfoViewModel(User.GetUserId());
+        if (!await _sellerService.IsSellerMaster(User.GetUserId())) return Forbid();
 
+        var model = await _sellerService.FillListOfPersonalInfoViewModel(User.GetUserId());
         if (model == null) return RedirectToAction(nameof(ManagePersonalInfoLink));
 
-        ViewData["Countries"] = await _stateService.GetAllCountries();
-        ViewData["States"] = await _stateService.GetStateChildren(model.CountryId);
-        ViewData["Cities"] = await _stateService.GetStateChildren(model.StateId);
-
+        await LoadProfileLocations(model);
         return View(model);
     }
 
+    private async Task LoadProfileLocations(ListOfPersonalInfoViewModel model)
+    {
+        ViewData["Countries"] = await _stateService.GetAllCountries();
+        ViewData["States"] = await _stateService.GetStateChildren(model.CountryId);
+        ViewData["Cities"] = await _stateService.GetStateChildren(model.StateId);
+    }
     #endregion
 
     #region Show Personal Link Form In Modal
@@ -381,44 +386,49 @@ public class SellerPersonalInfoController : SellerBaseController
 
     #region Upload Work Sample Image In Modal
 
-    [HttpPost]
-    public async Task<IActionResult> UploadSellerWorkSampleImgeInModal(IFormFile file)
+    [HttpPost, ValidateAntiForgeryToken]
+    public IActionResult UploadSellerWorkSampleImgeInModal(IFormFile? file)
     {
-        if (file != null)
-        {
-            if (Path.GetExtension(file.FileName) == ".png" || Path.GetExtension(file.FileName) == ".jpeg" || Path.GetExtension(file.FileName) == ".jpg")
-            {
-                var imageName = CodeGenerator.GenerateUniqCode() + Path.GetExtension(file.FileName);
-                file.AddImageToServer(imageName, FilePaths.SellerInfoPathServer, 270, 270, FilePaths.SellerInfoPathThumbServer);
-                return new JsonResult(new { status = "Success", imageName = imageName });
+        if (file is null || file.Length == 0 || !file.IsImage())
+            return BadRequest(new { status = "Error" });
 
-            }
-            else
-            {
-                return new JsonResult(new { status = "Error" });
-            }
-        }
-        else
+        var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        if (extension is not (".png" or ".jpeg" or ".jpg"))
+            return BadRequest(new { status = "Error" });
+
+        try
         {
-            return new JsonResult(new { status = "Error" });
+            var imageName = CodeGenerator.GenerateUniqCode() + extension;
+            file.AddImageToServer(imageName, FilePaths.SellerInfoPathServer, 270, 270, FilePaths.SellerInfoPathThumbServer);
+            return new JsonResult(new { status = "Success", imageName });
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, new { status = "Error" });
         }
     }
 
     #endregion
 
-    #region Add Personal Work Sample In Modal 
+    #region Add Personal Work Sample In Modal
 
+    [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> AddPersonalWorkInSampleInModal(AddSellerWorkSampleViewModel link)
     {
+        if (!ModelState.IsValid || string.IsNullOrWhiteSpace(link.WorkSampleImage))
+            return JsonResponseStatus.Error();
+
+        var imageName = Path.GetFileName(link.WorkSampleImage);
+        var extension = Path.GetExtension(imageName).ToLowerInvariant();
+        if (imageName != link.WorkSampleImage
+            || extension is not (".png" or ".jpeg" or ".jpg")
+            || !System.IO.File.Exists(Path.Combine(FilePaths.SellerInfoPathServer, imageName)))
+            return JsonResponseStatus.Error();
+
+        link.WorkSampleImage = imageName;
         link.UserId = User.GetUserId();
-
-        var res = await _sellerService.AddSellerWorkSampleInModal(link);
-        if (res)
-        {
-            return JsonResponseStatus.Success();
-        }
-
-        return JsonResponseStatus.Error();
+        var result = await _sellerService.AddSellerWorkSampleInModal(link);
+        return result ? JsonResponseStatus.Success() : JsonResponseStatus.Error();
     }
 
     #endregion
@@ -428,38 +438,55 @@ public class SellerPersonalInfoController : SellerBaseController
     [HttpPost , ValidateAntiForgeryToken]
     public async Task<IActionResult> UpdateSellerPersonlInfo(ListOfPersonalInfoViewModel model)
     {
-        #region Update Personal Info Method
+        var userId = User.GetUserId();
+        if (!await _sellerService.IsSellerMaster(userId)) return Forbid();
 
-        var res = await _sellerService.UpdateSellerPersonalInfoFromSellerPanel(model , User.GetUserId());
+        // This view model is shared with the admin panel. Only validate fields the seller can edit.
+        string[] editableFields =
+        [
+            nameof(model.NationalCode), nameof(model.SellerType), nameof(model.CompanyName),
+            nameof(model.PeriodTimesOfWork), nameof(model.CountryId), nameof(model.StateId),
+            nameof(model.CityId), nameof(model.Resume), nameof(model.WorkAddress),
+            nameof(model.ImageCompanyLogo), nameof(model.ImageOfBusinessLicense), nameof(model.ImageOfNationalCode)
+        ];
+        foreach (var key in ModelState.Keys.Except(editableFields, StringComparer.OrdinalIgnoreCase).ToArray())
+            ModelState.Remove(key);
 
-        switch (res)
+        await LoadProfileLocations(model);
+        void SetFieldError(string field, string message)
         {
-            case UpdateSellerPersonalInfoResul.Success:
-                TempData[SuccessMessage] = "عملیات با موفقیت انجام شده است .";
+            if (ModelState.TryGetValue(field, out var entry)) entry.Errors.Clear();
+            ModelState.AddModelError(field, message);
+        }
+
+        if (!((IEnumerable<Window.Domain.ViewModels.Common.SelectListViewModel>)ViewData["Countries"]!).Any(x => x.Id == model.CountryId))
+            SetFieldError(nameof(model.CountryId), "کشور معتبری انتخاب کنید.");
+        if (!((IEnumerable<Window.Domain.ViewModels.Common.SelectListViewModel>)ViewData["States"]!).Any(x => x.Id == model.StateId))
+            SetFieldError(nameof(model.StateId), "استانی از کشور انتخاب‌شده وارد کنید.");
+        if (!((IEnumerable<Window.Domain.ViewModels.Common.SelectListViewModel>)ViewData["Cities"]!).Any(x => x.Id == model.CityId))
+            SetFieldError(nameof(model.CityId), "شهری از استان انتخاب‌شده وارد کنید.");
+        if (model.NationalCode <= 0)
+            SetFieldError(nameof(model.NationalCode), "کد ملی را وارد کنید.");
+        if (!Enum.IsDefined(model.SellerType))
+            SetFieldError(nameof(model.SellerType), "نوع فروشنده را انتخاب کنید.");
+        if (ModelState.IsValid)
+        {
+            var result = await _sellerService.UpdateSellerPersonalInfoFromSellerPanel(model, userId);
+            if (result == UpdateSellerPersonalInfoResul.Success)
+            {
+                TempData[SuccessMessage] = "تغییرات اطلاعات فروشگاه ذخیره شد.";
                 return RedirectToAction(nameof(ListOfPersonalInfo));
+            }
+            if (result == UpdateSellerPersonalInfoResul.ImagesNotFound)
+                ModelState.AddModelError(string.Empty, "تصاویر انتخاب‌شده باید فایل معتبر JPG یا PNG باشند.");
+            else
+                TempData[ErrorMessage] = "ذخیرهٔ تغییرات ممکن نشد. دوباره تلاش کنید.";
+        }
 
-            case UpdateSellerPersonalInfoResul.Faild:
-                TempData[ErrorMessage] = "عملیات با شکست انجام شده است .";
-                break;
-
-            case UpdateSellerPersonalInfoResul.ImagesNotFound:
-                TempData[ErrorMessage] = "تصاویر در خواستی باید وارد شوند .";
-                break;
-
-            case UpdateSellerPersonalInfoResul.NotFound:
-                TempData[ErrorMessage] = "اطلاعات مورد نظر یافت نشده است .";
-                return RedirectToAction(nameof(ManagePersonalInfoLink));
-        };
-
-        #endregion
-
-        ViewData["Countries"] = await _stateService.GetAllCountries();
-        ViewData["States"] = await _stateService.GetStateChildren(model.CountryId);
-        ViewData["Cities"] = await _stateService.GetStateChildren(model.StateId);
-
-        return RedirectToAction(nameof(ListOfPersonalInfo));
+        var saved = await _sellerService.FillListOfPersonalInfoViewModel(userId);
+        if (saved == null) return RedirectToAction(nameof(ManagePersonalInfoLink));
+        return View(nameof(ListOfPersonalInfo), saved);
     }
-
     #endregion
 
     #region Market Charge Information 
@@ -652,60 +679,6 @@ public class SellerPersonalInfoController : SellerBaseController
 
     #endregion
 
-    #region Changes From Personal Info Page 
-
-    #region Add Work Sample
-
-    [HttpGet]
-    public async Task<IActionResult> AddWorkSample()
-    {
-        return View();
-    }
-
-    [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> AddWorkSample(AddSellerWorkSampleViewModel workSample, IFormFile workSampleImage)
-    {
-        #region Model State Validaton 
-
-        if (!ModelState.IsValid)
-        {
-            TempData[ErrorMessage] = "اطلاعات وارد شده صحیح نمی باشد .";
-            return View(workSample);
-        }
-
-        #endregion
-
-        #region Add Personal Work Sample
-
-        workSample.UserId = User.GetUserId();
-
-        var result = await _sellerService.AddSellerWorkSample(workSample, workSampleImage);
-
-        switch (result)
-        {
-            case AddSellerWorkSampleResult.Success:
-                TempData[SuccessMessage] = "عملیات با موفقیت انجام شده است .";
-                return RedirectToAction(nameof(ListOfPersonalInfo));
-
-            case AddSellerWorkSampleResult.ImageNotFound:
-                TempData[ErrorMessage] = "تصویر باید وارد شود .";
-                break;
-
-            case AddSellerWorkSampleResult.Faild:
-                TempData[ErrorMessage] = "عملیات با شکست مواجه شده است .";
-                break;
-        }
-
-        #endregion
-
-        return View(workSample);
-    }
-
-
-    #endregion
-
-    #endregion
-
     #region Personal Videos 
 
     #region EditAndCreateVideos
@@ -724,6 +697,7 @@ public class SellerPersonalInfoController : SellerBaseController
             var res = await _sellerPersonalVideoService.EditSellerPersonalVideo(User.GetUserId(), model, Image);
             if (res)
             {
+                await _sellerService.UpdateSellerStateAfterEditPersonalInfo(User.GetUserId());
                 TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
                 return RedirectToAction(nameof(PageOfManageSellerInformation));
             }

@@ -1,13 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System.Configuration;
 using Window.Application.CQRS.SellerPanel.SellerChequeInfo.Command.AddOrEditSellerChequeInfo;
 using Window.Application.CQRS.SellerPanel.SellerChequeInfo.Query.AddOrEditSellerChequeInfo;
 using Window.Application.Extensions;
+using Window.Application.Services.Interfaces;
 using Window.Domain.ViewModels.Seller.SellerChequeInfo;
 namespace Window.Web.Areas.Seller.Controllers;
 
 public class SellerChequeInfoController : SellerBaseController
 {
+    private readonly ISellerService _sellerService;
+
+    public SellerChequeInfoController(ISellerService sellerService)
+    {
+        _sellerService = sellerService;
+    }
     #region Add Or Edit Seller Cheque Info
 
     [HttpGet]
@@ -47,6 +54,8 @@ public class SellerChequeInfoController : SellerBaseController
     [HttpPost , ValidateAntiForgeryToken]
     public async Task<IActionResult> AddOrEditSellerChequeInfo(SellerChequeInfoSellerSideDTO model , CancellationToken cancellation = default)
     {
+        var sellerUserId = User.GetUserId();
+
         #region Add Or Edit Seller Cheque Info
 
         var res = await Mediator.Send(new AddOrEditSellerChqueInfoCommand()
@@ -54,12 +63,13 @@ public class SellerChequeInfoController : SellerBaseController
             CountOfCheque = model.CountOfCheque,
             HasLimitation = model.HasLimitation,
             SellerMaximumDays = model.SellerMaximumDays,
-            SellerUserId = model.SellerUserId
+            SellerUserId = sellerUserId
         },
         cancellation) ;
 
         if (res)
         {
+            await _sellerService.UpdateSellerStateAfterEditPersonalInfo(sellerUserId);
             TempData[SuccessMessage] = "عملیات باموفقیت انجام شده است.";
             return RedirectToAction("Index" , "Home" , new { area = "Seller" });
         }

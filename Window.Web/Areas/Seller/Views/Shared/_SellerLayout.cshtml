@@ -29,11 +29,40 @@
 <body class="seller-shell @(isDashboard ? "seller-dashboard-shell" : null)">
     <partial name="_SellerNavbar" model="panel" />
     <partial name="_SellerNavigation" model="panel" />
+    @if (panel.OperationNotices.Count > 0)
+    {
+        <div class="seller-operation-notices">
+            @foreach (var notice in panel.OperationNotices)
+            {
+                <div class="seller-operation-notice" data-level="@notice.Level.ToString().ToLowerInvariant()" role="@(notice.Level == SellerNoticeLevel.Error ? "alert" : "status")">
+                    <i class="fa @notice.Icon" aria-hidden="true"></i>
+                    <span>@notice.Message</span>
+                </div>
+            }
+        </div>
+    }
     <div class="main-container container-fluid">
         <div class="page-container">
             <div class="page-content seller-page-content">
                 <main class="page-body seller-page-body">
                     <div class="@(isDashboard ? "seller-dashboard" : null)">
+                        <header class="seller-page-heading">
+                            <h1 class="seller-page-title">@ViewData["Title"]</h1>
+                            @if (isDashboard)
+                            {
+                                <a class="seller-page-back seller-page-store-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="fa fa-home" aria-hidden="true"></i>
+                                    <span>رفتن به فروشگاه</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <button type="button" class="seller-page-back" data-seller-back data-fallback-url="@Url.Action("Index", "Home", new { area = "Seller" })">
+                                    <span>بازگشت</span>
+                                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                                </button>
+                            }
+                        </header>
                         @if (panel.Notices.Count > 0)
                         {
                             <partial name="_SellerNotices" model="panel.Notices" />
@@ -45,26 +74,17 @@
                                 <header class="seller-dashboard-hero">
                                     <div class="seller-dashboard-hero-copy">
                                         <span class="seller-dashboard-eyebrow">@Text["Seller panel"]</span>
-                                        <h1>@ViewData["Title"]</h1>
                                         <p>@Text["Store activity and quick access"]</p>
                                     </div>
                                     <img class="seller-dashboard-hero-art" src="~/images/seller-dashboard-window.svg"
                                          asp-append-version="true" width="320" height="230" alt="" />
                                 </header>
                             }
-                            else
-                            {
-                                <h1 class="sr-only">@ViewData["Title"]</h1>
-                            }
                             IgnoreSection("breadcrumb");
                         }
                         else
                         {
-                            <h1 class="seller-page-title">@ViewData["Title"]</h1>
-                            <ol class="breadcrumb seller-breadcrumb">
-                                <li><a asp-area="Seller" asp-controller="Home" asp-action="Index">@Text["Dashboard"]</a></li>
-                                @RenderSection("breadcrumb", false)
-                            </ol>
+                            IgnoreSection("breadcrumb");
                         }
 
                         @RenderBody()
