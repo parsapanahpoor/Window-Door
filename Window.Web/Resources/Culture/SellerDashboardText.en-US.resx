@@ -5,6 +5,8 @@
   <data name="Store status short review" xml:space="preserve"><value>Review</value></data>
   <data name="Store status short correction" xml:space="preserve"><value>Fix</value></data>
   <data name="Store status short verified" xml:space="preserve"><value>Verified</value></data>
+  <data name="Store active" xml:space="preserve"><value>Active</value></data>
+  <data name="Store status short active" xml:space="preserve"><value>Active</value></data>
   <data name="Store status short payment" xml:space="preserve"><value>Payment</value></data>
   <data name="Store status short inactive" xml:space="preserve"><value>Inactive</value></data>
   <data name="Store status short unverified" xml:space="preserve"><value>Unverified</value></data>

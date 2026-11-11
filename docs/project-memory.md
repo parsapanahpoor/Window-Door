@@ -106,13 +106,13 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 
 ## Shared seller shell
 
-- The shared seller layout now renders the primary navigation on every seller page. Its three links are fixed at the bottom on mobile and appear below the header on desktop. The layout loads local Shabnam in regular, medium and bold and uses a warm palette. Seller-specific typography separates headings, values, actions and metadata. The isolated browser runner verified the hierarchy and narrow layout. The new profile and language controls use the existing account and localization routes.
+- The shared seller layout now renders the primary navigation on every seller page. Its three links are fixed at the bottom on mobile and appear below the header on desktop. The layout loads local Shabnam in regular, medium and bold and uses a warm palette. Seller-specific typography separates headings, values, actions and metadata. The isolated browser runner verified the hierarchy and narrow layout. The shared content heading is a translucent glass bar with the RTL page title on the right and a browser-back button on the left with a left-pointing arrow placed before its label; the back action falls back to the seller dashboard when there is no prior history. On the seller dashboard, the action instead links to the public storefront. The glass uses a warm peach and copper tint. The new profile and language controls use the existing account and localization routes.
 - Extended the isolated browser runner with navigation through real seller routes, font and avatar loading, form clearance and keyboard controls. See specs/0005-seller-shell/spec.md.
 
 ## Seller notices and full navigation
 
-- Seller layout now renders existing account notices and one-request operation feedback at the top. The bell shows the same ordered notices. The dashboard welcome card is conditional; metrics and shortcuts remain available.
-- The navigation shares seller role visibility rules with dashboard shortcuts. The old page header is removed. Local Playwright checks passed with loopback fixtures, including the successful order command notification and refresh behavior. See specs/0006-seller-alerts-navigation/spec.md.
+- Seller pages share one visible title at the start of content, followed by account notices; legacy breadcrumb sections are ignored by the layout. Operation feedback is a separate bottom toast that auto-dismisses after five seconds and stays above mobile navigation. The bell represents account notices only. Seller profile notices keep a 24px separation from the form; dashboard spacing uses the dashboard grid. The dashboard welcome card is conditional; metrics and shortcuts remain available.
+- The navigation shares seller role visibility rules with dashboard shortcuts. Local Playwright checks passed with loopback fixtures for title-first ordering, absent breadcrumbs, five-second operation toasts, and the successful order command notification. See specs/0006-seller-alerts-navigation/spec.md.
 
 ## Seller store profile progress
 
@@ -126,3 +126,9 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - Dashboard cards use warmer highlights within the existing navy, berry and copper, saffron and alert severity palettes. The isolated browser runner passed the gradient and alert text contrast checks.
 - The activity overview uses four tinted illustration cards with local window and storefront SVGs. Isolated browser checks verified image loading, metric values, and responsive layout.
 - The seller dashboard loads activity metrics only for active panels. Dashboard and More navigation show employee management only to active store owners. Isolated browser checks passed.
+
+- The seller profile form uses visible file controls and validates location hierarchy before writes. Work-sample and contact-link sections have warm coordinated headers/actions, accessible table controls, custom empty states, and responsive card rows on narrow screens. Work samples are added through the profile modal; the old standalone AddWorkSample route and view were removed. A corrected rejected profile returns to review. Local browser checks and a malformed PNG test against the local database passed. See specs/0008-seller-profile-editing.md.
+
+- Seller header store status now distinguishes active from merely verified: active stores display «فعال»; active, inactive/correction, and pending states use green, red, and yellow translucent glass backgrounds. Coverage was added to SellerDashboardChecks.
+
+- Seller account status policy: successful edits to seller details, introduction video, or received-cheque policy set both the market and seller profile to WaitingForConfirmPersonalInformations. Expired active charges deactivate both records; a charge check also repairs legacy completion states from expired charge history. The prior three-month branch that marked a retained profile incomplete was removed. The legacy completion status now maps consistently across dashboard and shared pages. SellerDashboardChecks verifies video and cheque post-save review transitions plus completion-status consistency.
