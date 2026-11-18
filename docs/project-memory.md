@@ -132,3 +132,15 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - Seller header store status now distinguishes active from merely verified: active stores display «فعال»; active, inactive/correction, and pending states use green, red, and yellow translucent glass backgrounds. Coverage was added to SellerDashboardChecks.
 
 - Seller account status policy: successful edits to seller details, introduction video, or received-cheque policy set both the market and seller profile to WaitingForConfirmPersonalInformations. Expired active charges deactivate both records; a charge check also repairs legacy completion states from expired charge history. The prior three-month branch that marked a retained profile incomplete was removed. The legacy completion status now maps consistently across dashboard and shared pages. SellerDashboardChecks verifies video and cheque post-save review transitions plus completion-status consistency.
+
+## Authoritative checkout and historical landing investigation — 2026-11-17
+- Owner-designated working source: Desktop/Drives/App/Projects/Panjerehyab/Source Code/Window14011014/Window. Do not use the Documents/ChatGPT copy for development.
+- Owner rejected OldIndex. Reverted all three application files to HEAD and removed only our HomeLandingChecks and spec 0009; existing uploads were preserved. Root remains the storefront.
+- Found standalone Home/Index.cshtml with Layout=null, Landing assets, two heading lines and seven image tiles in c351a06ead8052e0664af5f859876553d2a2288c (parent of f8ae37d). origin/NewTemplate also retains this standalone template. f8ae37d replaced it on 2023-08-13. Current OldIndex is a different, later design.
+- Fetched origin successfully. Git works with the approved filesystem access; earlier work-tree errors were environment-related, not proof of a damaged repository.
+- No historical page activated or deployed. Application diff is empty after rollback; development path documentation remains corrected.
+## Standalone home restored — 2026-11-17
+- Owner selected the historical seven-tile document. Restored Home/Index from c351a06, with Persian lang and shop tile wired to Shop/ShopLanding. Home action no longer queries catalog data. Shop partial paths are explicit; seller routes unchanged.
+- Historical customer-club tile remains inactive. Replaced the legacy notification partial's missing ShowMessage dependency with encoded inline status messages in this standalone document.
+- Added spec 0009-standalone-home and offline HomeLandingChecks. No production validation or deployment.
+- Final Release HomeLandingChecks and Web/Razor build passed; git diff --check passed. Browser rendering remains unverified.

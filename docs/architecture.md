@@ -16,7 +16,7 @@ This is a layered application with mixed service and CQRS patterns. Application 
 ## Composition and request paths
 Window.Web/Program.cs configures localization, cookie authentication, session, MVC, SQL Server, static files and area/default routes. Window.Application/ConfigureServices.cs registers MediatR handlers and a FluentValidation pipeline. Window.Infra.IoC/Container/DependencyContainer.cs registers repositories and services.
 
-HomeController.Index → MediatR ShopLandingQuery → shop landing view. Legacy path: HomeController.OldIndex → IAdminDashboardService.FillHomeIndexViewModel → Razor view. These pages depend on persisted data.
+HomeController.Index → standalone historical seven-tile Index view (no catalog query). ShopController.ShopLanding → MediatR ShopLandingQuery → storefront at /Shop/ShopLanding. Legacy path: HomeController.OldIndex → IAdminDashboardService.FillHomeIndexViewModel → Razor view. These pages depend on persisted data.
 
 Shop path: Controllers/Shop/OrderController → SiteBaseController.Mediator → CQRS/SiteSide/ShopOrder handlers → repository interfaces → EF repositories → WindowDbContext. UnitOfWork.SaveChangesAsync persists tracked changes. ShopOrderQueryHandler performs writes despite its Query name; inspect behavior rather than assuming names express read-only semantics.
 
