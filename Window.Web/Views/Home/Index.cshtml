@@ -1,205 +1,320 @@
-﻿@using Window.Application.Convertors
-@using Window.Application.StticTools
-@model Window.Domain.ViewModels.Site.Shop.Landing.ShopLandingDTO
-
 @{
-    ViewData["Title"] = "فروشگاه پنجره یاب";
-    Layout = "_ShopLayout";
+    Layout = null;
 }
+<!DOCTYPE HTML>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>پنجره یاب |مرجع رسمی قیمت گذاری درب و پنجره</title>
+    <!-- Modernizr -->
+    <!-- <script src="/Landing/js/modernizr.js"></script> -->
+    <!-- Open Sans from Google Webfonts -->
+    <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'> -->
+    <!-- Main styles file -->
+    <link rel="shortcut icon" href="/admin/img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/Landing/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Landing/css/styles.css" />
+    <link rel="stylesheet" href="/Landing/css/component.css" />
+    <!-- Icons via Font Awesome -->
+    <link rel="stylesheet" href="/Landing/css/font-awesome.min.css" />
 
-<!-- Start main-content -->
-<main class="main-content dt-sl mb-3">
+    @*Manifest*@
+    <link rel="manifest" href="~/Site/Manifest/manifest.json">
 
-    <div class="container main-container">
-        <!-- Start Main-Slider -->
-        <div class="row mb-5">
-            <aside class="sidebar col-lg-4 hidden-md order-2 pr-0 hidden-md">
-                <!-- Start banner -->
-                <div class="sidebar-inner dt-sl">
-                    <div class="sidebar-banner">
-                        <div class="row">
-                            <div class="col-12 mb-1">
-                                <div class="widget-banner">
-                                    <a href="#">
-                                        <img src="/DidiKala/assets/img/banner/banner-side-slider-1.jpg" alt="">
+    <!-- #94151D,#EF394E -->
+    <style>
+        @@media(min-width:1000px) {
+            .cs-style-4 li {
+                height: inherit;
+                width: 230px;
+            }
+        }
+
+        @@media(max-width:400px) {
+            h1 {
+                margin-top: -40px;
+            }
+        }
+
+        @@media(max-width:500px) {
+            h1 {
+                margin-top: 20px;
+            }
+        }
+
+        @@media(max-width:500px) {
+            .col-500 {
+                width: 320px !important;
+                height: 320px !important;
+            }
+
+            .col-501 {
+                width: 150px !important;
+                height: 150px !important;
+            }
+
+            .row {
+                margin: 0 auto;
+            }
+
+            .container {
+                width: auto;
+                margin-left: 0px !important;
+                margin-right: 0px !important;
+                padding-right: 0px;
+                padding-left: 0px;
+            }
+
+            .res_small {
+                display: none;
+            }
+
+            .res_h1 {
+                font-size: 16px;
+            }
+
+            .cs-style-4 figcaption a {
+                bottom: 2.9em !important;
+                right: 0 !important;
+                font-size: 10px !important;
+            }
+
+            .grid figcaption a {
+                padding: 5px 5.3px !important;
+                border-radius: 2px !important;
+            }
+
+            footer {
+                right: 0%;
+            }
+        }
+
+        @@media (min-width:501px) and (max-width:520px) {
+            h1 {
+                margin-top: 44px;
+            }
+
+            .row {
+                margin: 0 9px;
+            }
+
+            .col-520 {
+                width: 250px !important;
+                height: 250px !important;
+            }
+
+            .col-521 {
+                width: 110px !important;
+                height: 110px !important;
+            }
+        }
+
+        @@media (min-width:992px) and (max-width:1036px) {
+            .row-respansiv {
+                margin: 0 190px;
+            }
+
+            .traz {
+                margin: 0 74px;
+                transform: translate(0px, 0px);
+            }
+        }
+    </style>
+</head>
+<body class="color-scheme-sky">
+    <!-- Animated background -->
+    <canvas id="bg-canvas"></canvas>
+    <!--  -->
+    <!-- First screen -->
+    <div class="splash">
+        <div class="centered-unit">
+            <div class="container">
+                <!-- Main header -->
+                <h1 class="title_header">پنجره یاب</h1>
+                <!-- Sub header -->
+                <p class="lead"> مرجع قیمت گذاری درب و پنجره در ایران</p>
+                <div class="row row-respansiv over-hidden">
+                    <ul class="grid cs-style-4">
+                        <li class="col-md-3 col-sm-6 col-500 col-520">
+                            <figure>
+                                <div>
+                                    <a asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct">
+                                        <img src="/Landing/images/1.jpg" alt="image 1">
                                     </a>
                                 </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="widget-banner">
-                                    <a href="#">
-                                        <img src="/DidiKala/assets/img/banner/banner-side-slider-2.jpg" alt="">
+                                <!--<figcaption>
+                                  <h1>استعلام رایگان</h1>
+                                  <small>توی چند ثانیه هر درب و پنجره ای بخای استعلام میگیری</small>
+                                  <a href="#">کلیک کن</a>
+                                </figcaption>-->
+                                <a asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct"> <h4 class="res_h1">استعلام رایگان</h4>  </a>
+
+                            </figure>
+                        </li>
+
+                        <li class="col-md-3 col-sm-6 col-501 col-521">
+                            <figure>
+                                <div>
+                                    <a asp-action="ListOfTechnicalIssuse" asp-area="" asp-controller="TechnicalIssues">
+                                        <img src="/Landing/images/2.jpg" alt="image 2">
                                     </a>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                                <!-- <figcaption>
+                                  <h1 class="res_h1">تضمین در خرید</h1>
+                                  <small class="res_small">انتخاب کن، تضمین با ما</small>
+                                  <a href="#">کلیک کن</a>
+                                </figcaption> -->
+                            </figure>
+                            <a asp-action="ListOfTechnicalIssuse" asp-area="" asp-controller="TechnicalIssues"> <h4 class="res_h1">تضمین در خرید</h4></a>
+                        </li>
+
+                        <li class="col-md-3 col-sm-6 col-501 col-521">
+
+                            <figure>
+                                <div>
+                                    <a asp-action="ListOfConsultant" asp-area="" asp-controller="Consultant">
+                                        <img src="/Landing/images/3.jpg" alt="image 3">
+                                    </a>
+                                </div>
+                                <!--<figcaption>
+                                   <h1 class="res_h1">مشاور رایگان</h1>
+                                   <small class="res_small">پشتیبان های ما توی انتخاب درست بهت کمک میکنند</small>
+                                   <a href="#">کلیک کن</a>
+                                 </figcaption>-->
+                            </figure>
+                            <a asp-action="ListOfConsultant" asp-area="" asp-controller="Consultant"><h4 class="res_h1">مشاوره رایگان</h4></a>
+                        </li>
+
+                        <li class="col-md-3 col-sm-6 col-501 col-521">
+                            <figure>
+                                <div>
+                                    <a asp-action="ListOfArticles" asp-area="" asp-controller="Article">
+                                        <img src="/Landing/images/4.jpg" alt="image 3">
+                                    </a>
+                                </div>
+                                <!--<figcaption>
+                                  <h1 class="res_h1">مسائل درب و پنجره</h1>
+                                  <small class="res_small">مقالات ما بهت توی انتخاب کمک میکنند</small>
+                                  <a href="#">کلیک کن</a>
+                                </figcaption>-->
+                            </figure>
+                            <a asp-action="ListOfArticles" asp-area="" asp-controller="Article"><h4 class="res_h1">نماها و پنجره های خاص</h4></a>
+                        </li>
+                    </ul>
                 </div>
-                <!-- End banner -->
-            </aside>
-            <div class="col-lg-8 col-md-12 order-1">
-                <!-- Start main-slider -->
-                <section id="main-slider"
-                         class="main-slider main-slider-cs mt-1 carousel slide carousel-fade card hidden-sm"
-                         data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <li data-target="#main-slider" data-slide-to="0" class="active"></li>
-                        <li data-target="#main-slider" data-slide-to="1"></li>
-                        <li data-target="#main-slider" data-slide-to="2"></li>
-                        <li data-target="#main-slider" data-slide-to="3"></li>
-                        <li data-target="#main-slider" data-slide-to="4"></li>
-                        <li data-target="#main-slider" data-slide-to="5"></li>
-                        <li data-target="#main-slider" data-slide-to="6"></li>
-                    </ol>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/1.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/2.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/3.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/4.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/5.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/6.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/7.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#main-slider" role="button" data-slide="prev">
-                        <i class="mdi mdi-chevron-right"></i>
-                    </a>
-                    <a class="carousel-control-next" href="#main-slider" data-slide="next">
-                        <i class="mdi mdi-chevron-left"></i>
-                    </a>
-                </section>
-                <section id="main-slider-res"
-                         class="main-slider carousel slide carousel-fade card d-none show-sm" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <li data-target="#main-slider-res" data-slide-to="0" class="active"></li>
-                        <li data-target="#main-slider-res" data-slide-to="1"></li>
-                        <li data-target="#main-slider-res" data-slide-to="2"></li>
-                        <li data-target="#main-slider-res" data-slide-to="3"></li>
-                        <li data-target="#main-slider-res" data-slide-to="4"></li>
-                        <li data-target="#main-slider-res" data-slide-to="5"></li>
-                    </ol>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/slider-responsive/1.jpg" alt=""
-                                     class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/slider-responsive/2.jpg" alt=""
-                                     class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/slider-responsive/3.jpg" alt=""
-                                     class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/slider-responsive/4.jpg" alt=""
-                                     class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/slider-responsive/5.jpg" alt=""
-                                     class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/slider-responsive/6.jpg" alt=""
-                                     class="img-fluid">
-                            </a>
-                        </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#main-slider-res" role="button" data-slide="prev">
-                        <i class="mdi mdi-chevron-right"></i>
-                    </a>
-                    <a class="carousel-control-next" href="#main-slider-res" data-slide="next">
-                        <i class="mdi mdi-chevron-left"></i>
-                    </a>
-                </section>
-                <!-- End main-slider -->
+                <div class="row over-hidden traz">
+                    <ul class="grid cs-style-4">
+                        <li class="col-md-4 col-sm-6 col-501 col-521">
+                            <figure>
+                                <div>
+                                    <a asp-action="ListOfQuestionAndAnswers" asp-area="" asp-controller="QA">
+                                        <img src="/Landing/images/5.jpg" alt="image 1">
+                                    </a>
+                                </div>
+                                <!--<figcaption>
+                                  <h1 class="res_h1">سوالات متداول</h1>
+                                  <small class="res_small">به سوالات ذهنی ات پاسخ دادیم</small>
+                                  <a href="#">کلیک کن</a>
+                                </figcaption>-->
+                            </figure>
+                            <a asp-action="ListOfQuestionAndAnswers" asp-area="" asp-controller="QA"><h4 class="res_h1">سوالات متداول</h4></a>
+                        </li>
+
+                        <li class="col-md-4 col-sm-6 col-501 col-521">
+                            <figure>
+                                <div><img src="/Landing/images/6.jpg" alt="image 2"></div>
+                                <!-- <figcaption>
+                                  <h1 class="res_h1">باشگاه مشتریان</h1>
+                                  <small class="res_small">بهت میگیم کی بهمون ملحق بشی:)</small>
+                                  <a href="#">به زودی</a>
+                                </figcaption> -->
+                            </figure>
+                            <h4 class="res_h1">باشگاه مشتریان</h4>
+                        </li>
+
+                        <li class="col-md-4 col-sm-6 col-501 col-521">
+                            <figure>
+                                <div><a asp-area="" asp-controller="Shop" asp-action="ShopLanding"><img src="/Landing/images/7.jpg" alt="فروشگاه"></a></div>
+                                <!-- <figcaption>
+                                  <h1 class="res_h1">فروشگاه</h1>
+                                  <small class="res_small">هر درب و پنجره ای که بخای برات میاریم</small>
+                                  <a href="#">به زودی</a>
+                                </figcaption> -->
+                            </figure>
+                            <a asp-area="" asp-controller="Shop" asp-action="ShopLanding"><h4 class="res_h1">فروشگاه</h4></a>
+                        </li>
+                    </ul>
+                </div>
             </div>
+
+            <footer class="footer" style="margin-bottom:30px;margin-top:30px">
+                <a href="https://www.fara-zaman.ir" class="footer-link" target="_blank">طراحی و توسعه توسط شرکت برنامه نویسی فـــرا زَمـــان</a>
+            </footer>
+
+                 <footer class="footer" style="margin-bottom:20px">
+           <a asp-action="TermsConditions" asp-area="" asp-controller="Home" class="footer-link mt-2 mb-2" >قوانین و مقررات و حریم خصوصی </a>
+            </footer>
         </div>
-        <!-- End Main-Slider -->
+
     </div>
 
-    <!-- Lastest Products -->
-    <partial name="_LastestProducts" model="@Model.LastestShopProducts">
 
-        @*Lastest Shop Products*@
-        @await Component.InvokeAsync("LastestShopProducts")
+    <!-- JavaScripts -->
+    <script src="/Landing/js/jquery.js"></script>
+    <!-- <script src="/Landing/js/countdown.js"></script> -->
+    <script src="/Landing/js/bezierCanvas.js"></script>
+    <script src="/Landing/js/notifyMe.js"></script>
+    <script src="/Landing/js/modernizr.custom.js"></script>
 
-        <div class="container main-container">
+    @*PWA Downloader Confige*@
+    <script src="~/Site/js/PWADownloader.js"></script>
 
-            <!-- Picture -->
-            <div class="row mt-3 mb-5">
-                <div class="col-sm-6 col-12 mb-2">
-                    <div class="widget-banner">
-                        <a href="#">
-                            <img src="/DidiKala/assets/img/banner/medium-banner-1.jpg" alt="">
-                        </a>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-12 mb-2">
-                    <div class="widget-banner">
-                        <a href="#">
-                            <img src="/DidiKala/assets/img/banner/medium-banner-2.jpg" alt="">
-                        </a>
-                    </div>
-                </div>
-            </div>
+    @foreach (var key in new[] { "SuccessMessage", "ErrorMessage", "WarningMessage", "InfoMessage" })
+    {
+        if (TempData[key] is string message)
+        {
+            <div role="status" style="position:relative;z-index:2;text-align:center;background:#fff;color:#222;padding:12px">@message</div>
+        }
+    }
+    <!-- <script src="/Landing/js/toucheffects.js"></script> -->
+    <script type="text/javascript">
+        $().ready(function () {
 
-        </div>
+            // Activate countdownTimer plugin on a '.countdown' element
+            // $(".countdown").countdownTimer({
+            // 	// Set the end date for the countdown
+            // 	endTime: new Date("April 21, 2014 11:13:00 UTC+0200")
+            // });
 
-        <!-- Lastest Sellers -->
-        <partial name="_LastestSellers" model="@Model.LastestSellers">
 
-            <!-- Popular Brands -->
-            <partial name="_PopularBrands" model="@Model.LastestBrands">
+            // Activate notifyMe plugin on a '#notifyMe' element
+            $("#notifyMe").notifyMe();
 
-                <!-- Banner -->
-                @*  <div class="row mt-3 mb-5">
-                <div class="col-12">
-                <div class="widget-banner">
-                <a href="#">
-                <img src="/DidiKala/assets/img/banner/large-banner.jpg" alt="">
-                </a>
-                </div>
-                </div>
-                </div> *@
 
-</main>
-<!-- End main-content -->
+            // Activate bezierCanvas plugin on a #bg-canvas element
+            $("#bg-canvas").bezierCanvas({
+                maxStyles: 1,
+                maxLines: 100,
+                lineSpacing: 0.5,
+                colorBase: { r: 255, g: 255, b: 255 },
+                colorVariation: { r: 0, g: 0, b: 0 },
+                delayVariation: 0,
+                speedLinear: true,
+                globalAlpha: 0.7,
+                globalSpeed: 500,
+            });
+
+            // Add handler on 'Scroll down to learn more' link
+            // $().ready(function(){
+            // 	$(".overlap .more").click(function(e){
+            // 		e.preventDefault();
+            // 		$("body,html").animate({scrollTop: $(window).height()});
+            // 	});
+            // });
+
+
+        });
+    </script>
+</body>
+</html>

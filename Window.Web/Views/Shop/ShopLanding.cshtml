@@ -1,4 +1,4 @@
-﻿@using Window.Application.Convertors
+@using Window.Application.Convertors
 @using Window.Application.StticTools
 @model Window.Domain.ViewModels.Site.Shop.Landing.ShopLandingDTO
 
@@ -157,7 +157,7 @@
     </div>
 
     <!-- Lastest Products -->
-    <partial name="_LastestProducts" model="@Model.LastestShopProducts">
+    <partial name="~/Views/Home/_LastestProducts.cshtml" model="@Model.LastestShopProducts">
 
         @*Lastest Shop Products*@
         @await Component.InvokeAsync("LastestShopProducts")
@@ -185,10 +185,10 @@
         </div>
 
         <!-- Lastest Sellers -->
-        <partial name="_LastestSellers" model="@Model.LastestSellers">
+        <partial name="~/Views/Home/_LastestSellers.cshtml" model="@Model.LastestSellers">
 
             <!-- Popular Brands -->
-            <partial name="_PopularBrands" model="@Model.LastestBrands">
+            <partial name="~/Views/Home/_PopularBrands.cshtml" model="@Model.LastestBrands">
 
                 <!-- Banner -->
                @*  <div class="row mt-3 mb-5">
