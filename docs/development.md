@@ -2,8 +2,8 @@
 
 ## Locations
 Cloud checkout: `/workspace/Window-Door`.
-Active Windows development checkout: `C:\Users\Parsapanahpoor\Documents\ChatGPT\Panjerehyab`.
-Original Windows source (preserved): `C:\Users\Parsapanahpoor\Desktop\Drives\App\Projects\Panjerehyab\Source Code\Window14011014\Window`.
+Active Windows development checkout: `C:\Users\Parsapanahpoor\Desktop\Drives\App\Projects\Panjerehyab\Source Code\Window14011014\Window`.
+Owner-designated working source: `C:\Users\Parsapanahpoor\Desktop\Drives\App\Projects\Panjerehyab\Source Code\Window14011014\Window`.
 The cloud agent cannot directly access that Windows filesystem. Synchronize source through Git; never copy credentials into documentation.
 
 ## Cloud
@@ -23,7 +23,7 @@ Use `bash scripts/check-development.sh` for version, restore and build checks; i
 ## Windows
 Use PowerShell 7 (`pwsh`) and a compatible SDK, then:
 ```powershell
-Set-Location 'C:\Users\Parsapanahpoor\Documents\ChatGPT\Panjerehyab'
+Set-Location 'C:\Users\Parsapanahpoor\Desktop\Drives\App\Projects\Panjerehyab\Source Code\Window14011014\Window'
 pwsh -NoProfile -File scripts/dev.ps1 Doctor
 pwsh -NoProfile -File scripts/dev.ps1 Setup
 pwsh -NoProfile -File scripts/dev.ps1 Verify
