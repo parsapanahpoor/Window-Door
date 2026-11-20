@@ -15,6 +15,7 @@ using Window.Application.Interfaces;
 using Window.Application.Security;
 using Window.Application.Services;
 using Window.Application.Services.Interfaces;
+using Window.Application.Services.Implementation;
 using Window.Data.Context;
 using Window.Domain.Entities.Account;
 using Window.Domain.ViewModels.User.Authentication;
@@ -42,6 +43,7 @@ internal static class HttpChecks
             return new UserService(services.GetRequiredService<IConfiguration>(), new UserRepository(db),
                 null!, db, null!, null!, services.GetRequiredService<ISMSService>());
         });
+        builder.Services.AddScoped<IPermissionService, PermissionService>();
         builder.Services.AddDataProtection().UseEphemeralDataProtectionProvider();
         builder.Services.AddDistributedMemoryCache();
         builder.Services.AddSession();
@@ -55,6 +57,7 @@ internal static class HttpChecks
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
+        app.MapControllerRoute("area", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
         app.MapGet("/session-check", (ClaimsPrincipal user) =>
             user.FindFirstValue(ClaimTypes.AuthenticationMethod) ?? "password").RequireAuthorization();
         app.MapGet("/session-account", (ClaimsPrincipal user) =>
@@ -113,8 +116,8 @@ internal static class HttpChecks
         {
             ["Code"] = sender.Code(phone), ["__RequestVerificationToken"] = token
         }))
-            Check(verified.StatusCode == HttpStatusCode.Redirect && verified.Headers.Location?.OriginalString == "/",
-                "Successful verification rejects the external return URL");
+            Check(verified.StatusCode == HttpStatusCode.Redirect && verified.Headers.Location?.OriginalString == "/UserPanel",
+                "Successful verification rejects the external return URL and opens the personal panel");
 
         Check(await browser.GetStringAsync("/session-check") == SmsLoginService.AuthenticationMethod,
             "SMS verification issues the normal authentication cookie");
@@ -186,6 +189,38 @@ internal static class HttpChecks
         Check(await passwordBrowser.GetStringAsync("/session-account") == second.Id.ToString() &&
             await passwordBrowser.GetStringAsync("/session-check") == "password",
             "Password fallback signs into the matching account, even when the raw number is identical");
+
+        ulong sellerAssignmentId;
+        await using (var db = new WindowDbContext(options))
+        {
+            var adminRole = new Role { Title = "Administrator", RoleUniqueName = "Admin" };
+            var sellerRole = new Role { Title = "Seller owner", RoleUniqueName = "SellerMaster" };
+            var sellerAssignment = new UserRole { UserId = second.Id, Role = sellerRole };
+            db.UserRoles.AddRange(new UserRole { UserId = second.Id, Role = adminRole }, sellerAssignment);
+            await db.SaveChangesAsync();
+            sellerAssignmentId = sellerAssignment.Id;
+        }
+
+        foreach (var expectedPanel in new[] { "/Seller", "/Admin" })
+        {
+            using var roleBrowser = Browser(app.Urls.Single());
+            var roleToken = Token(await roleBrowser.GetStringAsync("/login/password"));
+            using var signedIn = await Submit(roleBrowser, "/login/password", new()
+            {
+                ["Mobile"] = sharedPhone, ["Password"] = "second-password", ["__RequestVerificationToken"] = roleToken
+            });
+            Check(signedIn.StatusCode == HttpStatusCode.Redirect && signedIn.Headers.Location?.OriginalString == expectedPanel,
+                $"Password sign-in opens {expectedPanel} for the matching account roles");
+            using var existingSession = await roleBrowser.GetAsync("/login?returnUrl=%2Flogin");
+            Check(existingSession.Headers.Location?.OriginalString == expectedPanel, "Signed-in login entry opens the role panel");
+
+            if (expectedPanel == "/Seller")
+            {
+                await using var db = new WindowDbContext(options);
+                await db.UserRoles.Where(assignment => assignment.Id == sellerAssignmentId)
+                    .ExecuteUpdateAsync(update => update.SetProperty(assignment => assignment.IsDelete, true));
+            }
+        }
 
         await using (var db = new WindowDbContext(options))
             await db.Users.Where(u => u.Id == first.Id).ExecuteUpdateAsync(s => s.SetProperty(u => u.Password, second.Password));

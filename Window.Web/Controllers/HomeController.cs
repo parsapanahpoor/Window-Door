@@ -38,6 +38,7 @@ namespace Window.Web.Controllers
 
         #region Index 
 
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public Task<IActionResult> Index(CancellationToken cancellation)
         {
             return Task.FromResult<IActionResult>(View());

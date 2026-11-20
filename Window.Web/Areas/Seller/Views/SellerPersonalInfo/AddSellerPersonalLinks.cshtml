@@ -95,7 +95,7 @@
 
                         @if (links != null && links.Any())
                         {
-                            <table class="table table-hover table-bordered tc vm ">
+                            <table class="seller-table table table-hover table-bordered tc vm ">
                                 <thead class="tc vm">
                                     <tr class="tc vm">
                                         <th class="tc vm">
@@ -121,7 +121,7 @@
                                             </td>
 
                                             <td class="tc vm">
-                                                <button onclick="DeleteAjax(@link.Id, '@Url.Action("DeleteSellersLinks", "SellerPersonalInfo", new {area = "Seller", id = link.Id})')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
+                                                <button onclick="DeleteAjax(@link.Id, '@Url.Action("DeleteSellersLinks", "SellerPersonalInfo", new {area = "Seller", id = link.Id})')" class="btn btn-danger btn-circle btn-xs" title="حذف لینک" aria-label="حذف لینک"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></button>
                                             </td>
                                         </tr>
                                     }
@@ -130,7 +130,7 @@
                         }
                         else
                         {
-                            <partial name="_SellerNotFoundPartial" />
+                            <partial name="_SellerEmptyState" />
                         }
                     </div>
                 </div>

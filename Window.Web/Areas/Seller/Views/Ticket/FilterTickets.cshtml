@@ -25,7 +25,7 @@
       <div class="col-lg-3 col-sm-12">
         <div class="widget">
             <div class="widget-header bordered-bottom bordered-green">
-                <span class="widget-caption"> @ViewData["Title"] </span>
+                <span class="widget-caption"></span>
             </div>
             <div class="widget-body">
                 <div>
@@ -83,7 +83,7 @@
 
             @if (Model.Entities != null && Model.Entities.Any())
             {
-                <table class="table table-hover table-bordered tc vm margin-bottom-30">
+                <table class="seller-table table table-hover table-bordered tc vm margin-bottom-30">
                     <thead class="tc vm">
                         <tr class="tc vm">
                             <th class="tc vm">
@@ -117,7 +117,7 @@
                                     <p> @ticket.CreateDate.ToShamsi() </p>
                                 </td>
                                 <td class="tc vm">
-                                    <a asp-action="TicketDetail" asp-controller="Ticket" asp-area="Seller" asp-route-id="@ticket.Id" class="btn btn-primary btn-circle btn-xs"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                    <a asp-action="TicketDetail" asp-controller="Ticket" asp-area="Seller" asp-route-id="@ticket.Id" class="btn btn-primary btn-circle btn-xs" title="مشاهده تیکت" aria-label="مشاهده تیکت"><i class="glyphicon glyphicon-eye-open" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
                         }
@@ -132,7 +132,7 @@
             }
             else
             {
-                <partial name="_SellerNotFoundPartial" />
+                <partial name="_SellerEmptyState" />
             }
         </div>
     </div>

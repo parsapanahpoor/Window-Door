@@ -14,8 +14,10 @@ using Window.Application.CQRS.SellerPanel.SellerChequeInfo.Query.AddOrEditSeller
 using Window.Application.Services.Interfaces;
 using Window.Domain.Entities.Account;
 using Window.Domain.Entities.Market;
+using Window.Domain.ViewModels.User;
 using Window.Domain.ViewModels.User.Ticket;
 using Window.Domain.ViewModels.Seller.PersonalInfo;
+using Window.Domain.ViewModels.Seller.Contract;
 using Window.Domain.ViewModels.Seller.SellerChequeInfo;
 using Window.Web.Culture;
 using SellerHome = Window.Web.Areas.Seller.Controllers.HomeController;
@@ -90,20 +92,79 @@ builder.Services.AddScoped(provider =>
 builder.Services.AddScoped(provider =>
 {
     var fixture = provider.GetRequiredService<IHttpContextAccessor>().HttpContext!.Request.Headers["X-Seller-Fixture"].ToString();
-    return FixtureService.Create<IUserService>(name => name == nameof(IUserService.GetUserById)
-        ? Task.FromResult(new User { Id = 1, Mobile = "09120000000", ShopName = fixture == "clear" ? "فروشگاه آزمایشی" : "" })
-        : throw new NotSupportedException(name));
+    return FixtureService.Create<IUserService>(name => name switch
+    {
+        nameof(IUserService.GetUserById) => Task.FromResult(new User { Id = 1, Mobile = "09120000000", ShopName = fixture == "clear" ? "فروشگاه آزمایشی" : "" }),
+        nameof(IUserService.FilterUsersForSellerPanel) => Task.FromResult(new FilterUserViewModel
+        {
+            AllEntitiesCount = 2,
+            PageCount = 1,
+            StartPage = 1,
+            EndPage = 1,
+            Entities =
+            [
+                new User { Id = 10, Username = "کارمند نمونه", Mobile = "09120000001" },
+                new User { Id = 11, Username = "کارمند دوم", Mobile = "" }
+            ]
+        }),
+        _ => throw new NotSupportedException(name)
+    });
 });
 builder.Services.AddSingleton(FixtureService.Create<IPermissionService>(name => name == nameof(IPermissionService.IsUserSeller)
     ? Task.FromResult(true)
     : throw new NotSupportedException(name)));
-builder.Services.AddSingleton(FixtureService.Create<IContractService>(name => name == nameof(IContractService.CountOfUserWaitingContractRequest)
-    ? Task.FromResult(78)
-    : throw new NotSupportedException(name)));
+builder.Services.AddSingleton(FixtureService.Create<IContractService>(name => name switch
+{
+    nameof(IContractService.CountOfUserWaitingContractRequest) => Task.FromResult(78),
+    nameof(IContractService.FilterContractRequestSellerSide) => Task.FromResult(new FilterContractRequestSellerSideViewModel
+    {
+        AllEntitiesCount = 2,
+        PageCount = 1,
+        StartPage = 1,
+        EndPage = 1,
+        Entities =
+        [
+            new Window.Domain.Entities.Contract.RequestForContract
+            {
+                Id = 21,
+                RequestForContractType = Window.Domain.Enums.RequestForContract.RequestForContractType.Waiting,
+                CreateDate = new DateTime(2026, 1, 2, 8, 0, 0, DateTimeKind.Utc),
+                User = new User { Id = 30, Username = "خریدار نمونه", Mobile = "09120000002" }
+            },
+            new Window.Domain.Entities.Contract.RequestForContract
+            {
+                Id = 22,
+                RequestForContractType = Window.Domain.Enums.RequestForContract.RequestForContractType.Accepted,
+                CreateDate = new DateTime(2026, 1, 3, 8, 0, 0, DateTimeKind.Utc),
+                User = new User { Id = 31, Username = "خریدار دوم", Mobile = "09120000003" }
+            }
+        ]
+    }),
+    _ => throw new NotSupportedException(name)
+}));
 builder.Services.AddSingleton(FixtureService.Create<IProductService>(name => throw new NotSupportedException(name)));
-builder.Services.AddSingleton(FixtureService.Create<ITicketService>(name => name == nameof(ITicketService.FilterSiteTicket)
-    ? Task.FromResult(new FilterSiteTicketViewModel { Entities = [] })
-    : throw new NotSupportedException(name)));
+builder.Services.AddScoped(provider =>
+{
+    var fixture = provider.GetRequiredService<IHttpContextAccessor>().HttpContext!.Request.Headers["X-Seller-Fixture"].ToString();
+    return FixtureService.Create<ITicketService>((name, _) => name == nameof(ITicketService.FilterSiteTicket)
+        ? Task.FromResult(new FilterSiteTicketViewModel
+        {
+            AllEntitiesCount = fixture == "empty" ? 0 : 1,
+            PageCount = 1,
+            StartPage = 1,
+            EndPage = 1,
+            Entities = fixture == "empty"
+                ? []
+                : [new Window.Domain.Entities.Contact.Ticket
+                {
+                    Id = 41,
+                    Title = "تیکت نمونهٔ پشتیبانی",
+                    OnWorking = true,
+                    CreateDate = new DateTime(2026, 1, 4, 9, 30, 0, DateTimeKind.Utc)
+                }]
+        })
+        : throw new NotSupportedException(name));
+});
 
 builder.Services.AddSingleton(FixtureService.Create<ISender>((name, args) =>
 {
@@ -551,15 +612,18 @@ await Assertions.Expect(sellerLinkRow).ToContainTextAsync("وب‌سایت فر�
 await Assertions.Expect(sellerLinkRow).ToContainTextAsync("https://example.test");
 await Assertions.Expect(page.Locator(".seller-related-add")).ToHaveCountAsync(2);
 await Assertions.Expect(page.Locator(".seller-table-delete")).ToHaveCountAsync(2);
-await page.Locator(".seller-related-add").First.ClickAsync();
+var openWorkSample = page.Locator(".seller-related-add").First;
+await openWorkSample.PressAsync("Enter");
 await Assertions.Expect(page.Locator("#NormalModal")).ToBeVisibleAsync();
 await Assertions.Expect(page.Locator("#NormalModalTitle")).ToHaveTextAsync("افزودن نمونه‌کار");
 await Assertions.Expect(page.Locator("#PersonalWorkSampleForm")).ToBeVisibleAsync();
 await Assertions.Expect(page.Locator("#WorkSampleTitle")).ToBeEditableAsync();
 await Assertions.Expect(page.Locator("#image")).ToBeVisibleAsync();
 await Assertions.Expect(page.Locator("#PersonalWorkSampleForm input[name=__RequestVerificationToken]")).ToHaveCountAsync(1);
-await page.Locator("#NormalModal .seller-modal-cancel").ClickAsync();
+await Assertions.Expect(page.Locator("#WorkSampleTitle")).ToBeFocusedAsync();
+await page.Keyboard.PressAsync("Escape");
 await Assertions.Expect(page.Locator("#NormalModal")).ToBeHiddenAsync();
+await Assertions.Expect(openWorkSample).ToBeFocusedAsync();
 var standaloneSamplePage = await page.APIRequest.GetAsync(new Uri(baseUrl, "/Seller/SellerPersonalInfo/AddWorkSample").AbsoluteUri);
 Require(standaloneSamplePage.Status == 404, "work sample creation has no standalone page");
 var profileNotice = page.Locator("main .seller-notices");
@@ -624,7 +688,70 @@ await page.Locator("#SellerMaximumDays").FillAsync("300");
 await page.Locator("#CountOfCheque").FillAsync("3");
 await page.Locator("form button[type=submit]").ClickAsync();
 Require(TestCounters.ReviewTransitions == reviewTransitionBaseline + 2, "successful received-cheque policy edit queues store review");
-Console.WriteLine("PASS: seller dashboard/UI checks, responsive profile, and store-state transitions for video and cheque edits.");
+
+// Shared seller panel components on legacy list screens.
+await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-Fixture"] = "master" });
+foreach (var route in new[] { "/Seller/User/Index", "/Seller/Contarct/ListOfContracts", "/Seller/Ticket/FilterTickets" })
+{
+    var listResponse = await page.GotoAsync(new Uri(baseUrl, route).AbsoluteUri);
+    Require(listResponse?.Status == 200, $"{route} renders with the shared seller panel");
+    Require(await page.Locator(".seller-page-title").CountAsync() == 1, $"{route} renders one page title");
+    Require(await page.Locator("table.seller-table tbody tr").CountAsync() >= 1, $"{route} renders fixture rows");
+    Require(await page.Locator("table.seller-table tbody tr td[data-label]").CountAsync() >= 1, $"{route} labels table cells");
+    Require(await page.EvaluateAsync<bool>("() => Array.from(document.styleSheets).some(sheet => (sheet.href || '').includes('/css/seller-panel.css'))"),
+        $"{route} loads the seller panel stylesheet");
+    foreach (var width in new[] { 360, 768, 1440 })
+    {
+        await page.SetViewportSizeAsync(width, 800);
+        Require(await page.EvaluateAsync<bool>("document.documentElement.scrollWidth <= window.innerWidth"), $"{route} has no horizontal overflow at {width}px");
+    }
+
+    await page.SetViewportSizeAsync(360, 800);
+    Require(await page.Locator("table.seller-table tbody tr").First.EvaluateAsync<string>("row => getComputedStyle(row).display") == "block",
+        $"{route} turns table rows into cards at 360px");
+    var actions = page.Locator("table.seller-table .seller-row-actions > *");
+    if (await actions.CountAsync() > 0)
+    {
+        var actionBox = await actions.First.BoundingBoxAsync();
+        Require(actionBox is { Height: >= 44, Width: >= 44 }, $"{route} keeps list actions touch-sized at 360px");
+    }
+}
+
+await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-Fixture"] = "empty" });
+Require((await page.GotoAsync(new Uri(baseUrl, "/Seller/Ticket/FilterTickets").AbsoluteUri))?.Status == 200, "empty ticket list renders");
+await Assertions.Expect(page.Locator(".seller-empty")).ToBeVisibleAsync();
+await Assertions.Expect(page.Locator(".seller-empty")).ToContainTextAsync("موردی برای نمایش وجود ندارد");
+
+var screenshotDir = Environment.GetEnvironmentVariable("SELLER_CHECK_SCREENSHOTS");
+if (!string.IsNullOrWhiteSpace(screenshotDir))
+{
+    Directory.CreateDirectory(screenshotDir);
+    await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string> { ["X-Seller-Fixture"] = "master" });
+    var captures = new (string Route, string Name)[]
+    {
+        ("/Seller", "dashboard"),
+        ("/Seller/SellerPersonalInfo/ListOfPersonalInfo", "store-profile"),
+        ("/Seller/User/Index", "employees"),
+        ("/Seller/Contarct/ListOfContracts", "contracts"),
+        ("/Seller/Ticket/FilterTickets", "tickets")
+    };
+    foreach (var capture in captures)
+    {
+        await page.GotoAsync(new Uri(baseUrl, capture.Route).AbsoluteUri);
+        foreach (var width in new[] { 360, 1440 })
+        {
+            await page.SetViewportSizeAsync(width, 900);
+            await page.ScreenshotAsync(new PageScreenshotOptions
+            {
+                Path = Path.Combine(screenshotDir, $"{capture.Name}-{width}.png"),
+                FullPage = true
+            });
+        }
+    }
+    Console.WriteLine("Screenshots: " + Path.GetFullPath(screenshotDir));
+}
+
+Console.WriteLine("PASS: seller dashboard/UI checks, responsive profile, store-state transitions and shared seller panel list components.");
 
 static void Require(bool condition, string description)
 {
