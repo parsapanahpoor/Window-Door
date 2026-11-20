@@ -132,3 +132,50 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - Seller header store status now distinguishes active from merely verified: active stores display «فعال»; active, inactive/correction, and pending states use green, red, and yellow translucent glass backgrounds. Coverage was added to SellerDashboardChecks.
 
 - Seller account status policy: successful edits to seller details, introduction video, or received-cheque policy set both the market and seller profile to WaitingForConfirmPersonalInformations. Expired active charges deactivate both records; a charge check also repairs legacy completion states from expired charge history. The prior three-month branch that marked a retained profile incomplete was removed. The legacy completion status now maps consistently across dashboard and shared pages. SellerDashboardChecks verifies video and cheque post-save review transitions plus completion-status consistency.
+
+## Authoritative checkout and historical landing investigation — 2026-11-17
+- Owner-designated working source: Desktop/Drives/App/Projects/Panjerehyab/Source Code/Window14011014/Window. Do not use the Documents/ChatGPT copy for development.
+- Owner rejected OldIndex. Reverted all three application files to HEAD and removed only our HomeLandingChecks and spec 0009; existing uploads were preserved. Root remains the storefront.
+- Found standalone Home/Index.cshtml with Layout=null, Landing assets, two heading lines and seven image tiles in c351a06ead8052e0664af5f859876553d2a2288c (parent of f8ae37d). origin/NewTemplate also retains this standalone template. f8ae37d replaced it on 2023-08-13. Current OldIndex is a different, later design.
+- Fetched origin successfully. Git works with the approved filesystem access; earlier work-tree errors were environment-related, not proof of a damaged repository.
+- No historical page activated or deployed. Application diff is empty after rollback; development path documentation remains corrected.
+## Standalone home restored — 2026-11-17
+- Owner selected the historical seven-tile document. Restored Home/Index from c351a06, with Persian lang and shop tile wired to Shop/ShopLanding. Home action no longer queries catalog data. Shop partial paths are explicit; seller routes unchanged.
+- Historical customer-club tile remains inactive. Replaced the legacy notification partial's missing ShowMessage dependency with encoded inline status messages in this standalone document.
+- Added spec 0009-standalone-home and offline HomeLandingChecks. No production validation or deployment.
+- Final Release HomeLandingChecks and Web/Razor build passed; git diff --check passed. Browser rendering remains unverified.
+
+## Standalone home production release — 2026-11-19
+- PR #15 merged as master 8f21a1910045d055687e8dccc55dc960ea343a8d after GitHub build, offline recovery and seller browser checks passed. Local HomeLandingChecks passed.
+- Published Window.Web.dll/pdb from the source-equivalent release build via FTP. Previous binaries retained privately in home-rollback-8f21a19 outside httpdocs. Removed app_offline.htm after installation. IIS configuration and database require no changes for this release.
+- Live HTTPS root returned 200 with all seven historical tiles, expected heading and /Shop/ShopLanding link. Shop, Login, seller anonymous entry, representative Landing CSS/JS and images returned 200. No authenticated production mutations performed.
+
+## Landing tile colorization — 2026-11-19
+- Replaced Landing/images/6.jpg and 7.jpg with colorized illustrations generated using the built-in image tool from their grayscale references. Palette: royal blue, orange, saffron, turquoise and cream. Preserved the customer-club/shop subjects. JPEG conversion only after generation. These are newly chosen colors; no historical color originals were found.
+- Three-card revision: shop and inquiry remain linked; assistant uses existing consultation illustration with grayscale CSS and no action. Removed both requested landing footer links. Desktop three-column grid becomes one column below 640px.
+- Three-card checks and Release Web/Razor compilation passed; browser visual validation remains pending. Working branch: codex/feature/three-home-cards.
+- Added the requested white frame to all three landing cards: 2px white border, 24px radius, 12px padding and border-box sizing. CSS-only verification by source review and git diff --check; browser appearance remains unverified.
+- Owner clarified the frame using a screenshot: replaced the outer card border/padding with a 5px white border directly around each image, 24px corners. Titles are outside the frame. Source and diff checks passed; browser appearance not yet verified.
+
+- Border follow-up: inspected owner's Chrome at localhost:44324; missing frames confirmed. Legacy h2::before produced the short white strokes. Added an overflow-clipped image-only frame and suppressed that pseudo-element. IIS still served earlier compiled Razor markup after edits; rebuild verification pending.
+- Follow-up evidence: Debug build initially failed because VS/IIS held DLLs. Stopped only this checkout IIS worker, rebuilt successfully (0 errors), and restarted its IIS configuration with the development launcher. Root returns HTTP 200 with the new frame wrapper. Existing offline HomeLandingChecks passed. Final browser screenshot remains unverified.
+
+## Seller panel UI coverage — 2026-11-20
+- Added seller-only components: `wwwroot/css/seller-panel.css`, `wwwroot/js/seller-panel.js` and `Areas/Seller/Views/Shared/_SellerEmptyState.cshtml`, loaded by `_SellerLayout` after the approved shell styles.
+- Applied the shared layer across the Seller area: card surfaces for legacy widgets, grouped form controls, 44px touch actions, soft button variants, responsive tables that become record cards below 768px, detail/status/empty patterns, file-field feedback, modal focus restoration and removal of widget captions that repeat the glass page title.
+- Preserved routes, link targets, model-binding names, HTTP methods, antiforgery, multipart forms, server validation, filters and seller role/ownership checks. The approved dashboard and store profile pages remain the regression reference.
+- SellerDashboardChecks now covers `/Seller/User/Index`, `/Seller/Contarct/ListOfContracts`, `/Seller/Ticket/FilterTickets` and the empty ticket state at 360/768/1440px. Representative screenshots are generated under `artifacts/screenshots/seller-panel/` and are not committed.
+- Remaining: authenticated flows with real service data, visual review of every seller route, and physical TWA verification. Details: `specs/0010-seller-panel-ui/spec.md`.
+
+## Seller panel PR 16 keyboard follow-up
+- Seller modals use Bootstrap 3 jQuery events to focus the first visible editable field and restore the initiating control on dismissal. Added fixture-backed keyboard regression coverage for the work-sample modal. Order, product and Android TWA coverage remains limited as described in spec 0010.
+- The three-card landing places the disabled assistant at the far right above 640px, preserves mobile card order, and shows its coming-soon heading in dark gray.
+- Index now draws from the ten approved preview colors on server render and sends no-store. Release HomeLandingChecks passed. A 120-response loopback smoke check verified the palette and cache header.
+- Index has four cards and stacks below 768px. Seller login uses the colorized storefront and the existing login route. Shared password/SMS completion resolves persisted seller and admin roles, with seller priority. Ordinary accounts retain safe explicit destinations or use UserPanel. Isolated authentication HTTP and landing checks passed.
+- Landing grid uses one column below 640px, two centered columns from 640px to below 1200px, and four columns at 1200px and above. HomeLandingChecks and diff whitespace verification passed.
+- At widths of 1200px and above, the landing title, subtitle and cards center vertically as a single group. The desktop container grows on short screens. Source-based HomeLandingChecks and git diff whitespace checks passed.
+- Landing title and cards center vertically from 640px upward. The title gap scales from 40 to 64px and tablet cards use a viewport height bound. Release HomeLandingChecks passed. Edge confirmed no vertical overflow, vertical centering, and expected columns at nine viewport sizes between 640x800 and 2056x1266.
+
+## Responsive landing gallery
+- Applied the approved original gallery to Home/Index. Translucent cards keep titles inside, with two columns on portrait phones and tablets and four on desktop and short landscape screens. The existing wave and palette remain.
+- Release HomeLandingChecks passed. Edge rendered the actual local Razor page at 12 viewport sizes from 320x568 to 2056x1266, including 568x320 and 740x360. All had the expected columns, centered content, loaded images, a grayscale assistant and no horizontal or vertical overflow.

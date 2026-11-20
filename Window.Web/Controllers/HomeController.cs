@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Window.Application.Services.Interfaces;
@@ -38,11 +38,10 @@ namespace Window.Web.Controllers
 
         #region Index 
 
-        public async Task<IActionResult> Index(CancellationToken cancellation)
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+        public Task<IActionResult> Index(CancellationToken cancellation)
         {
-            var model = await Mediator.Send(new ShopLandingQuery(), cancellation);
-
-            return View(model);
+            return Task.FromResult<IActionResult>(View());
         }
 
         public async Task<IActionResult> OldIndex()

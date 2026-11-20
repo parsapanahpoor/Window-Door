@@ -1,205 +1,250 @@
-﻿@using Window.Application.Convertors
-@using Window.Application.StticTools
-@model Window.Domain.ViewModels.Site.Shop.Landing.ShopLandingDTO
-
 @{
-    ViewData["Title"] = "فروشگاه پنجره یاب";
-    Layout = "_ShopLayout";
+    Layout = null;
+
+    string[] backgroundColors =
+    [
+        "#dcd102", "#ffba97", "#afe3cb", "#a8d8f6", "#d5c3f0",
+        "#f5c3d5", "#e7c99e", "#91dedc", "#c7db9f", "#9eb7df"
+    ];
+    var backgroundColor = backgroundColors[Random.Shared.Next(backgroundColors.Length)];
 }
+<!DOCTYPE HTML>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>پنجره یاب |مرجع رسمی قیمت گذاری درب و پنجره</title>
+    <!-- Modernizr -->
+    <!-- <script src="/Landing/js/modernizr.js"></script> -->
+    <!-- Open Sans from Google Webfonts -->
+    <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'> -->
+    <!-- Main styles file -->
+    <link rel="shortcut icon" href="/admin/img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/Landing/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Landing/css/styles.css" />
+    <link rel="stylesheet" href="/Landing/css/component.css" />
+    <!-- Icons via Font Awesome -->
+    <link rel="stylesheet" href="/Landing/css/font-awesome.min.css" />
 
-<!-- Start main-content -->
-<main class="main-content dt-sl mb-3">
+    @*Manifest*@
+    <link rel="manifest" href="~/Site/Manifest/manifest.json">
 
-    <div class="container main-container">
-        <!-- Start Main-Slider -->
-        <div class="row mb-5">
-            <aside class="sidebar col-lg-4 hidden-md order-2 pr-0 hidden-md">
-                <!-- Start banner -->
-                <div class="sidebar-inner dt-sl">
-                    <div class="sidebar-banner">
-                        <div class="row">
-                            <div class="col-12 mb-1">
-                                <div class="widget-banner">
-                                    <a href="#">
-                                        <img src="/DidiKala/assets/img/banner/banner-side-slider-1.jpg" alt="">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="widget-banner">
-                                    <a href="#">
-                                        <img src="/DidiKala/assets/img/banner/banner-side-slider-2.jpg" alt="">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+    <!-- #94151D,#EF394E -->
+    <style>
+        body.color-scheme-sky {
+            min-width: 0;
+            background-color: var(--landing-background, #dcd102);
+        }
+        body.color-scheme-sky .splash h1.title_header {
+            margin: 0;
+            color: #08456f;
+            font-size: clamp(30px, 5vw, 52px);
+            line-height: 1.25;
+        }
+        body.color-scheme-sky .splash .lead {
+            margin: 7px 0 0;
+            color: #173049;
+            font-size: clamp(16px, 2.6vw, 23px);
+            line-height: 1.45;
+        }
+        .splash {
+            position: relative;
+            min-width: 0;
+            height: auto;
+        }
+        .splash .centered-unit {
+            position: relative;
+            top: auto;
+            margin-top: 0;
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            min-height: 100svh;
+            padding: clamp(14px, 3vh, 32px) clamp(16px, 4vw, 32px);
+        }
+        .splash .landing-layout {
+            width: 100%;
+            max-width: 1032px;
+        }
+        .landing-cards {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            max-width: min(540px, max(260px, calc(100svh - 310px)));
+            margin: clamp(24px, 4vh, 38px) auto 0;
+            direction: ltr;
+        }
+        .landing-card {
+            direction: rtl;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            padding: 8px;
+            border: 1px solid #fff9;
+            border-radius: 22px;
+            background: #ffffff45;
+            box-shadow: 0 8px 22px #44153112;
+            text-align: center;
+            text-decoration: none;
+        }
+        a.landing-card:hover, a.landing-card:focus { text-decoration: none; }
+        .landing-card-image {
+            display: block;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+        .landing-card img {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+        .landing-card h2::before { content: none; }
+        .landing-card h2 {
+            display: grid;
+            place-items: center;
+            flex: 1;
+            min-height: 54px;
+            margin: 0;
+            padding: 6px;
+            color: #173049;
+            font-size: 19px;
+            line-height: 1.4;
+        }
+        a.landing-card:focus-visible {
+            outline: 3px solid #08456f;
+            outline-offset: 3px;
+        }
+        .landing-card-disabled { background: #ffffff28; }
+        .landing-card-disabled img { filter: grayscale(1); }
+        .landing-card-disabled h2 { color: #454545; }
+
+        @@media (width < 640px) {
+            .landing-cards {
+                max-width: min(410px, max(240px, calc(100svh - 245px)));
+                gap: 11px;
+                margin-top: 23px;
+            }
+            .landing-card { padding: 6px; border-radius: 17px; }
+            .landing-card-image { border-radius: 12px; }
+            .landing-card h2 { min-height: 48px; padding: 5px 3px; font-size: 15px; }
+        }
+        @@media (min-width: 1200px) {
+            .landing-cards {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                max-width: min(1032px, max(580px, calc(4 * (100svh - 260px))));
+                margin-top: clamp(24px, 6vh, 48px);
+            }
+        }
+        @@media (min-width: 560px) and (max-height: 500px) and (orientation: landscape) {
+            .splash .centered-unit { padding-block: 12px; }
+            body.color-scheme-sky .splash h1.title_header { font-size: 30px; }
+            body.color-scheme-sky .splash .lead { font-size: 16px; }
+            .landing-cards {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                max-width: min(580px, max(360px, calc(4 * (100svh - 155px))));
+                gap: 10px;
+                margin-top: 20px;
+            }
+            .landing-card { padding: 5px; border-radius: 14px; }
+            .landing-card-image { border-radius: 10px; }
+            .landing-card h2 { min-height: 40px; font-size: 13px; }
+        }
+
+    </style>
+</head>
+<body class="color-scheme-sky" style="--landing-background: @backgroundColor;">
+    <!-- Animated background -->
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+    <!--  -->
+    <!-- First screen -->
+    <div class="splash">
+        <div class="centered-unit">
+            <div class="landing-layout">
+                <!-- Main header -->
+                <h1 class="title_header">پنجره یاب</h1>
+                <!-- Sub header -->
+                <p class="lead"> مرجع قیمت گذاری درب و پنجره در ایران</p>
+                <nav class="landing-cards" aria-label="بخش‌های پنجره‌یاب">
+                    <a class="landing-card" asp-area="" asp-controller="Shop" asp-action="ShopLanding">
+                        <span class="landing-card-image"><img src="/Landing/images/7.jpg" asp-append-version="true" alt="" width="1254" height="1254"></span>
+                        <h2>فروشگاه</h2>
+                    </a>
+                    <a class="landing-card" asp-area="" asp-controller="InquiryProduct" asp-action="InquiryStep1">
+                        <span class="landing-card-image"><img src="/Landing/images/1.jpg" asp-append-version="true" alt="" width="853" height="860"></span>
+                        <h2>استعلام رایگان</h2>
+                    </a>
+                    <a class="landing-card" asp-area="" asp-controller="Identity" asp-action="Login">
+                        <span class="landing-card-image"><img src="/Landing/images/6.jpg" asp-append-version="true" alt="" width="1254" height="1254"></span>
+                        <h2>ورود به پنل فروشندگان</h2>
+                    </a>
+                    <div class="landing-card landing-card-disabled" aria-disabled="true">
+                        <span class="landing-card-image"><img src="/Landing/images/3.jpg" asp-append-version="true" alt="" width="853" height="860"></span>
+                        <h2>دستیار هوشمند پنجره یاب (بزودی)</h2>
                     </div>
-                </div>
-                <!-- End banner -->
-            </aside>
-            <div class="col-lg-8 col-md-12 order-1">
-                <!-- Start main-slider -->
-                <section id="main-slider"
-                         class="main-slider main-slider-cs mt-1 carousel slide carousel-fade card hidden-sm"
-                         data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <li data-target="#main-slider" data-slide-to="0" class="active"></li>
-                        <li data-target="#main-slider" data-slide-to="1"></li>
-                        <li data-target="#main-slider" data-slide-to="2"></li>
-                        <li data-target="#main-slider" data-slide-to="3"></li>
-                        <li data-target="#main-slider" data-slide-to="4"></li>
-                        <li data-target="#main-slider" data-slide-to="5"></li>
-                        <li data-target="#main-slider" data-slide-to="6"></li>
-                    </ol>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/1.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/2.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/3.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/4.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/5.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/6.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/img-slider-2/7.jpg" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#main-slider" role="button" data-slide="prev">
-                        <i class="mdi mdi-chevron-right"></i>
-                    </a>
-                    <a class="carousel-control-next" href="#main-slider" data-slide="next">
-                        <i class="mdi mdi-chevron-left"></i>
-                    </a>
-                </section>
-                <section id="main-slider-res"
-                         class="main-slider carousel slide carousel-fade card d-none show-sm" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <li data-target="#main-slider-res" data-slide-to="0" class="active"></li>
-                        <li data-target="#main-slider-res" data-slide-to="1"></li>
-                        <li data-target="#main-slider-res" data-slide-to="2"></li>
-                        <li data-target="#main-slider-res" data-slide-to="3"></li>
-                        <li data-target="#main-slider-res" data-slide-to="4"></li>
-                        <li data-target="#main-slider-res" data-slide-to="5"></li>
-                    </ol>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/slider-responsive/1.jpg" alt=""
-                                     class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/slider-responsive/2.jpg" alt=""
-                                     class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/slider-responsive/3.jpg" alt=""
-                                     class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/slider-responsive/4.jpg" alt=""
-                                     class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/slider-responsive/5.jpg" alt=""
-                                     class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="carousel-item">
-                            <a class="main-slider-slide" href="#">
-                                <img src="/DidiKala/assets/img/main-slider/slider-responsive/6.jpg" alt=""
-                                     class="img-fluid">
-                            </a>
-                        </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#main-slider-res" role="button" data-slide="prev">
-                        <i class="mdi mdi-chevron-right"></i>
-                    </a>
-                    <a class="carousel-control-next" href="#main-slider-res" data-slide="next">
-                        <i class="mdi mdi-chevron-left"></i>
-                    </a>
-                </section>
-                <!-- End main-slider -->
+                </nav>
             </div>
         </div>
-        <!-- End Main-Slider -->
+
     </div>
 
-    <!-- Lastest Products -->
-    <partial name="_LastestProducts" model="@Model.LastestShopProducts">
 
-        @*Lastest Shop Products*@
-        @await Component.InvokeAsync("LastestShopProducts")
+    <!-- JavaScripts -->
+    <script src="/Landing/js/jquery.js"></script>
+    <!-- <script src="/Landing/js/countdown.js"></script> -->
+    <script src="/Landing/js/bezierCanvas.js"></script>
+    <script src="/Landing/js/notifyMe.js"></script>
+    <script src="/Landing/js/modernizr.custom.js"></script>
 
-        <div class="container main-container">
+    @*PWA Downloader Confige*@
+    <script src="~/Site/js/PWADownloader.js"></script>
 
-            <!-- Picture -->
-            <div class="row mt-3 mb-5">
-                <div class="col-sm-6 col-12 mb-2">
-                    <div class="widget-banner">
-                        <a href="#">
-                            <img src="/DidiKala/assets/img/banner/medium-banner-1.jpg" alt="">
-                        </a>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-12 mb-2">
-                    <div class="widget-banner">
-                        <a href="#">
-                            <img src="/DidiKala/assets/img/banner/medium-banner-2.jpg" alt="">
-                        </a>
-                    </div>
-                </div>
-            </div>
+    @foreach (var key in new[] { "SuccessMessage", "ErrorMessage", "WarningMessage", "InfoMessage" })
+    {
+        if (TempData[key] is string message)
+        {
+            <div role="status" style="position:relative;z-index:2;text-align:center;background:#fff;color:#222;padding:12px">@message</div>
+        }
+    }
+    <!-- <script src="/Landing/js/toucheffects.js"></script> -->
+    <script type="text/javascript">
+        $().ready(function () {
 
-        </div>
+            // Activate countdownTimer plugin on a '.countdown' element
+            // $(".countdown").countdownTimer({
+            // 	// Set the end date for the countdown
+            // 	endTime: new Date("April 21, 2014 11:13:00 UTC+0200")
+            // });
 
-        <!-- Lastest Sellers -->
-        <partial name="_LastestSellers" model="@Model.LastestSellers">
 
-            <!-- Popular Brands -->
-            <partial name="_PopularBrands" model="@Model.LastestBrands">
+            // Activate notifyMe plugin on a '#notifyMe' element
+            $("#notifyMe").notifyMe();
 
-                <!-- Banner -->
-                @*  <div class="row mt-3 mb-5">
-                <div class="col-12">
-                <div class="widget-banner">
-                <a href="#">
-                <img src="/DidiKala/assets/img/banner/large-banner.jpg" alt="">
-                </a>
-                </div>
-                </div>
-                </div> *@
 
-</main>
-<!-- End main-content -->
+            // Activate bezierCanvas plugin on a #bg-canvas element
+            $("#bg-canvas").bezierCanvas({
+                maxStyles: 1,
+                maxLines: 100,
+                lineSpacing: 0.5,
+                colorBase: { r: 255, g: 255, b: 255 },
+                colorVariation: { r: 0, g: 0, b: 0 },
+                delayVariation: 0,
+                speedLinear: true,
+                globalAlpha: 0.28,
+                globalSpeed: 500,
+            });
+
+            // Add handler on 'Scroll down to learn more' link
+            // $().ready(function(){
+            // 	$(".overlap .more").click(function(e){
+            // 		e.preventDefault();
+            // 		$("body,html").animate({scrollTop: $(window).height()});
+            // 	});
+            // });
+
+
+        });
+    </script>
+</body>
+</html>

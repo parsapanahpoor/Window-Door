@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Window.Application.Interfaces;
+using Window.Application.Extensions;
+using Window.Application.Services.Interfaces;
+using Window.Domain.ViewModels.Common;
 using Window.Domain.Entities.Account;
 using Window.Domain.ViewModels.Account;
 using Window.Domain.ViewModels.Site.Account;
@@ -162,9 +165,18 @@ namespace Window.Web.Controllers
         #region Login
 
         [HttpGet("login")]
-        [RedirectIfLoggedInActionFilter]
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
-        public IActionResult Login(string? returnUrl = null) => ShowSmsLogin(returnUrl);
+        public async Task<IActionResult> Login(string? returnUrl = null)
+        {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var account = await _userService.GetUserById(User.GetUserId());
+                if (account is not null)
+                    return await GetPostLoginDestinationAsync(account, returnUrl: null);
+            }
+
+            return ShowSmsLogin(returnUrl);
+        }
 
         [HttpGet("login/password")]
         [RedirectIfLoggedInActionFilter]
@@ -220,10 +232,24 @@ namespace Window.Web.Controllers
             if (authenticationMethod is not null)
                 claims.Add(new Claim(ClaimTypes.AuthenticationMethod, authenticationMethod));
 
+            var destination = await GetPostLoginDestinationAsync(user, returnUrl);
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity), new AuthenticationProperties { IsPersistent = rememberMe });
-            return LocalRedirect(LocalReturnUrl(returnUrl));
+            return destination;
+        }
+
+        private async Task<IActionResult> GetPostLoginDestinationAsync(User user, string? returnUrl)
+        {
+            var permissions = HttpContext.RequestServices.GetRequiredService<IPermissionService>();
+            var role = await permissions.GetLoginPanelRoleAsync(user, HttpContext.RequestAborted);
+            return role switch
+            {
+                GetUserRoles.Seller or GetUserRoles.SellerMaster => RedirectToAction("Index", "Home", new { area = "Seller" }),
+                GetUserRoles.Admin => RedirectToAction("Index", "Home", new { area = "Admin" }),
+                _ when LocalReturnUrl(returnUrl) is not ("/" or "~/") => LocalRedirect(LocalReturnUrl(returnUrl)),
+                _ => RedirectToAction("Index", "Home", new { area = "UserPanel" })
+            };
         }
 
         #endregion
