@@ -179,3 +179,10 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 ## Responsive landing gallery
 - Applied the approved original gallery to Home/Index. Translucent cards keep titles inside, with two columns on portrait phones and tablets and four on desktop and short landscape screens. The existing wave and palette remain.
 - Release HomeLandingChecks passed. Edge rendered the actual local Razor page at 12 viewport sizes from 320x568 to 2056x1266, including 568x320 and 740x360. All had the expected columns, centered content, loaded images, a grayscale assistant and no horizontal or vertical overflow.
+
+## Home gallery and seller panel production release
+- PR 17 integrated the gallery, seller panel and role-based sign-in into develop. PR 18 promoted the release to master as 4661550672f80b910b1f549daf44f1fc618b677b. Tag: release-2026.11.20-home-gallery.
+- Built Release from the exact master commit with zero build errors. HomeLandingChecks and isolated SmsLoginChecks passed. GitHub Actions passed for both integration and release PRs.
+- Installed Window.Web and Window.Application assemblies and symbols, Landing images 6 and 7, seller-panel.css and seller-panel.js through verified HTTPS Plesk. No schema migration was included. Temporary IIS offline marker was moved out of httpdocs.
+- Live home served the new gallery with no-store. Login and ForgotPassword returned 200. Anonymous Seller returned 302. All four public static files matched the staged SHA-256 hashes. Authenticated seller and live SMS were not exercised in production.
+- Private Plesk rollback directory gallery-rollback-20261120 contains the previous four binaries and symbols and two landing images. Restore those files to their original locations under a brief IIS offline window if needed. The new CSS and JS are only referenced by the new application views.
