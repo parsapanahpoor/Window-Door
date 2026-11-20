@@ -144,3 +144,18 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - Historical customer-club tile remains inactive. Replaced the legacy notification partial's missing ShowMessage dependency with encoded inline status messages in this standalone document.
 - Added spec 0009-standalone-home and offline HomeLandingChecks. No production validation or deployment.
 - Final Release HomeLandingChecks and Web/Razor build passed; git diff --check passed. Browser rendering remains unverified.
+
+## Standalone home production release — 2026-11-19
+- PR #15 merged as master 8f21a1910045d055687e8dccc55dc960ea343a8d after GitHub build, offline recovery and seller browser checks passed. Local HomeLandingChecks passed.
+- Published Window.Web.dll/pdb from the source-equivalent release build via FTP. Previous binaries retained privately in home-rollback-8f21a19 outside httpdocs. Removed app_offline.htm after installation. IIS configuration and database require no changes for this release.
+- Live HTTPS root returned 200 with all seven historical tiles, expected heading and /Shop/ShopLanding link. Shop, Login, seller anonymous entry, representative Landing CSS/JS and images returned 200. No authenticated production mutations performed.
+
+## Landing tile colorization — 2026-11-19
+- Replaced Landing/images/6.jpg and 7.jpg with colorized illustrations generated using the built-in image tool from their grayscale references. Palette: royal blue, orange, saffron, turquoise and cream. Preserved the customer-club/shop subjects. JPEG conversion only after generation. These are newly chosen colors; no historical color originals were found.
+- Three-card revision: shop and inquiry remain linked; assistant uses existing consultation illustration with grayscale CSS and no action. Removed both requested landing footer links. Desktop three-column grid becomes one column below 640px.
+- Three-card checks and Release Web/Razor compilation passed; browser visual validation remains pending. Working branch: codex/feature/three-home-cards.
+- Added the requested white frame to all three landing cards: 2px white border, 24px radius, 12px padding and border-box sizing. CSS-only verification by source review and git diff --check; browser appearance remains unverified.
+- Owner clarified the frame using a screenshot: replaced the outer card border/padding with a 5px white border directly around each image, 24px corners. Titles are outside the frame. Source and diff checks passed; browser appearance not yet verified.
+
+- Border follow-up: inspected owner's Chrome at localhost:44324; missing frames confirmed. Legacy h2::before produced the short white strokes. Added an overflow-clipped image-only frame and suppressed that pseudo-element. IIS still served earlier compiled Razor markup after edits; rebuild verification pending.
+- Follow-up evidence: Debug build initially failed because VS/IIS held DLLs. Stopped only this checkout IIS worker, rebuilt successfully (0 errors), and restarted its IIS configuration with the development launcher. Root returns HTTP 200 with the new frame wrapper. Existing offline HomeLandingChecks passed. Final browser screenshot remains unverified.

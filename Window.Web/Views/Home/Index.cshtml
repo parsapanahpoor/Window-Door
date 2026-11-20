@@ -24,100 +24,63 @@
 
     <!-- #94151D,#EF394E -->
     <style>
-        @@media(min-width:1000px) {
-            .cs-style-4 li {
-                height: inherit;
-                width: 230px;
-            }
+        .splash { min-width: 0; }
+        .splash .centered-unit {
+            position: relative;
+            top: auto;
+            margin-top: 0;
+            padding: 48px 0;
         }
-
-        @@media(max-width:400px) {
-            h1 {
-                margin-top: -40px;
-            }
+        .landing-cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+            max-width: 960px;
+            margin: 32px auto;
+            direction: rtl;
         }
-
-        @@media(max-width:500px) {
-            h1 {
-                margin-top: 20px;
-            }
+        .landing-card {
+            display: block;
+            min-width: 0;
+            box-sizing: border-box;
+            text-align: center;
+            text-decoration: none;
         }
-
-        @@media(max-width:500px) {
-            .col-500 {
-                width: 320px !important;
-                height: 320px !important;
-            }
-
-            .col-501 {
-                width: 150px !important;
-                height: 150px !important;
-            }
-
-            .row {
-                margin: 0 auto;
-            }
-
-            .container {
-                width: auto;
-                margin-left: 0px !important;
-                margin-right: 0px !important;
-                padding-right: 0px;
-                padding-left: 0px;
-            }
-
-            .res_small {
-                display: none;
-            }
-
-            .res_h1 {
-                font-size: 16px;
-            }
-
-            .cs-style-4 figcaption a {
-                bottom: 2.9em !important;
-                right: 0 !important;
-                font-size: 10px !important;
-            }
-
-            .grid figcaption a {
-                padding: 5px 5.3px !important;
-                border-radius: 2px !important;
-            }
-
-            footer {
-                right: 0%;
-            }
+        .landing-card-image {
+            display: block;
+            overflow: hidden;
+            border: 5px solid #fff;
+            border-radius: 24px;
+            background: #fff;
         }
-
-        @@media (min-width:501px) and (max-width:520px) {
-            h1 {
-                margin-top: 44px;
-            }
-
-            .row {
-                margin: 0 9px;
-            }
-
-            .col-520 {
-                width: 250px !important;
-                height: 250px !important;
-            }
-
-            .col-521 {
-                width: 110px !important;
-                height: 110px !important;
-            }
+        .landing-card img {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1;
+            object-fit: cover;
+            box-sizing: border-box;
+            border: 0;
         }
-
-        @@media (min-width:992px) and (max-width:1036px) {
-            .row-respansiv {
-                margin: 0 190px;
-            }
-
-            .traz {
-                margin: 0 74px;
-                transform: translate(0px, 0px);
+        .landing-card h2::before { content: none; }
+        .landing-card h2 {
+            margin: 16px 0 0;
+            font-size: 20px;
+            line-height: 1.7;
+        }
+        a.landing-card:focus-visible {
+            outline: 3px solid #ffba45;
+            outline-offset: 6px;
+            border-radius: 18px;
+        }
+        .landing-card-disabled img { filter: grayscale(1); }
+        .landing-card-disabled h2 { color: #d6d6d6; }
+        @@media (max-width: 640px) {
+            .landing-cards {
+                grid-template-columns: 1fr;
+                max-width: 320px;
+                gap: 28px;
+                padding: 0 16px;
             }
         }
     </style>
@@ -134,127 +97,21 @@
                 <h1 class="title_header">پنجره یاب</h1>
                 <!-- Sub header -->
                 <p class="lead"> مرجع قیمت گذاری درب و پنجره در ایران</p>
-                <div class="row row-respansiv over-hidden">
-                    <ul class="grid cs-style-4">
-                        <li class="col-md-3 col-sm-6 col-500 col-520">
-                            <figure>
-                                <div>
-                                    <a asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct">
-                                        <img src="/Landing/images/1.jpg" alt="image 1">
-                                    </a>
-                                </div>
-                                <!--<figcaption>
-                                  <h1>استعلام رایگان</h1>
-                                  <small>توی چند ثانیه هر درب و پنجره ای بخای استعلام میگیری</small>
-                                  <a href="#">کلیک کن</a>
-                                </figcaption>-->
-                                <a asp-action="InquiryStep1" asp-area="" asp-controller="InquiryProduct"> <h4 class="res_h1">استعلام رایگان</h4>  </a>
-
-                            </figure>
-                        </li>
-
-                        <li class="col-md-3 col-sm-6 col-501 col-521">
-                            <figure>
-                                <div>
-                                    <a asp-action="ListOfTechnicalIssuse" asp-area="" asp-controller="TechnicalIssues">
-                                        <img src="/Landing/images/2.jpg" alt="image 2">
-                                    </a>
-                                </div>
-                                <!-- <figcaption>
-                                  <h1 class="res_h1">تضمین در خرید</h1>
-                                  <small class="res_small">انتخاب کن، تضمین با ما</small>
-                                  <a href="#">کلیک کن</a>
-                                </figcaption> -->
-                            </figure>
-                            <a asp-action="ListOfTechnicalIssuse" asp-area="" asp-controller="TechnicalIssues"> <h4 class="res_h1">تضمین در خرید</h4></a>
-                        </li>
-
-                        <li class="col-md-3 col-sm-6 col-501 col-521">
-
-                            <figure>
-                                <div>
-                                    <a asp-action="ListOfConsultant" asp-area="" asp-controller="Consultant">
-                                        <img src="/Landing/images/3.jpg" alt="image 3">
-                                    </a>
-                                </div>
-                                <!--<figcaption>
-                                   <h1 class="res_h1">مشاور رایگان</h1>
-                                   <small class="res_small">پشتیبان های ما توی انتخاب درست بهت کمک میکنند</small>
-                                   <a href="#">کلیک کن</a>
-                                 </figcaption>-->
-                            </figure>
-                            <a asp-action="ListOfConsultant" asp-area="" asp-controller="Consultant"><h4 class="res_h1">مشاوره رایگان</h4></a>
-                        </li>
-
-                        <li class="col-md-3 col-sm-6 col-501 col-521">
-                            <figure>
-                                <div>
-                                    <a asp-action="ListOfArticles" asp-area="" asp-controller="Article">
-                                        <img src="/Landing/images/4.jpg" alt="image 3">
-                                    </a>
-                                </div>
-                                <!--<figcaption>
-                                  <h1 class="res_h1">مسائل درب و پنجره</h1>
-                                  <small class="res_small">مقالات ما بهت توی انتخاب کمک میکنند</small>
-                                  <a href="#">کلیک کن</a>
-                                </figcaption>-->
-                            </figure>
-                            <a asp-action="ListOfArticles" asp-area="" asp-controller="Article"><h4 class="res_h1">نماها و پنجره های خاص</h4></a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="row over-hidden traz">
-                    <ul class="grid cs-style-4">
-                        <li class="col-md-4 col-sm-6 col-501 col-521">
-                            <figure>
-                                <div>
-                                    <a asp-action="ListOfQuestionAndAnswers" asp-area="" asp-controller="QA">
-                                        <img src="/Landing/images/5.jpg" alt="image 1">
-                                    </a>
-                                </div>
-                                <!--<figcaption>
-                                  <h1 class="res_h1">سوالات متداول</h1>
-                                  <small class="res_small">به سوالات ذهنی ات پاسخ دادیم</small>
-                                  <a href="#">کلیک کن</a>
-                                </figcaption>-->
-                            </figure>
-                            <a asp-action="ListOfQuestionAndAnswers" asp-area="" asp-controller="QA"><h4 class="res_h1">سوالات متداول</h4></a>
-                        </li>
-
-                        <li class="col-md-4 col-sm-6 col-501 col-521">
-                            <figure>
-                                <div><img src="/Landing/images/6.jpg" alt="image 2"></div>
-                                <!-- <figcaption>
-                                  <h1 class="res_h1">باشگاه مشتریان</h1>
-                                  <small class="res_small">بهت میگیم کی بهمون ملحق بشی:)</small>
-                                  <a href="#">به زودی</a>
-                                </figcaption> -->
-                            </figure>
-                            <h4 class="res_h1">باشگاه مشتریان</h4>
-                        </li>
-
-                        <li class="col-md-4 col-sm-6 col-501 col-521">
-                            <figure>
-                                <div><a asp-area="" asp-controller="Shop" asp-action="ShopLanding"><img src="/Landing/images/7.jpg" alt="فروشگاه"></a></div>
-                                <!-- <figcaption>
-                                  <h1 class="res_h1">فروشگاه</h1>
-                                  <small class="res_small">هر درب و پنجره ای که بخای برات میاریم</small>
-                                  <a href="#">به زودی</a>
-                                </figcaption> -->
-                            </figure>
-                            <a asp-area="" asp-controller="Shop" asp-action="ShopLanding"><h4 class="res_h1">فروشگاه</h4></a>
-                        </li>
-                    </ul>
-                </div>
+                <nav class="landing-cards" aria-label="بخش‌های پنجره‌یاب">
+                    <a class="landing-card" asp-area="" asp-controller="Shop" asp-action="ShopLanding">
+                        <span class="landing-card-image"><img src="/Landing/images/7.jpg" asp-append-version="true" alt="" width="1254" height="1254"></span>
+                        <h2>فروشگاه</h2>
+                    </a>
+                    <a class="landing-card" asp-area="" asp-controller="InquiryProduct" asp-action="InquiryStep1">
+                        <span class="landing-card-image"><img src="/Landing/images/1.jpg" asp-append-version="true" alt="" width="853" height="860"></span>
+                        <h2>استعلام رایگان</h2>
+                    </a>
+                    <div class="landing-card landing-card-disabled" aria-disabled="true">
+                        <span class="landing-card-image"><img src="/Landing/images/3.jpg" asp-append-version="true" alt="" width="853" height="860"></span>
+                        <h2>دستیار هوشمند پنجره یاب</h2>
+                    </div>
+                </nav>
             </div>
-
-            <footer class="footer" style="margin-bottom:30px;margin-top:30px">
-                <a href="https://www.fara-zaman.ir" class="footer-link" target="_blank">طراحی و توسعه توسط شرکت برنامه نویسی فـــرا زَمـــان</a>
-            </footer>
-
-                 <footer class="footer" style="margin-bottom:20px">
-           <a asp-action="TermsConditions" asp-area="" asp-controller="Home" class="footer-link mt-2 mb-2" >قوانین و مقررات و حریم خصوصی </a>
-            </footer>
         </div>
 
     </div>
