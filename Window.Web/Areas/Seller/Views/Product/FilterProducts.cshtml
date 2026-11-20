@@ -36,7 +36,7 @@
 
             @if (Model.Entities != null && Model.Entities.Any())
             {
-                <table class="table table-hover table-bordered tc vm">
+                <table class="seller-table table table-hover table-bordered tc vm">
                     <thead class="tc vm">
                         <tr class="tc vm">
                             <th class="tc vm">
@@ -89,8 +89,8 @@
                                 </td>
 
                                 <td class="tc vm">
-                                    <a asp-action="SegmentPricing" asp-area="Seller" asp-controller="Product" asp-route-productId="@product.Id" class="btn btn-warning btn-circle btn-xs"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteProduct", "Product", new { area = "Seller", Id = product.Id })')" class="btn btn-danger btn-circle btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
+                                    <a asp-action="SegmentPricing" asp-area="Seller" asp-controller="Product" asp-route-productId="@product.Id" class="btn btn-warning btn-circle btn-xs" title="قیمت‌گذاری" aria-label="قیمت‌گذاری"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i></a>
+                                    <button onclick="DeleteAjax(@product.Id, '@Url.Action("DeleteProduct", "Product", new { area = "Seller", Id = product.Id })')" class="btn btn-danger btn-circle btn-xs" title="حذف محصول" aria-label="حذف محصول"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></button>
                                 </td>
                             </tr>
                         }
@@ -104,7 +104,7 @@
             }
             else
             {
-                <partial name="_SellerNotFoundPartial" />
+                <partial name="_SellerEmptyState" />
             }
         </div>
     </div>

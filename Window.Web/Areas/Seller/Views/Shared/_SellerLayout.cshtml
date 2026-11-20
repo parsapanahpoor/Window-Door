@@ -24,6 +24,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <partial name="_SellerHeaderReferences" />
     <link rel="stylesheet" href="~/css/seller-shell.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/seller-panel.css" asp-append-version="true" />
     @RenderSection("Styles", false)
 </head>
 <body class="seller-shell @(isDashboard ? "seller-dashboard-shell" : null)">
@@ -131,6 +132,7 @@
     </div>
     <partial name="_SellerFooterReferences" />
     <script src="~/js/seller-navigation.js" asp-append-version="true" defer></script>
+    <script src="~/js/seller-panel.js" asp-append-version="true" defer></script>
     <partial name="_SweetAlertLocalizer" />
     <partial name="_Modals" />
     @RenderSection("Scripts", false)
