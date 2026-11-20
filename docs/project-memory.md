@@ -159,3 +159,10 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 
 - Border follow-up: inspected owner's Chrome at localhost:44324; missing frames confirmed. Legacy h2::before produced the short white strokes. Added an overflow-clipped image-only frame and suppressed that pseudo-element. IIS still served earlier compiled Razor markup after edits; rebuild verification pending.
 - Follow-up evidence: Debug build initially failed because VS/IIS held DLLs. Stopped only this checkout IIS worker, rebuilt successfully (0 errors), and restarted its IIS configuration with the development launcher. Root returns HTTP 200 with the new frame wrapper. Existing offline HomeLandingChecks passed. Final browser screenshot remains unverified.
+
+## Seller panel UI coverage — 2026-11-20
+- Added seller-only components: `wwwroot/css/seller-panel.css`, `wwwroot/js/seller-panel.js` and `Areas/Seller/Views/Shared/_SellerEmptyState.cshtml`, loaded by `_SellerLayout` after the approved shell styles.
+- Applied the shared layer across the Seller area: card surfaces for legacy widgets, grouped form controls, 44px touch actions, soft button variants, responsive tables that become record cards below 768px, detail/status/empty patterns, file-field feedback, modal focus restoration and removal of widget captions that repeat the glass page title.
+- Preserved routes, link targets, model-binding names, HTTP methods, antiforgery, multipart forms, server validation, filters and seller role/ownership checks. The approved dashboard and store profile pages remain the regression reference.
+- SellerDashboardChecks now covers `/Seller/User/Index`, `/Seller/Contarct/ListOfContracts`, `/Seller/Ticket/FilterTickets` and the empty ticket state at 360/768/1440px. Representative screenshots are generated under `artifacts/screenshots/seller-panel/` and are not committed.
+- Remaining: authenticated flows with real service data, visual review of every seller route, and physical TWA verification. Details: `specs/0010-seller-panel-ui/spec.md`.

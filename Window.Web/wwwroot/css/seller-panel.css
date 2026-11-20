@@ -1,0 +1,1070 @@
+/* Seller panel page components.
+   Scope: only pages rendered inside the seller layout (body.seller-shell).
+   The approved dashboard, alerts, navigation and store profile pages keep their
+   existing styles; this layer supplies the shared form, list, detail and action
+   patterns used by the remaining seller screens. */
+
+body.seller-shell {
+    --seller-panel-radius: 18px;
+    --seller-panel-radius-sm: 12px;
+    --seller-control-height: 44px;
+}
+
+/* ---------------------------------------------------------------------------
+   Page grid and surfaces
+   --------------------------------------------------------------------------- */
+
+.seller-shell .seller-page-body > .row,
+.seller-shell .seller-page-body > form > .row {
+    row-gap: 16px;
+}
+
+.seller-panel-grid {
+    display: grid;
+    gap: 16px;
+    align-items: start;
+}
+
+@media (min-width: 992px) {
+    .seller-panel-grid {
+        grid-template-columns: minmax(250px, 300px) minmax(0, 1fr);
+    }
+
+    .seller-panel-grid--wide-aside {
+        grid-template-columns: minmax(0, 1fr) minmax(250px, 320px);
+    }
+
+    .seller-panel-aside {
+        position: sticky;
+        inset-block-start: 16px;
+    }
+}
+
+.seller-card,
+.seller-shell .widget,
+.seller-shell .well.with-header {
+    overflow: hidden;
+    border: 1px solid var(--seller-border);
+    border-radius: var(--seller-panel-radius);
+    background: var(--seller-surface);
+    box-shadow: 0 8px 22px var(--seller-shadow);
+}
+
+.seller-shell .widget + .widget,
+.seller-shell .seller-card + .seller-card {
+    margin-block-start: 16px;
+}
+
+/* Legacy widget headers become section headers, not page titles. */
+.seller-shell .widget > .widget-header,
+.seller-shell .well.with-header > .header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 14px;
+    min-height: 0;
+    padding: 13px 16px;
+    border: 0;
+    border-block-end: 1px solid var(--seller-border);
+    background: linear-gradient(120deg, #fff7e7, #fffdf8 62%);
+    color: var(--seller-ink);
+}
+
+.seller-shell .widget > .widget-header:empty,
+.seller-shell .well.with-header > .header:empty {
+    display: none;
+}
+
+.seller-shell .widget-caption,
+.seller-shell .well.with-header > .header > .flex-style > span:first-child {
+    color: var(--seller-ink);
+    font-size: var(--seller-text-card);
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.seller-shell .widget-caption:empty {
+    display: none;
+}
+
+.seller-shell .widget-body,
+.seller-shell .well.with-header > .body,
+.seller-shell .well > .footer {
+    padding: 16px;
+}
+
+.seller-shell .well.with-header > .footer {
+    border-block-start: 1px solid var(--seller-border);
+}
+
+@media (max-width: 480px) {
+    .seller-shell .widget-body,
+    .seller-shell .well.with-header > .body {
+        padding: 12px;
+    }
+}
+
+/* The legacy theme declares several button variants with !important. */
+.seller-shell .seller-page-body .btn-primary,
+.seller-shell .seller-page-body .btn-palegreen,
+.seller-shell .seller-page-body .btn-green {
+    border-color: transparent !important;
+    background-color: #2c5488 !important;
+    background-image: linear-gradient(135deg, #2c5488, #1d3a63) !important;
+    color: #fffdf6 !important;
+}
+
+.seller-shell .seller-page-body .btn-success {
+    border-color: #b7ddc8 !important;
+    background-color: #e8f7ee !important;
+    background-image: none !important;
+    color: #1c6040 !important;
+}
+
+.seller-shell .seller-page-body .btn-warning,
+.seller-shell .seller-page-body .btn-darkorange {
+    border-color: #ecc98d !important;
+    background-color: #fff3dc !important;
+    background-image: none !important;
+    color: #7a4a12 !important;
+}
+
+.seller-shell .seller-page-body .btn-danger,
+.seller-shell .seller-page-body .btn-maroon {
+    border-color: #eab6c2 !important;
+    background-color: #fdecef !important;
+    background-image: none !important;
+    color: #8a2341 !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Page actions
+   --------------------------------------------------------------------------- */
+
+.seller-panel-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-block-end: 14px;
+}
+
+.seller-panel-toolbar > * {
+    flex: 0 1 auto;
+}
+
+@media (max-width: 560px) {
+    .seller-panel-toolbar > * {
+        flex: 1 1 100%;
+    }
+}
+
+/* ---------------------------------------------------------------------------
+   Buttons and legacy badge actions
+   --------------------------------------------------------------------------- */
+
+.seller-shell .btn,
+.seller-shell .seller-row-actions .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: var(--seller-control-height);
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: var(--seller-panel-radius-sm);
+    font-family: var(--seller-font);
+    font-size: var(--seller-text-small);
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+    white-space: normal;
+}
+
+.seller-shell .btn > .btn-label,
+.seller-shell .btn > .glyphicon {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+}
+
+.seller-shell .btn-primary,
+.seller-shell .btn-palegreen,
+.seller-shell .btn-green {
+    border-color: transparent;
+    background: linear-gradient(135deg, #2c5488, #1d3a63);
+    color: #fffdf6;
+    box-shadow: 0 6px 16px #1d3a6333;
+}
+
+.seller-shell .btn-primary:is(:hover, :focus),
+.seller-shell .btn-palegreen:is(:hover, :focus),
+.seller-shell .btn-green:is(:hover, :focus) {
+    background: linear-gradient(135deg, #355f96, #24456f);
+    color: #fffdf6;
+}
+
+.seller-shell .btn-sky,
+.seller-shell .btn-blue,
+.seller-shell .btn-info {
+    border-color: #b9cde4;
+    background: #eaf2fb;
+    color: #1c3f6b;
+}
+
+/* The legacy theme declares these buttons with !important. */
+.seller-shell .seller-page-body .btn-sky,
+.seller-shell .seller-page-body .btn-blue,
+.seller-shell .seller-page-body .btn-info {
+    border-color: #b9cde4 !important;
+    background-color: #eaf2fb !important;
+    background-image: none !important;
+    color: #1c3f6b !important;
+}
+
+.seller-shell .btn-sky:is(:hover, :focus),
+.seller-shell .btn-blue:is(:hover, :focus),
+.seller-shell .btn-info:is(:hover, :focus) {
+    border-color: #93b2d4;
+    background: #dceaf8;
+    color: #12304f;
+}
+
+.seller-shell .btn-warning,
+.seller-shell .btn-darkorange {
+    border-color: #ecc98d;
+    background: #fff3dc;
+    color: #7a4a12;
+}
+
+.seller-shell .btn-warning:is(:hover, :focus),
+.seller-shell .btn-darkorange:is(:hover, :focus) {
+    border-color: #dfb46b;
+    background: #ffebc9;
+}
+
+.seller-shell .btn-danger,
+.seller-shell .btn-maroon {
+    border-color: #eab6c2;
+    background: #fdecef;
+    color: #8a2341;
+}
+
+.seller-shell .btn-danger:is(:hover, :focus),
+.seller-shell .btn-maroon:is(:hover, :focus) {
+    border-color: #dda0af;
+    background: #fbdde4;
+}
+
+.seller-shell .btn-link,
+.seller-shell .btn-default {
+    border-color: var(--seller-border);
+    background: #fffdf8;
+    color: var(--seller-accent);
+}
+
+.seller-shell .btn:disabled,
+.seller-shell .btn.disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.seller-row-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.seller-shell .seller-row-actions .badge {
+    min-height: 38px;
+    padding: 6px 12px;
+    border: 1px solid #d9d2c4;
+    border-radius: 10px;
+    background: #fffdf8;
+    color: var(--seller-accent);
+    text-decoration: none;
+    box-shadow: none;
+}
+
+.seller-shell .seller-row-actions .badge-warning {
+    border-color: #ecc98d;
+    background: #fff4df;
+    color: #7a4a12;
+}
+
+.seller-shell .seller-row-actions .badge-primary {
+    border-color: #b9cde4;
+    background: #eaf2fb;
+    color: #1c3f6b;
+}
+
+.seller-shell .seller-row-actions .badge-success {
+    border-color: #b7ddc8;
+    background: #e8f7ee;
+    color: #1c6040;
+}
+
+.seller-shell .seller-row-actions .badge-danger {
+    border-color: #eab6c2;
+    background: #fdecef;
+    color: #8a2341;
+}
+
+.seller-shell .seller-row-actions .badge:is(:hover, :focus),
+.seller-shell .seller-row-actions .btn:is(:hover, :focus) {
+    filter: brightness(.97);
+    text-decoration: none;
+}
+
+@media (max-width: 767px) {
+    .seller-row-actions > * {
+        flex: 1 1 calc(50% - 8px);
+        min-height: var(--seller-control-height);
+    }
+}
+
+/* Circular icon buttons in legacy list rows. */
+.seller-shell .seller-row-actions .btn-circle {
+    width: auto;
+    min-width: var(--seller-control-height);
+    padding-inline: 12px;
+    border-radius: 12px;
+}
+
+/* ---------------------------------------------------------------------------
+   Forms
+   --------------------------------------------------------------------------- */
+
+.seller-form-card {
+    padding: 18px;
+}
+
+.seller-shell .seller-page-body .form-group {
+    min-width: 0;
+    margin-block-end: 16px;
+}
+
+.seller-shell .seller-page-body .form-group > label,
+.seller-shell .seller-page-body .seller-field > label {
+    display: block;
+    margin-block-end: 6px;
+    color: var(--seller-ink);
+    font-size: var(--seller-text-body);
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.seller-shell .seller-page-body :is(.form-control, .form-select, select.form-control) {
+    min-height: var(--seller-control-height);
+    padding: 9px 12px;
+    border: 1px solid #d8d0c0;
+    border-radius: var(--seller-panel-radius-sm);
+    background: #fffdfa;
+    color: var(--seller-ink);
+    font-size: var(--seller-text-body);
+    box-shadow: inset 0 1px 2px #14274208;
+}
+
+.seller-shell .seller-page-body textarea.form-control {
+    min-height: 112px;
+    resize: vertical;
+}
+
+.seller-shell .seller-page-body :is(.form-control, select.form-control):focus {
+    border-color: #b7804a;
+    outline: 2px solid #f0c37a;
+    outline-offset: 1px;
+    box-shadow: 0 0 0 3px #f6d9a84d;
+}
+
+.seller-shell .seller-page-body .text-danger {
+    display: block;
+    margin-block-start: 4px;
+    color: #a61f3d;
+    font-size: var(--seller-text-small);
+}
+
+.seller-shell .seller-page-body .text-danger:empty {
+    display: none;
+}
+
+.seller-shell .seller-page-body .field-validation-valid {
+    display: none;
+}
+
+.seller-form-grid {
+    display: grid;
+    gap: 4px 16px;
+    grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 768px) {
+    .seller-form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1200px) {
+    .seller-form-grid--three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.seller-form-grid > .seller-field,
+.seller-form-grid > .form-group {
+    margin: 0;
+}
+
+.seller-field--wide {
+    grid-column: 1 / -1;
+}
+
+.seller-shell .seller-form-actions,
+.seller-shell .form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-block-start: 18px;
+    padding-block-start: 16px;
+    border-block-start: 1px solid var(--seller-border);
+}
+
+.seller-shell .seller-form-actions > .btn,
+.seller-shell .form-actions > .btn {
+    min-width: 130px;
+}
+
+@media (max-width: 560px) {
+    .seller-shell .seller-form-actions > .btn,
+    .seller-shell .form-actions > .btn {
+        flex: 1 1 100%;
+    }
+}
+
+.seller-shell .form-actions .flex-style,
+.seller-shell .seller-page-body .flex-style {
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Filter cards */
+.seller-filter {
+    padding: 16px;
+}
+
+.seller-filter .widget-header,
+.seller-filter > .seller-card-head {
+    padding: 0 0 10px;
+    border: 0;
+    background: none;
+}
+
+.seller-filter .seller-card-head h2 {
+    margin: 0;
+}
+
+.seller-filter .form-group:last-of-type {
+    margin-block-end: 8px;
+}
+
+.seller-shell .seller-filter hr {
+    margin-block: 12px;
+    border-color: var(--seller-border);
+}
+
+.seller-shell .seller-filter .btn + .btn {
+    margin-inline-start: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Tables that become record cards on phones
+   --------------------------------------------------------------------------- */
+
+.seller-shell .seller-table {
+    width: 100%;
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: var(--seller-ink);
+}
+
+.seller-shell .seller-table > thead th {
+    padding: 11px 12px;
+    border: 0;
+    border-block-end: 1px solid var(--seller-border);
+    background: #f7f1e4;
+    color: var(--seller-muted);
+    font-size: var(--seller-text-small);
+    font-weight: 500;
+    text-align: start;
+    white-space: nowrap;
+}
+
+.seller-shell .seller-table > tbody > tr > td {
+    padding: 12px;
+    border: 0;
+    border-block-end: 1px solid #eee7d8;
+    color: var(--seller-ink);
+    font-size: var(--seller-text-body);
+    vertical-align: middle;
+    text-align: start;
+    overflow-wrap: anywhere;
+}
+
+.seller-shell .seller-table > tbody > tr:last-child > td {
+    border-block-end: 0;
+}
+
+.seller-shell .seller-table > tbody > tr:is(:hover, :focus-within) > td {
+    background: #fffaf0;
+}
+
+.seller-shell .seller-table img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.seller-shell .seller-table .avatar-style,
+.seller-shell .seller-table .ticket-img-style {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.seller-shell .seller-table td .label {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: var(--seller-text-small);
+    font-weight: 500;
+}
+
+.seller-shell .seller-table td .label-danger {
+    background: #fde3e8;
+    color: #8a2341;
+}
+
+.seller-shell .seller-table td .label-success {
+    background: #dcf3e6;
+    color: #175c3c;
+}
+
+.seller-shell .seller-table td .label-warning {
+    background: #ffedc9;
+    color: #7a4a12;
+}
+
+.seller-shell .seller-table td .label-info {
+    background: #e3eefb;
+    color: #1c3f6b;
+}
+
+.seller-shell .seller-table .seller-table-actions {
+    min-width: 0;
+}
+
+@media (max-width: 767px) {
+    .seller-shell .seller-table,
+    .seller-shell .seller-table > thead,
+    .seller-shell .seller-table > tbody,
+    .seller-shell .seller-table > tbody > tr,
+    .seller-shell .seller-table > tbody > tr > td {
+        display: block;
+        width: 100%;
+    }
+
+    .seller-shell .seller-table > thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
+
+    .seller-shell .seller-table > tbody {
+        display: grid;
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .seller-shell .seller-table > tbody > tr {
+        overflow: hidden;
+        border: 1px solid var(--seller-border);
+        border-radius: 14px;
+        background: #fffefb;
+        box-shadow: 0 3px 10px #1427420f;
+    }
+
+    .seller-shell .seller-table > tbody > tr > td {
+        display: grid;
+        grid-template-columns: minmax(84px, 38%) minmax(0, 1fr);
+        gap: 10px;
+        align-items: center;
+        padding: 10px 12px;
+        border-block-end: 1px dashed #ece4d4;
+        text-align: start;
+    }
+
+    .seller-shell .seller-table > tbody > tr > td::before {
+        color: var(--seller-muted);
+        font-size: var(--seller-text-small);
+        font-weight: 500;
+        content: attr(data-label);
+    }
+
+    .seller-shell .seller-table > tbody > tr > td[data-label=""]::before,
+    .seller-shell .seller-table > tbody > tr > td.seller-table-actions::before {
+        content: none;
+    }
+
+    .seller-shell .seller-table > tbody > tr > td.seller-table-actions {
+        display: block;
+        padding-block: 12px;
+    }
+
+    .seller-shell .seller-table > tbody > tr > td:last-child {
+        border-block-end: 0;
+    }
+
+    .seller-shell .seller-table > tbody > tr > td > * {
+        min-width: 0;
+    }
+
+    .seller-shell .seller-row-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .seller-shell .seller-row-actions > * {
+        width: 100%;
+    }
+}
+
+/* Tables that do not opt into card mode stay scrollable. */
+.seller-shell .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ---------------------------------------------------------------------------
+   Details and status
+   --------------------------------------------------------------------------- */
+
+.seller-shell .seller-detail-grid {
+    display: grid;
+    gap: 10px 20px;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+}
+
+@media (min-width: 768px) {
+    .seller-shell .seller-detail-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.seller-shell .seller-detail-item {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid #eee5d4;
+    border-radius: 12px;
+    background: #fffdf7;
+}
+
+.seller-shell .seller-detail-item > dt,
+.seller-shell .seller-detail-item > .seller-detail-label {
+    color: var(--seller-muted);
+    font-size: var(--seller-text-small);
+    font-weight: 500;
+}
+
+.seller-shell .seller-detail-item > dd,
+.seller-shell .seller-detail-item > .seller-detail-value {
+    margin: 0;
+    color: var(--seller-ink);
+    font-size: var(--seller-text-body);
+    overflow-wrap: anywhere;
+}
+
+.seller-shell .seller-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 30px;
+    padding: 3px 11px;
+    border-radius: 999px;
+    background: #eef1f6;
+    color: #334a68;
+    font-size: var(--seller-text-small);
+    font-weight: 500;
+}
+
+.seller-shell .seller-status-pill[data-status="success"],
+.seller-shell .seller-status-pill[data-status="active"],
+.seller-shell .seller-status-pill[data-status="verified"] {
+    background: #dcf3e6;
+    color: #175c3c;
+}
+
+.seller-shell .seller-status-pill[data-status="warning"],
+.seller-shell .seller-status-pill[data-status="pending"],
+.seller-shell .seller-status-pill[data-status="review"] {
+    background: #ffedc9;
+    color: #7a4a12;
+}
+
+.seller-shell .seller-status-pill[data-status="danger"],
+.seller-shell .seller-status-pill[data-status="inactive"],
+.seller-shell .seller-status-pill[data-status="rejected"] {
+    background: #fde3e8;
+    color: #8a2341;
+}
+
+/* ---------------------------------------------------------------------------
+   Empty states
+   --------------------------------------------------------------------------- */
+
+.seller-empty {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    padding: 34px 18px;
+    border: 1px dashed #d8cdb8;
+    border-radius: var(--seller-panel-radius-sm);
+    background: #fffdf7;
+    text-align: center;
+}
+
+.seller-empty > i {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #f7ecd8;
+    color: #a4652f;
+    font-size: 22px;
+}
+
+.seller-empty > strong {
+    color: var(--seller-ink);
+    font-size: var(--seller-text-card);
+}
+
+.seller-empty > p {
+    max-width: 46ch;
+    margin: 0;
+    color: var(--seller-muted);
+    font-size: var(--seller-text-small);
+    line-height: 1.8;
+}
+
+.seller-empty > .btn {
+    margin-block-start: 6px;
+}
+
+/* Legacy empty notice, still rendered by older views. */
+.seller-shell .alert.alert-info {
+    padding: 20px;
+    border: 1px dashed #d8cdb8;
+    border-radius: var(--seller-panel-radius-sm);
+    background: #fffdf7;
+    color: var(--seller-muted);
+    text-align: center;
+}
+
+/* ---------------------------------------------------------------------------
+   File fields
+   --------------------------------------------------------------------------- */
+
+.seller-file {
+    display: grid;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid #e3d9c7;
+    border-radius: var(--seller-panel-radius-sm);
+    background: #fffdf7;
+}
+
+.seller-file-preview {
+    display: grid;
+    place-items: center;
+    min-height: 96px;
+    overflow: hidden;
+    border: 1px dashed #d8cdb8;
+    border-radius: 10px;
+    background: #fbf6ec;
+}
+
+.seller-file-preview img {
+    display: block;
+    max-width: 100%;
+    max-height: 220px;
+    object-fit: contain;
+}
+
+.seller-file-preview img:not([src]),
+.seller-file-preview img[src=""] {
+    display: none;
+}
+
+.seller-file-picker {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: var(--seller-control-height);
+    padding: 8px 16px;
+    border: 1px solid #cbbfa8;
+    border-radius: var(--seller-panel-radius-sm);
+    background: #fff8ea;
+    color: var(--seller-ink);
+    font-size: var(--seller-text-small);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.seller-file-picker input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.seller-file-picker:focus-within {
+    outline: 2px solid #f0c37a;
+    outline-offset: 2px;
+}
+
+.seller-file-name {
+    color: var(--seller-muted);
+    font-size: var(--seller-text-small);
+    overflow-wrap: anywhere;
+}
+
+.seller-file-error {
+    color: #a61f3d;
+    font-size: var(--seller-text-small);
+}
+
+/* ---------------------------------------------------------------------------
+   Ticket conversation
+   --------------------------------------------------------------------------- */
+
+.seller-shell .ticket-thread {
+    display: grid;
+    gap: 12px;
+}
+
+.seller-shell .ticket-message {
+    padding: 14px 16px;
+    border: 1px solid #e3d9c7;
+    border-radius: 14px;
+    background: #fffdf7;
+}
+
+.seller-shell .ticket-message.is-owner {
+    border-color: #e8c9ae;
+    background: #fff6e9;
+}
+
+.seller-shell .ticket-message .ticket-img-style {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.seller-shell .ticket-message .ticket-message-body {
+    margin-block-start: 10px;
+    color: var(--seller-ink);
+    overflow-wrap: anywhere;
+}
+
+.seller-shell .ticket-message .ticket-message-body img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ---------------------------------------------------------------------------
+   Legacy dashboard tiles and profile headers, used by older seller screens
+   --------------------------------------------------------------------------- */
+
+.seller-shell .databox {
+    display: flex;
+    min-height: 128px;
+    overflow: hidden;
+    border: 1px solid var(--seller-border);
+    border-radius: var(--seller-panel-radius);
+    background: var(--seller-surface);
+    box-shadow: 0 8px 22px var(--seller-shadow);
+}
+
+.seller-shell .databox > .databox-right {
+    display: grid;
+    place-items: center;
+    flex: 0 0 86px;
+    min-width: 86px;
+    color: #fffdf5;
+}
+
+.seller-shell .databox > .databox-left {
+    display: grid;
+    align-content: center;
+    gap: 4px;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 14px 16px;
+}
+
+.seller-shell .databox .databox-number {
+    color: var(--seller-ink);
+    font-size: var(--seller-text-card);
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.seller-shell .databox .databox-text {
+    color: var(--seller-muted);
+    font-size: var(--seller-text-small);
+    line-height: 1.7;
+}
+
+.seller-shell .databox .databox-stat {
+    justify-self: start;
+    margin-block-start: 4px;
+    padding: 4px 12px;
+    border-radius: 999px;
+}
+
+.seller-shell .databox .databox-stat .stat-text {
+    color: #fffdf5;
+    font-size: var(--seller-text-small);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.seller-shell .profile-container {
+    overflow: hidden;
+    border: 1px solid var(--seller-border);
+    border-radius: var(--seller-panel-radius);
+    background: var(--seller-surface);
+    box-shadow: 0 8px 22px var(--seller-shadow);
+}
+
+.seller-shell .profile-container > .profile-header {
+    padding: 16px;
+    background: linear-gradient(120deg, #fff7e7, #fffdf8 62%);
+}
+
+.seller-shell .profile-container > .profile-body {
+    padding: 16px;
+}
+
+.seller-shell .profile-container .header-avatar {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.seller-shell .profile-container .header-fullname {
+    color: var(--seller-ink);
+    font-size: var(--seller-text-card);
+    font-weight: 700;
+}
+
+.seller-shell .profile-container .stats-value {
+    color: var(--seller-ink);
+    font-size: var(--seller-text-section);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.seller-shell .profile-container .stats-title,
+.seller-shell .profile-container .header-information {
+    color: var(--seller-muted);
+    font-size: var(--seller-text-small);
+    line-height: 1.8;
+}
+
+@media (max-width: 480px) {
+    .seller-shell .databox > .databox-right {
+        flex-basis: 66px;
+        min-width: 66px;
+    }
+
+    .seller-shell .databox {
+        min-height: 112px;
+    }
+}
+
+/* Legacy paging stays usable on touch screens. */
+.seller-shell .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin: 18px 0 4px;
+    padding: 0;
+    list-style: none;
+}
+
+.seller-shell .pagination > li {
+    display: inline-flex;
+}
+
+.seller-shell .pagination > li > a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 4px 10px;
+    border: 1px solid var(--seller-border) !important;
+    border-radius: 10px !important;
+    background: #fffdf8 !important;
+    color: var(--seller-accent) !important;
+    text-decoration: none;
+}
+
+.seller-shell .pagination > li.active > a {
+    border-color: transparent !important;
+    background: linear-gradient(135deg, #2c5488, #1d3a63) !important;
+    color: #fffdf6 !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Utility
+   --------------------------------------------------------------------------- */
+
+.seller-shell .seller-muted {
+    color: var(--seller-muted);
+    font-size: var(--seller-text-small);
+}
+
+.seller-shell .seller-numeric {
+    font-variant-numeric: tabular-nums;
+    direction: ltr;
+    unicode-bidi: embed;
+}
+
+@media (max-width: 360px) {
+    .seller-shell .seller-table > tbody > tr > td {
+        grid-template-columns: minmax(72px, 34%) minmax(0, 1fr);
+    }
+}
