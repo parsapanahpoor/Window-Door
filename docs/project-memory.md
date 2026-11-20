@@ -179,3 +179,6 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 ## Responsive landing gallery
 - Applied the approved original gallery to Home/Index. Translucent cards keep titles inside, with two columns on portrait phones and tablets and four on desktop and short landscape screens. The existing wave and palette remain.
 - Release HomeLandingChecks passed. Edge rendered the actual local Razor page at 12 viewport sizes from 320x568 to 2056x1266, including 568x320 and 740x360. All had the expected columns, centered content, loaded images, a grayscale assistant and no horizontal or vertical overflow.
+
+## Home favicon correction
+- The standalone root used the legacy admin favicon. It now renders the same versioned SiteFavicon partial as the storefront and seller panel. HomeLandingChecks covers use of the partial and existence of the referenced asset.

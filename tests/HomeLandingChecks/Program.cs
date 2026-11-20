@@ -22,6 +22,12 @@ if (page.Contains("fara-zaman.ir") || page.Contains("TermsConditions"))
     throw new Exception("Removed footer links must not appear on the landing.");
 foreach (Match asset in Regex.Matches(page, "(?:src|href)=\"(/Landing/[^\"]+)\""))
     if (!File.Exists(Path.Combine(root, "Window.Web/wwwroot", asset.Groups[1].Value.TrimStart('/')))) throw new Exception("Missing asset: " + asset.Groups[1].Value);
+if (!page.Contains("<partial name=\"_SiteFavicon\" />") || page.Contains("/admin/img/favicon.png"))
+    throw new Exception("Home must use the shared site favicon.");
+var favicon = File.ReadAllText(Path.Combine(root, "Window.Web/Views/Shared/_SiteFavicon.cshtml"));
+var faviconPath = Regex.Match(favicon, "href=\"~/([^\"]+)\"").Groups[1].Value;
+if (string.IsNullOrWhiteSpace(faviconPath) || !File.Exists(Path.Combine(root, "Window.Web/wwwroot", faviconPath)))
+    throw new Exception("The shared favicon must point to an existing asset.");
 var shop = File.ReadAllText(Path.Combine(root, "Window.Web/Views/Shop/ShopLanding.cshtml"));
 foreach (var name in new[] { "_LastestProducts", "_LastestSellers", "_PopularBrands" })
     if (!shop.Contains($"~/Views/Home/{name}.cshtml") || !File.Exists(Path.Combine(root, $"Window.Web/Views/Home/{name}.cshtml"))) throw new Exception("Shop partial missing: " + name);
