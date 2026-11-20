@@ -38,3 +38,6 @@ Release HomeLandingChecks passed on 2026-11-17 after final edits: controller wit
 - Center the heading and gallery as a group. Standard viewports fit without scrolling. Unusually short viewports can scroll so every card remains reachable.
 - Keep the ten-color palette, white wave, current card order and destinations, and grayscale noninteractive assistant. Use the original gallery preview as the design reference.
 - Release HomeLandingChecks passed. Edge rendered the actual local Razor page at 12 viewport sizes from 320x568 to 2056x1266, including 568x320 and 740x360. All had the expected columns, centered content, loaded images, a grayscale assistant and no horizontal or vertical overflow.
+
+## Site favicon
+- Render the same versioned favicon as the storefront and seller panel by using the shared SiteFavicon partial on the standalone landing page.
