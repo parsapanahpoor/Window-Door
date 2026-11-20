@@ -169,3 +169,13 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 
 ## Seller panel PR 16 keyboard follow-up
 - Seller modals use Bootstrap 3 jQuery events to focus the first visible editable field and restore the initiating control on dismissal. Added fixture-backed keyboard regression coverage for the work-sample modal. Order, product and Android TWA coverage remains limited as described in spec 0010.
+- The three-card landing places the disabled assistant at the far right above 640px, preserves mobile card order, and shows its coming-soon heading in dark gray.
+- Index now draws from the ten approved preview colors on server render and sends no-store. Release HomeLandingChecks passed. A 120-response loopback smoke check verified the palette and cache header.
+- Index has four cards and stacks below 768px. Seller login uses the colorized storefront and the existing login route. Shared password/SMS completion resolves persisted seller and admin roles, with seller priority. Ordinary accounts retain safe explicit destinations or use UserPanel. Isolated authentication HTTP and landing checks passed.
+- Landing grid uses one column below 640px, two centered columns from 640px to below 1200px, and four columns at 1200px and above. HomeLandingChecks and diff whitespace verification passed.
+- At widths of 1200px and above, the landing title, subtitle and cards center vertically as a single group. The desktop container grows on short screens. Source-based HomeLandingChecks and git diff whitespace checks passed.
+- Landing title and cards center vertically from 640px upward. The title gap scales from 40 to 64px and tablet cards use a viewport height bound. Release HomeLandingChecks passed. Edge confirmed no vertical overflow, vertical centering, and expected columns at nine viewport sizes between 640x800 and 2056x1266.
+
+## Responsive landing gallery
+- Applied the approved original gallery to Home/Index. Translucent cards keep titles inside, with two columns on portrait phones and tablets and four on desktop and short landscape screens. The existing wave and palette remain.
+- Release HomeLandingChecks passed. Edge rendered the actual local Razor page at 12 viewport sizes from 320x568 to 2056x1266, including 568x320 and 740x360. All had the expected columns, centered content, loaded images, a grayscale assistant and no horizontal or vertical overflow.

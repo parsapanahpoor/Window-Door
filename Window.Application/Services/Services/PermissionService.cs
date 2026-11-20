@@ -1,4 +1,4 @@
-﻿using Window.Application.Services.Interfaces;
+using Window.Application.Services.Interfaces;
 using Window.Application.StaticTools;
 using Window.Domain.Entities.Account;
 using Window.Domain.ViewModels.Access;
@@ -286,6 +286,19 @@ namespace Window.Application.Services.Implementation
             return GetUserRoles.User;
         }
 
+        public async Task<GetUserRoles> GetLoginPanelRoleAsync(User user, CancellationToken cancellationToken = default)
+        {
+            var roles = await _context.UserRoles
+                .Where(assignment => assignment.UserId == user.Id && !assignment.IsDelete && !assignment.Role.IsDelete)
+                .Select(assignment => assignment.Role.RoleUniqueName)
+                .ToListAsync(cancellationToken);
+
+            if (roles.Contains("SellerMaster", StringComparer.OrdinalIgnoreCase)) return GetUserRoles.SellerMaster;
+            if (roles.Contains("Seller", StringComparer.OrdinalIgnoreCase)) return GetUserRoles.Seller;
+            if (user.IsAdmin || roles.Contains("Admin", StringComparer.OrdinalIgnoreCase)) return GetUserRoles.Admin;
+            return GetUserRoles.User;
+        }
+
         public async Task<bool> IsUserAdmin(ulong userId)
         {
             var result = await GetUserRole(userId);
@@ -311,15 +324,9 @@ namespace Window.Application.Services.Implementation
 
         public async Task<bool> IsUserSeller(ulong userId)
         {
-            var result = await GetUserRole(userId);
             var user = await _userService.GetUserById(userId);
-
-            if (result == GetUserRoles.Admin) return true;
-            if (user.IsAdmin) return true;
-            if (result == GetUserRoles.Seller) return true;
-            if (result == GetUserRoles.SellerMaster) return true;
-
-            return false;
+            return user is not null && await GetLoginPanelRoleAsync(user) is
+                GetUserRoles.Admin or GetUserRoles.Seller or GetUserRoles.SellerMaster;
         }
 
         public async Task<bool> IsUserMaster(ulong userId)

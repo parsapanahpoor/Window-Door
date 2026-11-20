@@ -1,4 +1,4 @@
-﻿using Window.Domain.Entities.Account;
+using Window.Domain.Entities.Account;
 using Window.Domain.ViewModels.Access;
 using Window.Domain.ViewModels.Common;
 using System;
@@ -37,6 +37,7 @@ namespace Window.Application.Services.Interfaces
         Task<bool> DeleteRole(ulong roleId);
 
         Task<GetUserRoles> GetUserRole(ulong userId);
+        Task<GetUserRoles> GetLoginPanelRoleAsync(User user, CancellationToken cancellationToken = default);
 
         Task<bool> IsUserAdmin(ulong userId);
 
