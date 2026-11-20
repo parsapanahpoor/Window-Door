@@ -83,3 +83,9 @@ Legend: **R** = approved reference/regression page; **S** = covered by the share
 - Added list-screen checks: `/Seller/User/Index`, `/Seller/Contarct/ListOfContracts` and `/Seller/Ticket/FilterTickets` render with one page title, fixture rows, labelled cells, the shared stylesheet, no horizontal overflow at 360/768/1440px, card-mode rows and touch-sized actions at 360px. The filtered ticket list with an empty fixture shows `_SellerEmptyState`.
 - Representative screenshots with fixture data were generated under `artifacts/screenshots/seller-panel/` (dashboard, store profile, employees, contracts and tickets at 360 and 1440px). They are ignored build artifacts and are not committed.
 - Not yet verified: authenticated flows against real service data, browser rendering of every remaining route, physical Android TWA, and form submit round-trips outside the existing profile/video/cheque coverage.
+
+## Modal keyboard regression
+
+- On the seller profile, Enter on the work-sample action opens the existing Bootstrap dialog and focuses its first editable field. Escape closes the dialog and returns focus to the initiating button.
+- Use Bootstrap 3's jQuery event handlers and keep the opener per dialog, including dialogs opened by an asynchronous request.
+- Exercise the real work-sample modal in SellerDashboardChecks with fixture-backed services.

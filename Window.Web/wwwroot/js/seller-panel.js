@@ -81,18 +81,23 @@
         notices.setAttribute("aria-live", "polite");
     }
 
-    // Restore keyboard focus to the control that opened a Bootstrap modal.
-    let dismissFocus = null;
-    document.addEventListener("show.bs.modal", (event) => {
-        dismissFocus = event.relatedTarget instanceof HTMLElement ? event.relatedTarget : null;
-    });
-    document.addEventListener("shown.bs.modal", (event) => {
-        const modal = event.target;
-        const focusable = modal.querySelector('input:not([type=hidden]):not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])');
-        focusable?.focus();
-    });
-    document.addEventListener("hidden.bs.modal", () => {
-        dismissFocus?.focus();
-        dismissFocus = null;
-    });
+    // Bootstrap 3 publishes modal events through jQuery.
+    const modalOpeners = new WeakMap();
+    window.jQuery(document)
+        .on("show.bs.modal", ".modal", function (event) {
+            const opener = event.relatedTarget ?? document.activeElement;
+            if (opener instanceof HTMLElement && !this.contains(opener)) {
+                modalOpeners.set(this, opener);
+            }
+        })
+        .on("shown.bs.modal", ".modal", function () {
+            window.jQuery(this)
+                .find(".modal-body :input:visible:enabled:not([readonly]):not(:button)")
+                .first()
+                .trigger("focus");
+        })
+        .on("hidden.bs.modal", ".modal", function () {
+            modalOpeners.get(this)?.focus();
+            modalOpeners.delete(this);
+        });
 })();

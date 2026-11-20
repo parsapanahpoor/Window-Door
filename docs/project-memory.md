@@ -166,3 +166,6 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - Preserved routes, link targets, model-binding names, HTTP methods, antiforgery, multipart forms, server validation, filters and seller role/ownership checks. The approved dashboard and store profile pages remain the regression reference.
 - SellerDashboardChecks now covers `/Seller/User/Index`, `/Seller/Contarct/ListOfContracts`, `/Seller/Ticket/FilterTickets` and the empty ticket state at 360/768/1440px. Representative screenshots are generated under `artifacts/screenshots/seller-panel/` and are not committed.
 - Remaining: authenticated flows with real service data, visual review of every seller route, and physical TWA verification. Details: `specs/0010-seller-panel-ui/spec.md`.
+
+## Seller panel PR 16 keyboard follow-up
+- Seller modals use Bootstrap 3 jQuery events to focus the first visible editable field and restore the initiating control on dismissal. Added fixture-backed keyboard regression coverage for the work-sample modal. Order, product and Android TWA coverage remains limited as described in spec 0010.
