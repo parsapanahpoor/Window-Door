@@ -26,7 +26,16 @@ public interface IInquiryService
     Task<int> CheckLogResultUserInquiry(string userMacAddress);
 
     //Log Inquiry For User In Step 1
-    Task LogInquiryForUserPart1(FilterInquiryViewModel filter);
+    Task LogInquiryForUserPart1(FilterInquiryViewModel filter, ulong? ownerUserId = null);
+
+    //Attach a guest inquiry to the signed-in user. Returns false when the inquiry does not exist or already has another owner.
+    Task<bool> ClaimInquiry(string inquiryToken, ulong userId);
+
+    //Whether the inquiry token belongs to the signed-in user.
+    Task<bool> InquiryBelongsToUser(string inquiryToken, ulong userId);
+
+    //Latest inquiry token that belongs to the signed-in user.
+    Task<string?> GetLatestInquiryTokenForUser(ulong userId);
 
     //Log Inquiry For User In Step 2
     Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height, int? KatibeSize, string userMacAddress, int productCount);

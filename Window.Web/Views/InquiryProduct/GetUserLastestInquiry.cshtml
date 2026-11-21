@@ -69,7 +69,7 @@
                                         <h4><a href="single-property-page-1.html">@product.Sample.SegmentName</a></h4>
 
                                         <div class="listing-badges">
-                                            <span style="background-color: #c80e0e;"><a asp-action="DeleteUserLasteInquiryDetail" asp-area="" asp-controller="InquiryProduct" asp-route-Id="@product.Id" style="background-color: #c80e0e;">حذف</a></span>
+                                            <span style="background-color: #c80e0e;"><button type="submit" formaction="/InquiryProduct/DeleteUserLasteInquiryDetail" formmethod="post" name="Id" value="@product.Id" style="background-color: #c80e0e; border: 0; color: inherit;">حذف</button></span>
                                         </div>
                                     </div>
 

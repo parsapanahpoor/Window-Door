@@ -63,6 +63,8 @@ public class InquryService : IInquiryService
                                     .AsNoTracking()
                                     .FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == userMacAddress);
 
+        if (inquiry == null) return 0;
+
         #endregion
 
         return await _context.logInquiryForUserDetails
@@ -70,8 +72,50 @@ public class InquryService : IInquiryService
                              .CountAsync(p => !p.IsDelete && p.LogInquiryForUserId == inquiry.Id);
     }
 
+    //Attach a guest inquiry to the signed-in user.
+    public async Task<bool> ClaimInquiry(string inquiryToken, ulong userId)
+    {
+        if (string.IsNullOrWhiteSpace(inquiryToken) || userId == 0) return false;
+
+        var inquiry = await _context.LogInquiryForUsers
+                                    .FirstOrDefaultAsync(p => !p.IsDelete && p.UserMAcAddress == inquiryToken);
+
+        if (inquiry == null) return false;
+
+        if (inquiry.OwnerUserId.HasValue)
+        {
+            return inquiry.OwnerUserId.Value == userId;
+        }
+
+        inquiry.OwnerUserId = userId;
+        _context.LogInquiryForUsers.Update(inquiry);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> InquiryBelongsToUser(string inquiryToken, ulong userId)
+    {
+        if (string.IsNullOrWhiteSpace(inquiryToken) || userId == 0) return false;
+
+        return await _context.LogInquiryForUsers
+                             .AsNoTracking()
+                             .AnyAsync(p => !p.IsDelete && p.UserMAcAddress == inquiryToken && p.OwnerUserId == userId);
+    }
+
+    public async Task<string?> GetLatestInquiryTokenForUser(ulong userId)
+    {
+        if (userId == 0) return null;
+
+        return await _context.LogInquiryForUsers
+                             .AsNoTracking()
+                             .Where(p => !p.IsDelete && p.OwnerUserId == userId)
+                             .OrderByDescending(p => p.Id)
+                             .Select(p => p.UserMAcAddress)
+                             .FirstOrDefaultAsync();
+    }
+
     //Log Inquiry For User In Step 1
-    public async Task LogInquiryForUserPart1(FilterInquiryViewModel filter)
+    public async Task LogInquiryForUserPart1(FilterInquiryViewModel filter, ulong? ownerUserId = null)
     {
         #region Check That Current User Has Any Inquiry OR Not 
 
@@ -95,6 +139,7 @@ public class InquryService : IInquiryService
                 IsDelete = false,
                 SellerType = filter.SellerType,
                 UserMAcAddress = filter.UserMacAddress,
+                OwnerUserId = ownerUserId,
                 GlassId = filter.GlassId
             };
 
@@ -122,6 +167,7 @@ public class InquryService : IInquiryService
                 IsDelete = false,
                 SellerType = filter.SellerType,
                 UserMAcAddress = filter.UserMacAddress,
+                OwnerUserId = ownerUserId,
                 GlassId = filter.GlassId
             };
 

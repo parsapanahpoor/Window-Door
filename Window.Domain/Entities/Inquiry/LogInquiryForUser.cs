@@ -25,6 +25,11 @@ namespace Window.Domain.Entities.Inquiry
 
         public string? UserMAcAddress { get; set; }
 
+        /// <summary>
+        /// Signed-in owner of the inquiry. Null for guest inquiries created before login.
+        /// </summary>
+        public ulong? OwnerUserId { get; set; }
+
         public ulong? GlassId { get; set; }
 
         #endregion
