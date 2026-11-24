@@ -26,6 +26,38 @@
         <label asp-for="RePassword">تکرار رمز عبور</label>
         <input asp-for="RePassword" dir="ltr" autocomplete="new-password" minlength="4" required />
     </div>
+    <fieldset class="account-field">
+        <legend>نوع حساب</legend>
+        <label class="account-choice">
+            <input asp-for="AccountType" type="radio" value="Customer" />
+            <span><strong>کاربر عادی</strong><small>خرید و استعلام قیمت</small></span>
+        </label>
+        <label class="account-choice">
+            <input asp-for="AccountType" type="radio" value="Seller" />
+            <span><strong>فروشنده</strong><small>ایجاد فروشگاه و دریافت درخواست</small></span>
+        </label>
+        <span asp-validation-for="AccountType" class="text-danger"></span>
+    </fieldset>
+    <div class="account-field" id="market-name-field" hidden="@(Model.AccountType != Window.Domain.ViewModels.User.Authentication.AccountType.Seller)">
+        <label asp-for="MarketName">نام فروشگاه</label>
+        <input asp-for="MarketName" maxlength="100" minlength="3" autocomplete="organization" placeholder="مثلاً پنجره‌سازی نمونه" />
+        <span asp-validation-for="MarketName" class="text-danger"></span>
+    </div>
     <button class="account-submit" type="submit">ثبت‌نام</button>
 </form>
 <p class="account-footer">حساب داری؟ <a asp-action="Login">ورود</a></p>
+<script>
+        (() => {
+            const field = document.getElementById('market-name-field');
+            const radios = document.querySelectorAll('input[name="AccountType"]');
+            if (!field || !radios.length) return;
+            const sync = () => {
+                const seller = document.querySelector('input[name="AccountType"]:checked')?.value === 'Seller';
+                field.hidden = !seller;
+                const input = field.querySelector('input');
+                if (input) input.disabled = !seller;
+            };
+            radios.forEach(radio => radio.addEventListener('change', sync));
+            sync();
+        })();
+</script>

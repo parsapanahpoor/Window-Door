@@ -197,3 +197,9 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 ## Admin mobile confirmation
 - Edit User exposes a dedicated protected POST for confirming the saved eligible number and records actor/target IDs in the application log. Changing the phone resets verification. No code or password is disclosed.
 - Release scope also includes the tested inquiry workflow and its additive migrations.
+
+## Registration flows — 2026-11-21
+- Seller/customer registration is now part of the auth pages. SMS sign-in asks for the account type before any message; the seller path creates an unconfirmed account, then the store in a separate request, then sends the code. Password registration asks for the role and store name and creates account, role and store in one transaction through the shared `AddMarketEntities` helper.
+- Activation now signs the user in after the code is verified. Post-login sends a seller with no market or `WaitingForCompleteInfoFromSeller` to the store-information page with a `welcome=1` guidance notice; `returnUrl` cannot bypass it.
+- The hardcoded Kavenegar key in `UserService.RegisterUserAsync` was removed; activation SMS goes through `ISMSService` after the commit. The exposed key still needs rotation by the owner.
+- Evidence: solution build 0 errors; `tests/SmsLoginChecks` PASS with the new account-type step and customer SMS path. Seller SMS store step, password-registration browser flow and responsive review remain unverified. See `specs/0013-seller-registration/spec.md`.

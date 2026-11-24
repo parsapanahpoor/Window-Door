@@ -21,11 +21,13 @@ namespace Window.Web.Controllers
 
         private readonly IUserService _userService;
         private readonly IStringLocalizer<IdentityController> _localizer;
+        private readonly ISMSService _smsService;
 
-        public IdentityController(IUserService userService, IStringLocalizer<IdentityController> localizer)
+        public IdentityController(IUserService userService, IStringLocalizer<IdentityController> localizer, ISMSService smsService)
         {
             _userService = userService;
             _localizer = localizer;
+            _smsService = smsService;
         }
 
         #endregion
@@ -36,7 +38,7 @@ namespace Window.Web.Controllers
         [RedirectIfLoggedInActionFilter]
         public async Task<IActionResult> Register()
         {
-            return View();
+            return View(new RegisterUserViewModel());
         }
 
         [HttpPost("register")]
@@ -57,10 +59,38 @@ namespace Window.Web.Controllers
             }
 
             model.Mobile = mobile;
+
+            if (model.AccountType is not (AccountType.Customer or AccountType.Seller))
+            {
+                ModelState.AddModelError(nameof(model.AccountType), "نوع حساب را انتخاب کنید.");
+                return View(model);
+            }
+
+            if (model.AccountType == AccountType.Seller)
+            {
+                model.MarketName = model.MarketName?.Trim();
+                if (string.IsNullOrWhiteSpace(model.MarketName) || model.MarketName.Length is < 3 or > 100)
+                {
+                    ModelState.AddModelError(nameof(model.MarketName), "نام فروشگاه باید بین ۳ تا ۱۰۰ کاراکتر باشد.");
+                    return View(model);
+                }
+            }
+            else
+            {
+                model.MarketName = null;
+            }
+
             var result = await _userService.RegisterUserAsync(model);
 
             if (result == RegisterUserResponse.Success)
             {
+                // The account (and, for sellers, the store) is committed before the message is sent.
+                var account = await _userService.GetMobileCodeAccountAsync(model.Mobile);
+                if (account is not null)
+                {
+                    await _smsService.SendLookupSMS(account.Mobile, account.MobileActivationCode, null, null, "Register");
+                }
+
                 TempData["success"] = _localizer["ثبت نام شما باموفقیت انجام شده است ."].Value;
                 return RedirectToAction("ActiveUserByMobileActivationCode", new { Mobile = model.Mobile });
             }
@@ -68,10 +98,14 @@ namespace Window.Web.Controllers
             switch (result)
             {
                 case RegisterUserResponse.EmailExist:
-                    ModelState.AddModelError("Mobile", _localizer["Mobile Exist"]);
-                    break;
                 case RegisterUserResponse.MobileExist:
                     ModelState.AddModelError("Mobile", _localizer["Mobile Exist"]);
+                    break;
+                case RegisterUserResponse.InvalidAccountType:
+                    ModelState.AddModelError(nameof(model.AccountType), "نوع حساب را انتخاب کنید.");
+                    break;
+                case RegisterUserResponse.InvalidMarketName:
+                    ModelState.AddModelError(nameof(model.MarketName), "نام فروشگاه باید بین ۳ تا ۱۰۰ کاراکتر باشد.");
                     break;
                 default:
                     ModelState.AddModelError("Error", _localizer["An error occurred in the register process"]);
@@ -146,6 +180,11 @@ namespace Window.Web.Controllers
                 switch (result)
                 {
                     case ActiveMobileByActivationCodeResult.Success:
+                        // A correct code proves phone ownership: confirm and sign in.
+                        var activated = await _userService.GetMobileCodeAccountAsync(activeMobileByActivationCodeViewModel.Mobile);
+                        if (activated is not null && !activated.IsDelete && !activated.IsBan)
+                            return await SignInUserAsync(activated, false, null);
+
                         TempData["success"] = _localizer["فعال سازی حساب کاربری شما با موفقیت انجام شده است."].Value;
                         return RedirectToAction(nameof(Login));
 
@@ -257,9 +296,24 @@ namespace Window.Web.Controllers
         {
             var permissions = HttpContext.RequestServices.GetRequiredService<IPermissionService>();
             var role = await permissions.GetLoginPanelRoleAsync(user, HttpContext.RequestAborted);
+
+            if (role is GetUserRoles.Seller or GetUserRoles.SellerMaster)
+            {
+                // A newly registered seller (or one who abandoned setup) must finish the store
+                // information step before any returnUrl destination can be used.
+                var sellers = HttpContext.RequestServices.GetRequiredService<ISellerService>();
+                var market = await sellers.GetMarketByUserId(user.Id);
+                if (market is null ||
+                    market.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller)
+                {
+                    return RedirectToAction("PageOfManageSellerInformation", "SellerPersonalInfo", new { area = "Seller", welcome = 1 });
+                }
+
+                return RedirectToAction("Index", "Home", new { area = "Seller" });
+            }
+
             return role switch
             {
-                GetUserRoles.Seller or GetUserRoles.SellerMaster => RedirectToAction("Index", "Home", new { area = "Seller" }),
                 GetUserRoles.Admin => RedirectToAction("Index", "Home", new { area = "Admin" }),
                 _ when LocalReturnUrl(returnUrl) is not ("/" or "~/") => LocalRedirect(LocalReturnUrl(returnUrl)),
                 _ => RedirectToAction("Index", "Home", new { area = "UserPanel" })

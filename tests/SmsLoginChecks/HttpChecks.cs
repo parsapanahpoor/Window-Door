@@ -1,4 +1,5 @@
 using System.Net;
+using System.Reflection;
 using CRM.Data.Repository;
 using System.Security.Claims;
 using HtmlAgilityPack;
@@ -41,9 +42,11 @@ internal static class HttpChecks
         {
             var db = services.GetRequiredService<WindowDbContext>();
             return new UserService(services.GetRequiredService<IConfiguration>(), new UserRepository(db),
-                null!, db, null!, null!, services.GetRequiredService<ISMSService>());
+                null!, db, null!, null!, services.GetRequiredService<ISMSService>(),
+                new Window.Application.Services.Services.MarketService(db));
         });
         builder.Services.AddScoped<IPermissionService, PermissionService>();
+        builder.Services.AddScoped<ISellerService>(_ => DispatchProxy.Create<ISellerService, SellerServiceStub>());
         builder.Services.AddDataProtection().UseEphemeralDataProtectionProvider();
         builder.Services.AddDistributedMemoryCache();
         builder.Services.AddSession();
@@ -90,9 +93,15 @@ internal static class HttpChecks
         var token = Token(await browser.GetStringAsync(start));
         var smsAction = HtmlEntity.DeEntitize(defaultForm.DocumentNode.SelectSingleNode("//form[@method='post']").GetAttributeValue("action", ""));
         Check(smsAction == "/login/sms?returnUrl=%2F", "Default form posts to SMS with a safe return URL");
-        using (var issued = await Submit(browser, smsAction, new() { ["Mobile"] = "۰۹۱۰۰۰۰۰۰۳۱", ["__RequestVerificationToken"] = token }))
+        using (var roleStep = await Submit(browser, smsAction, new() { ["Mobile"] = "۰۹۱۰۰۰۰۰۰۳۱", ["__RequestVerificationToken"] = token }))
+        {
+            Check(roleStep.StatusCode == HttpStatusCode.OK, "A new number opens the account-type step");
+            Check(sender.Count(phone) == 0, "No SMS is sent before the account type is chosen");
+        }
+        var accountTypeToken = Token(await browser.GetStringAsync("/login/sms/register"));
+        using (var issued = await Submit(browser, "/login/sms/register", new() { ["accountType"] = "Customer", ["__RequestVerificationToken"] = accountTypeToken }))
             Check(issued.StatusCode == HttpStatusCode.Redirect && issued.Headers.Location?.OriginalString == "/login/sms/code",
-                "Start passwordless flow with a normalized phone");
+                "Customer registration starts the passwordless challenge");
 
         var codePage = await browser.GetStringAsync("/login/sms/code");
         var view = new HtmlDocument();
@@ -209,10 +218,13 @@ internal static class HttpChecks
             {
                 ["Mobile"] = sharedPhone, ["Password"] = "second-password", ["__RequestVerificationToken"] = roleToken
             });
-            Check(signedIn.StatusCode == HttpStatusCode.Redirect && signedIn.Headers.Location?.OriginalString == expectedPanel,
-                $"Password sign-in opens {expectedPanel} for the matching account roles");
+            var expectedDestination = expectedPanel == "/Seller"
+                ? "/Seller/SellerPersonalInfo/PageOfManageSellerInformation?welcome=1"
+                : expectedPanel;
+            Check(signedIn.StatusCode == HttpStatusCode.Redirect && signedIn.Headers.Location?.OriginalString == expectedDestination,
+                $"Password sign-in opens {expectedDestination} for the matching account roles (got {(int)signedIn.StatusCode} {signedIn.Headers.Location})");
             using var existingSession = await roleBrowser.GetAsync("/login?returnUrl=%2Flogin");
-            Check(existingSession.Headers.Location?.OriginalString == expectedPanel, "Signed-in login entry opens the role panel");
+            Check(existingSession.Headers.Location?.OriginalString == expectedDestination, "Signed-in login entry opens the role panel");
 
             if (expectedPanel == "/Seller")
             {
@@ -263,4 +275,12 @@ internal static class HttpChecks
         if (!result)
             throw new InvalidOperationException(description);
     }
+}
+
+public class SellerServiceStub : DispatchProxy
+{
+    protected override object? Invoke(MethodInfo? targetMethod, object?[]? args)
+        => targetMethod!.Name == nameof(ISellerService.GetMarketByUserId)
+            ? Task.FromResult<Window.Domain.Entities.Market.Market?>(null)
+            : throw new NotSupportedException(targetMethod.Name);
 }

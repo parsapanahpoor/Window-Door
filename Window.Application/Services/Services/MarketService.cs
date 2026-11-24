@@ -35,27 +35,37 @@ namespace Window.Application.Services.Services
                 return false;
             }
 
-            if (string.IsNullOrEmpty(titleName))
+            if (!IsValidMarketName(titleName))
             {
                 return false;
             }
 
             #endregion
 
-            #region Add Market 
+            AddMarketEntities(userId, titleName.Trim());
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public bool IsValidMarketName(string? titleName) =>
+            !string.IsNullOrWhiteSpace(titleName) && titleName.Trim().Length is >= 3 and <= 100;
+
+        public void AddMarketEntities(ulong userId, string titleName)
+        {
+            #region Add Market
 
             Market market = new Market()
             {
                 UserId = userId,
                 IsDelete = false,
                 CreateDate = DateTime.Now,
-                ActivationTariff = await _context.SiteSettings.Where(p=> !p.IsDelete).Select(p=> p.ChargeOfNewMarkets).FirstOrDefaultAsync(),
+                ActivationTariff = _context.SiteSettings.Where(p=> !p.IsDelete).Select(p=> p.ChargeOfNewMarkets).FirstOrDefault(),
                 MarketPersonalsInfoState = MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller,
-                MarketName = titleName
+                MarketName = titleName.Trim()
             };
 
-            await _context.Market.AddAsync(market);
-            await _context.SaveChangesAsync();
+            _context.Market.Add(market);
 
             #endregion
 
@@ -65,13 +75,12 @@ namespace Window.Application.Services.Services
             {
                 CreateDate = DateTime.Now,
                 IsDelete = false,
-                MarketId = market.Id,
+                Market = market,
                 UserId = userId,
                 RoleId = 4
             };
 
-            await  _context.MarketUser.AddAsync(marketUsers);
-            await _context.SaveChangesAsync();
+            _context.MarketUser.Add(marketUsers);
 
             #endregion
 
@@ -79,16 +88,13 @@ namespace Window.Application.Services.Services
 
             UserRole role = new UserRole()
             {
-                UserId =userId,
+                UserId = userId,
                 RoleId = 4,
             };
 
-            await _context.UserRoles.AddAsync(role);
-            await _context.SaveChangesAsync();
+            _context.UserRoles.Add(role);
 
             #endregion
-
-            return true;
         }
 
 

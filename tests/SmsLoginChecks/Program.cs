@@ -225,7 +225,7 @@ try
         await recoveryDb.SaveChangesAsync();
 
         var service = new UserService(new ConfigurationBuilder().Build(), new UserRepository(recoveryDb),
-            null!, recoveryDb, null!, null!, sender);
+            null!, recoveryDb, null!, null!, sender, new Window.Application.Services.Services.MarketService(recoveryDb));
         var reset = new ResetPasswordViewModel
         {
             ActiveCode = "۵۴۳۲۱۰", Password = "new-fixture-password", ConfirmPassword = "new-fixture-password"
@@ -248,7 +248,7 @@ try
         await adminDb.SaveChangesAsync();
 
         var service = new UserService(new ConfigurationBuilder().Build(), new UserRepository(adminDb),
-            null!, adminDb, null!, null!, sender);
+            null!, adminDb, null!, null!, sender, new Window.Application.Services.Services.MarketService(adminDb));
         Check(!await service.ConfirmMobileByAdmin(pending.Id, "09100000999", default), "Reject stale admin form");
         Check(!await service.ConfirmMobileByAdmin(blocked.Id, blockedPhone, default), "Do not activate a blocked account");
         Check(await service.ConfirmMobileByAdmin(pending.Id, manualPhone, default), "Confirm the stored eligible mobile");

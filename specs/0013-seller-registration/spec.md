@@ -1,6 +1,6 @@
-# 0012 — Customer and seller registration
+# 0013 — Customer and seller registration
 
-Status: Ready (investigation complete; implementation not started)
+Status: Implementing (account-type step, password registration, activation sign-in and seller redirect implemented; seller SMS store step and browser checks pending)
 
 ## Confirmed findings on develop@9ed77d0
 
@@ -134,4 +134,13 @@ controller logic. `MarketController.AddMarket` keeps its route and delegates to 
 
 ## Verification
 
-Build and existing tests must run before implementation. No behaviour was changed by this spec commit.
+- `dotnet build Window.sln --no-restore -m:2`: 0 errors.
+- `dotnet run --project tests/SmsLoginChecks -c Release -- "(localdb)\MSSQLLocalDB"`: PASS, including the new
+  account-type step (no SMS before a role is chosen), the customer SMS registration path, password sign-in
+  redirect, and all pre-existing SMS challenge, replay, cooldown and admin checks.
+- Implemented: server-generated pending account, shared `AddMarketEntities`, role selection in the SMS
+  flow, customer SMS registration, password registration with role + store and an atomic transaction,
+  activation auto sign-in, new seller redirect with guidance, removal of the hardcoded SMS key.
+- Not verified yet: seller SMS store step (no automated HTTP check), password registration through the
+  browser (service-level only), duplicate/concurrent registration posts, foreign-session continuation,
+  and the 360/768/1440 browser review.
