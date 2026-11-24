@@ -46,6 +46,7 @@ internal static class HttpChecks
                 new Window.Application.Services.Services.MarketService(db));
         });
         builder.Services.AddScoped<IPermissionService, PermissionService>();
+        builder.Services.AddScoped<IMarketService, Window.Application.Services.Services.MarketService>();
         builder.Services.AddScoped<ISellerService>(_ => DispatchProxy.Create<ISellerService, SellerServiceStub>());
         builder.Services.AddDataProtection().UseEphemeralDataProtectionProvider();
         builder.Services.AddDistributedMemoryCache();
@@ -55,6 +56,7 @@ internal static class HttpChecks
         builder.Services.AddAuthorization();
         builder.Services.AddControllersWithViews().AddViewLocalization();
         await using var app = builder.Build();
+        app.UseDeveloperExceptionPage();
         app.UseStaticFiles();
         app.UseSession();
         app.UseAuthentication();
@@ -219,10 +221,11 @@ internal static class HttpChecks
                 ["Mobile"] = sharedPhone, ["Password"] = "second-password", ["__RequestVerificationToken"] = roleToken
             });
             var expectedDestination = expectedPanel == "/Seller"
-                ? "/Seller/SellerPersonalInfo/PageOfManageSellerInformation?welcome=1"
+                ? "/Market/AddMarket?welcome=1"
                 : expectedPanel;
+            var failureBody = signedIn.StatusCode == HttpStatusCode.Redirect ? "" : (await signedIn.Content.ReadAsStringAsync());
             Check(signedIn.StatusCode == HttpStatusCode.Redirect && signedIn.Headers.Location?.OriginalString == expectedDestination,
-                $"Password sign-in opens {expectedDestination} for the matching account roles (got {(int)signedIn.StatusCode} {signedIn.Headers.Location})");
+                $"Password sign-in opens {expectedDestination} for the matching account roles (got {(int)signedIn.StatusCode} {signedIn.Headers.Location} {failureBody[..Math.Min(400, failureBody.Length)]})");
             using var existingSession = await roleBrowser.GetAsync("/login?returnUrl=%2Flogin");
             Check(existingSession.Headers.Location?.OriginalString == expectedDestination, "Signed-in login entry opens the role panel");
 
@@ -246,6 +249,106 @@ internal static class HttpChecks
         Check(ambiguous.StatusCode == HttpStatusCode.OK &&
             WebUtility.HtmlDecode(await ambiguous.Content.ReadAsStringAsync()).Contains("شمارهٔ موبایل یا کلمهٔ عبور درست نیست."),
             "A legacy password POST cannot sign in when the same credentials match more than one account");
+
+        // New seller through the SMS flow: role -> store -> code -> verified -> store information.
+        const string sellerPhone = "09100000071";
+        var sellerBrowser = Browser(app.Urls.Single());
+        var sellerEntryToken = Token(await sellerBrowser.GetStringAsync("/login/sms"));
+        using (var sellerStep = await Submit(sellerBrowser, "/login/sms", new() { ["Mobile"] = sellerPhone, ["__RequestVerificationToken"] = sellerEntryToken }))
+            Check(sellerStep.StatusCode == HttpStatusCode.OK && sender.Count(sellerPhone) == 0,
+                "A new seller number asks for the account type without sending an SMS");
+        var sellerRoleToken = Token(await sellerBrowser.GetStringAsync("/login/sms/register"));
+        using (var storePage = await Submit(sellerBrowser, "/login/sms/register", new() { ["accountType"] = "Seller", ["__RequestVerificationToken"] = sellerRoleToken }))
+            Check(storePage.StatusCode == HttpStatusCode.OK && sender.Count(sellerPhone) == 0,
+                "The store name is requested before any SMS");
+        var storeToken = Token(await sellerBrowser.GetStringAsync("/login/sms/register/store"));
+        using (var store = await Submit(sellerBrowser, "/login/sms/register/store", new() { ["marketName"] = "فروشگاه تست پیامکی", ["__RequestVerificationToken"] = storeToken }))
+            Check(store.StatusCode == HttpStatusCode.Redirect && store.Headers.Location?.OriginalString == "/login/sms/code",
+                "A valid store name starts the SMS challenge");
+        Check(sender.Count(sellerPhone) == 1, "Exactly one activation SMS is sent after the store");
+        var sellerCodeToken = Token(await sellerBrowser.GetStringAsync("/login/sms/code"));
+        using (var sellerVerified = await Submit(sellerBrowser, "/login/sms/code", new() { ["Code"] = sender.Code(sellerPhone), ["__RequestVerificationToken"] = sellerCodeToken }))
+            Check(sellerVerified.StatusCode == HttpStatusCode.Redirect &&
+                sellerVerified.Headers.Location?.OriginalString == "/Seller/SellerPersonalInfo/PageOfManageSellerInformation?welcome=1",
+                "The verified seller is signed in and sent to store information");
+
+        await using (var db = new WindowDbContext(options))
+        {
+            var seller = await db.Users.AsNoTracking().SingleAsync(u => u.Mobile == sellerPhone);
+            var market = await db.Market.AsNoTracking().SingleAsync(m => m.UserId == seller.Id && !m.IsDelete);
+            Check(seller.IsMobileConfirm, "The seller mobile is confirmed only after the code");
+            Check(market.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller,
+                "A new store starts in the incomplete state");
+            Check(await db.UserRoles.AnyAsync(r => r.UserId == seller.Id && r.RoleId == 4 && !r.IsDelete),
+                "The seller receives the owner role");
+            Check(await db.MarketUser.AnyAsync(mu => mu.MarketId == market.Id && mu.UserId == seller.Id && mu.RoleId == 4),
+                "The store owner link is created");
+        }
+
+        // Password registration for a seller: account + store are committed before activation.
+        const string passwordSellerPhone = "09100000072";
+        var passwordSeller = Browser(app.Urls.Single());
+        var registerToken = Token(await passwordSeller.GetStringAsync("/register"));
+        using (var registered = await Submit(passwordSeller, "/register", new()
+        {
+            ["Mobile"] = passwordSellerPhone, ["Password"] = "seller-password", ["RePassword"] = "seller-password",
+            ["AccountType"] = "Seller", ["MarketName"] = "فروشگاه ثبت‌نام رمز", ["__RequestVerificationToken"] = registerToken
+        }))
+            Check(registered.StatusCode == HttpStatusCode.Redirect &&
+                registered.Headers.Location?.OriginalString == $"/Active-mobile/{passwordSellerPhone}",
+                "Seller password registration redirects to mobile activation");
+
+        string passwordActivationCode;
+        await using (var db = new WindowDbContext(options))
+        {
+            var seller = await db.Users.AsNoTracking().SingleAsync(u => u.Mobile == passwordSellerPhone);
+            passwordActivationCode = seller.MobileActivationCode;
+            Check(!seller.IsMobileConfirm, "The password account is unconfirmed before activation");
+            Check(await db.Market.AnyAsync(m => m.UserId == seller.Id && !m.IsDelete),
+                "The store is created in the same registration transaction");
+        }
+
+        var activationToken = Token(await passwordSeller.GetStringAsync($"/Active-mobile/{passwordSellerPhone}"));
+        using (var activated = await Submit(passwordSeller, $"/Active-mobile/{passwordSellerPhone}", new()
+        {
+            ["Mobile"] = passwordSellerPhone, ["MobileActiveCode"] = passwordActivationCode,
+            ["__RequestVerificationToken"] = activationToken
+        }))
+            Check(activated.StatusCode == HttpStatusCode.Redirect &&
+                activated.Headers.Location?.OriginalString == "/Seller/SellerPersonalInfo/PageOfManageSellerInformation?welcome=1",
+                "Activation signs the seller in and opens store information");
+
+        // Password registration for a customer: no store and no seller role.
+        const string passwordCustomerPhone = "09100000073";
+        var passwordCustomer = Browser(app.Urls.Single());
+        var customerToken = Token(await passwordCustomer.GetStringAsync("/register"));
+        using (var registeredCustomer = await Submit(passwordCustomer, "/register", new()
+        {
+            ["Mobile"] = passwordCustomerPhone, ["Password"] = "customer-password", ["RePassword"] = "customer-password",
+            ["AccountType"] = "Customer", ["__RequestVerificationToken"] = customerToken
+        }))
+            Check(registeredCustomer.StatusCode == HttpStatusCode.Redirect &&
+                registeredCustomer.Headers.Location?.OriginalString == $"/Active-mobile/{passwordCustomerPhone}",
+                "Customer password registration redirects to mobile activation");
+
+        string customerActivationCode;
+        await using (var db = new WindowDbContext(options))
+        {
+            var customer = await db.Users.AsNoTracking().SingleAsync(u => u.Mobile == passwordCustomerPhone);
+            customerActivationCode = customer.MobileActivationCode;
+            Check(!await db.Market.AnyAsync(m => m.UserId == customer.Id && !m.IsDelete), "A customer registration creates no store");
+            Check(!await db.UserRoles.AnyAsync(r => r.UserId == customer.Id && r.RoleId == 4 && !r.IsDelete), "A customer receives no seller role");
+        }
+
+        var customerActivationToken = Token(await passwordCustomer.GetStringAsync($"/Active-mobile/{passwordCustomerPhone}"));
+        using (var customerActivated = await Submit(passwordCustomer, $"/Active-mobile/{passwordCustomerPhone}", new()
+        {
+            ["Mobile"] = passwordCustomerPhone, ["MobileActiveCode"] = customerActivationCode,
+            ["__RequestVerificationToken"] = customerActivationToken
+        }))
+            Check(customerActivated.StatusCode == HttpStatusCode.Redirect &&
+                customerActivated.Headers.Location?.OriginalString == "/UserPanel",
+                "Activated customer opens the personal panel");
 
         await app.StopAsync();
     }

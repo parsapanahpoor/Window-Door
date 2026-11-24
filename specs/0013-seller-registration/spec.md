@@ -138,9 +138,19 @@ controller logic. `MarketController.AddMarket` keeps its route and delegates to 
 - `dotnet run --project tests/SmsLoginChecks -c Release -- "(localdb)\MSSQLLocalDB"`: PASS, including the new
   account-type step (no SMS before a role is chosen), the customer SMS registration path, password sign-in
   redirect, and all pre-existing SMS challenge, replay, cooldown and admin checks.
-- Implemented: server-generated pending account, shared `AddMarketEntities`, role selection in the SMS
-  flow, customer SMS registration, password registration with role + store and an atomic transaction,
-  activation auto sign-in, new seller redirect with guidance, removal of the hardcoded SMS key.
-- Not verified yet: seller SMS store step (no automated HTTP check), password registration through the
-  browser (service-level only), duplicate/concurrent registration posts, foreign-session continuation,
-  and the 360/768/1440 browser review.
+- Implemented: server-generated pending account with the chosen role recorded on the account,
+  shared `AddMarketEntities`, role selection in the SMS flow, customer and seller SMS registration,
+  password registration with role + store and an atomic transaction, activation auto sign-in,
+  seller redirect (no store → `/Market/AddMarket?welcome=1`, incomplete store → store information with
+  guidance), and removal of the hardcoded SMS key.
+- Verified end to end with the isolated LocalDB and the offline SMS sender: new seller through SMS
+  (role step, store step, one SMS only after the store, verification, store-information redirect,
+  confirmed account, incomplete market, role 4 and owner link), seller password registration (account
+  and store committed before activation, unconfirmed before the code, activation signs in and redirects),
+  customer password registration (no store and no seller role, activation opens `/UserPanel`), and the
+  existing customer SMS, replay, cooldown, duplicate, CSRF and external-returnUrl checks.
+- Not verified yet: an automated check for resuming a seller after losing the registration session,
+  dedicated concurrent-registration and invalid-role/store tests, forged POSTs against
+  `/register` and activation, and the 360/768/1440 browser review of the four auth screens. The
+  store-creation race is guarded by a serializable transaction and the mobile unique index, but has no
+  dedicated test.

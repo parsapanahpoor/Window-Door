@@ -199,7 +199,7 @@ public partial class IdentityController
             return View("SmsRegisterRole", new SmsRegisterViewModel { Mobile = flow.Mobile, ReturnUrl = flow.ReturnUrl });
         }
 
-        var account = await _userService.CreatePendingSmsAccountAsync(flow.Mobile, cancellationToken);
+        var account = await _userService.CreatePendingSmsAccountAsync(flow.Mobile, accountType == AccountType.Seller, cancellationToken);
         if (account is null || account.IsMobileConfirm)
             return RedirectToAction(nameof(SmsLogin));
 
@@ -263,8 +263,7 @@ public partial class IdentityController
         if (!created)
         {
             // A retry after a partial failure must continue with the store this user already owns.
-            var existing = await HttpContext.RequestServices.GetRequiredService<ISellerService>()
-                .GetMarketByUserId(userId);
+            var existing = await markets.GetMarketByUserId(userId);
             if (existing is null)
             {
                 ModelState.AddModelError(nameof(marketName), "ثبت فروشگاه انجام نشد. دوباره تلاش کنید.");

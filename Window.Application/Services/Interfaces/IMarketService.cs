@@ -21,6 +21,8 @@ namespace Window.Application.Services.Interfaces
 
         bool IsValidMarketName(string? titleName);
 
+        Task<Window.Domain.Entities.Market.Market?> GetMarketByUserId(ulong userId);
+
         #endregion
     }
 }

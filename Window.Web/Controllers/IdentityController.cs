@@ -301,10 +301,18 @@ namespace Window.Web.Controllers
             {
                 // A newly registered seller (or one who abandoned setup) must finish the store
                 // information step before any returnUrl destination can be used.
-                var sellers = HttpContext.RequestServices.GetRequiredService<ISellerService>();
-                var market = await sellers.GetMarketByUserId(user.Id);
-                if (market is null ||
-                    market.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller)
+                var markets = HttpContext.RequestServices.GetRequiredService<IMarketService>();
+                var market = await markets.GetMarketByUserId(user.Id);
+                if (market is null)
+                {
+                    // The seller chose the role but has not created a store yet (for example after
+                    // losing the registration session). The account type was recorded on the
+                    // account, and the phone has now been verified, so the store form is safe.
+                    TempData["success"] = "شمارهٔ موبایل تأیید شد. اکنون نام فروشگاه را ثبت کنید.";
+                    return LocalRedirect("/Market/AddMarket?welcome=1");
+                }
+
+                if (market.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller)
                 {
                     return RedirectToAction("PageOfManageSellerInformation", "SellerPersonalInfo", new { area = "Seller", welcome = 1 });
                 }

@@ -28,28 +28,43 @@ namespace Window.Application.Services.Services
 
         public async Task<bool> AddMarket(ulong userId , string titleName)
         {
-            #region Is Exist Any Market By This User
-
-            if (await _context.Market.AnyAsync(p=> !p.IsDelete && p.UserId == userId))
+            await using var transaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
+            try
             {
+                #region Is Exist Any Market By This User
+
+                if (await _context.Market.AnyAsync(p=> !p.IsDelete && p.UserId == userId))
+                {
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+
+                if (!IsValidMarketName(titleName))
+                {
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+
+                #endregion
+
+                AddMarketEntities(userId, titleName.Trim());
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return true;
+            }
+            catch (DbUpdateException)
+            {
+                await transaction.RollbackAsync();
                 return false;
             }
-
-            if (!IsValidMarketName(titleName))
-            {
-                return false;
-            }
-
-            #endregion
-
-            AddMarketEntities(userId, titleName.Trim());
-            await _context.SaveChangesAsync();
-
-            return true;
         }
 
         public bool IsValidMarketName(string? titleName) =>
             !string.IsNullOrWhiteSpace(titleName) && titleName.Trim().Length is >= 3 and <= 100;
+
+        public Task<Market?> GetMarketByUserId(ulong userId) =>
+            _context.Market.AsNoTracking().FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
 
         public void AddMarketEntities(ulong userId, string titleName)
         {

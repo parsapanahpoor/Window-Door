@@ -172,7 +172,7 @@ namespace Window.Application.Services
         /// Creates the unconfirmed account for the SMS registration flow. The seller store is
         /// created later, in a separate request, from the validated server-side flow state.
         /// </summary>
-        public async Task<User?> CreatePendingSmsAccountAsync(string normalizedMobile, CancellationToken cancellationToken = default)
+        public async Task<User?> CreatePendingSmsAccountAsync(string normalizedMobile, bool isSeller, CancellationToken cancellationToken = default)
         {
             var existing = await _context.Users
                 .FirstOrDefaultAsync(u => EF.Property<string>(u, MobileLoginKey.Name) == normalizedMobile, cancellationToken);
@@ -182,31 +182,43 @@ namespace Window.Application.Services
                 return existing.IsDelete || existing.IsBan ? null : existing;
             }
 
-            var user = new User
-            {
-                Mobile = normalizedMobile,
-                Username = normalizedMobile,
-                Password = SmsOnlyPassword,
-                EmailActivationCode = Guid.NewGuid().ToString("N"),
-                CreateDate = DateTime.Now,
-                IsAdmin = false,
-                MobileActivationCode = new Random().Next(10000, 999999).ToString(),
-                ExpireMobileSMSDateTime = DateTime.Now
-            };
-
-            var campaign = await _context.AllBulkSMSs.FirstOrDefaultAsync(p => !p.IsDelete && p.Mobile == user.Mobile, cancellationToken);
-            if (campaign is not null)
-                campaign.IsUserRegistered = true;
-
-            _context.Users.Add(user);
-
+            await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
             try
             {
+                var user = new User
+                {
+                    Mobile = normalizedMobile,
+                    Username = normalizedMobile,
+                    Password = SmsOnlyPassword,
+                    EmailActivationCode = Guid.NewGuid().ToString("N"),
+                    CreateDate = DateTime.Now,
+                    IsAdmin = false,
+                    MobileActivationCode = new Random().Next(10000, 999999).ToString(),
+                    ExpireMobileSMSDateTime = DateTime.Now
+                };
+
+                var campaign = await _context.AllBulkSMSs.FirstOrDefaultAsync(p => !p.IsDelete && p.Mobile == user.Mobile, cancellationToken);
+                if (campaign is not null)
+                    campaign.IsUserRegistered = true;
+
+                _context.Users.Add(user);
                 await _context.SaveChangesAsync(cancellationToken);
+
+                // Record the chosen account type on the account itself so a lost session can be
+                // recovered after the mobile is verified. The role alone grants no access because
+                // the account cannot sign in until verification.
+                if (isSeller)
+                {
+                    _context.UserRoles.Add(new UserRole { UserId = user.Id, RoleId = 4 });
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+
+                await transaction.CommitAsync(cancellationToken);
                 return user;
             }
             catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 2601 or 2627 })
             {
+                await transaction.RollbackAsync(cancellationToken);
                 return await _context.Users
                     .FirstOrDefaultAsync(u => EF.Property<string>(u, MobileLoginKey.Name) == normalizedMobile, cancellationToken);
             }
