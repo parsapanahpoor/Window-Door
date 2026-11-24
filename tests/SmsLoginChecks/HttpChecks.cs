@@ -231,6 +231,16 @@ internal static class HttpChecks
 
             if (expectedPanel == "/Seller")
             {
+                using (var forgedStore = await Submit(roleBrowser, "/register/store", new() { ["marketName"] = "فروشگاه جعلی" }))
+                    Check(forgedStore.StatusCode == HttpStatusCode.BadRequest, "/register/store rejects a POST without antiforgery");
+                await using (var forgedDb = new WindowDbContext(options))
+                {
+                    Check(!await forgedDb.Market.AnyAsync(m => m.UserId == second.Id), "A forged store POST creates no market");
+                    Check(!await forgedDb.MarketUser.AnyAsync(mu => mu.UserId == second.Id), "A forged store POST creates no owner link");
+                    Check(!await forgedDb.UserRoles.AnyAsync(r => r.UserId == second.Id && r.RoleId == 4 && !r.IsDelete),
+                        "A forged store POST adds no role");
+                }
+
                 // The seller lost the registration session before the store step. After signing
                 // in with the verified phone, the dedicated store form must finish the flow.
                 var resumeToken = Token(await roleBrowser.GetStringAsync("/register/store"));
@@ -476,6 +486,52 @@ internal static class HttpChecks
         using (var resent = await Submit(retryBrowser, "/login/sms/resend", new() { ["__RequestVerificationToken"] = retryCodeToken }))
             Check(resent.StatusCode == HttpStatusCode.Redirect, "Resend continues the same registration flow");
         Check(sender.Count(retryPhone) == sendsAfterFailure + 1, "The retry sends exactly one more activation code");
+
+        // 2b/3b. Password registration: missing/unknown role and invalid store names.
+        var passwordEdgeBrowser = Browser(app.Urls.Single());
+        var noRoleToken = Token(await GetPage(passwordEdgeBrowser, "/register"));
+        using (var noRole = await Submit(passwordEdgeBrowser, "/register", new()
+        {
+            ["Mobile"] = "09100000307", ["Password"] = "pass1234", ["RePassword"] = "pass1234",
+            ["__RequestVerificationToken"] = noRoleToken
+        }))
+        {
+            var body = WebUtility.HtmlDecode(await noRole.Content.ReadAsStringAsync());
+            Check(noRole.StatusCode == HttpStatusCode.OK && body.Contains("نوع حساب") && body.Contains("value=\"09100000307\""),
+                "Password registration without a role shows the error and preserves the mobile");
+        }
+        var unknownRoleToken = Token(await GetPage(passwordEdgeBrowser, "/register"));
+        using (var unknownRole = await Submit(passwordEdgeBrowser, "/register", new()
+        {
+            ["Mobile"] = "09100000308", ["Password"] = "pass1234", ["RePassword"] = "pass1234",
+            ["AccountType"] = "NotARole", ["__RequestVerificationToken"] = unknownRoleToken
+        }))
+            Check(unknownRole.StatusCode == HttpStatusCode.OK, "Password registration rejects an unknown role");
+        await using (var db = new WindowDbContext(options))
+        {
+            Check(!await db.Users.AnyAsync(u => u.Mobile == "09100000307" || u.Mobile == "09100000308"),
+                "Invalid password roles create no accounts and no stores");
+        }
+
+        var invalidStoreNames = new[] { "", "   ", new string('a', 101) };
+        for (var index = 0; index < invalidStoreNames.Length; index++)
+        {
+            var mobile = "0910000031" + index;
+            var passwordStoreToken = Token(await GetPage(passwordEdgeBrowser, "/register"));
+            using var invalidStore = await Submit(passwordEdgeBrowser, "/register", new()
+            {
+                ["Mobile"] = mobile, ["Password"] = "pass1234", ["RePassword"] = "pass1234",
+                ["AccountType"] = "Seller", ["MarketName"] = invalidStoreNames[index],
+                ["__RequestVerificationToken"] = passwordStoreToken
+            });
+            var body = WebUtility.HtmlDecode(await invalidStore.Content.ReadAsStringAsync());
+            Check(invalidStore.StatusCode == HttpStatusCode.OK && body.Contains("value=\"Seller\"") && body.Contains($"value=\"{mobile}\""),
+                "Invalid password store name is rejected and preserves role and mobile");
+        }
+        await using (var db = new WindowDbContext(options))
+        {
+            Check(!await db.Users.AnyAsync(u => u.Mobile.StartsWith("0910000031")), "Invalid password store names create no accounts");
+        }
 
         // 6. An unconfirmed account cannot obtain a panel session.
         var unconfirmedBrowser = Browser(app.Urls.Single());

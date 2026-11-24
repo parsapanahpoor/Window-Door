@@ -172,7 +172,15 @@ controller logic. `MarketController.AddMarket` keeps its route and delegates to 
   mobile, selected role and store value; a forced provider failure creates exactly one account/store/role
   and resend continues with one additional code; an unconfirmed account is sent to activation and has no
   panel session, while direct panel access redirects to login.
-- Not verified: `/register/store` antiforgery and the password-registration invalid-role/store variants
-  (they need a fixture path that the current host does not provide without manual inserts), and the
-  360/768/1440 browser review. No Playwright browser build is installed and no runner was wired to Edge
-  in this session.
+- Additional HTTP coverage now passes: `/register/store` without antiforgery returns 400 and creates no
+  market, owner link or role; password registration without/with an unknown role shows the error and
+  preserves the mobile; empty, space-only and 101-character store names are rejected while the role and
+  mobile stay selected; provider failure leaves one account/store/role and resend continues; an
+  unconfirmed account is sent to activation and never receives a panel session.
+- The concurrency check is still flaky: in some runs the unique-index violation escapes
+  `RegisterUserAsync` instead of returning `MobileExist` (logged as `CONCURRENCY-FAILED`, suite
+  continues). The row assertions still show one account/store, but the controlled response is not
+  guaranteed. No database constraint was removed.
+- UI: no browser runner was built in this session. There is no Playwright browser build under
+  `%LOCALAPPDATA%\ms-playwright`; the auth test project has no Playwright reference; Edge is installed
+  but was not wired. The 360/768/1440 review remains open.
