@@ -151,3 +151,13 @@ a:focus-visible, button:focus-visible, input:focus-visible {
     .account-art img { width: min(100%, 310px); margin-inline: auto; object-fit: contain; max-height: 160px; }
 }
 @media (max-width: 360px) { .account-content { padding-inline: 14px; } }
+/* Registration account type choices share the authentication form surface. */
+fieldset.account-field { margin: 0; padding: 14px; border: 1px solid var(--line, #d7dfda); border-radius: 12px; }
+fieldset.account-field legend { padding-inline: 6px; font-size: .95rem; font-weight: 700; }
+.account-field label.account-choice { display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 12px; border: 1px solid #d7dfda; border-radius: 10px; cursor: pointer; }
+.account-field .account-choice input { width: 20px; height: 20px; flex: 0 0 20px; margin: 0; padding: 0; accent-color: var(--green); }
+.account-choice span { display: grid; gap: 4px; }
+.account-choice small { color: var(--muted); font-weight: 400; }
+.account-choice:has(input:checked) { border-color: var(--green); background: #edf7f1; }
+.account-choice:focus-within { outline: 2px solid var(--green); outline-offset: 2px; }
+.account-field[hidden] { display: none; }

@@ -549,6 +549,7 @@ internal static class HttpChecks
             Check(directPanel.StatusCode == HttpStatusCode.Redirect && directPanel.Headers.Location?.AbsolutePath == "/Login",
                 "Direct panel access without a session is redirected to login");
 
+        await RegistrationBrowserChecks.RunAsync(app.Urls.Single(), sender);
         await app.StopAsync();
     }
 

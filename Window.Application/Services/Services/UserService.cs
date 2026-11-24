@@ -166,6 +166,7 @@ namespace Window.Application.Services
             catch (Exception ex) when (IsDuplicateOrDeadlock(ex))
             {
                 try { await transaction.RollbackAsync(); } catch { /* the server may have rolled back already */ }
+                _context.ChangeTracker.Clear();
                 return RegisterUserResponse.MobileExist;
             }
             catch
@@ -190,7 +191,8 @@ namespace Window.Application.Services
 
             if (existing is not null)
             {
-                return existing.IsDelete || existing.IsBan ? null : existing;
+                // Only the request that creates the account receives a pre-verification registration grant.
+                return null;
             }
 
             await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
@@ -230,8 +232,8 @@ namespace Window.Application.Services
             catch (Exception ex) when (IsDuplicateOrDeadlock(ex))
             {
                 try { await transaction.RollbackAsync(cancellationToken); } catch { /* already rolled back */ }
-                return await _context.Users
-                    .FirstOrDefaultAsync(u => EF.Property<string>(u, MobileLoginKey.Name) == normalizedMobile, cancellationToken);
+                _context.ChangeTracker.Clear();
+                return null;
             }
         }
 

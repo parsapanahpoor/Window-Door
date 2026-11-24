@@ -184,3 +184,10 @@ controller logic. `MarketController.AddMarket` keeps its route and delegates to 
 - UI: no browser runner was built in this session. There is no Playwright browser build under
   `%LOCALAPPDATA%\ms-playwright`; the auth test project has no Playwright reference; Edge is installed
   but was not wired. The 360/768/1440 review remains open.
+
+## Independent review follow-up
+- Concurrency failures now fail the executable test runner. After rollback, failed tracked inserts are cleared so subsequent saves do not replay the losing insert.
+- New registration requests cannot obtain a store-registration grant for an existing account before phone verification; regression coverage exercises this service boundary.
+- Edge browser checks run against the disposable SQL/offline SMS HTTP fixture at 360/768/1440. They exercise seller/customer field visibility, SMS role and store submission, code/error pages and password activation. Account-type controls now have explicit responsive sizing and focus/selection styling.
+- Remaining operational item: rotate the previously exposed SMS key through private service configuration. Physical mobile/TWA verification remains outside the desktop browser checks.
+- Final isolated runner passed after the review fixes, including browser-context loss and verified-phone continuation to /register/store at all three widths. Browser destinations wait for DOMContentLoaded, avoiding unrelated load-state timing.

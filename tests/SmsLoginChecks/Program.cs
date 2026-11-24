@@ -286,6 +286,8 @@ try
         Check(await ctxA.Users.AsNoTracking().CountAsync(u => u.Mobile == concurrentPhone) == 1,
             "Concurrent registration leaves exactly one account");
 
+        Check(await secondService.CreatePendingSmsAccountAsync(concurrentPhone, true) is null,
+            "Existing accounts cannot grant a new pre-verification store session");
         var owner = CreateUser("09100000082", legacyPassword, confirmed: true);
         ctxA.Users.Add(owner);
         await ctxA.SaveChangesAsync();
@@ -301,7 +303,7 @@ try
         }
         catch (Exception ex)
         {
-            Console.WriteLine("CONCURRENCY-FAILED: " + ex.GetBaseException());
+            throw new InvalidOperationException("Concurrent registration/store creation failed.", ex);
         }
     }
 

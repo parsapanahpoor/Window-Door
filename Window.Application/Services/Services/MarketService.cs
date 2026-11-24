@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,12 +55,14 @@ namespace Window.Application.Services.Services
             }
             catch (DbUpdateException)
             {
-                await transaction.RollbackAsync();
+                try { await transaction.RollbackAsync(); } catch { /* already rolled back */ }
+                _context.ChangeTracker.Clear();
                 return false;
             }
             catch (Exception ex) when (ex.GetBaseException() is Microsoft.Data.SqlClient.SqlException sql && sql.Number == 1205)
             {
                 // A concurrent request won the serializable range; report a controlled failure.
+                _context.ChangeTracker.Clear();
                 try { await transaction.RollbackAsync(); } catch { /* already rolled back */ }
                 return false;
             }
