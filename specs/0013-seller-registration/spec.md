@@ -156,8 +156,23 @@ controller logic. `MarketController.AddMarket` keeps its route and delegates to 
   two store creations for one owner. Exactly one account/store remains, one call succeeds and the loser
   receives a controlled result; deadlock/unique violations are caught (including EF transient wrappers)
   and the transaction is rolled back without a server error.
-- Not verified yet: dedicated HTTP checks for missing antiforgery on `/register` and activation,
-  invalid/empty/space-only/long store names and value preservation after errors, SMS-provider failure
-  retry, and a confirmed-account permission check. Browser review at 360/768/1440 was not run: the auth
-  test project has no Playwright reference, no Playwright browser build is installed, and Edge is
-  present but was not wired into a browser runner in this session.
+- Root causes found while adding the edge checks:
+  - Concurrent registration lost the race on the unique index `IX_Users_MobileLoginKey`; the
+    `DbUpdateException` escaped because the handler did not walk the exception chain. The service now
+    detects SQL 2601/2627/1205 anywhere in the chain and rolls back safely. No database constraint was
+    removed.
+  - The `302` on `/register` was correct application behaviour: the shared test browser was already
+    signed in and `[RedirectIfLoggedInActionFilter]` sent it to `/`. The test now uses a fresh browser
+    and asserts status/Location instead of calling `GetStringAsync`.
+  - A real duplicate-role defect was found: the SMS seller account received role 4 at creation and
+    `AddMarketEntities` added it again. The helper now adds the owner role only when it is absent.
+- Verified with the isolated LocalDB and the offline SMS sender: forged POSTs for `/register` and
+  activation return 400 and change nothing; unknown SMS role creates no account; space-only and
+  101-character store names are rejected without sending an SMS; a validation error preserves the
+  mobile, selected role and store value; a forced provider failure creates exactly one account/store/role
+  and resend continues with one additional code; an unconfirmed account is sent to activation and has no
+  panel session, while direct panel access redirects to login.
+- Not verified: `/register/store` antiforgery and the password-registration invalid-role/store variants
+  (they need a fixture path that the current host does not provide without manual inserts), and the
+  360/768/1440 browser review. No Playwright browser build is installed and no runner was wired to Edge
+  in this session.

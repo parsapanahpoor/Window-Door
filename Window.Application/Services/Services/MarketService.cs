@@ -107,13 +107,16 @@ namespace Window.Application.Services.Services
 
             #region Add User Role
 
-            UserRole role = new UserRole()
+            if (!_context.UserRoles.Any(existing => existing.UserId == userId && existing.RoleId == 4 && !existing.IsDelete))
             {
-                UserId = userId,
-                RoleId = 4,
-            };
+                UserRole role = new UserRole()
+                {
+                    UserId = userId,
+                    RoleId = 4,
+                };
 
-            _context.UserRoles.Add(role);
+                _context.UserRoles.Add(role);
+            }
 
             #endregion
         }

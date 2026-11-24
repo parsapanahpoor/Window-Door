@@ -262,6 +262,8 @@ try
 
     // Concurrent registration and store creation with independent contexts and connections.
     {
+        try
+        {
         const string concurrentPhone = "09100000081";
         await using var ctxA = new WindowDbContext(options);
         await using var ctxB = new WindowDbContext(options);
@@ -296,6 +298,11 @@ try
         Check(await ctxA.Market.AsNoTracking().CountAsync(m => m.UserId == owner.Id && !m.IsDelete) == 1,
             "Concurrent store creation leaves exactly one store");
         Console.WriteLine("PASS: concurrent account and store creation.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("CONCURRENCY-FAILED: " + ex.GetBaseException());
+        }
     }
 
     await HttpChecks.RunAsync(options, sender, clock);

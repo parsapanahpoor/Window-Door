@@ -42,6 +42,17 @@ namespace Window.Application.Services
         private readonly IMarketService _marketService;
         private const string SmsOnlyPassword = "!sms-only";
 
+        private static bool IsDuplicateOrDeadlock(Exception exception)
+        {
+            for (Exception? current = exception; current is not null; current = current.InnerException)
+            {
+                if (current is SqlException sql && sql.Number is 2601 or 2627 or 1205)
+                    return true;
+            }
+
+            return false;
+        }
+
         public UserService(IConfiguration configuration, IUserRepository userRepository, IWalletService walletService, WindowDbContext context
                                 , IEmailSender emailSender, IViewRenderService viewRenderService, ISMSService smsservice,
                                 IMarketService marketService)
@@ -152,7 +163,7 @@ namespace Window.Application.Services
 
                 await transaction.CommitAsync();
             }
-            catch (Exception ex) when (ex.GetBaseException() is SqlException sql && sql.Number is 2601 or 2627 or 1205)
+            catch (Exception ex) when (IsDuplicateOrDeadlock(ex))
             {
                 try { await transaction.RollbackAsync(); } catch { /* the server may have rolled back already */ }
                 return RegisterUserResponse.MobileExist;
@@ -216,7 +227,7 @@ namespace Window.Application.Services
                 await transaction.CommitAsync(cancellationToken);
                 return user;
             }
-            catch (Exception ex) when (ex.GetBaseException() is SqlException sql && sql.Number is 2601 or 2627 or 1205)
+            catch (Exception ex) when (IsDuplicateOrDeadlock(ex))
             {
                 try { await transaction.RollbackAsync(cancellationToken); } catch { /* already rolled back */ }
                 return await _context.Users

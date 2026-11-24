@@ -370,6 +370,129 @@ internal static class HttpChecks
                 customerActivated.Headers.Location?.OriginalString == "/UserPanel",
                 "Activated customer opens the personal panel");
 
+        // HTTP edge cases. GET helpers assert status and print the Location so a redirect is
+        // diagnosed instead of being swallowed by GetStringAsync.
+        async Task<string> GetPage(HttpClient client, string path)
+        {
+            using var response = await client.GetAsync(path);
+            var body = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"GET {path} -> {(int)response.StatusCode} {response.Headers.Location}");
+            Check(response.StatusCode == HttpStatusCode.OK, $"GET {path} must return 200");
+            return body;
+        }
+
+        // 1a. Register rejects a forged POST.
+        const string forgedPhone = "09100000301";
+        using (var forgedRegister = await Submit(browser, "/register", new()
+        { ["Mobile"] = forgedPhone, ["Password"] = "pass1234", ["RePassword"] = "pass1234", ["AccountType"] = "Customer" }))
+            Check(forgedRegister.StatusCode == HttpStatusCode.BadRequest, "Register rejects a POST without antiforgery");
+        await using (var db = new WindowDbContext(options))
+            Check(!await db.Users.AnyAsync(u => u.Mobile == forgedPhone), "A forged register POST creates no account");
+
+        // 1b. Activation rejects a forged POST and does not confirm the account.
+        const string activationPhone = "09100000302";
+        var activationBrowser = Browser(app.Urls.Single());
+        var activationRegisterToken = Token(await GetPage(activationBrowser, "/register"));
+        using (var registered = await Submit(activationBrowser, "/register", new()
+        {
+            ["Mobile"] = activationPhone, ["Password"] = "pass1234", ["RePassword"] = "pass1234",
+            ["AccountType"] = "Customer", ["__RequestVerificationToken"] = activationRegisterToken
+        }))
+            Console.WriteLine($"POST /register (activation fixture) -> {(int)registered.StatusCode} {registered.Headers.Location}");
+        string activationCode;
+        await using (var db = new WindowDbContext(options))
+            activationCode = (await db.Users.AsNoTracking().SingleAsync(u => u.Mobile == activationPhone)).MobileActivationCode;
+        using (var forgedActivation = await Submit(activationBrowser, $"/Active-mobile/{activationPhone}", new()
+        { ["Mobile"] = activationPhone, ["MobileActiveCode"] = activationCode }))
+            Check(forgedActivation.StatusCode == HttpStatusCode.BadRequest, "Activation rejects a POST without antiforgery");
+        await using (var db = new WindowDbContext(options))
+            Check(!(await db.Users.AsNoTracking().SingleAsync(u => u.Mobile == activationPhone)).IsMobileConfirm,
+                "A forged activation does not confirm the mobile");
+
+        // 2. Missing or unknown account type creates nothing.
+        const string invalidRolePhone = "09100000303";
+        var invalidBrowser = Browser(app.Urls.Single());
+        var invalidEntryToken = Token(await GetPage(invalidBrowser, "/login/sms"));
+        using (var entry = await Submit(invalidBrowser, "/login/sms", new() { ["Mobile"] = invalidRolePhone, ["__RequestVerificationToken"] = invalidEntryToken }))
+            Console.WriteLine($"POST /login/sms (new number) -> {(int)entry.StatusCode} {entry.Headers.Location}");
+        var invalidRoleToken = Token(await GetPage(invalidBrowser, "/login/sms/register"));
+        using (var invalidRole = await Submit(invalidBrowser, "/login/sms/register", new() { ["accountType"] = "NotARole", ["__RequestVerificationToken"] = invalidRoleToken }))
+            Check(invalidRole.StatusCode == HttpStatusCode.OK, "The SMS role step rejects an unknown account type");
+        await using (var db = new WindowDbContext(options))
+            Check(!await db.Users.AnyAsync(u => u.Mobile == invalidRolePhone), "An unknown SMS role creates no account");
+
+        // 3. Space-only and over-long store names are rejected.
+        const string spacesPhone = "09100000304";
+        var spacesBrowser = Browser(app.Urls.Single());
+        var spacesEntryToken = Token(await GetPage(spacesBrowser, "/login/sms"));
+        await Submit(spacesBrowser, "/login/sms", new() { ["Mobile"] = spacesPhone, ["__RequestVerificationToken"] = spacesEntryToken });
+        var spacesRoleToken = Token(await GetPage(spacesBrowser, "/login/sms/register"));
+        using (var role = await Submit(spacesBrowser, "/login/sms/register", new() { ["accountType"] = "Seller", ["__RequestVerificationToken"] = spacesRoleToken }))
+            Console.WriteLine($"POST /login/sms/register (seller) -> {(int)role.StatusCode} {role.Headers.Location}");
+        var spacesStoreToken = Token(await GetPage(spacesBrowser, "/login/sms/register/store"));
+        using (var spacesStore = await Submit(spacesBrowser, "/login/sms/register/store", new() { ["marketName"] = "   ", ["__RequestVerificationToken"] = spacesStoreToken }))
+            Check(spacesStore.StatusCode == HttpStatusCode.OK, "A space-only store name is rejected in the SMS flow");
+        Check(sender.Count(spacesPhone) == 0, "A rejected store name sends no SMS");
+        var longStoreToken = Token(await GetPage(spacesBrowser, "/login/sms/register/store"));
+        using (var longStore = await Submit(spacesBrowser, "/login/sms/register/store", new() { ["marketName"] = new string('a', 101), ["__RequestVerificationToken"] = longStoreToken }))
+            Check(longStore.StatusCode == HttpStatusCode.OK, "A store name over 100 characters is rejected in the SMS flow");
+
+        // 4. A validation error preserves the mobile, role and store value.
+        var preserveBrowser = Browser(app.Urls.Single());
+        var preserveToken = Token(await GetPage(preserveBrowser, "/register"));
+        using (var preserve = await Submit(preserveBrowser, "/register", new()
+        {
+            ["Mobile"] = "09100000305", ["Password"] = "pass1234", ["RePassword"] = "pass1234",
+            ["AccountType"] = "Seller", ["MarketName"] = "ab", ["__RequestVerificationToken"] = preserveToken
+        }))
+        {
+            var preserved = WebUtility.HtmlDecode(await preserve.Content.ReadAsStringAsync());
+            Check(preserve.StatusCode == HttpStatusCode.OK && preserved.Contains("value=\"09100000305\"") &&
+                preserved.Contains("value=\"ab\"") && preserved.Contains("value=\"Seller\""),
+                "A validation error preserves the mobile, role and store name");
+        }
+
+        // 5. A provider failure does not duplicate records; resend continues the flow.
+        const string retryPhone = "09100000306";
+        sender.RejectedMobile = retryPhone;
+        var retryBrowser = Browser(app.Urls.Single());
+        var retryEntryToken = Token(await GetPage(retryBrowser, "/login/sms"));
+        await Submit(retryBrowser, "/login/sms", new() { ["Mobile"] = retryPhone, ["__RequestVerificationToken"] = retryEntryToken });
+        var retryRoleToken = Token(await GetPage(retryBrowser, "/login/sms/register"));
+        await Submit(retryBrowser, "/login/sms/register", new() { ["accountType"] = "Seller", ["__RequestVerificationToken"] = retryRoleToken });
+        var retryStoreToken = Token(await GetPage(retryBrowser, "/login/sms/register/store"));
+        using (var failedSend = await Submit(retryBrowser, "/login/sms/register/store", new() { ["marketName"] = "فروشگاه تلاش مجدد", ["__RequestVerificationToken"] = retryStoreToken }))
+            Check(failedSend.StatusCode == HttpStatusCode.Redirect, "A provider failure continues the flow without a server error");
+        await using (var db = new WindowDbContext(options))
+        {
+            var retryUser = await db.Users.AsNoTracking().SingleAsync(u => u.Mobile == retryPhone);
+            Check(await db.Market.AsNoTracking().CountAsync(m => m.UserId == retryUser.Id) == 1, "One store exists after a provider failure");
+            Check(await db.UserRoles.AsNoTracking().CountAsync(r => r.UserId == retryUser.Id && r.RoleId == 4) == 1, "One owner role exists after a provider failure");
+        }
+        var sendsAfterFailure = sender.Count(retryPhone);
+        ((TestClock)clock).Advance(TimeSpan.FromMinutes(3));
+        sender.RejectedMobile = null;
+        var retryCodeToken = Token(await GetPage(retryBrowser, "/login/sms/code"));
+        using (var resent = await Submit(retryBrowser, "/login/sms/resend", new() { ["__RequestVerificationToken"] = retryCodeToken }))
+            Check(resent.StatusCode == HttpStatusCode.Redirect, "Resend continues the same registration flow");
+        Check(sender.Count(retryPhone) == sendsAfterFailure + 1, "The retry sends exactly one more activation code");
+
+        // 6. An unconfirmed account cannot obtain a panel session.
+        var unconfirmedBrowser = Browser(app.Urls.Single());
+        var unconfirmedToken = Token(await GetPage(unconfirmedBrowser, "/login/password"));
+        using (var unconfirmedLogin = await Submit(unconfirmedBrowser, "/login/password", new()
+        { ["Mobile"] = activationPhone, ["Password"] = "pass1234", ["__RequestVerificationToken"] = unconfirmedToken }))
+            Check(unconfirmedLogin.StatusCode == HttpStatusCode.Redirect &&
+                unconfirmedLogin.Headers.Location?.OriginalString.StartsWith($"/Active-mobile/{activationPhone}") == true,
+                "An unconfirmed account is sent to activation instead of the panel");
+        using (var panel = await unconfirmedBrowser.GetAsync("/Seller"))
+            Check(panel.StatusCode == HttpStatusCode.Redirect && panel.Headers.Location?.AbsolutePath == "/Login",
+                "An unconfirmed account has no panel session after password sign-in");
+        using var anonymousPanel = Browser(app.Urls.Single());
+        using (var directPanel = await anonymousPanel.GetAsync("/Seller"))
+            Check(directPanel.StatusCode == HttpStatusCode.Redirect && directPanel.Headers.Location?.AbsolutePath == "/Login",
+                "Direct panel access without a session is redirected to login");
+
         await app.StopAsync();
     }
 
