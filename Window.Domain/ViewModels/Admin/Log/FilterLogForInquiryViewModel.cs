@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -14,6 +15,33 @@ namespace Window.Domain.ViewModels.Admin.Log
 {
     public class FilterLogForInquiryViewModel : BasePaging<LogForInquiry>
     {
+        public static bool TryReadDate(string? text, out DateTime? value)
+        {
+            value = null;
+            if (string.IsNullOrWhiteSpace(text)) return true;
+
+            var normalized = text.Trim().Select(character => character switch
+            {
+                >= '۰' and <= '۹' => (char)('0' + character - '۰'),
+                >= '٠' and <= '٩' => (char)('0' + character - '٠'),
+                _ => character
+            }).ToArray();
+            var date = new string(normalized).Split('/');
+            if (date.Length != 3 || !int.TryParse(date[0], out var year)
+                || !int.TryParse(date[1], out var month) || !int.TryParse(date[2], out var day))
+                return false;
+
+            try
+            {
+                value = new DateTime(year, month, day, new PersianCalendar());
+                return value.Value.Date < DateTime.MaxValue.Date;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return false;
+            }
+        }
+
         #region proeprties
 
         [RegularExpression(@"^\d{4}\/(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])$", ErrorMessage = "The entered date is not valid")]

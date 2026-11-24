@@ -1,4 +1,4 @@
-﻿@using Window.Domain.ViewModels.Common
+@using Window.Domain.ViewModels.Common
 @using Window.Application.StaticTools
 @model Window.Domain.ViewModels.Seller.Pricing.SegmentPricingViewModel
 @using Window.Domain.Enums.SellerType
@@ -84,16 +84,16 @@
                                             {
                                                 @if (segmentPricing.Any(p => p.SegmentId == item.Segment.Id))
                                                 {
-                                                    <input type="number" step="100" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="0">
+                                                    <input type="number" step="1" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="1" aria-label="قیمت به ریال" required>
                                                 }
                                                 else
                                                 {
-                                                    <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                    <input type="number" step="1" class="form-control" name="Price" min="1" aria-label="قیمت به ریال" required>
                                                 }
                                             }
                                             else
                                             {
-                                                <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                <input type="number" step="1" class="form-control" name="Price" min="1" aria-label="قیمت به ریال" required>
                                             }
                                             <span class="input-group-btn">
                                                 <span class="btn palegreen-azure btn-file" style="padding:0px 0px 0px 0px;">
@@ -132,16 +132,16 @@
                                                     {
                                                         @if (segmentPricing.Any(p => p.SegmentId == item.Segment.Id))
                                                         {
-                                                            <input type="number" step="100" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="0">
+                                                            <input type="number" step="1" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="1" aria-label="قیمت به ریال" required>
                                                         }
                                                         else
                                                         {
-                                                            <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                            <input type="number" step="1" class="form-control" name="Price" min="1" aria-label="قیمت به ریال" required>
                                                         }
                                                     }
                                                     else
                                                     {
-                                                        <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                        <input type="number" step="1" class="form-control" name="Price" min="1" aria-label="قیمت به ریال" required>
                                                     }
                                                     <span class="input-group-btn">
                                                         <span class="btn palegreen-azure btn-file" style="padding:0px 0px 0px 0px;">
@@ -179,16 +179,16 @@
                                                     {
                                                         @if (segmentPricing.Any(p => p.SegmentId == item.Segment.Id))
                                                         {
-                                                            <input type="number" step="100" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="0">
+                                                            <input type="number" step="1" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="1" aria-label="قیمت به ریال" required>
                                                         }
                                                         else
                                                         {
-                                                            <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                            <input type="number" step="1" class="form-control" name="Price" min="1" aria-label="قیمت به ریال" required>
                                                         }
                                                     }
                                                     else
                                                     {
-                                                        <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                        <input type="number" step="1" class="form-control" name="Price" min="1" aria-label="قیمت به ریال" required>
                                                     }
                                                     <span class="input-group-btn">
                                                         <span class="btn palegreen-azure btn-file" style="padding:0px 0px 0px 0px;">
@@ -227,16 +227,16 @@
                                                 {
                                                     @if (segmentPricing.Any(p => p.SegmentId == item.Segment.Id))
                                                     {
-                                                        <input type="number" step="100" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="0">
+                                                        <input type="number" step="1" class="form-control" value="@segmentPricing.Where(p=> p.SegmentId == item.Segment.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="1" aria-label="قیمت به ریال" required>
                                                     }
                                                     else
                                                     {
-                                                        <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                        <input type="number" step="1" class="form-control" name="Price" min="1" aria-label="قیمت به ریال" required>
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    <input type="number" step="100" class="form-control" name="Price" min="0">
+                                                    <input type="number" step="1" class="form-control" name="Price" min="1" aria-label="قیمت به ریال" required>
                                                 }
                                                 <span class="input-group-btn">
                                                     <span class="btn palegreen-azure btn-file" style="padding:0px 0px 0px 0px;">

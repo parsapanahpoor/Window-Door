@@ -53,6 +53,9 @@ namespace Window.Application.Services.Services
 
         #region Seller Panel
 
+        public Task<int> CountInquiryAppearances(ulong sellerId) =>
+            _context.InquirySellerExposures.CountAsync(exposure => exposure.SellerId == sellerId);
+
         public async Task<int> CountOfTodayUserInInquiry(ulong userId)
         {
             #region Get Market By User Id 
@@ -1644,28 +1647,15 @@ namespace Window.Application.Services.Services
 
             #region filter
 
-            if (!string.IsNullOrEmpty(filter.FromDate))
+            var fromValid = Window.Domain.ViewModels.Admin.Log.FilterLogForInquiryViewModel.TryReadDate(filter.FromDate, out var fromDate);
+            var toValid = Window.Domain.ViewModels.Admin.Log.FilterLogForInquiryViewModel.TryReadDate(filter.ToDate, out var toDate);
+            if (!fromValid || !toValid || fromDate > toDate) query = query.Where(_ => false);
+            if (fromDate.HasValue) query = query.Where(log => log.CreateDate >= fromDate.Value);
+            if (toValid && toDate.HasValue)
             {
-                var spliteDate = filter.FromDate.Split('/');
-                int year = int.Parse(spliteDate[0]);
-                int month = int.Parse(spliteDate[1]);
-                int day = int.Parse(spliteDate[2]);
-                DateTime fromDate = new DateTime(year, month, day, new PersianCalendar());
-
-                query = query.Where(s => s.CreateDate >= fromDate);
+                var exclusiveEnd = toDate.Value.AddDays(1);
+                query = query.Where(log => log.CreateDate < exclusiveEnd);
             }
-
-            if (!string.IsNullOrEmpty(filter.ToDate))
-            {
-                var spliteDate = filter.ToDate.Split('/');
-                int year = int.Parse(spliteDate[0]);
-                int month = int.Parse(spliteDate[1]);
-                int day = int.Parse(spliteDate[2]);
-                DateTime toDate = new DateTime(year, month, day, new PersianCalendar());
-
-                query = query.Where(s => s.CreateDate <= toDate);
-            }
-
 
             if (filter.CountryId.HasValue)
             {

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -647,130 +647,59 @@ namespace Window.Application.Services.Services
 
         public async Task<bool> AddPricingForSegment(ulong ProductId, ulong SegmentId, int Price, ulong userId)
         {
-            #region Get Market By Id 
+            if (Price <= 0) return false;
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            var owner = await LockRateOwner(userId);
+            if (!owner.HasValue
+                || !await _context.Products.AnyAsync(product => product.Id == ProductId && product.UserId == owner && !product.IsDelete)
+                || !await _context.Segments.AnyAsync(segment => segment.Id == SegmentId && !segment.IsDelete))
+                return false;
 
-            var market = await _context.MarketUser.Where(p => !p.IsDelete && p.UserId == userId).Select(p => p.Market).FirstOrDefaultAsync();
-            if (market == null) return false;
+            var rate = await _context.SegmentPricings.Where(item => item.SegmentId == SegmentId && !item.IsDelete && item.ProductId == ProductId)
+                .OrderByDescending(item => item.Id).FirstOrDefaultAsync();
+            if (rate == null)
+                _context.SegmentPricings.Add(new SegmentPricing { SegmentId = SegmentId, ProductId = ProductId, Price = Price });
+            else
+                rate.Price = Price;
 
-            #endregion
-
-            #region Get Product 
-
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == ProductId && p.UserId == market.UserId && !p.IsDelete);
-            if (product == null) return false;
-
-            #endregion
-
-            #region Get Segment
-
-            var segment = await _context.Segments.FirstOrDefaultAsync(p => p.Id == SegmentId && !p.IsDelete);
-            if (segment == null) return false;
-
-            #endregion
-
-            #region Is Exist Any Same Segment Price
-
-            var samePrice = await _context.SegmentPricings.AnyAsync(p => p.SegmentId == SegmentId && !p.IsDelete && p.ProductId == ProductId);
-
-            #endregion
-
-            //Update Pricing
-            if (samePrice == true)
-            {
-                var lastSegmentPricing = await _context.SegmentPricings.FirstOrDefaultAsync(p => p.SegmentId == SegmentId && !p.IsDelete && p.ProductId == ProductId);
-
-                lastSegmentPricing.Price = Price;
-
-                _context.SegmentPricings.Update(lastSegmentPricing);
-                await _context.SaveChangesAsync();
-            }
-
-            //Add New Pricing
-            if (samePrice == false)
-            {
-                #region Fill Entity
-
-                SegmentPricing model = new SegmentPricing()
-                {
-                    SegmentId = SegmentId,
-                    ProductId = ProductId,
-                    Price = Price
-                };
-
-                #endregion
-
-                #region Add Segment Price
-
-                await _context.SegmentPricings.AddAsync(model);
-                await _context.SaveChangesAsync();
-
-                #endregion
-            }
-
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
             return true;
         }
 
         public async Task<bool> AddPricingForGlass(ulong GlassId, int Price, ulong userId)
         {
-            #region Get Market By User Id 
+            if (Price <= 0) return false;
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            var owner = await LockRateOwner(userId);
+            if (!owner.HasValue || !await _context.Glasses.AnyAsync(glass => glass.Id == GlassId && !glass.IsDelete))
+                return false;
 
-            var marketPersons = await _context.MarketUser.FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
-            if (marketPersons == null) return false;
+            var rate = await _context.GlassPricings.Where(item => item.GlassId == GlassId && item.UserId == owner && !item.IsDelete)
+                .OrderByDescending(item => item.Id).FirstOrDefaultAsync();
+            if (rate == null)
+                _context.GlassPricings.Add(new GlassPricing { GlassId = GlassId, UserId = owner.Value, Price = Price });
+            else
+                rate.Price = Price;
 
-            var market = await _context.Market.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == marketPersons.MarketId);
-            if (market == null) return false;
-
-            #endregion
-
-            #region Get Segment
-
-            var glass = await _context.Glasses.FirstOrDefaultAsync(p => p.Id == GlassId && !p.IsDelete);
-            if (glass == null) return false;
-
-            #endregion
-
-            #region Is Exist Any Same Glass Price
-
-            var samePrice = await _context.GlassPricings.AnyAsync(p => p.GlassId == GlassId && p.UserId == market.UserId && !p.IsDelete);
-
-            #endregion
-
-            //Update Pricing
-            if (samePrice == true)
-            {
-                var lastSegmentPricing = await _context.GlassPricings.FirstOrDefaultAsync(p => p.GlassId == GlassId && p.UserId == market.UserId && !p.IsDelete);
-
-                lastSegmentPricing.Price = Price;
-
-                _context.GlassPricings.Update(lastSegmentPricing);
-                await _context.SaveChangesAsync();
-            }
-
-            //Add New Pricing
-            if (samePrice == false)
-            {
-                #region Fill Entity
-
-                GlassPricing model = new GlassPricing()
-                {
-                    GlassId = GlassId,
-                    Price = Price,
-                    UserId = market.UserId
-                };
-
-                #endregion
-
-                #region Add Glass Price
-
-                await _context.GlassPricings.AddAsync(model);
-                await _context.SaveChangesAsync();
-
-                #endregion
-            }
-
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
             return true;
         }
 
+        private async Task<ulong?> LockRateOwner(ulong userId)
+        {
+            var marketId = await _context.MarketUser
+                .Where(member => !member.IsDelete && member.UserId == userId && !member.Market.IsDelete)
+                .OrderBy(member => member.Id).Select(member => (ulong?)member.MarketId).FirstOrDefaultAsync();
+            if (!marketId.HasValue) return null;
+
+            var market = _context.Market.Where(item => item.Id == marketId && !item.IsDelete);
+            if (await market.ExecuteUpdateAsync(setters => setters.SetProperty(item => item.IsDelete, false)) != 1)
+                return null;
+
+            return await market.Select(item => (ulong?)item.UserId).SingleAsync();
+        }
 
         public async Task<List<SegmentPricing>?> FillSegmentPricing(ulong productId, ulong userId)
         {

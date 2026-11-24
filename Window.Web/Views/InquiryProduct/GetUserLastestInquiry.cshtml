@@ -1,4 +1,4 @@
-﻿@model List<Window.Domain.Entities.Inquiry.LogInquiryForUserDetail>
+@model List<Window.Domain.Entities.Inquiry.LogInquiryForUserDetail>
 
 @{
     ViewData["Title"] = "استعلام گیری";
@@ -18,7 +18,10 @@
                     <nav id="breadcrumbs">
                         <ul>
                             <li>
-                                <a asp-action="InquiryStep4" asp-route-userMacAddress="@ViewBag.UserMacAddress" asp-controller="InquiryProduct" asp-area="" class="button">نمایش نتیجه ی استعلام </a>
+                                <form asp-action="CompleteInquiry" asp-controller="InquiryProduct" method="post">
+    <input type="hidden" name="userMacAddress" value="@ViewBag.UserMacAddress" />
+    <button class="button" type="submit">نمایش نتیجهٔ استعلام</button>
+</form>
                             </li>
                         </ul>
                     </nav>
@@ -69,7 +72,7 @@
                                         <h4><a href="single-property-page-1.html">@product.Sample.SegmentName</a></h4>
 
                                         <div class="listing-badges">
-                                            <span style="background-color: #c80e0e;"><a asp-action="DeleteUserLasteInquiryDetail" asp-area="" asp-controller="InquiryProduct" asp-route-Id="@product.Id" style="background-color: #c80e0e;">حذف</a></span>
+                                            <span style="background-color: #c80e0e;"><button type="submit" formaction="/InquiryProduct/DeleteUserLasteInquiryDetail" formmethod="post" name="Id" value="@product.Id" style="background-color: #c80e0e; border: 0; color: inherit;">حذف</button></span>
                                         </div>
                                     </div>
 
@@ -88,22 +91,22 @@
                                             {
                                                 <div class="row">
                                                     <div class="col-md-4">
-                                                        <input name="Height" min="0" step="1" type="text" value="@product.Height" placeholder="ارتفاع را وارد کنید">
+                                                        <input inputmode="numeric" pattern="[0-9۰-۹٠-٩]+" name="Height" type="text" value="@(ViewData["InvalidDetailId"] is ulong invalidHeight && invalidHeight == product.Id ? ViewData.ModelState["Height"]?.AttemptedValue : product.Height.ToString())" placeholder="ارتفاع را وارد کنید">
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <input type="text" min="0" step="1" name="Width" value="@product.Width" placeholder="عرض را وارد کنید">
+                                                        <input inputmode="numeric" pattern="[0-9۰-۹٠-٩]+" type="text" name="Width" value="@(ViewData["InvalidDetailId"] is ulong invalidWidth && invalidWidth == product.Id ? ViewData.ModelState["Width"]?.AttemptedValue : product.Width.ToString())" placeholder="عرض را وارد کنید">
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <input type="text" min="1" name="SampleCount" value="@product.CountOfSample" placeholder="تعداد را وارد کنید">
+                                                        <input inputmode="numeric" pattern="[0-9۰-۹٠-٩]+" type="text" name="SampleCount" value="@(ViewData["InvalidDetailId"] is ulong invalidSampleCount && invalidSampleCount == product.Id ? ViewData.ModelState["SampleCount"]?.AttemptedValue : product.CountOfSample.ToString())" placeholder="تعداد را وارد کنید">
                                                     </div>
                                                 </div>
 
                                                 <div class="row">
 
                                                     <div class="col-md-3">
-                                                        <input type="text" min="0" step="1" value="@product.KatibeSize" name="katibeSize" placeholder="عرض درب a">
+                                                        <input inputmode="numeric" pattern="[0-9۰-۹٠-٩]+" type="text" value="@(ViewData["InvalidDetailId"] is ulong invalidkatibeSize && invalidkatibeSize == product.Id ? ViewData.ModelState["katibeSize"]?.AttemptedValue : product.KatibeSize.ToString())" name="katibeSize" placeholder="عرض بخش درب (سانتی‌متر)">
                                                     </div>
 
                                                     <div class="col-md-3">
@@ -122,15 +125,15 @@
                                                     <div class="row">
 
                                                         <div class="col-md-4">
-                                                            <input name="Height" min="0" step="1" type="text" value="@product.Height" placeholder="ارتفاع را وارد کنید">
+                                                            <input inputmode="numeric" pattern="[0-9۰-۹٠-٩]+" name="Height" type="text" value="@(ViewData["InvalidDetailId"] is ulong invalidHeight && invalidHeight == product.Id ? ViewData.ModelState["Height"]?.AttemptedValue : product.Height.ToString())" placeholder="ارتفاع را وارد کنید">
                                                         </div>
 
                                                         <div class="col-md-4">
-                                                            <input type="text" min="0" step="1" name="Width" value="@product.Width" placeholder="عرض را وارد کنید">
+                                                            <input inputmode="numeric" pattern="[0-9۰-۹٠-٩]+" type="text" name="Width" value="@(ViewData["InvalidDetailId"] is ulong invalidWidth && invalidWidth == product.Id ? ViewData.ModelState["Width"]?.AttemptedValue : product.Width.ToString())" placeholder="عرض را وارد کنید">
                                                         </div>
 
                                                         <div class="col-md-4">
-                                                            <input type="text" min="1" name="SampleCount" value="@product.CountOfSample" placeholder="تعداد را وارد کنید">
+                                                            <input inputmode="numeric" pattern="[0-9۰-۹٠-٩]+" type="text" name="SampleCount" value="@(ViewData["InvalidDetailId"] is ulong invalidSampleCount && invalidSampleCount == product.Id ? ViewData.ModelState["SampleCount"]?.AttemptedValue : product.CountOfSample.ToString())" placeholder="تعداد را وارد کنید">
                                                         </div>
 
                                                     </div>
@@ -138,7 +141,7 @@
                                                     <div class="row">
 
                                                         <div class="col-md-3">
-                                                            <input type="number" min="0" step="1" value="@product.KatibeSize" name="katibeSize" placeholder="ارتفاع کتیبه " />
+                                                            <input inputmode="numeric" pattern="[0-9۰-۹٠-٩]+" type="text" value="@(ViewData["InvalidDetailId"] is ulong invalidkatibeSize && invalidkatibeSize == product.Id ? ViewData.ModelState["katibeSize"]?.AttemptedValue : product.KatibeSize.ToString())" name="katibeSize" placeholder="ارتفاع کتیبه " />
                                                         </div>
 
                                                         <div class="col-md-3">
@@ -151,15 +154,15 @@
                                                 else
                                                 {
                                                     <div class="col-md-3">
-                                                        <input name="Height" min="0" step="1" type="text" value="@product.Height" placeholder="ارتفاع را وارد کنید">
+                                                        <input inputmode="numeric" pattern="[0-9۰-۹٠-٩]+" name="Height" type="text" value="@(ViewData["InvalidDetailId"] is ulong invalidHeight && invalidHeight == product.Id ? ViewData.ModelState["Height"]?.AttemptedValue : product.Height.ToString())" placeholder="ارتفاع را وارد کنید">
                                                     </div>
 
                                                     <div class="col-md-3">
-                                                        <input type="text" min="0" step="1" name="Width" value="@product.Width" placeholder="عرض را وارد کنید">
+                                                        <input inputmode="numeric" pattern="[0-9۰-۹٠-٩]+" type="text" name="Width" value="@(ViewData["InvalidDetailId"] is ulong invalidWidth && invalidWidth == product.Id ? ViewData.ModelState["Width"]?.AttemptedValue : product.Width.ToString())" placeholder="عرض را وارد کنید">
                                                     </div>
 
                                                     <div class="col-md-3">
-                                                        <input type="text" min="1" name="SampleCount" value="@product.CountOfSample" placeholder="تعداد را وارد کنید">
+                                                        <input inputmode="numeric" pattern="[0-9۰-۹٠-٩]+" type="text" name="SampleCount" value="@(ViewData["InvalidDetailId"] is ulong invalidSampleCount && invalidSampleCount == product.Id ? ViewData.ModelState["SampleCount"]?.AttemptedValue : product.CountOfSample.ToString())" placeholder="تعداد را وارد کنید">
                                                     </div>
 
                                                     <div class="col-md-3">
@@ -189,3 +192,12 @@
     </div>
 </div>
 
+
+<script>
+    document.addEventListener("input", (event) => {
+        const field = event.target;
+        if (!(field instanceof HTMLInputElement) || field.inputMode !== "numeric") return;
+        field.value = field.value.replace(/[۰-۹٠-٩]/g, digit =>
+            String(digit.charCodeAt(0) - (digit >= "۰" ? 1776 : 1632)));
+    });
+</script>

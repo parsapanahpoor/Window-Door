@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
@@ -10,6 +10,7 @@ using Window.Domain.ViewModels.Site.Inquiry;
 
 namespace Window.Web.Controllers
 {
+    [NonController]
     [Authorize]
     public class testController : SiteBaseController
     {
@@ -82,6 +83,9 @@ namespace Window.Web.Controllers
 
         public async Task<IActionResult> InquiryStep2(ulong CountryId, ulong StateId, ulong CityId, ProductType? ProductType, ProductKind? ProductKind, SellerType? SellerType, ulong? MainBrandId, ulong? GlassId, string UserMacAddress)
         {
+            if (UserMacAddress?.StartsWith(InquiryProductController.WebInquiryTokenPrefix, StringComparison.OrdinalIgnoreCase) == true)
+                return BadRequest();
+
             #region Model State Valdiation
 
             if (!ModelState.IsValid)
@@ -123,6 +127,9 @@ namespace Window.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> InquiryStep3(string userMacAddress)
         {
+            if (userMacAddress?.StartsWith(InquiryProductController.WebInquiryTokenPrefix, StringComparison.OrdinalIgnoreCase) == true)
+                return BadRequest();
+
             #region Get Samples For Show In Page Model
 
             var samples = await _sampleService.GetListOfSamplesForShowInAPI(userMacAddress);
@@ -142,6 +149,9 @@ namespace Window.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> InquiryStep3(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string userMacAddress)
         {
+            if (userMacAddress?.StartsWith(InquiryProductController.WebInquiryTokenPrefix, StringComparison.OrdinalIgnoreCase) == true)
+                return BadRequest();
+
             #region Get Samples For Show In Page Model
 
             var samples = await _sampleService.GetListOfSamplesForShowInAPI(userMacAddress);
@@ -203,6 +213,9 @@ namespace Window.Web.Controllers
 
         public async Task<IActionResult> InquiryStep4(string userMacAddress, string? brandTitle, int? orderByPrice, int? orderByScore, int pageId = 1)
         {
+            if (userMacAddress?.StartsWith(InquiryProductController.WebInquiryTokenPrefix, StringComparison.OrdinalIgnoreCase) == true)
+                return BadRequest();
+
             return View();
         }
 
@@ -352,6 +365,9 @@ namespace Window.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserLastestInquiry(string userMacAddress)
         {
+            if (userMacAddress?.StartsWith(InquiryProductController.WebInquiryTokenPrefix, StringComparison.OrdinalIgnoreCase) == true)
+                return BadRequest();
+
             #region Get List Of Lastest Inquiry
 
             var res = await _inquiryService.GetUserLastestInquiryDetailForChange(User.GetUserId().ToString());
@@ -371,6 +387,9 @@ namespace Window.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> GetUserLastestInquiry(ulong inquiryDetailId, ulong sampleId, int width, int height, int? katibeSize, string userMacAddress , int? SampleCount)
         {
+            if (userMacAddress?.StartsWith(InquiryProductController.WebInquiryTokenPrefix, StringComparison.OrdinalIgnoreCase) == true)
+                return BadRequest();
+
             #region Get Samples For Show In Page Model
 
             var samples = await _sampleService.GetListOfSamplesForShowInAPI(userMacAddress);

@@ -1,4 +1,4 @@
-﻿@using Window.Domain.ViewModels.Admin.Log
+@using Window.Domain.ViewModels.Admin.Log
 @using Window.Application.Convertors
 @using Window.Application.Extensions
 @model Window.Domain.ViewModels.Admin.Log.FilterLogForInquiryViewModel
@@ -75,7 +75,7 @@
                 </div>
                 <div class="databox-left">
                     <span class="databox-number primary">@((ViewBag.Today != null) ? ViewBag.Today : 0)</span>
-                <div class="databox-text darkgray">تعداد استعلام های گرفته شده ی امروز</div>
+                <div class="databox-text darkgray">تعداد شروع استعلام در امروز</div>
 
             </div>
         </div>
@@ -87,7 +87,7 @@
             </div>
             <div class="databox-left">
                 <span class="databox-number danger">@((ViewBag.Month != null) ? ViewBag.Month : 0)</span>
-                <div class="databox-text darkgray">تعداد استعلام های گرفته شده ی این ماه </div>
+                <div class="databox-text darkgray">تعداد شروع استعلام در این ماه </div>
 
             </div>
         </div>
@@ -99,13 +99,18 @@
             </div>
             <div class="databox-left">
                 <span class="databox-number warning">@((ViewBag.Year != null) ? ViewBag.Year : 0)</span>
-                <div class="databox-text darkgray">تعداد استعلام های گرفته شده ی امسال</div>
+                <div class="databox-text darkgray">تعداد شروع استعلام در امسال</div>
             </div>
         </div>
     </div>
 
 </div>
 
+<p>
+    آخرین نتیجهٔ ثبت‌شدهٔ استعلام‌ها از زمان فعال‌شدن این گزارش
+    <strong>@ViewBag.WithQuote با قیمت کامل</strong> و
+    <strong>@ViewBag.WithoutQuote بدون قیمت کامل</strong>
+</p>
 <div class="container-fluid">
 
     <div class="row">
@@ -186,11 +191,13 @@
                             <div class="form-group col-md-12">
                                 <label asp-for="FromDate"> @Localizer["از تاریخ"] </label>
                                 <input type="text" class="form-control" AdminDatePicker="1" asp-for="FromDate">
+                                <span asp-validation-for="FromDate" class="text-danger"></span>
                             </div>
 
                             <div class="form-group col-md-12">
                                 <label asp-for="ToDate"> @Localizer["تا تاریخ "] </label>
                                 <input type="text" class="form-control" AdminDatePicker="2" asp-for="ToDate">
+                                <span asp-validation-for="ToDate" class="text-danger"></span>
                             </div>
 
                             <hr />
@@ -266,7 +273,7 @@
                                     وضعیت
                                 </th>
                                 <th class="tc vm">
-                                    تاریخ بازدید
+                                    تاریخ شروع استعلام
                                 </th>
                             </tr>
                         </thead>

@@ -61,6 +61,8 @@ namespace Window.Application.Interfaces
 
         Task<EditProfileResponse> EditProfileAsync(ulong userId, EditProfileViewModel model);
 
+        Task<bool> ConfirmMobileByAdmin(ulong userId, string? expectedMobile, CancellationToken cancellationToken);
+
         Task<EditUserViewModel> GetUserForEdit(ulong userId);
 
         Task<bool> RemoveUserById(ulong userId);

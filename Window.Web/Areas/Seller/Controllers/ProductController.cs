@@ -1,4 +1,4 @@
-﻿#region Usings
+#region Usings
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -117,6 +117,12 @@ public class ProductController : SellerBaseController
     [HttpPost , ValidateAntiForgeryToken]
     public async Task<IActionResult> AddSegmentPricing(ulong ProductId , ulong SegmentId , int Price)
     {
+        if (!ModelState.IsValid || Price <= 0)
+        {
+            TempData[ErrorMessage] = "قیمت باید عدد صحیح و بیشتر از صفر، به ریال باشد.";
+            return RedirectToAction(nameof(SegmentPricing), new { productId = ProductId });
+        }
+
         #region Add Pricing
 
         var res = await _productService.AddPricingForSegment(ProductId , SegmentId , Price , User.GetUserId());
@@ -159,6 +165,12 @@ public class ProductController : SellerBaseController
     [HttpPost , ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateGlassPricing(ulong GlassId , int Price)
     {
+        if (!ModelState.IsValid || Price <= 0)
+        {
+            TempData[ErrorMessage] = "قیمت باید عدد صحیح و بیشتر از صفر، به ریال باشد.";
+            return RedirectToAction(nameof(CreateGlassPricing));
+        }
+
         #region Fill View Model
 
         var model = await _productService.FillGlassPricingEntityViewModel(User.GetUserId());

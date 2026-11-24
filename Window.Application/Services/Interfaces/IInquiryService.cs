@@ -1,4 +1,4 @@
-﻿#region Usings
+#region Usings
 
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,7 +26,22 @@ public interface IInquiryService
     Task<int> CheckLogResultUserInquiry(string userMacAddress);
 
     //Log Inquiry For User In Step 1
-    Task LogInquiryForUserPart1(FilterInquiryViewModel filter);
+    Task LogInquiryForUserPart1(FilterInquiryViewModel filter, ulong? ownerUserId = null);
+
+    //Attach a guest inquiry to the signed-in user. Returns false when the inquiry does not exist or already has another owner.
+    Task CompleteInquiry(string inquiryToken);
+
+    Task<(int WithQuote, int WithoutQuote)> CountRecordedCompletions();
+
+    Task<bool> IsUnownedInquiry(string inquiryToken);
+
+    Task<bool> ClaimInquiry(string inquiryToken, ulong userId);
+
+    //Whether the inquiry token belongs to the signed-in user.
+    Task<bool> InquiryBelongsToUser(string inquiryToken, ulong userId);
+
+    //Latest inquiry token that belongs to the signed-in user.
+    Task<string?> GetLatestInquiryTokenForUser(ulong userId);
 
     //Log Inquiry For User In Step 2
     Task<bool> LogInquiryForUserPart2(ulong sampleId, int width, int height, int? KatibeSize, string userMacAddress, int productCount);
@@ -36,7 +51,7 @@ public interface IInquiryService
     Task<List<InquiryViewModel>?> ListOfInquiryLast6(string userMacAddress, string userId);
 
     //Initial Result Of User Inquiry
-    Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string UserId, string userMacAddress);
+    Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string UserId, string userMacAddress, Guid? clientRequestId = null);
 
     Task<double?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, int productCount , int? katibeSizes, ulong userId , ulong glassId);
 

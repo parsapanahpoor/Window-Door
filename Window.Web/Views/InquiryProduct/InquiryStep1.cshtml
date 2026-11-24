@@ -1,4 +1,4 @@
-﻿@using Window.Application.Extensions
+@using Window.Application.Extensions
 @using Window.Application.Convertors
 @model Window.Domain.ViewModels.Site.Inquiry.FilterInquiryViewModel
 @using Window.Domain.ViewModels.Admin.QuestionAnswer
@@ -72,44 +72,45 @@
 
     <script>
 
-        $("#StateId").change(function () {
+        const status = document.getElementById("inquiry-location-status");
 
-            console.log("Hello");
+        function loadOptions(parentSelector, childSelector, url, queryName, required) {
+            const parent = document.querySelector(parentSelector);
+            const child = document.querySelector(childSelector);
+            if (!parent || !child) return;
 
-            if ($("#StateId :selected").val() !== '') {
-                $('#CityId option:not(:first)').remove();
-                $.get("/Home/LoadCities", { stateId: $("#StateId :selected").val() }).then(res => {
-                    if (res.data !== null) {
-                        $.each(res.data, function () {
-                            $("#CityId").append(
-                                '<option value=' + this.id + '>' + this.title + '</option>'
-                            );
-                        });
-                        $("#CityId").removeAttr("disabled");
-                    }
-                });
-            } else {
-                $('#CityId option:not(:first)').remove();
-            }
-        });
+            let pendingRequest;
+            parent.addEventListener("change", async () => {
+                pendingRequest?.abort();
+                child.options.length = 1;
+                child.selectedIndex = 0;
+                child.disabled = true;
+                if (!parent.value || parent.value === "0") {
+                    if (required) status.textContent = "";
+                    return;
+                }
 
-        $("#SellerType").change(function () {
-            if ($("#SellerType :selected").val() !== '') {
-                $('#MainBrandId option:not(:first)').remove();
-                $.get("/Home/LoadBrands", { SellerType: $("#SellerType :selected").val() }).then(res => {
-                    if (res.data !== null) {
-                        $.each(res.data, function () {
-                            $("#MainBrandId").append(
-                                '<option value=' + this.id + '>' + this.title + '</option>'
-                            );
-                        });
-                        $("#MainBrandId").removeAttr("disabled");
-                    }
-                });
-            } else {
-                $('#MainBrandId option:not(:first)').remove();
-            }
-        });
+                const request = new AbortController();
+                pendingRequest = request;
+                if (required) status.textContent = "در حال دریافت شهرها…";
+                try {
+                    const query = new URLSearchParams({ [queryName]: parent.value });
+                    const response = await fetch(url + "?" + query, { signal: request.signal });
+                    if (!response.ok) throw new Error("Unable to load options");
+                    const result = await response.json();
+                    if (pendingRequest !== request) return;
+                    for (const entry of result.data ?? []) child.add(new Option(entry.title, entry.id));
+                    child.disabled = child.options.length <= 1;
+                    if (required) status.textContent = child.disabled ? "شهری برای این استان ثبت نشده است." : "";
+                } catch (error) {
+                    if (pendingRequest === request && error.name !== "AbortError" && required)
+                        status.textContent = "دریافت شهرها انجام نشد. دوباره استان را انتخاب کنید.";
+                }
+            });
+        }
+
+        loadOptions("#StateId", "#CityId", "@Url.Action("LoadCities", "Home")", "stateId", true);
+        loadOptions("#SellerType", "#MainBrandId", "@Url.Action("LoadBrands", "Home")", "SellerType", false);
 
     </script>
 
@@ -161,7 +162,8 @@
                 </div>
             </div>
 
-            <form asp-action="InquiryStep2" asp-controller="InquiryProduct" asp-area="" id="filter-search" method="get">
+            <p id="inquiry-location-status" role="status" aria-live="polite"></p>
+<form asp-action="InquiryStep2" asp-controller="InquiryProduct" asp-area="" id="filter-search" method="post">
                 <input name="UserMacAddress" type="hidden" value="@ViewBag.UserId" />
                 <!-- Step 2: Education-->
                 <div class="bg-light rounded-3 p-4 p-md-5 mb-3">
@@ -173,7 +175,7 @@
 
                         <div class="col-sm-6 mb-4">
 
-                            <label class="form-label" for="pr-education-level"> استان سکونت شما <span class="text-danger">*</span></label>
+                            <label class="form-label" for="StateId"> استان سکونت شما <span class="text-danger">*</span></label>
 
                             <select asp-for="StateId" class="form-select form-select-lg" id="StateId" required="">
                                 <option value=""> لطفا یک استان را انتخاب کنید </option>
@@ -199,7 +201,7 @@
 
                         <div class="col-sm-6 mb-4">
 
-                            <label class="form-label" for="pr-education-level"> شهر سکونت شما <span class="text-danger">*</span></label>
+                            <label class="form-label" for="CityId"> شهر سکونت شما <span class="text-danger">*</span></label>
 
                             <select asp-for="CityId" class="form-select form-select-lg" id="CityId" required="">
                                 <option value=""> لطفا یک شهر را انتخاب کنید </option>
@@ -207,7 +209,7 @@
                                 {
                                     foreach (var state in cities)
                                     {
-                                        if (Model != null && Model.StateId == state.Id)
+                                        if (Model != null && Model.CityId == state.Id)
                                         {
                                             <option value="@state.Id" selected="selected"> @state.Title </option>
                                         }
@@ -224,12 +226,12 @@
 
                         <div class="col-sm-6 mb-4">
 
-                            <label class="form-label" for="pr-education-level"> جنس کالا را انتخاب کنید <span class="text-danger">*</span></label>
+                            <label class="form-label" for="SellerType"> جنس کالا را انتخاب کنید <span class="text-danger">*</span></label>
 
-                            <select asp-for="SellerType" class="form-select form-select-lg" id="CityId" required="">
+                            <select asp-for="SellerType" class="form-select form-select-lg" id="SellerType" required="">
 
-                                <option value="0">UPVC</option>
-                                <option value="1">آلومینیوم</option>
+                                <option value="0" selected="@(Model?.SellerType == Window.Domain.Enums.SellerType.SellerType.UPC ? "selected" : null)">UPVC</option>
+                                <option value="1" selected="@(Model?.SellerType == Window.Domain.Enums.SellerType.SellerType.Aluminium ? "selected" : null)">آلومینیوم</option>
 
                             </select>
 
@@ -237,15 +239,15 @@
 
                         <div class="col-sm-6 mb-4">
 
-                            <label class="form-label" for="pr-education-level"> نوع شیشه را انتخاب کنید <span class="text-danger">*</span></label>
+                            <label class="form-label" for="GlassId"> نوع شیشه را انتخاب کنید <span class="text-danger">*</span></label>
 
-                            <select asp-for="GlassId" class="form-select form-select-lg" id="CityId" required="">
+                            <select asp-for="GlassId" class="form-select form-select-lg" id="GlassId" required="">
 
                                 @if (glass != null && glass.Any())
                                 {
                                     foreach (var glasses in glass)
                                     {
-                                        <option value="@glasses.Id"> @glasses.Title </option>
+                                        <option value="@glasses.Id" selected="@(Model?.GlassId == glasses.Id ? "selected" : null)"> @glasses.Title </option>
                                     }
                                 }
 

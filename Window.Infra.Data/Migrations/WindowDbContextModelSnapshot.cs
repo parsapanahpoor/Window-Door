@@ -112,18 +112,40 @@ namespace Window.Infra.Data.Migrations
 
             modelBuilder.Entity("Window.Domain.Entities.Account.SmsLoginChallenge", b =>
                 {
-                    b.Property<string>("Mobile").HasMaxLength(11).HasColumnType("nvarchar(11)");
-                    b.Property<Guid>("ChallengeId").HasColumnType("uniqueidentifier");
-                    b.Property<DateTimeOffset>("ExpiresAt").HasColumnType("datetimeoffset");
-                    b.Property<int>("FailedAttempts").HasColumnType("int");
-                    b.Property<DateTimeOffset>("NextSendAt").HasColumnType("datetimeoffset");
-                    b.Property<string>("ProtectedCode").HasMaxLength(512).HasColumnType("nvarchar(512)");
-                    b.Property<int>("SendCount").HasColumnType("int");
-                    b.Property<byte[]>("Version").IsConcurrencyToken().IsRequired()
-                        .ValueGeneratedOnAddOrUpdate().HasColumnType("rowversion");
-                    b.Property<DateTimeOffset>("WindowStartedAt").HasColumnType("datetimeoffset");
+                    b.Property<string>("Mobile")
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<Guid>("ChallengeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("FailedAttempts")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("NextSendAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("ProtectedCode")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<int>("SendCount")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<DateTimeOffset>("WindowStartedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Mobile");
+
                     b.ToTable("SmsLoginChallenges");
                 });
 
@@ -175,6 +197,13 @@ namespace Window.Infra.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("MobileLoginKey")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)")
+                        .HasComputedColumnSql("CONVERT(nvarchar(32), CASE WHEN RIGHT(TRANSLATE(REPLACE(REPLACE(REPLACE(REPLACE([Mobile], N' ', N''), N'-', N''), N'(', N''), N')', N''), N'۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', N'01234567890123456789'), 10) COLLATE Latin1_General_100_BIN2 NOT LIKE N'%[^0-9]%' AND ((LEN(TRANSLATE(REPLACE(REPLACE(REPLACE(REPLACE([Mobile], N' ', N''), N'-', N''), N'(', N''), N')', N''), N'۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', N'01234567890123456789')) = 11 AND TRANSLATE(REPLACE(REPLACE(REPLACE(REPLACE([Mobile], N' ', N''), N'-', N''), N'(', N''), N')', N''), N'۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', N'01234567890123456789') LIKE N'09%') OR ((LEN(TRANSLATE(REPLACE(REPLACE(REPLACE(REPLACE([Mobile], N' ', N''), N'-', N''), N'(', N''), N')', N''), N'۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', N'01234567890123456789')) = 13 AND TRANSLATE(REPLACE(REPLACE(REPLACE(REPLACE([Mobile], N' ', N''), N'-', N''), N'(', N''), N')', N''), N'۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', N'01234567890123456789') LIKE N'+989%') OR (LEN(TRANSLATE(REPLACE(REPLACE(REPLACE(REPLACE([Mobile], N' ', N''), N'-', N''), N'(', N''), N')', N''), N'۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', N'01234567890123456789')) = 14 AND TRANSLATE(REPLACE(REPLACE(REPLACE(REPLACE([Mobile], N' ', N''), N'-', N''), N'(', N''), N')', N''), N'۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', N'01234567890123456789') LIKE N'00989%') OR (LEN(TRANSLATE(REPLACE(REPLACE(REPLACE(REPLACE([Mobile], N' ', N''), N'-', N''), N'(', N''), N')', N''), N'۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', N'01234567890123456789')) = 12 AND TRANSLATE(REPLACE(REPLACE(REPLACE(REPLACE([Mobile], N' ', N''), N'-', N''), N'(', N''), N')', N''), N'۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', N'01234567890123456789') LIKE N'989%')) OR (LEN(TRANSLATE(REPLACE(REPLACE(REPLACE(REPLACE([Mobile], N' ', N''), N'-', N''), N'(', N''), N')', N''), N'۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', N'01234567890123456789')) = 10 AND TRANSLATE(REPLACE(REPLACE(REPLACE(REPLACE([Mobile], N' ', N''), N'-', N''), N'(', N''), N')', N''), N'۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', N'01234567890123456789') LIKE N'9%')) THEN N'0' + RIGHT(TRANSLATE(REPLACE(REPLACE(REPLACE(REPLACE([Mobile], N' ', N''), N'-', N''), N'(', N''), N')', N''), N'۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', N'01234567890123456789'), 10) ELSE N'legacy:' + CONVERT(nvarchar(20), [Id]) END)", true);
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -182,6 +211,11 @@ namespace Window.Infra.Data.Migrations
 
                     b.Property<string>("ShopName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("SmsLoginExcluded")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -191,25 +225,13 @@ namespace Window.Infra.Data.Migrations
                     b.Property<int>("WalletBalance")
                         .HasColumnType("int");
 
-                    b.Property<string>(MobileLoginKey.Name)
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)")
-                        .HasComputedColumnSql(MobileLoginKey.ComputedSql, true);
-
                     b.HasKey("Id");
 
-                    b.Property<bool>(MobileLoginKey.Excluded)
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.HasIndex(MobileLoginKey.Name, MobileLoginKey.Excluded);
-
-                    b.HasIndex(MobileLoginKey.Name)
+                    b.HasIndex("MobileLoginKey")
                         .IsUnique()
-                        .HasFilter(MobileLoginKey.EligibleFilter);
+                        .HasFilter("[SmsLoginExcluded] = 0");
+
+                    b.HasIndex("MobileLoginKey", "SmsLoginExcluded");
 
                     b.ToTable("Users");
                 });
@@ -669,6 +691,25 @@ namespace Window.Infra.Data.Migrations
                     b.ToTable("Glasses");
                 });
 
+            modelBuilder.Entity("Window.Domain.Entities.Inquiry.InquirySellerExposure", b =>
+                {
+                    b.Property<decimal>("InquiryId")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<decimal>("SellerId")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Tariff")
+                        .HasColumnType("int");
+
+                    b.HasKey("InquiryId", "SellerId");
+
+                    b.ToTable("InquirySellerExposures");
+                });
+
             modelBuilder.Entity("Window.Domain.Entities.Inquiry.LogInquiryForUser", b =>
                 {
                     b.Property<decimal>("Id")
@@ -695,6 +736,15 @@ namespace Window.Infra.Data.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime?>("LastCompletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("LastCompletionHasQuote")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("OwnerUserId")
+                        .HasColumnType("decimal(20,0)");
+
                     b.Property<int?>("SellerType")
                         .HasColumnType("int");
 
@@ -716,6 +766,9 @@ namespace Window.Infra.Data.Migrations
                         .HasColumnType("decimal(20,0)");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
+
+                    b.Property<Guid?>("ClientRequestId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CountOfSample")
                         .HasColumnType("int");
@@ -743,9 +796,13 @@ namespace Window.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SampleId");
+
                     b.HasIndex("LogInquiryForUserId");
 
-                    b.HasIndex("SampleId");
+                    b.HasIndex("LogInquiryForUserId", "ClientRequestId")
+                        .IsUnique()
+                        .HasFilter("[ClientRequestId] IS NOT NULL");
 
                     b.ToTable("logInquiryForUserDetails");
                 });

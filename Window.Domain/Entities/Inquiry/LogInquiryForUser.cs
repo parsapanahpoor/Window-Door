@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +25,16 @@ namespace Window.Domain.Entities.Inquiry
 
         public string? UserMAcAddress { get; set; }
 
+        /// <summary>
+        /// Signed-in owner of the inquiry. Null for guest inquiries created before login.
+        /// </summary>
+        public ulong? OwnerUserId { get; set; }
+
         public ulong? GlassId { get; set; }
+
+        public DateTime? LastCompletedAtUtc { get; set; }
+
+        public bool? LastCompletionHasQuote { get; set; }
 
         #endregion
 

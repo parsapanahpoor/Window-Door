@@ -20,6 +20,7 @@ using Window.Data.Context;
 using Window.Domain.SharedResource;
 using Window.IOC.Container;
 using Window.Application;
+using WebEssentials.AspNetCore.Pwa;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +35,12 @@ builder.Services.Configure<RequestLocalizationOptions>(ApplicationRequestLocaliz
 
 #region PWA
 
-builder.Services.AddProgressiveWebApp("/Site/Manifest/manifest.json");
+builder.Services.AddProgressiveWebApp(new PwaOptions
+{
+    CacheId = "panjerehyab-web-202611-inquiry",
+    Strategy = ServiceWorkerStrategy.Minimal,
+    AllowHttp = builder.Environment.IsDevelopment()
+}, "/Site/Manifest/manifest.json");
 
 #endregion
 
