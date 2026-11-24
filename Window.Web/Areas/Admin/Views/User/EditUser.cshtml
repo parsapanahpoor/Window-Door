@@ -1,4 +1,4 @@
-﻿@model Window.Domain.ViewModels.User.EditUserViewModel
+@model Window.Domain.ViewModels.User.EditUserViewModel
 @using Window.Application.StticTools
 @using Window.Domain.ViewModels.Common
 
@@ -140,4 +140,24 @@
     </div>
 
 </form>
+
+@if (Model != null)
+{
+    <section class="well" aria-label="وضعیت تأیید موبایل">
+        <p>شمارهٔ ذخیره‌شده <b dir="ltr">@Model.Mobile</b></p>
+        @if (Model.IsMobileConfirmed)
+        {
+            <p>شمارهٔ موبایل تأیید شده است.</p>
+        }
+        else
+        {
+            <form asp-action="ConfirmMobile" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="hidden" name="expectedMobile" value="@Model.Mobile" />
+                <p>پس از بررسی مالکیت شماره، آن را به‌صورت دستی تأیید کنید.</p>
+                <button class="btn btn-warning" type="submit">تأیید دستی شمارهٔ موبایل</button>
+            </form>
+        }
+    </section>
+}
 

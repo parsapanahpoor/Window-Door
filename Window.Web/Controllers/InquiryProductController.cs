@@ -1,4 +1,4 @@
-﻿#region Usings
+#region Usings
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +14,7 @@ namespace Window.Web.Controllers;
 
 #endregion
 
+[ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 public class InquiryProductController : SiteBaseController
 {
     #region Ctor
@@ -47,55 +48,28 @@ public class InquiryProductController : SiteBaseController
 
     #region Inquiry ownership
 
-    private const string InquiryTokenSessionKey = "InquiryToken";
+    internal const string GuestInquiryKeyPrefix = "GuestInquiry:";
+    internal const string InquiryTokenSessionKey = "InquiryToken";
+    internal const string WebInquiryTokenPrefix = "web_";
 
     private bool IsSignedIn => User.Identity?.IsAuthenticated == true;
 
-    /// <summary>
-    /// Resolves the inquiry token for the current request. Guests may only use the
-    /// token stored in their own session; signed-in users must own the inquiry.
-    /// A guest inquiry is claimed by the user on the first signed-in request.
-    /// </summary>
     private async Task<string?> ResolveInquiryTokenAsync(string? requestToken)
     {
-        var sessionToken = HttpContext.Session.GetString(InquiryTokenSessionKey);
-
-        if (!IsSignedIn)
-        {
-            if (!string.IsNullOrWhiteSpace(requestToken))
-            {
-                return requestToken == sessionToken ? requestToken : null;
-            }
-
-            return sessionToken;
-        }
-
-        var token = string.IsNullOrWhiteSpace(requestToken) ? sessionToken : requestToken;
+        var token = string.IsNullOrWhiteSpace(requestToken)
+            ? HttpContext.Session.GetString(InquiryTokenSessionKey)
+            : requestToken;
 
         if (string.IsNullOrWhiteSpace(token))
-        {
-            token = await _inquiryService.GetLatestInquiryTokenForUser(User.GetUserId());
-            if (!string.IsNullOrWhiteSpace(token))
-            {
-                HttpContext.Session.SetString(InquiryTokenSessionKey, token);
-            }
+            return IsSignedIn ? await _inquiryService.GetLatestInquiryTokenForUser(User.GetUserId()) : null;
 
-            return token;
-        }
+        if (IsSignedIn)
+            return await _inquiryService.InquiryBelongsToUser(token, User.GetUserId()) ? token : null;
 
-        if (await _inquiryService.ClaimInquiry(token, User.GetUserId()))
-        {
-            HttpContext.Session.SetString(InquiryTokenSessionKey, token);
-            return token;
-        }
+        if (HttpContext.Session.GetString(GuestInquiryKeyPrefix + token) == null)
+            return null;
 
-        if (await _inquiryService.InquiryBelongsToUser(token, User.GetUserId()))
-        {
-            HttpContext.Session.SetString(InquiryTokenSessionKey, token);
-            return token;
-        }
-
-        return null;
+        return await _inquiryService.IsUnownedInquiry(token) ? token : null;
     }
 
     #endregion
@@ -121,14 +95,14 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
-        return View();
+        return View("InquiryStep1", filter);
     }
 
     #endregion
 
     #region Test For Step 2
 
-    [HttpGet]
+    [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> InquiryStep2(ulong StateId, ulong CityId, ProductType? ProductType, ProductKind? ProductKind, SellerType SellerType, ulong? GlassId)
     {
         #region Check That If User Is Seller
@@ -146,10 +120,21 @@ public class InquiryProductController : SiteBaseController
 
         #region Model State Valdiation
 
-        if (!ModelState.IsValid)
+        var states = await _stateService.GetStateChildren(1);
+        var validState = states.Any(state => state.Id == StateId);
+        var validCity = validState && (await _stateService.GetStateChildren(StateId)).Any(city => city.Id == CityId);
+        var glasses = await _productService.GetAllGlasses();
+
+        if (!ModelState.IsValid || !validCity || !Enum.IsDefined(SellerType) || !glasses.Any(glass => glass.Id == GlassId))
         {
-            TempData[ErrorMessage] = "لطفا اطلاعات را کامل وارد کنید";
-            return RedirectToAction(nameof(InquiryStep1));
+            TempData[ErrorMessage] = "استان، شهر، جنس و نوع شیشه را بررسی کنید.";
+            return await InquiryStep1(new FilterInquiryViewModel
+            {
+                StateId = validState ? StateId : null,
+                CityId = validCity ? CityId : null,
+                SellerType = SellerType,
+                GlassId = GlassId
+            });
         }
 
         #endregion
@@ -159,7 +144,7 @@ public class InquiryProductController : SiteBaseController
         // The previous implementation keyed ownership by the server's IP address, so every
         // visitor shared one basket. Each inquiry now gets a server-generated token; the
         // token is bound to the visitor's session (and to the user id after sign-in).
-        var inquiryToken = Guid.NewGuid().ToString("N");
+        var inquiryToken = WebInquiryTokenPrefix + Guid.NewGuid().ToString("N");
 
         FilterInquiryViewModel log = new FilterInquiryViewModel()
         {
@@ -177,6 +162,8 @@ public class InquiryProductController : SiteBaseController
 
         await _inquiryService.LogInquiryForUserPart1(log, IsSignedIn ? User.GetUserId() : null);
         HttpContext.Session.SetString(InquiryTokenSessionKey, inquiryToken);
+        if (!IsSignedIn)
+            HttpContext.Session.SetString(GuestInquiryKeyPrefix + inquiryToken, "1");
 
         #endregion
 
@@ -190,7 +177,7 @@ public class InquiryProductController : SiteBaseController
     #region Inquiry Step 3
 
     [HttpGet]
-    public async Task<IActionResult> InquiryStep3(ulong? brandId, string? userMacAddress)
+    public async Task<IActionResult> InquiryStep3(string? userMacAddress)
     {
         var inquiryToken = await ResolveInquiryTokenAsync(userMacAddress);
         if (string.IsNullOrWhiteSpace(inquiryToken))
@@ -210,16 +197,7 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
-        #region Update User Log
-
-        if (brandId.HasValue)
-        {
-            await _inquiryService.UpdateLogUserInquiryRequest(inquiryToken, brandId.Value);
-        }
-
-        #endregion
-
-        ViewBag.UserMacAddress = inquiryToken;
+ViewBag.UserMacAddress = inquiryToken;
 
         var CountOfVerifySample = await _inquiryService.CheckLogResultUserInquiry(inquiryToken);
         ViewBag.CountOfVerifySample = 5 - CountOfVerifySample;
@@ -228,7 +206,51 @@ public class InquiryProductController : SiteBaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> InquiryStep3(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string userMacAddress)
+    public async Task<IActionResult> SelectInquiryBrand(ulong brandId, string userMacAddress)
+    {
+        var inquiryToken = await ResolveInquiryTokenAsync(userMacAddress);
+        if (inquiryToken == null)
+            return RedirectToAction(nameof(InquiryStep1));
+
+        if (await _brandService.GetMainBrandById(brandId) == null)
+        {
+            TempData[ErrorMessage] = "برند انتخاب شده معتبر نیست.";
+            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = inquiryToken });
+        }
+
+        await _inquiryService.UpdateLogUserInquiryRequest(inquiryToken, brandId);
+        return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = inquiryToken });
+    }
+
+    private async Task<string?> ValidateInquiryItem(string token, ulong sampleId, int width, int height, int count, int? sashSize)
+    {
+        var samples = await _sampleService.GetListOfSamplesForShowInAPI(token);
+        var sample = samples?.FirstOrDefault(item => item.Id == sampleId);
+        if (sample == null) return "نمونه برای این استعلام قابل انتخاب نیست.";
+        if (width <= 0 || width < sample.MinWidth || width > sample.MaxWidth
+            || height <= 0 || height < sample.MinHeight || height > sample.MaxHeight)
+            return "ابعاد را در بازهٔ مجاز نمونه و به سانتی‌متر وارد کنید.";
+        if (count <= 0) return "تعداد باید بیشتر از صفر باشد.";
+
+        var usesDoorSplit = sampleId is 15 or 16 or 42 or 43;
+        var usesTransom = sampleId is 22 or 23 or 24 or 25 or 26 or 44 or 45 or 46 or 47 or 48
+            or 49 or 50 or 51 or 52 or 53 or 55 or 56 or 57;
+        if (usesDoorSplit || usesTransom)
+        {
+            var limit = usesDoorSplit ? width : height;
+            if (sashSize is null or <= 0 || sashSize >= limit)
+                return "اندازهٔ بخش فرعی باید بیشتر از صفر و کمتر از اندازهٔ کل باشد.";
+        }
+        else if (sashSize.HasValue)
+        {
+            return "این نمونه اندازهٔ بخش فرعی ندارد.";
+        }
+
+        return null;
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> InquiryStep3(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string userMacAddress, Guid? requestId)
     {
         var inquiryToken = await ResolveInquiryTokenAsync(userMacAddress);
         if (string.IsNullOrWhiteSpace(inquiryToken))
@@ -237,57 +259,22 @@ public class InquiryProductController : SiteBaseController
             return RedirectToAction(nameof(InquiryStep1));
         }
 
-        #region Check Is Exist Sample
-
-        var sample = await _sampleService.GetSampleBySampleIdWithAsNoTracking(sampleId);
-        if (sample == null)
+        var validationError = await ValidateInquiryItem(inquiryToken, sampleId, width, height, SampleCount, katibeSize);
+        if (!ModelState.IsValid || validationError != null)
         {
-            TempData[ErrorMessage] = "نمونه انتخاب شده معتبر نیست.";
-            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = inquiryToken });
-        }
-
-        if (sample.MaxHeight < height)
-        {
-            TempData[ErrorMessage] = "ارتفاع وارد شده بیشتر از حد مجاز است .";
-            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
-        }
-        if (sample.MinHeight > height)
-        {
-            TempData[ErrorMessage] = "ارتفاع وارد شده کمتر از حد مجاز است .";
-            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
-        }
-        if (sample.MaxWidth < width)
-        {
-            TempData[ErrorMessage] = "عرض وارد شده بیشتر از حد مجاز است .";
-            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
-        }
-        if (sample.MinWidth > width)
-        {
-            TempData[ErrorMessage] = "عرض وارد شده کمتر از حد مجاز است .";
-            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
-        }
-        if (SampleCount <= 0)
-        {
-            TempData[ErrorMessage] = "تعداد وارد شده صحیح نمی باشد.";
-            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
-        }
-
-        #endregion
-
-        var CountOfVerifySample = await _inquiryService.CheckLogResultUserInquiry(inquiryToken);
-        ViewBag.CountOfVerifySample = 5 - CountOfVerifySample;
-
-        //Check User Inquiry Log Count
-        if (CountOfVerifySample >= 5)
-        {
-            TempData[ErrorMessage] = "بیش از تعداد 5 محصول را نمی توان به طور همزمان مقدار دهی کرد.";
-            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = inquiryToken });
+            TempData[ErrorMessage] = validationError ?? "اعداد واردشده معتبر نیستند.";
+            ViewData["InvalidSampleId"] = sampleId;
+            return await InquiryStep3(inquiryToken);
         }
 
         #region Add Log For User
 
-        var res = await _inquiryService.InitialResultOfUserInquiry(sampleId, width, height, SampleCount, katibeSize, inquiryToken, inquiryToken);
-        if (!res) return NotFound();
+        var res = await _inquiryService.InitialResultOfUserInquiry(sampleId, width, height, SampleCount, katibeSize, inquiryToken, inquiryToken, requestId);
+        if (!res)
+        {
+            TempData[ErrorMessage] = "ثبت قلم انجام نشد. انتخاب شیشه و تعداد اقلام را بررسی کنید.";
+            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = inquiryToken });
+        }
 
         #endregion
 
@@ -302,6 +289,18 @@ public class InquiryProductController : SiteBaseController
 
     #region Inquiry Step 4 (proccess inquiry)
 
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> CompleteInquiry(string? userMacAddress)
+    {
+        var inquiryToken = await ResolveInquiryTokenAsync(userMacAddress);
+        if (inquiryToken == null)
+            return RedirectToAction(nameof(InquiryStep1));
+
+        await _inquiryService.CompleteInquiry(inquiryToken);
+        return RedirectToAction(nameof(InquiryStep4), new { userMacAddress = inquiryToken });
+    }
+
+    [HttpGet]
     public async Task<IActionResult> InquiryStep4(string? userMacAddress, int? orderByPrice)
     {
         var inquiryToken = await ResolveInquiryTokenAsync(userMacAddress);
@@ -314,11 +313,7 @@ public class InquiryProductController : SiteBaseController
         #region Fill Model
 
         var model = await _inquiryService.ListOfInquiry(inquiryToken, inquiryToken);
-        if (model == null || !model.Any())
-        {
-            TempData[ErrorMessage] = "نتیجه ای برای استعلام شما یافت نشده است .";
-            return RedirectToAction("Index", "Home");
-        }
+        model ??= new List<InquiryViewModel>();
 
         #endregion
 
@@ -338,7 +333,7 @@ public class InquiryProductController : SiteBaseController
 
         #endregion
 
-        TempData[SuccessMessage] = "استعلام گیری با موفقیت انجام شده است .";
+
         return View(model);
     }
 
@@ -552,58 +547,13 @@ public class InquiryProductController : SiteBaseController
             return RedirectToAction(nameof(InquiryStep1));
         }
 
-        #region Get Samples For Show In Page Model
-
-        var samples = await _sampleService.GetListOfSamplesForShowInAPI(inquiryToken);
-        if (samples == null || !samples.Any())
+        var validationError = await ValidateInquiryItem(inquiryToken, sampleId, width, height, SampleCount.GetValueOrDefault(), katibeSize);
+        if (!ModelState.IsValid || validationError != null)
         {
-            TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
-            return NotFound();
+            TempData[ErrorMessage] = validationError ?? "اعداد واردشده معتبر نیستند.";
+            ViewData["InvalidDetailId"] = inquiryDetailId;
+            return await GetUserLastestInquiry(inquiryToken);
         }
-
-        #endregion
-
-        #region Check Is Exist Sample 
-
-        var sample = await _sampleService.GetSampleBySampleId(sampleId);
-        if (samples == null || !samples.Any())
-        {
-            TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
-            return NotFound();
-        }
-        if (sample == null)
-        {
-            TempData[ErrorMessage] = "اطلاعات وارد شده معتبر نمی باشند .";
-            return NotFound();
-        }
-
-        if (sample.MaxHeight < height)
-        {
-            TempData[ErrorMessage] = "ارتفاع وارد شده بیشتر از حد مجاز است .";
-            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
-        }
-        if (sample.MinHeight > height)
-        {
-            TempData[ErrorMessage] = "ارتفاع وارد شده کمتر از حد مجاز است .";
-            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
-        }
-        if (sample.MaxWidth < width)
-        {
-            TempData[ErrorMessage] = "عرض وارد شده بیشتر از حد مجاز است .";
-            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
-        }
-        if (sample.MinWidth > width)
-        {
-            TempData[ErrorMessage] = "عرض وارد شده کمتر از حد مجاز است .";
-            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
-        }
-        if (SampleCount <= 0)
-        {
-            TempData[ErrorMessage] = "تعداد وارد شده صحیح نمی باشد.";
-            return RedirectToAction(nameof(InquiryStep3), new { userMacAddress = userMacAddress });
-        }
-
-        #endregion
 
         #region Add Log For User
 

@@ -233,6 +233,20 @@ namespace Window.Web.Controllers
                 claims.Add(new Claim(ClaimTypes.AuthenticationMethod, authenticationMethod));
 
             var destination = await GetPostLoginDestinationAsync(user, returnUrl);
+            var guestKeys = HttpContext.Session.Keys
+                .Where(key => key.StartsWith(InquiryProductController.GuestInquiryKeyPrefix, StringComparison.Ordinal))
+                .ToArray();
+            if (guestKeys.Length > 0)
+            {
+                var inquiryService = HttpContext.RequestServices.GetRequiredService<IInquiryService>();
+                foreach (var key in guestKeys)
+                {
+                    var token = key[InquiryProductController.GuestInquiryKeyPrefix.Length..];
+                    await inquiryService.ClaimInquiry(token, user.Id);
+                    HttpContext.Session.Remove(key);
+                }
+            }
+
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity), new AuthenticationProperties { IsPersistent = rememberMe });
@@ -363,6 +377,14 @@ namespace Window.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
+            foreach (var key in HttpContext.Session.Keys
+                .Where(key => key.StartsWith(InquiryProductController.GuestInquiryKeyPrefix, StringComparison.Ordinal))
+                .ToArray())
+            {
+                HttpContext.Session.Remove(key);
+            }
+
+            HttpContext.Session.Remove(InquiryProductController.InquiryTokenSessionKey);
             return Redirect("/");
         }
 

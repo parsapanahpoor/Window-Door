@@ -1,4 +1,5 @@
-﻿using Window.Application.Interfaces;
+using Window.Application.Interfaces;
+using Window.Application.Extensions;
 using Window.Application.Security;
 using Window.Domain.ViewModels;
 using Window.Domain.ViewModels.Admin.Wallet;
@@ -138,6 +139,23 @@ namespace Window.Web.Areas.Admin.Controllers
         }
 
         #endregion
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmMobile(ulong id, string? expectedMobile, CancellationToken cancellationToken)
+        {
+            if (await _userService.ConfirmMobileByAdmin(id, expectedMobile, cancellationToken))
+            {
+                HttpContext.RequestServices.GetRequiredService<ILogger<UserController>>()
+                    .LogInformation("Admin {AdminUserId} manually confirmed mobile for account {TargetUserId}", User.GetUserId(), id);
+                TempData[SuccessMessage] = "شمارهٔ موبایل ثبت‌شده تأیید شد.";
+            }
+            else
+            {
+                TempData[ErrorMessage] = "تأیید انجام نشد. وضعیت حساب و شمارهٔ ذخیره‌شده را دوباره بررسی کنید.";
+            }
+
+            return RedirectToAction(nameof(EditUser), new { id });
+        }
 
         #region remove user
 

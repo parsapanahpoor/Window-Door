@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,6 +31,10 @@ namespace Window.Domain.Entities.Inquiry
         public ulong? OwnerUserId { get; set; }
 
         public ulong? GlassId { get; set; }
+
+        public DateTime? LastCompletedAtUtc { get; set; }
+
+        public bool? LastCompletionHasQuote { get; set; }
 
         #endregion
 

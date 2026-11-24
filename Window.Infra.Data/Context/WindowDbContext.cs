@@ -241,6 +241,7 @@ public class WindowDbContext : DbContext
     #region Inquiry
 
     public DbSet<LogInquiryForUser> LogInquiryForUsers { get; set; }
+    public DbSet<InquirySellerExposure> InquirySellerExposures { get; set; }
 
     public DbSet<LogInquiryForUserDetail> logInquiryForUserDetails { get; set; }
 
@@ -314,6 +315,10 @@ public class WindowDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<InquirySellerExposure>().HasKey(exposure => new { exposure.InquiryId, exposure.SellerId });
+        modelBuilder.Entity<LogInquiryForUserDetail>().HasIndex(item => item.LogInquiryForUserId);
+        modelBuilder.Entity<LogInquiryForUserDetail>().HasIndex(item => new { item.LogInquiryForUserId, item.ClientRequestId }).IsUnique().HasFilter("[ClientRequestId] IS NOT NULL");
+
         var users = modelBuilder.Entity<User>();
         users.Property<string>(MobileLoginKey.Name).HasMaxLength(32).IsRequired()
             .HasComputedColumnSql(MobileLoginKey.ComputedSql, stored: true);
@@ -328,7 +333,7 @@ public class WindowDbContext : DbContext
             Id = 1,
             Title = "Admin",
             RoleUniqueName = "Admin",
-            CreateDate = DateTime.Now,
+            CreateDate = new DateTime(2024, 7, 19, 13, 51, 2, 931, DateTimeKind.Local).AddTicks(6757),
             IsDelete = false
         });
    
@@ -337,7 +342,7 @@ public class WindowDbContext : DbContext
             Id = 2,
             Title = "Support",
             RoleUniqueName = "Support",
-            CreateDate = DateTime.Now,
+            CreateDate = new DateTime(2024, 7, 19, 13, 51, 2, 931, DateTimeKind.Local).AddTicks(6796),
             IsDelete = false
         });
 
@@ -346,7 +351,7 @@ public class WindowDbContext : DbContext
             Id = 3,
             Title = "Seller",
             RoleUniqueName = "Seller",
-            CreateDate = DateTime.Now,
+            CreateDate = new DateTime(2024, 7, 19, 13, 51, 2, 931, DateTimeKind.Local).AddTicks(6823),
             IsDelete = false
         });
 
@@ -355,7 +360,7 @@ public class WindowDbContext : DbContext
             Id = 4,
             Title = "SellerMaster",
             RoleUniqueName = "SellerMaster",
-            CreateDate = DateTime.Now,
+            CreateDate = new DateTime(2024, 7, 19, 13, 51, 2, 931, DateTimeKind.Local).AddTicks(6840),
             IsDelete = false
         });
 
@@ -368,7 +373,7 @@ public class WindowDbContext : DbContext
             Id = 1,
             Name = "کشویی",
             ProductType = Domain.Enums.Types.ProductType.Keshoie,
-            CreateDate = DateTime.Now,
+            CreateDate = new DateTime(2024, 7, 19, 13, 51, 2, 931, DateTimeKind.Local).AddTicks(6879),
             IsDelete = false
         });
 
@@ -377,7 +382,7 @@ public class WindowDbContext : DbContext
             Id = 2,
             Name = "کتیبه",
             ProductType = Domain.Enums.Types.ProductType.Keshoie,
-            CreateDate = DateTime.Now,
+            CreateDate = new DateTime(2024, 7, 19, 13, 51, 2, 931, DateTimeKind.Local).AddTicks(6900),
             IsDelete = false
         });
 
@@ -386,7 +391,7 @@ public class WindowDbContext : DbContext
             Id = 3,
             Name = "کتیبه",
             ProductType = Domain.Enums.Types.ProductType.Lolaie,
-            CreateDate = DateTime.Now,
+            CreateDate = new DateTime(2024, 7, 19, 13, 51, 2, 931, DateTimeKind.Local).AddTicks(6919),
             IsDelete = false
         });
 
@@ -395,7 +400,7 @@ public class WindowDbContext : DbContext
             Id = 4,
             Name = "درب",
             ProductType = Domain.Enums.Types.ProductType.Lolaie,
-            CreateDate = DateTime.Now,
+            CreateDate = new DateTime(2024, 7, 19, 13, 51, 2, 931, DateTimeKind.Local).AddTicks(6935),
             IsDelete = false
         });
 
@@ -404,7 +409,7 @@ public class WindowDbContext : DbContext
             Id = 5,
             Name = "لولایی",
             ProductType = Domain.Enums.Types.ProductType.Lolaie,
-            CreateDate = DateTime.Now,
+            CreateDate = new DateTime(2024, 7, 19, 13, 51, 2, 931, DateTimeKind.Local).AddTicks(6951),
             IsDelete = false
         });
 

@@ -1,4 +1,4 @@
-﻿#region Usings
+#region Usings
 
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,6 +29,12 @@ public interface IInquiryService
     Task LogInquiryForUserPart1(FilterInquiryViewModel filter, ulong? ownerUserId = null);
 
     //Attach a guest inquiry to the signed-in user. Returns false when the inquiry does not exist or already has another owner.
+    Task CompleteInquiry(string inquiryToken);
+
+    Task<(int WithQuote, int WithoutQuote)> CountRecordedCompletions();
+
+    Task<bool> IsUnownedInquiry(string inquiryToken);
+
     Task<bool> ClaimInquiry(string inquiryToken, ulong userId);
 
     //Whether the inquiry token belongs to the signed-in user.
@@ -45,7 +51,7 @@ public interface IInquiryService
     Task<List<InquiryViewModel>?> ListOfInquiryLast6(string userMacAddress, string userId);
 
     //Initial Result Of User Inquiry
-    Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string UserId, string userMacAddress);
+    Task<bool> InitialResultOfUserInquiry(ulong sampleId, int width, int height, int SampleCount, int? katibeSize, string UserId, string userMacAddress, Guid? clientRequestId = null);
 
     Task<double?> InitialTotalSamplePrice(ulong brandId, ulong sampleId, int height, int width, int productCount , int? katibeSizes, ulong userId , ulong glassId);
 

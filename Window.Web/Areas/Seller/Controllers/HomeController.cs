@@ -63,6 +63,7 @@ namespace Window.Web.Areas.Seller.Controllers
                 ViewBag.CountOfTodayUserInInquiry = await _sellerService.CountOfTodayUserInInquiry(userId);
                 ViewBag.CountOfMonthUserInInquiry = await _sellerService.CountOfMonthUserInInquiry(userId);
                 ViewBag.CountOfYearUserInInquiry = await _sellerService.CountOfYearUserInInquiry(userId);
+                ViewBag.CountInquiryAppearances = await _sellerService.CountInquiryAppearances(market.UserId);
                 ViewBag.CountOfSellerWaitingRequest = await _contractService.CountOfUserWaitingContractRequest(userId);
             }
 

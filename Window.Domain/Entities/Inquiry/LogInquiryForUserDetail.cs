@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +13,8 @@ namespace Window.Domain.Entities.Inquiry
         #region properties
 
         public ulong LogInquiryForUserId { get; set; }
+
+        public Guid? ClientRequestId { get; set; }
 
         public ulong? SampleId { get; set; }
 

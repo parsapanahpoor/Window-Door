@@ -83,6 +83,7 @@ builder.Services.AddScoped(provider =>
             _ => "ActiveSellerAccount"
         }),
         nameof(ISellerService.IsSellerMaster) => Task.FromResult(fixture != "employee"),
+        nameof(ISellerService.CountInquiryAppearances) => Task.FromResult(2),
         nameof(ISellerService.CountOfTodayUserInInquiry) => Task.FromResult(12),
         nameof(ISellerService.CountOfMonthUserInInquiry) => Task.FromResult(34),
         nameof(ISellerService.CountOfYearUserInInquiry) => Task.FromResult(56),
