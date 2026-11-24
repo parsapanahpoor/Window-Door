@@ -100,6 +100,8 @@ namespace Window.Application.Services.Interfaces
 
         #region Site Side
 
+        Task<int> CountInquiryAppearances(ulong sellerId);
+
         Task<int> CountOfTodayUserInInquiry(ulong userId);
 
         Task<int> CountOfMonthUserInInquiry(ulong userId);

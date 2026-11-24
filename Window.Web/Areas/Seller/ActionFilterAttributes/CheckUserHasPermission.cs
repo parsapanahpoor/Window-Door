@@ -1,4 +1,4 @@
-﻿using Window.Application.Extensions;
+using Window.Application.Extensions;
 using Window.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -16,7 +16,7 @@ namespace Window.Web.Areas.Seller.ActionFilterAttributes
 
             if (!hasUserAnyRole)
             {
-                context.HttpContext.Response.Redirect("/");
+                context.Result = new Microsoft.AspNetCore.Mvc.RedirectResult("/");
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Window.Application.Security;
 using Window.Application.Services.Interfaces;
 using Window.Domain.Entities.Sample;
@@ -71,7 +71,7 @@ namespace Window.Web.Areas.Admin.Controllers
             ViewData["Segments"] = await _segmentService.GetAllSegments();
 
             TempData[ErrorMessage] = "درج نمونه با شکست روبروشده است .";
-            return RedirectToAction(nameof(CreateSample));
+            return View(sample);
         }
 
         #endregion
@@ -113,7 +113,7 @@ namespace Window.Web.Areas.Admin.Controllers
             ViewBag.SelectedSegments = await _sampleService.GetSampleSelectedSegmnetIdBySampleId(sample.Id);
 
             TempData[ErrorMessage] = "درج نمونه با شکست روبروشده است .";
-            return RedirectToAction(nameof(sample));
+            return View(sample);
         }
 
         #endregion

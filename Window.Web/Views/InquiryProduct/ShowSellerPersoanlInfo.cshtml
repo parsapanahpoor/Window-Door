@@ -367,11 +367,17 @@
                 {
                     @if (canInsertComment.RequestForContractType == Window.Domain.Enums.RequestForContract.RequestForContractType.Decline)
                     {
-                        <a class="btn btn-lg btn-primary w-100 mb-3" asp-action="RequestForContract" asp-area="" asp-controller="InquiryProduct" asp-route-sellerId="@sellerId">درخواست قرارداد</a>
+                        <form asp-action="RequestForContract" asp-area="" asp-controller="InquiryProduct" method="post">
+                            <input type="hidden" name="sellerId" value="@sellerId" />
+                            <button type="submit" class="btn btn-lg btn-primary w-100 mb-3">درخواست قرارداد</button>
+                        </form>
                     }
                     else
                     {
-                        <a class="btn btn-lg btn-primary w-100 mb-3" asp-action="RequestForContract" asp-area="" asp-controller="InquiryProduct" asp-route-sellerId="@sellerId">درخواست قرارداد</a>
+                        <form asp-action="RequestForContract" asp-area="" asp-controller="InquiryProduct" method="post">
+                            <input type="hidden" name="sellerId" value="@sellerId" />
+                            <button type="submit" class="btn btn-lg btn-primary w-100 mb-3">درخواست قرارداد</button>
+                        </form>
                     }
                 }
                 @if (canInsertComment != null)

@@ -75,4 +75,5 @@
   <data name="Store status short unverified" xml:space="preserve"><value>تأیید نشده</value></data>
   <data name="Store status short incomplete" xml:space="preserve"><value>ناقص</value></data>
   <data name="Store profile, links and work samples" xml:space="preserve"><value>مشخصات، لینک‌ها و نمونه‌کارها</value></data>
+  <data name="Inquiry results appearances" xml:space="preserve"><value>حضور ثبت‌شده در نتایج استعلام</value></data>
 </root>

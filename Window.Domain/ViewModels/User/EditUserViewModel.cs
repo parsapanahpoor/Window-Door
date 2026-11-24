@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +12,8 @@ namespace Window.Domain.ViewModels.User
     {
         #region properties
         public ulong Id { get; set; }
+
+        public bool IsMobileConfirmed { get; set; }
 
         [DisplayName("Username")]
         [Required(ErrorMessage = "Please Enter {0}")]

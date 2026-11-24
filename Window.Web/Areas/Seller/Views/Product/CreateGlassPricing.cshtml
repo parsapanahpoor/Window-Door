@@ -1,4 +1,4 @@
-﻿@using Window.Domain.ViewModels.Common
+@using Window.Domain.ViewModels.Common
 @using Window.Application.StaticTools
 @model Window.Domain.ViewModels.Seller.Pricing.GlassPricingViewModel
 @using Window.Domain.Enums.SellerType
@@ -46,16 +46,16 @@
                                             {
                                                 @if (glassPricing.Any(p => p.GlassId == item.Glass.Id))
                                                 {
-                                                    <input type="number" class="form-control" value="@glassPricing.Where(p=> p.GlassId == item.Glass.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="0">
+                                                    <input type="number" class="form-control" value="@glassPricing.Where(p=> p.GlassId == item.Glass.Id).Select(p=> p.Price).FirstOrDefault()" name="Price" min="1" aria-label="قیمت به ریال" required>
                                                 }
                                                    else
                                             {
-                                                <input type="number" class="form-control" name="Price" min="0">
+                                                <input type="number" class="form-control" name="Price" min="1" aria-label="قیمت به ریال" required>
                                             }
                                             }
                                             else
                                             {
-                                                <input type="number" class="form-control" name="Price" min="0">
+                                                <input type="number" class="form-control" name="Price" min="1" aria-label="قیمت به ریال" required>
                                             }
                                             <span class="input-group-btn">
                                                 <span class="btn palegreen-azure btn-file" style="padding:0px 0px 0px 0px;">

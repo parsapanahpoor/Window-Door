@@ -239,6 +239,26 @@ try
             u.Password == PasswordHelper.EncodePasswordMd5(reset.Password)), "Store the existing password hash format");
     }
 
+    await using (var adminDb = new WindowDbContext(options))
+    {
+        const string manualPhone = "09100000998";
+        var pending = CreateUser(manualPhone, legacyPassword, confirmed: false);
+        pending.ExpireMobileSMSDateTime = DateTime.Now.AddMinutes(2);
+        adminDb.Users.Add(pending);
+        await adminDb.SaveChangesAsync();
+
+        var service = new UserService(new ConfigurationBuilder().Build(), new UserRepository(adminDb),
+            null!, adminDb, null!, null!, sender);
+        Check(!await service.ConfirmMobileByAdmin(pending.Id, "09100000999", default), "Reject stale admin form");
+        Check(!await service.ConfirmMobileByAdmin(blocked.Id, blockedPhone, default), "Do not activate a blocked account");
+        Check(await service.ConfirmMobileByAdmin(pending.Id, manualPhone, default), "Confirm the stored eligible mobile");
+        Check(!await service.ConfirmMobileByAdmin(pending.Id, manualPhone, default), "Repeat confirmation must not change the account");
+        var saved = await adminDb.Users.AsNoTracking().SingleAsync(user => user.Id == pending.Id);
+        Check(saved.IsMobileConfirm && saved.ExpireMobileSMSDateTime == null && saved.Password == legacyPassword,
+            "Confirmation must invalidate the old code and preserve the password");
+        Console.WriteLine("PASS: admin confirmation eligibility, stale form, replay and unchanged password.");
+    }
+
     await HttpChecks.RunAsync(options, sender, clock);
     Console.WriteLine("PASS: SQL migration, legacy normalization, disputed mobiles, admin and ordinary SMS sign-in, replay, concurrency, cooldown, failures and HTTP flow.");
 }

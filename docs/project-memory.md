@@ -182,3 +182,18 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 
 ## Home favicon correction
 - The standalone root used the legacy admin favicon. It now renders the same versioned SiteFavicon partial as the storefront and seller panel. HomeLandingChecks covers use of the partial and existence of the referenced asset.
+
+## Inquiry phase 1 review follow-up
+- Reserved web draft tokens, per-draft session grants, conditional login claims and inquiry-only logout cleanup address the ownership review. Protected legacy API routes reject web tokens.
+- Draft creation and brand selection now require antiforgery-protected POST. Panel role filters stop execution. SQL serializes web basket additions. Result reads no longer increment seller tariffs. Ownership migration preserves unrelated seed dates.
+- Solution build, disposable local SQL InquiryOwnershipChecks and local HTTP verb and antiforgery smoke checks passed. Full browser and authenticated HTTP coverage and phases 2–4 remain open.
+
+## Inquiry acceptance and publication handoff — 2026-11-23
+- Web inquiry now rebuilds a complete quote on basket mutation, deduplicates form submission, and records at most one tariff for each seller at explicit completion. Admin starts and outcomes and seller profile visits and quote appearances are distinct.
+- Owner confirmed no consumers of the stateful legacy inquiry API. Those routes return 410. Installed clients use the web workflow. The PWA now uses an online worker and existing-brand icons with valid manifest paths.
+- Local disposable SQL tests cover schema upgrade, ownership, HTTP authorization, numeric reference pricing, concurrent insertion and tariffs, rate validation, sample rollback and Jalali reports. Edge covers the inquiry workflow at mobile and desktop widths and service-worker registration.
+- Pending release activities: review and deploy via Git Flow, then check production and installed-client worker upgrade. No shared database or hosting deployment was performed in this task.
+
+## Admin mobile confirmation
+- Edit User exposes a dedicated protected POST for confirming the saved eligible number and records actor/target IDs in the application log. Changing the phone resets verification. No code or password is disclosed.
+- Release scope also includes the tested inquiry workflow and its additive migrations.

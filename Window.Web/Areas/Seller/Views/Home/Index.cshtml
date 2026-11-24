@@ -31,5 +31,6 @@ ViewData["SellerDashboard"] = true;
                 <dd>@(ViewBag.CountOfSellerWaitingRequest ?? 0)</dd>
             </div>
         </dl>
+        <p>@DashboardText["Inquiry results appearances"] <strong>@(ViewBag.CountInquiryAppearances ?? 0)</strong></p>
     </section>
 }

@@ -487,7 +487,15 @@ namespace Window.Application.Services
             if (editedUser != null)
             {
                 editedUser.Username = user.Username;
-                editedUser.Mobile = user.Mobile.SanitizeText();
+                var editedMobile = user.Mobile.SanitizeText();
+                if (MobileNumber.Normalize(editedUser.Mobile) != MobileNumber.Normalize(editedMobile)
+                    || (MobileNumber.Normalize(editedMobile) == null && editedUser.Mobile != editedMobile))
+                {
+                    editedUser.IsMobileConfirm = false;
+                    editedUser.MobileActivationCode = Guid.NewGuid().ToString("N");
+                    editedUser.ExpireMobileSMSDateTime = null;
+                }
+                editedUser.Mobile = editedMobile;
 
                 if (user.Password != null)
                 {
@@ -580,9 +588,31 @@ namespace Window.Application.Services
             return EditProfileResponse.Success;
         }
 
+        public async Task<bool> ConfirmMobileByAdmin(ulong userId, string? expectedMobile, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(expectedMobile)) return false;
+            var normalized = MobileNumber.Normalize(expectedMobile);
+            if (string.IsNullOrEmpty(normalized)) return false;
+
+            var invalidatedCode = Guid.NewGuid().ToString("N");
+            var updated = await _context.Users.Where(user => user.Id == userId && !user.IsDelete && !user.IsBan
+                && !user.IsMobileConfirm && user.Mobile == expectedMobile
+                && EF.Property<string>(user, MobileLoginKey.Name) == normalized
+                && !EF.Property<bool>(user, MobileLoginKey.Excluded)
+                && !_context.Users.Any(other => other.Id != userId
+                    && EF.Property<string>(other, MobileLoginKey.Name) == normalized))
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(user => user.IsMobileConfirm, true)
+                    .SetProperty(user => user.MobileActivationCode, invalidatedCode)
+                    .SetProperty(user => user.ExpireMobileSMSDateTime, (DateTime?)null), cancellationToken);
+
+            return updated == 1;
+        }
+
         public async Task<EditUserViewModel> GetUserForEdit(ulong userId)
         {
             var user = await GetUserById(userId);
+            if (user == null || user.IsDelete) return null;
 
             var userRoleIds = await _context.UserRoles
                     .Where(s => !s.IsDelete && s.UserId == userId)
@@ -591,6 +621,8 @@ namespace Window.Application.Services
 
             return new EditUserViewModel()
             {
+                Id = user.Id,
+                IsMobileConfirmed = user.IsMobileConfirm,
                 Username = user.Username,
                 Mobile = user.Mobile,
                 Avatar = user.Avatar,

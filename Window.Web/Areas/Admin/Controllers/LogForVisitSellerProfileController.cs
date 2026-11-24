@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Window.Application.Services.Implementation;
 using Window.Application.Services.Interfaces;
 using Window.Application.Services.Services;
@@ -51,6 +51,16 @@ namespace Window.Web.Areas.Admin.Controllers
 
             #endregion
 
+            if (!FilterLogForInquiryViewModel.TryReadDate(filter.FromDate, out var fromDate))
+                ModelState.AddModelError(nameof(filter.FromDate), "تاریخ آغاز معتبر نیست.");
+            if (!FilterLogForInquiryViewModel.TryReadDate(filter.ToDate, out var toDate))
+                ModelState.AddModelError(nameof(filter.ToDate), "تاریخ پایان معتبر نیست.");
+            if (fromDate > toDate)
+                ModelState.AddModelError(nameof(filter.ToDate), "تاریخ پایان باید از تاریخ آغاز کوچک‌تر نباشد.");
+
+            var completions = await _inquiryService.CountRecordedCompletions();
+            ViewBag.WithQuote = completions.WithQuote;
+            ViewBag.WithoutQuote = completions.WithoutQuote;
             return View(await _sellerService.FilterLogForInquiryViewModel(filter));
         }
 

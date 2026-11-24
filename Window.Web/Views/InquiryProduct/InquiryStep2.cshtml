@@ -1,4 +1,4 @@
-﻿@model List<Window.Domain.ViewModels.Site.Inquiry.ListOfBrandsWithCountOfSellersViewModel>
+@model List<Window.Domain.ViewModels.Site.Inquiry.ListOfBrandsWithCountOfSellersViewModel>
 @using Window.Application.StticTools
 @{
     ViewData["Title"] = "انتخاب برند مورد نظر";
@@ -113,7 +113,7 @@
                     cancelButtonText: 'خیر',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "@FilePaths.SiteAddress/InquiryProduct/InquiryStep3";
+                        window.location.href = $("#target").data("next-url");
                     }
                 });
 
@@ -141,7 +141,7 @@
             <div class="text-center pb-4 mb-3">
                 <h1 class="h4 mb-4 font-vazir">انتخاب برند موردنظر</h1>
                 <p class="mb-4">.در این بخش شما میتوانید لیست برند های موجود را مشاهده کنید و ار بین آن ها برند موردنظر خود را انتخاب کنید</p>
-                <button id="target" class="btn btn-primary btn-lg rounded-pill" type="button"><i class="fi-check me-2"></i>استعلام همزمان تمامی برندها</button>
+                <button id="target" data-next-url="@Url.Action("InquiryStep3", "InquiryProduct", new { userMacAddress = ViewBag.UserMacAddress })" class="btn btn-primary btn-lg rounded-pill" type="button"><i class="fi-check me-2"></i>استعلام همزمان تمامی برندها</button>
             </div>
 
             <!-- Steps-->
@@ -208,12 +208,11 @@
 
                                         }
 
-                                        <a class="btn btn-accent bg-gradient mb-3 me-2"
-                                           asp-action="InquiryStep3"
-                                           asp-area=""
-                                           asp-controller="InquiryProduct"
-                                           asp-route-userMacAddress="@ViewBag.UserMacAddress"
-                                           asp-route-brandId="@brand.Brand.Id">انتخاب برند</a>
+                                        <form asp-action="SelectInquiryBrand" asp-area="" asp-controller="InquiryProduct" method="post">
+                                            <input type="hidden" name="userMacAddress" value="@ViewBag.UserMacAddress" />
+                                            <input type="hidden" name="brandId" value="@brand.Brand.Id" />
+                                            <button class="btn btn-accent bg-gradient mb-3 me-2" type="submit">انتخاب برند</button>
+                                        </form>
 
                                     </div>
                                 </div>

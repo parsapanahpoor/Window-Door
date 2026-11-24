@@ -1,4 +1,4 @@
-﻿#region Usings
+#region Usings
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -33,38 +33,57 @@ public class SampleService : ISampleService
 
     public async Task<bool> CreateSampleFromAdmin(Sample sample, List<ulong> segmentsId, IFormFile sampleImage)
     {
-        #region Article Image
+        if (!await IsValidSample(sample, segmentsId)) return false;
 
-        var imageName = Guid.NewGuid() + Path.GetExtension(sampleImage.FileName);
-        sampleImage.AddImageToServer(imageName, FilePaths.SampleImageOriginPathServer, 400, 300, FilePaths.SampleImageThumbPathServer);
-        sample.Image = imageName;
-
-        #endregion
-
-        #region Add Sample
-
-        await _context.Samples.AddAsync(sample);
-        await _context.SaveChangesAsync();
-
-        #endregion
-
-        #region Add Sample Selected Segment
-
-        foreach (var item in segmentsId)
+        return await SaveSampleWithImage(sampleImage, async imageName =>
         {
-            SampleSelectedSegment segment = new SampleSelectedSegment()
-            {
-                SampleId = sample.Id,
-                SegmentId = item,
-            };
-
-            await _context.SampleSelectedSegments.AddAsync(segment);
+            sample.Image = imageName!;
+            sample.SampleSelectedSegment = segmentsId.Distinct()
+                .Select(segmentId => new SampleSelectedSegment { SegmentId = segmentId }).ToList();
+            _context.Samples.Add(sample);
             await _context.SaveChangesAsync();
+        });
+    }
+
+    private async Task<bool> IsValidSample(Sample sample, List<ulong> segmentsId)
+    {
+        if (string.IsNullOrWhiteSpace(sample.SegmentName) || sample.MinHeight < 0 || sample.MinWidth < 0
+            || sample.MaxHeight <= 0 || sample.MaxWidth <= 0 || sample.MinHeight > sample.MaxHeight
+            || sample.MinWidth > sample.MaxWidth || !(sample.UPVC || sample.Aluminum)
+            || !(sample.Door || sample.Window) || !(sample.Keshoie || sample.Lolaie))
+            return false;
+
+        var ids = segmentsId.Distinct().ToArray();
+        return await _context.Segments.CountAsync(segment => !segment.IsDelete && ids.Contains(segment.Id)) == ids.Length;
+    }
+
+    private static async Task<bool> SaveSampleWithImage(IFormFile? image, Func<string?, Task> persist)
+    {
+        string? imageName = null;
+        var saved = false;
+        try
+        {
+            if (image != null)
+            {
+                var extension = Path.GetExtension(image.FileName).ToLowerInvariant();
+                if (extension is not (".jpg" or ".jpeg" or ".png")) return false;
+
+                imageName = Guid.NewGuid().ToString("N") + extension;
+                image.AddImageToServer(imageName, FilePaths.SampleImageOriginPathServer, 400, 300, FilePaths.SampleImageThumbPathServer);
+                if (!File.Exists(Path.Combine(FilePaths.SampleImageOriginPathServer, imageName))
+                    || !File.Exists(Path.Combine(FilePaths.SampleImageThumbPathServer, imageName)))
+                    return false;
+            }
+
+            await persist(imageName);
+            saved = true;
+            return true;
         }
-
-        #endregion
-
-        return true;
+        finally
+        {
+            if (!saved && imageName != null)
+                imageName.DeleteImage(FilePaths.SampleImageOriginPathServer, FilePaths.SampleImageThumbPathServer);
+        }
     }
 
     public async Task<FilterSampleAdminSideViewModel> FilterSampleAdminSideViewModel(FilterSampleAdminSideViewModel filter)
@@ -131,6 +150,8 @@ public class SampleService : ISampleService
 
     public async Task<bool> EditSample(Sample sample, List<ulong> segmentsId, IFormFile? ArticleImage)
     {
+        if (!await IsValidSample(sample, segmentsId)) return false;
+
         #region Get Sample
 
         var model = await _context.Samples.FirstOrDefaultAsync(p => !p.IsDelete && p.Id == sample.Id);
@@ -155,58 +176,19 @@ public class SampleService : ISampleService
 
         #endregion
 
-        #region Sample Image
-
-        if (ArticleImage != null)
+        return await SaveSampleWithImage(ArticleImage, async imageName =>
         {
-            var imageName = Guid.NewGuid() + Path.GetExtension(ArticleImage.FileName);
-            ArticleImage.AddImageToServer(imageName, FilePaths.SampleImageOriginPathServer, 400, 300, FilePaths.SampleImageThumbPathServer);
+            if (imageName != null) model.Image = imageName;
 
-            if (!string.IsNullOrEmpty(model.Image))
-            {
-                model.Image.DeleteImage(FilePaths.SampleImageOriginPathServer, FilePaths.SampleImageThumbPathServer);
-            }
+            var previous = await _context.SampleSelectedSegments
+                .Where(part => !part.IsDelete && part.SampleId == model.Id).ToListAsync();
+            var desired = segmentsId.Distinct().ToHashSet();
 
-            model.Image = imageName;
-        }
-
-        #endregion
-
-        #region Update Sample
-
-        _context.Samples.Update(model);
-        await _context.SaveChangesAsync();
-
-        #endregion
-
-        #region Update Sample Selected Segment 
-
-        var segments = await _context.SampleSelectedSegments.Where(p => !p.IsDelete && p.SampleId == sample.Id).ToListAsync();
-
-        if (segments != null && segments.Any())
-        {
-            _context.SampleSelectedSegments.RemoveRange(segments);
+            _context.SampleSelectedSegments.RemoveRange(previous.Where(part => !desired.Contains(part.SegmentId)));
+            _context.SampleSelectedSegments.AddRange(desired.Except(previous.Select(part => part.SegmentId))
+                .Select(id => new SampleSelectedSegment { SampleId = model.Id, SegmentId = id }));
             await _context.SaveChangesAsync();
-        }
-
-        if (segmentsId != null && segmentsId.Any())
-        {
-            foreach (var item in segmentsId)
-            {
-                SampleSelectedSegment sampleSelected = new SampleSelectedSegment()
-                {
-                    SampleId = sample.Id,
-                    SegmentId = item
-                };
-
-                await _context.SampleSelectedSegments.AddAsync(sampleSelected);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        #endregion
-
-        return true;
+        });
     }
 
     public async Task<bool> DeleteSample(ulong sampleId)

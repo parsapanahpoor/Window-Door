@@ -1,4 +1,4 @@
-﻿@using Window.Application.Extensions
+@using Window.Application.Extensions
 @using Window.Application.Convertors
 @model List<Window.Domain.ViewModels.Site.Inquiry.InquiryViewModel>
 @using Window.Domain.ViewModels.Admin.QuestionAnswer
@@ -128,7 +128,14 @@
         <!-- Filters sidebar (Offcanvas on mobile)-->
         <aside class="col-lg-4 col-xl-3 border-top-lg border-end-lg shadow-sm px-3 px-xl-4 px-xxl-5 pt-lg-2">
 
-            <form asp-action="InquiryStep4" asp-controller="InquiryProduct" asp-area="" method="get">
+            @if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info" role="status">
+        قیمت کامل سبد پیدا نشد. می‌توانید به مرحلهٔ قبل برگردید و اقلام استعلام را بررسی کنید.
+        <a asp-action="InquiryStep3" asp-route-userMacAddress="@ViewBag.userMacAddress">بررسی اقلام</a>
+    </div>
+}
+<form asp-action="InquiryStep4" asp-controller="InquiryProduct" asp-area="" method="get">
                 <input type="hidden" name="userMacAddress" value="@ViewBag.userMacAddress" />
 
                 <div class="offcanvas offcanvas-start offcanvas-collapse" id="filters-sidebar">
