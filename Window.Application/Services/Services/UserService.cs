@@ -152,9 +152,9 @@ namespace Window.Application.Services
 
                 await transaction.CommitAsync();
             }
-            catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 2601 or 2627 })
+            catch (Exception ex) when (ex.GetBaseException() is SqlException sql && sql.Number is 2601 or 2627 or 1205)
             {
-                await transaction.RollbackAsync();
+                try { await transaction.RollbackAsync(); } catch { /* the server may have rolled back already */ }
                 return RegisterUserResponse.MobileExist;
             }
             catch
@@ -216,9 +216,9 @@ namespace Window.Application.Services
                 await transaction.CommitAsync(cancellationToken);
                 return user;
             }
-            catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 2601 or 2627 })
+            catch (Exception ex) when (ex.GetBaseException() is SqlException sql && sql.Number is 2601 or 2627 or 1205)
             {
-                await transaction.RollbackAsync(cancellationToken);
+                try { await transaction.RollbackAsync(cancellationToken); } catch { /* already rolled back */ }
                 return await _context.Users
                     .FirstOrDefaultAsync(u => EF.Property<string>(u, MobileLoginKey.Name) == normalizedMobile, cancellationToken);
             }

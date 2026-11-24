@@ -149,8 +149,15 @@ controller logic. `MarketController.AddMarket` keeps its route and delegates to 
   and store committed before activation, unconfirmed before the code, activation signs in and redirects),
   customer password registration (no store and no seller role, activation opens `/UserPanel`), and the
   existing customer SMS, replay, cooldown, duplicate, CSRF and external-returnUrl checks.
-- Not verified yet: an automated check for resuming a seller after losing the registration session,
-  dedicated concurrent-registration and invalid-role/store tests, forged POSTs against
-  `/register` and activation, and the 360/768/1440 browser review of the four auth screens. The
-  store-creation race is guarded by a serializable transaction and the mobile unique index, but has no
-  dedicated test.
+- Session loss: a signed-in seller with no store is sent to `/register/store`, an authenticated form
+  that creates the store and continues to the store-information page. The HTTP check signs the seller
+  in, completes the store and verifies the resulting market.
+- Concurrency: the check runs two independent `DbContext`/connection registrations for one mobile and
+  two store creations for one owner. Exactly one account/store remains, one call succeeds and the loser
+  receives a controlled result; deadlock/unique violations are caught (including EF transient wrappers)
+  and the transaction is rolled back without a server error.
+- Not verified yet: dedicated HTTP checks for missing antiforgery on `/register` and activation,
+  invalid/empty/space-only/long store names and value preservation after errors, SMS-provider failure
+  retry, and a confirmed-account permission check. Browser review at 360/768/1440 was not run: the auth
+  test project has no Playwright reference, no Playwright browser build is installed, and Edge is
+  present but was not wired into a browser runner in this session.

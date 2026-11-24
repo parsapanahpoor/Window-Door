@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -113,6 +114,46 @@ namespace Window.Web.Controllers
             }
 
             return View(model);
+        }
+
+        #endregion
+
+        #region Complete seller store after sign-in
+
+        [Authorize]
+        [HttpGet("register/store")]
+        public async Task<IActionResult> CompleteSellerStore()
+        {
+            var markets = HttpContext.RequestServices.GetRequiredService<IMarketService>();
+            if (await markets.GetMarketByUserId(User.GetUserId()) is not null)
+            {
+                return RedirectToAction("PageOfManageSellerInformation", "SellerPersonalInfo", new { area = "Seller", welcome = 1 });
+            }
+
+            return View(new SmsRegisterViewModel());
+        }
+
+        [Authorize]
+        [HttpPost("register/store"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> CompleteSellerStore(string? marketName)
+        {
+            var markets = HttpContext.RequestServices.GetRequiredService<IMarketService>();
+            var userId = User.GetUserId();
+
+            if (!markets.IsValidMarketName(marketName))
+            {
+                ModelState.AddModelError(nameof(marketName), "نام فروشگاه باید بین ۳ تا ۱۰۰ کاراکتر باشد.");
+                return View(new SmsRegisterViewModel { MarketName = marketName });
+            }
+
+            var created = await markets.AddMarket(userId, marketName!);
+            if (!created && await markets.GetMarketByUserId(userId) is null)
+            {
+                ModelState.AddModelError(nameof(marketName), "ثبت فروشگاه انجام نشد. دوباره تلاش کنید.");
+                return View(new SmsRegisterViewModel { MarketName = marketName });
+            }
+
+            return RedirectToAction("PageOfManageSellerInformation", "SellerPersonalInfo", new { area = "Seller", welcome = 1 });
         }
 
         #endregion
@@ -309,7 +350,7 @@ namespace Window.Web.Controllers
                     // losing the registration session). The account type was recorded on the
                     // account, and the phone has now been verified, so the store form is safe.
                     TempData["success"] = "شمارهٔ موبایل تأیید شد. اکنون نام فروشگاه را ثبت کنید.";
-                    return LocalRedirect("/Market/AddMarket?welcome=1");
+                    return LocalRedirect("/register/store");
                 }
 
                 if (market.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller)

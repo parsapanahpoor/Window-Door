@@ -58,6 +58,12 @@ namespace Window.Application.Services.Services
                 await transaction.RollbackAsync();
                 return false;
             }
+            catch (Exception ex) when (ex.GetBaseException() is Microsoft.Data.SqlClient.SqlException sql && sql.Number == 1205)
+            {
+                // A concurrent request won the serializable range; report a controlled failure.
+                try { await transaction.RollbackAsync(); } catch { /* already rolled back */ }
+                return false;
+            }
         }
 
         public bool IsValidMarketName(string? titleName) =>

@@ -221,7 +221,7 @@ internal static class HttpChecks
                 ["Mobile"] = sharedPhone, ["Password"] = "second-password", ["__RequestVerificationToken"] = roleToken
             });
             var expectedDestination = expectedPanel == "/Seller"
-                ? "/Market/AddMarket?welcome=1"
+                ? "/register/store"
                 : expectedPanel;
             var failureBody = signedIn.StatusCode == HttpStatusCode.Redirect ? "" : (await signedIn.Content.ReadAsStringAsync());
             Check(signedIn.StatusCode == HttpStatusCode.Redirect && signedIn.Headers.Location?.OriginalString == expectedDestination,
@@ -231,8 +231,28 @@ internal static class HttpChecks
 
             if (expectedPanel == "/Seller")
             {
+                // The seller lost the registration session before the store step. After signing
+                // in with the verified phone, the dedicated store form must finish the flow.
+                var resumeToken = Token(await roleBrowser.GetStringAsync("/register/store"));
+                using var resumed = await Submit(roleBrowser, "/register/store", new()
+                {
+                    ["marketName"] = "فروشگاه بازیابی‌شده", ["__RequestVerificationToken"] = resumeToken
+                });
+                Check(resumed.StatusCode == HttpStatusCode.Redirect &&
+                    resumed.Headers.Location?.OriginalString == "/Seller/SellerPersonalInfo/PageOfManageSellerInformation?welcome=1",
+                    "A seller who lost the session completes the store after sign-in");
+
+                await using var resumeDb = new WindowDbContext(options);
+                Check(await resumeDb.Market.AnyAsync(m => m.UserId == second.Id && !m.IsDelete),
+                    "The resumed store belongs to the signed-in seller");
+
                 await using var db = new WindowDbContext(options);
                 await db.UserRoles.Where(assignment => assignment.Id == sellerAssignmentId)
+                    .ExecuteUpdateAsync(update => update.SetProperty(assignment => assignment.IsDelete, true));
+                // Completing the store added the project's owner role (id 4); remove it too so the
+                // next iteration verifies the admin destination for a pure admin account.
+                await db.UserRoles.Where(assignment => assignment.UserId == second.Id &&
+                        assignment.RoleId == 4 && !assignment.IsDelete)
                     .ExecuteUpdateAsync(update => update.SetProperty(assignment => assignment.IsDelete, true));
             }
         }
