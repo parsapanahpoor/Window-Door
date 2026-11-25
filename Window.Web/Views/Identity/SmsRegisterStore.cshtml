@@ -1,0 +1,21 @@
+@model Window.Domain.ViewModels.User.Authentication.SmsRegisterViewModel
+@{
+    ViewData["Title"] = "نام فروشگاه";
+    ViewData["AccountArt"] = "door";
+    Layout = "Identity/_AccountLayout";
+}
+<div class="account-heading">
+    <p class="account-kicker">ثبت‌نام فروشنده</p>
+    <h1 id="account-title">نام فروشگاهت را وارد کن</h1>
+    <p>پس از ثبت نام فروشگاه، کد تأیید شماره را برایت می‌فرستیم. فعال‌شدن فروشگاه پس از تکمیل اطلاعات و بررسی پشتیبانی انجام می‌شود.</p>
+</div>
+<form asp-action="SmsRegistrationStore" method="post" class="account-form">
+    <div asp-validation-summary="All" class="account-errors" role="alert"></div>
+    <div class="account-field">
+        <label for="marketName">نام فروشگاه</label>
+        <input id="marketName" name="marketName" value="@Model.MarketName" maxlength="100" minlength="3" required
+               autocomplete="organization" placeholder="مثلاً پنجره‌سازی نمونه" />
+    </div>
+    <button class="account-submit" type="submit">ثبت فروشگاه و دریافت کد</button>
+</form>
+<p class="account-footer">شمارهٔ در حال ثبت: <bdi dir="ltr">@Model.Mobile</bdi></p>

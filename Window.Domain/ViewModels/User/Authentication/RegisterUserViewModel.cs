@@ -26,11 +26,25 @@ public class RegisterUserViewModel
     [DisplayName("Mobile")]
     public string Mobile { get; set; }
 
+    [DisplayName("Account type")]
+    public AccountType AccountType { get; set; }
+
+    [MaxLength(100, ErrorMessage = "نام فروشگاه حداکثر ۱۰۰ کاراکتر است.")]
+    [DisplayName("Store name")]
+    public string? MarketName { get; set; }
+
     #endregion
 
 }
 
+public enum AccountType
+{
+    None = 0,
+    Customer = 1,
+    Seller = 2
+}
+
 public enum RegisterUserResponse
 {
-    EmailExist, MobileExist, Success
+    EmailExist, MobileExist, Success, InvalidAccountType, InvalidMarketName
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,34 +28,67 @@ namespace Window.Application.Services.Services
 
         public async Task<bool> AddMarket(ulong userId , string titleName)
         {
-            #region Is Exist Any Market By This User
-
-            if (await _context.Market.AnyAsync(p=> !p.IsDelete && p.UserId == userId))
+            await using var transaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
+            try
             {
+                #region Is Exist Any Market By This User
+
+                if (await _context.Market.AnyAsync(p=> !p.IsDelete && p.UserId == userId))
+                {
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+
+                if (!IsValidMarketName(titleName))
+                {
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+
+                #endregion
+
+                AddMarketEntities(userId, titleName.Trim());
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return true;
+            }
+            catch (DbUpdateException)
+            {
+                try { await transaction.RollbackAsync(); } catch { /* already rolled back */ }
+                _context.ChangeTracker.Clear();
                 return false;
             }
-
-            if (string.IsNullOrEmpty(titleName))
+            catch (Exception ex) when (ex.GetBaseException() is Microsoft.Data.SqlClient.SqlException sql && sql.Number == 1205)
             {
+                // A concurrent request won the serializable range; report a controlled failure.
+                _context.ChangeTracker.Clear();
+                try { await transaction.RollbackAsync(); } catch { /* already rolled back */ }
                 return false;
             }
+        }
 
-            #endregion
+        public bool IsValidMarketName(string? titleName) =>
+            !string.IsNullOrWhiteSpace(titleName) && titleName.Trim().Length is >= 3 and <= 100;
 
-            #region Add Market 
+        public Task<Market?> GetMarketByUserId(ulong userId) =>
+            _context.Market.AsNoTracking().FirstOrDefaultAsync(p => !p.IsDelete && p.UserId == userId);
+
+        public void AddMarketEntities(ulong userId, string titleName)
+        {
+            #region Add Market
 
             Market market = new Market()
             {
                 UserId = userId,
                 IsDelete = false,
                 CreateDate = DateTime.Now,
-                ActivationTariff = await _context.SiteSettings.Where(p=> !p.IsDelete).Select(p=> p.ChargeOfNewMarkets).FirstOrDefaultAsync(),
+                ActivationTariff = _context.SiteSettings.Where(p=> !p.IsDelete).Select(p=> p.ChargeOfNewMarkets).FirstOrDefault(),
                 MarketPersonalsInfoState = MarketPersonalsInfoState.WaitingForCompleteInfoFromSeller,
-                MarketName = titleName
+                MarketName = titleName.Trim()
             };
 
-            await _context.Market.AddAsync(market);
-            await _context.SaveChangesAsync();
+            _context.Market.Add(market);
 
             #endregion
 
@@ -65,30 +98,29 @@ namespace Window.Application.Services.Services
             {
                 CreateDate = DateTime.Now,
                 IsDelete = false,
-                MarketId = market.Id,
+                Market = market,
                 UserId = userId,
                 RoleId = 4
             };
 
-            await  _context.MarketUser.AddAsync(marketUsers);
-            await _context.SaveChangesAsync();
+            _context.MarketUser.Add(marketUsers);
 
             #endregion
 
             #region Add User Role
 
-            UserRole role = new UserRole()
+            if (!_context.UserRoles.Any(existing => existing.UserId == userId && existing.RoleId == 4 && !existing.IsDelete))
             {
-                UserId =userId,
-                RoleId = 4,
-            };
+                UserRole role = new UserRole()
+                {
+                    UserId = userId,
+                    RoleId = 4,
+                };
 
-            await _context.UserRoles.AddAsync(role);
-            await _context.SaveChangesAsync();
+                _context.UserRoles.Add(role);
+            }
 
             #endregion
-
-            return true;
         }
 
 

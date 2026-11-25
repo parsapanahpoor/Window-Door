@@ -82,13 +82,18 @@ public sealed class SmsLoginService(
         return new(challenge.ChallengeId, await TrySaveAsync(CancellationToken.None));
     }
 
+    public async Task<bool> AccountExistsAsync(string mobile, CancellationToken cancellationToken)
+    {
+        var (account, excluded) = await FindAccountAsync(mobile, cancellationToken);
+        return account is not null || excluded;
+    }
+
     public async Task<int> SecondsUntilResendAsync(string mobile, Guid id, CancellationToken cancellationToken)
     {
         var challenge = await db.SmsLoginChallenges.AsNoTracking()
             .SingleOrDefaultAsync(c => c.Mobile == mobile && c.ChallengeId == id, cancellationToken);
         return challenge is null ? 0 : Math.Max(0, (int)Math.Ceiling((RetryAt(challenge) - timeProvider.GetUtcNow()).TotalSeconds));
     }
-
     public async Task<SmsLoginVerificationResult> VerifyAsync(string mobile, Guid id, string code, CancellationToken cancellationToken)
     {
         if (code.Length != 6 || !code.All(char.IsAsciiDigit))

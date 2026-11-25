@@ -29,6 +29,8 @@ namespace Window.Application.Interfaces
 
         Task<RegisterUserResponse> RegisterUserAsync(RegisterUserViewModel model);
 
+        Task<User?> CreatePendingSmsAccountAsync(string normalizedMobile, bool isSeller, CancellationToken cancellationToken = default);
+
         Task<(LoginUserResponse Status, User? Account)> LoginUserAsync(LoginUserViewModel model, CancellationToken cancellationToken);
 
         Task<List<SelectListViewModel>> GetSelectRolesList();

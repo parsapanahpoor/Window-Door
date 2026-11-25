@@ -24,6 +24,16 @@
 }
 <div class="row">
 
+    @if (Context.Request.Query["welcome"] == "1")
+    {
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            <div class="well bordered-left bordered-themeprimary">
+                <p><strong>برای فعال‌شدن فروشگاه، اطلاعات و مدارک موردنیاز را تکمیل کنید.</strong></p>
+                <p>تأیید شماره موبایل فقط ورود شما را فعال کرده است؛ فروشگاه پس از تکمیل اطلاعات و بررسی پشتیبانی فعال می‌شود.</p>
+            </div>
+        </div>
+    }
+
     @if (!string.IsNullOrEmpty(Model.RejectNote) && Model.MarketPersonalsInfoState == Window.Domain.Entities.Market.MarketPersonalsInfoState.Rejected)
     {
         <div class="col-lg-12 col-sm-12 col-xs-12">

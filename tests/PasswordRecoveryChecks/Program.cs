@@ -39,11 +39,11 @@ using var http = new HttpClient(transport) { BaseAddress = new Uri("https://exam
 var settings = new ConfigurationBuilder().AddInMemoryCollection().Build();
 settings["kavenegar:apikey"] = "legacy-offline-test-key";
 var sms = new SMSService(http, settings, NullLogger<SMSService>.Instance);
-var service = new UserService(settings, repository, null!, database, null!, null!, sms);
+var service = new UserService(settings, repository, null!, database, null!, null!, sms, null!);
 var localizer = new StringLocalizer<IdentityController>(
     new ResourceManagerStringLocalizerFactory(
         Microsoft.Extensions.Options.Options.Create(new LocalizationOptions()), NullLoggerFactory.Instance));
-var controller = new IdentityController(service, localizer);
+var controller = new IdentityController(service, localizer, sms);
 
 async Task CheckFailure()
 {
@@ -113,6 +113,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 builder.WebHost.UseUrls("http://127.0.0.1:0");
 builder.Logging.ClearProviders();
 builder.Services.AddSingleton<IUserService>(service);
+builder.Services.AddSingleton<Window.Application.Services.Interfaces.ISMSService>(sms);
 builder.Services.AddDataProtection().UseEphemeralDataProtectionProvider();
 builder.Services.AddControllersWithViews().AddViewLocalization();
 await using var app = builder.Build();
@@ -203,3 +204,4 @@ sealed class RecoveryTransport : HttpMessageHandler
         return ReplyAsync == null ? Reply!() : await ReplyAsync();
     }
 }
+
