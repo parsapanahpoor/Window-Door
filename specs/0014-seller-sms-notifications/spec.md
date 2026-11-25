@@ -132,4 +132,20 @@ Admins = users with an active `Admin` role **or** `IsAdmin`, including multi-rol
 
 ## Verification
 
-Design only. No build, migration, code or tests were run for this spec commit.
+Outbox infrastructure implemented in this change; event hooks and reminders are the next stage.
+
+- Added `SmsNotificationOutbox` + enums, EF configuration with unique `(RecipientMobile, EventKey)` and
+  a `(Status, NextAttemptAtUtc)` index, and migration `20261125132913_AddSmsNotificationOutbox`
+  (applied only to the isolated LocalDB).
+- `ISmsNotificationQueue.EnqueueAsync` joins the caller's unit of work, normalizes the mobile, checks
+  both the database and the change tracker for duplicates, and writes a `Disabled` row when the kind is
+  disabled or its template is empty. No commit or send occurs inside enqueue.
+- `DispatchAsync` claims with an atomic conditional update and lease, recovers expired leases, skips
+  rows delivered before, re-checks settings, retries with bounded backoff, records a per-row result and
+  clears claims. Each row is saved independently. Delivery exactly-once is not claimed.
+- Tests in `tests/SmsLoginChecks` pass: unsaved enqueue rollback, normalized-mobile dedupe, disabled
+  rows not sent after enabling, one-delivery, provider retry with backoff, and expired-lease recovery.
+  The suite exits 0; the Edge registration UI checks at 360/768/1440 also pass.
+- Not implemented yet: registration/review event hooks, subscription reminder eligibility and the
+  standalone runner/scheduler. Template names remain empty and disabled by default; no real SMS was
+  sent.

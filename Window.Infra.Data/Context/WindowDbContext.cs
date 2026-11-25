@@ -30,6 +30,7 @@ using Window.Domain.Entities.ShopProductFeature;
 using Window.Domain.Entities.ShopProductGallery;
 using Window.Domain.Entities.SiteSetting;
 using Window.Domain.Entities.TechnicalIssues;
+using Window.Domain.Entities.Notification;
 using Window.Domain.Entities.Wallet;
 
 namespace Window.Data.Context;
@@ -305,6 +306,8 @@ public class WindowDbContext : DbContext
 
     public DbSet<OrderCheque> orderCheques { get; set; }
 
+    public DbSet<SmsNotificationOutbox> SmsNotificationOutbox { get; set; }
+
     #endregion
 
     #endregion
@@ -315,6 +318,19 @@ public class WindowDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        var smsOutbox = modelBuilder.Entity<SmsNotificationOutbox>();
+        smsOutbox.ToTable("SmsNotificationOutbox");
+        smsOutbox.HasIndex(row => new { row.RecipientMobile, row.EventKey }).IsUnique();
+        smsOutbox.HasIndex(row => new { row.Status, row.NextAttemptAtUtc });
+        smsOutbox.Property(row => row.EventKey).HasMaxLength(200).IsRequired();
+        smsOutbox.Property(row => row.RecipientMobile).HasMaxLength(20).IsRequired();
+        smsOutbox.Property(row => row.Token1).HasMaxLength(200);
+        smsOutbox.Property(row => row.Token2).HasMaxLength(200);
+        smsOutbox.Property(row => row.Token3).HasMaxLength(200);
+        smsOutbox.Property(row => row.ProviderMessageId).HasMaxLength(100);
+        smsOutbox.Property(row => row.ProviderStatus).HasMaxLength(100);
+        smsOutbox.Property(row => row.LastError).HasMaxLength(1000);
+
         modelBuilder.Entity<InquirySellerExposure>().HasKey(exposure => new { exposure.InquiryId, exposure.SellerId });
         modelBuilder.Entity<LogInquiryForUserDetail>().HasIndex(item => item.LogInquiryForUserId);
         modelBuilder.Entity<LogInquiryForUserDetail>().HasIndex(item => new { item.LogInquiryForUserId, item.ClientRequestId }).IsUnique().HasFilter("[ClientRequestId] IS NOT NULL");

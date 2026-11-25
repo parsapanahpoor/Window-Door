@@ -13,7 +13,10 @@ using Window.Application.Services;
 using Window.Application.Services.Interfaces;
 using Window.Data.Context;
 using Window.Domain.Entities.Account;
+using Window.Domain.Entities.Notification;
 using Window.Domain.ViewModels.User.Authentication;
+using Microsoft.Extensions.Logging.Abstractions;
+using Window.Application.Services.Services;
 
 var server = args.FirstOrDefault() ?? @"localhost\MSSQLSERVER2022";
 if (server is not (@"localhost\MSSQLSERVER2022" or @"(localdb)\MSSQLLocalDB"))
@@ -305,6 +308,101 @@ try
         {
             throw new InvalidOperationException("Concurrent registration/store creation failed.", ex);
         }
+    }
+
+    // SMS outbox: enqueue, rollback, dedupe, disabled rows, dispatch, retry and leases.
+    {
+        var disabledConfig = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            ["SmsNotifications:SellerReviewRequestedAdmin:Enabled"] = "false",
+            ["SmsNotifications:SellerReviewRequestedAdmin:Template"] = ""
+        }).Build();
+        var enabledConfig = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            ["SmsNotifications:SellerReviewRequestedAdmin:Enabled"] = "true",
+            ["SmsNotifications:SellerReviewRequestedAdmin:Template"] = "Register"
+        }).Build();
+
+        await using (var queueDb = new WindowDbContext(options))
+        {
+            var queue = new SmsNotificationQueue(queueDb, sender, disabledConfig, clock,
+                NullLogger<SmsNotificationQueue>.Instance);
+            Check(await queue.EnqueueAsync(SmsNotificationKind.SellerReviewRequestedAdmin, "review:rollback", "09100000500", "123456")
+                == SmsNotificationEnqueueResult.Disabled, "A disabled feature writes a final unsent row");
+        }
+        await using (var checkDb = new WindowDbContext(options))
+            Check(!await checkDb.SmsNotificationOutbox.AnyAsync(), "An unsaved outbox row rolls back with the unit of work");
+
+        await using (var queueDb = new WindowDbContext(options))
+        {
+            var queue = new SmsNotificationQueue(queueDb, sender, enabledConfig, clock,
+                NullLogger<SmsNotificationQueue>.Instance);
+            Check(await queue.EnqueueAsync(SmsNotificationKind.SellerReviewRequestedAdmin, "review:1", "۰۹۱۰۰۰۰۰۵۰۱", "123456")
+                == SmsNotificationEnqueueResult.Queued, "An enabled feature queues a row");
+            Check(await queue.EnqueueAsync(SmsNotificationKind.SellerReviewRequestedAdmin, "review:1", "09100000501", "123456")
+                == SmsNotificationEnqueueResult.Duplicate, "The normalized mobile deduplicates the event");
+            await queueDb.SaveChangesAsync();
+            Check(await queueDb.SmsNotificationOutbox.CountAsync(row => row.EventKey == "review:1") == 1,
+                "Only one row exists per event and normalized mobile");
+            Check(await queue.DispatchAsync("worker-a") == 1, "A ready row is delivered once");
+        }
+        Check(sender.Count("09100000501") == 1, "Exactly one provider call is made per row");
+        await using (var queueDb = new WindowDbContext(options))
+        {
+            var queue = new SmsNotificationQueue(queueDb, sender, enabledConfig, clock,
+                NullLogger<SmsNotificationQueue>.Instance);
+            Check(await queue.DispatchAsync("worker-b") == 0, "An accepted row is not delivered again");
+        }
+
+        await using (var queueDb = new WindowDbContext(options))
+        {
+            var queue = new SmsNotificationQueue(queueDb, sender, disabledConfig, clock,
+                NullLogger<SmsNotificationQueue>.Instance);
+            await queue.EnqueueAsync(SmsNotificationKind.SellerReviewRequestedAdmin, "review:disabled", "09100000502", "123456");
+            await queueDb.SaveChangesAsync();
+
+            var enabledQueue = new SmsNotificationQueue(queueDb, sender, enabledConfig, clock,
+                NullLogger<SmsNotificationQueue>.Instance);
+            Check(await enabledQueue.DispatchAsync("worker-c") == 0, "A disabled row is never sent after enabling the feature");
+            Check(sender.Count("09100000502") == 0, "The disabled row produced no provider call");
+        }
+
+        const string retryMobile = "09100000503";
+        sender.RejectedMobile = retryMobile;
+        await using (var queueDb = new WindowDbContext(options))
+        {
+            var queue = new SmsNotificationQueue(queueDb, sender, enabledConfig, clock,
+                NullLogger<SmsNotificationQueue>.Instance);
+            await queue.EnqueueAsync(SmsNotificationKind.SellerReviewRequestedAdmin, "review:retry", retryMobile, "123456");
+            await queueDb.SaveChangesAsync();
+            Check(await queue.DispatchAsync("worker-d") == 0, "A provider failure leaves the row pending");
+            var row = await queueDb.SmsNotificationOutbox.AsNoTracking().SingleAsync(r => r.EventKey == "review:retry");
+            Check(row.Status == SmsNotificationStatus.Pending && row.Attempts == 1, "The failure is recorded with retry state");
+        }
+        ((TestClock)clock).Advance(TimeSpan.FromMinutes(3));
+        sender.RejectedMobile = null;
+        await using (var queueDb = new WindowDbContext(options))
+        {
+            var queue = new SmsNotificationQueue(queueDb, sender, enabledConfig, clock,
+                NullLogger<SmsNotificationQueue>.Instance);
+            Check(await queue.DispatchAsync("worker-e") == 1, "The retry succeeds after the backoff window");
+        }
+        Check(sender.Count(retryMobile) == 2, "The retry produced the second provider call");
+
+        await using (var queueDb = new WindowDbContext(options))
+        {
+            var queue = new SmsNotificationQueue(queueDb, sender, enabledConfig, clock,
+                NullLogger<SmsNotificationQueue>.Instance);
+            await queue.EnqueueAsync(SmsNotificationKind.SellerReviewRequestedAdmin, "review:lease", "09100000504", "123456");
+            await queueDb.SaveChangesAsync();
+            await queueDb.SmsNotificationOutbox.Where(r => r.EventKey == "review:lease")
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(r => r.Status, SmsNotificationStatus.Sending)
+                    .SetProperty(r => r.LeaseUntilUtc, clock.GetUtcNow().AddMinutes(-1)));
+            Check(await queue.DispatchAsync("worker-f") == 1, "An expired lease is recovered");
+        }
+        Check(sender.Count("09100000504") == 1, "The recovered lease sends once");
+        Console.WriteLine("PASS: SMS outbox enqueue, rollback, dedupe, disabled, retry and lease checks.");
     }
 
     await HttpChecks.RunAsync(options, sender, clock);

@@ -88,6 +88,7 @@ namespace Window.IOC.Container
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ISampleService, SampleService>();
             services.AddScoped<IInquiryService, InquryService>();
+            services.AddScoped<ISmsNotificationQueue, SmsNotificationQueue>();
             services.AddScoped<IViewRenderService, ViewRenderService>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<ISiteSettingService, SiteSettingService>();
