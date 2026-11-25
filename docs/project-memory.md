@@ -220,3 +220,11 @@ After each task append a concise outcome with commit/evidence, tests executed, u
 - Styled account-type choices with explicit radio sizing, selected/focus states, and hidden-field behavior consistent with the authentication theme.
 - Production SMS credentials, shared databases and hosting were not used for these checks. Rotation of the previously exposed Kavenegar credential remains an operational follow-up requiring coordinated private configuration updates.
 - Final evidence: the disposable SQL/offline SMS suite and Edge checks passed after the fixes, including a fresh browser context proving phone ownership and reaching /register/store after losing the registration session at each viewport. A prior browser load-state timeout was addressed by waiting for DOMContentLoaded on the explicit destination.
+
+## Seller registration production release — 2026-11-25
+- PR 25 integrated the reviewed registration feature into develop. PR 26 released master commit 338b5707264ed9372305662b4006dd0c8bba9081. PR 27 synced master back to develop after both required checks passed.
+- Updated the offline recovery fixture for the new UserService and IdentityController constructor dependencies; recovery checks passed locally and GitHub checks passed before release.
+- Built the exact master commit in Release with 0 errors. Installed the five application assemblies and symbols plus account.css via Plesk. Private rollback files are in registration-rollback-20261125 outside httpdocs. No database migration was required.
+- Plesk upload failures were caused by an expired session. After reauthentication, uploaded master-338b570.zip and extracted it privately. Copied the reviewed files while IIS was offline, then moved app_offline.htm into the private rollback directory.
+- Post-install anonymous HTTPS checks: root, Login, password login, register and account.css returned 200; registration step/code/store routes returned expected 302 responses without a session. The live registration form contains AccountType and MarketName and the downloaded stylesheet SHA256 matches the release artifact.
+- Release tag: release-2026.11.25-seller-registration. No live registration, user activation, SMS or payment was triggered during production checks. Previously exposed SMS key rotation remains a separate open operational item.
