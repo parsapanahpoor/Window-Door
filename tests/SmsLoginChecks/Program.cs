@@ -13,6 +13,7 @@ using Window.Application.Services;
 using Window.Application.Services.Interfaces;
 using Window.Data.Context;
 using Window.Domain.Entities.Account;
+using Window.Domain.ViewModels.User.Authentication;
 
 var server = args.FirstOrDefault() ?? @"localhost\MSSQLSERVER2022";
 if (server is not (@"localhost\MSSQLSERVER2022" or @"(localdb)\MSSQLLocalDB"))
@@ -225,7 +226,7 @@ try
         await recoveryDb.SaveChangesAsync();
 
         var service = new UserService(new ConfigurationBuilder().Build(), new UserRepository(recoveryDb),
-            null!, recoveryDb, null!, null!, sender);
+            null!, recoveryDb, null!, null!, sender, new Window.Application.Services.Services.MarketService(recoveryDb));
         var reset = new ResetPasswordViewModel
         {
             ActiveCode = "۵۴۳۲۱۰", Password = "new-fixture-password", ConfirmPassword = "new-fixture-password"
@@ -248,7 +249,7 @@ try
         await adminDb.SaveChangesAsync();
 
         var service = new UserService(new ConfigurationBuilder().Build(), new UserRepository(adminDb),
-            null!, adminDb, null!, null!, sender);
+            null!, adminDb, null!, null!, sender, new Window.Application.Services.Services.MarketService(adminDb));
         Check(!await service.ConfirmMobileByAdmin(pending.Id, "09100000999", default), "Reject stale admin form");
         Check(!await service.ConfirmMobileByAdmin(blocked.Id, blockedPhone, default), "Do not activate a blocked account");
         Check(await service.ConfirmMobileByAdmin(pending.Id, manualPhone, default), "Confirm the stored eligible mobile");
@@ -257,6 +258,53 @@ try
         Check(saved.IsMobileConfirm && saved.ExpireMobileSMSDateTime == null && saved.Password == legacyPassword,
             "Confirmation must invalidate the old code and preserve the password");
         Console.WriteLine("PASS: admin confirmation eligibility, stale form, replay and unchanged password.");
+    }
+
+    // Concurrent registration and store creation with independent contexts and connections.
+    {
+        try
+        {
+        const string concurrentPhone = "09100000081";
+        await using var ctxA = new WindowDbContext(options);
+        await using var ctxB = new WindowDbContext(options);
+        var firstService = new UserService(new ConfigurationBuilder().Build(), new UserRepository(ctxA),
+            null!, ctxA, null!, null!, sender, new Window.Application.Services.Services.MarketService(ctxA));
+        var secondService = new UserService(new ConfigurationBuilder().Build(), new UserRepository(ctxB),
+            null!, ctxB, null!, null!, sender, new Window.Application.Services.Services.MarketService(ctxB));
+        var model = new RegisterUserViewModel
+        {
+            Mobile = concurrentPhone,
+            Password = "concurrent-pass",
+            RePassword = "concurrent-pass",
+            AccountType = AccountType.Customer
+        };
+
+        var outcomes = await Task.WhenAll(firstService.RegisterUserAsync(model), secondService.RegisterUserAsync(model));
+        Check(outcomes.Count(o => o == RegisterUserResponse.Success) == 1 &&
+              outcomes.Count(o => o == RegisterUserResponse.MobileExist) == 1,
+            "Concurrent registration yields one success and one controlled duplicate");
+        Check(await ctxA.Users.AsNoTracking().CountAsync(u => u.Mobile == concurrentPhone) == 1,
+            "Concurrent registration leaves exactly one account");
+
+        Check(await secondService.CreatePendingSmsAccountAsync(concurrentPhone, true) is null,
+            "Existing accounts cannot grant a new pre-verification store session");
+        var owner = CreateUser("09100000082", legacyPassword, confirmed: true);
+        ctxA.Users.Add(owner);
+        await ctxA.SaveChangesAsync();
+
+        var marketResults = await Task.WhenAll(
+            new Window.Application.Services.Services.MarketService(ctxA).AddMarket(owner.Id, "فروشگاه رقابتی"),
+            new Window.Application.Services.Services.MarketService(ctxB).AddMarket(owner.Id, "فروشگاه رقابتی"));
+        Check(marketResults.Count(result => result) == 1 && marketResults.Any(result => !result),
+            "Concurrent store creation yields one winner and no server error");
+        Check(await ctxA.Market.AsNoTracking().CountAsync(m => m.UserId == owner.Id && !m.IsDelete) == 1,
+            "Concurrent store creation leaves exactly one store");
+        Console.WriteLine("PASS: concurrent account and store creation.");
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("Concurrent registration/store creation failed.", ex);
+        }
     }
 
     await HttpChecks.RunAsync(options, sender, clock);
@@ -318,7 +366,7 @@ sealed class OfflineSms : ISMSService
         if (template == "Wellcoming")
             return Task.FromResult<SendResult?>(new SendResult { Messageid = 1, Status = 1 });
 
-        if (template != "Register" || token.Length != 6 || !token.All(char.IsAsciiDigit))
+        if (template != "Register" || token.Length is < 4 or > 6 || !token.All(char.IsAsciiDigit))
             throw new InvalidOperationException("Unexpected provider payload.");
 
         _messages.GetOrAdd(receptor, _ => new()).Enqueue(token);

@@ -12,6 +12,17 @@ namespace Window.Application.Services.Interfaces
 
         Task<bool> AddMarket(ulong userId, string titleName);
 
+        /// <summary>
+        /// Adds the market, its owner link and the owner role to the current unit of work
+        /// without saving. Callers that must also create the user atomically use this method
+        /// and call SaveChanges once inside their transaction.
+        /// </summary>
+        void AddMarketEntities(ulong userId, string titleName);
+
+        bool IsValidMarketName(string? titleName);
+
+        Task<Window.Domain.Entities.Market.Market?> GetMarketByUserId(ulong userId);
+
         #endregion
     }
 }

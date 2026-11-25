@@ -1,0 +1,20 @@
+@model Window.Domain.ViewModels.User.Authentication.SmsRegisterViewModel
+@{
+    ViewData["Title"] = "تکمیل ثبت‌نام فروشنده";
+    ViewData["AccountArt"] = "door";
+    Layout = "Identity/_AccountLayout";
+}
+<div class="account-heading">
+    <p class="account-kicker">ثبت‌نام فروشنده</p>
+    <h1 id="account-title">نام فروشگاهت را کامل کن</h1>
+    <p>شمارهٔ موبایل تو تأیید شده است. برای ادامه، نام فروشگاه را ثبت کن. فعال‌شدن فروشگاه پس از تکمیل اطلاعات و بررسی پشتیبانی انجام می‌شود.</p>
+</div>
+<form asp-action="CompleteSellerStore" method="post" class="account-form">
+    <div asp-validation-summary="All" class="account-errors" role="alert"></div>
+    <div class="account-field">
+        <label for="marketName">نام فروشگاه</label>
+        <input id="marketName" name="marketName" value="@Model.MarketName" minlength="3" maxlength="100" required
+               autocomplete="organization" placeholder="مثلاً پنجره‌سازی نمونه" />
+    </div>
+    <button class="account-submit" type="submit">ثبت فروشگاه و ادامه</button>
+</form>

@@ -39,9 +39,23 @@ namespace Window.Application.Services
         private IEmailSender _emailSender;
         private static readonly HttpClient client = new HttpClient();
         private readonly ISMSService _smsservice;
+        private readonly IMarketService _marketService;
+        private const string SmsOnlyPassword = "!sms-only";
+
+        private static bool IsDuplicateOrDeadlock(Exception exception)
+        {
+            for (Exception? current = exception; current is not null; current = current.InnerException)
+            {
+                if (current is SqlException sql && sql.Number is 2601 or 2627 or 1205)
+                    return true;
+            }
+
+            return false;
+        }
 
         public UserService(IConfiguration configuration, IUserRepository userRepository, IWalletService walletService, WindowDbContext context
-                                , IEmailSender emailSender, IViewRenderService viewRenderService, ISMSService smsservice)
+                                , IEmailSender emailSender, IViewRenderService viewRenderService, ISMSService smsservice,
+                                IMarketService marketService)
         {
             _configuration = configuration;
             _userRepository = userRepository;
@@ -50,6 +64,7 @@ namespace Window.Application.Services
             _emailSender = emailSender;
             _viewRenderService = viewRenderService;
             _smsservice = smsservice;
+            _marketService = marketService;
         }
 
         #endregion
@@ -101,49 +116,125 @@ namespace Window.Application.Services
 
         public async Task<RegisterUserResponse> RegisterUserAsync(RegisterUserViewModel model)
         {
+            if (model.AccountType is not (AccountType.Customer or AccountType.Seller))
+            {
+                return RegisterUserResponse.InvalidAccountType;
+            }
+
+            var isSeller = model.AccountType == AccountType.Seller;
+            if (isSeller && !_marketService.IsValidMarketName(model.MarketName))
+            {
+                return RegisterUserResponse.InvalidMarketName;
+            }
 
             if (await _context.Users.AnyAsync(u => EF.Property<string>(u, MobileLoginKey.Name) == model.Mobile))
             {
                 return RegisterUserResponse.MobileExist;
             }
 
-            var user = new User
-            {
-                Mobile = model.Mobile.Trim().ToLower(),
-                Username = model.Mobile,
-                Password = PasswordHelper.EncodePasswordMd5(model.Password),
-                EmailActivationCode = CodeGenerator.GenerateUniqCode(),
-                CreateDate = DateTime.Now,
-                IsAdmin = false,
-                MobileActivationCode = new Random().Next(10000, 999999).ToString(),
-                ExpireMobileSMSDateTime = DateTime.Now
-            };
-
-            var campaign = await _context.AllBulkSMSs.FirstOrDefaultAsync(p => !p.IsDelete && p.Mobile == user.Mobile);
-            if (campaign is not null)
-                campaign.IsUserRegistered = true;
-
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                await _userRepository.CreateUser(user);
+                var user = new User
+                {
+                    Mobile = model.Mobile.Trim().ToLower(),
+                    Username = model.Mobile,
+                    Password = PasswordHelper.EncodePasswordMd5(model.Password),
+                    EmailActivationCode = CodeGenerator.GenerateUniqCode(),
+                    CreateDate = DateTime.Now,
+                    IsAdmin = false,
+                    MobileActivationCode = new Random().Next(10000, 999999).ToString(),
+                    ExpireMobileSMSDateTime = DateTime.Now
+                };
+
+                var campaign = await _context.AllBulkSMSs.FirstOrDefaultAsync(p => !p.IsDelete && p.Mobile == user.Mobile);
+                if (campaign is not null)
+                    campaign.IsUserRegistered = true;
+
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+
+                // The store and its owner role are written only for the seller account type.
+                if (isSeller)
+                {
+                    _marketService.AddMarketEntities(user.Id, model.MarketName!);
+                    await _context.SaveChangesAsync();
+                }
+
+                await transaction.CommitAsync();
             }
-            catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 2601 or 2627 })
+            catch (Exception ex) when (IsDuplicateOrDeadlock(ex))
             {
+                try { await transaction.RollbackAsync(); } catch { /* the server may have rolled back already */ }
+                _context.ChangeTracker.Clear();
                 return RegisterUserResponse.MobileExist;
             }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
 
-            #region Send Verification Code SMS
-
-            var result = $"https://api.kavenegar.com/v1/6A427559367558527A76485753667A5779587337736735753945747946474F347A346A65356E7A567A51413D/verify/lookup.json?receptor={user.Mobile}&token={user.MobileActivationCode}&template=Register";
-            var results = client.GetStringAsync(result);
-
-            //var message = Window.Application.StaticTools.Messages.SendActivationRegisterSms(user.MobileActivationCode);
-
-            //await _smsservice.SendSimpleSMS(user.Mobile, message);
-
-            #endregion
-
+            // Sending the activation message is the caller's responsibility so it happens
+            // after the transaction commits.
             return RegisterUserResponse.Success;
+        }
+
+        /// <summary>
+        /// Creates the unconfirmed account for the SMS registration flow. The seller store is
+        /// created later, in a separate request, from the validated server-side flow state.
+        /// </summary>
+        public async Task<User?> CreatePendingSmsAccountAsync(string normalizedMobile, bool isSeller, CancellationToken cancellationToken = default)
+        {
+            var existing = await _context.Users
+                .FirstOrDefaultAsync(u => EF.Property<string>(u, MobileLoginKey.Name) == normalizedMobile, cancellationToken);
+
+            if (existing is not null)
+            {
+                // Only the request that creates the account receives a pre-verification registration grant.
+                return null;
+            }
+
+            await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+            try
+            {
+                var user = new User
+                {
+                    Mobile = normalizedMobile,
+                    Username = normalizedMobile,
+                    Password = SmsOnlyPassword,
+                    EmailActivationCode = Guid.NewGuid().ToString("N"),
+                    CreateDate = DateTime.Now,
+                    IsAdmin = false,
+                    MobileActivationCode = new Random().Next(10000, 999999).ToString(),
+                    ExpireMobileSMSDateTime = DateTime.Now
+                };
+
+                var campaign = await _context.AllBulkSMSs.FirstOrDefaultAsync(p => !p.IsDelete && p.Mobile == user.Mobile, cancellationToken);
+                if (campaign is not null)
+                    campaign.IsUserRegistered = true;
+
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync(cancellationToken);
+
+                // Record the chosen account type on the account itself so a lost session can be
+                // recovered after the mobile is verified. The role alone grants no access because
+                // the account cannot sign in until verification.
+                if (isSeller)
+                {
+                    _context.UserRoles.Add(new UserRole { UserId = user.Id, RoleId = 4 });
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+
+                await transaction.CommitAsync(cancellationToken);
+                return user;
+            }
+            catch (Exception ex) when (IsDuplicateOrDeadlock(ex))
+            {
+                try { await transaction.RollbackAsync(cancellationToken); } catch { /* already rolled back */ }
+                _context.ChangeTracker.Clear();
+                return null;
+            }
         }
 
         public async Task<User?> GetUserByEmailActivationCode(string emailActivationCode)

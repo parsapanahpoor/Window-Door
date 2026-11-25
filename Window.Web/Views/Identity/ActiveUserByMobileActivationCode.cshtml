@@ -1,93 +1,57 @@
 ﻿@using Window.Web.Culture
 @model Window.Domain.ViewModels.Site.Account.ActiveMobileByActivationCodeViewModel
-
 @{
-    ViewData["Title"] = "فعالسازی حساب کاربری";
-    var Time = ViewBag.Time;
-    Layout = "Identity/_IdentityLayout";
-
+    ViewData["Title"] = "فعال‌سازی حساب کاربری";
+    ViewData["AccountArt"] = "door";
+    Layout = "Identity/_AccountLayout";
+    var seconds = ViewBag.Time is double value ? (int)Math.Max(0, value) : 120;
+    var mobile = ViewBag.Mobile as string ?? Model?.Mobile;
 }
-
-@section Scripts
-    {
-    <partial name="_JqueryValidation" />
-
-    <partial name="_ValidationScriptsPartial" />
-    <partial name="_SweetAlertLocalizer" />
-
-    <script src="~/lib/Simple-Countdown-Timer-Plugin-jQuery/jquery.simple.timer.js"></script>
-    <script src="~/lib/Simple-Countdown-Timer-Plugin-jQuery/examples/bundle.js"></script>
-    <script src="~/lib/Simple-Countdown-Timer-Plugin-jQuery/examples/dojo.js"></script>
-
-    <script>
-        $(function () {
-
-            $("#timer").startTimer({
-                onComplete: function () {
-                    $("#SMS").css({ 'display': 'block' });
-                    $("#timer").css({ 'display': 'none' });
-                }
-            });
-
-        });
-    </script>
-}
-
-@section styles
-    {
-    <style>
-        .jst-hours {
-            float: left;
-        }
-
-        .jst-minutes {
-            float: left;
-        }
-
-        .jst-seconds {
-            float: left;
-        }
-
-        .jst-clearDiv {
-            clear: both;
-        }
-
-        .jst-timeout {
-            color: red;
-        }
-    </style>
-}
-
-<div class="login-container animated fadeInDown">
-    <form method="post" dir="" ltr" asp-antiforgery="true">
-                                        <input type="hidden" asp-for="Mobile" value=@ViewBag.Mobile />
-
-        <div class="loginbox bg-white">
-            <div class="loginbox-title">فعالسازی حساب کاربری</div>
-
-            <div class="loginbox-textbox">
-                <label asp-for="Mobile">کد فعال سازی :</label>
-                <input asp-for="MobileActiveCode" class="form-control" />
-                <span asp-validation-for="MobileActiveCode" class="text-danger small"></span>
-            </div>
-
-            <div class="remember-me-wrap" style="padding-left:50px;">
-                <p class="timerCounter" data-seconds-left="@Time" id="timer"></p>
-            </div>
-
-            <div class="loginbox-textbox">
-
-                <a id="SMS" asp-area="" asp-controller="Identity" asp-action="ActiveUserByMobileActivationCode" asp-route-Mobile="@ViewBag.Mobile" asp-route-Resend="true" class="btn btn-warning" style="display: none"><span> ارسال مجدد کد  </span></a>
-
-            </div>
-
-            <div class="loginbox-submit mt-3" dir="rtl">
-                <input type="submit" class="btn btn-primary" value="@Localizer["ارسال"]">
-            </div>
-
-        </div>
-    </form>
+<div class="account-heading">
+    <p class="account-kicker">تأیید شماره موبایل</p>
+    <h1 id="account-title">کد تأیید را وارد کن</h1>
+    <p>کد شش‌رقمی به شمارهٔ <bdi dir="ltr">@mobile</bdi> فرستاده شد. تأیید شماره حساب را برای ورود فعال می‌کند؛ فعال‌شدن فروشگاه جداگانه و پس از تکمیل اطلاعات است.</p>
 </div>
-
-
-
+<form method="post" asp-action="ActiveUserByMobileActivationCode" asp-route-Mobile="@mobile" class="account-form">
+    <div asp-validation-summary="All" class="account-errors" role="alert"></div>
+    <input type="hidden" asp-for="Mobile" value="@mobile" />
+    <div class="account-field">
+        <label asp-for="MobileActiveCode">کد تأیید پیامکی</label>
+        <input asp-for="MobileActiveCode" inputmode="numeric" dir="ltr" autocomplete="one-time-code"
+               maxlength="6" required placeholder="۱۲۳۴۵۶" />
+        <span asp-validation-for="MobileActiveCode" class="text-danger"></span>
+    </div>
+    <button class="account-submit" type="submit">تأیید و ورود</button>
+</form>
+<p class="account-footer" id="resend-area" aria-live="polite">
+    <span id="resend-timer" data-seconds="@seconds">ارسال مجدد تا @seconds ثانیهٔ دیگر</span>
+    <a id="resend-link"
+       asp-action="ActiveUserByMobileActivationCode" asp-route-Mobile="@mobile" asp-route-Resend="true"
+       hidden>ارسال مجدد کد</a>
+</p>
+<script>
+    (() => {
+        const timer = document.getElementById('resend-timer');
+        const link = document.getElementById('resend-link');
+        if (!timer || !link) return;
+        let seconds = Number(timer.dataset.seconds) || 0;
+        const render = () => {
+            if (seconds > 0) {
+                timer.textContent = 'ارسال مجدد تا ' + seconds + ' ثانیهٔ دیگر';
+                timer.hidden = false;
+                link.hidden = true;
+            } else {
+                timer.hidden = true;
+                link.hidden = false;
+            }
+        };
+        render();
+        if (seconds > 0) {
+            const id = setInterval(() => {
+                seconds--;
+                render();
+                if (seconds <= 0) clearInterval(id);
+            }, 1000);
+        }
+    })();
+</script>

@@ -1,0 +1,28 @@
+@model Window.Domain.ViewModels.User.Authentication.SmsRegisterViewModel
+@{
+    ViewData["Title"] = "انتخاب نوع حساب";
+    ViewData["AccountArt"] = "door";
+    Layout = "Identity/_AccountLayout";
+}
+<div class="account-heading">
+    <p class="account-kicker">ثبت‌نام</p>
+    <h1 id="account-title">نوع حساب را انتخاب کن</h1>
+    <p>این شماره هنوز حساب ندارد. برای ادامه مشخص کن می‌خواهی خریدار باشی یا فروشنده.</p>
+</div>
+<form asp-action="SmsRegistrationRole" method="post" class="account-form">
+    <div asp-validation-summary="All" class="account-errors" role="alert"></div>
+    <fieldset class="account-field">
+        <legend>نوع حساب</legend>
+        <label class="account-choice">
+            <input type="radio" name="accountType" value="Customer" checked="@(Model.AccountType == Window.Domain.ViewModels.User.Authentication.AccountType.Customer)" />
+            <span><strong>کاربر عادی</strong><small>خرید و استعلام قیمت</small></span>
+        </label>
+        <label class="account-choice">
+            <input type="radio" name="accountType" value="Seller" checked="@(Model.AccountType == Window.Domain.ViewModels.User.Authentication.AccountType.Seller)" />
+            <span><strong>فروشنده</strong><small>ایجاد فروشگاه و دریافت درخواست</small></span>
+        </label>
+    </fieldset>
+    <p class="account-description">تأیید شماره موبایل حساب را برای ورود فعال می‌کند؛ فعال‌شدن فروشگاه به تکمیل اطلاعات و بررسی پشتیبانی بستگی دارد.</p>
+    <button class="account-submit" type="submit">ادامه</button>
+</form>
+<p class="account-footer">حساب داری؟ <a asp-action="Login">ورود</a></p>
